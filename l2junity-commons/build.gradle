@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+defaultTasks('build')
+
+sourceCompatibility = '1.8'
+
+dependencies {
+	compile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24')
+	compile(group: 'com.mchange', name: 'c3p0', version: '0.9.5.2')
+	compile(group: 'org.bitlet', name: 'weupnp', version: '0.1.4')
+	compile(group: 'org.reflections', name: 'reflections', version: '0.9.10')
+	compile(group: 'com.google.guava', name: 'guava', version: '21.0')
+
+	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}

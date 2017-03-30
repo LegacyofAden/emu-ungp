@@ -1,0 +1,181 @@
+/*
+ * Copyright (C) 2004-2016 L2J Unity
+ * 
+ * This file is part of L2J Unity.
+ * 
+ * L2J Unity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * L2J Unity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.l2junity.gameserver.model.stats.finalizers;
+
+import java.util.OptionalDouble;
+
+import org.l2junity.gameserver.config.L2JModsConfig;
+import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.gameserver.data.xml.impl.ClanHallData;
+import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.instancemanager.SiegeManager;
+import org.l2junity.gameserver.instancemanager.ZoneManager;
+import org.l2junity.gameserver.model.SiegeClan;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.entity.Siege;
+import org.l2junity.gameserver.model.residences.AbstractResidence;
+import org.l2junity.gameserver.model.residences.ResidenceFunction;
+import org.l2junity.gameserver.model.residences.ResidenceFunctionType;
+import org.l2junity.gameserver.model.stats.BaseStats;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.zone.ZoneId;
+import org.l2junity.gameserver.model.zone.type.CastleZone;
+import org.l2junity.gameserver.model.zone.type.ClanHallZone;
+import org.l2junity.gameserver.model.zone.type.FortZone;
+import org.l2junity.gameserver.model.zone.type.MotherTreeZone;
+import org.l2junity.gameserver.util.Util;
+
+/**
+ * @author UnAfraid
+ */
+public class RegenHPFinalizer implements IStatsFunction
+{
+	@Override
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
+	{
+		throwIfPresent(base);
+		
+		double baseValue = creature.isPlayer() ? creature.getActingPlayer().getTemplate().getBaseHpRegen(creature.getLevel()) : creature.getTemplate().getBaseHpReg();
+		baseValue *= creature.isRaid() ? NpcConfig.RAID_HP_REGEN_MULTIPLIER : PlayerConfig.HP_REGEN_MULTIPLIER;
+		
+		if (L2JModsConfig.L2JMOD_CHAMPION_ENABLE && creature.isChampion())
+		{
+			baseValue *= L2JModsConfig.L2JMOD_CHAMPION_HP_REGEN;
+		}
+		
+		if (creature.isPlayer())
+		{
+			PlayerInstance player = creature.getActingPlayer();
+			
+			baseValue *= calcSiegeRegenModifier(player);
+			
+			if (player.isInsideZone(ZoneId.CLAN_HALL) && (player.getClan() != null) && (player.getClan().getHideoutId() > 0))
+			{
+				ClanHallZone zone = ZoneManager.getInstance().getZone(player, ClanHallZone.class);
+				int posChIndex = zone == null ? -1 : zone.getResidenceId();
+				int clanHallIndex = player.getClan().getHideoutId();
+				if ((clanHallIndex > 0) && (clanHallIndex == posChIndex))
+				{
+					final AbstractResidence residense = ClanHallData.getInstance().getClanHallById(player.getClan().getHideoutId());
+					if (residense != null)
+					{
+						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.HP_REGEN);
+						if (func != null)
+						{
+							baseValue *= func.getValue();
+						}
+					}
+				}
+			}
+			
+			if (player.isInsideZone(ZoneId.CASTLE) && (player.getClan() != null) && (player.getClan().getCastleId() > 0))
+			{
+				CastleZone zone = ZoneManager.getInstance().getZone(player, CastleZone.class);
+				int posCastleIndex = zone == null ? -1 : zone.getResidenceId();
+				int castleIndex = player.getClan().getCastleId();
+				if ((castleIndex > 0) && (castleIndex == posCastleIndex))
+				{
+					final AbstractResidence residense = CastleManager.getInstance().getCastleById(player.getClan().getCastleId());
+					if (residense != null)
+					{
+						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.HP_REGEN);
+						if (func != null)
+						{
+							baseValue *= func.getValue();
+						}
+					}
+				}
+			}
+			
+			if (player.isInsideZone(ZoneId.FORT) && (player.getClan() != null) && (player.getClan().getFortId() > 0))
+			{
+				FortZone zone = ZoneManager.getInstance().getZone(player, FortZone.class);
+				int posFortIndex = zone == null ? -1 : zone.getResidenceId();
+				int fortIndex = player.getClan().getFortId();
+				if ((fortIndex > 0) && (fortIndex == posFortIndex))
+				{
+					final AbstractResidence residense = FortManager.getInstance().getFortById(player.getClan().getFortId());
+					if (residense != null)
+					{
+						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.HP_REGEN);
+						if (func != null)
+						{
+							baseValue *= func.getValue();
+						}
+					}
+				}
+			}
+			
+			// Mother Tree effect is calculated at last
+			if (player.isInsideZone(ZoneId.MOTHER_TREE))
+			{
+				final MotherTreeZone zone = ZoneManager.getInstance().getZone(player, MotherTreeZone.class);
+				int hpBonus = zone == null ? 0 : zone.getHpRegenBonus();
+				baseValue += hpBonus;
+			}
+			
+			// Calculate Movement bonus
+			if (player.isSitting())
+			{
+				baseValue *= 1.5; // Sitting
+			}
+			else if (!player.isMoving())
+			{
+				baseValue *= 1.1; // Staying
+			}
+			else if (player.isRunning())
+			{
+				baseValue *= 0.7; // Running
+			}
+		}
+		else if (creature.isPet())
+		{
+			baseValue = ((L2PetInstance) creature).getPetLevelData().getPetRegenHP() * NpcConfig.PET_HP_REGEN_MULTIPLIER;
+		}
+		
+		return DoubleStat.defaultValue(creature, stat, baseValue * creature.getLevelMod() * (creature.getCON() > 0 ? BaseStats.CON.calcBonus(creature) : 1.));
+	}
+	
+	private static double calcSiegeRegenModifier(PlayerInstance activeChar)
+	{
+		if ((activeChar == null) || (activeChar.getClan() == null))
+		{
+			return 1;
+		}
+		
+		final Siege siege = SiegeManager.getInstance().getSiege(activeChar.getX(), activeChar.getY(), activeChar.getZ());
+		if ((siege == null) || !siege.isInProgress())
+		{
+			return 1;
+		}
+		
+		final SiegeClan siegeClan = siege.getAttackerClan(activeChar.getClan().getId());
+		if ((siegeClan == null) || siegeClan.getFlag().isEmpty() || !Util.checkIfInRange(200, activeChar, siegeClan.getFlag().stream().findAny().get(), true))
+		{
+			return 1;
+		}
+		
+		return 1.5; // If all is true, then modifier will be 50% more
+	}
+}

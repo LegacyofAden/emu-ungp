@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/multisell.xsd">
+	<item>
+		<ingredient id="-100" count="10000"/> <!-- Pc Cafe Points --> 
+		<production id="24356" count="1"/> <!-- Draco's Hat: Wizard - 7-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="10000"/> <!-- Pc Cafe Points --> 
+		<production id="24357" count="1"/> <!-- Draco's Hat: Warrior - 7-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="18000"/> <!-- Pc Cafe Points --> 
+		<production id="24359" count="1"/> <!-- Antharas' Earring - 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="18000"/> <!-- Pc Cafe Points --> 
+		<production id="24360" count="1"/> <!-- Valakas' Necklace - 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="12000"/> <!-- Pc Cafe Points --> 
+		<production id="24361" count="1"/> <!-- Zaken's Earring - 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="12000"/> <!-- Pc Cafe Points --> 
+		<production id="24363" count="1"/> <!-- Baium's Ring - 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="12000"/> <!-- Pc Cafe Points --> 
+		<production id="24362" count="1"/> <!-- Queen Ant's Ring - 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="24000"/> <!-- Pc Cafe Points --> 
+		<production id="24351" count="1"/> <!-- Talisman - Hunter - Abundance / 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="24000"/> <!-- Pc Cafe Points --> 
+		<production id="24352" count="1"/> <!-- Talisman - Slaughterer - Abundance / 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="24000"/> <!-- Pc Cafe Points --> 
+		<production id="24353" count="1"/> <!-- Talisman - Conquerer - Abundance / 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="24000"/> <!-- Pc Cafe Points --> 
+		<production id="24354" count="1"/> <!-- Talisman - Outlaw - Abundance / 3-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="180"/> <!-- Pc Cafe Points --> 
+		<production id="34620" count="1"/> <!-- Heavenly Cocktail - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="120"/> <!-- Pc Cafe Points --> 
+		<production id="35999" count="1"/> <!-- Heavenly P. Atk. Cookie - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="120"/> <!-- Pc Cafe Points --> 
+		<production id="36000" count="1"/> <!-- Heavenly P. Def. Cookie - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="120"/> <!-- Pc Cafe Points --> 
+		<production id="36001" count="1"/> <!-- Heavenly Magic Cookie - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="480"/> <!-- Pc Cafe Points --> 
+		<production id="24355" count="1"/> <!-- Premium Account: Art of Seduction - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="360"/> <!-- Pc Cafe Points --> 
+		<production id="24358" count="1"/> <!-- Premium Account: Quick Healing Potion - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30"/> <!-- Pc Cafe Points --> 
+		<production id="6406" count="1"/> <!-- Firecracker - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="60"/> <!-- Pc Cafe Points --> 
+		<production id="6407" count="1"/> <!-- Large Firecracker - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46039" count="1"/> <!-- Player Commendation Talisman - STR - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46040" count="1"/> <!-- Player Commendation Talisman - INT - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46041" count="1"/> <!-- Player Commendation Talisman - DEX - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46042" count="1"/> <!-- Player Commendation Talisman - WIT - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46043" count="1"/> <!-- Player Commendation Talisman - CON - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="500"/> <!-- Pc Cafe Points --> 
+		<production id="46044" count="1"/> <!-- Player Commendation Talisman - MEN - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46045" count="1"/> <!-- Player Commendation Talisman - Atk. Attribute Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46046" count="1"/> <!-- Player Commendation Talisman - Fire Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46047" count="1"/> <!-- Player Commendation Talisman - Water Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46048" count="1"/> <!-- Player Commendation Talisman - Wind Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46049" count="1"/> <!-- Player Commendation Talisman - Earth Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46050" count="1"/> <!-- Player Commendation Talisman - Holy Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="400"/> <!-- Pc Cafe Points --> 
+		<production id="46051" count="1"/> <!-- Player Commendation Talisman - Dark Resistance Boost - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="20"/> <!-- Pc Cafe Points --> 
+		<production id="46084" count="1"/> <!-- Player Commendation Special Bait - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37919" count="1"/> <!-- Pig Lollipop Appearance Stone: One-handed Sword - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37920" count="1"/> <!-- Chrono Cithara Appearance Stone: One-handed Sword - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37921" count="1"/> <!-- Chrono Unitus Appearance Stone: Fist Weapon - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37922" count="1"/> <!-- Chrono Campana Appearance Stone: Spear - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37923" count="1"/> <!-- Chrono Darbuka Appearance Stone: Two-handed Blunt Weapon - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37924" count="1"/> <!-- Chrono Maracas Appearance Stone: Dualsword - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37925" count="1"/> <!-- Pumpkin Dagger Appearance Stone: Dagger - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37926" count="1"/> <!-- Pumpkin Dual Dagger Appearance Stone: Dual Dagger - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="8400"/> <!-- Pc Cafe Points --> 
+		<production id="37927" count="1"/> <!-- Scarecrow Sword Appearance Stone: One-handed Magic Sword - 15-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37907" count="1"/> <!-- Pig Lollipop Appearance Stone: One-handed Sword - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37908" count="1"/> <!-- Chrono Cithara Appearance Stone: One-handed Sword - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37909" count="1"/> <!-- Chrono Unitus Appearance Stone: Fist Weapon - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37910" count="1"/> <!-- Chrono Campana Appearance Stone: Spear - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37911" count="1"/> <!-- Chrono Darbuka Appearance Stone: Two-handed Blunt Weapon - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37912" count="1"/> <!-- Chrono Maracas Appearance Stone: Dualsword - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37913" count="1"/> <!-- Pumpkin Dagger Appearance Stone: Dagger - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37914" count="1"/> <!-- Pumpkin Dual Dagger Appearance Stone: Dual Dagger - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="30000"/> <!-- Pc Cafe Points --> 
+		<production id="37915" count="1"/> <!-- Scarecrow Sword Appearance Stone: One-handed Magic Sword - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="1200"/> <!-- Pc Cafe Points --> 
+		<production id="9198" count="1"/> <!-- Shadow Item: Teddy Bear Hat - Firework --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="1200"/> <!-- Pc Cafe Points --> 
+		<production id="9199" count="1"/> <!-- Shadow Item: Piggy Hat - Firework --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="1200"/> <!-- Pc Cafe Points --> 
+		<production id="9201" count="1"/> <!-- Shadow Item: Wizard Hat - Firework --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="1200"/> <!-- Pc Cafe Points --> 
+		<production id="9202" count="1"/> <!-- Shadow Item: Dapper Cap - Firework --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="1200"/> <!-- Pc Cafe Points --> 
+		<production id="9204" count="1"/> <!-- Shadow Item: Iron Circlet - Firework --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="10620" count="1"/> <!-- Shadow Item: Ant Hat - Blessed Escape --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="10624" count="1"/> <!-- Shadow Item: Ol Mahum Hat - Blessed Escape --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="10628" count="1"/> <!-- Shadow Item: Wolf Hat - Blessed Escape --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="22183" count="1"/> <!-- Graduation Cap - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="21984" count="1"/> <!-- Refined Jester Hat - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="13517" count="1"/> <!-- Event - Raccoon Hat - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="13518" count="1"/> <!-- Event - Top Hat - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="13520" count="1"/> <!-- Event - Jindo Dog Hat - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="13521" count="1"/> <!-- Event - Shaggy Dog Hat - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="22161" count="1"/> <!-- Red Mask of Victory - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="14000"/> <!-- Pc Cafe Points --> 
+		<production id="22164" count="1"/> <!-- Red Party Mask - None --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="3000"/> <!-- Pc Cafe Points --> 
+		<production id="14069" count="1"/> <!-- Snow Man Transformation Stick (Event) - 30-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="3000"/> <!-- Pc Cafe Points --> 
+		<production id="14070" count="1"/> <!-- Scarecrow Jack Transformation Stick (Event) - 30-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="3000"/> <!-- Pc Cafe Points --> 
+		<production id="14071" count="1"/> <!-- Tin Golem Transformation Stick (Event) - 30-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="21379" count="1"/> <!-- Mount - Darkmane Pacer - 7-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="21391" count="1"/> <!-- Mount - Steam Beetle - 7-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="4000"/> <!-- Pc Cafe Points --> 
+		<production id="21403" count="1"/> <!-- Mount - Gold Maned Lion - 7-day --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="5000"/> <!-- Pc Cafe Points --> 
+		<production id="34595" count="1"/> <!-- Player Commendation - Agathion - Propeller - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="5000"/> <!-- Pc Cafe Points --> 
+		<production id="34596" count="1"/> <!-- Player Commendation - Agathion - Magical Girl - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="5000"/> <!-- Pc Cafe Points --> 
+		<production id="34597" count="1"/> <!-- Player Commendation - Agathion - Cobra - PC-exclusive --> 
+	</item>
+	<item>
+		<ingredient id="-100" count="5000"/> <!-- Pc Cafe Points --> 
+		<production id="34598" count="1"/> <!-- Player Commendation - Agathion - Baby Ufa - PC-exclusive --> 
+	</item>
+</list>
