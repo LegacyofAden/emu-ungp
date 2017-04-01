@@ -1,48 +1,42 @@
 apply plugin: 'java'
-apply plugin: 'distribution'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'propdeps-idea'
+apply plugin: 'application'
 
-defaultTasks('build')
+run.workingDir = new File("./")
+mainClassName = "org.l2junity.loginserver.LoginServer"
+
+applicationDefaultJvmArgs = [
+		"-server",
+		"-Xms128M",
+		"-Xmx512M"
+]
+
+defaultTasks 'assemble'
+distTar.enabled = false
+bootRepackage.enabled = false
 
 sourceCompatibility = '1.8'
 
-
 dependencies {
+	provided('org.projectlombok:lombok:+')
 	compile project(':l2junity-commons')
 	compile project(':l2junity-network')
-	
-	compile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24')
-	compile(group: 'com.mchange', name: 'c3p0', version: '0.9.5.2')
+
 	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')
 	compile(group: 'org.jdbi', name: 'jdbi', version: '2.78')
-	
-	runtime(group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.8.1')
-	runtime(group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.1')
 	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
 }
 
-
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+configurations {
+	compile.exclude group:'ch.qos.logback'
 }
 
-
-jar {
-	manifest {
-		attributes('Built-By': System.getProperty('user.name'),
-				'Implementation-URL': 'http://www.l2junity.org/',
-				'Main-Class': 'org.l2junity.loginserver.LoginServer',
-				'Class-Path': configurations.runtime.collect({ 'libs/' + it.getName() }).join(' ')
-			)
-	}
-}
-
-distributions {
-	main {
-		contents {
-			into('libs') {
-				from(configurations.runtime)
-			}
-			from(jar)
-		}
+distZip {
+	from('dist') {
+		into(baseName + '/bin/')
 	}
 }
