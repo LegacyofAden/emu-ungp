@@ -1,11 +1,27 @@
 apply plugin: 'java'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
 
 defaultTasks('build')
 
-sourceCompatibility = '1.8'
-
 dependencies {
-	compile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24')
+    // Annotation processing
+	provided('org.projectlombok:lombok:+')
+	compile('org.atteo.classindex:classindex:+')
+
+    // Utils
+	compile('org.apache.commons:commons-lang3:+')
+	compile("org.apache.commons:commons-math3:+")
+	compile('commons-io:commons-io:+')
+
+    // Logging
+	compile('org.apache.logging.log4j:log4j-core:2.6.1')
+	compile('org.apache.logging.log4j:log4j-slf4j-impl:2.6.1')
+	compile('org.slf4j:slf4j-api:+')
+	compile('org.slf4j:slf4j-ext:+')
+
 	compile(group: 'com.mchange', name: 'c3p0', version: '0.9.5.2')
 	compile(group: 'org.bitlet', name: 'weupnp', version: '0.1.4')
 	compile(group: 'org.reflections', name: 'reflections', version: '0.9.10')
@@ -14,6 +30,8 @@ dependencies {
 	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
 }
 
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+
+configurations {
+	compile.exclude group:'ch.qos.logback'
+	compile.exclude group:'ch.qos.cal10n'
 }

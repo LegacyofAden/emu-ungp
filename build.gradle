@@ -1,19 +1,35 @@
-plugins {
-	id 'org.ajoberstar.grgit' version '1.5.1'
+System.setProperty("file.encoding", "UTF-8")
+
+import org.tmatesoft.svn.core.wc.*
+
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.tmatesoft.svnkit:svnkit:+")
+        classpath("org.springframework.build.gradle:propdeps-plugin:+")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:+")
+    }
 }
 
 subprojects {
-	apply plugin: 'org.ajoberstar.grgit'
+    apply plugin: 'idea'
 	apply plugin: 'eclipse'
-	// apply plugin: 'distribution'
-	
-	group = 'org.l2junity'
-	// version = '1.0'
-		
+
+    sourceCompatibility = '1.8'
+
 	repositories {
 		mavenCentral()
 	}
-	
+
 	eclipse {
 		project {
 			natures('org.springsource.ide.eclipse.gradle.core.nature')
@@ -34,47 +50,35 @@ subprojects {
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'
 	}
-	
-	/*distZip {
-		eachFile { copySpec ->
-			includeEmptyDirs = false
-			def raw = copySpec.getPath()
-			if (raw.startsWith(project.name)) {
-				copySpec.setPath(raw.minus(project.name));
-			}
-		}
-	}*/
-	
-	tasks.withType(Jar) {
-		def grgit = org.ajoberstar.grgit.Grgit.open(project.file('..'))
-		
-		manifest {
-			attributes(
-				'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
-				'Built-By': System.getProperty('user.name'),
-				'Implementation-URL': 'http://www.l2junity.org/',
-				'Implementation-Time': new Date().format('yyyy-MM-dd_hh:mm'),
-				'Git-Branch': grgit.branch.getCurrent().getName(),
-				'Git-Hash-Full': grgit.head().id,
-				'Git-Hash-Short': grgit.head().getAbbreviatedId(),
-				'Git-Commit-Count': grgit.log(includes:['HEAD']).size(),
-			)
-		}
-	}
+
+    compileJava.doLast {
+        jar.manifest {
+            attributes('Implementation-Title': project.name,
+                    'Implementation-Version': getSvnRevision(),
+                    'Built-Date': new java.util.Date().toString(),
+                    'Built-By': System.getProperty('user.name'),
+                    'Built-JDK': System.getProperty('java.version'),
+                    'Source-Compatibility': project.sourceCompatibility,
+                    'Target-Compatibility': project.targetCompatibility
+            )
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '3.3'
 }
 
-def contentSpec = copySpec {
-	subprojects.each { subproject ->
-		from subproject.buildDir
-		include 'distributions/**'
-	}
-}
-
-task distributionCopy(type: Copy) {
-	into project.buildDir  
-	with contentSpec
+def getSvnRevision(){
+    try {
+        ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+        SVNClientManager clientManager = SVNClientManager.newInstance(options);
+        SVNStatusClient statusClient = clientManager.getStatusClient();
+        SVNStatus status = statusClient.doStatus(projectDir, false);
+        SVNRevision revision = status.getRevision();
+        return revision.getNumber();
+    }
+    catch (Exception ignored) {
+        return "DEV"
+    }
 }

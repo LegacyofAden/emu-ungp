@@ -2,14 +2,7 @@ apply plugin: 'java'
 
 defaultTasks('build')
 
-sourceCompatibility = '1.8'
-
 dependencies {
-	compile(group: 'org.slf4j', name: 'slf4j-api', version: '1.7.24')
+	compile project(':l2junity-commons')
 	compile(group: 'io.netty', name: 'netty-all', version: '4.1.8.Final')
-}
-
-
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
 }
