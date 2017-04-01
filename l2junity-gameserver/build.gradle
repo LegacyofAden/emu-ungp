@@ -5,20 +5,19 @@ apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-eclipse'
 apply plugin: 'propdeps-idea'
 apply plugin: 'application'
-apply plugin: 'antlr'
 
-run.workingDir = new File("./")
+run.workingDir = new File("./dist")
 mainClassName = "org.l2junity.gameserver.GameServer"
-
-defaultTasks 'assemble'
-distTar.enabled = false
-bootRepackage.enabled = false
 
 applicationDefaultJvmArgs = [
 		"-server",
 		"-Xms2G",
 		"-Xmx8G"
 ]
+
+defaultTasks 'assemble'
+distTar.enabled = false
+bootRepackage.enabled = false
 
 sourceSets {
 	scripts {
@@ -42,18 +41,12 @@ dependencies {
 	runtime(group: 'org.eclipse.jdt.core.compiler', name: 'ecj', version: '4.4.2')
 }
 
+configurations {
+    compile.exclude group:'ch.qos.logback'
+}
+
 distZip {
 	from('dist') {
 		into(baseName + '/bin/')
 	}
-}
-
-task generateLoginConfigs(type: JavaExec, dependsOn: 'classes') {
-    main = 'org.l2junity.loginserver.config.LoginConfigGenerator'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task generateGameConfigs(type: JavaExec, dependsOn: 'classes') {
-    main = 'org.l2junity.gameserver.config.GameConfigGenerator'
-    classpath = sourceSets.main.runtimeClasspath
 }
