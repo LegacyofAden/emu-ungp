@@ -15,8 +15,8 @@ buildscript {
     }
     dependencies {
         classpath("org.tmatesoft.svnkit:svnkit:+")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
         classpath("org.springframework.build.gradle:propdeps-plugin:+")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:+")
     }
 }
 
@@ -51,8 +51,8 @@ subprojects {
 		options.encoding = 'UTF-8'
 	}
 
-    compileJava.doLast {
-        jar.manifest {
+    tasks.withType(Jar) {
+        manifest {
             attributes('Implementation-Title': project.name,
                     'Implementation-Version': getSvnRevision(),
                     'Built-Date': new java.util.Date().toString(),

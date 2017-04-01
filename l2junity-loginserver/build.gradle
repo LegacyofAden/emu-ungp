@@ -6,7 +6,7 @@ apply plugin: 'propdeps-eclipse'
 apply plugin: 'propdeps-idea'
 apply plugin: 'application'
 
-run.workingDir = new File("./")
+run.workingDir = new File("./dist")
 mainClassName = "org.l2junity.loginserver.LoginServer"
 
 applicationDefaultJvmArgs = [
@@ -19,8 +19,6 @@ defaultTasks 'assemble'
 distTar.enabled = false
 bootRepackage.enabled = false
 
-sourceCompatibility = '1.8'
-
 dependencies {
 	provided('org.projectlombok:lombok:+')
 	compile project(':l2junity-commons')
@@ -28,7 +26,6 @@ dependencies {
 
 	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')
 	compile(group: 'org.jdbi', name: 'jdbi', version: '2.78')
-	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
 }
 
 configurations {
