@@ -43,7 +43,7 @@ dependencies {
 }
 
 distZip {
-	from('dist/game') {
+	from('dist') {
 		into(baseName + '/bin/')
 	}
 }
