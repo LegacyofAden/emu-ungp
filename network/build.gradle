@@ -3,6 +3,6 @@ apply plugin: 'java'
 defaultTasks('build')
 
 dependencies {
-	compile project(':l2junity-commons')
+	compile project(':commons')
 	compile(group: 'io.netty', name: 'netty-all', version: '4.1.8.Final')
 }
