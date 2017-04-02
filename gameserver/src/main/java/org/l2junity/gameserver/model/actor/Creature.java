@@ -18,7 +18,26 @@
  */
 package org.l2junity.gameserver.model.actor;
 
-import org.l2junity.gameserver.engines.IdFactory;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.EmptyQueue;
 import org.l2junity.commons.util.Rnd;
@@ -34,7 +53,18 @@ import org.l2junity.gameserver.data.xml.impl.CategoryData;
 import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.LevelBonusData;
 import org.l2junity.gameserver.data.xml.impl.TransformData;
-import org.l2junity.gameserver.enums.*;
+import org.l2junity.gameserver.engines.IdFactory;
+import org.l2junity.gameserver.enums.AttributeType;
+import org.l2junity.gameserver.enums.BasicProperty;
+import org.l2junity.gameserver.enums.CategoryType;
+import org.l2junity.gameserver.enums.InstanceType;
+import org.l2junity.gameserver.enums.ItemSkillType;
+import org.l2junity.gameserver.enums.Position;
+import org.l2junity.gameserver.enums.Race;
+import org.l2junity.gameserver.enums.ShotType;
+import org.l2junity.gameserver.enums.StatusUpdateType;
+import org.l2junity.gameserver.enums.Team;
+import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
 import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
@@ -42,7 +72,18 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.TimersManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.AccessLevel;
+import org.l2junity.gameserver.model.CharEffectList;
+import org.l2junity.gameserver.model.CreatureContainer;
+import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.PcCondOverride;
+import org.l2junity.gameserver.model.TeleportWhereType;
+import org.l2junity.gameserver.model.TimeStamp;
+import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.WorldRegion;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
 import org.l2junity.gameserver.model.actor.status.CharStatus;
@@ -55,7 +96,15 @@ import org.l2junity.gameserver.model.debugger.Debugger;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.*;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttack;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttackAvoid;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageDealt;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureKilled;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleport;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleported;
 import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
 import org.l2junity.gameserver.model.events.returns.DamageReturn;
 import org.l2junity.gameserver.model.events.returns.LocationReturn;
@@ -73,31 +122,48 @@ import org.l2junity.gameserver.model.items.type.EtcItemType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.options.OptionsSkillHolder;
 import org.l2junity.gameserver.model.options.OptionsSkillType;
-import org.l2junity.gameserver.model.skills.*;
-import org.l2junity.gameserver.model.stats.*;
+import org.l2junity.gameserver.model.skills.AbnormalType;
+import org.l2junity.gameserver.model.skills.CommonSkill;
+import org.l2junity.gameserver.model.skills.EffectScope;
+import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.skills.SkillCaster;
+import org.l2junity.gameserver.model.skills.SkillCastingType;
+import org.l2junity.gameserver.model.skills.SkillChannelized;
+import org.l2junity.gameserver.model.skills.SkillChannelizer;
+import org.l2junity.gameserver.model.skills.SkillConditionScope;
+import org.l2junity.gameserver.model.stats.BaseStats;
+import org.l2junity.gameserver.model.stats.BasicPropertyResist;
+import org.l2junity.gameserver.model.stats.BooleanStat;
+import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.Formulas;
+import org.l2junity.gameserver.model.stats.MoveType;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
 import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.Attack;
+import org.l2junity.gameserver.network.client.send.ChangeMoveType;
+import org.l2junity.gameserver.network.client.send.ChangeWaitType;
+import org.l2junity.gameserver.network.client.send.ExShowTrace;
+import org.l2junity.gameserver.network.client.send.ExTeleportToLocationActivate;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.MoveToLocation;
+import org.l2junity.gameserver.network.client.send.NpcInfo;
+import org.l2junity.gameserver.network.client.send.Revive;
+import org.l2junity.gameserver.network.client.send.ServerObjectInfo;
+import org.l2junity.gameserver.network.client.send.SetupGauge;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.StatusUpdate;
+import org.l2junity.gameserver.network.client.send.StopMove;
+import org.l2junity.gameserver.network.client.send.StopRotation;
+import org.l2junity.gameserver.network.client.send.TeleportToLocation;
+import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.ref.WeakReference;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
 
 /**
  * Mother class of all character objects of the world (PC, NPC...)<br>
@@ -937,7 +1003,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					// Check if bow delay is still active.
 					if (_disableRangedAttackEndTime > System.nanoTime()) {
 						if (isPlayer()) {
-							ThreadPool.getInstance().scheduleAi(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), 1000, TimeUnit.MILLISECONDS);
+							ThreadPool.getInstance().scheduleGeneral(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), 1000, TimeUnit.MILLISECONDS);
 							sendPacket(ActionFailed.STATIC_PACKET);
 						}
 						return;
@@ -966,7 +1032,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 						// Check if player has enough MP to shoot.
 						final int mpConsume = getStat().has(BooleanStat.CHEAPSHOT) ? 0 : ((weaponItem.getReducedMpConsume() > 0) && (Rnd.get(100) < weaponItem.getReducedMpConsumeChance())) ? weaponItem.getReducedMpConsume() : weaponItem.getMpConsume();
 						if (getCurrentMp() < mpConsume) {
-							ThreadPool.getInstance().scheduleAi(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), 1000, TimeUnit.MILLISECONDS);
+							ThreadPool.getInstance().scheduleGeneral(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), 1000, TimeUnit.MILLISECONDS);
 							sendPacket(SystemMessageId.NOT_ENOUGH_MP);
 							sendPacket(ActionFailed.STATIC_PACKET);
 							return;
@@ -1058,7 +1124,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			}
 
 			// Notify AI with EVT_READY_TO_ACT
-			ThreadPool.getInstance().scheduleAi(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), timeAtk, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(new NotifyAITask(this, CtrlEvent.EVT_READY_TO_ACT), timeAtk, TimeUnit.MILLISECONDS);
 		}
 
 	}
@@ -1125,7 +1191,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		}
 
 		// Create a new hit task with Medium priority
-		ThreadPool.getInstance().scheduleAi(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
 
 		// Calculate and set the disable delay of the bow in function of the Attack Speed
 		_disableRangedAttackEndTime = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(reuse);
@@ -1194,10 +1260,10 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		}
 
 		// Create a new hit task with Medium priority for hit 1
-		ThreadPool.getInstance().scheduleAi(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
 
 		// Create a new hit task with Medium priority for hit 2 with a higher delay
-		ThreadPool.getInstance().scheduleAi(new HitTask(this, target, damage2, crit2, miss2, attack.hasSoulshot(), shld2), sAtk2, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new HitTask(this, target, damage2, crit2, miss2, attack.hasSoulshot(), shld2), sAtk2, TimeUnit.MILLISECONDS);
 
 		// Add those hits to the Server-Client packet Attack
 		attack.addHit(target, damage1, miss1, crit1, shld1);
@@ -1221,7 +1287,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					damage /= 2;
 				}
 
-				ThreadPool.getInstance().scheduleAi(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk, TimeUnit.MILLISECONDS);
 				attack.addHit(surroundTarget, damage, miss, crit, shld);
 				miss1 |= miss;
 			}
@@ -1239,7 +1305,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					damage /= 2;
 				}
 
-				ThreadPool.getInstance().scheduleAi(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk2, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk2, TimeUnit.MILLISECONDS);
 				attack.addHit(surroundTarget, damage, miss, crit, shld);
 				miss2 |= miss;
 			}
@@ -1288,7 +1354,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		}
 
 		// Create a new hit task with Medium priority
-		ThreadPool.getInstance().scheduleAi(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new HitTask(this, target, damage1, crit1, miss1, attack.hasSoulshot(), shld1), sAtk, TimeUnit.MILLISECONDS);
 
 		// Add this hit to the Server-Client packet Attack
 		attack.addHit(target, damage1, miss1, crit1, shld1);
@@ -1309,7 +1375,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					damage = (int) Formulas.calcAutoAttackDamage(this, surroundTarget, 0, shld, crit, attack.hasSoulshot());
 				}
 
-				ThreadPool.getInstance().scheduleAi(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new HitTask(this, surroundTarget, damage, crit, miss, attack.hasSoulshot(), shld), sAtk, TimeUnit.MILLISECONDS);
 				attack.addHit(surroundTarget, damage, miss, crit, shld);
 				miss1 |= miss;
 			}
@@ -2733,7 +2799,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		m._moveTimestamp = gameTicks;
 
 		if (distFraction > 1) {
-			ThreadPool.getInstance().executeAi(() -> getAI().notifyEvent(CtrlEvent.EVT_ARRIVED));
+			ThreadPool.getInstance().executeGeneral(() -> getAI().notifyEvent(CtrlEvent.EVT_ARRIVED));
 			return true;
 		}
 
@@ -3106,7 +3172,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 
 		// Create a task to notify the AI that L2Character arrives at a check point of the movement
 		if ((ticksToMove * GameTimeManager.MILLIS_IN_TICK) > 3000) {
-			ThreadPool.getInstance().scheduleAi(new NotifyAITask(this, CtrlEvent.EVT_ARRIVED_REVALIDATE), 2000, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(new NotifyAITask(this, CtrlEvent.EVT_ARRIVED_REVALIDATE), 2000, TimeUnit.MILLISECONDS);
 		}
 
 		// the CtrlEvent.EVT_ARRIVED will be sent when the character will actually arrive
@@ -3177,7 +3243,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 
 		// Create a task to notify the AI that L2Character arrives at a check point of the movement
 		if ((ticksToMove * GameTimeManager.MILLIS_IN_TICK) > 3000) {
-			ThreadPool.getInstance().scheduleAi(new NotifyAITask(this, CtrlEvent.EVT_ARRIVED_REVALIDATE), 2000, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(new NotifyAITask(this, CtrlEvent.EVT_ARRIVED_REVALIDATE), 2000, TimeUnit.MILLISECONDS);
 		}
 
 		// the CtrlEvent.EVT_ARRIVED will be sent when the character will actually arrive

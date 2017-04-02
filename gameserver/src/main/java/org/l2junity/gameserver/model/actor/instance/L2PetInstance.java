@@ -18,6 +18,17 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
@@ -53,24 +64,22 @@ import org.l2junity.gameserver.model.itemcontainer.PetInventory;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.skills.*;
+import org.l2junity.gameserver.model.skills.AbnormalType;
+import org.l2junity.gameserver.model.skills.BuffInfo;
+import org.l2junity.gameserver.model.skills.CommonSkill;
+import org.l2junity.gameserver.model.skills.EffectScope;
+import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.ExChangeNpcState;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.PetInventoryUpdate;
+import org.l2junity.gameserver.network.client.send.StopMove;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class L2PetInstance extends Summon {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(L2PetInstance.class);
@@ -938,7 +947,7 @@ public class L2PetInstance extends Summon {
 
 		stopFeed();
 		if (!isDead() && (getOwner().getPet() == this)) {
-			_feedTask = ThreadPool.getInstance().scheduleAiAtFixedRate(new FeedTask(), 10000, 10000, TimeUnit.MILLISECONDS);
+			_feedTask = ThreadPool.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000, TimeUnit.MILLISECONDS);
 		}
 	}
 
