@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExShowEnsoulWindow implements IClientOutgoingPacket
-{
+public class ExShowEnsoulWindow implements IClientOutgoingPacket {
 	public static final ExShowEnsoulWindow STATIC_PACKET = new ExShowEnsoulWindow();
-	
-	private ExShowEnsoulWindow()
-	{
+
+	private ExShowEnsoulWindow() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_ENSOUL_WINDOW.writeId(packet);
 		return true;
 	}

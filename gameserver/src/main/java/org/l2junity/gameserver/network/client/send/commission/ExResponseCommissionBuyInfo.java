@@ -26,25 +26,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class ExResponseCommissionBuyInfo extends AbstractItemPacket
-{
+public class ExResponseCommissionBuyInfo extends AbstractItemPacket {
 	public static final ExResponseCommissionBuyInfo FAILED = new ExResponseCommissionBuyInfo(null);
-	
+
 	private final CommissionItem _commissionItem;
-	
-	public ExResponseCommissionBuyInfo(CommissionItem commissionItem)
-	{
+
+	public ExResponseCommissionBuyInfo(CommissionItem commissionItem) {
 		_commissionItem = commissionItem;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESPONSE_COMMISSION_BUY_INFO.writeId(packet);
-		
+
 		packet.writeD(_commissionItem != null ? 1 : 0);
-		if (_commissionItem != null)
-		{
+		if (_commissionItem != null) {
 			packet.writeQ(_commissionItem.getPricePerUnit());
 			packet.writeQ(_commissionItem.getCommissionId());
 			packet.writeD(0); // CommissionItemType seems client does not really need it.

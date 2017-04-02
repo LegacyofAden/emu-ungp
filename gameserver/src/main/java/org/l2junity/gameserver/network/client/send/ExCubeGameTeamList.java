@@ -18,56 +18,52 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author mrTJO
  */
-public class ExCubeGameTeamList implements IClientOutgoingPacket
-{
+public class ExCubeGameTeamList implements IClientOutgoingPacket {
 	// Players Lists
 	private final List<PlayerInstance> _bluePlayers;
 	private final List<PlayerInstance> _redPlayers;
-	
+
 	// Common Values
 	private final int _roomNumber;
-	
+
 	/**
 	 * Show Minigame Waiting List to Player
-	 * @param redPlayers Red Players List
+	 *
+	 * @param redPlayers  Red Players List
 	 * @param bluePlayers Blue Players List
-	 * @param roomNumber Arena/Room ID
+	 * @param roomNumber  Arena/Room ID
 	 */
-	public ExCubeGameTeamList(List<PlayerInstance> redPlayers, List<PlayerInstance> bluePlayers, int roomNumber)
-	{
+	public ExCubeGameTeamList(List<PlayerInstance> redPlayers, List<PlayerInstance> bluePlayers, int roomNumber) {
 		_redPlayers = redPlayers;
 		_bluePlayers = bluePlayers;
 		_roomNumber = roomNumber - 1;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BLOCK_UP_SET_LIST.writeId(packet);
-		
+
 		packet.writeD(0x00);
-		
+
 		packet.writeD(_roomNumber);
 		packet.writeD(0xffffffff);
-		
+
 		packet.writeD(_bluePlayers.size());
-		for (PlayerInstance player : _bluePlayers)
-		{
+		for (PlayerInstance player : _bluePlayers) {
 			packet.writeD(player.getObjectId());
 			packet.writeS(player.getName());
 		}
 		packet.writeD(_redPlayers.size());
-		for (PlayerInstance player : _redPlayers)
-		{
+		for (PlayerInstance player : _redPlayers) {
 			packet.writeD(player.getObjectId());
 			packet.writeS(player.getName());
 		}

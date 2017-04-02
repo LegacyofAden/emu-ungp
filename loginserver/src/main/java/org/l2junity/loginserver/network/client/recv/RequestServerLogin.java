@@ -18,7 +18,7 @@
  */
 package org.l2junity.loginserver.network.client.recv;
 
-import org.l2junity.loginserver.Config;
+import org.l2junity.core.configs.LoginServerConfig;
 import org.l2junity.loginserver.manager.LoginManager;
 import org.l2junity.loginserver.network.client.ClientHandler;
 import org.l2junity.loginserver.network.client.send.LoginFail2;
@@ -28,28 +28,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestServerLogin implements IIncomingPacket<ClientHandler>
-{
+public class RequestServerLogin implements IIncomingPacket<ClientHandler> {
 	private long _loginSessionId;
 	private short _serverId;
-	
+
 	@Override
-	public boolean read(ClientHandler client, PacketReader packet)
-	{
+	public boolean read(ClientHandler client, PacketReader packet) {
 		_loginSessionId = packet.readQ();
 		_serverId = packet.readC();
 		return true;
 	}
-	
+
 	@Override
-	public void run(ClientHandler client)
-	{
-		if (Config.SHOW_LICENCE && (client.getLoginSessionId() != _loginSessionId))
-		{
+	public void run(ClientHandler client) {
+		if (LoginServerConfig.SHOW_LICENCE && (client.getLoginSessionId() != _loginSessionId)) {
 			client.close(LoginFail2.ACCESS_FAILED_PLEASE_TRY_AGAIN_LATER);
 			return;
 		}
-		
+
 		LoginManager.getInstance().tryServerLogin(client, _serverId);
 	}
 }

@@ -21,9 +21,8 @@ package org.l2junity.gameserver.model.html;
 /**
  * @author UnAfraid
  */
-public interface IHtmlStyle
-{
+public interface IHtmlStyle {
 	String applyBypass(String bypass, String name, boolean isEnabled);
-	
+
 	String applySeparator();
 }

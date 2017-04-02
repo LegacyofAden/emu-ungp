@@ -24,28 +24,23 @@ import java.util.List;
 /**
  * @author UnAfraid
  */
-public class EventDropGroup
-{
+public class EventDropGroup {
 	private final List<EventDropItem> _items = new ArrayList<>();
 	private final double _chance;
-	
-	public EventDropGroup(double chance)
-	{
+
+	public EventDropGroup(double chance) {
 		_chance = chance;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
-	
-	public List<EventDropItem> getItems()
-	{
+
+	public List<EventDropItem> getItems() {
 		return _items;
 	}
-	
-	public void addItem(EventDropItem item)
-	{
+
+	public void addItem(EventDropItem item) {
 		_items.add(item);
 	}
 }

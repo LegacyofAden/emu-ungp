@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExEnchantRetryToPutItemOk implements IClientOutgoingPacket
-{
+public class ExEnchantRetryToPutItemOk implements IClientOutgoingPacket {
 	public static final ExEnchantRetryToPutItemOk STATIC_PACKET = new ExEnchantRetryToPutItemOk();
-	
-	private ExEnchantRetryToPutItemOk()
-	{
+
+	private ExEnchantRetryToPutItemOk() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ENCHANT_RETRY_TO_PUT_ITEM_OK.writeId(packet);
 		return true;
 	}

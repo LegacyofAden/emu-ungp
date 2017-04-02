@@ -23,8 +23,7 @@ import org.l2junity.gameserver.model.items.type.CrystalType;
 /**
  * @author UnAfraid
  */
-public enum ItemGrade
-{
+public enum ItemGrade {
 	NONE,
 	D,
 	C,
@@ -33,11 +32,9 @@ public enum ItemGrade
 	S,
 	R,
 	EVENT;
-	
-	public static ItemGrade valueOf(CrystalType type)
-	{
-		switch (type)
-		{
+
+	public static ItemGrade valueOf(CrystalType type) {
+		switch (type) {
 			case NONE:
 				return NONE;
 			case D:
@@ -60,7 +57,7 @@ public enum ItemGrade
 				return R;
 			case EVENT:
 				return EVENT;
-			
+
 		}
 		return null;
 	}

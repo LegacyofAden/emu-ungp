@@ -21,24 +21,21 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExRegenMax implements IClientOutgoingPacket
-{
+public class ExRegenMax implements IClientOutgoingPacket {
 	private final int _time;
 	private final int _tickInterval;
 	private final double _amountPerTick;
-	
-	public ExRegenMax(int time, int tickInterval, double amountPerTick)
-	{
+
+	public ExRegenMax(int time, int tickInterval, double amountPerTick) {
 		_time = time;
 		_tickInterval = tickInterval;
 		_amountPerTick = amountPerTick;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_REGEN_MAX.writeId(packet);
-		
+
 		packet.writeD(1);
 		packet.writeD(_time);
 		packet.writeD(_tickInterval);

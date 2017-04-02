@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnNpcFirstTalk implements IBaseEvent
-{
+public class OnNpcFirstTalk implements IBaseEvent {
 	private final Npc _npc;
 	private final PlayerInstance _activeChar;
-	
-	public OnNpcFirstTalk(Npc npc, PlayerInstance activeChar)
-	{
+
+	public OnNpcFirstTalk(Npc npc, PlayerInstance activeChar) {
 		_npc = npc;
 		_activeChar = activeChar;
 	}
-	
-	public Npc getNpc()
-	{
+
+	public Npc getNpc() {
 		return _npc;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_FIRST_TALK;
 	}
 }

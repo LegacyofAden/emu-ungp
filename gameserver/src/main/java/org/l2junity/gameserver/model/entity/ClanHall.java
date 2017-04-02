@@ -18,18 +18,8 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.ClanHallGrade;
 import org.l2junity.gameserver.enums.ClanHallType;
@@ -48,11 +38,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author St3eT
  */
-public final class ClanHall extends AbstractResidence
-{
+public final class ClanHall extends AbstractResidence {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClanHall.class);
 
 	private static final String INSERT_CLANHALL = "INSERT INTO clanhall (id, ownerId, paidUntil) VALUES (?,?,?)";
@@ -74,8 +73,7 @@ public final class ClanHall extends AbstractResidence
 	private long _paidUntil = 0;
 	protected ScheduledFuture<?> _checkPaymentTask = null;
 
-	public ClanHall(StatsSet params)
-	{
+	public ClanHall(StatsSet params) {
 		super(params.getInt("id"));
 		// Set static parameters
 		setName(params.getString("name"));
@@ -94,283 +92,245 @@ public final class ClanHall extends AbstractResidence
 		initResidenceZone();
 		initFunctions();
 	}
-	
+
 	@Override
-	protected void load()
-	{
+	protected void load() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement loadStatement = con.prepareStatement(LOAD_CLANHALL);
-			PreparedStatement insertStatement = con.prepareStatement(INSERT_CLANHALL))
-		{
+			 PreparedStatement loadStatement = con.prepareStatement(LOAD_CLANHALL);
+			 PreparedStatement insertStatement = con.prepareStatement(INSERT_CLANHALL)) {
 			loadStatement.setInt(1, getResidenceId());
-			
-			try (ResultSet rset = loadStatement.executeQuery())
-			{
-				if (rset.next())
-				{
+
+			try (ResultSet rset = loadStatement.executeQuery()) {
+				if (rset.next()) {
 					setPaidUntil(rset.getLong("paidUntil"));
 					setOwner(rset.getInt("ownerId"));
-				}
-				else
-				{
+				} else {
 					insertStatement.setInt(1, getResidenceId());
 					insertStatement.setInt(2, 0); // New clanhall should not have owner
 					insertStatement.setInt(3, 0); // New clanhall should not have paid until
-					if (insertStatement.execute())
-					{
+					if (insertStatement.execute()) {
 						LOGGER.info("Clan Hall " + getName() + " (" + getResidenceId() + ") was sucessfully created.");
 					}
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.info("Failed loading clan hall", e);
 		}
 	}
-	
-	public void updateDB()
-	{
+
+	public void updateDB() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement(UPDATE_CLANHALL))
-		{
+			 PreparedStatement statement = con.prepareStatement(UPDATE_CLANHALL)) {
 			statement.setInt(1, getOwnerId());
 			statement.setLong(2, getPaidUntil());
 			statement.setInt(3, getResidenceId());
 			statement.execute();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
-	protected void initResidenceZone()
-	{
+	protected void initResidenceZone() {
 		final ClanHallZone zone = ZoneManager.getInstance().getAllZones(ClanHallZone.class).stream().filter(z -> z.getResidenceId() == getResidenceId()).findFirst().orElse(null);
-		if (zone != null)
-		{
+		if (zone != null) {
 			setResidenceZone(zone);
 		}
 	}
-	
-	public int getCostFailDay()
-	{
+
+	public int getCostFailDay() {
 		final Duration failDay = Duration.between(Instant.ofEpochMilli(getPaidUntil()), Instant.now());
 		return failDay.isNegative() ? 0 : (int) failDay.toDays();
 	}
-	
+
 	/**
 	 * Teleport all non-owner players from {@link ClanHallZone} to {@link ClanHall#getBanishLocation()}.
 	 */
-	public void banishOthers()
-	{
+	public void banishOthers() {
 		getResidenceZone().banishForeigners(getOwnerId());
 	}
-	
+
 	/**
 	 * Open or close all {@link DoorInstance} related to this {@link ClanHall}.
+	 *
 	 * @param open {@code true} means open door, {@code false} means close door
 	 */
-	public void openCloseDoors(boolean open)
-	{
+	public void openCloseDoors(boolean open) {
 		_doors.forEach(door -> door.openCloseMe(open));
 	}
-	
+
 	/**
 	 * Gets the grade of clan hall.
+	 *
 	 * @return grade of this {@link ClanHall} in {@link ClanHallGrade} enum.
 	 */
-	public ClanHallGrade getGrade()
-	{
+	public ClanHallGrade getGrade() {
 		return _grade;
 	}
-	
+
 	/**
 	 * Gets all {@link DoorInstance} related to this {@link ClanHall}.
+	 *
 	 * @return all {@link DoorInstance} related to this {@link ClanHall}
 	 */
-	public List<DoorInstance> getDoors()
-	{
+	public List<DoorInstance> getDoors() {
 		return _doors;
 	}
-	
+
 	/**
 	 * Gets all {@link Npc} related to this {@link ClanHall}.
+	 *
 	 * @return all {@link Npc} related to this {@link ClanHall}
 	 */
-	public List<Integer> getNpcs()
-	{
+	public List<Integer> getNpcs() {
 		return _npcs;
 	}
-	
+
 	/**
 	 * Gets the {@link ClanHallType} of this {@link ClanHall}.
+	 *
 	 * @return {@link ClanHallType} of this {@link ClanHall} in {@link ClanHallGrade} enum.
 	 */
-	public ClanHallType getType()
-	{
+	public ClanHallType getType() {
 		return _type;
 	}
-	
+
 	/**
 	 * Gets the {@link L2Clan} which own this {@link ClanHall}.
+	 *
 	 * @return {@link L2Clan} which own this {@link ClanHall}
 	 */
-	public L2Clan getOwner()
-	{
+	public L2Clan getOwner() {
 		return _owner;
 	}
-	
+
 	/**
 	 * Gets the {@link L2Clan} ID which own this {@link ClanHall}.
+	 *
 	 * @return the {@link L2Clan} ID which own this {@link ClanHall}
 	 */
 	@Override
-	public int getOwnerId()
-	{
+	public int getOwnerId() {
 		final L2Clan owner = _owner;
 		return (owner != null) ? owner.getId() : 0;
 	}
-	
+
 	/**
 	 * Set the owner of clan hall
+	 *
 	 * @param clanId the Id of the clan
 	 */
-	public void setOwner(int clanId)
-	{
+	public void setOwner(int clanId) {
 		setOwner(ClanTable.getInstance().getClan(clanId));
 	}
-	
+
 	/**
 	 * Set the clan as owner of clan hall
+	 *
 	 * @param clan the L2Clan object
 	 */
-	public void setOwner(L2Clan clan)
-	{
-		if (clan != null)
-		{
+	public void setOwner(L2Clan clan) {
+		if (clan != null) {
 			_owner = clan;
 			clan.setHideoutId(getResidenceId());
 			clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
-			if (getPaidUntil() == 0)
-			{
+			if (getPaidUntil() == 0) {
 				setPaidUntil(Instant.now().plus(Duration.ofDays(7)).toEpochMilli());
 			}
-			
+
 			final int failDays = getCostFailDay();
 			final long time = failDays > 0 ? (failDays > 8 ? Instant.now().toEpochMilli() : Instant.ofEpochMilli(getPaidUntil()).plus(Duration.ofDays(failDays + 1)).toEpochMilli()) : getPaidUntil();
-			_checkPaymentTask = ThreadPool.schedule(new CheckPaymentTask(), time - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-		}
-		else
-		{
-			if (_owner != null)
-			{
+			_checkPaymentTask = ThreadPool.getInstance().scheduleGeneral(new CheckPaymentTask(), time - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+		} else {
+			if (_owner != null) {
 				_owner.setHideoutId(0);
 				_owner.broadcastToOnlineMembers(new PledgeShowInfoUpdate(_owner));
 				removeFunctions();
 			}
 			_owner = null;
 			setPaidUntil(0);
-			if (_checkPaymentTask != null)
-			{
+			if (_checkPaymentTask != null) {
 				_checkPaymentTask.cancel(true);
 				_checkPaymentTask = null;
 			}
 		}
 		updateDB();
 	}
-	
+
 	/**
 	 * Gets the due date of clan hall payment
+	 *
 	 * @return the due date of clan hall payment
 	 */
-	public long getPaidUntil()
-	{
+	public long getPaidUntil() {
 		return _paidUntil;
 	}
-	
+
 	/**
 	 * Set the due date of clan hall payment
+	 *
 	 * @param paidUntil the due date of clan hall payment
 	 */
-	public void setPaidUntil(long paidUntil)
-	{
+	public void setPaidUntil(long paidUntil) {
 		_paidUntil = paidUntil;
 	}
-	
+
 	/**
 	 * Gets the next date of clan hall payment
+	 *
 	 * @return the next date of clan hall payment
 	 */
-	public long getNextPayment()
-	{
+	public long getNextPayment() {
 		return (_checkPaymentTask != null) ? System.currentTimeMillis() + _checkPaymentTask.getDelay(TimeUnit.MILLISECONDS) : 0;
 	}
-	
-	public Location getOwnerLocation()
-	{
+
+	public Location getOwnerLocation() {
 		return _ownerLocation;
 	}
-	
-	public Location getBanishLocation()
-	{
+
+	public Location getBanishLocation() {
 		return _banishLocation;
 	}
-	
-	public int getMinBid()
-	{
+
+	public int getMinBid() {
 		return _minBid;
 	}
-	
-	public int getLease()
-	{
+
+	public int getLease() {
 		return _lease;
 	}
-	
-	public int getDeposit()
-	{
+
+	public int getDeposit() {
 		return _deposit;
 	}
-	
-	class CheckPaymentTask implements Runnable
-	{
+
+	class CheckPaymentTask implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			final L2Clan clan = getOwner();
-			if (clan != null)
-			{
-				if (clan.getWarehouse().getAdena() < getLease())
-				{
-					if (getCostFailDay() > 8)
-					{
+			if (clan != null) {
+				if (clan.getWarehouse().getAdena() < getLease()) {
+					if (getCostFailDay() > 8) {
 						setOwner(null);
 						clan.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.THE_CLAN_HALL_FEE_IS_ONE_WEEK_OVERDUE_THEREFORE_THE_CLAN_HALL_OWNERSHIP_HAS_BEEN_REVOKED));
-					}
-					else
-					{
-						_checkPaymentTask = ThreadPool.schedule(new CheckPaymentTask(), 1, TimeUnit.DAYS);
+					} else {
+						_checkPaymentTask = ThreadPool.getInstance().scheduleGeneral(new CheckPaymentTask(), 1, TimeUnit.DAYS);
 						final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.PAYMENT_FOR_YOUR_CLAN_HALL_HAS_NOT_BEEN_MADE_PLEASE_MAKE_PAYMENT_TO_YOUR_CLAN_WAREHOUSE_BY_S1_TOMORROW);
 						sm.addInt(getLease());
 						clan.broadcastToOnlineMembers(sm);
 					}
-				}
-				else
-				{
+				} else {
 					clan.getWarehouse().destroyItem("Clan Hall Lease", Inventory.ADENA_ID, getLease(), null, null);
 					setPaidUntil(Instant.ofEpochMilli(getPaidUntil()).plus(Duration.ofDays(7)).toEpochMilli());
-					_checkPaymentTask = ThreadPool.schedule(new CheckPaymentTask(), getPaidUntil() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+					_checkPaymentTask = ThreadPool.getInstance().scheduleGeneral(new CheckPaymentTask(), getPaidUntil() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 					updateDB();
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return (getClass().getSimpleName() + ":" + getName() + "[" + getResidenceId() + "]");
 	}
 }

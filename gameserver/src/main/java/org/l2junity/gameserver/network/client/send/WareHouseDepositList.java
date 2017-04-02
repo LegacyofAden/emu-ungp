@@ -18,17 +18,16 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class WareHouseDepositList extends AbstractItemPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public final class WareHouseDepositList extends AbstractItemPacket {
 	public static final int PRIVATE = 1;
 	public static final int CLAN = 2;
 	public static final int CASTLE = 3;
@@ -46,47 +45,40 @@ public final class WareHouseDepositList extends AbstractItemPacket
 	 * </ul>
 	 */
 	private final int _whType;
-	
-	public WareHouseDepositList(PlayerInstance player, int type)
-	{
+
+	public WareHouseDepositList(PlayerInstance player, int type) {
 		_whType = type;
 		_playerAdena = player.getAdena();
 		final ItemContainer warehouse = player.getActiveWarehouse();
 		_whSize = warehouse != null ? warehouse.getSize() : 0;
-		
+
 		final boolean isPrivate = _whType == PRIVATE;
-		for (ItemInstance temp : player.getInventory().getAvailableItems(true, isPrivate, false))
-		{
-			if ((temp != null) && temp.isDepositable(isPrivate))
-			{
+		for (ItemInstance temp : player.getInventory().getAvailableItems(true, isPrivate, false)) {
+			if ((temp != null) && temp.isDepositable(isPrivate)) {
 				_items.add(temp);
 			}
-			if ((temp != null) && temp.isDepositable(isPrivate) && temp.isStackable())
-			{
+			if ((temp != null) && temp.isDepositable(isPrivate) && temp.isStackable()) {
 				_itemsStackable.add(temp.getDisplayId());
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.WAREHOUSE_DEPOSIT_LIST.writeId(packet);
-		
+
 		packet.writeH(_whType);
 		packet.writeQ(_playerAdena);
 		packet.writeD(_whSize);
 		packet.writeH(_itemsStackable.size());
-		
-		for (int itemId : _itemsStackable)
-		{
+
+		for (int itemId : _itemsStackable) {
 			packet.writeD(itemId);
 		}
-		
+
 		packet.writeH(_items.size());
-		
-		for (ItemInstance item : _items)
-		{
+
+		for (ItemInstance item : _items) {
 			writeItem(packet, item);
 			packet.writeD(item.getObjectId());
 		}

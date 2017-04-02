@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv.friend;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -30,65 +27,59 @@ import org.l2junity.gameserver.network.client.send.friend.FriendAddRequestResult
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestAnswerFriendInvite implements IClientIncomingPacket
-{
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public final class RequestAnswerFriendInvite implements IClientIncomingPacket {
 	private int _response;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readC(); // Unk. Always seem to be 1.
 		_response = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final PlayerInstance requestor = player.getActiveRequester();
-		if (requestor == null)
-		{
+		if (requestor == null) {
 			return;
 		}
-		
-		if (player == requestor)
-		{
+
+		if (player == requestor) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_ADD_YOURSELF_TO_YOUR_OWN_FRIEND_LIST);
 			return;
 		}
-		
+
 		if (player.getFriendList().contains(requestor.getObjectId()) //
-			|| requestor.getFriendList().contains(player.getObjectId()))
-		{
+				|| requestor.getFriendList().contains(player.getObjectId())) {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ALREADY_ON_YOUR_FRIEND_LIST);
 			sm.addCharName(player);
 			requestor.sendPacket(sm);
 			return;
 		}
-		
-		if (_response == 1)
-		{
+
+		if (_response == 1) {
 			// Player added to your friend list
 			SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_ADDED_TO_YOUR_FRIENDS_LIST);
 			msg.addString(player.getName());
 			requestor.sendPacket(msg);
 			requestor.getFriendList().add(player.getObjectId());
-			
+
 			// has joined as friend.
 			msg = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_JOINED_AS_A_FRIEND);
 			msg.addString(requestor.getName());
 			player.sendPacket(msg);
 			player.getFriendList().add(requestor.getObjectId());
-			
+
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				PreparedStatement statement = con.prepareStatement("INSERT INTO character_friends (charId, friendId) VALUES (?, ?), (?, ?)"))
-			{
+				 PreparedStatement statement = con.prepareStatement("INSERT INTO character_friends (charId, friendId) VALUES (?, ?), (?, ?)")) {
 				statement.setInt(1, requestor.getObjectId());
 				statement.setInt(2, player.getObjectId());
 				statement.setInt(3, player.getObjectId());
@@ -96,22 +87,18 @@ public final class RequestAnswerFriendInvite implements IClientIncomingPacket
 				statement.execute();
 				msg = SystemMessage.getSystemMessage(SystemMessageId.THAT_PERSON_HAS_BEEN_SUCCESSFULLY_ADDED_TO_YOUR_FRIEND_LIST);
 				requestor.sendPacket(msg);
-				
+
 				// Send notifications for both player in order to show them online
 				player.sendPacket(new FriendAddRequestResult(requestor, 1));
 				requestor.sendPacket(new FriendAddRequestResult(player, 1));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				_log.warn("Could not add friend objectid: " + e.getMessage(), e);
 			}
-		}
-		else
-		{
+		} else {
 			SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_FAILED_TO_ADD_A_FRIEND_TO_YOUR_FRIENDS_LIST);
 			requestor.sendPacket(msg);
 		}
-		
+
 		player.setActiveRequester(null);
 		requestor.onTransactionResponse();
 	}

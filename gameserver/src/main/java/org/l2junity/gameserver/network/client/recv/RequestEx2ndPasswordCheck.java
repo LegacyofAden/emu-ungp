@@ -25,25 +25,22 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)
+ *
  * @author mrTJO
  */
-public class RequestEx2ndPasswordCheck implements IClientIncomingPacket
-{
+public class RequestEx2ndPasswordCheck implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!SecondaryAuthData.getInstance().isEnabled() || client.getSecondaryAuth().isAuthed())
-		{
+	public void run(L2GameClient client) {
+		if (!SecondaryAuthData.getInstance().isEnabled() || client.getSecondaryAuth().isAuthed()) {
 			client.sendPacket(new Ex2ndPasswordCheck(Ex2ndPasswordCheck.PASSWORD_OK));
 			return;
 		}
-		
+
 		client.getSecondaryAuth().openDialog();
 	}
 }

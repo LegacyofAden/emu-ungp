@@ -26,24 +26,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Luca Baldi
  */
-public class EtcStatusUpdate implements IClientOutgoingPacket
-{
+public class EtcStatusUpdate implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private int _mask;
-	
-	public EtcStatusUpdate(PlayerInstance activeChar)
-	{
+
+	public EtcStatusUpdate(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 		_mask = _activeChar.getMessageRefusal() || _activeChar.isChatBanned() || _activeChar.isSilenceMode() ? 1 : 0;
 		_mask |= _activeChar.isInsideZone(ZoneId.DANGER_AREA) ? 2 : 0;
 		_mask |= _activeChar.hasCharmOfCourage() ? 4 : 0;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ETC_STATUS_UPDATE.writeId(packet);
-		
+
 		packet.writeC(_activeChar.getCharges()); // 1-7 increase force, lvl
 		packet.writeD(_activeChar.getWeightPenalty()); // 1-4 weight penalty, lvl (1=50%, 2=66.6%, 3=80%, 4=100%)
 		packet.writeC(_activeChar.getExpertiseWeaponPenalty()); // Weapon Grade Penalty [1-4]

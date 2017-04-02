@@ -25,21 +25,18 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author bit
  */
-public class ExAutoFishAvailable implements IClientOutgoingPacket
-{
+public class ExAutoFishAvailable implements IClientOutgoingPacket {
 	public static ExAutoFishAvailable YES = new ExAutoFishAvailable(true);
 	public static ExAutoFishAvailable NO = new ExAutoFishAvailable(false);
-	
+
 	private final boolean _available;
-	
-	private ExAutoFishAvailable(boolean available)
-	{
+
+	private ExAutoFishAvailable(boolean available) {
 		_available = available;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_AUTO_FISH_AVAILABLE.writeId(packet);
 		packet.writeC(_available ? 1 : 0);
 		return true;

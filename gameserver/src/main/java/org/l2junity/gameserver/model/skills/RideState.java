@@ -20,16 +20,24 @@ package org.l2junity.gameserver.model.skills;
 
 /**
  * Ride state enumerated.
+ *
  * @author Zoey76
  */
-public enum RideState
-{
-	/** Riding nothing. */
+public enum RideState {
+	/**
+	 * Riding nothing.
+	 */
 	NONE,
-	/** Riding a strider. */
+	/**
+	 * Riding a strider.
+	 */
 	STRIDER,
-	/** Riding a wolf. */
+	/**
+	 * Riding a wolf.
+	 */
 	WOLF,
-	/** Riding a wyvern. */
+	/**
+	 * Riding a wyvern.
+	 */
 	WYVERN,
 }

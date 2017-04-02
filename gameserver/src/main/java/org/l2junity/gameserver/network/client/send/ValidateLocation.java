@@ -23,22 +23,19 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ValidateLocation implements IClientOutgoingPacket
-{
+public class ValidateLocation implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final Location _loc;
-	
-	public ValidateLocation(WorldObject obj)
-	{
+
+	public ValidateLocation(WorldObject obj) {
 		_charObjId = obj.getObjectId();
 		_loc = obj.getLocation();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VALIDATE_LOCATION.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD((int) _loc.getX());
 		packet.writeD((int) _loc.getY());

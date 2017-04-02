@@ -25,24 +25,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author kerberos
  */
-public class ExStopMoveAirShip implements IClientOutgoingPacket
-{
+public class ExStopMoveAirShip implements IClientOutgoingPacket {
 	private final int _objectId, _x, _y, _z, _heading;
-	
-	public ExStopMoveAirShip(Creature ship)
-	{
+
+	public ExStopMoveAirShip(Creature ship) {
 		_objectId = ship.getObjectId();
 		_x = (int) ship.getX();
 		_y = (int) ship.getY();
 		_z = (int) ship.getZ();
 		_heading = ship.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_STOP_MOVE_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_x);
 		packet.writeD(_y);

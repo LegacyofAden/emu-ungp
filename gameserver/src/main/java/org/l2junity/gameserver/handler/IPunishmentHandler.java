@@ -26,13 +26,12 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public interface IPunishmentHandler
-{
+public interface IPunishmentHandler {
 	Logger _log = LoggerFactory.getLogger(IPunishmentHandler.class);
-	
+
 	void onStart(PunishmentTask task);
-	
+
 	void onEnd(PunishmentTask task);
-	
+
 	PunishmentType getType();
 }

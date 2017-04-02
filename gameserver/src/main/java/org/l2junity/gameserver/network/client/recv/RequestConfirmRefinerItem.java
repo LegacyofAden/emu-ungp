@@ -29,49 +29,43 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Fromat(ch) dd
+ *
  * @author -Wooden-
  */
-public class RequestConfirmRefinerItem extends AbstractRefinePacket
-{
+public class RequestConfirmRefinerItem extends AbstractRefinePacket {
 	private int _targetItemObjId;
 	private int _refinerItemObjId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_targetItemObjId = packet.readD();
 		_refinerItemObjId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final ItemInstance targetItem = activeChar.getInventory().getItemByObjectId(_targetItemObjId);
-		if (targetItem == null)
-		{
+		if (targetItem == null) {
 			return;
 		}
-		
+
 		final ItemInstance refinerItem = activeChar.getInventory().getItemByObjectId(_refinerItemObjId);
-		if (refinerItem == null)
-		{
+		if (refinerItem == null) {
 			return;
 		}
-		
+
 		final VariationFee fee = VariationData.getInstance().getFee(targetItem.getId(), refinerItem.getId());
-		if ((fee == null) || !isValid(activeChar, targetItem, refinerItem))
-		{
+		if ((fee == null) || !isValid(activeChar, targetItem, refinerItem)) {
 			activeChar.sendPacket(SystemMessageId.THIS_IS_NOT_A_SUITABLE_ITEM);
 			return;
 		}
-		
+
 		activeChar.sendPacket(new ExPutIntensiveResultForVariationMake(_refinerItemObjId, refinerItem.getId(), fee.getItemId(), fee.getItemCount()));
 	}
 }

@@ -26,15 +26,14 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Instance level condition
+ *
  * @author malyelfik
  */
-public final class ConditionLevel extends Condition
-{
+public final class ConditionLevel extends Condition {
 	private final int _min;
 	private final int _max;
-	
-	public ConditionLevel(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+
+	public ConditionLevel(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 		// Load params
 		_min = parameters.getInt("min", 1);
@@ -42,10 +41,9 @@ public final class ConditionLevel extends Condition
 		// Set message
 		setSystemMessage(SystemMessageId.C1_S_LEVEL_DOES_NOT_CORRESPOND_TO_THE_REQUIREMENTS_FOR_ENTRY, (msg, player) -> msg.addCharName(player));
 	}
-	
+
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc)
-	{
+	protected boolean test(PlayerInstance player, Npc npc) {
 		return (player.getLevel() >= _min) && (player.getLevel() <= _max);
 	}
 }

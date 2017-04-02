@@ -18,21 +18,19 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class SkillList implements IClientOutgoingPacket
-{
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public final class SkillList implements IClientOutgoingPacket {
 	private final List<Skill> _skills = new ArrayList<>();
 	private int _lastLearnedSkillId = 0;
-	
-	static class Skill
-	{
+
+	static class Skill {
 		public int id;
 		public int reuseDelayGroup;
 		public int level;
@@ -40,9 +38,8 @@ public final class SkillList implements IClientOutgoingPacket
 		public boolean passive;
 		public boolean disabled;
 		public boolean enchanted;
-		
-		Skill(int pId, int pReuseDelayGroup, int pLevel, int pSubLevel, boolean pPassive, boolean pDisabled, boolean pEnchanted)
-		{
+
+		Skill(int pId, int pReuseDelayGroup, int pLevel, int pSubLevel, boolean pPassive, boolean pDisabled, boolean pEnchanted) {
 			id = pId;
 			reuseDelayGroup = pReuseDelayGroup;
 			level = pLevel;
@@ -52,25 +49,21 @@ public final class SkillList implements IClientOutgoingPacket
 			enchanted = pEnchanted;
 		}
 	}
-	
-	public void addSkill(int id, int reuseDelayGroup, int level, int subLevel, boolean passive, boolean disabled, boolean enchanted)
-	{
+
+	public void addSkill(int id, int reuseDelayGroup, int level, int subLevel, boolean passive, boolean disabled, boolean enchanted) {
 		_skills.add(new Skill(id, reuseDelayGroup, level, subLevel, passive, disabled, enchanted));
 	}
-	
-	public void setLastLearnedSkillId(int lastLearnedSkillId)
-	{
+
+	public void setLastLearnedSkillId(int lastLearnedSkillId) {
 		_lastLearnedSkillId = lastLearnedSkillId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SKILL_LIST.writeId(packet);
 		_skills.sort(Comparator.comparing(s -> SkillData.getInstance().getSkill(s.id, s.level, s.subLevel).isToggle() ? 1 : 0));
 		packet.writeD(_skills.size());
-		for (Skill temp : _skills)
-		{
+		for (Skill temp : _skills) {
 			packet.writeD(temp.passive ? 1 : 0);
 			packet.writeH(temp.level);
 			packet.writeH(temp.subLevel);

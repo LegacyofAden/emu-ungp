@@ -24,18 +24,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class PlayOk implements IOutgoingPacket
-{
+public class PlayOk implements IOutgoingPacket {
 	private final long _sessionId;
-	
-	private PlayOk(long sessionId)
-	{
+
+	private PlayOk(long sessionId) {
 		_sessionId = sessionId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x07);
 		packet.writeQ(_sessionId);
 		return true;

@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Maktakien
  */
-public class VehicleCheckLocation implements IClientOutgoingPacket
-{
+public class VehicleCheckLocation implements IClientOutgoingPacket {
 	private final Creature _boat;
-	
-	public VehicleCheckLocation(Creature boat)
-	{
+
+	public VehicleCheckLocation(Creature boat) {
 		_boat = boat;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VEHICLE_CHECK_LOCATION.writeId(packet);
-		
+
 		packet.writeD(_boat.getObjectId());
 		packet.writeD((int) _boat.getX());
 		packet.writeD((int) _boat.getY());

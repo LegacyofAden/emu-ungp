@@ -18,54 +18,48 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.HashSet;
-import java.util.OptionalDouble;
-import java.util.Set;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.ArmorSetsData;
 import org.l2junity.gameserver.model.ArmorSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.BaseStats;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.HashSet;
+import java.util.OptionalDouble;
+import java.util.Set;
 
 /**
  * @author UnAfraid
  */
-public class BaseStatsFinalizer implements IStatsFunction
-{
+public class BaseStatsFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		// Apply template value
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
-		
+
 		final PlayerInstance player = creature.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			final Set<ArmorSet> appliedSets = new HashSet<>(2);
-			
+
 			// Armor sets calculation
-			for (ItemInstance item : player.getInventory().getPaperdollItems())
-			{
-				for (ArmorSet set : ArmorSetsData.getInstance().getSets(item.getId()))
-				{
-					if ((set.getPiecesCount(player, ItemInstance::getId) >= set.getMinimumPieces()) && appliedSets.add(set))
-					{
+			for (ItemInstance item : player.getInventory().getPaperdollItems()) {
+				for (ArmorSet set : ArmorSetsData.getInstance().getSets(item.getId())) {
+					if ((set.getPiecesCount(player, ItemInstance::getId) >= set.getMinimumPieces()) && appliedSets.add(set)) {
 						baseValue += set.getStatsBonus(BaseStats.valueOf(stat));
 					}
 				}
 			}
-			
+
 			// Henna calculation
 			baseValue += player.getHennaValue(BaseStats.valueOf(stat));
 		}
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue), 1, PlayerConfig.MAX_BASE_STAT);
 	}
-	
+
 }

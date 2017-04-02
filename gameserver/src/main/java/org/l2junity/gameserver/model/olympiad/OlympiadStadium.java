@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.L2Spawn;
@@ -40,150 +36,122 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * @author JIV
  */
-public class OlympiadStadium
-{
+public class OlympiadStadium {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OlympiadStadium.class);
 	private final OlympiadStadiumZone _zone;
 	private final Instance _instance;
 	private final List<L2Spawn> _buffers;
 	private OlympiadGameTask _task = null;
-	
-	protected OlympiadStadium(OlympiadStadiumZone olyzone, int stadium)
-	{
+
+	protected OlympiadStadium(OlympiadStadiumZone olyzone, int stadium) {
 		_zone = olyzone;
 		_instance = InstanceManager.getInstance().createInstance(olyzone.getInstanceTemplateId(), null);
 		_buffers = _instance.getNpcs().stream().map(Npc::getSpawn).collect(Collectors.toList());
 		_buffers.stream().map(L2Spawn::getLastSpawn).forEach(Npc::decayMe);
 	}
-	
-	public OlympiadStadiumZone getZone()
-	{
+
+	public OlympiadStadiumZone getZone() {
 		return _zone;
 	}
-	
-	public final void registerTask(OlympiadGameTask task)
-	{
+
+	public final void registerTask(OlympiadGameTask task) {
 		_task = task;
 	}
-	
-	public OlympiadGameTask getTask()
-	{
+
+	public OlympiadGameTask getTask() {
 		return _task;
 	}
-	
-	public Instance getInstance()
-	{
+
+	public Instance getInstance() {
 		return _instance;
 	}
-	
-	public final void openDoors()
-	{
+
+	public final void openDoors() {
 		_instance.getDoors().forEach(DoorInstance::openMe);
 	}
-	
-	public final void closeDoors()
-	{
+
+	public final void closeDoors() {
 		_instance.getDoors().forEach(DoorInstance::closeMe);
 	}
-	
-	public final void spawnBuffers()
-	{
+
+	public final void spawnBuffers() {
 		_buffers.forEach(L2Spawn::doSpawn);
 	}
-	
-	public final void deleteBuffers()
-	{
+
+	public final void deleteBuffers() {
 		_buffers.stream().map(L2Spawn::getLastSpawn).filter(Objects::nonNull).forEach(Npc::deleteMe);
 	}
-	
-	public final void broadcastStatusUpdate(PlayerInstance player)
-	{
+
+	public final void broadcastStatusUpdate(PlayerInstance player) {
 		final ExOlympiadUserInfo packet = new ExOlympiadUserInfo(player);
-		for (PlayerInstance target : _instance.getPlayers())
-		{
-			if (target.inObserverMode() || (target.getOlympiadSide() != player.getOlympiadSide()))
-			{
+		for (PlayerInstance target : _instance.getPlayers()) {
+			if (target.inObserverMode() || (target.getOlympiadSide() != player.getOlympiadSide())) {
 				target.sendPacket(packet);
 			}
 		}
 	}
-	
-	public final void broadcastPacket(IClientOutgoingPacket packet)
-	{
+
+	public final void broadcastPacket(IClientOutgoingPacket packet) {
 		_instance.broadcastPacket(packet);
 	}
-	
-	public final void broadcastPacketToObservers(IClientOutgoingPacket packet)
-	{
-		for (PlayerInstance target : _instance.getPlayers())
-		{
-			if (target.inObserverMode())
-			{
+
+	public final void broadcastPacketToObservers(IClientOutgoingPacket packet) {
+		for (PlayerInstance target : _instance.getPlayers()) {
+			if (target.inObserverMode()) {
 				target.sendPacket(packet);
 			}
 		}
 	}
-	
-	public final void updateZoneStatusForCharactersInside()
-	{
-		if (_task == null)
-		{
+
+	public final void updateZoneStatusForCharactersInside() {
+		if (_task == null) {
 			return;
 		}
-		
+
 		final boolean battleStarted = _task.isBattleStarted();
 		final SystemMessage sm;
-		if (battleStarted)
-		{
+		if (battleStarted) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_ENTERED_A_COMBAT_ZONE);
-		}
-		else
-		{
+		} else {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 		}
-		
-		for (PlayerInstance player : _instance.getPlayers())
-		{
-			if (player.inObserverMode())
-			{
+
+		for (PlayerInstance player : _instance.getPlayers()) {
+			if (player.inObserverMode()) {
 				return;
 			}
-			
-			if (battleStarted)
-			{
+
+			if (battleStarted) {
 				player.setInsideZone(ZoneId.PVP, true);
 				player.sendPacket(sm);
-			}
-			else
-			{
+			} else {
 				player.setInsideZone(ZoneId.PVP, false);
 				player.sendPacket(sm);
 				player.sendPacket(ExOlympiadMatchEnd.STATIC_PACKET);
 			}
 		}
 	}
-	
-	public final void updateZoneInfoForObservers()
-	{
-		if (_task == null)
-		{
+
+	public final void updateZoneInfoForObservers() {
+		if (_task == null) {
 			return;
 		}
-		
-		for (PlayerInstance player : _instance.getPlayers())
-		{
-			if (!player.inObserverMode())
-			{
+
+		for (PlayerInstance player : _instance.getPlayers()) {
+			if (!player.inObserverMode()) {
 				return;
 			}
-			
+
 			final OlympiadGameTask nextArena = OlympiadGameManager.getInstance().getOlympiadTask(player.getOlympiadGameId());
 			final List<Location> spectatorSpawns = nextArena.getStadium().getZone().getSpectatorSpawns();
-			if (spectatorSpawns.isEmpty())
-			{
+			if (spectatorSpawns.isEmpty()) {
 				LOGGER.warn(getClass().getSimpleName() + ": Zone: " + nextArena.getStadium().getZone() + " doesn't have specatator spawns defined!");
 				return;
 			}

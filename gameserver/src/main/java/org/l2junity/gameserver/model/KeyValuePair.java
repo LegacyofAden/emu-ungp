@@ -19,28 +19,24 @@
 package org.l2junity.gameserver.model;
 
 /**
- * @author UnAfraid
  * @param <K>
  * @param <V>
+ * @author UnAfraid
  */
-public class KeyValuePair<K, V>
-{
+public class KeyValuePair<K, V> {
 	private final K _key;
 	private final V _value;
-	
-	public KeyValuePair(K key, V value)
-	{
+
+	public KeyValuePair(K key, V value) {
 		_key = key;
 		_value = value;
 	}
-	
-	public K getKey()
-	{
+
+	public K getKey() {
 		return _key;
 	}
-	
-	public V getValue()
-	{
+
+	public V getValue() {
 		return _value;
 	}
 }

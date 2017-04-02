@@ -18,16 +18,11 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.templates.L2CubicTemplate;
 import org.l2junity.gameserver.model.cubic.CubicSkill;
@@ -36,58 +31,52 @@ import org.l2junity.gameserver.model.cubic.conditions.HealthCondition;
 import org.l2junity.gameserver.model.cubic.conditions.HpCondition;
 import org.l2junity.gameserver.model.cubic.conditions.HpCondition.HpConditionType;
 import org.l2junity.gameserver.model.cubic.conditions.RangeCondition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author UnAfraid
  */
-public class CubicData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(CubicData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class CubicData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final CubicData instance = new CubicData();
+
 	private final Map<Integer, Map<Integer, L2CubicTemplate>> _cubics = new HashMap<>();
-	
-	protected CubicData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	protected CubicData() {
 		_cubics.clear();
 		parseDatapackDirectory("data/stats/cubics", true);
-		LOGGER.info("Loaded {} cubics.", _cubics.size());
+		log.info("Loaded {} cubics.", _cubics.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "cubic", cubicNode ->
 		{
 			parseTemplate(cubicNode, new L2CubicTemplate(new StatsSet(parseAttributes(cubicNode))));
 		}));
 	}
-	
+
 	/**
 	 * @param cubicNode
 	 * @param template
 	 */
-	private void parseTemplate(Node cubicNode, L2CubicTemplate template)
-	{
+	private void parseTemplate(Node cubicNode, L2CubicTemplate template) {
 		forEach(cubicNode, IXmlReader::isNode, innerNode ->
 		{
-			switch (innerNode.getNodeName())
-			{
-				case "conditions":
-				{
+			switch (innerNode.getNodeName()) {
+				case "conditions": {
 					parseConditions(innerNode, template, template);
 					break;
 				}
-				case "skills":
-				{
+				case "skills": {
 					parseSkills(innerNode, template);
 					break;
 				}
@@ -95,54 +84,47 @@ public class CubicData implements IGameXmlReader
 		});
 		_cubics.computeIfAbsent(template.getId(), key -> new HashMap<>()).put(template.getLevel(), template);
 	}
-	
+
 	/**
 	 * @param cubicNode
 	 * @param template
 	 * @param holder
 	 */
-	private void parseConditions(Node cubicNode, L2CubicTemplate template, ICubicConditionHolder holder)
-	{
+	private void parseConditions(Node cubicNode, L2CubicTemplate template, ICubicConditionHolder holder) {
 		forEach(cubicNode, IXmlReader::isNode, conditionNode ->
 		{
-			switch (conditionNode.getNodeName())
-			{
-				case "hp":
-				{
+			switch (conditionNode.getNodeName()) {
+				case "hp": {
 					final HpConditionType type = parseEnum(conditionNode.getAttributes(), HpConditionType.class, "type");
 					final int hpPer = parseInteger(conditionNode.getAttributes(), "percent");
 					holder.addCondition(new HpCondition(type, hpPer));
 					break;
 				}
-				case "range":
-				{
+				case "range": {
 					final int range = parseInteger(conditionNode.getAttributes(), "value");
 					holder.addCondition(new RangeCondition(range));
 					break;
 				}
-				case "healthPercent":
-				{
+				case "healthPercent": {
 					final int min = parseInteger(conditionNode.getAttributes(), "min");
 					final int max = parseInteger(conditionNode.getAttributes(), "max");
 					holder.addCondition(new HealthCondition(min, max));
 					break;
 				}
-				default:
-				{
-					LOGGER.warn("Attempting to use not implemented condition: {} for cubic id: {} level: {}", conditionNode.getNodeName(), template.getId(), template.getLevel());
+				default: {
+					log.warn("Attempting to use not implemented condition: {} for cubic id: {} level: {}", conditionNode.getNodeName(), template.getId(), template.getLevel());
 					break;
 				}
 			}
 		});
-		
+
 	}
-	
+
 	/**
 	 * @param cubicNode
 	 * @param template
 	 */
-	private void parseSkills(Node cubicNode, L2CubicTemplate template)
-	{
+	private void parseSkills(Node cubicNode, L2CubicTemplate template) {
 		forEach(cubicNode, "skill", skillNode ->
 		{
 			final CubicSkill skill = new CubicSkill(new StatsSet(parseAttributes(skillNode)));
@@ -150,34 +132,17 @@ public class CubicData implements IGameXmlReader
 			template.getSkills().add(skill);
 		});
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _cubics.size();
 	}
-	
+
 	/**
 	 * @param id
 	 * @param level
 	 * @return the L2CubicTemplate for specified id and level
 	 */
-	public L2CubicTemplate getCubicTemplate(int id, int level)
-	{
+	public L2CubicTemplate getCubicTemplate(int id, int level) {
 		return _cubics.getOrDefault(id, Collections.emptyMap()).get(level);
-	}
-	
-	/**
-	 * Gets the single instance of CubicData.
-	 * @return single instance of CubicData
-	 */
-	@InstanceGetter
-	public static final CubicData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final CubicData _instance = new CubicData();
 	}
 }

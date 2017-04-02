@@ -26,20 +26,16 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestInzoneWaitingTime implements IClientIncomingPacket
-{
+public class RequestInzoneWaitingTime implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		client.sendPacket(new ExInzoneWaiting(activeChar));

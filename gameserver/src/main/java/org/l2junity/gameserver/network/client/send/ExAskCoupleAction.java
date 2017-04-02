@@ -24,22 +24,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author JIV
  */
-public class ExAskCoupleAction implements IClientOutgoingPacket
-{
+public class ExAskCoupleAction implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _actionId;
-	
-	public ExAskCoupleAction(int charObjId, int social)
-	{
+
+	public ExAskCoupleAction(int charObjId, int social) {
 		_charObjId = charObjId;
 		_actionId = social;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ASK_COUPLE_ACTION.writeId(packet);
-		
+
 		packet.writeD(_actionId);
 		packet.writeD(_charObjId);
 		return true;

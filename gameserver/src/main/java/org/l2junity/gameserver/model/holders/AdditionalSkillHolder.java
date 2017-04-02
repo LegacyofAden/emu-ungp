@@ -21,19 +21,16 @@ package org.l2junity.gameserver.model.holders;
 /**
  * @author UnAfraid
  */
-public class AdditionalSkillHolder extends SkillHolder
-{
+public class AdditionalSkillHolder extends SkillHolder {
 	private static final long serialVersionUID = 1471191240653148142L;
 	private final int _minLevel;
-	
-	public AdditionalSkillHolder(int skillId, int skillLevel, int minLevel)
-	{
+
+	public AdditionalSkillHolder(int skillId, int skillLevel, int minLevel) {
 		super(skillId, skillLevel);
 		_minLevel = minLevel;
 	}
-	
-	public int getMinLevel()
-	{
+
+	public int getMinLevel() {
 		return _minLevel;
 	}
 }

@@ -25,21 +25,17 @@ import org.l2junity.network.PacketReader;
 /**
  * @author lord_rex
  */
-public final class RequestStopMove implements IClientIncomingPacket
-{
+public final class RequestStopMove implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// Nothing to read.
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			player.stopMove(player.getLocation());
 		}
 	}

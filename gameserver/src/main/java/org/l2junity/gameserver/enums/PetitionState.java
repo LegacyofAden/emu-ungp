@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * Enum with petition states.
+ *
  * @author xban1x
  */
-public enum PetitionState
-{
+public enum PetitionState {
 	PENDING,
 	RESPONDER_CANCEL,
 	RESPONDER_MISSING,

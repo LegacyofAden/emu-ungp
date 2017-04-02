@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.model.spawns;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.interfaces.IParameterized;
@@ -30,11 +25,15 @@ import org.l2junity.gameserver.model.interfaces.ITerritorized;
 import org.l2junity.gameserver.model.zone.type.BannedSpawnTerritory;
 import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author UnAfraid
  */
-public class SpawnGroup implements Cloneable, ITerritorized, IParameterized<StatsSet>
-{
+public class SpawnGroup implements Cloneable, ITerritorized, IParameterized<StatsSet> {
 	private final String _ai;
 	private final String _name;
 	private final boolean _spawnByDefault;
@@ -42,131 +41,108 @@ public class SpawnGroup implements Cloneable, ITerritorized, IParameterized<Stat
 	private List<BannedSpawnTerritory> _bannedTerritories;
 	private final List<NpcSpawnTemplate> _spawns = new ArrayList<>();
 	private StatsSet _parameters;
-	
-	public SpawnGroup(StatsSet set)
-	{
+
+	public SpawnGroup(StatsSet set) {
 		this(set.getString("ai", null), set.getString("name", null), set.getBoolean("spawnByDefault", true));
 	}
-	
-	private SpawnGroup(String ai, String name, boolean spawnByDefault)
-	{
+
+	private SpawnGroup(String ai, String name, boolean spawnByDefault) {
 		_ai = ai;
 		_name = name;
 		_spawnByDefault = spawnByDefault;
 	}
-	
-	public String getAI()
-	{
+
+	public String getAI() {
 		return _ai;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public boolean isSpawningByDefault()
-	{
+
+	public boolean isSpawningByDefault() {
 		return _spawnByDefault;
 	}
-	
-	public void addSpawn(NpcSpawnTemplate template)
-	{
+
+	public void addSpawn(NpcSpawnTemplate template) {
 		_spawns.add(template);
 	}
-	
-	public List<NpcSpawnTemplate> getSpawns()
-	{
+
+	public List<NpcSpawnTemplate> getSpawns() {
 		return _spawns;
 	}
-	
+
 	@Override
-	public void addTerritory(SpawnTerritory territory)
-	{
-		if (_territories == null)
-		{
+	public void addTerritory(SpawnTerritory territory) {
+		if (_territories == null) {
 			_territories = new ArrayList<>();
 		}
 		_territories.add(territory);
 	}
-	
+
 	@Override
-	public List<SpawnTerritory> getTerritories()
-	{
+	public List<SpawnTerritory> getTerritories() {
 		return _territories != null ? _territories : Collections.emptyList();
 	}
-	
+
 	@Override
-	public void addBannedTerritory(BannedSpawnTerritory territory)
-	{
-		if (_bannedTerritories == null)
-		{
+	public void addBannedTerritory(BannedSpawnTerritory territory) {
+		if (_bannedTerritories == null) {
 			_bannedTerritories = new ArrayList<>();
 		}
 		_bannedTerritories.add(territory);
 	}
-	
+
 	@Override
-	public List<BannedSpawnTerritory> getBannedTerritories()
-	{
+	public List<BannedSpawnTerritory> getBannedTerritories() {
 		return _bannedTerritories != null ? _bannedTerritories : Collections.emptyList();
 	}
-	
+
 	@Override
-	public StatsSet getParameters()
-	{
+	public StatsSet getParameters() {
 		return _parameters;
 	}
-	
+
 	@Override
-	public void setParameters(StatsSet parameters)
-	{
+	public void setParameters(StatsSet parameters) {
 		_parameters = parameters;
 	}
-	
-	public List<NpcSpawnTemplate> getSpawnsById(int id)
-	{
+
+	public List<NpcSpawnTemplate> getSpawnsById(int id) {
 		return _spawns.stream().filter(spawn -> spawn.getId() == id).collect(Collectors.toList());
 	}
-	
-	public void spawnAll()
-	{
+
+	public void spawnAll() {
 		spawnAll(null);
 	}
-	
-	public void spawnAll(Instance instance)
-	{
+
+	public void spawnAll(Instance instance) {
 		_spawns.forEach(template -> template.spawn(instance));
 	}
-	
-	public void despawnAll()
-	{
+
+	public void despawnAll() {
 		_spawns.forEach(NpcSpawnTemplate::despawn);
 	}
-	
+
 	@Override
-	public SpawnGroup clone()
-	{
+	public SpawnGroup clone() {
 		final SpawnGroup group = new SpawnGroup(_ai, _name, _spawnByDefault);
-		
+
 		// Clone banned territories
-		for (BannedSpawnTerritory territory : getBannedTerritories())
-		{
+		for (BannedSpawnTerritory territory : getBannedTerritories()) {
 			group.addBannedTerritory(territory);
 		}
-		
+
 		// Clone territories
-		for (SpawnTerritory territory : getTerritories())
-		{
+		for (SpawnTerritory territory : getTerritories()) {
 			group.addTerritory(territory);
 		}
-		
+
 		// Clone spawns
-		for (NpcSpawnTemplate spawn : _spawns)
-		{
+		for (NpcSpawnTemplate spawn : _spawns) {
 			group.addSpawn(spawn.clone());
 		}
-		
+
 		return group;
 	}
 }

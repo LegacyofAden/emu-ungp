@@ -24,41 +24,35 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 /**
  * @author Gnacik
  */
-public class L2EventMonsterInstance extends L2MonsterInstance
-{
+public class L2EventMonsterInstance extends L2MonsterInstance {
 	// Block offensive skills usage on event mobs
 	// mainly for AoE skills, disallow kill many event mobs
 	// with one skill
 	public boolean block_skill_attack = false;
-	
+
 	// Event mobs should drop items to ground
 	// but item pickup must be protected to killer
 	// Todo: Some mobs need protect drop for spawner
 	public boolean drop_on_ground = false;
-	
-	public L2EventMonsterInstance(L2NpcTemplate template)
-	{
+
+	public L2EventMonsterInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2EventMobInstance);
 	}
-	
-	public void eventSetBlockOffensiveSkills(boolean value)
-	{
+
+	public void eventSetBlockOffensiveSkills(boolean value) {
 		block_skill_attack = value;
 	}
-	
-	public void eventSetDropOnGround(boolean value)
-	{
+
+	public void eventSetDropOnGround(boolean value) {
 		drop_on_ground = value;
 	}
-	
-	public boolean eventDropOnGround()
-	{
+
+	public boolean eventDropOnGround() {
 		return drop_on_ground;
 	}
-	
-	public boolean eventSkillAttackBlocked()
-	{
+
+	public boolean eventSkillAttackBlocked() {
 		return block_skill_attack;
 	}
 }

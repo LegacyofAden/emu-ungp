@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Sdw
  */
-public interface IConditionHandler
-{
+public interface IConditionHandler {
 	boolean test(Creature creature, WorldObject object);
 }

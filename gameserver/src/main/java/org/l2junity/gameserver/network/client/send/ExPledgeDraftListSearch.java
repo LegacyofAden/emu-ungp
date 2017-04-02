@@ -18,32 +18,28 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.clan.entry.PledgeWaitingInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class ExPledgeDraftListSearch implements IClientOutgoingPacket
-{
+public class ExPledgeDraftListSearch implements IClientOutgoingPacket {
 	final List<PledgeWaitingInfo> _pledgeRecruitList;
-	
-	public ExPledgeDraftListSearch(List<PledgeWaitingInfo> pledgeRecruitList)
-	{
+
+	public ExPledgeDraftListSearch(List<PledgeWaitingInfo> pledgeRecruitList) {
 		_pledgeRecruitList = pledgeRecruitList;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_DRAFT_LIST_SEARCH.writeId(packet);
-		
+
 		packet.writeD(_pledgeRecruitList.size());
-		for (PledgeWaitingInfo prl : _pledgeRecruitList)
-		{
+		for (PledgeWaitingInfo prl : _pledgeRecruitList) {
 			packet.writeD(prl.getPlayerId());
 			packet.writeS(prl.getPlayerName());
 			packet.writeD(prl.getKarma());

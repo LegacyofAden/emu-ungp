@@ -24,15 +24,12 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnDailyReset implements IBaseEvent
-{
-	public OnDailyReset()
-	{
+public class OnDailyReset implements IBaseEvent {
+	public OnDailyReset() {
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_DAILY_RESET;
 	}
 }

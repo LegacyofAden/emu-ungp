@@ -39,16 +39,14 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Nik
  */
-public class DoppelgangerInstance extends Npc
-{
+public class DoppelgangerInstance extends Npc {
 	protected static final Logger log = LoggerFactory.getLogger(DoppelgangerInstance.class);
-	
+
 	private boolean _copySummonerEffects = true;
-	
-	public DoppelgangerInstance(L2NpcTemplate template, PlayerInstance owner)
-	{
+
+	public DoppelgangerInstance(L2NpcTemplate template, PlayerInstance owner) {
 		super(template);
-		
+
 		setSummoner(owner);
 		setCloneObjId(owner.getObjectId());
 		setClanId(owner.getClanId());
@@ -57,124 +55,99 @@ public class DoppelgangerInstance extends Npc
 		((DoppelgangerAI) getAI()).setStartFollowController(true);
 		followSummoner(true);
 	}
-	
+
 	@Override
-	protected CharacterAI initAI()
-	{
+	protected CharacterAI initAI() {
 		return new DoppelgangerAI(this);
 	}
-	
+
 	@Override
-	public void onSpawn()
-	{
+	public void onSpawn() {
 		super.onSpawn();
-		
-		if (_copySummonerEffects && (getSummoner() != null))
-		{
-			for (BuffInfo summonerInfo : getSummoner().getEffectList().getEffects())
-			{
-				if (summonerInfo.getAbnormalTime() > 0)
-				{
+
+		if (_copySummonerEffects && (getSummoner() != null)) {
+			for (BuffInfo summonerInfo : getSummoner().getEffectList().getEffects()) {
+				if (summonerInfo.getAbnormalTime() > 0) {
 					final BuffInfo info = new BuffInfo(getSummoner(), this, summonerInfo.getSkill(), false, null, null);
 					info.setAbnormalTime(summonerInfo.getAbnormalTime());
 					getEffectList().add(info);
 				}
-				
+
 			}
 		}
 	}
-	
-	public void followSummoner(boolean followSummoner)
-	{
-		if (followSummoner)
-		{
-			if ((getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) || (getAI().getIntention() == CtrlIntention.AI_INTENTION_ACTIVE))
-			{
+
+	public void followSummoner(boolean followSummoner) {
+		if (followSummoner) {
+			if ((getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) || (getAI().getIntention() == CtrlIntention.AI_INTENTION_ACTIVE)) {
 				setRunning();
 				getAI().setIntention(CtrlIntention.AI_INTENTION_FOLLOW, getSummoner());
 			}
-		}
-		else
-		{
-			if (getAI().getIntention() == CtrlIntention.AI_INTENTION_FOLLOW)
-			{
+		} else {
+			if (getAI().getIntention() == CtrlIntention.AI_INTENTION_FOLLOW) {
 				getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 			}
 		}
 	}
-	
-	public void setCopySummonerEffects(boolean copySummonerEffects)
-	{
+
+	public void setCopySummonerEffects(boolean copySummonerEffects) {
 		_copySummonerEffects = copySummonerEffects;
 	}
-	
+
 	@Override
-	public final byte getPvpFlag()
-	{
+	public final byte getPvpFlag() {
 		return getSummoner() != null ? getSummoner().getPvpFlag() : 0;
 	}
-	
+
 	@Override
-	public final Team getTeam()
-	{
+	public final Team getTeam() {
 		return getSummoner() != null ? getSummoner().getTeam() : Team.NONE;
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return (getSummoner() != null) ? getSummoner().isAutoAttackable(attacker) : super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public void doAttack(double damage, Creature target, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect)
-	{
+	public void doAttack(double damage, Creature target, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect) {
 		super.doAttack(damage, target, skill, isDOT, directlyToHp, critical, reflect);
 		sendDamageMessage(target, skill, (int) damage, critical, false);
 	}
-	
+
 	@Override
-	public void sendDamageMessage(Creature target, Skill skill, int damage, boolean crit, boolean miss)
-	{
-		if (miss || (getSummoner() == null) || !getSummoner().isPlayer())
-		{
+	public void sendDamageMessage(Creature target, Skill skill, int damage, boolean crit, boolean miss) {
+		if (miss || (getSummoner() == null) || !getSummoner().isPlayer()) {
 			return;
 		}
-		
+
 		// Prevents the double spam of system messages, if the target is the owning player.
-		if (target.getObjectId() != getSummoner().getObjectId())
-		{
-			if (getActingPlayer().isInOlympiadMode() && (target.isPlayer()) && ((PlayerInstance) target).isInOlympiadMode() && (((PlayerInstance) target).getOlympiadGameId() == getActingPlayer().getOlympiadGameId()))
-			{
+		if (target.getObjectId() != getSummoner().getObjectId()) {
+			if (getActingPlayer().isInOlympiadMode() && (target.isPlayer()) && ((PlayerInstance) target).isInOlympiadMode() && (((PlayerInstance) target).getOlympiadGameId() == getActingPlayer().getOlympiadGameId())) {
 				OlympiadGameManager.getInstance().notifyCompetitorDamage(getSummoner().getActingPlayer(), damage);
 			}
-			
+
 			final SystemMessage sm;
-			
-			if ((target.isHpBlocked() && !target.isNpc()) || (target.isPlayer() && target.getStat().has(BooleanStat.FACE_OFF) && (target.getActingPlayer().getAttackerObjId() != getObjectId())))
-			{
+
+			if ((target.isHpBlocked() && !target.isNpc()) || (target.isPlayer() && target.getStat().has(BooleanStat.FACE_OFF) && (target.getActingPlayer().getAttackerObjId() != getObjectId()))) {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.THE_ATTACK_HAS_BEEN_BLOCKED);
-			}
-			else
-			{
+			} else {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_INFLICTED_S3_DAMAGE_ON_C2_S4);
 				sm.addNpcName(this);
 				sm.addCharName(target);
 				sm.addInt(damage);
 				sm.addPopup(target.getObjectId(), getObjectId(), (damage * -1));
 			}
-			
+
 			sendPacket(sm);
 		}
 	}
-	
+
 	@Override
-	public void reduceCurrentHp(double damage, Creature attacker, Skill skill)
-	{
+	public void reduceCurrentHp(double damage, Creature attacker, Skill skill) {
 		super.reduceCurrentHp(damage, attacker, skill);
-		
-		if ((getSummoner() != null) && getSummoner().isPlayer() && (attacker != null) && !isDead() && !isHpBlocked())
-		{
+
+		if ((getSummoner() != null) && getSummoner().isPlayer() && (attacker != null) && !isDead() && !isHpBlocked()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_RECEIVED_S3_DAMAGE_FROM_C2);
 			sm.addNpcName(this);
 			sm.addCharName(attacker);
@@ -182,40 +155,33 @@ public class DoppelgangerInstance extends Npc
 			sendPacket(sm);
 		}
 	}
-	
+
 	@Override
-	public PlayerInstance getActingPlayer()
-	{
+	public PlayerInstance getActingPlayer() {
 		return getSummoner() != null ? getSummoner().getActingPlayer() : super.getActingPlayer();
 	}
-	
+
 	@Override
-	public void onTeleported()
-	{
+	public void onTeleported() {
 		deleteMe(); // In retail, doppelgangers disappear when summoner teleports.
 	}
-	
+
 	@Override
-	public void sendPacket(IClientOutgoingPacket... packets)
-	{
-		if (getSummoner() != null)
-		{
+	public void sendPacket(IClientOutgoingPacket... packets) {
+		if (getSummoner() != null) {
 			getSummoner().sendPacket(packets);
 		}
 	}
-	
+
 	@Override
-	public void sendPacket(SystemMessageId id)
-	{
-		if (getSummoner() != null)
-		{
+	public void sendPacket(SystemMessageId id) {
+		if (getSummoner() != null) {
 			getSummoner().sendPacket(id);
 		}
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return super.toString() + "(" + getId() + ") Summoner: " + getSummoner();
 	}
 }

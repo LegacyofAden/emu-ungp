@@ -18,20 +18,19 @@
  */
 package org.l2junity.gameserver.model.interfaces;
 
-import java.util.Map;
-
 import org.l2junity.gameserver.model.skills.Skill;
+
+import java.util.Map;
 
 /**
  * @author UnAfraid
  */
-public interface ISkillsHolder
-{
+public interface ISkillsHolder {
 	Map<Integer, Skill> getSkills();
-	
+
 	Skill addSkill(Skill skill);
-	
+
 	Skill getKnownSkill(int skillId);
-	
+
 	int getSkillLevel(int skillId);
 }

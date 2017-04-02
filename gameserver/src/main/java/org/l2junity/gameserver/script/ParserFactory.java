@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.script;
 
-public abstract class ParserFactory
-{
+public abstract class ParserFactory {
 	public abstract Parser create();
-	
+
 }

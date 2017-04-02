@@ -25,23 +25,20 @@ import org.l2junity.network.PacketWriter;
  * @author Kerberos
  */
 @Deprecated
-public class GMHide implements IClientOutgoingPacket
-{
+public class GMHide implements IClientOutgoingPacket {
 	private final int _mode;
-	
+
 	/**
 	 * @param mode (0 = display windows, 1 = hide windows)
 	 */
-	public GMHide(int mode)
-	{
+	public GMHide(int mode) {
 		_mode = mode;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GM_HIDE.writeId(packet);
-		
+
 		packet.writeD(_mode);
 		return true;
 	}

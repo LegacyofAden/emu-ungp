@@ -20,19 +20,20 @@ package org.l2junity.gameserver.handler;
 
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public interface IVoicedCommandHandler
-{
+public interface IVoicedCommandHandler {
 	/**
 	 * this is the worker method that is called when someone uses an admin command.
+	 *
 	 * @param activeChar
 	 * @param command
 	 * @param params
 	 * @return command success
 	 */
 	boolean useVoicedCommand(String command, PlayerInstance activeChar, String params);
-	
+
 	/**
 	 * this method is called at initialization to register all the item ids automatically
+	 *
 	 * @return all known itemIds
 	 */
 	String[] getVoicedCommandList();

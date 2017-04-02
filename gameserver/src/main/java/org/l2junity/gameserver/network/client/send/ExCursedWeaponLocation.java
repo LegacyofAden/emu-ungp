@@ -18,62 +18,54 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * Format: (ch) d[ddddd]
+ *
  * @author -Wooden-
  */
-public class ExCursedWeaponLocation implements IClientOutgoingPacket
-{
+public class ExCursedWeaponLocation implements IClientOutgoingPacket {
 	private final List<CursedWeaponInfo> _cursedWeaponInfo;
-	
-	public ExCursedWeaponLocation(List<CursedWeaponInfo> cursedWeaponInfo)
-	{
+
+	public ExCursedWeaponLocation(List<CursedWeaponInfo> cursedWeaponInfo) {
 		_cursedWeaponInfo = cursedWeaponInfo;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CURSED_WEAPON_LOCATION.writeId(packet);
-		
-		if (!_cursedWeaponInfo.isEmpty())
-		{
+
+		if (!_cursedWeaponInfo.isEmpty()) {
 			packet.writeD(_cursedWeaponInfo.size());
-			for (CursedWeaponInfo w : _cursedWeaponInfo)
-			{
+			for (CursedWeaponInfo w : _cursedWeaponInfo) {
 				packet.writeD(w.id);
 				packet.writeD(w.activated);
-				
+
 				packet.writeD((int) w.pos.getX());
 				packet.writeD((int) w.pos.getY());
 				packet.writeD((int) w.pos.getZ());
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0);
 		}
 		return true;
 	}
-	
-	public static class CursedWeaponInfo
-	{
+
+	public static class CursedWeaponInfo {
 		public Location pos;
 		public int id;
 		public int activated; // 0 - not activated ? 1 - activated
-		
-		public CursedWeaponInfo(Location p, int ID, int status)
-		{
+
+		public CursedWeaponInfo(Location p, int ID, int status) {
 			pos = p;
 			id = ID;
 			activated = status;
 		}
-		
+
 	}
 }

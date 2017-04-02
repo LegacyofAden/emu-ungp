@@ -26,29 +26,24 @@ import org.l2junity.network.PacketReader;
 /**
  * This packet is received from client when a party leader requests to change the leadership to another player in his party.
  */
-public final class RequestChangePartyLeader implements IClientIncomingPacket
-{
+public final class RequestChangePartyLeader implements IClientIncomingPacket {
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		Party party = activeChar.getParty();
-		if ((party != null) && party.isLeader(activeChar))
-		{
+		if ((party != null) && party.isLeader(activeChar)) {
 			party.changePartyLeader(_name);
 		}
 	}

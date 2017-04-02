@@ -24,23 +24,20 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExGetOnAirShip implements IClientOutgoingPacket
-{
+public class ExGetOnAirShip implements IClientOutgoingPacket {
 	private final int _playerId, _airShipId;
 	private final Location _pos;
-	
-	public ExGetOnAirShip(PlayerInstance player, Creature ship)
-	{
+
+	public ExGetOnAirShip(PlayerInstance player, Creature ship) {
 		_playerId = player.getObjectId();
 		_airShipId = ship.getObjectId();
 		_pos = player.getInVehiclePosition();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_GET_ON_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_playerId);
 		packet.writeD(_airShipId);
 		packet.writeD((int) _pos.getX());

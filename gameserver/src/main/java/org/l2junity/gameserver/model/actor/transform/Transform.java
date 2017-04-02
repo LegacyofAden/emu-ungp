@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.transform;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.InventoryBlockType;
 import org.l2junity.gameserver.enums.Sex;
@@ -42,11 +38,14 @@ import org.l2junity.gameserver.network.client.send.ExBasicActionList;
 import org.l2junity.gameserver.network.client.send.ExUserInfoEquipSlot;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * @author UnAfraid
  */
-public final class Transform implements IIdentifiable
-{
+public final class Transform implements IIdentifiable {
 	private final int _id;
 	private final int _displayId;
 	private final TransformType _type;
@@ -56,12 +55,11 @@ public final class Transform implements IIdentifiable
 	private final String _name;
 	private final String _title;
 	private final boolean _allowAllSkills;
-	
+
 	private TransformTemplate _maleTemplate;
 	private TransformTemplate _femaleTemplate;
-	
-	public Transform(StatsSet set)
-	{
+
+	public Transform(StatsSet set) {
 		_id = set.getInt("id");
 		_displayId = set.getInt("displayId", _id);
 		_type = set.getEnum("type", TransformType.class, TransformType.COMBAT);
@@ -72,366 +70,304 @@ public final class Transform implements IIdentifiable
 		_title = set.getString("setTitle", null);
 		_allowAllSkills = set.getInt("allow_all_skills", 0) == 1;
 	}
-	
+
 	/**
 	 * Gets the transformation ID.
+	 *
 	 * @return the transformation ID
 	 */
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
-	public int getDisplayId()
-	{
+
+	public int getDisplayId() {
 		return _displayId;
 	}
-	
-	public TransformType getType()
-	{
+
+	public TransformType getType() {
 		return _type;
 	}
-	
-	public boolean canSwim()
-	{
+
+	public boolean canSwim() {
 		return _canSwim;
 	}
-	
-	public boolean canAttack()
-	{
+
+	public boolean canAttack() {
 		return _canAttack;
 	}
-	
-	public int getSpawnHeight()
-	{
+
+	public int getSpawnHeight() {
 		return _spawnHeight;
 	}
-	
+
 	/**
 	 * @return name that's going to be set to the player while is transformed with current transformation
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * @return title that's going to be set to the player while is transformed with current transformation
 	 */
-	public String getTitle()
-	{
+	public String getTitle() {
 		return _title;
 	}
-	
-	public TransformTemplate getTemplate(Creature creature)
-	{
-		if (creature.isPlayer())
-		{
+
+	public TransformTemplate getTemplate(Creature creature) {
+		if (creature.isPlayer()) {
 			return (creature.getActingPlayer().getAppearance().getSex() ? _femaleTemplate : _maleTemplate);
-		}
-		else if (creature.isNpc())
-		{
+		} else if (creature.isNpc()) {
 			return ((Npc) creature).getTemplate().getSex() == Sex.FEMALE ? _femaleTemplate : _maleTemplate;
 		}
-		
+
 		return null;
 	}
-	
-	public void setTemplate(boolean male, TransformTemplate template)
-	{
-		if (male)
-		{
+
+	public void setTemplate(boolean male, TransformTemplate template) {
+		if (male) {
 			_maleTemplate = template;
-		}
-		else
-		{
+		} else {
 			_femaleTemplate = template;
 		}
 	}
-	
+
 	/**
 	 * @return Allow all skills for this transformation.
 	 */
-	public boolean allowAllSkills()
-	{
+	public boolean allowAllSkills() {
 		return _allowAllSkills;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is mode change, {@code false} otherwise
 	 */
-	public boolean isStance()
-	{
+	public boolean isStance() {
 		return _type == TransformType.MODE_CHANGE;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is combat, {@code false} otherwise
 	 */
-	public boolean isCombat()
-	{
+	public boolean isCombat() {
 		return _type == TransformType.COMBAT;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is non combat, {@code false} otherwise
 	 */
-	public boolean isNonCombat()
-	{
+	public boolean isNonCombat() {
 		return _type == TransformType.NON_COMBAT;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is flying, {@code false} otherwise
 	 */
-	public boolean isFlying()
-	{
+	public boolean isFlying() {
 		return _type == TransformType.FLYING;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is cursed, {@code false} otherwise
 	 */
-	public boolean isCursed()
-	{
+	public boolean isCursed() {
 		return _type == TransformType.CURSED;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is raiding, {@code false} otherwise
 	 */
-	public boolean isRiding()
-	{
+	public boolean isRiding() {
 		return _type == TransformType.RIDING_MODE;
 	}
-	
+
 	/**
 	 * @return {@code true} if transform type is pure stat, {@code false} otherwise
 	 */
-	public boolean isPureStats()
-	{
+	public boolean isPureStats() {
 		return _type == TransformType.PURE_STAT;
 	}
-	
-	public double getCollisionHeight(Creature creature, double defaultCollisionHeight)
-	{
+
+	public double getCollisionHeight(Creature creature, double defaultCollisionHeight) {
 		final TransformTemplate template = getTemplate(creature);
-		if ((template != null) && (template.getCollisionHeight() != null))
-		{
+		if ((template != null) && (template.getCollisionHeight() != null)) {
 			return template.getCollisionHeight();
 		}
-		
+
 		return defaultCollisionHeight;
 	}
-	
-	public double getCollisionRadius(Creature creature, double defaultCollisionRadius)
-	{
+
+	public double getCollisionRadius(Creature creature, double defaultCollisionRadius) {
 		final TransformTemplate template = getTemplate(creature);
-		if ((template != null) && (template.getCollisionRadius() != null))
-		{
+		if ((template != null) && (template.getCollisionRadius() != null)) {
 			return template.getCollisionRadius();
 		}
-		
+
 		return defaultCollisionRadius;
 	}
-	
-	public void onTransform(Creature creature, boolean addSkills)
-	{
+
+	public void onTransform(Creature creature, boolean addSkills) {
 		// Abort attacking and casting.
 		creature.abortAttack();
 		creature.abortCast();
-		
+
 		final PlayerInstance player = creature.getActingPlayer();
-		
+
 		// Get off the strider or something else if character is mounted
-		if (creature.isPlayer() && player.isMounted())
-		{
+		if (creature.isPlayer() && player.isMounted()) {
 			player.dismount();
 		}
-		
+
 		final TransformTemplate template = getTemplate(creature);
-		if (template != null)
-		{
+		if (template != null) {
 			// Start flying.
-			if (isFlying())
-			{
+			if (isFlying()) {
 				creature.setIsFlying(true);
 			}
-			
+
 			// Get player a bit higher so he doesn't drops underground after transformation happens
 			creature.setXYZ(creature.getX(), creature.getY(), creature.getZ() + getCollisionHeight(creature, 0));
-			
-			if (creature.isPlayer())
-			{
-				if (getName() != null)
-				{
+
+			if (creature.isPlayer()) {
+				if (getName() != null) {
 					player.getAppearance().setVisibleName(getName());
 				}
-				if (getTitle() != null)
-				{
+				if (getTitle() != null) {
 					player.getAppearance().setVisibleTitle(getTitle());
 				}
-				
-				if (addSkills)
-				{
+
+				if (addSkills) {
 					//@formatter:off
 					// Add common skills.
 					template.getSkills()
-						.stream()
-						.map(SkillHolder::getSkill)
-						.forEach(player::addTransformSkill);
-					
+							.stream()
+							.map(SkillHolder::getSkill)
+							.forEach(player::addTransformSkill);
+
 					// Add skills depending on level.
 					template.getAdditionalSkills()
-						.stream()
-						.filter(h -> player.getLevel() >= h.getMinLevel())
-						.map(SkillHolder::getSkill)
-						.forEach(player::addTransformSkill);
-					
+							.stream()
+							.filter(h -> player.getLevel() >= h.getMinLevel())
+							.map(SkillHolder::getSkill)
+							.forEach(player::addTransformSkill);
+
 					// Add collection skills.
 					SkillTreesData.getInstance().getCollectSkillTree().values()
-						.stream()
-						.map(s -> player.getKnownSkill(s.getSkillId()))
-						.filter(Objects::nonNull)
-						.forEach(player::addTransformSkill);
+							.stream()
+							.map(s -> player.getKnownSkill(s.getSkillId()))
+							.filter(Objects::nonNull)
+							.forEach(player::addTransformSkill);
 					//@formatter:on
 				}
-				
+
 				// Set inventory blocks if needed.
-				if (!template.getAdditionalItems().isEmpty())
-				{
+				if (!template.getAdditionalItems().isEmpty()) {
 					final List<Integer> allowed = new ArrayList<>();
 					final List<Integer> notAllowed = new ArrayList<>();
-					for (AdditionalItemHolder holder : template.getAdditionalItems())
-					{
-						if (holder.isAllowedToUse())
-						{
+					for (AdditionalItemHolder holder : template.getAdditionalItems()) {
+						if (holder.isAllowedToUse()) {
 							allowed.add(holder.getId());
-						}
-						else
-						{
+						} else {
 							notAllowed.add(holder.getId());
 						}
 					}
-					
-					if (!allowed.isEmpty())
-					{
+
+					if (!allowed.isEmpty()) {
 						player.getInventory().setInventoryBlock(allowed, InventoryBlockType.WHITELIST);
 					}
-					
-					if (!notAllowed.isEmpty())
-					{
+
+					if (!notAllowed.isEmpty()) {
 						player.getInventory().setInventoryBlock(notAllowed, InventoryBlockType.BLACKLIST);
 					}
 				}
-				
+
 				// Send basic action list.
-				if (template.hasBasicActionList())
-				{
+				if (template.hasBasicActionList()) {
 					player.sendPacket(template.getBasicActionList());
 				}
-				
+
 				player.getEffectList().stopAllToggles();
-				
-				if (player.hasTransformSkills())
-				{
+
+				if (player.hasTransformSkills()) {
 					player.sendSkillList();
 					player.sendPacket(new SkillCoolTime(player));
 				}
-				
+
 				player.broadcastUserInfo();
-				
+
 				// Notify to scripts
 				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerTransform(player, getId()), player);
-			}
-			else
-			{
+			} else {
 				creature.broadcastInfo();
 			}
-			
+
 			// I don't know why, but you need to broadcast this to trigger the transformation client-side.
 			// Usually should be sent naturally after applying effect, but sometimes is sent before that... i just dont know...
 			// Also, broadcastUserInfo should always be sent before this, or else it will result in incorrect collision change.
 			creature.updateAbnormalVisualEffects();
 		}
 	}
-	
-	public void onUntransform(Creature creature)
-	{
+
+	public void onUntransform(Creature creature) {
 		// Abort attacking and casting.
 		creature.abortAttack();
 		creature.abortCast();
-		
+
 		final TransformTemplate template = getTemplate(creature);
-		if (template != null)
-		{
+		if (template != null) {
 			// Stop flying.
-			if (isFlying())
-			{
+			if (isFlying()) {
 				creature.setIsFlying(false);
 			}
-			
-			if (creature.isPlayer())
-			{
+
+			if (creature.isPlayer()) {
 				final PlayerInstance player = creature.getActingPlayer();
 				final boolean hasTransformSkills = player.hasTransformSkills();
-				
-				if (getName() != null)
-				{
+
+				if (getName() != null) {
 					player.getAppearance().setVisibleName(null);
 				}
-				if (getTitle() != null)
-				{
+				if (getTitle() != null) {
 					player.getAppearance().setVisibleTitle(null);
 				}
-				
+
 				// Remove transformation skills.
 				player.removeAllTransformSkills();
-				
+
 				// Remove inventory blocks if needed.
-				if (!template.getAdditionalItems().isEmpty())
-				{
+				if (!template.getAdditionalItems().isEmpty()) {
 					player.getInventory().unblock();
 				}
-				
+
 				player.sendPacket(ExBasicActionList.STATIC_PACKET);
-				
+
 				player.getEffectList().stopEffects(AbnormalType.TRANSFORM);
 				player.getEffectList().stopEffects(AbnormalType.CHANGEBODY);
-				
-				if (hasTransformSkills)
-				{
+
+				if (hasTransformSkills) {
 					player.sendSkillList();
 					player.sendPacket(new SkillCoolTime(player));
 				}
-				
+
 				player.broadcastUserInfo();
 				player.sendPacket(new ExUserInfoEquipSlot(player));
 				// Notify to scripts
 				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerTransform(player, 0), player);
-			}
-			else
-			{
+			} else {
 				creature.broadcastInfo();
 			}
 		}
 	}
-	
-	public void onLevelUp(PlayerInstance player)
-	{
+
+	public void onLevelUp(PlayerInstance player) {
 		final TransformTemplate template = getTemplate(player);
-		if (template != null)
-		{
+		if (template != null) {
 			// Add skills depending on level.
-			if (!template.getAdditionalSkills().isEmpty())
-			{
-				for (AdditionalSkillHolder holder : template.getAdditionalSkills())
-				{
-					if (player.getLevel() >= holder.getMinLevel())
-					{
-						if (player.getSkillLevel(holder.getSkillId()) < holder.getSkillLevel())
-						{
+			if (!template.getAdditionalSkills().isEmpty()) {
+				for (AdditionalSkillHolder holder : template.getAdditionalSkills()) {
+					if (player.getLevel() >= holder.getMinLevel()) {
+						if (player.getSkillLevel(holder.getSkillId()) < holder.getSkillLevel()) {
 							player.addTransformSkill(holder.getSkill());
 						}
 					}
@@ -439,58 +375,48 @@ public final class Transform implements IIdentifiable
 			}
 		}
 	}
-	
-	public WeaponType getBaseAttackType(Creature creature, WeaponType defaultAttackType)
-	{
+
+	public WeaponType getBaseAttackType(Creature creature, WeaponType defaultAttackType) {
 		final TransformTemplate template = getTemplate(creature);
-		if (template != null)
-		{
+		if (template != null) {
 			final WeaponType weaponType = template.getBaseAttackType();
-			if (weaponType != null)
-			{
+			if (weaponType != null) {
 				return weaponType;
 			}
 		}
 		return defaultAttackType;
 	}
-	
-	public double getStats(Creature creature, DoubleStat stats, double defaultValue)
-	{
+
+	public double getStats(Creature creature, DoubleStat stats, double defaultValue) {
 		double val = defaultValue;
 		final TransformTemplate template = getTemplate(creature);
-		if (template != null)
-		{
+		if (template != null) {
 			val = template.getStats(stats, defaultValue);
 			final TransformLevelData data = template.getData(creature.getLevel());
-			if (data != null)
-			{
+			if (data != null) {
 				val = data.getStats(stats, defaultValue);
 			}
 		}
 		return val;
 	}
-	
-	public int getBaseDefBySlot(PlayerInstance player, int slot)
-	{
+
+	public int getBaseDefBySlot(PlayerInstance player, int slot) {
 		final int defaultValue = player.getTemplate().getBaseDefBySlot(slot);
 		final TransformTemplate template = getTemplate(player);
-		
+
 		return template == null ? defaultValue : template.getDefense(slot, defaultValue);
 	}
-	
+
 	/**
 	 * @param creature
 	 * @return {@code -1} if this transformation doesn't alter levelmod, otherwise a new levelmod will be returned.
 	 */
-	public double getLevelMod(Creature creature)
-	{
+	public double getLevelMod(Creature creature) {
 		double val = 1;
 		final TransformTemplate template = getTemplate(creature);
-		if (template != null)
-		{
+		if (template != null) {
 			final TransformLevelData data = template.getData(creature.getLevel());
-			if (data != null)
-			{
+			if (data != null) {
 				val = data.getLevelMod();
 			}
 		}

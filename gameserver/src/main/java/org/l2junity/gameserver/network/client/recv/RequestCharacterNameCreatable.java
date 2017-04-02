@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.ServerConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExIsCharNameCreatable;
@@ -28,51 +28,40 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestCharacterNameCreatable implements IClientIncomingPacket
-{
+public class RequestCharacterNameCreatable implements IClientIncomingPacket {
 	private String _name;
 	private int result;
-	
+
 	public static int CHARACTER_CREATE_FAILED = 1;
 	public static int NAME_ALREADY_EXISTS = 2;
 	public static int INVALID_LENGTH = 3;
 	public static int INVALID_NAME = 4;
 	public static int CANNOT_CREATE_SERVER = 5;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final int charId = CharNameTable.getInstance().getIdByName(_name);
-		
-		if (!Util.isAlphaNumeric(_name) || !isValidName(_name))
-		{
+
+		if (!Util.isAlphaNumeric(_name) || !isValidName(_name)) {
 			result = INVALID_NAME;
-		}
-		else if (charId > 0)
-		{
+		} else if (charId > 0) {
 			result = NAME_ALREADY_EXISTS;
-		}
-		else if (_name.length() > 16)
-		{
+		} else if (_name.length() > 16) {
 			result = INVALID_LENGTH;
-		}
-		else
-		{
+		} else {
 			result = -1;
 		}
-		
+
 		client.sendPacket(new ExIsCharNameCreatable(result));
 	}
-	
-	private boolean isValidName(String text)
-	{
-		return ServerConfig.CHARNAME_TEMPLATE_PATTERN.matcher(text).matches();
+
+	private boolean isValidName(String text) {
+		return GameserverConfig.CHARNAME_TEMPLATE_PATTERN.matcher(text).matches();
 	}
 }

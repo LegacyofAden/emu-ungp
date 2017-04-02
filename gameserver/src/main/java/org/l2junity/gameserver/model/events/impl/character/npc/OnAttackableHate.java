@@ -26,37 +26,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnAttackableHate implements IBaseEvent
-{
+public class OnAttackableHate implements IBaseEvent {
 	private final Attackable _npc;
 	private final PlayerInstance _activeChar;
 	private final boolean _isSummon;
-	
-	public OnAttackableHate(Attackable npc, PlayerInstance activeChar, boolean isSummon)
-	{
+
+	public OnAttackableHate(Attackable npc, PlayerInstance activeChar, boolean isSummon) {
 		_npc = npc;
 		_activeChar = activeChar;
 		_isSummon = isSummon;
 	}
-	
-	public final Attackable getNpc()
-	{
+
+	public final Attackable getNpc() {
 		return _npc;
 	}
-	
-	public final PlayerInstance getActiveChar()
-	{
+
+	public final PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public boolean isSummon()
-	{
+
+	public boolean isSummon() {
 		return _isSummon;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_HATE;
 	}
 }

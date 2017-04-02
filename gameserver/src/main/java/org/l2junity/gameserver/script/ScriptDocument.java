@@ -18,79 +18,65 @@
  */
 package org.l2junity.gameserver.script;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  *
  */
-public class ScriptDocument
-{
+public class ScriptDocument {
 	private static final Logger _log = LoggerFactory.getLogger(ScriptDocument.class);
-	
+
 	private Document _document;
 	private final String _name;
-	
-	public ScriptDocument(String name, InputStream input)
-	{
+
+	public ScriptDocument(String name, InputStream input) {
 		_name = name;
-		
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		try
-		{
+		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			_document = builder.parse(input);
-			
-		}
-		catch (SAXException sxe)
-		{
+
+		} catch (SAXException sxe) {
 			// Error generated during parsing)
 			Exception x = sxe;
-			if (sxe.getException() != null)
-			{
+			if (sxe.getException() != null) {
 				x = sxe.getException();
 			}
 			_log.warn(getClass().getSimpleName() + ": " + x.getMessage());
-		}
-		catch (ParserConfigurationException pce)
-		{
+		} catch (ParserConfigurationException pce) {
 			// Parser with specified options can't be built
 			_log.warn("", pce);
-			
-		}
-		catch (IOException ioe)
-		{
+
+		} catch (IOException ioe) {
 			// I/O error
 			_log.warn("", ioe);
 		}
 	}
-	
-	public Document getDocument()
-	{
+
+	public Document getDocument() {
 		return _document;
 	}
-	
+
 	/**
 	 * @return Returns the _name.
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return _name;
 	}
-	
+
 }

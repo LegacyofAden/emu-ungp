@@ -18,55 +18,45 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.datatables.ItemTable;
+import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.items.type.CrystalType;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.items.L2Item;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.items.type.CrystalType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * This class holds the Enchant HP Bonus Data.
+ *
  * @author MrPoke, Zoey76
  */
-public class EnchantItemHPBonusData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(EnchantItemHPBonusData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = ItemTable.class)
+public class EnchantItemHPBonusData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final EnchantItemHPBonusData instance = new EnchantItemHPBonusData();
+
 	private static float FULL_ARMOR_MODIFIER = 1.5f;
-	
+
 	private final Map<CrystalType, List<Integer>> _armorHPBonuses = new EnumMap<>(CrystalType.class);
-	
-	/**
-	 * Instantiates a new enchant hp bonus data.
-	 */
-	protected EnchantItemHPBonusData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ItemTable.class))
-	protected void load() throws Exception
-	{
+
+	private EnchantItemHPBonusData() {
 		_armorHPBonuses.clear();
 		parseDatapackFile("data/stats/enchantHPBonus.xml");
 		LOGGER.info("Loaded {} Enchant HP Bonuses.", _armorHPBonuses.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode ->
 		{
 			forEach(listNode, "onePieceFactor", onePieceFactorNode ->
@@ -76,7 +66,7 @@ public class EnchantItemHPBonusData implements IGameXmlReader
 			forEach(listNode, "enchantHP", enchantHPNode ->
 			{
 				final List<Integer> bonuses = new ArrayList<>(12);
-				
+
 				forEach(enchantHPNode, "bonus", bonusNode ->
 				{
 					bonuses.add(Integer.parseInt(bonusNode.getTextContent()));
@@ -85,50 +75,31 @@ public class EnchantItemHPBonusData implements IGameXmlReader
 			});
 		});
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _armorHPBonuses.size();
 	}
-	
+
 	/**
 	 * Gets the HP bonus.
+	 *
 	 * @param item the item
 	 * @return the HP bonus
 	 */
-	public final int getHPBonus(ItemInstance item)
-	{
-		if ((item.getOlyEnchantLevel() <= 0) || (item.getItem().getType2() != L2Item.TYPE2_SHIELD_ARMOR))
-		{
+	public final int getHPBonus(ItemInstance item) {
+		if ((item.getOlyEnchantLevel() <= 0) || (item.getItem().getType2() != L2Item.TYPE2_SHIELD_ARMOR)) {
 			return 0;
 		}
-		
+
 		final List<Integer> values = _armorHPBonuses.get(item.getItem().getCrystalTypePlus());
-		if ((values == null) || values.isEmpty())
-		{
+		if ((values == null) || values.isEmpty()) {
 			return 0;
 		}
-		
+
 		final int bonus = values.get(Math.min(item.getOlyEnchantLevel(), values.size()) - 1);
-		if (item.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)
-		{
+		if (item.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) {
 			return (int) (bonus * FULL_ARMOR_MODIFIER);
 		}
 		return bonus;
-	}
-	
-	/**
-	 * Gets the single instance of EnchantHPBonusData.
-	 * @return single instance of EnchantHPBonusData
-	 */
-	@InstanceGetter
-	public static final EnchantItemHPBonusData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final EnchantItemHPBonusData _instance = new EnchantItemHPBonusData();
 	}
 }

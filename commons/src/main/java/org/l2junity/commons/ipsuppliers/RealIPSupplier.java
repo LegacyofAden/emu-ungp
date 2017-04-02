@@ -18,42 +18,35 @@
  */
 package org.l2junity.commons.ipsuppliers;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.l2junity.commons.ipsuppliers.impl.AmazongIPSupplier;
 import org.l2junity.commons.ipsuppliers.impl.IFConfigIPSupplier;
 import org.l2junity.commons.ipsuppliers.impl.UnityIPSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 /**
  * @author UnAfraid
  */
-public class RealIPSupplier
-{
+public class RealIPSupplier {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RealIPSupplier.class);
-	
+
 	private static final SortedSet<IRealIPSupplier> IP_PROVIDERS = new TreeSet<>(Arrays.asList(new AmazongIPSupplier(), new IFConfigIPSupplier(), new UnityIPSupplier()));
 	private static final String LOCALHOST = "127.0.0.1";
-	
-	public String get()
-	{
-		for (IRealIPSupplier provider : IP_PROVIDERS)
-		{
-			try
-			{
-				
+
+	public String get() {
+		for (IRealIPSupplier provider : IP_PROVIDERS) {
+			try {
+
 				final String ip = provider.getIP();
-				if (ip != null)
-				{
+				if (ip != null) {
 					return ip;
 				}
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				LOGGER.warn("Failed to obtain IP from provider: {}", provider.getClass().getSimpleName(), e);
 			}
 		}

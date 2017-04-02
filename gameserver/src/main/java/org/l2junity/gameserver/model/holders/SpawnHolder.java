@@ -23,57 +23,49 @@ import org.l2junity.gameserver.model.Location;
 /**
  * @author St3eT
  */
-public final class SpawnHolder extends Location
-{
+public final class SpawnHolder extends Location {
 	private static final long serialVersionUID = 7136684341706210901L;
 	private final int _npcId;
 	private final int _respawnDelay;
 	private final boolean _spawnAnimation;
-	
-	public SpawnHolder(int npcId, int x, int y, int z, int heading, boolean spawnAnimation)
-	{
+
+	public SpawnHolder(int npcId, int x, int y, int z, int heading, boolean spawnAnimation) {
 		super(x, y, z, heading);
 		_npcId = npcId;
 		_respawnDelay = 0;
 		_spawnAnimation = spawnAnimation;
 	}
-	
-	public SpawnHolder(int npcId, int x, int y, int z, int heading, int respawn, boolean spawnAnimation)
-	{
+
+	public SpawnHolder(int npcId, int x, int y, int z, int heading, int respawn, boolean spawnAnimation) {
 		super(x, y, z, heading);
 		_npcId = npcId;
 		_respawnDelay = respawn;
 		_spawnAnimation = spawnAnimation;
 	}
-	
-	public SpawnHolder(int npcId, Location loc, boolean spawnAnimation)
-	{
+
+	public SpawnHolder(int npcId, Location loc, boolean spawnAnimation) {
 		super(loc.getX(), loc.getY(), loc.getZ(), loc.getHeading());
 		_npcId = npcId;
 		_respawnDelay = 0;
 		_spawnAnimation = spawnAnimation;
 	}
-	
-	public SpawnHolder(int npcId, Location loc, int respawn, boolean spawnAnimation)
-	{
+
+	public SpawnHolder(int npcId, Location loc, int respawn, boolean spawnAnimation) {
 		super(loc.getX(), loc.getY(), loc.getZ(), loc.getHeading());
 		_npcId = npcId;
 		_respawnDelay = respawn;
 		_spawnAnimation = spawnAnimation;
 	}
-	
-	public final int getNpcId()
-	{
+
+	public final int getNpcId() {
 		return _npcId;
 	}
-	
-	public final boolean isSpawnAnimation()
-	{
+
+	public final boolean isSpawnAnimation() {
 		return _spawnAnimation;
 	}
-	
-	public int getRespawnDelay()
-	{
+
+	public int getRespawnDelay() {
 		return _respawnDelay;
 	}
 }

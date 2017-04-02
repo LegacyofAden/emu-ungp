@@ -23,10 +23,10 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Nik
  */
-public interface IAffectObjectHandler
-{
+public interface IAffectObjectHandler {
 	/**
 	 * Checks if the rules for the given affect object type are accepted or not.
+	 *
 	 * @param activeChar
 	 * @param target
 	 * @return {@code true} if target should be accepted, {@code false} otherwise

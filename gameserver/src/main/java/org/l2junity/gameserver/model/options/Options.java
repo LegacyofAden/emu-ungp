@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.model.options;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -29,249 +26,199 @@ import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class Options
-{
+public class Options {
 	private final int _id;
 	private List<AbstractEffect> _effects = null;
 	private List<SkillHolder> _activeSkill = null;
 	private List<SkillHolder> _passiveSkill = null;
 	private List<OptionsSkillHolder> _activationSkills = null;
-	
+
 	/**
 	 * @param id
 	 */
-	public Options(int id)
-	{
+	public Options(int id) {
 		_id = id;
 	}
-	
-	public final int getId()
-	{
+
+	public final int getId() {
 		return _id;
 	}
-	
-	public void addEffect(AbstractEffect effect)
-	{
-		if (_effects == null)
-		{
+
+	public void addEffect(AbstractEffect effect) {
+		if (_effects == null) {
 			_effects = new ArrayList<>();
 		}
 		_effects.add(effect);
 	}
-	
-	public List<AbstractEffect> getEffects()
-	{
+
+	public List<AbstractEffect> getEffects() {
 		return _effects;
 	}
-	
-	public boolean hasEffects()
-	{
+
+	public boolean hasEffects() {
 		return _effects != null;
 	}
-	
-	public boolean hasActiveSkills()
-	{
+
+	public boolean hasActiveSkills() {
 		return _activeSkill != null;
 	}
-	
-	public List<SkillHolder> getActiveSkills()
-	{
+
+	public List<SkillHolder> getActiveSkills() {
 		return _activeSkill;
 	}
-	
-	public void addActiveSkill(SkillHolder holder)
-	{
-		if (_activeSkill == null)
-		{
+
+	public void addActiveSkill(SkillHolder holder) {
+		if (_activeSkill == null) {
 			_activeSkill = new ArrayList<>();
 		}
 		_activeSkill.add(holder);
 	}
-	
-	public boolean hasPassiveSkills()
-	{
+
+	public boolean hasPassiveSkills() {
 		return _passiveSkill != null;
 	}
-	
-	public List<SkillHolder> getPassiveSkills()
-	{
+
+	public List<SkillHolder> getPassiveSkills() {
 		return _passiveSkill;
 	}
-	
-	public void addPassiveSkill(SkillHolder holder)
-	{
-		if (_passiveSkill == null)
-		{
+
+	public void addPassiveSkill(SkillHolder holder) {
+		if (_passiveSkill == null) {
 			_passiveSkill = new ArrayList<>();
 		}
 		_passiveSkill.add(holder);
 	}
-	
-	public boolean hasActivationSkills()
-	{
+
+	public boolean hasActivationSkills() {
 		return _activationSkills != null;
 	}
-	
-	public boolean hasActivationSkills(OptionsSkillType type)
-	{
-		if (_activationSkills != null)
-		{
-			for (OptionsSkillHolder holder : _activationSkills)
-			{
-				if (holder.getSkillType() == type)
-				{
+
+	public boolean hasActivationSkills(OptionsSkillType type) {
+		if (_activationSkills != null) {
+			for (OptionsSkillHolder holder : _activationSkills) {
+				if (holder.getSkillType() == type) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	public List<OptionsSkillHolder> getActivationsSkills()
-	{
+
+	public List<OptionsSkillHolder> getActivationsSkills() {
 		return _activationSkills;
 	}
-	
-	public List<OptionsSkillHolder> getActivationsSkills(OptionsSkillType type)
-	{
+
+	public List<OptionsSkillHolder> getActivationsSkills(OptionsSkillType type) {
 		List<OptionsSkillHolder> temp = new ArrayList<>();
-		if (_activationSkills != null)
-		{
-			for (OptionsSkillHolder holder : _activationSkills)
-			{
-				if (holder.getSkillType() == type)
-				{
+		if (_activationSkills != null) {
+			for (OptionsSkillHolder holder : _activationSkills) {
+				if (holder.getSkillType() == type) {
 					temp.add(holder);
 				}
 			}
 		}
 		return temp;
 	}
-	
-	public void addActivationSkill(OptionsSkillHolder holder)
-	{
-		if (_activationSkills == null)
-		{
+
+	public void addActivationSkill(OptionsSkillHolder holder) {
+		if (_activationSkills == null) {
 			_activationSkills = new ArrayList<>();
 		}
 		_activationSkills.add(holder);
 	}
-	
-	public void apply(PlayerInstance player)
-	{
+
+	public void apply(PlayerInstance player) {
 		player.sendDebugMessage("Activating option id: " + _id, DebugType.OPTIONS);
-		if (hasEffects())
-		{
+		if (hasEffects()) {
 			final BuffInfo info = new BuffInfo(player, player, null, true, null, this);
-			for (AbstractEffect effect : _effects)
-			{
-				if (effect.calcSuccess(info.getEffector(), info.getEffected(), info.getSkill()))
-				{
+			for (AbstractEffect effect : _effects) {
+				if (effect.calcSuccess(info.getEffector(), info.getEffected(), info.getSkill())) {
 					effect.instant(info.getEffector(), info.getEffected(), info.getSkill(), info.getItem());
 					player.sendDebugMessage("Appling instant effect: " + effect.getClass().getSimpleName(), DebugType.OPTIONS);
-					if (effect.checkPumpCondition(info.getEffector(), info.getEffected(), info.getSkill()))
-					{
+					if (effect.checkPumpCondition(info.getEffector(), info.getEffected(), info.getSkill())) {
 						info.addEffect(effect);
 						player.sendDebugMessage("Appling continious effect: " + effect.getClass().getSimpleName(), DebugType.OPTIONS);
 					}
 				}
 			}
-			if (!info.getEffects().isEmpty())
-			{
+			if (!info.getEffects().isEmpty()) {
 				player.getEffectList().add(info);
 			}
 		}
-		if (hasActiveSkills())
-		{
-			for (SkillHolder holder : getActiveSkills())
-			{
+		if (hasActiveSkills()) {
+			for (SkillHolder holder : getActiveSkills()) {
 				addSkill(player, holder.getSkill());
 				player.sendDebugMessage("Adding active skill: " + getActiveSkills(), DebugType.OPTIONS);
 			}
 		}
-		if (hasPassiveSkills())
-		{
-			for (SkillHolder holder : getPassiveSkills())
-			{
+		if (hasPassiveSkills()) {
+			for (SkillHolder holder : getPassiveSkills()) {
 				addSkill(player, holder.getSkill());
 				player.sendDebugMessage("Adding passive skill: " + getPassiveSkills(), DebugType.OPTIONS);
 			}
 		}
-		if (hasActivationSkills())
-		{
-			for (OptionsSkillHolder holder : _activationSkills)
-			{
+		if (hasActivationSkills()) {
+			for (OptionsSkillHolder holder : _activationSkills) {
 				player.addTriggerSkill(holder);
 				player.sendDebugMessage("Adding trigger skill: " + holder, DebugType.OPTIONS);
 			}
 		}
-		
+
 		player.sendSkillList();
 	}
-	
-	public void remove(PlayerInstance player)
-	{
+
+	public void remove(PlayerInstance player) {
 		player.sendDebugMessage("Deactivating option id: " + _id, DebugType.OPTIONS);
-		if (hasEffects())
-		{
-			for (BuffInfo info : player.getEffectList().getOptions())
-			{
-				if (info.getOption() == this)
-				{
+		if (hasEffects()) {
+			for (BuffInfo info : player.getEffectList().getOptions()) {
+				if (info.getOption() == this) {
 					player.sendDebugMessage("Removing effects: " + info.getEffects(), DebugType.OPTIONS);
 					player.getEffectList().remove(info, false, true, true);
 				}
 			}
 		}
-		if (hasActiveSkills())
-		{
-			for (SkillHolder holder : getActiveSkills())
-			{
+		if (hasActiveSkills()) {
+			for (SkillHolder holder : getActiveSkills()) {
 				player.removeSkill(holder.getSkill(), false, false);
 				player.sendDebugMessage("Removing active skill: " + getActiveSkills(), DebugType.OPTIONS);
 			}
 		}
-		if (hasPassiveSkills())
-		{
-			for (SkillHolder holder : getPassiveSkills())
-			{
+		if (hasPassiveSkills()) {
+			for (SkillHolder holder : getPassiveSkills()) {
 				player.removeSkill(holder.getSkill(), false, true);
 				player.sendDebugMessage("Removing passive skill: " + getPassiveSkills(), DebugType.OPTIONS);
 			}
 		}
-		if (hasActivationSkills())
-		{
-			for (OptionsSkillHolder holder : _activationSkills)
-			{
+		if (hasActivationSkills()) {
+			for (OptionsSkillHolder holder : _activationSkills) {
 				player.removeTriggerSkill(holder);
 				player.sendDebugMessage("Removing trigger skill: " + holder, DebugType.OPTIONS);
 			}
 		}
-		
+
 		player.getStat().recalculateStats(true);
 		player.sendSkillList();
 	}
-	
-	private void addSkill(PlayerInstance player, Skill skill)
-	{
+
+	private void addSkill(PlayerInstance player, Skill skill) {
 		boolean updateTimeStamp = false;
-		
+
 		player.addSkill(skill, false);
-		
-		if (skill.isActive())
-		{
+
+		if (skill.isActive()) {
 			final long remainingTime = player.getSkillRemainingReuseTime(skill.getReuseHashCode());
-			if (remainingTime > 0)
-			{
+			if (remainingTime > 0) {
 				player.addTimeStamp(skill, remainingTime);
 			}
 			updateTimeStamp = true;
 		}
-		if (updateTimeStamp)
-		{
+		if (updateTimeStamp) {
 			player.sendPacket(new SkillCoolTime(player));
 		}
 	}

@@ -23,8 +23,7 @@ import org.l2junity.gameserver.model.eventengine.IEventState;
 /**
  * @author Sdw
  */
-public enum CeremonyOfChaosState implements IEventState
-{
+public enum CeremonyOfChaosState implements IEventState {
 	SCHEDULED,
 	REGISTRATION,
 	PREPARING_FOR_TELEPORT,

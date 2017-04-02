@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.entity.Message;
@@ -32,49 +32,41 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Migi, DS
  */
-public final class RequestSentPost implements IClientIncomingPacket
-{
+public final class RequestSentPost implements IClientIncomingPacket {
 	private int _msgId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_msgId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL)
-		{
+		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL) {
 			return;
 		}
-		
+
 		Message msg = MailManager.getInstance().getMessage(_msgId);
-		if (msg == null)
-		{
+		if (msg == null) {
 			return;
 		}
-		
-		if (!activeChar.isInsideZone(ZoneId.PEACE) && msg.hasAttachments())
-		{
+
+		if (!activeChar.isInsideZone(ZoneId.PEACE) && msg.hasAttachments()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_RECEIVE_OR_SEND_MAIL_WITH_ATTACHED_ITEMS_IN_NON_PEACE_ZONE_REGIONS);
 			return;
 		}
-		
-		if (msg.getSenderId() != activeChar.getObjectId())
-		{
+
+		if (msg.getSenderId() != activeChar.getObjectId()) {
 			Util.handleIllegalPlayerAction(activeChar, "Player " + activeChar.getName() + " tried to read not own post!", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (msg.isDeletedBySender())
-		{
+
+		if (msg.isDeletedBySender()) {
 			return;
 		}
-		
+
 		client.sendPacket(new ExReplySentPost(msg));
 	}
 }

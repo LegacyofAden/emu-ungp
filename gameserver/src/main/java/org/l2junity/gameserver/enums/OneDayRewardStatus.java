@@ -21,30 +21,24 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum OneDayRewardStatus
-{
+public enum OneDayRewardStatus {
 	AVAILABLE(1),
 	NOT_AVAILABLE(2),
 	COMPLETED(3);
-	
+
 	private int _clientId;
-	
-	private OneDayRewardStatus(int clientId)
-	{
+
+	private OneDayRewardStatus(int clientId) {
 		_clientId = clientId;
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
-	
-	public static OneDayRewardStatus valueOf(int clientId)
-	{
-		for (OneDayRewardStatus type : values())
-		{
-			if (type.getClientId() == clientId)
-			{
+
+	public static OneDayRewardStatus valueOf(int clientId) {
+		for (OneDayRewardStatus type : values()) {
+			if (type.getClientId() == clientId) {
 				return type;
 			}
 		}

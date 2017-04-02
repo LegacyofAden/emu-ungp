@@ -26,29 +26,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author JIV
  */
-public final class EndScenePlayer implements IClientIncomingPacket
-{
+public final class EndScenePlayer implements IClientIncomingPacket {
 	private int _movieId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_movieId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || (_movieId == 0))
-		{
+		if ((activeChar == null) || (_movieId == 0)) {
 			return;
 		}
-		
+
 		final MovieHolder holder = activeChar.getMovieHolder();
-		if ((holder == null) || (holder.getMovie().getClientId() != _movieId))
-		{
+		if ((holder == null) || (holder.getMovie().getClientId() != _movieId)) {
 			_log.warn("Player " + client + " sent EndScenePlayer with wrong movie id: " + _movieId);
 			return;
 		}

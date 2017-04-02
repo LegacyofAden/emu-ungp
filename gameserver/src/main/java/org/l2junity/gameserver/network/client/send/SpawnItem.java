@@ -23,44 +23,38 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class SpawnItem implements IClientOutgoingPacket
-{
+public final class SpawnItem implements IClientOutgoingPacket {
 	private final int _objectId;
 	private int _itemId;
 	private final int _x, _y, _z;
 	private int _stackable;
 	private long _count;
-	
-	public SpawnItem(WorldObject obj)
-	{
+
+	public SpawnItem(WorldObject obj) {
 		_objectId = obj.getObjectId();
 		_x = (int) obj.getX();
 		_y = (int) obj.getY();
 		_z = (int) obj.getZ();
-		
-		if (obj.isItem())
-		{
+
+		if (obj.isItem()) {
 			ItemInstance item = (ItemInstance) obj;
 			_itemId = item.getDisplayId();
 			_stackable = item.isStackable() ? 0x01 : 0x00;
 			_count = item.getCount();
-		}
-		else
-		{
+		} else {
 			_itemId = obj.getPoly().getPolyId();
 			_stackable = 0;
 			_count = 1;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SPAWN_ITEM.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_itemId);
-		
+
 		packet.writeD(_x);
 		packet.writeD(_y);
 		packet.writeD(_z);

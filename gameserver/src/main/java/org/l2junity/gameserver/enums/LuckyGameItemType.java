@@ -21,21 +21,18 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum LuckyGameItemType
-{
+public enum LuckyGameItemType {
 	COMMON(1),
 	UNIQUE(2),
 	RARE(3);
-	
+
 	private final int _clientId;
-	
-	LuckyGameItemType(int clientId)
-	{
+
+	LuckyGameItemType(int clientId) {
 		_clientId = clientId;
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
 }

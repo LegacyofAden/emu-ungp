@@ -23,55 +23,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author HorridoJoho
  * @param <T>
+ * @author HorridoJoho
  */
-public abstract class AbstractExecutionContext<T extends IScriptingEngine> implements IExecutionContext
-{
+public abstract class AbstractExecutionContext<T extends IScriptingEngine> implements IExecutionContext {
 	private final T _engine;
 	private final Map<String, String> _properties;
 	private volatile Path _currentExecutingScipt;
-	
-	protected AbstractExecutionContext(final T engine)
-	{
-		if (engine == null)
-		{
+
+	protected AbstractExecutionContext(final T engine) {
+		if (engine == null) {
 			throw new IllegalArgumentException();
 		}
 		_engine = engine;
 		_properties = new HashMap<>();
 	}
-	
-	protected final void setCurrentExecutingScript(final Path currentExecutingScript)
-	{
+
+	protected final void setCurrentExecutingScript(final Path currentExecutingScript) {
 		_currentExecutingScipt = currentExecutingScript;
 	}
-	
+
 	@Override
-	public final String setProperty(final String key, final String value)
-	{
+	public final String setProperty(final String key, final String value) {
 		return _properties.put(key, value);
 	}
-	
+
 	@Override
-	public final String getProperty(final String key)
-	{
-		if (!_properties.containsKey(key))
-		{
+	public final String getProperty(final String key) {
+		if (!_properties.containsKey(key)) {
 			return _engine.getProperty(key);
 		}
 		return _properties.get(key);
 	}
-	
+
 	@Override
-	public final Path getCurrentExecutingScript()
-	{
+	public final Path getCurrentExecutingScript() {
 		return _currentExecutingScipt;
 	}
-	
+
 	@Override
-	public final T getScriptingEngine()
-	{
+	public final T getScriptingEngine() {
 		return _engine;
 	}
 }

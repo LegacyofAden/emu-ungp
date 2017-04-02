@@ -30,46 +30,38 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Forsaiken
  */
-public final class RequestBidItemAuction implements IClientIncomingPacket
-{
+public final class RequestBidItemAuction implements IClientIncomingPacket {
 	private int _instanceId;
 	private long _bid;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_instanceId = packet.readD();
 		_bid = packet.readQ();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		// can't use auction fp here
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("auction"))
-		{
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("auction")) {
 			activeChar.sendMessage("You are bidding too fast.");
 			return;
 		}
-		
-		if (!ItemContainer.validateCount(Inventory.ADENA_ID, _bid))
-		{
+
+		if (!ItemContainer.validateCount(Inventory.ADENA_ID, _bid)) {
 			return;
 		}
-		
+
 		final ItemAuctionInstance instance = ItemAuctionManager.getInstance().getManagerInstance(_instanceId);
-		if (instance != null)
-		{
+		if (instance != null) {
 			final ItemAuction auction = instance.getCurrentAuction();
-			if (auction != null)
-			{
+			if (auction != null) {
 				auction.registerBid(activeChar, _bid);
 			}
 		}

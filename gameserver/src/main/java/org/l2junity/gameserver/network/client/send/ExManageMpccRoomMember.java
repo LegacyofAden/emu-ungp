@@ -29,24 +29,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class ExManageMpccRoomMember implements IClientOutgoingPacket
-{
+public class ExManageMpccRoomMember implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final MatchingMemberType _memberType;
 	private final ExManagePartyRoomMemberType _type;
-	
-	public ExManageMpccRoomMember(PlayerInstance player, CommandChannelMatchingRoom room, ExManagePartyRoomMemberType mode)
-	{
+
+	public ExManageMpccRoomMember(PlayerInstance player, CommandChannelMatchingRoom room, ExManagePartyRoomMemberType mode) {
 		_activeChar = player;
 		_memberType = room.getMemberType(player);
 		_type = mode;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MANAGE_PARTY_ROOM_MEMBER.writeId(packet);
-		
+
 		packet.writeD(_type.ordinal());
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeS(_activeChar.getName());

@@ -21,17 +21,14 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class SunRise implements IClientOutgoingPacket
-{
+public class SunRise implements IClientOutgoingPacket {
 	public static final SunRise STATIC_PACKET = new SunRise();
-	
-	private SunRise()
-	{
+
+	private SunRise() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SUN_RISE.writeId(packet);
 		return true;
 	}

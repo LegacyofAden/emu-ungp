@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.effects;
 
 /**
  * Effect types.
+ *
  * @author nBd
  */
-public enum L2EffectType
-{
+public enum L2EffectType {
 	AGGRESSION,
 	CPHEAL,
 	DISPEL,

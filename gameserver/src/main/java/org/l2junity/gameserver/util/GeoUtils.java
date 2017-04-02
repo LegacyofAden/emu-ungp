@@ -18,52 +18,48 @@
  */
 package org.l2junity.gameserver.util;
 
-import java.awt.Color;
-
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.geodriver.Cell;
 
+import java.awt.*;
+
 /**
  * @author HorridoJoho
  */
-public final class GeoUtils
-{
-	public static void debug2DLine(PlayerInstance player, double x, double y, double tx, double ty, double z)
-	{
+public final class GeoUtils {
+	public static void debug2DLine(PlayerInstance player, double x, double y, double tx, double ty, double z) {
 		int gx = GeoData.getInstance().getGeoX(x);
 		int gy = GeoData.getInstance().getGeoY(y);
-		
+
 		int tgx = GeoData.getInstance().getGeoX(tx);
 		int tgy = GeoData.getInstance().getGeoY(ty);
-		
+
 		ExServerPrimitive prim = new ExServerPrimitive("Debug2DLine", x, y, z);
 		prim.addLine(Color.BLUE, GeoData.getInstance().getWorldX(gx), GeoData.getInstance().getWorldY(gy), z, GeoData.getInstance().getWorldX(tgx), GeoData.getInstance().getWorldY(tgy), z);
-		
+
 		LinePointIterator iter = new LinePointIterator(gx, gy, tgx, tgy);
-		
-		while (iter.next())
-		{
+
+		while (iter.next()) {
 			double wx = GeoData.getInstance().getWorldX(iter.x());
 			double wy = GeoData.getInstance().getWorldY(iter.y());
-			
+
 			prim.addPoint(Color.RED, wx, wy, z);
 		}
 		player.sendPacket(prim);
 	}
-	
-	public static void debug3DLine(PlayerInstance player, int x, int y, int z, int tx, int ty, int tz)
-	{
+
+	public static void debug3DLine(PlayerInstance player, int x, int y, int z, int tx, int ty, int tz) {
 		int gx = GeoData.getInstance().getGeoX(x);
 		int gy = GeoData.getInstance().getGeoY(y);
-		
+
 		int tgx = GeoData.getInstance().getGeoX(tx);
 		int tgy = GeoData.getInstance().getGeoY(ty);
-		
+
 		ExServerPrimitive prim = new ExServerPrimitive("Debug3DLine", x, y, z);
 		prim.addLine(Color.BLUE, GeoData.getInstance().getWorldX(gx), GeoData.getInstance().getWorldY(gy), z, GeoData.getInstance().getWorldX(tgx), GeoData.getInstance().getWorldY(tgy), tz);
-		
+
 		LinePointIterator3D iter = new LinePointIterator3D(gx, gy, z, tgx, tgy, tz);
 		iter.next();
 		int prevX = iter.x();
@@ -72,166 +68,138 @@ public final class GeoUtils
 		double wy = GeoData.getInstance().getWorldY(prevY);
 		double wz = iter.z();
 		prim.addPoint(Color.RED, wx, wy, wz);
-		
-		while (iter.next())
-		{
+
+		while (iter.next()) {
 			int curX = iter.x();
 			int curY = iter.y();
-			
-			if ((curX != prevX) || (curY != prevY))
-			{
+
+			if ((curX != prevX) || (curY != prevY)) {
 				wx = GeoData.getInstance().getWorldX(curX);
 				wy = GeoData.getInstance().getWorldY(curY);
 				wz = iter.z();
-				
+
 				prim.addPoint(Color.RED, wx, wy, wz);
-				
+
 				prevX = curX;
 				prevY = curY;
 			}
 		}
 		player.sendPacket(prim);
 	}
-	
-	private static Color getDirectionColor(int x, int y, double z, int nswe)
-	{
-		if (GeoData.getInstance().checkNearestNswe(x, y, z, nswe))
-		{
+
+	private static Color getDirectionColor(int x, int y, double z, int nswe) {
+		if (GeoData.getInstance().checkNearestNswe(x, y, z, nswe)) {
 			return Color.GREEN;
 		}
 		return Color.RED;
 	}
-	
-	public static void debugGrid(PlayerInstance player, int radius)
-	{
+
+	public static void debugGrid(PlayerInstance player, int radius) {
 		int blocksPerPacket = 40;
-		if (radius < 0)
-		{
+		if (radius < 0) {
 			throw new IllegalArgumentException("geoRadius < 0");
 		}
-		
+
 		int iBlock = blocksPerPacket;
 		int iPacket = 0;
-		
+
 		ExServerPrimitive exsp = null;
 		GeoData gd = GeoData.getInstance();
 		int playerGx = gd.getGeoX(player.getX());
 		int playerGy = gd.getGeoY(player.getY());
-		for (int dx = -radius; dx <= radius; ++dx)
-		{
-			for (int dy = -radius; dy <= radius; ++dy)
-			{
-				if (iBlock >= blocksPerPacket)
-				{
+		for (int dx = -radius; dx <= radius; ++dx) {
+			for (int dy = -radius; dy <= radius; ++dy) {
+				if (iBlock >= blocksPerPacket) {
 					iBlock = 0;
-					if (exsp != null)
-					{
+					if (exsp != null) {
 						++iPacket;
 						player.sendPacket(exsp);
 					}
 					exsp = new ExServerPrimitive("DebugGrid_" + iPacket, player.getX(), player.getY(), -16000);
 				}
-				
-				if (exsp == null)
-				{
+
+				if (exsp == null) {
 					throw new IllegalStateException();
 				}
-				
+
 				int gx = playerGx + dx;
 				int gy = playerGy + dy;
-				
+
 				double x = gd.getWorldX(gx);
 				double y = gd.getWorldY(gy);
 				double z = gd.getNearestZ(gx, gy, player.getZ());
-				
+
 				// north arrow
 				Color col = getDirectionColor(gx, gy, z, Cell.NSWE_NORTH);
 				exsp.addLine(col, x - 1, y - 7, z, x + 1, y - 7, z);
 				exsp.addLine(col, x - 2, y - 6, z, x + 2, y - 6, z);
 				exsp.addLine(col, x - 3, y - 5, z, x + 3, y - 5, z);
 				exsp.addLine(col, x - 4, y - 4, z, x + 4, y - 4, z);
-				
+
 				// east arrow
 				col = getDirectionColor(gx, gy, z, Cell.NSWE_EAST);
 				exsp.addLine(col, x + 7, y - 1, z, x + 7, y + 1, z);
 				exsp.addLine(col, x + 6, y - 2, z, x + 6, y + 2, z);
 				exsp.addLine(col, x + 5, y - 3, z, x + 5, y + 3, z);
 				exsp.addLine(col, x + 4, y - 4, z, x + 4, y + 4, z);
-				
+
 				// south arrow
 				col = getDirectionColor(gx, gy, z, Cell.NSWE_SOUTH);
 				exsp.addLine(col, x - 1, y + 7, z, x + 1, y + 7, z);
 				exsp.addLine(col, x - 2, y + 6, z, x + 2, y + 6, z);
 				exsp.addLine(col, x - 3, y + 5, z, x + 3, y + 5, z);
 				exsp.addLine(col, x - 4, y + 4, z, x + 4, y + 4, z);
-				
+
 				col = getDirectionColor(gx, gy, z, Cell.NSWE_WEST);
 				exsp.addLine(col, x - 7, y - 1, z, x - 7, y + 1, z);
 				exsp.addLine(col, x - 6, y - 2, z, x - 6, y + 2, z);
 				exsp.addLine(col, x - 5, y - 3, z, x - 5, y + 3, z);
 				exsp.addLine(col, x - 4, y - 4, z, x - 4, y + 4, z);
-				
+
 				++iBlock;
 			}
 		}
-		
+
 		player.sendPacket(exsp);
 	}
-	
+
 	/**
 	 * difference between x values: never above 1<br>
 	 * difference between y values: never above 1
+	 *
 	 * @param lastX
 	 * @param lastY
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public static int computeNswe(int lastX, int lastY, int x, int y)
-	{
+	public static int computeNswe(int lastX, int lastY, int x, int y) {
 		if (x > lastX) // east
 		{
-			if (y > lastY)
-			{
+			if (y > lastY) {
 				return Cell.NSWE_SOUTH_EAST;// Direction.SOUTH_EAST;
-			}
-			else if (y < lastY)
-			{
+			} else if (y < lastY) {
 				return Cell.NSWE_NORTH_EAST;// Direction.NORTH_EAST;
-			}
-			else
-			{
+			} else {
 				return Cell.NSWE_EAST;// Direction.EAST;
 			}
-		}
-		else if (x < lastX) // west
+		} else if (x < lastX) // west
 		{
-			if (y > lastY)
-			{
+			if (y > lastY) {
 				return Cell.NSWE_SOUTH_WEST;// Direction.SOUTH_WEST;
-			}
-			else if (y < lastY)
-			{
+			} else if (y < lastY) {
 				return Cell.NSWE_NORTH_WEST;// Direction.NORTH_WEST;
-			}
-			else
-			{
+			} else {
 				return Cell.NSWE_WEST;// Direction.WEST;
 			}
-		}
-		else
+		} else
 		// unchanged x
 		{
-			if (y > lastY)
-			{
+			if (y > lastY) {
 				return Cell.NSWE_SOUTH;// Direction.SOUTH;
-			}
-			else if (y < lastY)
-			{
+			} else if (y < lastY) {
 				return Cell.NSWE_NORTH;// Direction.NORTH;
-			}
-			else
-			{
+			} else {
 				throw new RuntimeException();
 			}
 		}

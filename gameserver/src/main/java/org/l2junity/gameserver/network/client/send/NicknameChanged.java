@@ -25,22 +25,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author devScarlet
  */
-public class NicknameChanged implements IClientOutgoingPacket
-{
+public class NicknameChanged implements IClientOutgoingPacket {
 	private final String _title;
 	private final int _objectId;
-	
-	public NicknameChanged(Creature cha)
-	{
+
+	public NicknameChanged(Creature cha) {
 		_objectId = cha.getObjectId();
 		_title = cha.getTitle();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.NICK_NAME_CHANGED.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeS(_title);
 		return true;

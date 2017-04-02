@@ -18,22 +18,20 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author Sdw
  */
-public class ShieldDefenceFinalizer implements IStatsFunction
-{
+public class ShieldDefenceFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		return DoubleStat.defaultValue(creature, stat, calcEquippedItemsBaseValue(creature, stat));
 	}
 }

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum NextActionType
-{
+public enum NextActionType {
 	NONE,
 	ATTACK,
 	CAST

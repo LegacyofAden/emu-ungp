@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_FOLLOW;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
-
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
@@ -29,75 +25,63 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 
-public class SummonAI extends PlayableAI
-{
+import static org.l2junity.gameserver.ai.CtrlIntention.*;
+
+public class SummonAI extends PlayableAI {
 	private volatile boolean _thinking; // to prevent recursive thinking
 	private volatile boolean _startFollow = ((Summon) _actor).getFollowStatus();
 	private Creature _lastAttack = null;
 	private volatile boolean _isDefending;
-	
-	public SummonAI(Summon summon)
-	{
+
+	public SummonAI(Summon summon) {
 		super(summon);
 	}
-	
+
 	@Override
-	protected void onIntentionIdle()
-	{
+	protected void onIntentionIdle() {
 		stopFollow();
 		_startFollow = false;
 		onIntentionActive();
 	}
-	
+
 	@Override
-	protected void onIntentionActive()
-	{
+	protected void onIntentionActive() {
 		Summon summon = (Summon) _actor;
-		if (_startFollow)
-		{
+		if (_startFollow) {
 			setIntention(AI_INTENTION_FOLLOW, summon.getOwner());
-		}
-		else
-		{
+		} else {
 			super.onIntentionActive();
 		}
 	}
-	
-	private void thinkAttack()
-	{
+
+	private void thinkAttack() {
 		final WorldObject target = getTarget();
 		final Creature attackTarget = (target != null) && target.isCreature() ? (Creature) target : null;
-		
-		if (checkTargetLostOrDead(attackTarget))
-		{
+
+		if (checkTargetLostOrDead(attackTarget)) {
 			setTarget(null);
 			return;
 		}
-		if (maybeMoveToPawn(attackTarget, _actor.getPhysicalAttackRange()))
-		{
+		if (maybeMoveToPawn(attackTarget, _actor.getPhysicalAttackRange())) {
 			return;
 		}
 		clientStopMoving(null);
 		_actor.doAutoAttack(attackTarget);
 	}
-	
-	private void thinkCast()
-	{
+
+	private void thinkCast() {
 		Summon summon = (Summon) _actor;
-		if (summon.isCastingNow(SkillCaster::isAnyNormalType))
-		{
+		if (summon.isCastingNow(SkillCaster::isAnyNormalType)) {
 			return;
 		}
-		
+
 		final WorldObject target = _skill.getTarget(_actor, _forceUse, _dontMove, false);
-		if (checkTargetLost(target))
-		{
+		if (checkTargetLost(target)) {
 			setTarget(null);
 			return;
 		}
 		boolean val = _startFollow;
-		if (maybeMoveToPawn(target, _actor.getMagicalAttackRange(_skill)))
-		{
+		if (maybeMoveToPawn(target, _actor.getMagicalAttackRange(_skill))) {
 			return;
 		}
 		summon.setFollowStatus(false);
@@ -105,48 +89,38 @@ public class SummonAI extends PlayableAI
 		_startFollow = val;
 		_actor.doCast(_skill, _item, _forceUse, _dontMove);
 	}
-	
-	private void thinkPickUp()
-	{
+
+	private void thinkPickUp() {
 		final WorldObject target = getTarget();
-		if (checkTargetLost(target))
-		{
+		if (checkTargetLost(target)) {
 			return;
 		}
-		if (maybeMoveToPawn(target, 36))
-		{
+		if (maybeMoveToPawn(target, 36)) {
 			return;
 		}
 		setIntention(AI_INTENTION_IDLE);
 		getActor().doPickupItem(target);
 	}
-	
-	private void thinkInteract()
-	{
+
+	private void thinkInteract() {
 		final WorldObject target = getTarget();
-		if (checkTargetLost(target))
-		{
+		if (checkTargetLost(target)) {
 			return;
 		}
-		if (maybeMoveToPawn(target, 36))
-		{
+		if (maybeMoveToPawn(target, 36)) {
 			return;
 		}
 		setIntention(AI_INTENTION_IDLE);
 	}
-	
+
 	@Override
-	protected void onEvtThink()
-	{
-		if (_thinking || _actor.isCastingNow() || _actor.isAllSkillsDisabled())
-		{
+	protected void onEvtThink() {
+		if (_thinking || _actor.isCastingNow() || _actor.isAllSkillsDisabled()) {
 			return;
 		}
 		_thinking = true;
-		try
-		{
-			switch (getIntention())
-			{
+		try {
+			switch (getIntention()) {
 				case AI_INTENTION_ATTACK:
 					thinkAttack();
 					break;
@@ -160,71 +134,56 @@ public class SummonAI extends PlayableAI
 					thinkInteract();
 					break;
 			}
-		}
-		finally
-		{
+		} finally {
 			_thinking = false;
 		}
 	}
-	
+
 	@Override
-	protected void onEvtFinishCasting()
-	{
-		if (_lastAttack == null)
-		{
+	protected void onEvtFinishCasting() {
+		if (_lastAttack == null) {
 			((Summon) _actor).setFollowStatus(_startFollow);
-		}
-		else
-		{
+		} else {
 			setIntention(CtrlIntention.AI_INTENTION_ATTACK, _lastAttack);
 			_lastAttack = null;
 		}
 	}
-	
+
 	@Override
-	protected void onEvtAttacked(Creature attacker)
-	{
+	protected void onEvtAttacked(Creature attacker) {
 		super.onEvtAttacked(attacker);
-		
+
 		startFollowEvadeTarget(attacker); // TODO: This should only work for autoattack, not skills, not even melee skills!
-		
-		if (isDefending())
-		{
+
+		if (isDefending()) {
 			defendAttack(attacker);
 		}
 	}
-	
+
 	@Override
-	protected void onEvtEvaded(Creature attacker)
-	{
+	protected void onEvtEvaded(Creature attacker) {
 		super.onEvtEvaded(attacker);
-		
-		if (isDefending())
-		{
+
+		if (isDefending()) {
 			defendAttack(attacker);
 		}
 	}
-	
-	public void defendAttack(Creature attacker)
-	{
+
+	public void defendAttack(Creature attacker) {
 		// Cannot defend while attacking or casting.
-		if (_actor.isAttackingNow() || _actor.isCastingNow())
-		{
+		if (_actor.isAttackingNow() || _actor.isCastingNow()) {
 			return;
 		}
-		
+
 		final Summon summon = getActor();
-		if ((summon.getOwner() != null) && (summon.getOwner() != attacker) && !summon.isMoving() && summon.canAttack(attacker, false) && summon.getOwner().isInRadius3d(_actor, 300))
-		{
+		if ((summon.getOwner() != null) && (summon.getOwner() != attacker) && !summon.isMoving() && summon.canAttack(attacker, false) && summon.getOwner().isInRadius3d(_actor, 300)) {
 			summon.doAutoAttack(attacker);
 		}
 	}
-	
-	public void notifyFollowStatusChange()
-	{
+
+	public void notifyFollowStatusChange() {
 		_startFollow = !_startFollow;
-		switch (getIntention())
-		{
+		switch (getIntention()) {
 			case AI_INTENTION_ACTIVE:
 			case AI_INTENTION_FOLLOW:
 			case AI_INTENTION_IDLE:
@@ -233,51 +192,42 @@ public class SummonAI extends PlayableAI
 				((Summon) _actor).setFollowStatus(_startFollow);
 		}
 	}
-	
-	public void setStartFollowController(boolean val)
-	{
+
+	public void setStartFollowController(boolean val) {
 		_startFollow = val;
 	}
-	
+
 	@Override
-	protected void onIntentionCast(Skill skill, WorldObject target, ItemInstance item, boolean forceUse, boolean dontMove)
-	{
-		if (getIntention() == AI_INTENTION_ATTACK)
-		{
+	protected void onIntentionCast(Skill skill, WorldObject target, ItemInstance item, boolean forceUse, boolean dontMove) {
+		if (getIntention() == AI_INTENTION_ATTACK) {
 			_lastAttack = (getTarget() != null) && getTarget().isCreature() ? (Creature) getTarget() : null;
-		}
-		else
-		{
+		} else {
 			_lastAttack = null;
 		}
 		super.onIntentionCast(skill, target, item, forceUse, dontMove);
 	}
-	
+
 	@Override
-	public void stopAITask()
-	{
+	public void stopAITask() {
 		super.stopAITask();
 	}
-	
+
 	@Override
-	public Summon getActor()
-	{
+	public Summon getActor() {
 		return (Summon) super.getActor();
 	}
-	
+
 	/**
 	 * @return if the summon is defending itself or master.
 	 */
-	public boolean isDefending()
-	{
+	public boolean isDefending() {
 		return _isDefending;
 	}
-	
+
 	/**
 	 * @param isDefending set the summon to defend itself and master, or be passive and avoid while being attacked.
 	 */
-	public void setDefending(boolean isDefending)
-	{
+	public void setDefending(boolean isDefending) {
 		_isDefending = isDefending;
 	}
 }

@@ -26,26 +26,21 @@ import org.l2junity.network.PacketReader;
 /**
  * @author St3eT
  */
-public final class RequestExEscapeScene implements IClientIncomingPacket
-{
+public final class RequestExEscapeScene implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final MovieHolder holder = activeChar.getMovieHolder();
-		if (holder == null)
-		{
+		if (holder == null) {
 			return;
 		}
 		holder.playerEscapeVote(activeChar);

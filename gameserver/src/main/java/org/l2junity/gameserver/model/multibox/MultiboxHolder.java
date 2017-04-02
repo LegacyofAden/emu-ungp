@@ -18,178 +18,147 @@
  */
 package org.l2junity.gameserver.model.multibox;
 
+import org.l2junity.gameserver.network.client.L2GameClient;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.l2junity.gameserver.network.client.L2GameClient;
-
 /**
  * @author UnAfraid
  */
-public class MultiboxHolder
-{
+public class MultiboxHolder {
 	private final MultiboxSettings _settings;
 	private final Map<Integer, Set<L2GameClient>> _clients = new ConcurrentHashMap<>();
-	
-	public MultiboxHolder(MultiboxSettings settings)
-	{
+
+	public MultiboxHolder(MultiboxSettings settings) {
 		_settings = settings;
 	}
-	
+
 	/**
 	 * @return
 	 */
-	public MultiboxSettings getSettings()
-	{
+	public MultiboxSettings getSettings() {
 		return _settings;
 	}
-	
+
 	/**
 	 * @param client
 	 * @return
 	 */
-	public boolean canAddClient(L2GameClient client)
-	{
-		if (client == null)
-		{
+	public boolean canAddClient(L2GameClient client) {
+		if (client == null) {
 			return false;
-		}
-		else if (!getSettings().isEnabled())
-		{
+		} else if (!getSettings().isEnabled()) {
 			return true;
 		}
-		
+
 		int hash = getSettings().getProtectionType().generateHash(client);
-		if (hash == 0)
-		{
+		if (hash == 0) {
 			return true;
 		}
-		
-		if (_clients.containsKey(hash))
-		{
+
+		if (_clients.containsKey(hash)) {
 			int whiteListed = getSettings().getWhitelistBonus(hash);
 			int maxConnections = ((whiteListed > 0) ? whiteListed : getSettings().getMaxClients());
 			return ((maxConnections < 1) || (maxConnections > _clients.get(hash).size()));
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param client
 	 * @return
 	 */
-	public boolean addClient(L2GameClient client)
-	{
-		if (client == null)
-		{
+	public boolean addClient(L2GameClient client) {
+		if (client == null) {
 			return false;
-		}
-		else if (!getSettings().isEnabled())
-		{
+		} else if (!getSettings().isEnabled()) {
 			return true;
 		}
-		
+
 		boolean canAddClient = canAddClient(client);
-		if (canAddClient)
-		{
+		if (canAddClient) {
 			int hash = getSettings().getProtectionType().generateHash(client);
-			if (hash == 0)
-			{
+			if (hash == 0) {
 				return true;
 			}
-			
+
 			_clients.computeIfAbsent(hash, key -> ConcurrentHashMap.newKeySet()).add(client);
 		}
 		return canAddClient;
 	}
-	
+
 	/**
 	 * @param client
 	 */
-	public void removeClient(L2GameClient client)
-	{
-		if ((client == null) || !getSettings().isEnabled())
-		{
+	public void removeClient(L2GameClient client) {
+		if ((client == null) || !getSettings().isEnabled()) {
 			return;
 		}
-		
+
 		int hash = getSettings().getProtectionType().generateHash(client);
-		if (hash == 0)
-		{
+		if (hash == 0) {
 			return;
 		}
-		
+
 		final Set<L2GameClient> dualboxClients = _clients.get(hash);
-		if ((dualboxClients != null) && dualboxClients.contains(client))
-		{
+		if ((dualboxClients != null) && dualboxClients.contains(client)) {
 			dualboxClients.remove(client);
-			if (dualboxClients.isEmpty())
-			{
+			if (dualboxClients.isEmpty()) {
 				_clients.remove(hash);
 			}
 		}
 	}
-	
+
 	/**
 	 * @param client
 	 * @return
 	 */
-	public int getCurrentConnections(L2GameClient client)
-	{
-		if ((client != null) && getSettings().isEnabled())
-		{
+	public int getCurrentConnections(L2GameClient client) {
+		if ((client != null) && getSettings().isEnabled()) {
 			int key = getSettings().getProtectionType().generateHash(client);
-			if (_clients.containsKey(key))
-			{
+			if (_clients.containsKey(key)) {
 				return _clients.get(key).size();
 			}
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Clears all the clients from the holder.
 	 */
-	public void clear()
-	{
+	public void clear() {
 		_clients.clear();
 	}
-	
+
 	/**
 	 * @return map containing all multibox clients.
 	 */
-	public Map<Integer, Set<L2GameClient>> getAllClients()
-	{
+	public Map<Integer, Set<L2GameClient>> getAllClients() {
 		return _clients;
 	}
-	
+
 	/**
 	 * Clearing all un-active registered clients.
 	 */
-	public void clearDisconnected()
-	{
-		if (_clients.isEmpty() || !getSettings().isEnabled() || !getSettings().clearOnDisconnected())
-		{
+	public void clearDisconnected() {
+		if (_clients.isEmpty() || !getSettings().isEnabled() || !getSettings().clearOnDisconnected()) {
 			return;
 		}
-		
+
 		final Iterator<Set<L2GameClient>> it = _clients.values().iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			final Set<L2GameClient> clients = it.next();
 			final Iterator<L2GameClient> clientIt = clients.iterator();
-			while (clientIt.hasNext())
-			{
+			while (clientIt.hasNext()) {
 				final L2GameClient client = clientIt.next();
-				if ((client == null) || (client.getActiveChar() == null))
-				{
+				if ((client == null) || (client.getActiveChar() == null)) {
 					clientIt.remove();
 				}
 			}
-			if (clients.isEmpty())
-			{
+			if (clients.isEmpty()) {
 				it.remove();
 			}
 		}

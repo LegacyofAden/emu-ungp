@@ -26,26 +26,22 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author ShanSoft
  */
-public class ExGetBookMarkInfoPacket implements IClientOutgoingPacket
-{
+public class ExGetBookMarkInfoPacket implements IClientOutgoingPacket {
 	private final PlayerInstance player;
-	
-	public ExGetBookMarkInfoPacket(PlayerInstance cha)
-	{
+
+	public ExGetBookMarkInfoPacket(PlayerInstance cha) {
 		player = cha;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_GET_BOOK_MARK_INFO.writeId(packet);
-		
+
 		packet.writeD(0x00); // Dummy
 		packet.writeD(player.getBookmarkslot());
 		packet.writeD(player.getTeleportBookmarks().size());
-		
-		for (TeleportBookmark tpbm : player.getTeleportBookmarks())
-		{
+
+		for (TeleportBookmark tpbm : player.getTeleportBookmarks()) {
 			packet.writeD(tpbm.getId());
 			packet.writeD((int) tpbm.getX());
 			packet.writeD((int) tpbm.getY());

@@ -26,17 +26,15 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 /**
  * @author Nik
  */
-public class OnCreatureTeleport implements IBaseEvent
-{
+public class OnCreatureTeleport implements IBaseEvent {
 	private final Creature _creature;
 	private final double _destX;
 	private final double _destY;
 	private final double _destZ;
 	private final int _destHeading;
 	private final Instance _destInstance;
-	
-	public OnCreatureTeleport(Creature creature, double destX, double destY, double destZ, int destHeading, Instance destInstance)
-	{
+
+	public OnCreatureTeleport(Creature creature, double destX, double destY, double destZ, int destHeading, Instance destInstance) {
 		_creature = creature;
 		_destX = destX;
 		_destY = destY;
@@ -44,40 +42,33 @@ public class OnCreatureTeleport implements IBaseEvent
 		_destHeading = destHeading;
 		_destInstance = destInstance;
 	}
-	
-	public Creature getCreature()
-	{
+
+	public Creature getCreature() {
 		return _creature;
 	}
-	
-	public double getDestX()
-	{
+
+	public double getDestX() {
 		return _destX;
 	}
-	
-	public double getDestY()
-	{
+
+	public double getDestY() {
 		return _destY;
 	}
-	
-	public double getDestZ()
-	{
+
+	public double getDestZ() {
 		return _destZ;
 	}
-	
-	public int getDestHeading()
-	{
+
+	public int getDestHeading() {
 		return _destHeading;
 	}
-	
-	public Instance getDestInstance()
-	{
+
+	public Instance getDestInstance() {
 		return _destInstance;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_TELEPORT;
 	}
 }

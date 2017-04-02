@@ -18,45 +18,40 @@
  */
 package org.l2junity.loginserver.db;
 
-import java.io.Closeable;
-
 import org.l2junity.loginserver.db.dto.Account;
 import org.l2junity.loginserver.db.mapper.AccountMapper;
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.BindBean;
-import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+
+import java.io.Closeable;
 
 /**
  * @author NosBit
  */
 @RegisterMapper(AccountMapper.class)
-public interface AccountsDAO extends Closeable
-{
+public interface AccountsDAO extends Closeable {
 	@SqlUpdate("INSERT INTO `accounts`(`name`, `password`) VALUES(:name, :password)")
 	@GetGeneratedKeys
 	long insert(@Bind("name") String name, @Bind("password") String password);
-	
+
 	@SqlUpdate("UPDATE `accounts` SET `password` = :password WHERE `id` = :id")
 	int updatePassword(@Bind("id") long id, @Bind("password") String password);
-	
+
 	@SqlUpdate("UPDATE `accounts` SET `password` = :password WHERE `id` = :id")
 	int updatePassword(@BindBean Account account);
-	
+
 	@SqlUpdate("UPDATE `accounts` SET `last_server_id` = :lastServerId WHERE `id` = :id")
 	int updateLastServerId(@Bind("id") long id, @Bind("lastServerId") short lastServerId);
-	
+
 	@SqlUpdate("UPDATE `accounts` SET `last_server_id` = :lastServerId WHERE `id` = :id")
 	int updateLastServerId(@BindBean Account account);
-	
+
 	@SqlQuery("SELECT * FROM `accounts` WHERE `id` = :id")
 	Account findById(@Bind("id") long id);
-	
+
 	@SqlQuery("SELECT * FROM `accounts` WHERE `name` = :name")
 	Account findByName(@Bind("name") String name);
-	
+
 	@Override
 	void close();
 }

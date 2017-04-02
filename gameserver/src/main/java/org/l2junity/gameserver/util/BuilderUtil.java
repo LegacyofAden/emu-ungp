@@ -26,47 +26,43 @@ import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffec
 /**
  * @author lord_rex
  */
-public final class BuilderUtil
-{
-	private BuilderUtil()
-	{
+public final class BuilderUtil {
+	private BuilderUtil() {
 		// utility class
 	}
-	
+
 	/**
 	 * Sends builder system message to the player.
+	 *
 	 * @param player
 	 * @param message
 	 */
-	public static void sendSysMessage(final PlayerInstance player, final String message)
-	{
+	public static void sendSysMessage(final PlayerInstance player, final String message) {
 		player.sendPacket(new CreatureSay(0, ChatType.GENERAL, "SYS", message));
 	}
-	
+
 	/**
 	 * Changes player's hiding state.
+	 *
 	 * @param player
 	 * @param hide
 	 * @return {@code true} if hide state was changed, otherwise {@code false}
 	 */
-	public static boolean setHiding(final PlayerInstance player, final boolean hide)
-	{
-		if (player.isInvisible() && hide)
-		{
+	public static boolean setHiding(final PlayerInstance player, final boolean hide) {
+		if (player.isInvisible() && hide) {
 			// already hiding
 			return false;
 		}
-		
-		if (!player.isInvisible() && !hide)
-		{
+
+		if (!player.isInvisible() && !hide) {
 			// already visible
 			return false;
 		}
-		
+
 		player.setSilenceMode(hide);
 		player.setIsInvul(hide);
 		player.setInvisible(hide);
-		
+
 		player.broadcastUserInfo();
 		player.sendPacket(new ExUserInfoAbnormalVisualEffect(player));
 		return true;

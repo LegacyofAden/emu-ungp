@@ -25,17 +25,14 @@ import java.util.Map;
 /**
  * @author HorridoJoho
  */
-public abstract class AbstractScriptingEngine implements IScriptingEngine
-{
+public abstract class AbstractScriptingEngine implements IScriptingEngine {
 	private final String _engineName;
 	private final String _engineVersion;
 	private final String[] _commonFileExtensions;
 	private final Map<String, String> _properties;
-	
-	protected AbstractScriptingEngine(final String engineName, final String engineVersion, final String... commonFileExtensions)
-	{
-		if ((engineName == null) || engineName.isEmpty() || (engineVersion == null) || engineVersion.isEmpty() || (commonFileExtensions == null) || (commonFileExtensions.length == 0))
-		{
+
+	protected AbstractScriptingEngine(final String engineName, final String engineVersion, final String... commonFileExtensions) {
+		if ((engineName == null) || engineName.isEmpty() || (engineVersion == null) || engineVersion.isEmpty() || (commonFileExtensions == null) || (commonFileExtensions.length == 0)) {
 			throw new IllegalArgumentException();
 		}
 		_engineName = engineName;
@@ -43,34 +40,29 @@ public abstract class AbstractScriptingEngine implements IScriptingEngine
 		_commonFileExtensions = commonFileExtensions;
 		_properties = new HashMap<>();
 	}
-	
+
 	@Override
-	public final String setProperty(final String key, final String value)
-	{
+	public final String setProperty(final String key, final String value) {
 		return _properties.put(key, value);
 	}
-	
+
 	@Override
-	public final String getProperty(final String key)
-	{
+	public final String getProperty(final String key) {
 		return _properties.get(key);
 	}
-	
+
 	@Override
-	public final String getEngineName()
-	{
+	public final String getEngineName() {
 		return _engineName;
 	}
-	
+
 	@Override
-	public final String getEngineVersion()
-	{
+	public final String getEngineVersion() {
 		return _engineVersion;
 	}
-	
+
 	@Override
-	public final String[] getCommonFileExtensions()
-	{
+	public final String[] getCommonFileExtensions() {
 		return Arrays.copyOf(_commonFileExtensions, _commonFileExtensions.length);
 	}
 }

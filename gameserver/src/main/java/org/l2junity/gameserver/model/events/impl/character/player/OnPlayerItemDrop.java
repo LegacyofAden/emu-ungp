@@ -27,37 +27,31 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerItemDrop implements IBaseEvent
-{
+public class OnPlayerItemDrop implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final Location _loc;
-	
-	public OnPlayerItemDrop(PlayerInstance activeChar, ItemInstance item, Location loc)
-	{
+
+	public OnPlayerItemDrop(PlayerInstance activeChar, ItemInstance item, Location loc) {
 		_activeChar = activeChar;
 		_item = item;
 		_loc = loc;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public Location getLocation()
-	{
+
+	public Location getLocation() {
 		return _loc;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_ITEM_DROP;
 	}
 }

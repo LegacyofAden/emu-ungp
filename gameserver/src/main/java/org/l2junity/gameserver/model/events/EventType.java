@@ -22,168 +22,42 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.events.impl.OnDayNightChange;
 import org.l2junity.gameserver.model.events.impl.ceremonyofchaos.OnCeremonyOfChaosMatchResult;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttack;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttackAvoid;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageDealt;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureHpChange;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureKilled;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillFinishCast;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillUse;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillUsed;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleport;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleported;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureZoneEnter;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureZoneExit;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAggroRangeEnter;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAttack;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableFactionCall;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableHate;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCreatureSee;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcDespawn;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcManorBypass;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMenuSelect;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveFinished;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveNodeArrived;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSpawn;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleport;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleportRequest;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerAbilityPointsChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerAugment;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerBypass;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerCallToChangeClass;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerChangeToAwakenedClass;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerChat;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanCreate;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanDestroy;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanJoin;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanLeaderChange;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanLeft;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanLvlUp;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanWHItemAdd;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanWHItemDestroy;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanWHItemTransfer;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerCreate;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDeathExpPenalty;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDeathPenalty;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDelete;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDlgAnswer;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerEquipItem;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFameChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFishing;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerHennaAdd;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerHennaRemove;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemAdd;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemDestroy;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemDrop;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemPickup;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemTransfer;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLevelChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogin;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogout;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeAdd;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeLeft;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeRemove;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeStatus;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMentorStatus;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMoveRequest;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPKChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressTutorialMark;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerProfessionChange;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPvPChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPvPKill;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerQuestAbort;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerQuestComplete;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerReputationChanged;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerRequestAcquireSkillInfo;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerRestore;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSelect;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSkillLearn;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSocialAction;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSubChange;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonSpawn;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonTalk;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerTransform;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerVitalityConsume;
-import org.l2junity.gameserver.model.events.impl.character.player.OnTrapAction;
+import org.l2junity.gameserver.model.events.impl.character.*;
+import org.l2junity.gameserver.model.events.impl.character.npc.*;
+import org.l2junity.gameserver.model.events.impl.character.player.*;
 import org.l2junity.gameserver.model.events.impl.clan.OnClanWarFinish;
 import org.l2junity.gameserver.model.events.impl.clan.OnClanWarStart;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceCreated;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceDestroy;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceEnter;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceFinish;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceLeave;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
+import org.l2junity.gameserver.model.events.impl.instance.*;
 import org.l2junity.gameserver.model.events.impl.item.OnItemBypassEvent;
 import org.l2junity.gameserver.model.events.impl.item.OnItemCreate;
 import org.l2junity.gameserver.model.events.impl.item.OnItemTalk;
 import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerAttack;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToAlly;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToClan;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToParty;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerJoinSiege;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerLearnSkill;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerLeaveParty;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerLogout;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerPickUp;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerRequestRevive;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerStandUp;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerTrade;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseAction;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseItem;
-import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseSkill;
-import org.l2junity.gameserver.model.events.impl.restriction.GetPlayerCombatState;
-import org.l2junity.gameserver.model.events.impl.restriction.IsPlayerInvul;
-import org.l2junity.gameserver.model.events.impl.restriction.IsWorldObjectVisibleFor;
+import org.l2junity.gameserver.model.events.impl.restriction.*;
 import org.l2junity.gameserver.model.events.impl.server.OnDailyReset;
 import org.l2junity.gameserver.model.events.impl.server.OnPacketReceived;
 import org.l2junity.gameserver.model.events.impl.server.OnPacketSent;
-import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeFinish;
-import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeOwnerChange;
-import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeStart;
-import org.l2junity.gameserver.model.events.impl.sieges.OnFortSiegeFinish;
-import org.l2junity.gameserver.model.events.impl.sieges.OnFortSiegeStart;
-import org.l2junity.gameserver.model.events.returns.BooleanReturn;
-import org.l2junity.gameserver.model.events.returns.ChatFilterReturn;
-import org.l2junity.gameserver.model.events.returns.CombatStateReturn;
-import org.l2junity.gameserver.model.events.returns.DamageReturn;
-import org.l2junity.gameserver.model.events.returns.IntegerReturn;
-import org.l2junity.gameserver.model.events.returns.LocationReturn;
-import org.l2junity.gameserver.model.events.returns.LongReturn;
-import org.l2junity.gameserver.model.events.returns.TerminateReturn;
+import org.l2junity.gameserver.model.events.impl.sieges.*;
+import org.l2junity.gameserver.model.events.returns.*;
 
 /**
  * @author UnAfraid
  */
-public enum EventType
-{
+public enum EventType {
 	// Attackable events
 	ON_ATTACKABLE_AGGRO_RANGE_ENTER(OnAttackableAggroRangeEnter.class, void.class),
 	ON_ATTACKABLE_ATTACK(OnAttackableAttack.class, void.class),
 	ON_ATTACKABLE_FACTION_CALL(OnAttackableFactionCall.class, void.class),
 	ON_ATTACKABLE_KILL(OnAttackableKill.class, void.class),
-	
+
 	// Castle events
 	ON_CASTLE_SIEGE_FINISH(OnCastleSiegeFinish.class, void.class),
 	ON_CASTLE_SIEGE_OWNER_CHANGE(OnCastleSiegeOwnerChange.class, void.class),
 	ON_CASTLE_SIEGE_START(OnCastleSiegeStart.class, void.class),
-	
+
 	// Clan events
 	ON_CLAN_WAR_FINISH(OnClanWarFinish.class, void.class),
 	ON_CLAN_WAR_START(OnClanWarStart.class, void.class),
-	
+
 	// Creature events
 	ON_CREATURE_ATTACK(OnCreatureAttack.class, void.class, void.class),
 	ON_CREATURE_ATTACK_AVOID(OnCreatureAttackAvoid.class, void.class, void.class),
@@ -201,16 +75,16 @@ public enum EventType
 	ON_CREATURE_TELEPORTED(OnCreatureTeleported.class, void.class),
 	ON_CREATURE_ZONE_ENTER(OnCreatureZoneEnter.class, void.class),
 	ON_CREATURE_ZONE_EXIT(OnCreatureZoneExit.class, void.class),
-	
+
 	// Fortress events
 	ON_FORT_SIEGE_FINISH(OnFortSiegeFinish.class, void.class),
 	ON_FORT_SIEGE_START(OnFortSiegeStart.class, void.class),
-	
+
 	// Item events
 	ON_ITEM_BYPASS_EVENT(OnItemBypassEvent.class, void.class),
 	ON_ITEM_CREATE(OnItemCreate.class, void.class),
 	ON_ITEM_TALK(OnItemTalk.class, void.class),
-	
+
 	// Npcs events
 	ON_NPC_CAN_BE_SEEN(OnNpcCanBeSeen.class, void.class, TerminateReturn.class),
 	ON_NPC_CREATURE_SEE(OnNpcCreatureSee.class, void.class),
@@ -230,16 +104,16 @@ public enum EventType
 	ON_NPC_MENU_SELECT(OnNpcMenuSelect.class, void.class),
 	ON_NPC_DESPAWN(OnNpcDespawn.class, void.class),
 	ON_NPC_TELEPORT_REQUEST(OnNpcTeleportRequest.class, void.class, TerminateReturn.class),
-	
+
 	// Olympiad events
 	ON_OLYMPIAD_MATCH_RESULT(OnOlympiadMatchResult.class, void.class),
-	
+
 	// Ceremony of Chaos events
 	ON_CEREMONY_OF_CHAOS_MATCH_RESULT(OnCeremonyOfChaosMatchResult.class, void.class),
-	
+
 	// Playable events
 	ON_PLAYABLE_EXP_CHANGED(OnPlayableExpChanged.class, void.class, TerminateReturn.class),
-	
+
 	// Player events
 	ON_PLAYER_AUGMENT(OnPlayerAugment.class, void.class),
 	ON_PLAYER_BYPASS(OnPlayerBypass.class, void.class, TerminateReturn.class),
@@ -304,17 +178,17 @@ public enum EventType
 	ON_PLAYER_DEATH_EXP_PENALTY(OnPlayerDeathExpPenalty.class, void.class, LongReturn.class),
 	ON_PLAYER_DEATH_PENALTY(OnPlayerDeathPenalty.class, void.class, TerminateReturn.class),
 	ON_PLAYER_VITALITY_CONSUME(OnPlayerVitalityConsume.class, void.class, IntegerReturn.class),
-	
+
 	// Trap events
 	ON_TRAP_ACTION(OnTrapAction.class, void.class),
-	
+
 	ON_DAY_NIGHT_CHANGE(OnDayNightChange.class, void.class),
-	
+
 	ON_PACKET_RECEIVED(OnPacketReceived.class, void.class),
 	ON_PACKET_SENT(OnPacketSent.class, void.class),
-	
+
 	ON_DAILY_RESET(OnDailyReset.class, void.class),
-	
+
 	// Instance events
 	ON_INSTANCE_CREATED(OnInstanceCreated.class, void.class),
 	ON_INSTANCE_DESTROY(OnInstanceDestroy.class, void.class),
@@ -322,7 +196,7 @@ public enum EventType
 	ON_INSTANCE_FINISH(OnInstanceFinish.class, void.class),
 	ON_INSTANCE_LEAVE(OnInstanceLeave.class, void.class),
 	ON_INSTANCE_STATUS_CHANGE(OnInstanceStatusChange.class, void.class),
-	
+
 	// Restrictions - CAN
 	CAN_PLAYER_ATTACK(CanPlayerAttack.class, BooleanReturn.class),
 	CAN_PLAYER_INVITE_TO_PARTY(CanPlayerInviteToParty.class, BooleanReturn.class),
@@ -339,43 +213,38 @@ public enum EventType
 	CAN_PLAYER_STAND_UP(CanPlayerStandUp.class, BooleanReturn.class),
 	CAN_PLAYER_PICK_UP(CanPlayerPickUp.class, BooleanReturn.class),
 	CAN_PLAYER_REQUEST_REVIVE(CanPlayerRequestRevive.class, BooleanReturn.class),
-	
+
 	// Restrictions - IS
 	IS_WORLD_OBJECT_VISIBLE_FOR(IsWorldObjectVisibleFor.class, BooleanReturn.class),
 	IS_PLAYER_INVUL(IsPlayerInvul.class, BooleanReturn.class),
-	
+
 	// Restrictions - GET
 	GET_COMBAT_STATE(GetPlayerCombatState.class, CombatStateReturn.class),
-	
+
 	// ...
 	;
-	
+
 	private final Class<? extends IBaseEvent> _eventClass;
 	private final Class<?>[] _returnClass;
-	
-	EventType(Class<? extends IBaseEvent> eventClass, Class<?>... returnClasss)
-	{
+
+	EventType(Class<? extends IBaseEvent> eventClass, Class<?>... returnClasss) {
 		_eventClass = eventClass;
 		_returnClass = returnClasss;
 	}
-	
-	public Class<? extends IBaseEvent> getEventClass()
-	{
+
+	public Class<? extends IBaseEvent> getEventClass() {
 		return _eventClass;
 	}
-	
-	public Class<?>[] getReturnClasses()
-	{
+
+	public Class<?>[] getReturnClasses() {
 		return _returnClass;
 	}
-	
-	public boolean isEventClass(Class<?> clazz)
-	{
+
+	public boolean isEventClass(Class<?> clazz) {
 		return _eventClass == clazz;
 	}
-	
-	public boolean isReturnClass(Class<?> clazz)
-	{
+
+	public boolean isReturnClass(Class<?> clazz) {
 		return ArrayUtil.contains(_returnClass, clazz);
 	}
 }

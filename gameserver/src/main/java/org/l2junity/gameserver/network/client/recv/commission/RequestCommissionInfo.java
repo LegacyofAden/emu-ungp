@@ -30,39 +30,31 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestCommissionInfo implements IClientIncomingPacket
-{
+public class RequestCommissionInfo implements IClientIncomingPacket {
 	private int _itemObjectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_itemObjectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!CommissionManager.isPlayerAllowedToInteract(player))
-		{
+
+		if (!CommissionManager.isPlayerAllowedToInteract(player)) {
 			client.sendPacket(ExCloseCommission.STATIC_PACKET);
 			return;
 		}
-		
+
 		final ItemInstance itemInstance = player.getInventory().getItemByObjectId(_itemObjectId);
-		if (itemInstance != null)
-		{
+		if (itemInstance != null) {
 			client.sendPacket(player.getLastCommissionInfos().getOrDefault(itemInstance.getId(), ExResponseCommissionInfo.EMPTY));
-		}
-		else
-		{
+		} else {
 			client.sendPacket(ExResponseCommissionInfo.EMPTY);
 		}
 	}

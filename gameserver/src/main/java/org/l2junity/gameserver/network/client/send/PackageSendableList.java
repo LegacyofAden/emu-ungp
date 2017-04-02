@@ -18,40 +18,36 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author -Wooden-
  * @author UnAfraid, mrTJO
  */
-public class PackageSendableList extends AbstractItemPacket
-{
+public class PackageSendableList extends AbstractItemPacket {
 	private final Collection<ItemInstance> _items;
 	private final int _objectId;
 	private final long _adena;
-	
-	public PackageSendableList(PlayerInstance player, int objectId)
-	{
+
+	public PackageSendableList(PlayerInstance player, int objectId) {
 		_items = player.getInventory().getAvailableItems(true, true, true);
 		_objectId = objectId;
 		_adena = player.getAdena();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PACKAGE_SENDABLE_LIST.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeQ(_adena);
 		packet.writeD(_items.size());
-		for (ItemInstance item : _items)
-		{
+		for (ItemInstance item : _items) {
 			writeItem(packet, item);
 			packet.writeD(item.getObjectId());
 		}

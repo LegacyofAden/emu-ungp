@@ -21,28 +21,25 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class RadarControl implements IClientOutgoingPacket
-{
+public class RadarControl implements IClientOutgoingPacket {
 	private final int _showRadar;
 	private final int _type;
 	private final int _x;
 	private final int _y;
 	private final int _z;
-	
-	public RadarControl(int showRadar, int type, double x, double y, double z)
-	{
+
+	public RadarControl(int showRadar, int type, double x, double y, double z) {
 		_showRadar = showRadar; // showRader?? 0 = showradar; 1 = delete radar;
 		_type = type; // radar type??
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RADAR_CONTROL.writeId(packet);
-		
+
 		packet.writeD(_showRadar);
 		packet.writeD(_type); // maybe type
 		packet.writeD(_x);

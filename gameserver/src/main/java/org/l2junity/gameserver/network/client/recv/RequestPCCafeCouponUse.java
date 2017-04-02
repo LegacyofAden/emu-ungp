@@ -23,22 +23,20 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) S
+ *
  * @author -Wooden- TODO: GodKratos: This packet is wrong in Gracia Final!!
  */
-public final class RequestPCCafeCouponUse implements IClientIncomingPacket
-{
+public final class RequestPCCafeCouponUse implements IClientIncomingPacket {
 	private String _str;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_str = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		_log.info("C5: RequestPCCafeCouponUse: S: " + _str);
 	}
 }

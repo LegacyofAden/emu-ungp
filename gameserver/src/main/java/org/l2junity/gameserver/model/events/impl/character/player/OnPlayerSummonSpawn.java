@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerSummonSpawn implements IBaseEvent
-{
+public class OnPlayerSummonSpawn implements IBaseEvent {
 	private final Summon _summon;
-	
-	public OnPlayerSummonSpawn(Summon summon)
-	{
+
+	public OnPlayerSummonSpawn(Summon summon) {
 		_summon = summon;
 	}
-	
-	public Summon getSummon()
-	{
+
+	public Summon getSummon() {
 		return _summon;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_SUMMON_SPAWN;
 	}
 }

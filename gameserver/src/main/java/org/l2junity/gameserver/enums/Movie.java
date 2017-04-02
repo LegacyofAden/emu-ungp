@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * This file contains all movies.
+ *
  * @author St3eT
  */
-public enum Movie
-{
+public enum Movie {
 	SC_LINDVIOR(1, true),
 	SC_ECHMUS_OPENING(2, true),
 	SC_ECHMUS_SUCCESS(3, true),
@@ -124,43 +124,38 @@ public enum Movie
 	LAND_ANNIHILATION_A(1004, true),
 	G_CARTIA_1_SIN(2001, false),
 	G_CARTIA_2_SIN(2002, false);
-	
+
 	private final int _clientId;
 	private final boolean _isEscapable;
-	
-	private Movie(int clientId, boolean isEscapable)
-	{
+
+	private Movie(int clientId, boolean isEscapable) {
 		_clientId = clientId;
 		_isEscapable = isEscapable;
 	}
-	
+
 	/**
 	 * @return the client id.
 	 */
-	public int getClientId()
-	{
+	public int getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * @return {@code true} if movie can be escaped (skipped), {@code false} otherwise.
 	 */
-	public boolean isEscapable()
-	{
+	public boolean isEscapable() {
 		return _isEscapable;
 	}
-	
+
 	/**
 	 * Finds the {@code Movie} by its clientId
+	 *
 	 * @param clientId the clientId
 	 * @return the {@code Movie} if its found, {@code null} otherwise.
 	 */
-	public static Movie findByClientId(int clientId)
-	{
-		for (Movie movie : values())
-		{
-			if (movie.getClientId() == clientId)
-			{
+	public static Movie findByClientId(int clientId) {
+		for (Movie movie : values()) {
+			if (movie.getClientId() == clientId) {
 				return movie;
 			}
 		}

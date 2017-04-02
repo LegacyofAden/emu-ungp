@@ -25,40 +25,34 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.1.4.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class FinishRotating implements IClientIncomingPacket
-{
+public final class FinishRotating implements IClientIncomingPacket {
 	private int _degree;
 	@SuppressWarnings("unused")
 	private int _unknown;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_degree = packet.readD();
 		_unknown = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		StopRotation sr;
-		if (activeChar.isInAirShip() && activeChar.getAirShip().isCaptain(activeChar))
-		{
+		if (activeChar.isInAirShip() && activeChar.getAirShip().isCaptain(activeChar)) {
 			activeChar.getAirShip().setHeading(_degree);
 			sr = new StopRotation(activeChar.getAirShip().getObjectId(), _degree, 0);
 			activeChar.getAirShip().broadcastPacket(sr);
-		}
-		else
-		{
+		} else {
 			sr = new StopRotation(activeChar.getObjectId(), _degree, 0);
 			activeChar.broadcastPacket(sr);
 		}

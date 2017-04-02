@@ -28,30 +28,25 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestFortressMapInfo implements IClientIncomingPacket
-{
+public class RequestFortressMapInfo implements IClientIncomingPacket {
 	private int _fortressId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_fortressId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final Fort fort = FortManager.getInstance().getFortById(_fortressId);
-		if (fort == null)
-		{
+		if (fort == null) {
 			_log.warn("Fort is not found with id (" + _fortressId + ") in all forts with size of (" + FortManager.getInstance().getForts().size() + ") called by player (" + client.getActiveChar() + ")");
-			
-			if (client.getActiveChar() == null)
-			{
+
+			if (client.getActiveChar() == null) {
 				return;
 			}
-			
+
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}

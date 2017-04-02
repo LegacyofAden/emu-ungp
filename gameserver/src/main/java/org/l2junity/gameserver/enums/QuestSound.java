@@ -18,20 +18,20 @@
  */
 package org.l2junity.gameserver.enums;
 
+import org.l2junity.gameserver.network.client.send.PlaySound;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.l2junity.gameserver.network.client.send.PlaySound;
 
 /**
  * This enum contains known sound effects used by quests.<br>
  * The idea is to have only a single object of each quest sound instead of constructing a new one every time a script calls the playSound method.<br>
  * This is pretty much just a memory and CPU cycle optimization; avoids constructing/deconstructing objects all the time if they're all the same.<br>
  * For datapack scripts written in Java and extending the Quest class, this does not need an extra import.
+ *
  * @author jurchiks
  */
-public enum QuestSound
-{
+public enum QuestSound {
 	ITEMSOUND_QUEST_ACCEPT(new PlaySound("ItemSound.quest_accept")),
 	ITEMSOUND_QUEST_MIDDLE(new PlaySound("ItemSound.quest_middle")),
 	ITEMSOUND_QUEST_FINISH(new PlaySound("ItemSound.quest_finish")),
@@ -119,54 +119,48 @@ public enum QuestSound
 	BS02_D(new PlaySound("BS02_D")),
 	BS05_D(new PlaySound("BS05_D")),
 	BS07_D(new PlaySound("BS07_D"));
-	
+
 	private final PlaySound _playSound;
-	
+
 	private static Map<String, PlaySound> soundPackets = new HashMap<>();
-	
-	private QuestSound(PlaySound playSound)
-	{
+
+	private QuestSound(PlaySound playSound) {
 		_playSound = playSound;
 	}
-	
+
 	/**
 	 * Get a {@link PlaySound} packet by its name.
+	 *
 	 * @param soundName the name of the sound to look for
 	 * @return the {@link PlaySound} packet with the specified sound or {@code null} if one was not found
 	 */
-	public static PlaySound getSound(String soundName)
-	{
-		if (soundPackets.containsKey(soundName))
-		{
+	public static PlaySound getSound(String soundName) {
+		if (soundPackets.containsKey(soundName)) {
 			return soundPackets.get(soundName);
 		}
-		
-		for (QuestSound qs : QuestSound.values())
-		{
-			if (qs._playSound.getSoundName().equals(soundName))
-			{
+
+		for (QuestSound qs : QuestSound.values()) {
+			if (qs._playSound.getSoundName().equals(soundName)) {
 				soundPackets.put(soundName, qs._playSound); // cache in map to avoid looping repeatedly
 				return qs._playSound;
 			}
 		}
-		
+
 		soundPackets.put(soundName, new PlaySound(soundName));
 		return soundPackets.get(soundName);
 	}
-	
+
 	/**
 	 * @return the name of the sound of this QuestSound object
 	 */
-	public String getSoundName()
-	{
+	public String getSoundName() {
 		return _playSound.getSoundName();
 	}
-	
+
 	/**
 	 * @return the {@link PlaySound} packet of this QuestSound object
 	 */
-	public PlaySound getPacket()
-	{
+	public PlaySound getPacket() {
 		return _playSound;
 	}
 }

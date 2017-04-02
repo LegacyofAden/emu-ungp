@@ -18,40 +18,32 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.stats.BaseStats;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author UnAfraid
  */
-public class RegenCPFinalizer implements IStatsFunction
-{
+public class RegenCPFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		if (!creature.isPlayer())
-		{
+		if (!creature.isPlayer()) {
 			return 0;
 		}
-		
+
 		final PlayerInstance player = creature.getActingPlayer();
 		double baseValue = player.getTemplate().getBaseCpRegen(creature.getLevel()) * creature.getLevelMod() * BaseStats.CON.calcBonus(creature);
-		if (player.isSitting())
-		{
+		if (player.isSitting()) {
 			baseValue *= 1.5; // Sitting
-		}
-		else if (!player.isMoving())
-		{
+		} else if (!player.isMoving()) {
 			baseValue *= 1.1; // Staying
-		}
-		else if (player.isRunning())
-		{
+		} else if (player.isRunning()) {
 			baseValue *= 0.7; // Running
 		}
 		return DoubleStat.defaultValue(player, stat, baseValue);

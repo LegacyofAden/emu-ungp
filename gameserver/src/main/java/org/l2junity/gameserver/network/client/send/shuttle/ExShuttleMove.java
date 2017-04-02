@@ -26,24 +26,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExShuttleMove implements IClientOutgoingPacket
-{
+public class ExShuttleMove implements IClientOutgoingPacket {
 	private final L2ShuttleInstance _shuttle;
 	private final int _x, _y, _z;
-	
-	public ExShuttleMove(L2ShuttleInstance shuttle, double x, double y, double z)
-	{
+
+	public ExShuttleMove(L2ShuttleInstance shuttle, double x, double y, double z) {
 		_shuttle = shuttle;
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SUTTLE_MOVE.writeId(packet);
-		
+
 		packet.writeD(_shuttle.getObjectId());
 		packet.writeD((int) _shuttle.getStat().getMoveSpeed());
 		packet.writeD((int) _shuttle.getStat().getRotationSpeed());

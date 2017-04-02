@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author lord_rex
  */
-public final class CanPlayerPickUp implements IBaseEvent
-{
+public final class CanPlayerPickUp implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _target;
-	
-	public CanPlayerPickUp(PlayerInstance activeChar, ItemInstance target)
-	{
+
+	public CanPlayerPickUp(PlayerInstance activeChar, ItemInstance target) {
 		_activeChar = activeChar;
 		_target = target;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getTarget()
-	{
+
+	public ItemInstance getTarget() {
 		return _target;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_PICK_UP;
 	}
 }

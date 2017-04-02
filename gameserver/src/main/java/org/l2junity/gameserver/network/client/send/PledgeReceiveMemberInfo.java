@@ -25,35 +25,29 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class PledgeReceiveMemberInfo implements IClientOutgoingPacket
-{
+public class PledgeReceiveMemberInfo implements IClientOutgoingPacket {
 	private final ClanMember _member;
-	
-	public PledgeReceiveMemberInfo(ClanMember member)
-	{
+
+	public PledgeReceiveMemberInfo(ClanMember member) {
 		_member = member;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_RECEIVE_MEMBER_INFO.writeId(packet);
-		
+
 		packet.writeD(_member.getPledgeType());
 		packet.writeS(_member.getName());
 		packet.writeS(_member.getTitle()); // title
 		packet.writeD(_member.getPowerGrade()); // power
-		
+
 		// clan or subpledge name
-		if (_member.getPledgeType() != 0)
-		{
+		if (_member.getPledgeType() != 0) {
 			packet.writeS((_member.getClan().getSubPledge(_member.getPledgeType())).getName());
-		}
-		else
-		{
+		} else {
 			packet.writeS(_member.getClan().getName());
 		}
-		
+
 		packet.writeS(_member.getApprenticeOrSponsorName()); // name of this member's apprentice/sponsor
 		return true;
 	}

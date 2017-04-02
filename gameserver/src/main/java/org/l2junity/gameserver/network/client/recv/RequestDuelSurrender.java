@@ -24,19 +24,17 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format:(ch) just a trigger
+ *
  * @author -Wooden-
  */
-public final class RequestDuelSurrender implements IClientIncomingPacket
-{
+public final class RequestDuelSurrender implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		DuelManager.getInstance().doSurrender(client.getActiveChar());
 	}
 }

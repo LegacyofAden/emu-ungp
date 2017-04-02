@@ -29,18 +29,16 @@ import org.l2junity.network.PacketReader;
 /**
  * author: Gnacik
  */
-public class RequestPartyMatchList implements IClientIncomingPacket
-{
+public class RequestPartyMatchList implements IClientIncomingPacket {
 	private int _roomId;
 	private int _maxMembers;
 	private int _minLevel;
 	private int _maxLevel;
 	private int _lootType;
 	private String _roomTitle;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomId = packet.readD();
 		_maxMembers = packet.readD();
 		_minLevel = packet.readD();
@@ -49,36 +47,30 @@ public class RequestPartyMatchList implements IClientIncomingPacket
 		_roomTitle = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((_roomId <= 0) && (activeChar.getMatchingRoom() == null))
-		{
+
+		if ((_roomId <= 0) && (activeChar.getMatchingRoom() == null)) {
 			final PartyMatchingRoom room = new PartyMatchingRoom(_roomTitle, _lootType, _minLevel, _maxLevel, _maxMembers, activeChar);
 			activeChar.setMatchingRoom(room);
-		}
-		else
-		{
+		} else {
 			final MatchingRoom room = activeChar.getMatchingRoom();
-			if ((room.getId() == _roomId) && (room.getRoomType() == MatchingRoomType.PARTY) && room.isLeader(activeChar))
-			{
+			if ((room.getId() == _roomId) && (room.getRoomType() == MatchingRoomType.PARTY) && room.isLeader(activeChar)) {
 				room.setLootType(_lootType);
 				room.setMinLvl(_minLevel);
 				room.setMaxLvl(_maxLevel);
 				room.setMaxMembers(_maxMembers);
 				room.setTitle(_roomTitle);
-				
+
 				final PartyRoomInfo packet = new PartyRoomInfo((PartyMatchingRoom) room);
 				room.getMembers().forEach(packet::sendTo);
 			}
 		}
 	}
-	
+
 }

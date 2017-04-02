@@ -18,30 +18,28 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
 /**
  * RequestShowBoard client packet implementation.
+ *
  * @author Zoey76
  */
-public final class RequestShowBoard implements IClientIncomingPacket
-{
+public final class RequestShowBoard implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _unknown;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_unknown = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		CommunityBoardHandler.getInstance().handleParseCommand(GeneralConfig.BBS_DEFAULT, client.getActiveChar());
 	}
 }

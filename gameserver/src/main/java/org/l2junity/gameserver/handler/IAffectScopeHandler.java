@@ -18,30 +18,28 @@
  */
 package org.l2junity.gameserver.handler;
 
-import java.awt.Color;
-import java.util.function.Consumer;
-
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 
+import java.awt.*;
+import java.util.function.Consumer;
+
 /**
  * @author Nik
  */
-public interface IAffectScopeHandler
-{
+public interface IAffectScopeHandler {
 	void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action);
-	
-	default void drawEffected(Creature activeChar, WorldObject target, Skill skill)
-	{
+
+	default void drawEffected(Creature activeChar, WorldObject target, Skill skill) {
 		final ExServerPrimitive packet = new ExServerPrimitive(getClass().getSimpleName() + "-" + activeChar.getObjectId(), activeChar);
-		
+
 		forEachAffected(activeChar, target, skill, creature ->
 		{
 			packet.addLine(getClass().getSimpleName(), Color.RED, true, activeChar, target);
 		});
-		
+
 		activeChar.sendDebugPacket(packet);
 	}
 }

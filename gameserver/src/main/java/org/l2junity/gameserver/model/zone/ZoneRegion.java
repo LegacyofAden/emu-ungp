@@ -18,125 +18,101 @@
  */
 package org.l2junity.gameserver.model.zone;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.type.PeaceZone;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Nos
  */
-public class ZoneRegion
-{
+public class ZoneRegion {
 	private final int _regionX;
 	private final int _regionY;
 	private final Map<Integer, ZoneType> _zones = new ConcurrentHashMap<>();
-	
-	public ZoneRegion(int regionX, int regionY)
-	{
+
+	public ZoneRegion(int regionX, int regionY) {
 		_regionX = regionX;
 		_regionY = regionY;
 	}
-	
-	public Map<Integer, ZoneType> getZones()
-	{
+
+	public Map<Integer, ZoneType> getZones() {
 		return _zones;
 	}
-	
-	public int getRegionX()
-	{
+
+	public int getRegionX() {
 		return _regionX;
 	}
-	
-	public int getRegionY()
-	{
+
+	public int getRegionY() {
 		return _regionY;
 	}
-	
-	public void revalidateZones(Creature character)
-	{
+
+	public void revalidateZones(Creature character) {
 		// do NOT update the world region while the character is still in the process of teleporting
 		// Once the teleport is COMPLETED, revalidation occurs safely, at that time.
-		
-		if (character.isTeleporting())
-		{
+
+		if (character.isTeleporting()) {
 			return;
 		}
-		
-		for (ZoneType z : getZones().values())
-		{
+
+		for (ZoneType z : getZones().values()) {
 			z.revalidateInZone(character);
 		}
 	}
-	
-	public void removeFromZones(Creature character, boolean isLogout)
-	{
-		for (ZoneType z : getZones().values())
-		{
+
+	public void removeFromZones(Creature character, boolean isLogout) {
+		for (ZoneType z : getZones().values()) {
 			z.removeCharacter(character, isLogout);
 		}
 	}
-	
-	public boolean checkEffectRangeInsidePeaceZone(Skill skill, final double x, final double y, final double z)
-	{
+
+	public boolean checkEffectRangeInsidePeaceZone(Skill skill, final double x, final double y, final double z) {
 		final int range = skill.getEffectRange();
 		final double up = y + range;
 		final double down = y - range;
 		final double left = x + range;
 		final double right = x - range;
-		
-		for (ZoneType e : getZones().values())
-		{
-			if (e instanceof PeaceZone)
-			{
-				if (e.isInsideZone(x, up, z))
-				{
+
+		for (ZoneType e : getZones().values()) {
+			if (e instanceof PeaceZone) {
+				if (e.isInsideZone(x, up, z)) {
 					return false;
 				}
-				
-				if (e.isInsideZone(x, down, z))
-				{
+
+				if (e.isInsideZone(x, down, z)) {
 					return false;
 				}
-				
-				if (e.isInsideZone(left, y, z))
-				{
+
+				if (e.isInsideZone(left, y, z)) {
 					return false;
 				}
-				
-				if (e.isInsideZone(right, y, z))
-				{
+
+				if (e.isInsideZone(right, y, z)) {
 					return false;
 				}
-				
-				if (e.isInsideZone(x, y, z))
-				{
+
+				if (e.isInsideZone(x, y, z)) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	
-	public void onDeath(Creature character)
-	{
-		for (ZoneType z : getZones().values())
-		{
-			if (z.isInsideZone(character))
-			{
+
+	public void onDeath(Creature character) {
+		for (ZoneType z : getZones().values()) {
+			if (z.isInsideZone(character)) {
 				z.onDieInside(character);
 			}
 		}
 	}
-	
-	public void onRevive(Creature character)
-	{
-		for (ZoneType z : getZones().values())
-		{
-			if (z.isInsideZone(character))
-			{
+
+	public void onRevive(Creature character) {
+		for (ZoneType z : getZones().values()) {
+			if (z.isInsideZone(character)) {
 				z.onReviveInside(character);
 			}
 		}

@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.items.Henna;
 /**
  * @author UnAfraid
  */
-public class OnPlayerHennaAdd implements IBaseEvent
-{
+public class OnPlayerHennaAdd implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Henna _henna;
-	
-	public OnPlayerHennaAdd(PlayerInstance activeChar, Henna henna)
-	{
+
+	public OnPlayerHennaAdd(PlayerInstance activeChar, Henna henna) {
 		_activeChar = activeChar;
 		_henna = henna;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Henna getHenna()
-	{
+
+	public Henna getHenna() {
 		return _henna;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_HENNA_ADD;
 	}
 }

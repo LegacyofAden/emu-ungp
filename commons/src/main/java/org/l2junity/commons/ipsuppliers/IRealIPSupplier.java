@@ -27,41 +27,35 @@ import java.net.URL;
 /**
  * @author UnAfraid
  */
-public interface IRealIPSupplier extends Comparable<IRealIPSupplier>
-{
+public interface IRealIPSupplier extends Comparable<IRealIPSupplier> {
 	public String getIP() throws IOException;
-	
-	default boolean validateIP(String ip)
-	{
+
+	default boolean validateIP(String ip) {
 		return (ip != null) && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
 	}
-	
-	default String defaultIPObtainMethod(String urlAddress) throws IOException
-	{
+
+	default String defaultIPObtainMethod(String urlAddress) throws IOException {
 		final URL url = new URL(urlAddress);
 		final HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setConnectTimeout(2 * 1000);
 		con.setReadTimeout(2 * 1000);
 		con.setDoInput(true);
 		con.connect();
-		
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
-		{
+
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
 			final String ip = in.readLine();
-			if (validateIP(ip))
-			{
+			if (validateIP(ip)) {
 				return ip;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public int getPriority();
-	
+
 	@Override
-	default int compareTo(IRealIPSupplier o)
-	{
+	default int compareTo(IRealIPSupplier o) {
 		return Integer.compare(getPriority(), o.getPriority());
 	}
 }

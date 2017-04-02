@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.superpoint;
 
-import java.util.concurrent.ScheduledFuture;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.SuperpointMoveType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
@@ -28,14 +26,16 @@ import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
 
+import java.util.concurrent.ScheduledFuture;
+
 /**
  * Holds info about current walk progress
+ *
  * @author GKR, UnAfraid
  */
-public class SuperpointInfo
-{
+public class SuperpointInfo {
 	private final Superpoint _route;
-	
+
 	private ScheduledFuture<?> _walkCheckTask;
 	private boolean _blocked = false;
 	private boolean _suspended = false;
@@ -43,164 +43,140 @@ public class SuperpointInfo
 	private int _currentNode = 0;
 	private boolean _forward = true; // Determines first --> last or first <-- last direction
 	private long _lastActionTime; // Debug field
-	
-	public SuperpointInfo(Superpoint route)
-	{
+
+	public SuperpointInfo(Superpoint route) {
 		_route = route;
 	}
-	
+
 	/**
 	 * @return name of route of this WalkInfo.
 	 */
-	public Superpoint getRoute()
-	{
+	public Superpoint getRoute() {
 		return _route;
 	}
-	
+
 	/**
 	 * @return current node of this WalkInfo.
 	 */
-	public SuperpointNode getCurrentNode()
-	{
+	public SuperpointNode getCurrentNode() {
 		return _route.getNode(_currentNode);
 	}
-	
+
 	/**
 	 * Calculate next node for this WalkInfo and send debug message from given npc
+	 *
 	 * @param npc NPC to debug message to be sent from
 	 * @return
 	 */
-	public boolean calculateNextNode(Npc npc)
-	{
-		if (_route.getMoveType() == SuperpointMoveType.MoveSuperPoint_Random)
-		{
+	public boolean calculateNextNode(Npc npc) {
+		if (_route.getMoveType() == SuperpointMoveType.MoveSuperPoint_Random) {
 			int newNode = _currentNode;
-			
-			while (newNode == _currentNode)
-			{
+
+			while (newNode == _currentNode) {
 				newNode = Rnd.get(_route.getNodeSize());
 			}
-			
+
 			_currentNode = newNode;
-			
+
 			npc.sendDebugMessage("Route: " + _route.getAlias() + ", next random node is " + _currentNode, DebugType.WALKER);
-		}
-		else
-		{
+		} else {
 			_currentNode = _forward ? _currentNode + 1 : _currentNode - 1;
-			
-			if (_currentNode == _route.getNodeSize())
-			{
+
+			if (_currentNode == _route.getNodeSize()) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnNpcMoveRouteFinished(npc), npc);
 				npc.sendDebugMessage("Route: " + getRoute().getAlias() + ", last node arrived", DebugType.WALKER);
-				if (_route.getMoveType() == SuperpointMoveType.MoveSuperPoint_StopRail)
-				{
+				if (_route.getMoveType() == SuperpointMoveType.MoveSuperPoint_StopRail) {
 					SuperpointManager.getInstance().cancelMoving(npc);
 					return false;
 				}
 				_forward = false;
 				_currentNode -= 1;
-			}
-			
-			else if (_currentNode == -1)
-			{
+			} else if (_currentNode == -1) {
 				_currentNode = 1;
 				_forward = true;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @return {@code true} if walking task is blocked, {@code false} otherwise,
 	 */
-	public boolean isBlocked()
-	{
+	public boolean isBlocked() {
 		return _blocked;
 	}
-	
+
 	/**
 	 * @param val
 	 */
-	public void setBlocked(boolean val)
-	{
+	public void setBlocked(boolean val) {
 		_blocked = val;
 	}
-	
+
 	/**
 	 * @return {@code true} if walking task is suspended, {@code false} otherwise,
 	 */
-	public boolean isSuspended()
-	{
+	public boolean isSuspended() {
 		return _suspended;
 	}
-	
+
 	/**
 	 * @param val
 	 */
-	public void setSuspended(boolean val)
-	{
+	public void setSuspended(boolean val) {
 		_suspended = val;
 	}
-	
+
 	/**
 	 * @return {@code true} if walking task shall be stopped by attack, {@code false} otherwise,
 	 */
-	public boolean isStoppedByAttack()
-	{
+	public boolean isStoppedByAttack() {
 		return _stoppedByAttack;
 	}
-	
+
 	/**
 	 * @param val
 	 */
-	public void setStoppedByAttack(boolean val)
-	{
+	public void setStoppedByAttack(boolean val) {
 		_stoppedByAttack = val;
 	}
-	
+
 	/**
 	 * @return the id of the current node in this walking task.
 	 */
-	public int getCurrentNodeId()
-	{
+	public int getCurrentNodeId() {
 		return _currentNode;
 	}
-	
+
 	/**
 	 * @return {@code long} last action time used only for debugging.
 	 */
-	public long getLastAction()
-	{
+	public long getLastAction() {
 		return _lastActionTime;
 	}
-	
+
 	/**
 	 * @param val
 	 */
-	public void setLastAction(long val)
-	{
+	public void setLastAction(long val) {
 		_lastActionTime = val;
 	}
-	
+
 	/**
 	 * @return walking check task.
 	 */
-	public ScheduledFuture<?> getWalkCheckTask()
-	{
+	public ScheduledFuture<?> getWalkCheckTask() {
 		return _walkCheckTask;
 	}
-	
+
 	/**
 	 * @param val walking check task.
 	 */
-	public void setWalkCheckTask(ScheduledFuture<?> val)
-	{
+	public void setWalkCheckTask(ScheduledFuture<?> val) {
 		_walkCheckTask = val;
 	}
-	
-	public boolean isRunning()
-	{
+
+	public boolean isRunning() {
 		return _route.isRunning();
 	}
 }

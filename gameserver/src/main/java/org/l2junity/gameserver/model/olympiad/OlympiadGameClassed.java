@@ -18,72 +18,61 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.core.configs.OlympiadConfig;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+
 import java.util.List;
 import java.util.Set;
-
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.config.OlympiadConfig;
-import org.l2junity.gameserver.model.holders.ItemHolder;
 
 /**
  * @author DS
  */
-public class OlympiadGameClassed extends OlympiadGameNormal
-{
-	private OlympiadGameClassed(int id, Participant[] opponents)
-	{
+public class OlympiadGameClassed extends OlympiadGameNormal {
+	private OlympiadGameClassed(int id, Participant[] opponents) {
 		super(id, opponents);
 	}
-	
+
 	@Override
-	public final CompetitionType getType()
-	{
+	public final CompetitionType getType() {
 		return CompetitionType.CLASSED;
 	}
-	
+
 	@Override
-	protected final int getDivider()
-	{
+	protected final int getDivider() {
 		return OlympiadConfig.ALT_OLY_DIVIDER_CLASSED;
 	}
-	
+
 	@Override
-	protected final List<ItemHolder> getReward()
-	{
+	protected final List<ItemHolder> getReward() {
 		return OlympiadConfig.ALT_OLY_CLASSED_REWARD;
 	}
-	
+
 	@Override
-	protected final String getWeeklyMatchType()
-	{
+	protected final String getWeeklyMatchType() {
 		return COMP_DONE_WEEK_CLASSED;
 	}
-	
-	protected static OlympiadGameClassed createGame(int id, List<Set<Integer>> classList)
-	{
-		if ((classList == null) || classList.isEmpty())
-		{
+
+	protected static OlympiadGameClassed createGame(int id, List<Set<Integer>> classList) {
+		if ((classList == null) || classList.isEmpty()) {
 			return null;
 		}
-		
+
 		Set<Integer> list;
 		Participant[] opponents;
-		while (!classList.isEmpty())
-		{
+		while (!classList.isEmpty()) {
 			list = classList.get(Rnd.nextInt(classList.size()));
-			if ((list == null) || (list.size() < 2))
-			{
+			if ((list == null) || (list.size() < 2)) {
 				classList.remove(list);
 				continue;
 			}
-			
+
 			opponents = OlympiadGameNormal.createListOfParticipants(list);
-			if (opponents == null)
-			{
+			if (opponents == null) {
 				classList.remove(list);
 				continue;
 			}
-			
+
 			return new OlympiadGameClassed(id, opponents);
 		}
 		return null;

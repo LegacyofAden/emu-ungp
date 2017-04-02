@@ -28,55 +28,48 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Lets drink to code!
+ *
  * @author zabbix, HorridoJoho
  */
-public final class RequestLinkHtml implements IClientIncomingPacket
-{
+public final class RequestLinkHtml implements IClientIncomingPacket {
 	private String _link;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_link = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (_link.isEmpty())
-		{
+
+		if (_link.isEmpty()) {
 			_log.warn("Player " + player.getName() + " sent empty html link!");
 			return;
 		}
-		
-		if (_link.contains(".."))
-		{
+
+		if (_link.contains("..")) {
 			_log.warn("Player " + player.getName() + " sent invalid html link: link " + _link);
 			return;
 		}
-		
+
 		int htmlObjectId = player.validateHtmlAction("link " + _link);
-		if (htmlObjectId == -1)
-		{
+		if (htmlObjectId == -1) {
 			_log.warn("Player " + player.getName() + " sent non cached  html link: link " + _link);
 			return;
 		}
-		
-		if ((htmlObjectId > 0) && !Util.isInsideRangeOfObjectId(player, htmlObjectId, Npc.INTERACTION_DISTANCE))
-		{
+
+		if ((htmlObjectId > 0) && !Util.isInsideRangeOfObjectId(player, htmlObjectId, Npc.INTERACTION_DISTANCE)) {
 			// No logging here, this could be a common case
 			return;
 		}
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(htmlObjectId);
-		html.setFile(player.getHtmlPrefix(), "data/html/" + _link);
+		html.setFile(player.getHtmlPrefix(), "" + _link);
 		player.sendPacket(html);
 	}
 }

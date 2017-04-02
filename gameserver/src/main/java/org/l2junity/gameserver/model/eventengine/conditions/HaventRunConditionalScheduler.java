@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.model.eventengine.conditions;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.eventengine.AbstractEventManager;
 import org.l2junity.gameserver.model.eventengine.EventScheduler;
@@ -30,63 +25,56 @@ import org.l2junity.gameserver.model.eventengine.IConditionalEventScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author UnAfraid
  */
-public class HaventRunConditionalScheduler implements IConditionalEventScheduler
-{
+public class HaventRunConditionalScheduler implements IConditionalEventScheduler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HaventRunConditionalScheduler.class);
 	private final AbstractEventManager<?> _eventManager;
 	private final String _name;
-	
-	public HaventRunConditionalScheduler(AbstractEventManager<?> eventManager, String name)
-	{
+
+	public HaventRunConditionalScheduler(AbstractEventManager<?> eventManager, String name) {
 		_eventManager = eventManager;
 		_name = name;
 	}
-	
+
 	@Override
-	public boolean test()
-	{
+	public boolean test() {
 		final EventScheduler mainScheduler = _eventManager.getScheduler(_name);
-		if (mainScheduler == null)
-		{
+		if (mainScheduler == null) {
 			throw new NullPointerException("Scheduler not found: " + _name);
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT lastRun FROM event_schedulers WHERE eventName = ? AND schedulerName = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT lastRun FROM event_schedulers WHERE eventName = ? AND schedulerName = ?")) {
 			ps.setString(1, _eventManager.getName());
 			ps.setString(2, mainScheduler.getName());
-			try (ResultSet rs = ps.executeQuery())
-			{
-				if (rs.next())
-				{
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
 					final long lastRun = rs.getTimestamp(1).getTime();
 					final long lastPossibleRun = mainScheduler.getPrevSchedule();
 					return (lastPossibleRun > lastRun) && (Math.abs(lastPossibleRun - lastRun) > 1000);
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Failed to retreive information for scheduled task event manager: {} scheduler: {}", _eventManager.getClass().getSimpleName(), _name, e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		final EventScheduler mainScheduler = _eventManager.getScheduler(_name);
-		if (mainScheduler == null)
-		{
+		if (mainScheduler == null) {
 			throw new NullPointerException("Scheduler not found: " + _name);
 		}
-		
-		if (mainScheduler.updateLastRun())
-		{
+
+		if (mainScheduler.updateLastRun()) {
 			mainScheduler.run();
 		}
 	}

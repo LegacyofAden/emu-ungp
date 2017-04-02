@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Sdw
  */
-public final class OnPlayerChangeToAwakenedClass implements IBaseEvent
-{
+public final class OnPlayerChangeToAwakenedClass implements IBaseEvent {
 	private final PlayerInstance _activeChar;
-	
-	public OnPlayerChangeToAwakenedClass(PlayerInstance activeChar)
-	{
+
+	public OnPlayerChangeToAwakenedClass(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CHANGE_TO_AWAKENED_CLASS;
 	}
 }

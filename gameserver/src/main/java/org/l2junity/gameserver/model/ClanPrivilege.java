@@ -21,28 +21,42 @@ package org.l2junity.gameserver.model;
 /**
  * This enum is used for clan privileges.<br>
  * The ordinal of each entry is the bit index in the privilege bitmask.
+ *
  * @author HorridoJoho
  */
-public enum ClanPrivilege
-{
-	/** dummy entry */
+public enum ClanPrivilege {
+	/**
+	 * dummy entry
+	 */
 	DUMMY,
-	/** Privilege to join clan */
+	/**
+	 * Privilege to join clan
+	 */
 	CL_JOIN_CLAN,
-	/** Privilege to give a title */
+	/**
+	 * Privilege to give a title
+	 */
 	CL_GIVE_TITLE,
-	/** Privilege to view warehouse content */
+	/**
+	 * Privilege to view warehouse content
+	 */
 	CL_VIEW_WAREHOUSE,
-	/** Privilege to manage clan ranks */
+	/**
+	 * Privilege to manage clan ranks
+	 */
 	CL_MANAGE_RANKS,
 	CL_PLEDGE_WAR,
 	CL_DISMISS,
-	/** Privilege to register clan crest */
+	/**
+	 * Privilege to register clan crest
+	 */
 	CL_REGISTER_CREST,
 	CL_APPRENTICE,
 	CL_TROOPS_FAME,
 	CL_SUMMON_AIRSHIP,
-	/** Privilege to open a door */
+	/**
+	 * Privilege to open a door
+	 */
 	CH_OPEN_DOOR,
 	CH_OTHER_RIGHTS,
 	CH_AUCTION,
@@ -56,9 +70,8 @@ public enum ClanPrivilege
 	CS_TAXES,
 	CS_MERCENARIES,
 	CS_SET_FUNCTIONS;
-	
-	public int getBitmask()
-	{
+
+	public int getBitmask() {
 		return 1 << ordinal();
 	}
 }

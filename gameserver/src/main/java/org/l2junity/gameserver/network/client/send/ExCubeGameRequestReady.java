@@ -23,22 +23,20 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Show Confirm Dialog for 10 seconds
+ *
  * @author mrTJO
  */
-public class ExCubeGameRequestReady implements IClientOutgoingPacket
-{
+public class ExCubeGameRequestReady implements IClientOutgoingPacket {
 	public static final ExCubeGameRequestReady STATIC_PACKET = new ExCubeGameRequestReady();
-	
-	private ExCubeGameRequestReady()
-	{
-		
+
+	private ExCubeGameRequestReady() {
+
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BLOCK_UP_SET_LIST.writeId(packet);
-		
+
 		packet.writeD(0x04);
 		return true;
 	}

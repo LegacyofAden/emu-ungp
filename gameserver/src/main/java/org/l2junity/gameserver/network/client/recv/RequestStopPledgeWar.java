@@ -29,56 +29,48 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.network.PacketReader;
 
-public final class RequestStopPledgeWar implements IClientIncomingPacket
-{
+public final class RequestStopPledgeWar implements IClientIncomingPacket {
 	private String _pledgeName;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_pledgeName = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
 		L2Clan playerClan = player.getClan();
-		if (playerClan == null)
-		{
+		if (playerClan == null) {
 			return;
 		}
-		
+
 		L2Clan clan = ClanTable.getInstance().getClanByName(_pledgeName);
-		
-		if (clan == null)
-		{
+
+		if (clan == null) {
 			player.sendPacket(SystemMessageId.THAT_CLAN_DOES_NOT_EXIST);
 			return;
 		}
-		
-		if (!playerClan.isAtWarWith(clan.getId()))
-		{
+
+		if (!playerClan.isAtWarWith(clan.getId())) {
 			player.sendPacket(SystemMessageId.THERE_IS_NO_CLAN_WAR_IN_PROGRESS);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Check if player who does the request has the correct rights to do it
-		if (!player.hasClanPrivilege(ClanPrivilege.CL_PLEDGE_WAR))
-		{
+		if (!player.hasClanPrivilege(ClanPrivilege.CL_PLEDGE_WAR)) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-		
+
 		// LOGGER.info("RequestStopPledgeWar: By leader or authorized player: " + playerClan.getLeaderName() + " of clan: "
 		// + playerClan.getName() + " to clan: " + _pledgeName);
-		
+
 		// L2PcInstance leader = L2World.getInstance().getPlayer(clan.getLeaderName());
 		// if(leader != null && leader.isOnline() == 0)
 		// {
@@ -86,7 +78,7 @@ public final class RequestStopPledgeWar implements IClientIncomingPacket
 		// player.sendPacket(ActionFailed.STATIC_PACKET);
 		// return;
 		// }
-		
+
 		// if (leader.isProcessingRequest())
 		// {
 		// SystemMessage sm = SystemMessage.getSystemMessage(SystemMessage.S1_IS_BUSY_TRY_LATER);
@@ -94,29 +86,24 @@ public final class RequestStopPledgeWar implements IClientIncomingPacket
 		// player.sendPacket(sm);
 		// return;
 		// }
-		
-		for (ClanMember member : playerClan.getMembers())
-		{
-			if ((member == null) || (member.getPlayerInstance() == null))
-			{
+
+		for (ClanMember member : playerClan.getMembers()) {
+			if ((member == null) || (member.getPlayerInstance() == null)) {
 				continue;
 			}
-			if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(member.getPlayerInstance()))
-			{
+			if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(member.getPlayerInstance())) {
 				player.sendPacket(SystemMessageId.A_CEASE_FIRE_DURING_A_CLAN_WAR_CAN_NOT_BE_CALLED_WHILE_MEMBERS_OF_YOUR_CLAN_ARE_ENGAGED_IN_BATTLE);
 				return;
 			}
 		}
-		
+
 		ClanTable.getInstance().deleteClansWar(playerClan.getId(), clan.getId());
-		
-		for (PlayerInstance member : playerClan.getOnlineMembers(0))
-		{
+
+		for (PlayerInstance member : playerClan.getOnlineMembers(0)) {
 			member.broadcastUserInfo();
 		}
-		
-		for (PlayerInstance member : clan.getOnlineMembers(0))
-		{
+
+		for (PlayerInstance member : clan.getOnlineMembers(0)) {
 			member.broadcastUserInfo();
 		}
 	}

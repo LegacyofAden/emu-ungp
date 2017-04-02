@@ -25,33 +25,27 @@ import java.lang.reflect.Type;
 /**
  * @author lord_rex
  */
-public final class GenericUtil
-{
-	private GenericUtil()
-	{
+public final class GenericUtil {
+	private GenericUtil() {
 		// utility class
 	}
-	
-	public static Type[] getGenericTypes(final Field field)
-	{
+
+	public static Type[] getGenericTypes(final Field field) {
 		final Type genType = field.getGenericType();
-		if (!ParameterizedType.class.isInstance(genType))
-		{
+		if (!ParameterizedType.class.isInstance(genType)) {
 			return null;
 		}
-		
+
 		final ParameterizedType pType = (ParameterizedType) genType;
 		return pType.getActualTypeArguments();
 	}
-	
-	public static Class<?> getFirstGenericTypeOfGenerizedField(final Field field)
-	{
+
+	public static Class<?> getFirstGenericTypeOfGenerizedField(final Field field) {
 		final Type[] allGenTypes = getGenericTypes(field);
-		if (allGenTypes == null)
-		{
+		if (allGenTypes == null) {
 			return Object.class; // missing wildcard declaration
 		}
-		
+
 		return (Class<?>) allGenTypes[0];
 	}
 }

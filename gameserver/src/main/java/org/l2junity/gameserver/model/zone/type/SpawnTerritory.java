@@ -23,36 +23,31 @@ import org.l2junity.gameserver.model.zone.L2ZoneForm;
 
 /**
  * Just dummy zone, needs only for geometry calculations
+ *
  * @author GKR
  */
-public class SpawnTerritory
-{
+public class SpawnTerritory {
 	private final String _name;
 	private final L2ZoneForm _territory;
-	
-	public SpawnTerritory(String name, L2ZoneForm territory)
-	{
+
+	public SpawnTerritory(String name, L2ZoneForm territory) {
 		_name = name;
 		_territory = territory;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public Location getRandomPoint()
-	{
+
+	public Location getRandomPoint() {
 		return _territory.getRandomPoint();
 	}
-	
-	public boolean isInsideZone(double x, double y, double z)
-	{
+
+	public boolean isInsideZone(double x, double y, double z) {
 		return _territory.isInsideZone(x, y, z);
 	}
-	
-	public void visualizeZone(double z)
-	{
+
+	public void visualizeZone(double z) {
 		_territory.visualizeZone(z);
 	}
 }

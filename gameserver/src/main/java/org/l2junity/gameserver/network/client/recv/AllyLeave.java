@@ -18,59 +18,51 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class AllyLeave implements IClientIncomingPacket
-{
+public final class AllyLeave implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (player.getClan() == null)
-		{
+
+		if (player.getClan() == null) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_A_CLAN_MEMBER_AND_CANNOT_PERFORM_THIS_ACTION);
 			return;
 		}
-		if (!player.isClanLeader())
-		{
+		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.ONLY_THE_CLAN_LEADER_MAY_APPLY_FOR_WITHDRAWAL_FROM_THE_ALLIANCE);
 			return;
 		}
 		L2Clan clan = player.getClan();
-		if (clan.getAllyId() == 0)
-		{
+		if (clan.getAllyId() == 0) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_ALLIED_WITH_ANY_CLANS);
 			return;
 		}
-		if (clan.getId() == clan.getAllyId())
-		{
+		if (clan.getId() == clan.getAllyId()) {
 			player.sendPacket(SystemMessageId.ALLIANCE_LEADERS_CANNOT_WITHDRAW);
 			return;
 		}
-		
+
 		long currentTime = System.currentTimeMillis();
 		clan.setAllyId(0);
 		clan.setAllyName(null);
 		clan.changeAllyCrest(0, true);
 		clan.setAllyPenaltyExpiryTime(currentTime + (PlayerConfig.ALT_ALLY_JOIN_DAYS_WHEN_LEAVED * 86400000L), L2Clan.PENALTY_TYPE_CLAN_LEAVED); // 24*60*60*1000 = 86400000
 		clan.updateClanInDB();
-		
+
 		player.sendPacket(SystemMessageId.YOU_HAVE_WITHDRAWN_FROM_THE_ALLIANCE);
 	}
 }

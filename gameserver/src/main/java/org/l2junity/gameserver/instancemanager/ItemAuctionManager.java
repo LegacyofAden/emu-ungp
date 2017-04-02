@@ -18,69 +18,52 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.itemauction.ItemAuctionInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author Forsaiken
  */
-public final class ItemAuctionManager implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ItemAuctionManager.class);
-	
+@Slf4j
+@StartupComponent(value = "Service", dependency = ItemTable.class)
+public final class ItemAuctionManager implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ItemAuctionManager instance = new ItemAuctionManager();
+
 	private final Map<Integer, ItemAuctionInstance> _managerInstances = new HashMap<>();
 	private final AtomicInteger _auctionIds = new AtomicInteger(1);
-	
-	protected ItemAuctionManager()
-	{
-		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED)
-		{
+
+	private ItemAuctionManager() {
+		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED) {
 			LOGGER.info("Disabled by config.");
 			return;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement statement = con.createStatement();
-			ResultSet rset = statement.executeQuery("SELECT auctionId FROM item_auction ORDER BY auctionId DESC LIMIT 0, 1"))
-		{
-			if (rset.next())
-			{
+			 Statement statement = con.createStatement();
+			 ResultSet rset = statement.executeQuery("SELECT auctionId FROM item_auction ORDER BY auctionId DESC LIMIT 0, 1")) {
+			if (rset.next()) {
 				_auctionIds.set(rset.getInt(1) + 1);
 			}
-		}
-		catch (final SQLException e)
-		{
+		} catch (final SQLException e) {
 			LOGGER.error("Failed loading auctions.", e);
 		}
-	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ItemTable.class))
-	private void load() throws Exception
-	{
-		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED)
-		{
+		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED) {
 			LOGGER.info("Disabled by config.");
 			return;
 		}
@@ -88,93 +71,59 @@ public final class ItemAuctionManager implements IGameXmlReader
 		parseDatapackFile("data/ItemAuctions.xml");
 		LOGGER.info("Loaded {} instance(s).", _managerInstances.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		try
-		{
-			for (Node na = doc.getFirstChild(); na != null; na = na.getNextSibling())
-			{
-				if ("list".equalsIgnoreCase(na.getNodeName()))
-				{
-					for (Node nb = na.getFirstChild(); nb != null; nb = nb.getNextSibling())
-					{
-						if ("instance".equalsIgnoreCase(nb.getNodeName()))
-						{
+	public void parseDocument(Document doc, Path path) {
+		try {
+			for (Node na = doc.getFirstChild(); na != null; na = na.getNextSibling()) {
+				if ("list".equalsIgnoreCase(na.getNodeName())) {
+					for (Node nb = na.getFirstChild(); nb != null; nb = nb.getNextSibling()) {
+						if ("instance".equalsIgnoreCase(nb.getNodeName())) {
 							final NamedNodeMap nab = nb.getAttributes();
 							final int instanceId = Integer.parseInt(nab.getNamedItem("id").getNodeValue());
-							
-							if (_managerInstances.containsKey(instanceId))
-							{
-								throw new Exception("Dublicated instanceId " + instanceId);
+
+							if (_managerInstances.containsKey(instanceId)) {
+								throw new Exception("Duplicated instanceId " + instanceId);
 							}
-							
+
 							final ItemAuctionInstance instance = new ItemAuctionInstance(instanceId, _auctionIds, nb);
 							_managerInstances.put(instanceId, instance);
 						}
 					}
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Failed loading auctions from xml.", e);
 		}
 	}
-	
-	public final void shutdown()
-	{
-		for (ItemAuctionInstance instance : _managerInstances.values())
-		{
+
+	public final void shutdown() {
+		for (ItemAuctionInstance instance : _managerInstances.values()) {
 			instance.shutdown();
 		}
 	}
-	
-	public final ItemAuctionInstance getManagerInstance(final int instanceId)
-	{
+
+	public final ItemAuctionInstance getManagerInstance(final int instanceId) {
 		return _managerInstances.get(instanceId);
 	}
-	
-	public final int getNextAuctionId()
-	{
+
+	public final int getNextAuctionId() {
 		return _auctionIds.getAndIncrement();
 	}
-	
-	public static void deleteAuction(final int auctionId)
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
-			try (PreparedStatement statement = con.prepareStatement("DELETE FROM item_auction WHERE auctionId=?"))
-			{
+
+	public static void deleteAuction(final int auctionId) {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
+			try (PreparedStatement statement = con.prepareStatement("DELETE FROM item_auction WHERE auctionId=?")) {
 				statement.setInt(1, auctionId);
 				statement.execute();
 			}
-			
-			try (PreparedStatement statement = con.prepareStatement("DELETE FROM item_auction_bid WHERE auctionId=?"))
-			{
+
+			try (PreparedStatement statement = con.prepareStatement("DELETE FROM item_auction_bid WHERE auctionId=?")) {
 				statement.setInt(1, auctionId);
 				statement.execute();
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.error("L2ItemAuctionManagerInstance: Failed deleting auction: {}", auctionId, e);
 		}
-	}
-	
-	/**
-	 * Gets the single instance of {@code ItemAuctionManager}.
-	 * @return single instance of {@code ItemAuctionManager}
-	 */
-	@InstanceGetter
-	public static ItemAuctionManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ItemAuctionManager _instance = new ItemAuctionManager();
 	}
 }

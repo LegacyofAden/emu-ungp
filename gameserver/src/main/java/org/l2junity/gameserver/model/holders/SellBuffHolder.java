@@ -20,31 +20,27 @@ package org.l2junity.gameserver.model.holders;
 
 /**
  * Simple class for storing info for Selling Buffs system.
+ *
  * @author St3eT
  */
-public final class SellBuffHolder
-{
+public final class SellBuffHolder {
 	private final int _skillId;
 	private long _price;
-	
-	public SellBuffHolder(int skillId, long price)
-	{
+
+	public SellBuffHolder(int skillId, long price) {
 		_skillId = skillId;
 		_price = price;
 	}
-	
-	public final int getSkillId()
-	{
+
+	public final int getSkillId() {
 		return _skillId;
 	}
-	
-	public final void setPrice(int price)
-	{
+
+	public final void setPrice(int price) {
 		_price = price;
 	}
-	
-	public final long getPrice()
-	{
+
+	public final long getPrice() {
 		return _price;
 	}
 }

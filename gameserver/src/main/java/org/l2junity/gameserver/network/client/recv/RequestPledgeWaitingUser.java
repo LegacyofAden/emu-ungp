@@ -29,35 +29,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeWaitingUser implements IClientIncomingPacket
-{
+public class RequestPledgeWaitingUser implements IClientIncomingPacket {
 	private int _clanId;
 	private int _playerId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_clanId = packet.readD();
 		_playerId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || (activeChar.getClanId() != _clanId))
-		{
+		if ((activeChar == null) || (activeChar.getClanId() != _clanId)) {
 			return;
 		}
-		
+
 		final PledgeApplicantInfo infos = ClanEntryManager.getInstance().getPlayerApplication(_clanId, _playerId);
-		if (infos == null)
-		{
+		if (infos == null) {
 			client.sendPacket(new ExPledgeWaitingList(_clanId));
-		}
-		else
-		{
+		} else {
 			client.sendPacket(new ExPledgeWaitingUser(infos));
 		}
 	}

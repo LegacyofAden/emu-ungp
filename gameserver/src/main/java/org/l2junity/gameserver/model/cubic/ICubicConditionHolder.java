@@ -24,9 +24,8 @@ import org.l2junity.gameserver.model.cubic.conditions.ICubicCondition;
 /**
  * @author UnAfraid
  */
-public interface ICubicConditionHolder
-{
+public interface ICubicConditionHolder {
 	public boolean validateConditions(CubicInstance cubic, Creature owner, Creature target);
-	
+
 	public void addCondition(ICubicCondition condition);
 }

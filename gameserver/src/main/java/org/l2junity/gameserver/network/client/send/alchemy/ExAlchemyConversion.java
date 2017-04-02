@@ -25,22 +25,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExAlchemyConversion implements IClientOutgoingPacket
-{
+public class ExAlchemyConversion implements IClientOutgoingPacket {
 	private final int _successCount;
 	private final int _failureCount;
-	
-	public ExAlchemyConversion(int successCount, int failureCount)
-	{
+
+	public ExAlchemyConversion(int successCount, int failureCount) {
 		_successCount = successCount;
 		_failureCount = failureCount;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ALCHEMY_CONVERSION.writeId(packet);
-		
+
 		packet.writeC(0x00); // TODO: Find me
 		packet.writeD(_successCount);
 		packet.writeD(_failureCount);

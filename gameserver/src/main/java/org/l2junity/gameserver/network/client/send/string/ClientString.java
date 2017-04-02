@@ -28,9 +28,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ClientString
-{
+public @interface ClientString {
 	int id();
-	
+
 	String message();
 }

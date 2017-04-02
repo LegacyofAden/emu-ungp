@@ -29,31 +29,25 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Zoey76
  */
-public final class RequestHennaItemInfo implements IClientIncomingPacket
-{
+public final class RequestHennaItemInfo implements IClientIncomingPacket {
 	private int _symbolId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_symbolId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final Henna henna = HennaData.getInstance().getHenna(_symbolId);
-		if (henna == null)
-		{
-			if (_symbolId != 0)
-			{
+		if (henna == null) {
+			if (_symbolId != 0) {
 				_log.warn(getClass().getSimpleName() + ": Invalid Henna Id: " + _symbolId + " from player " + activeChar);
 			}
 			client.sendPacket(ActionFailed.STATIC_PACKET);

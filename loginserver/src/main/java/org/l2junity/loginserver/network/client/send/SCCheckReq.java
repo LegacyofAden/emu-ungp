@@ -24,20 +24,18 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class SCCheckReq implements IOutgoingPacket
-{
-	
+public class SCCheckReq implements IOutgoingPacket {
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.network.IOutgoingPacket#write(org.l2junity.network.PacketWriter)
 	 */
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x0A);
 		packet.writeD(15); // NCCardKeyLoginWnd::SetCardKeyLoginState
 		packet.writeC(10); // NCCardKeyLoginWnd::SetCardKeyLoginState
 		return true;
 	}
-	
+
 }

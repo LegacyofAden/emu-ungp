@@ -24,29 +24,24 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * A landing zone
+ *
  * @author Kerberos
  */
-public class LandingZone extends ZoneType
-{
-	public LandingZone(int id)
-	{
+public class LandingZone extends ZoneType {
+	public LandingZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.LANDING, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.LANDING, false);
 		}
 	}

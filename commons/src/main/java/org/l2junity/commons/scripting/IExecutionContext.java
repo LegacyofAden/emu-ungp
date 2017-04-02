@@ -25,48 +25,53 @@ import java.util.Map.Entry;
 /**
  * @author HorridoJoho
  */
-public interface IExecutionContext
-{
+public interface IExecutionContext {
 	/**
 	 * Properties set here override the settings from the IScriptEngine<br>
 	 * this class was created from.
-	 * @param key the key
+	 *
+	 * @param key   the key
 	 * @param value the value
 	 * @return the previous value, or null when this key was not present before
 	 */
 	String setProperty(String key, String value);
-	
+
 	/**
 	 * Executes all script in the iterable.
+	 *
 	 * @param sourcePaths the scripts to execute
 	 * @return map of failed executions, Path=source file Throwable=thrown exception
 	 * @throws Exception preparation for script execution failed
 	 */
 	Map<Path, Throwable> executeScripts(Iterable<Path> sourcePaths) throws Exception;
-	
+
 	/**
 	 * Executes a single file.
+	 *
 	 * @param sourcePath the script to execute
 	 * @return entry of failed execution, Path=source file Throwable=thrown exception
 	 * @throws Exception preparation for script execution failed
 	 */
 	Entry<Path, Throwable> executeScript(Path sourcePath) throws Exception;
-	
+
 	/**
 	 * Method to get the specified property value.
+	 *
 	 * @param key the key
 	 * @return the value, or null if the key is not present
 	 */
 	String getProperty(String key);
-	
+
 	/**
 	 * Method to get the current executing script file.
+	 *
 	 * @return the currently executing script file, null if non
 	 */
 	Path getCurrentExecutingScript();
-	
+
 	/**
 	 * Method to get the script engine this execution context belongs to.
+	 *
 	 * @return the script engine this execution context belongs to
 	 */
 	IScriptingEngine getScriptingEngine();

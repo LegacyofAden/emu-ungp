@@ -21,22 +21,19 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class SetSummonRemainTime implements IClientOutgoingPacket
-{
+public final class SetSummonRemainTime implements IClientOutgoingPacket {
 	private final int _maxTime;
 	private final int _remainingTime;
-	
-	public SetSummonRemainTime(int maxTime, int remainingTime)
-	{
+
+	public SetSummonRemainTime(int maxTime, int remainingTime) {
 		_remainingTime = remainingTime;
 		_maxTime = maxTime;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SET_SUMMON_REMAIN_TIME.writeId(packet);
-		
+
 		packet.writeD(_maxTime);
 		packet.writeD(_remainingTime);
 		return true;

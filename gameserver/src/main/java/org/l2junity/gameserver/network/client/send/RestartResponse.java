@@ -21,21 +21,18 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class RestartResponse implements IClientOutgoingPacket
-{
+public final class RestartResponse implements IClientOutgoingPacket {
 	public static final RestartResponse TRUE = new RestartResponse(true);
 	public static final RestartResponse FALSE = new RestartResponse(false);
-	
+
 	private final boolean _result;
-	
-	private RestartResponse(boolean result)
-	{
+
+	private RestartResponse(boolean result) {
 		_result = result;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RESTART_RESPONSE.writeId(packet);
 		packet.writeD(_result ? 1 : 0);
 		return true;

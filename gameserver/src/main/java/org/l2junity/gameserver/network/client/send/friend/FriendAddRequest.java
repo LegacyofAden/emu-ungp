@@ -22,20 +22,17 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
-public class FriendAddRequest implements IClientOutgoingPacket
-{
+public class FriendAddRequest implements IClientOutgoingPacket {
 	private final String _requestorName;
-	
-	public FriendAddRequest(String requestorName)
-	{
+
+	public FriendAddRequest(String requestorName) {
 		_requestorName = requestorName;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.FRIEND_ADD_REQUEST.writeId(packet);
-		
+
 		packet.writeS(_requestorName);
 		return true;
 	}

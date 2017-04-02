@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Sdw
  */
-public class OnPlayerQuestAbort implements IBaseEvent
-{
+public class OnPlayerQuestAbort implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _questId;
-	
-	public OnPlayerQuestAbort(PlayerInstance activeChar, int questId)
-	{
+
+	public OnPlayerQuestAbort(PlayerInstance activeChar, int questId) {
 		_activeChar = activeChar;
 		_questId = questId;
 	}
-	
-	public final PlayerInstance getActiveChar()
-	{
+
+	public final PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public final int getQuestId()
-	{
+
+	public final int getQuestId() {
 		return _questId;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_QUEST_ABORT;
 	}
 }

@@ -27,23 +27,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestFriendDetailInfo implements IClientIncomingPacket
-{
+public class RequestFriendDetailInfo implements IClientIncomingPacket {
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			client.sendPacket(new ExFriendDetailInfo(player, _name));
 		}
 	}

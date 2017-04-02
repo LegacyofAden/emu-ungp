@@ -24,27 +24,22 @@ import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleMove;
 /**
  * @author UnAfraid
  */
-public class ShuttleAI extends VehicleAI
-{
-	public ShuttleAI(L2ShuttleInstance shuttle)
-	{
+public class ShuttleAI extends VehicleAI {
+	public ShuttleAI(L2ShuttleInstance shuttle) {
 		super(shuttle);
 	}
-	
+
 	@Override
-	public void moveTo(double x, double y, double z)
-	{
-		if (!_actor.isMovementDisabled())
-		{
+	public void moveTo(double x, double y, double z) {
+		if (!_actor.isMovementDisabled()) {
 			_clientMoving = true;
 			_actor.moveToLocation(x, y, z, 0);
 			_actor.broadcastPacket(new ExShuttleMove(getActor(), x, y, z));
 		}
 	}
-	
+
 	@Override
-	public L2ShuttleInstance getActor()
-	{
+	public L2ShuttleInstance getActor() {
 		return (L2ShuttleInstance) _actor;
 	}
 }

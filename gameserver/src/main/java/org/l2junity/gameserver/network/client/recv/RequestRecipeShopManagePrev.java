@@ -26,37 +26,32 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.1.2.1.2.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestRecipeShopManagePrev implements IClientIncomingPacket
-{
+public final class RequestRecipeShopManagePrev implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((player == null))
-		{
+		if ((player == null)) {
 			return;
 		}
-		
-		if (player.isAlikeDead() || (player.getTarget() == null) || !player.getTarget().isPlayer())
-		{
+
+		if (player.isAlikeDead() || (player.getTarget() == null) || !player.getTarget().isPlayer()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (!player.isInRadius3d(player.getTarget(), 250))
-		{
+
+		if (!player.isInRadius3d(player.getTarget(), 250)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		player.sendPacket(new RecipeShopSellList(player, player.getTarget().getActingPlayer()));
 	}
 }

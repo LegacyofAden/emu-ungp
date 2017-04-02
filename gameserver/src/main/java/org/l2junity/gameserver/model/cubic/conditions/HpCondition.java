@@ -24,43 +24,35 @@ import org.l2junity.gameserver.model.cubic.CubicInstance;
 /**
  * @author UnAfraid
  */
-public class HpCondition implements ICubicCondition
-{
+public class HpCondition implements ICubicCondition {
 	private final HpConditionType _type;
 	private final int _hpPer;
-	
-	public HpCondition(HpConditionType type, int hpPer)
-	{
+
+	public HpCondition(HpConditionType type, int hpPer) {
 		_type = type;
 		_hpPer = hpPer;
 	}
-	
+
 	@Override
-	public boolean test(CubicInstance cubic, Creature owner, Creature target)
-	{
+	public boolean test(CubicInstance cubic, Creature owner, Creature target) {
 		final double hpPer = target.getCurrentHpPercent();
-		switch (_type)
-		{
-			case GREATER:
-			{
+		switch (_type) {
+			case GREATER: {
 				return hpPer > _hpPer;
 			}
-			case LESSER:
-			{
+			case LESSER: {
 				return hpPer < _hpPer;
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getClass().getSimpleName() + " chance: " + _hpPer;
 	}
-	
-	public static enum HpConditionType
-	{
+
+	public static enum HpConditionType {
 		GREATER,
 		LESSER;
 	}

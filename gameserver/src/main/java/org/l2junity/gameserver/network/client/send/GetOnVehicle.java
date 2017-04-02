@@ -25,29 +25,26 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Maktakien
  */
-public class GetOnVehicle implements IClientOutgoingPacket
-{
+public class GetOnVehicle implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _boatObjId;
 	private final Location _pos;
-	
+
 	/**
 	 * @param charObjId
 	 * @param boatObjId
 	 * @param pos
 	 */
-	public GetOnVehicle(int charObjId, int boatObjId, Location pos)
-	{
+	public GetOnVehicle(int charObjId, int boatObjId, Location pos) {
 		_charObjId = charObjId;
 		_boatObjId = boatObjId;
 		_pos = pos;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GET_ON_VEHICLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_boatObjId);
 		packet.writeD((int) _pos.getX());

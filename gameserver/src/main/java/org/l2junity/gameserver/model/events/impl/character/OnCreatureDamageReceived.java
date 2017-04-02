@@ -25,10 +25,10 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An instantly executed event when L2Character is attacked by L2Character.
+ *
  * @author UnAfraid
  */
-public class OnCreatureDamageReceived implements IBaseEvent
-{
+public class OnCreatureDamageReceived implements IBaseEvent {
 	private final Creature _attacker;
 	private final Creature _target;
 	private final double _damage;
@@ -36,9 +36,8 @@ public class OnCreatureDamageReceived implements IBaseEvent
 	private final boolean _crit;
 	private final boolean _damageOverTime;
 	private final boolean _reflect;
-	
-	public OnCreatureDamageReceived(Creature attacker, Creature target, double damage, Skill skill, boolean crit, boolean damageOverTime, boolean reflect)
-	{
+
+	public OnCreatureDamageReceived(Creature attacker, Creature target, double damage, Skill skill, boolean crit, boolean damageOverTime, boolean reflect) {
 		_attacker = attacker;
 		_target = target;
 		_damage = damage;
@@ -47,45 +46,37 @@ public class OnCreatureDamageReceived implements IBaseEvent
 		_damageOverTime = damageOverTime;
 		_reflect = reflect;
 	}
-	
-	public final Creature getAttacker()
-	{
+
+	public final Creature getAttacker() {
 		return _attacker;
 	}
-	
-	public final Creature getTarget()
-	{
+
+	public final Creature getTarget() {
 		return _target;
 	}
-	
-	public double getDamage()
-	{
+
+	public double getDamage() {
 		return _damage;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill;
 	}
-	
-	public boolean isCritical()
-	{
+
+	public boolean isCritical() {
 		return _crit;
 	}
-	
-	public boolean isDamageOverTime()
-	{
+
+	public boolean isDamageOverTime() {
 		return _damageOverTime;
 	}
-	
-	public boolean isReflect()
-	{
+
+	public boolean isReflect() {
 		return _reflect;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_DAMAGE_RECEIVED;
 	}
 }

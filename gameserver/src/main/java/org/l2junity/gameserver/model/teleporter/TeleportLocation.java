@@ -18,20 +18,19 @@
  */
 package org.l2junity.gameserver.model.teleporter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class TeleportLocation extends Location
-{
+public class TeleportLocation extends Location {
 	private static final long serialVersionUID = -861866782301067330L;
 	private final int _id;
 	private final String _name;
@@ -40,9 +39,8 @@ public class TeleportLocation extends Location
 	private final int _feeId;
 	private final long _feeCount;
 	private final List<Integer> _castleId;
-	
-	public TeleportLocation(int id, StatsSet set)
-	{
+
+	public TeleportLocation(int id, StatsSet set) {
 		super(set);
 		_id = id;
 		_name = set.getString("name", null);
@@ -50,58 +48,45 @@ public class TeleportLocation extends Location
 		_questZoneId = set.getInt("questZoneId", 0);
 		_feeId = set.getInt("feeId", Inventory.ADENA_ID);
 		_feeCount = set.getLong("feeCount", 0);
-		
+
 		final String castleIds = set.getString("castleId", "");
-		if (castleIds.isEmpty())
-		{
+		if (castleIds.isEmpty()) {
 			_castleId = Collections.emptyList();
-		}
-		else if (!castleIds.contains(";"))
-		{
+		} else if (!castleIds.contains(";")) {
 			_castleId = Collections.singletonList(Integer.parseInt(castleIds));
-		}
-		else
-		{
+		} else {
 			_castleId = new ArrayList<>();
-			for (String castleId : castleIds.split(";"))
-			{
+			for (String castleId : castleIds.split(";")) {
 				_castleId.add(Integer.parseInt(castleId));
 			}
 		}
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public NpcStringId getNpcStringId()
-	{
+
+	public NpcStringId getNpcStringId() {
 		return _npcStringId;
 	}
-	
-	public int getQuestZoneId()
-	{
+
+	public int getQuestZoneId() {
 		return _questZoneId;
 	}
-	
-	public int getFeeId()
-	{
+
+	public int getFeeId() {
 		return _feeId;
 	}
-	
-	public long getFeeCount()
-	{
+
+	public long getFeeCount() {
 		return _feeCount;
 	}
-	
-	public List<Integer> getCastleId()
-	{
+
+	public List<Integer> getCastleId() {
 		return _castleId;
 	}
 }

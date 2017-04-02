@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.templates;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.model.Location;
@@ -29,31 +25,33 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author mkizub, Zoey76
  */
-public class L2PcTemplate extends L2CharTemplate
-{
+public class L2PcTemplate extends L2CharTemplate {
 	private final ClassId _classId;
-	
+
 	private final float[] _baseHp;
 	private final float[] _baseMp;
 	private final float[] _baseCp;
-	
+
 	private final double[] _baseHpReg;
 	private final double[] _baseMpReg;
 	private final double[] _baseCpReg;
-	
+
 	private final double _fCollisionHeightFemale;
 	private final double _fCollisionRadiusFemale;
-	
+
 	private final int _baseSafeFallHeight;
-	
+
 	private final List<Location> _creationPoints;
 	private final Map<Integer, Integer> _baseSlotDef;
-	
-	public L2PcTemplate(StatsSet set)
-	{
+
+	public L2PcTemplate(StatsSet set) {
 		super(set);
 		_classId = ClassId.getClassId(set.getInt("classId"));
 		setRace(_classId.getRace());
@@ -63,7 +61,7 @@ public class L2PcTemplate extends L2CharTemplate
 		_baseHpReg = new double[ExperienceData.getInstance().getMaxLevel()];
 		_baseMpReg = new double[ExperienceData.getInstance().getMaxLevel()];
 		_baseCpReg = new double[ExperienceData.getInstance().getMaxLevel()];
-		
+
 		_baseSlotDef = new HashMap<>(12);
 		_baseSlotDef.put(Inventory.PAPERDOLL_CHEST, set.getInt("basePDefchest"));
 		_baseSlotDef.put(Inventory.PAPERDOLL_LEGS, set.getInt("basePDeflegs"));
@@ -77,157 +75,138 @@ public class L2PcTemplate extends L2CharTemplate
 		_baseSlotDef.put(Inventory.PAPERDOLL_RFINGER, set.getInt("baseMDefrfinger"));
 		_baseSlotDef.put(Inventory.PAPERDOLL_LFINGER, set.getInt("baseMDefrfinger"));
 		_baseSlotDef.put(Inventory.PAPERDOLL_NECK, set.getInt("baseMDefneck"));
-		
+
 		_fCollisionRadiusFemale = set.getDouble("collisionFemaleradius");
 		_fCollisionHeightFemale = set.getDouble("collisionFemaleheight");
-		
+
 		_baseSafeFallHeight = set.getInt("baseSafeFall");
 		_creationPoints = set.getList("creationPoints", Location.class);
 	}
-	
+
 	/**
 	 * @return the template class Id.
 	 */
-	public ClassId getClassId()
-	{
+	public ClassId getClassId() {
 		return _classId;
 	}
-	
+
 	/**
 	 * @return random Location of created character spawn.
 	 */
-	public Location getCreationPoint()
-	{
+	public Location getCreationPoint() {
 		return _creationPoints.get(Rnd.get(_creationPoints.size()));
 	}
-	
+
 	/**
 	 * Sets the value of level upgain parameter.
+	 *
 	 * @param paramName name of parameter
-	 * @param level corresponding character level
-	 * @param val value of parameter
+	 * @param level     corresponding character level
+	 * @param val       value of parameter
 	 */
-	public void setUpgainValue(String paramName, int level, double val)
-	{
-		switch (paramName)
-		{
-			case "hp":
-			{
+	public void setUpgainValue(String paramName, int level, double val) {
+		switch (paramName) {
+			case "hp": {
 				_baseHp[level] = (float) val;
 				break;
 			}
-			case "mp":
-			{
+			case "mp": {
 				_baseMp[level] = (float) val;
 				break;
 			}
-			case "cp":
-			{
+			case "cp": {
 				_baseCp[level] = (float) val;
 				break;
 			}
-			case "hpRegen":
-			{
+			case "hpRegen": {
 				_baseHpReg[level] = val;
 				break;
 			}
-			case "mpRegen":
-			{
+			case "mpRegen": {
 				_baseMpReg[level] = val;
 				break;
 			}
-			case "cpRegen":
-			{
+			case "cpRegen": {
 				_baseCpReg[level] = val;
 				break;
 			}
 		}
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the baseHpMax for given character level
 	 */
-	public float getBaseHpMax(int level)
-	{
+	public float getBaseHpMax(int level) {
 		return _baseHp[level];
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the baseMpMax for given character level
 	 */
-	public float getBaseMpMax(int level)
-	{
+	public float getBaseMpMax(int level) {
 		return _baseMp[level];
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the baseCpMax for given character level
 	 */
-	public float getBaseCpMax(int level)
-	{
+	public float getBaseCpMax(int level) {
 		return _baseCp[level];
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the base HP Regeneration for given character level
 	 */
-	public double getBaseHpRegen(int level)
-	{
+	public double getBaseHpRegen(int level) {
 		return _baseHpReg[level];
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the base MP Regeneration for given character level
 	 */
-	public double getBaseMpRegen(int level)
-	{
+	public double getBaseMpRegen(int level) {
 		return _baseMpReg[level];
 	}
-	
+
 	/**
 	 * @param level character level to return value
 	 * @return the base HP Regeneration for given character level
 	 */
-	public double getBaseCpRegen(int level)
-	{
+	public double getBaseCpRegen(int level) {
 		return _baseCpReg[level];
 	}
-	
+
 	/**
 	 * @param slotId id of inventory slot to return value
 	 * @return defence value of charactert for EMPTY given slot
 	 */
-	public int getBaseDefBySlot(int slotId)
-	{
+	public int getBaseDefBySlot(int slotId) {
 		return _baseSlotDef.containsKey(slotId) ? _baseSlotDef.get(slotId) : 0;
 	}
-	
+
 	/**
 	 * @return the template collision height for female characters.
 	 */
-	public double getFCollisionHeightFemale()
-	{
+	public double getFCollisionHeightFemale() {
 		return _fCollisionHeightFemale;
 	}
-	
+
 	/**
 	 * @return the template collision radius for female characters.
 	 */
-	public double getFCollisionRadiusFemale()
-	{
+	public double getFCollisionRadiusFemale() {
 		return _fCollisionRadiusFemale;
 	}
-	
+
 	/**
 	 * @return the safe fall height.
 	 */
-	public int getSafeFallHeight()
-	{
+	public int getSafeFallHeight() {
 		return _baseSafeFallHeight;
 	}
 }

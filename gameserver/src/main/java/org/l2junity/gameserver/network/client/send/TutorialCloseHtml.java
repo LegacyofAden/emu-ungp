@@ -23,19 +23,17 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * TutorialCloseHtml server packet implementation.
+ *
  * @author HorridoJoho
  */
-public class TutorialCloseHtml implements IClientOutgoingPacket
-{
+public class TutorialCloseHtml implements IClientOutgoingPacket {
 	public static final TutorialCloseHtml STATIC_PACKET = new TutorialCloseHtml();
-	
-	private TutorialCloseHtml()
-	{
+
+	private TutorialCloseHtml() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TUTORIAL_CLOSE_HTML.writeId(packet);
 		return true;
 	}

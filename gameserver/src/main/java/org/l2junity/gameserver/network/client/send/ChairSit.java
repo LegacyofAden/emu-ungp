@@ -22,26 +22,23 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ChairSit implements IClientOutgoingPacket
-{
+public class ChairSit implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _staticObjectId;
-	
+
 	/**
 	 * @param player
 	 * @param staticObjectId
 	 */
-	public ChairSit(PlayerInstance player, int staticObjectId)
-	{
+	public ChairSit(PlayerInstance player, int staticObjectId) {
 		_activeChar = player;
 		_staticObjectId = staticObjectId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHAIR_SIT.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_staticObjectId);
 		return true;

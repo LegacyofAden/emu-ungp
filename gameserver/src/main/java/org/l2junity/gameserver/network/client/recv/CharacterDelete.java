@@ -31,35 +31,29 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.8.2.1.2.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class CharacterDelete implements IClientIncomingPacket
-{
+public final class CharacterDelete implements IClientIncomingPacket {
 	// cd
 	private int _charSlot;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_charSlot = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final CharacterDeleteFailType failType;
-		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterDelete"))
-		{
+		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterDelete")) {
 			failType = CharacterDeleteFailType.UNKNOWN;
-		}
-		else
-		{
+		} else {
 			failType = client.markToDeleteChar(_charSlot);
 		}
-		
-		switch (failType)
-		{
+
+		switch (failType) {
 			case NONE:// Success!
 			{
 				client.sendPacket(new CharDeleteSuccess());
@@ -67,13 +61,12 @@ public final class CharacterDelete implements IClientIncomingPacket
 				EventDispatcher.getInstance().notifyEvent(new OnPlayerDelete(charInfo.getObjectId(), charInfo.getName(), client), Containers.Players());
 				break;
 			}
-			default:
-			{
+			default: {
 				client.sendPacket(new CharDeleteFail(failType));
 				break;
 			}
 		}
-		
+
 		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1, 0);
 		client.sendPacket(cl);
 		client.setCharSelection(cl.getCharInfo());

@@ -21,15 +21,14 @@ package org.l2junity.gameserver.geodata.pathfinding;
 /**
  * @author -Nemesiss-
  */
-public abstract class AbstractNodeLoc
-{
+public abstract class AbstractNodeLoc {
 	public abstract int getX();
-	
+
 	public abstract int getY();
-	
+
 	public abstract int getZ();
-	
+
 	public abstract int getNodeX();
-	
+
 	public abstract int getNodeY();
 }

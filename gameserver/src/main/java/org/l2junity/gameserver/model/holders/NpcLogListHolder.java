@@ -23,38 +23,32 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 /**
  * @author Sdw
  */
-public class NpcLogListHolder
-{
+public class NpcLogListHolder {
 	private final int _id;
 	private final boolean _isNpcString;
 	private final int _count;
-	
-	public NpcLogListHolder(NpcStringId npcStringId, int count)
-	{
+
+	public NpcLogListHolder(NpcStringId npcStringId, int count) {
 		_id = npcStringId.getId();
 		_isNpcString = true;
 		_count = count;
 	}
-	
-	public NpcLogListHolder(int id, boolean isNpcString, int count)
-	{
+
+	public NpcLogListHolder(int id, boolean isNpcString, int count) {
 		_id = id;
 		_isNpcString = isNpcString;
 		_count = count;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public boolean isNpcString()
-	{
+
+	public boolean isNpcString() {
 		return _isNpcString;
 	}
-	
-	public int getCount()
-	{
+
+	public int getCount() {
 		return _count;
 	}
 }

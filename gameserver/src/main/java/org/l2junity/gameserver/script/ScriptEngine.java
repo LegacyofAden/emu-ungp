@@ -18,39 +18,34 @@
  */
 package org.l2junity.gameserver.script;
 
-import java.util.Hashtable;
-
 import org.l2junity.gameserver.script.faenor.FaenorInterface;
+
+import java.util.Hashtable;
 
 /**
  * @author Luis Arias
  */
-public class ScriptEngine
-{
+public class ScriptEngine {
 	protected EngineInterface _utils = FaenorInterface.getInstance();
 	public static final Hashtable<String, ParserFactory> parserFactories = new Hashtable<>();
-	
-	public static Parser createParser(String name) throws ParserNotCreatedException
-	{
+
+	public static Parser createParser(String name) throws ParserNotCreatedException {
 		ParserFactory s = parserFactories.get(name);
 		if (s == null) // shape not found
 		{
-			try
-			{
+			try {
 				Class.forName(ScriptEngine.class.getPackage().getName() + "." + name);
 				// By now the static block with no function would
 				// have been executed if the shape was found.
 				// the shape is expected to have put its factory
 				// in the hashtable.
-				
+
 				s = parserFactories.get(name);
 				if (s == null) // if the shape factory is not there even now
 				{
 					throw (new ParserNotCreatedException());
 				}
-			}
-			catch (ClassNotFoundException e)
-			{
+			} catch (ClassNotFoundException e) {
 				// We'll throw an exception to indicate that
 				// the shape could not be created
 				throw (new ParserNotCreatedException());

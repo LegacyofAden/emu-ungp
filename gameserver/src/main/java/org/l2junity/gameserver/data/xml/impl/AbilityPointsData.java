@@ -18,54 +18,46 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.holders.RangeAbilityPointsHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public final class AbilityPointsData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbilityPointsData.class);
+@Slf4j
+@StartupComponent("Data")
+public final class AbilityPointsData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final AbilityPointsData instance = new AbilityPointsData();
+
 	private final List<RangeAbilityPointsHolder> _points = new ArrayList<>();
-	
-	protected AbilityPointsData()
-	{
+
+	private AbilityPointsData() {
+		reload();
 	}
-	
-	@Reload("ability")
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	protected void reload() {
 		_points.clear();
 		parseDatapackFile("config/AbilityPoints.xml");
 		LOGGER.info("Loaded: {} range fees.", _points.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("points".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("points".equalsIgnoreCase(d.getNodeName())) {
 						final NamedNodeMap attrs = d.getAttributes();
 						final int from = parseInteger(attrs, "from");
 						final int to = parseInteger(attrs, "to");
@@ -76,50 +68,32 @@ public final class AbilityPointsData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getPointsCount()
-	{
+
+	public int getPointsCount() {
 		return _points.size();
 	}
-	
-	public RangeAbilityPointsHolder getHolder(int points)
-	{
-		for (RangeAbilityPointsHolder holder : _points)
-		{
-			if ((holder.getMin() <= points) && (holder.getMax() >= points))
-			{
+
+	public RangeAbilityPointsHolder getHolder(int points) {
+		for (RangeAbilityPointsHolder holder : _points) {
+			if ((holder.getMin() <= points) && (holder.getMax() >= points)) {
 				return holder;
 			}
 		}
 		return null;
 	}
-	
-	public long getPrice(int points)
-	{
+
+	public long getPrice(int points) {
 		points++; // for next point
 		final RangeAbilityPointsHolder holder = getHolder(points);
-		if (holder == null)
-		{
+		if (holder == null) {
 			final RangeAbilityPointsHolder prevHolder = getHolder(points - 1);
-			if (prevHolder != null)
-			{
+			if (prevHolder != null) {
 				return prevHolder.getSP();
 			}
-			
+
 			// No data found
 			return points >= 13 ? 1_000_000_000 : points >= 9 ? 750_000_000 : points >= 5 ? 500_000_000 : 250_000_000;
 		}
 		return holder.getSP();
-	}
-	
-	@InstanceGetter
-	public static final AbilityPointsData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final AbilityPointsData _instance = new AbilityPointsData();
 	}
 }

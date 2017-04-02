@@ -18,33 +18,29 @@
  */
 package org.l2junity.gameserver.model.conditions;
 
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Set;
+
 /**
  * Condition Category Type implementation.
+ *
  * @author Adry_85
  */
-public class ConditionCategoryType extends Condition
-{
+public class ConditionCategoryType extends Condition {
 	private final Set<CategoryType> _categoryTypes;
-	
-	public ConditionCategoryType(Set<CategoryType> categoryTypes)
-	{
+
+	public ConditionCategoryType(Set<CategoryType> categoryTypes) {
 		_categoryTypes = categoryTypes;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		for (CategoryType type : _categoryTypes)
-		{
-			if (effector.isInCategory(type))
-			{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		for (CategoryType type : _categoryTypes) {
+			if (effector.isInCategory(type)) {
 				return true;
 			}
 		}

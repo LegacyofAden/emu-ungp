@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExCallToChangeClass implements IClientOutgoingPacket
-{
+public class ExCallToChangeClass implements IClientOutgoingPacket {
 	private final int _classId;
 	private final boolean _showMessage;
-	
-	public ExCallToChangeClass(int classId, boolean showMessage)
-	{
+
+	public ExCallToChangeClass(int classId, boolean showMessage) {
 		_classId = classId;
 		_showMessage = showMessage;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CALL_TO_CHANGE_CLASS.writeId(packet);
 		packet.writeD(_classId);
 		packet.writeD(_showMessage ? 1 : 0);

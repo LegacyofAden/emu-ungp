@@ -25,28 +25,26 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * update 27.8.10
+ *
  * @author kerberos, JIV
  */
-public class ExStopMoveInAirShip implements IClientOutgoingPacket
-{
+public class ExStopMoveInAirShip implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _shipObjId;
 	private final int _h;
 	private final Location _loc;
-	
-	public ExStopMoveInAirShip(PlayerInstance player, int shipObjId)
-	{
+
+	public ExStopMoveInAirShip(PlayerInstance player, int shipObjId) {
 		_activeChar = player;
 		_shipObjId = shipObjId;
 		_h = player.getHeading();
 		_loc = player.getInVehiclePosition();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_STOP_MOVE_IN_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_shipObjId);
 		packet.writeD((int) _loc.getX());

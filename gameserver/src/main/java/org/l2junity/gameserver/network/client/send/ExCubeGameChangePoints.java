@@ -24,32 +24,30 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author mrTJO
  */
-public class ExCubeGameChangePoints implements IClientOutgoingPacket
-{
+public class ExCubeGameChangePoints implements IClientOutgoingPacket {
 	int _timeLeft;
 	int _bluePoints;
 	int _redPoints;
-	
+
 	/**
 	 * Change Client Point Counter
-	 * @param timeLeft Time Left before Minigame's End
+	 *
+	 * @param timeLeft   Time Left before Minigame's End
 	 * @param bluePoints Current Blue Team Points
-	 * @param redPoints Current Red Team Points
+	 * @param redPoints  Current Red Team Points
 	 */
-	public ExCubeGameChangePoints(int timeLeft, int bluePoints, int redPoints)
-	{
+	public ExCubeGameChangePoints(int timeLeft, int bluePoints, int redPoints) {
 		_timeLeft = timeLeft;
 		_bluePoints = bluePoints;
 		_redPoints = redPoints;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BLOCK_UP_SET_STATE.writeId(packet);
-		
+
 		packet.writeD(0x02);
-		
+
 		packet.writeD(_timeLeft);
 		packet.writeD(_bluePoints);
 		packet.writeD(_redPoints);

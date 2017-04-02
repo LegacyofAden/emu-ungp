@@ -25,37 +25,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerPKChanged implements IBaseEvent
-{
+public class OnPlayerPKChanged implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _oldPoints;
 	private final int _newPoints;
-	
-	public OnPlayerPKChanged(PlayerInstance activeChar, int oldPoints, int newPoints)
-	{
+
+	public OnPlayerPKChanged(PlayerInstance activeChar, int oldPoints, int newPoints) {
 		_activeChar = activeChar;
 		_oldPoints = oldPoints;
 		_newPoints = newPoints;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getOldPoints()
-	{
+
+	public int getOldPoints() {
 		return _oldPoints;
 	}
-	
-	public int getNewPoints()
-	{
+
+	public int getNewPoints() {
 		return _newPoints;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_PK_CHANGED;
 	}
 }

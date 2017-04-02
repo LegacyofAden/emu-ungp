@@ -26,44 +26,37 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerChat implements IBaseEvent
-{
+public class OnPlayerChat implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final PlayerInstance _target;
 	private final String _text;
 	private final ChatType _type;
-	
-	public OnPlayerChat(PlayerInstance activeChar, PlayerInstance target, String text, ChatType type)
-	{
+
+	public OnPlayerChat(PlayerInstance activeChar, PlayerInstance target, String text, ChatType type) {
 		_activeChar = activeChar;
 		_target = target;
 		_text = text;
 		_type = type;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public PlayerInstance getTarget()
-	{
+
+	public PlayerInstance getTarget() {
 		return _target;
 	}
-	
-	public String getText()
-	{
+
+	public String getText() {
 		return _text;
 	}
-	
-	public ChatType getChatType()
-	{
+
+	public ChatType getChatType() {
 		return _type;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CHAT;
 	}
 }

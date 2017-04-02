@@ -21,61 +21,54 @@ package org.l2junity.gameserver.script;
 /**
  * @author Zoey76
  */
-public class EventDrop
-{
+public class EventDrop {
 	private final int[] _itemIdList;
 	private final long _minCount;
 	private final long _maxCount;
 	private final int _dropChance;
-	
-	public EventDrop(int[] itemIdList, long min, long max, int dropChance)
-	{
+
+	public EventDrop(int[] itemIdList, long min, long max, int dropChance) {
 		_itemIdList = itemIdList;
 		_minCount = min;
 		_maxCount = max;
 		_dropChance = dropChance;
 	}
-	
-	public EventDrop(int itemId, long minCount, long maxCount, int dropChance)
-	{
+
+	public EventDrop(int itemId, long minCount, long maxCount, int dropChance) {
 		_itemIdList = new int[]
-		{
-			itemId
-		};
+				{
+						itemId
+				};
 		_minCount = minCount;
 		_maxCount = maxCount;
 		_dropChance = dropChance;
 	}
-	
+
 	/**
 	 * @return the _itemId
 	 */
-	public int[] getItemIdList()
-	{
+	public int[] getItemIdList() {
 		return _itemIdList;
 	}
-	
+
 	/**
 	 * @return the _minCount
 	 */
-	public long getMinCount()
-	{
+	public long getMinCount() {
 		return _minCount;
 	}
-	
+
 	/**
 	 * @return the _maxCount
 	 */
-	public long getMaxCount()
-	{
+	public long getMaxCount() {
 		return _maxCount;
 	}
-	
+
 	/**
 	 * @return the _dropChance
 	 */
-	public int getDropChance()
-	{
+	public int getDropChance() {
 		return _dropChance;
 	}
 }

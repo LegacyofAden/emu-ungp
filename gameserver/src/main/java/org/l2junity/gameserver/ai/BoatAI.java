@@ -28,57 +28,46 @@ import org.l2junity.gameserver.network.client.send.VehicleStarted;
 /**
  * @author DS
  */
-public class BoatAI extends VehicleAI
-{
-	public BoatAI(L2BoatInstance boat)
-	{
+public class BoatAI extends VehicleAI {
+	public BoatAI(L2BoatInstance boat) {
 		super(boat);
 	}
-	
+
 	@Override
-	protected void moveTo(double x, double y, double z)
-	{
-		if (!_actor.isMovementDisabled())
-		{
-			if (!_clientMoving)
-			{
+	protected void moveTo(double x, double y, double z) {
+		if (!_actor.isMovementDisabled()) {
+			if (!_clientMoving) {
 				_actor.broadcastPacket(new VehicleStarted(getActor(), 1));
 			}
-			
+
 			_clientMoving = true;
 			_actor.moveToLocation(x, y, z, 0);
 			_actor.broadcastPacket(new VehicleDeparture(getActor()));
 		}
 	}
-	
+
 	@Override
-	public void clientStopMoving(Location loc)
-	{
-		if (_actor.isMoving())
-		{
+	public void clientStopMoving(Location loc) {
+		if (_actor.isMoving()) {
 			_actor.stopMove(loc);
 		}
-		
-		if (_clientMoving || (loc != null))
-		{
+
+		if (_clientMoving || (loc != null)) {
 			_clientMoving = false;
 			_actor.broadcastPacket(new VehicleStarted(getActor(), 0));
 			_actor.broadcastPacket(new VehicleInfo(getActor()));
 		}
 	}
-	
+
 	@Override
-	public void describeStateToPlayer(PlayerInstance player)
-	{
-		if (_clientMoving)
-		{
+	public void describeStateToPlayer(PlayerInstance player) {
+		if (_clientMoving) {
 			player.sendPacket(new VehicleDeparture(getActor()));
 		}
 	}
-	
+
 	@Override
-	public L2BoatInstance getActor()
-	{
+	public L2BoatInstance getActor() {
 		return (L2BoatInstance) _actor;
 	}
 }

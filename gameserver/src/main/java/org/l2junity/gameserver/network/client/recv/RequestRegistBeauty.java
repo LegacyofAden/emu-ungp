@@ -30,122 +30,103 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestRegistBeauty implements IClientIncomingPacket
-{
+public class RequestRegistBeauty implements IClientIncomingPacket {
 	private int _hairId;
 	private int _faceId;
 	private int _colorId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_hairId = packet.readD();
 		_faceId = packet.readD();
 		_colorId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final BeautyData beautyData = BeautyShopData.getInstance().getBeautyData(player.getRace(), player.getAppearance().getSexType());
 		int requiredAdena = 0;
 		int requiredBeautyShopTicket = 0;
-		
-		if (_hairId > 0)
-		{
+
+		if (_hairId > 0) {
 			final BeautyItem hair = beautyData.getHairList().get(_hairId);
-			if (hair == null)
-			{
+			if (hair == null) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 				player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 				return;
 			}
-			
-			if (hair.getId() != player.getVisualHair())
-			{
+
+			if (hair.getId() != player.getVisualHair()) {
 				requiredAdena += hair.getAdena();
 				requiredBeautyShopTicket += hair.getBeautyShopTicket();
 			}
-			
-			if (_colorId > 0)
-			{
+
+			if (_colorId > 0) {
 				BeautyItem color = hair.getColors().get(_colorId);
-				if (color == null)
-				{
+				if (color == null) {
 					player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 					player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 					return;
 				}
-				
+
 				requiredAdena += color.getAdena();
 				requiredBeautyShopTicket += color.getBeautyShopTicket();
 			}
 		}
-		
-		if ((_faceId > 0) && (_faceId != player.getVisualFace()))
-		{
+
+		if ((_faceId > 0) && (_faceId != player.getVisualFace())) {
 			final BeautyItem face = beautyData.getFaceList().get(_faceId);
-			if (face == null)
-			{
+			if (face == null) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 				player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 				return;
 			}
-			
+
 			requiredAdena += face.getAdena();
 			requiredBeautyShopTicket += face.getBeautyShopTicket();
 		}
-		
-		if ((player.getAdena() < requiredAdena) || ((player.getBeautyTickets() < requiredBeautyShopTicket)))
-		{
+
+		if ((player.getAdena() < requiredAdena) || ((player.getBeautyTickets() < requiredBeautyShopTicket))) {
 			player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 			player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 			return;
 		}
-		
-		if (requiredAdena > 0)
-		{
-			if (!player.reduceAdena(getClass().getSimpleName(), requiredAdena, null, true))
-			{
+
+		if (requiredAdena > 0) {
+			if (!player.reduceAdena(getClass().getSimpleName(), requiredAdena, null, true)) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 				player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 				return;
 			}
 		}
-		
-		if (requiredBeautyShopTicket > 0)
-		{
-			if (!player.reduceBeautyTickets(getClass().getSimpleName(), requiredBeautyShopTicket, null, true))
-			{
+
+		if (requiredBeautyShopTicket > 0) {
+			if (!player.reduceBeautyTickets(getClass().getSimpleName(), requiredBeautyShopTicket, null, true)) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.FAILURE));
 				player.sendPacket(new ExResponseBeautyList(player, ExResponseBeautyList.SHOW_FACESHAPE));
 				return;
 			}
 		}
-		
-		if (_hairId > 0)
-		{
+
+		if (_hairId > 0) {
 			player.setVisualHair(_hairId);
 		}
-		
-		if (_colorId > 0)
-		{
+
+		if (_colorId > 0) {
 			player.setVisualHairColor(_colorId);
 		}
-		
-		if (_faceId > 0)
-		{
+
+		if (_faceId > 0) {
 			player.setVisualFace(_faceId);
 		}
-		
+
 		player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.CHANGE, ExResponseBeautyRegistReset.SUCCESS));
 	}
-	
+
 }

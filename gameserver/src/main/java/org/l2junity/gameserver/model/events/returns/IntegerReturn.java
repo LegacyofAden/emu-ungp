@@ -21,18 +21,15 @@ package org.l2junity.gameserver.model.events.returns;
 /**
  * @author Sdw
  */
-public class IntegerReturn extends TerminateReturn
-{
+public class IntegerReturn extends TerminateReturn {
 	private final int _value;
-	
-	public IntegerReturn(boolean terminate, boolean override, boolean abort, int value)
-	{
+
+	public IntegerReturn(boolean terminate, boolean override, boolean abort, int value) {
 		super(terminate, override, abort);
 		_value = value;
 	}
-	
-	public int getValue()
-	{
+
+	public int getValue() {
 		return _value;
 	}
 }

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.cubic;
 /**
  * @author UnAfraid
  */
-public enum CubicSkillTargetType
-{
+public enum CubicSkillTargetType {
 	HEAL,
 	MASTER,
 	TARGET

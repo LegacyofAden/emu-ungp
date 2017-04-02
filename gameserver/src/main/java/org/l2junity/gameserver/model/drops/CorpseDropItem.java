@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.drops;
 
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -26,47 +26,41 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author NosBit
  */
-public class CorpseDropItem extends GeneralDropItem
-{
+public class CorpseDropItem extends GeneralDropItem {
 	/**
 	 * @param itemId the item id
-	 * @param min the min count
-	 * @param max the max count
+	 * @param min    the min count
+	 * @param max    the max count
 	 * @param chance the chance of this drop item
 	 */
-	public CorpseDropItem(int itemId, long min, long max, double chance)
-	{
+	public CorpseDropItem(int itemId, long min, long max, double chance) {
 		super(itemId, min, max, chance);
 	}
-	
+
 	@Override
-	protected double getChanceMultiplier(Creature killer)
-	{
+	protected double getChanceMultiplier(Creature killer) {
 		final Party party = killer.getParty();
-		if (party != null)
-		{
+		if (party != null) {
 			return (party.getMembers().stream().mapToDouble(p -> p.getStat().getAdd(DoubleStat.BONUS_SPOIL) + 100).sum() / party.getMemberCount()) / 100;
 		}
 		return (killer.getStat().getAdd(DoubleStat.BONUS_SPOIL) + 100) / 100;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.gameserver.model.drops.GeneralDropItem#getGlobalAmountMultiplier()
 	 */
 	@Override
-	protected double getGlobalAmountMultiplier()
-	{
+	protected double getGlobalAmountMultiplier() {
 		return RatesConfig.RATE_CORPSE_DROP_AMOUNT_MULTIPLIER;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.gameserver.model.drops.GeneralDropItem#getGlobalChanceMultiplier()
 	 */
 	@Override
-	protected double getGlobalChanceMultiplier()
-	{
+	protected double getGlobalChanceMultiplier() {
 		return RatesConfig.RATE_CORPSE_DROP_CHANCE_MULTIPLIER;
 	}
 }

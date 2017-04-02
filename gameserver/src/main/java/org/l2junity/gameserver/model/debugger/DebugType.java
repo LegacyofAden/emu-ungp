@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.debugger;
 /**
  * @author UnAfraid
  */
-public enum DebugType
-{
+public enum DebugType {
 	ITEMS,
 	SKILLS,
 	OPTIONS,
@@ -30,17 +29,14 @@ public enum DebugType
 	WALKER,
 	BYPASSES,
 	PACKET;
-	
+
 	/**
 	 * @param token
 	 * @return
 	 */
-	public static DebugType findByName(String token)
-	{
-		for (DebugType type : values())
-		{
-			if (type.name().equalsIgnoreCase(token))
-			{
+	public static DebugType findByName(String token) {
+		for (DebugType type : values()) {
+			if (type.name().equalsIgnoreCase(token)) {
 				return type;
 			}
 		}

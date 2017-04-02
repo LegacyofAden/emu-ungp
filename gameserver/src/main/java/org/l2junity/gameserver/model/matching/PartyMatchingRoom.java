@@ -25,62 +25,52 @@ import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.network.client.send.ExClosePartyRoom;
-import org.l2junity.gameserver.network.client.send.ExPartyRoomMember;
-import org.l2junity.gameserver.network.client.send.ListPartyWaiting;
-import org.l2junity.gameserver.network.client.send.PartyRoomInfo;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * @author Sdw
  */
-public final class PartyMatchingRoom extends MatchingRoom
-{
-	public PartyMatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, PlayerInstance leader)
-	{
+public final class PartyMatchingRoom extends MatchingRoom {
+	public PartyMatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, PlayerInstance leader) {
 		super(title, loot, minlvl, maxlvl, maxmem, leader);
 	}
-	
+
 	@Override
-	protected void onRoomCreation(PlayerInstance player)
-	{
+	protected void onRoomCreation(PlayerInstance player) {
 		player.broadcastUserInfo(UserInfoType.POSITION, UserInfoType.CLAN);
 		player.sendPacket(new ListPartyWaiting(PartyMatchingRoomLevelType.ALL, -1, 1, player.getLevel()));
 		player.sendPacket(SystemMessageId.YOU_HAVE_CREATED_A_PARTY_ROOM);
 	}
-	
+
 	@Override
-	protected void notifyInvalidCondition(PlayerInstance player)
-	{
+	protected void notifyInvalidCondition(PlayerInstance player) {
 		player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_ENTER_THAT_PARTY_ROOM);
 	}
-	
+
 	@Override
-	protected void notifyNewMember(PlayerInstance player)
-	{
+	protected void notifyNewMember(PlayerInstance player) {
 		// Update others player
 		getMembers().stream().filter(p -> p != player).forEach(p ->
 		{
 			p.sendPacket(new ExPartyRoomMember(p, this));
 		});
-		
+
 		// Send SystemMessage to others player
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_ENTERED_THE_PARTY_ROOM);
 		sm.addPcName(player);
 		getMembers().stream().filter(p -> p != player).forEach(sm::sendTo);
-		
+
 		// Update new player
 		player.sendPacket(new PartyRoomInfo(this));
 		player.sendPacket(new ExPartyRoomMember(player, this));
 	}
-	
+
 	@Override
-	protected void notifyRemovedMember(PlayerInstance player, boolean kicked, boolean leaderChanged)
-	{
+	protected void notifyRemovedMember(PlayerInstance player, boolean kicked, boolean leaderChanged) {
 		final SystemMessage sm = SystemMessage.getSystemMessage(kicked ? SystemMessageId.C1_HAS_BEEN_KICKED_FROM_THE_PARTY_ROOM : SystemMessageId.C1_HAS_LEFT_THE_PARTY_ROOM);
 		sm.addPcName(player);
-		
+
 		getMembers().forEach(p ->
 		{
 			p.sendPacket(new PartyRoomInfo(this));
@@ -88,15 +78,14 @@ public final class PartyMatchingRoom extends MatchingRoom
 			p.sendPacket(sm);
 			p.sendPacket(SystemMessageId.THE_LEADER_OF_THE_PARTY_ROOM_HAS_CHANGED);
 		});
-		
+
 		final SystemMessage sm2 = SystemMessage.getSystemMessage(kicked ? SystemMessageId.YOU_HAVE_BEEN_OUSTED_FROM_THE_PARTY_ROOM : SystemMessageId.YOU_HAVE_EXITED_THE_PARTY_ROOM);
 		player.sendPacket(sm2);
 		player.sendPacket(ExClosePartyRoom.STATIC_PACKET);
 	}
-	
+
 	@Override
-	public void disbandRoom()
-	{
+	public void disbandRoom() {
 		getMembers().forEach(p ->
 		{
 			p.sendPacket(SystemMessageId.THE_PARTY_ROOM_HAS_BEEN_DISBANDED);
@@ -105,33 +94,29 @@ public final class PartyMatchingRoom extends MatchingRoom
 			p.broadcastUserInfo(UserInfoType.CLAN);
 			MatchingRoomManager.getInstance().addToWaitingList(p);
 		});
-		
+
 		getMembers().clear();
-		
+
 		MatchingRoomManager.getInstance().removeMatchingRoom(this);
 	}
-	
+
 	@Override
-	public MatchingRoomType getRoomType()
-	{
+	public MatchingRoomType getRoomType() {
 		return MatchingRoomType.PARTY;
 	}
-	
+
 	@Override
-	public MatchingMemberType getMemberType(PlayerInstance player)
-	{
-		if (isLeader(player))
-		{
+	public MatchingMemberType getMemberType(PlayerInstance player) {
+		if (isLeader(player)) {
 			return MatchingMemberType.PARTY_LEADER;
 		}
-		
+
 		final Party leaderParty = getLeader().getParty();
 		final Party playerParty = player.getParty();
-		if ((leaderParty != null) && (playerParty != null) && (playerParty == leaderParty))
-		{
+		if ((leaderParty != null) && (playerParty != null) && (playerParty == leaderParty)) {
 			return MatchingMemberType.PARTY_MEMBER;
 		}
-		
+
 		return MatchingMemberType.WAITING_PLAYER;
 	}
 }

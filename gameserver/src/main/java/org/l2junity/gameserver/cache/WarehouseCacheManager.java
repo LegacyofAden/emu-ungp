@@ -18,61 +18,51 @@
  */
 package org.l2junity.gameserver.cache;
 
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-
 /**
  * @author -Nemesiss-
  */
-public class WarehouseCacheManager
-{
+public class WarehouseCacheManager {
 	protected final Map<PlayerInstance, Long> _cachedWh = new ConcurrentHashMap<>();
 	protected final long _cacheTime = GeneralConfig.WAREHOUSE_CACHE_TIME * 60000L;
-	
-	protected WarehouseCacheManager()
-	{
-		ThreadPool.scheduleAtFixedRate(new CacheScheduler(), 120000, 60000, TimeUnit.MILLISECONDS);
+
+	protected WarehouseCacheManager() {
+		ThreadPool.getInstance().scheduleGeneralAtFixedRate(new CacheScheduler(), 120000, 60000, TimeUnit.MILLISECONDS);
 	}
-	
-	public void addCacheTask(PlayerInstance pc)
-	{
+
+	public void addCacheTask(PlayerInstance pc) {
 		_cachedWh.put(pc, System.currentTimeMillis());
 	}
-	
-	public void remCacheTask(PlayerInstance pc)
-	{
+
+	public void remCacheTask(PlayerInstance pc) {
 		_cachedWh.remove(pc);
 	}
-	
-	public class CacheScheduler implements Runnable
-	{
+
+	public class CacheScheduler implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			long cTime = System.currentTimeMillis();
-			for (PlayerInstance pc : _cachedWh.keySet())
-			{
-				if ((cTime - _cachedWh.get(pc)) > _cacheTime)
-				{
+			for (PlayerInstance pc : _cachedWh.keySet()) {
+				if ((cTime - _cachedWh.get(pc)) > _cacheTime) {
 					pc.clearWarehouse();
 					_cachedWh.remove(pc);
 				}
 			}
 		}
 	}
-	
-	public static WarehouseCacheManager getInstance()
-	{
+
+	public static WarehouseCacheManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final WarehouseCacheManager _instance = new WarehouseCacheManager();
 	}
 }

@@ -23,21 +23,19 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Close Minigame Waiting List
+ *
  * @author mrTJO
  */
-public class ExCubeGameCloseUI implements IClientOutgoingPacket
-{
+public class ExCubeGameCloseUI implements IClientOutgoingPacket {
 	public static final ExCubeGameCloseUI STATIC_PACKET = new ExCubeGameCloseUI();
-	
-	private ExCubeGameCloseUI()
-	{
+
+	private ExCubeGameCloseUI() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BLOCK_UP_SET_LIST.writeId(packet);
-		
+
 		packet.writeD(0xffffffff);
 		return true;
 	}

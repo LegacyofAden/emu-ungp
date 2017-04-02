@@ -18,42 +18,35 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.attackable;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Attackable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author xban1x
  */
-public final class CommandChannelTimer implements Runnable
-{
+public final class CommandChannelTimer implements Runnable {
 	private final Attackable _attackable;
-	
-	public CommandChannelTimer(Attackable attackable)
-	{
+
+	public CommandChannelTimer(Attackable attackable) {
 		_attackable = attackable;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_attackable == null)
-		{
+	public void run() {
+		if (_attackable == null) {
 			return;
 		}
-		
-		if ((System.currentTimeMillis() - _attackable.getCommandChannelLastAttack()) > PlayerConfig.LOOT_RAIDS_PRIVILEGE_INTERVAL)
-		{
+
+		if ((System.currentTimeMillis() - _attackable.getCommandChannelLastAttack()) > PlayerConfig.LOOT_RAIDS_PRIVILEGE_INTERVAL) {
 			_attackable.setCommandChannelTimer(null);
 			_attackable.setFirstCommandChannelAttacked(null);
 			_attackable.setCommandChannelLastAttack(0);
-		}
-		else
-		{
-			ThreadPool.schedule(this, 10000, TimeUnit.MILLISECONDS); // 10sec
+		} else {
+			ThreadPool.getInstance().scheduleGeneral(this, 10, TimeUnit.SECONDS);
 		}
 	}
-	
+
 }

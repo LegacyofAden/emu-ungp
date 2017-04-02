@@ -33,37 +33,31 @@ import org.l2junity.gameserver.network.client.send.NpcInfo;
 /**
  * @author BiggBoss
  */
-public class L2BlockInstance extends L2MonsterInstance
-{
+public class L2BlockInstance extends L2MonsterInstance {
 	private int _colorEffect;
-	
-	public L2BlockInstance(L2NpcTemplate template)
-	{
+
+	public L2BlockInstance(L2NpcTemplate template) {
 		super(template);
 	}
-	
+
 	/**
 	 * Will change the color of the block and update the appearance in the known players clients
+	 *
 	 * @param attacker
 	 * @param holder
 	 * @param team
 	 */
-	public void changeColor(PlayerInstance attacker, ArenaParticipantsHolder holder, int team)
-	{
+	public void changeColor(PlayerInstance attacker, ArenaParticipantsHolder holder, int team) {
 		// Do not update color while sending old info
-		synchronized (this)
-		{
+		synchronized (this) {
 			final BlockCheckerEngine event = holder.getEvent();
-			if (_colorEffect == 0x53)
-			{
+			if (_colorEffect == 0x53) {
 				// Change color
 				_colorEffect = 0x00;
 				// BroadCast to all known players
 				broadcastPacket(new NpcInfo(this));
 				increaseTeamPointsAndSend(attacker, team, event);
-			}
-			else
-			{
+			} else {
 				// Change color
 				_colorEffect = 0x53;
 				// BroadCast to all known players
@@ -73,95 +67,81 @@ public class L2BlockInstance extends L2MonsterInstance
 			// 30% chance to drop the event items
 			int random = Rnd.get(100);
 			// Bond
-			if ((random > 69) && (random <= 84))
-			{
+			if ((random > 69) && (random <= 84)) {
 				dropItem(13787, event, attacker);
-			}
-			else if (random > 84)
-			{
+			} else if (random > 84) {
 				dropItem(13788, event, attacker);
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets if the block is red or blue. Mainly used in block spawn
+	 *
 	 * @param isRed
 	 */
-	public void setRed(boolean isRed)
-	{
+	public void setRed(boolean isRed) {
 		_colorEffect = isRed ? 0x53 : 0x00;
 	}
-	
+
 	/**
 	 * @return {@code true} if the block is red at this moment, {@code false} otherwise
 	 */
 	@Override
-	public int getColorEffect()
-	{
+	public int getColorEffect() {
 		return _colorEffect;
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if (attacker instanceof PlayerInstance)
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker instanceof PlayerInstance) {
 			return (attacker.getActingPlayer() != null) && (attacker.getActingPlayer().getBlockCheckerArena() > -1);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
+	public boolean doDie(Creature killer) {
 		return false;
 	}
-	
+
 	@Override
-	public void onAction(PlayerInstance player, boolean interact)
-	{
-		if (!canTarget(player))
-		{
+	public void onAction(PlayerInstance player, boolean interact) {
+		if (!canTarget(player)) {
 			return;
 		}
-		
+
 		player.setLastFolkNPC(this);
-		
-		if (player.getTarget() != this)
-		{
+
+		if (player.getTarget() != this) {
 			player.setTarget(this);
 			getAI(); // wake up ai
-		}
-		else if (interact)
-		{
+		} else if (interact) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 	}
-	
-	private void increaseTeamPointsAndSend(PlayerInstance player, int team, BlockCheckerEngine eng)
-	{
+
+	private void increaseTeamPointsAndSend(PlayerInstance player, int team, BlockCheckerEngine eng) {
 		eng.increasePlayerPoints(player, team);
-		
+
 		int timeLeft = (int) ((eng.getStarterTime() - System.currentTimeMillis()) / 1000);
 		boolean isRed = eng.getHolder().getRedPlayers().contains(player);
-		
+
 		ExCubeGameChangePoints changePoints = new ExCubeGameChangePoints(timeLeft, eng.getBluePoints(), eng.getRedPoints());
 		ExCubeGameExtendedChangePoints secretPoints = new ExCubeGameExtendedChangePoints(timeLeft, eng.getBluePoints(), eng.getRedPoints(), isRed, player, eng.getPlayerPoints(player, isRed));
-		
+
 		eng.getHolder().broadCastPacketToTeam(changePoints);
 		eng.getHolder().broadCastPacketToTeam(secretPoints);
 	}
-	
-	private void dropItem(int id, BlockCheckerEngine eng, PlayerInstance player)
-	{
+
+	private void dropItem(int id, BlockCheckerEngine eng, PlayerInstance player) {
 		ItemInstance drop = ItemTable.getInstance().createItem("Loot", id, 1, player, this);
 		double x = getX() + Rnd.get(50);
 		double y = getY() + Rnd.get(50);
 		double z = getZ();
-		
+
 		drop.dropMe(this, x, y, z);
-		
+
 		eng.addNewDrop(drop);
 	}
 }

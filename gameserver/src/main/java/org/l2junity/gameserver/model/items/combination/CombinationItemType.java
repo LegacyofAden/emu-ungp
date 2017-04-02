@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.items.combination;
 /**
  * @author UnAfraid
  */
-public enum CombinationItemType
-{
+public enum CombinationItemType {
 	ON_SUCCESS,
 	ON_FAILURE;
 }

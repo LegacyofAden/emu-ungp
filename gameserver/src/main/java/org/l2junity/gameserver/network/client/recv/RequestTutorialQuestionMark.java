@@ -24,28 +24,24 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressT
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
-public class RequestTutorialQuestionMark implements IClientIncomingPacket
-{
+public class RequestTutorialQuestionMark implements IClientIncomingPacket {
 	private int _cond = 0;
 	private int _questId = 0;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_cond = packet.readC();
 		_questId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		// Notify scripts
 		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerPressTutorialMark(player, _questId, _cond), player);
 	}

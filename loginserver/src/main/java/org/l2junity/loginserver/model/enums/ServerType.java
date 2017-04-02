@@ -20,10 +20,10 @@ package org.l2junity.loginserver.model.enums;
 
 /**
  * An {@code enum} representing the server types such as Relax, Test, Broad, Create Restrict, Event, Free, World Raid, New and Classic.
+ *
  * @author Nos
  */
-public enum ServerType
-{
+public enum ServerType {
 	RELAX(0x02),
 	TEST(0x04),
 	BROAD(0x08),
@@ -33,24 +33,24 @@ public enum ServerType
 	WORLD_RAID(0x100),
 	NEW(0x200),
 	CLASSIC(0x400);
-	
+
 	private final int _mask;
-	
+
 	/**
 	 * Creates a server type instance.
+	 *
 	 * @param mask the mask
 	 */
-	ServerType(int mask)
-	{
+	ServerType(int mask) {
 		_mask = mask;
 	}
-	
+
 	/**
 	 * Gets the mask.
+	 *
 	 * @return the mask
 	 */
-	public int getMask()
-	{
+	public int getMask() {
 		return _mask;
 	}
 }

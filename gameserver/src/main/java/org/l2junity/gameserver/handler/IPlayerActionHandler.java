@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author UnAfraid
  */
-public interface IPlayerActionHandler
-{
+public interface IPlayerActionHandler {
 	void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed);
 }

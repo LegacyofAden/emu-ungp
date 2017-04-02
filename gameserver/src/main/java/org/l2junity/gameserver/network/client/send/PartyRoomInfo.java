@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class PartyRoomInfo implements IClientOutgoingPacket
-{
+public class PartyRoomInfo implements IClientOutgoingPacket {
 	private final PartyMatchingRoom _room;
-	
-	public PartyRoomInfo(PartyMatchingRoom room)
-	{
+
+	public PartyRoomInfo(PartyMatchingRoom room) {
 		_room = room;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PARTY_ROOM_INFO.writeId(packet);
-		
+
 		packet.writeD(_room.getId());
 		packet.writeD(_room.getMaxMembers());
 		packet.writeD(_room.getMinLvl());

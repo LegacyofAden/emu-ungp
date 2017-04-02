@@ -18,41 +18,35 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PartySpelled implements IClientOutgoingPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class PartySpelled implements IClientOutgoingPacket {
 	private final List<BuffInfo> _effects = new ArrayList<>();
 	private final Creature _activeChar;
-	
-	public PartySpelled(Creature cha)
-	{
+
+	public PartySpelled(Creature cha) {
 		_activeChar = cha;
 	}
-	
-	public void addSkill(BuffInfo info)
-	{
+
+	public void addSkill(BuffInfo info) {
 		_effects.add(info);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PARTY_SPELLED.writeId(packet);
-		
+
 		packet.writeD(_activeChar.isServitor() ? 2 : _activeChar.isPet() ? 1 : 0);
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_effects.size());
-		for (BuffInfo info : _effects)
-		{
-			if ((info != null) && info.isInUse())
-			{
+		for (BuffInfo info : _effects) {
+			if ((info != null) && info.isInUse()) {
 				packet.writeD(info.getSkill().getDisplayId());
 				packet.writeH(info.getSkill().getDisplayLevel());
 				packet.writeH(info.getSkill().getSubLevel());

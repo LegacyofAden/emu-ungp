@@ -18,48 +18,41 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author zabbix
  */
-public class PartyMemberPosition implements IClientOutgoingPacket
-{
+public class PartyMemberPosition implements IClientOutgoingPacket {
 	private final Map<Integer, Location> locations = new HashMap<>();
-	
-	public PartyMemberPosition(Party party)
-	{
+
+	public PartyMemberPosition(Party party) {
 		reuse(party);
 	}
-	
-	public void reuse(Party party)
-	{
+
+	public void reuse(Party party) {
 		locations.clear();
-		for (PlayerInstance member : party.getMembers())
-		{
-			if (member == null)
-			{
+		for (PlayerInstance member : party.getMembers()) {
+			if (member == null) {
 				continue;
 			}
 			locations.put(member.getObjectId(), member.getLocation());
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PARTY_MEMBER_POSITION.writeId(packet);
-		
+
 		packet.writeD(locations.size());
-		for (Map.Entry<Integer, Location> entry : locations.entrySet())
-		{
+		for (Map.Entry<Integer, Location> entry : locations.entrySet()) {
 			Location loc = entry.getValue();
 			packet.writeD(entry.getKey());
 			packet.writeD((int) loc.getX());

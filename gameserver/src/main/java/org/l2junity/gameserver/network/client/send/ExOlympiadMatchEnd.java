@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author GodKratos
  */
-public class ExOlympiadMatchEnd implements IClientOutgoingPacket
-{
+public class ExOlympiadMatchEnd implements IClientOutgoingPacket {
 	public static final ExOlympiadMatchEnd STATIC_PACKET = new ExOlympiadMatchEnd();
-	
-	private ExOlympiadMatchEnd()
-	{
+
+	private ExOlympiadMatchEnd() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_OLYMPIAD_MATCH_END.writeId(packet);
-		
+
 		return true;
 	}
 }

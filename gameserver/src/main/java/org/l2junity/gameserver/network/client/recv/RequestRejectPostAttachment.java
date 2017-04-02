@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.World;
@@ -35,67 +35,56 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Migi, DS
  */
-public final class RequestRejectPostAttachment implements IClientIncomingPacket
-{
+public final class RequestRejectPostAttachment implements IClientIncomingPacket {
 	private int _msgId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_msgId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!GeneralConfig.ALLOW_MAIL || !GeneralConfig.ALLOW_ATTACHMENTS)
-		{
+	public void run(L2GameClient client) {
+		if (!GeneralConfig.ALLOW_MAIL || !GeneralConfig.ALLOW_ATTACHMENTS) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("rejectattach"))
-		{
+
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("rejectattach")) {
 			return;
 		}
-		
-		if (!activeChar.isInsideZone(ZoneId.PEACE))
-		{
+
+		if (!activeChar.isInsideZone(ZoneId.PEACE)) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_RECEIVE_OR_SEND_MAIL_WITH_ATTACHED_ITEMS_IN_NON_PEACE_ZONE_REGIONS);
 			return;
 		}
-		
+
 		Message msg = MailManager.getInstance().getMessage(_msgId);
-		if (msg == null)
-		{
+		if (msg == null) {
 			return;
 		}
-		
-		if (msg.getReceiverId() != activeChar.getObjectId())
-		{
+
+		if (msg.getReceiverId() != activeChar.getObjectId()) {
 			Util.handleIllegalPlayerAction(activeChar, "Player " + activeChar.getName() + " tried to reject not own attachment!", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (!msg.hasAttachments() || (msg.getMailType() != MailType.REGULAR))
-		{
+
+		if (!msg.hasAttachments() || (msg.getMailType() != MailType.REGULAR)) {
 			return;
 		}
-		
+
 		MailManager.getInstance().sendMessage(new Message(msg));
-		
+
 		client.sendPacket(SystemMessageId.MAIL_SUCCESSFULLY_RETURNED);
 		client.sendPacket(new ExChangePostState(true, _msgId, Message.REJECTED));
-		
+
 		final PlayerInstance sender = World.getInstance().getPlayer(msg.getSenderId());
-		if (sender != null)
-		{
+		if (sender != null) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_RETURNED_THE_MAIL);
 			sm.addCharName(activeChar);
 			sender.sendPacket(sm);

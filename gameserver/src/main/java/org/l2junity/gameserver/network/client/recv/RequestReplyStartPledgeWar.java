@@ -29,50 +29,41 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.4.2.1.2.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestReplyStartPledgeWar implements IClientIncomingPacket
-{
+public final class RequestReplyStartPledgeWar implements IClientIncomingPacket {
 	private int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readS();
 		_answer = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		final PlayerInstance requestor = activeChar.getActiveRequester();
-		if (requestor == null)
-		{
+		if (requestor == null) {
 			return;
 		}
-		
-		if (_answer == 1)
-		{
+
+		if (_answer == 1) {
 			final L2Clan attacked = activeChar.getClan();
 			final L2Clan attacker = requestor.getClan();
-			if ((attacked != null) && (attacker != null))
-			{
+			if ((attacked != null) && (attacker != null)) {
 				final ClanWar clanWar = attacker.getWarWith(attacked.getId());
-				if (clanWar.getState() == ClanWarState.BLOOD_DECLARATION)
-				{
+				if (clanWar.getState() == ClanWarState.BLOOD_DECLARATION) {
 					clanWar.mutualClanWarAccepted(attacker, attacked);
 					ClanTable.getInstance().storeClansWar(clanWar);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			requestor.sendPacket(SystemMessageId.THE_S1_CLAN_DID_NOT_RESPOND_WAR_PROCLAMATION_HAS_BEEN_REFUSED2);
 		}
 		activeChar.setActiveRequester(null);

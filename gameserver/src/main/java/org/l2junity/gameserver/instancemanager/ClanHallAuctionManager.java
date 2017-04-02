@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.clanhallauction.ClanHallAuction;
@@ -30,75 +27,68 @@ import org.l2junity.gameserver.model.eventengine.ScheduleTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Sdw
  */
-public class ClanHallAuctionManager extends AbstractEventManager<AbstractEvent<?>>
-{
+public class ClanHallAuctionManager extends AbstractEventManager<AbstractEvent<?>> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClanHallAuctionManager.class);
-	
+
 	private static final Map<Integer, ClanHallAuction> AUCTIONS = new HashMap<>();
-	
-	protected ClanHallAuctionManager()
-	{
+
+	protected ClanHallAuctionManager() {
 	}
-	
+
 	@ScheduleTarget
-	private void onEventStart()
-	{
+	private void onEventStart() {
 		LOGGER.info("Clan Hall Auction has started!");
 		AUCTIONS.clear();
-		
+
 		//@formatter:off
 		ClanHallData.getInstance().getFreeAuctionableHall()
-			.forEach(c -> AUCTIONS.put(c.getResidenceId(), new ClanHallAuction(c.getResidenceId())));
+				.forEach(c -> AUCTIONS.put(c.getResidenceId(), new ClanHallAuction(c.getResidenceId())));
 		//@formatter:on
 	}
-	
+
 	@ScheduleTarget
-	private void onEventEnd()
-	{
+	private void onEventEnd() {
 		AUCTIONS.values().forEach(ClanHallAuction::finalizeAuctions);
 		AUCTIONS.clear();
 		LOGGER.info("Clan Hall Auction has ended!");
 	}
-	
+
 	@Override
-	public void onInitialized()
-	{
+	public void onInitialized() {
 	}
-	
-	public ClanHallAuction getClanHallAuctionById(int clanHallId)
-	{
+
+	public ClanHallAuction getClanHallAuctionById(int clanHallId) {
 		return AUCTIONS.get(clanHallId);
 	}
-	
-	public ClanHallAuction getClanHallAuctionByClan(L2Clan clan)
-	{
+
+	public ClanHallAuction getClanHallAuctionByClan(L2Clan clan) {
 		//@formatter:off
 		return AUCTIONS.values().stream()
-			.filter(a -> a.getBids().containsKey(clan.getId()))
-			.findFirst()
-			.orElse(null);
+				.filter(a -> a.getBids().containsKey(clan.getId()))
+				.findFirst()
+				.orElse(null);
 		//@formatter:on
 	}
-	
-	public boolean checkForClanBid(int clanHallId, L2Clan clan)
-	{
+
+	public boolean checkForClanBid(int clanHallId, L2Clan clan) {
 		//@formatter:off
 		return AUCTIONS.entrySet().stream()
-			.filter(a -> a.getKey() != clanHallId)
-			.anyMatch(a -> a.getValue().getBids().containsKey(clan.getId()));
+				.filter(a -> a.getKey() != clanHallId)
+				.anyMatch(a -> a.getValue().getBids().containsKey(clan.getId()));
 		//@formatter:on
 	}
-	
-	public static final ClanHallAuctionManager getInstance()
-	{
+
+	public static final ClanHallAuctionManager getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final ClanHallAuctionManager INSTANCE = new ClanHallAuctionManager();
 	}
 }

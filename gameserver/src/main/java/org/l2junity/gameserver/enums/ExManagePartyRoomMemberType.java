@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum ExManagePartyRoomMemberType
-{
+public enum ExManagePartyRoomMemberType {
 	ADD_MEMBER,
 	UPDATE_MEMBER,
 	DELETE_MEMBER

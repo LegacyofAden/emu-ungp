@@ -25,22 +25,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class FriendRemove implements IClientOutgoingPacket
-{
+public class FriendRemove implements IClientOutgoingPacket {
 	private final int _responce;
 	private final String _charName;
-	
-	public FriendRemove(String charName, int responce)
-	{
+
+	public FriendRemove(String charName, int responce) {
 		_responce = responce;
 		_charName = charName;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.FRIEND_REMOVE.writeId(packet);
-		
+
 		packet.writeD(_responce);
 		packet.writeS(_charName);
 		return true;

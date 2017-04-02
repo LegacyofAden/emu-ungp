@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model;
 /**
  * @author UnAfraid
  */
-public enum PcCondOverride
-{
+public enum PcCondOverride {
 	MAX_STATS_VALUE(0, "Overrides maximum states conditions"),
 	ITEM_CONDITIONS(1, "Overrides item usage conditions"),
 	SKILL_CONDITIONS(2, "Overrides skill usage conditions"),
@@ -39,43 +38,34 @@ public enum PcCondOverride
 	SEE_ALL_PLAYERS(13, "Overrides the conditions to see hidden players"),
 	TARGET_ALL(14, "Overrides target conditions"),
 	DROP_ALL_ITEMS(15, "Overrides item drop conditions");
-	
+
 	private final int _mask;
 	private final String _descr;
-	
-	PcCondOverride(int id, String descr)
-	{
+
+	PcCondOverride(int id, String descr) {
 		_mask = 1 << id;
 		_descr = descr;
 	}
-	
-	public int getMask()
-	{
+
+	public int getMask() {
 		return _mask;
 	}
-	
-	public String getDescription()
-	{
+
+	public String getDescription() {
 		return _descr;
 	}
-	
-	public static PcCondOverride getCondOverride(int ordinal)
-	{
-		try
-		{
+
+	public static PcCondOverride getCondOverride(int ordinal) {
+		try {
 			return values()[ordinal];
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			return null;
 		}
 	}
-	
-	public static long getAllExceptionsMask()
-	{
+
+	public static long getAllExceptionsMask() {
 		long result = 0L;
-		for (PcCondOverride ex : values())
-		{
+		for (PcCondOverride ex : values()) {
 			result |= ex.getMask();
 		}
 		return result;

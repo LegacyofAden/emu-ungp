@@ -18,151 +18,133 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.MonsterRace;
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.idfactory.IdFactory;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.DeleteObject;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.InventoryUpdate;
-import org.l2junity.gameserver.network.client.send.MonRaceInfo;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
-public class L2RaceManagerInstance extends Npc
-{
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
+
+public class L2RaceManagerInstance extends Npc {
 	public static final int LANES = 8;
 	public static final int WINDOW_START = 0;
-	
+
 	private static List<L2RaceManagerInstance> _managers;
 	protected static int _raceNumber = 4;
-	
+
 	// Time Constants
 	private static final long SECOND = 1000;
 	private static final long MINUTE = 60 * SECOND;
-	
+
 	private static int _minutes = 5;
-	
+
 	// States
 	private static final int ACCEPTING_BETS = 0;
 	private static final int WAITING = 1;
 	private static final int STARTING_RACE = 2;
 	private static final int RACE_END = 3;
 	private static int _state = RACE_END;
-	
+
 	protected static final int[][] _codes =
-	{
-		{
-			-1,
-			0
-		},
-		{
-			0,
-			15322
-		},
-		{
-			13765,
-			-1
-		}
-	};
+			{
+					{
+							-1,
+							0
+					},
+					{
+							0,
+							15322
+					},
+					{
+							13765,
+							-1
+					}
+			};
 	private static boolean _notInitialized = true;
 	protected static MonRaceInfo _packet;
 	protected static final int _cost[] =
-	{
-		100,
-		500,
-		1000,
-		5000,
-		10000,
-		20000,
-		50000,
-		100000
-	};
-	
-	public L2RaceManagerInstance(L2NpcTemplate template)
-	{
+			{
+					100,
+					500,
+					1000,
+					5000,
+					10000,
+					20000,
+					50000,
+					100000
+			};
+
+	public L2RaceManagerInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2RaceManagerInstance);
-		if (_notInitialized)
-		{
+		if (_notInitialized) {
 			_notInitialized = false;
-			
+
 			_managers = new CopyOnWriteArrayList<>();
-			
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKETS_ARE_NOW_AVAILABLE_FOR_MONSTER_RACE_S1), 0, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.NOW_SELLING_TICKETS_FOR_MONSTER_RACE_S1), 30 * SECOND, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKETS_ARE_NOW_AVAILABLE_FOR_MONSTER_RACE_S1), MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.NOW_SELLING_TICKETS_FOR_MONSTER_RACE_S1), MINUTE + (30 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 2 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 3 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 4 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 5 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 6 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.TICKETS_SALES_ARE_CLOSED_FOR_MONSTER_RACE_S1_ODDS_ARE_POSTED), 7 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S2_WILL_BEGIN_IN_S1_MINUTE_S), 7 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S2_WILL_BEGIN_IN_S1_MINUTE_S), 8 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S1_WILL_BEGIN_IN_30_SECONDS), (8 * MINUTE) + (30 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S1_IS_ABOUT_TO_BEGIN_COUNTDOWN_IN_FIVE_SECONDS), (8 * MINUTE) + (50 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (55 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (56 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (57 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (58 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (59 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
-			ThreadPool.scheduleAtFixedRate(new Announcement(SystemMessageId.THEY_RE_OFF), 9 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKETS_ARE_NOW_AVAILABLE_FOR_MONSTER_RACE_S1), 0, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.NOW_SELLING_TICKETS_FOR_MONSTER_RACE_S1), 30 * SECOND, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKETS_ARE_NOW_AVAILABLE_FOR_MONSTER_RACE_S1), MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.NOW_SELLING_TICKETS_FOR_MONSTER_RACE_S1), MINUTE + (30 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 2 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 3 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 4 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 5 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKET_SALES_FOR_THE_MONSTER_RACE_WILL_END_IN_S1_MINUTE_S), 6 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.TICKETS_SALES_ARE_CLOSED_FOR_MONSTER_RACE_S1_ODDS_ARE_POSTED), 7 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S2_WILL_BEGIN_IN_S1_MINUTE_S), 7 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S2_WILL_BEGIN_IN_S1_MINUTE_S), 8 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S1_WILL_BEGIN_IN_30_SECONDS), (8 * MINUTE) + (30 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.MONSTER_RACE_S1_IS_ABOUT_TO_BEGIN_COUNTDOWN_IN_FIVE_SECONDS), (8 * MINUTE) + (50 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (55 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (56 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (57 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (58 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S), (8 * MINUTE) + (59 * SECOND), 10 * MINUTE, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new Announcement(SystemMessageId.THEY_RE_OFF), 9 * MINUTE, 10 * MINUTE, TimeUnit.MILLISECONDS);
 			// */
 		}
 		_managers.add(this);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if (attacker.isMonster())
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker.isMonster()) {
 			return true;
 		}
-		
+
 		return super.isAutoAttackable(attacker);
 	}
-	
-	class Announcement implements Runnable
-	{
+
+	class Announcement implements Runnable {
 		private final SystemMessageId _type;
-		
-		public Announcement(SystemMessageId pType)
-		{
+
+		public Announcement(SystemMessageId pType) {
 			_type = pType;
 		}
-		
+
 		@Override
-		public void run()
-		{
+		public void run() {
 			makeAnnouncement(_type);
 		}
 	}
-	
-	public void makeAnnouncement(SystemMessageId type)
-	{
+
+	public void makeAnnouncement(SystemMessageId type) {
 		SystemMessage sm = SystemMessage.getSystemMessage(type);
-		switch (type.getId())
-		{
+		switch (type.getId()) {
 			case 816: // SystemMessageId.TICKETS_ARE_NOW_AVAILABLE_FOR_MONSTER_RACE_S1
 			case 817: // SystemMessageId.NOW_SELLING_TICKETS_FOR_MONSTER_RACE_S1
-				if (_state != ACCEPTING_BETS)
-				{// LOGGER.info("Race Initializing");
+				if (_state != ACCEPTING_BETS) {// LOGGER.info("Race Initializing");
 					_state = ACCEPTING_BETS;
 					startRace();
 				} // else{LOGGER.info("Race open");}
@@ -172,8 +154,7 @@ public class L2RaceManagerInstance extends Npc
 			case 820: // SystemMessageId.MONSTER_RACE_S2_WILL_BEGIN_IN_S1_MINUTE_S
 			case 823: // SystemMessageId.THE_RACE_WILL_BEGIN_IN_S1_SECOND_S
 				sm.addInt(_minutes);
-				if (type.getId() == 820)
-				{
+				if (type.getId() == 820) {
 					sm.addInt(_raceNumber);
 				}
 				_minutes--;
@@ -201,37 +182,30 @@ public class L2RaceManagerInstance extends Npc
 		// LOGGER.info("State: "+state);
 		broadcast(sm);
 		// LOGGER.info("Player's known: "+getKnownPlayers().size());
-		
-		if (type == SystemMessageId.THEY_RE_OFF)
-		{
+
+		if (type == SystemMessageId.THEY_RE_OFF) {
 			// LOGGER.info("Starting race");
 			_state = STARTING_RACE;
 			startRace();
 			_minutes = 5;
 		}
 	}
-	
-	protected void broadcast(IClientOutgoingPacket pkt)
-	{
-		for (L2RaceManagerInstance manager : _managers)
-		{
-			if (!manager.isDead())
-			{
+
+	protected void broadcast(IClientOutgoingPacket pkt) {
+		for (L2RaceManagerInstance manager : _managers) {
+			if (!manager.isDead()) {
 				Broadcast.toKnownPlayers(manager, pkt);
 			}
 		}
 	}
-	
-	public void sendMonsterInfo()
-	{
+
+	public void sendMonsterInfo() {
 		broadcast(_packet);
 	}
-	
-	private void startRace()
-	{
+
+	private void startRace() {
 		MonsterRace race = MonsterRace.getInstance();
-		if (_state == STARTING_RACE)
-		{
+		if (_state == STARTING_RACE) {
 			// state++;
 			PlaySound SRace = new PlaySound(1, "S_Race", 0, 0, 0, 0, 0);
 			broadcast(SRace);
@@ -239,75 +213,55 @@ public class L2RaceManagerInstance extends Npc
 			broadcast(SRace2);
 			_packet = new MonRaceInfo(_codes[1][0], _codes[1][1], race.getMonsters(), race.getSpeeds());
 			sendMonsterInfo();
-			
-			ThreadPool.schedule(new RunRace(), 5000, TimeUnit.MILLISECONDS);
-		}
-		else
-		{
+
+			ThreadPool.getInstance().scheduleGeneral(new RunRace(), 5000, TimeUnit.MILLISECONDS);
+		} else {
 			// state++;
 			race.newRace();
 			race.newSpeeds();
 			_packet = new MonRaceInfo(_codes[0][0], _codes[0][1], race.getMonsters(), race.getSpeeds());
 			sendMonsterInfo();
 		}
-		
+
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (command.startsWith("BuyTicket") && (_state != ACCEPTING_BETS))
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (command.startsWith("BuyTicket") && (_state != ACCEPTING_BETS)) {
 			player.sendPacket(SystemMessageId.MONSTER_RACE_TICKETS_ARE_NO_LONGER_AVAILABLE);
 			command = "Chat 0";
 		}
-		if (command.startsWith("ShowOdds") && (_state == ACCEPTING_BETS))
-		{
+		if (command.startsWith("ShowOdds") && (_state == ACCEPTING_BETS)) {
 			player.sendPacket(SystemMessageId.MONSTER_RACE_PAYOUT_INFORMATION_IS_NOT_AVAILABLE_WHILE_TICKETS_ARE_BEING_SOLD);
 			command = "Chat 0";
 		}
-		
-		if (command.startsWith("BuyTicket"))
-		{
+
+		if (command.startsWith("BuyTicket")) {
 			int val = Integer.parseInt(command.substring(10));
-			if (val == 0)
-			{
+			if (val == 0) {
 				player.setRace(0, 0);
 				player.setRace(1, 0);
 			}
-			if (((val == 10) && (player.getRace(0) == 0)) || ((val == 20) && (player.getRace(0) == 0) && (player.getRace(1) == 0)))
-			{
+			if (((val == 10) && (player.getRace(0) == 0)) || ((val == 20) && (player.getRace(0) == 0) && (player.getRace(1) == 0))) {
 				val = 0;
 			}
 			showBuyTicket(player, val);
-		}
-		else if (command.equals("ShowOdds"))
-		{
+		} else if (command.equals("ShowOdds")) {
 			showOdds(player);
-		}
-		else if (command.equals("ShowInfo"))
-		{
+		} else if (command.equals("ShowInfo")) {
 			showMonsterInfo(player);
-		}
-		else if (command.equals("calculateWin"))
-		{
+		} else if (command.equals("calculateWin")) {
 			// displayCalculateWinnings(player);
-		}
-		else if (command.equals("viewHistory"))
-		{
+		} else if (command.equals("viewHistory")) {
 			// displayHistory(player);
-		}
-		else
-		{
+		} else {
 			// getKnownList().removeKnownObject(player);
 			super.onBypassFeedback(player, command);
 		}
 	}
-	
-	public void showOdds(PlayerInstance player)
-	{
-		if (_state == ACCEPTING_BETS)
-		{
+
+	public void showOdds(PlayerInstance player) {
+		if (_state == ACCEPTING_BETS) {
 			return;
 		}
 		int npcId = getTemplate().getId();
@@ -315,8 +269,7 @@ public class L2RaceManagerInstance extends Npc
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		filename = getHtmlPath(npcId, 5);
 		html.setFile(player.getHtmlPrefix(), filename);
-		for (int i = 0; i < 8; i++)
-		{
+		for (int i = 0; i < 8; i++) {
 			int n = i + 1;
 			search = "Mob" + n;
 			html.replace(search, MonsterRace.getInstance().getMonsters()[i].getTemplate().getName());
@@ -326,16 +279,14 @@ public class L2RaceManagerInstance extends Npc
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
-	public void showMonsterInfo(PlayerInstance player)
-	{
+
+	public void showMonsterInfo(PlayerInstance player) {
 		int npcId = getTemplate().getId();
 		String filename, search;
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		filename = getHtmlPath(npcId, 6);
 		html.setFile(player.getHtmlPrefix(), filename);
-		for (int i = 0; i < 8; i++)
-		{
+		for (int i = 0; i < 8; i++) {
 			int n = i + 1;
 			search = "Mob" + n;
 			html.replace(search, MonsterRace.getInstance().getMonsters()[i].getTemplate().getName());
@@ -344,42 +295,32 @@ public class L2RaceManagerInstance extends Npc
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
-	public void showBuyTicket(PlayerInstance player, int val)
-	{
-		if (_state != ACCEPTING_BETS)
-		{
+
+	public void showBuyTicket(PlayerInstance player, int val) {
+		if (_state != ACCEPTING_BETS) {
 			return;
 		}
 		int npcId = getTemplate().getId();
 		SystemMessage sm;
 		String filename, search, replace;
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		if (val < 10)
-		{
+		if (val < 10) {
 			filename = getHtmlPath(npcId, 2);
 			html.setFile(player.getHtmlPrefix(), filename);
-			for (int i = 0; i < 8; i++)
-			{
+			for (int i = 0; i < 8; i++) {
 				int n = i + 1;
 				search = "Mob" + n;
 				html.replace(search, MonsterRace.getInstance().getMonsters()[i].getTemplate().getName());
 			}
 			search = "No1";
-			if (val == 0)
-			{
+			if (val == 0) {
 				html.replace(search, "");
-			}
-			else
-			{
+			} else {
 				html.replace(search, "" + val);
 				player.setRace(0, val);
 			}
-		}
-		else if (val < 20)
-		{
-			if (player.getRace(0) == 0)
-			{
+		} else if (val < 20) {
+			if (player.getRace(0) == 0) {
 				return;
 			}
 			filename = getHtmlPath(npcId, 3);
@@ -389,20 +330,14 @@ public class L2RaceManagerInstance extends Npc
 			replace = MonsterRace.getInstance().getMonsters()[player.getRace(0) - 1].getTemplate().getName();
 			html.replace(search, replace);
 			search = "0adena";
-			if (val == 10)
-			{
+			if (val == 10) {
 				html.replace(search, "");
-			}
-			else
-			{
+			} else {
 				html.replace(search, "" + _cost[val - 11]);
 				player.setRace(1, val - 10);
 			}
-		}
-		else if (val == 20)
-		{
-			if ((player.getRace(0) == 0) || (player.getRace(1) == 0))
-			{
+		} else if (val == 20) {
+			if ((player.getRace(0) == 0) || (player.getRace(1) == 0)) {
 				return;
 			}
 			filename = getHtmlPath(npcId, 4);
@@ -420,17 +355,13 @@ public class L2RaceManagerInstance extends Npc
 			search = "0total";
 			int total = price + tax;
 			html.replace(search, "" + total);
-		}
-		else
-		{
-			if ((player.getRace(0) == 0) || (player.getRace(1) == 0))
-			{
+		} else {
+			if ((player.getRace(0) == 0) || (player.getRace(1) == 0)) {
 				return;
 			}
 			int ticket = player.getRace(0);
 			int priceId = player.getRace(1);
-			if (!player.reduceAdena("Race", _cost[priceId - 1], this, true))
-			{
+			if (!player.reduceAdena("Race", _cost[priceId - 1], this, true)) {
 				return;
 			}
 			player.setRace(0, 0);
@@ -457,86 +388,72 @@ public class L2RaceManagerInstance extends Npc
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
-	public static class Race
-	{
+
+	public static class Race {
 		private final Info[] _info;
-		
-		public Race(Info[] pInfo)
-		{
+
+		public Race(Info[] pInfo) {
 			_info = pInfo;
 		}
-		
-		public Info getLaneInfo(int lane)
-		{
+
+		public Info getLaneInfo(int lane) {
 			return _info[lane];
 		}
-		
-		public class Info
-		{
+
+		public class Info {
 			private final int _id;
 			private final int _place;
 			private final int _odds;
 			private final int _payout;
-			
-			public Info(int pId, int pPlace, int pOdds, int pPayout)
-			{
+
+			public Info(int pId, int pPlace, int pOdds, int pPayout) {
 				_id = pId;
 				_place = pPlace;
 				_odds = pOdds;
 				_payout = pPayout;
 			}
-			
-			public int getId()
-			{
+
+			public int getId() {
 				return _id;
 			}
-			
-			public int getOdds()
-			{
+
+			public int getOdds() {
 				return _odds;
 			}
-			
-			public int getPayout()
-			{
+
+			public int getPayout() {
 				return _payout;
 			}
-			
-			public int getPlace()
-			{
+
+			public int getPlace() {
 				return _place;
 			}
 		}
-		
+
 	}
-	
-	class RunRace implements Runnable
-	{
+
+	class RunRace implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			_packet = new MonRaceInfo(_codes[2][0], _codes[2][1], MonsterRace.getInstance().getMonsters(), MonsterRace.getInstance().getSpeeds());
 			sendMonsterInfo();
-			ThreadPool.schedule(new RunEnd(), 30000, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(new RunEnd(), 30000, TimeUnit.MILLISECONDS);
 		}
 	}
-	
-	class RunEnd implements Runnable
-	{
+
+	class RunEnd implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			makeAnnouncement(SystemMessageId.FIRST_PRIZE_GOES_TO_THE_PLAYER_IN_LANE_S1_SECOND_PRIZE_GOES_TO_THE_PLAYER_IN_LANE_S2);
 			makeAnnouncement(SystemMessageId.MONSTER_RACE_S1_IS_FINISHED);
 			_raceNumber++;
-			
+
 			DeleteObject obj = null;
-			for (int i = 0; i < 8; i++)
-			{
+			for (int i = 0; i < 8; i++) {
 				obj = new DeleteObject(MonsterRace.getInstance().getMonsters()[i]);
 				broadcast(obj);
 			}
 		}
 	}
-	
+
 }

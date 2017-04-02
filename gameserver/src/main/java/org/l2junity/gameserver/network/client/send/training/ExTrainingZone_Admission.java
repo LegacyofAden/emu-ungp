@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.training;
 
-import org.l2junity.gameserver.config.TrainingCampConfig;
+import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -28,32 +28,28 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExTrainingZone_Admission implements IClientOutgoingPacket
-{
+public class ExTrainingZone_Admission implements IClientOutgoingPacket {
 	private final long _timeElapsed;
 	private final long _timeRemaining;
 	private final double _maxExp;
 	private final double _maxSp;
-	
-	public ExTrainingZone_Admission(PlayerInstance player)
-	{
+
+	public ExTrainingZone_Admission(PlayerInstance player) {
 		_timeElapsed = 0;
 		_timeRemaining = TrainingCampConfig.MAX_DURATION;
 		_maxExp = (ExperienceData.getInstance().getExpForLevel(player.getLevel()) * ExperienceData.getInstance().getTrainingRate(player.getLevel())) / TrainingCampConfig.MAX_DURATION;
 		_maxSp = _maxExp / 250d;
 	}
-	
-	public ExTrainingZone_Admission(int level, long timeElapsed, long timeRemaing)
-	{
+
+	public ExTrainingZone_Admission(int level, long timeElapsed, long timeRemaing) {
 		_timeElapsed = timeElapsed;
 		_timeRemaining = timeRemaing;
 		_maxExp = (ExperienceData.getInstance().getExpForLevel(level) * ExperienceData.getInstance().getTrainingRate(level)) / TrainingCampConfig.MAX_DURATION;
 		_maxSp = _maxExp / 250d;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_TRAINING_ZONE_ADMISSION.writeId(packet);
 		packet.writeD((int) _timeElapsed); // Training time elapsed in minutes, max : 600 - 10hr RU / 300 - 5hr NA
 		packet.writeD((int) _timeRemaining); // Time remaining in seconds, max : 36000 - 10hr RU / 18000 - 5hr NA

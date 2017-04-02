@@ -18,80 +18,66 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author UnAfraid
  */
-public class PEvasionRateFinalizer implements IStatsFunction
-{
+public class PEvasionRateFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = calcEquippedItemsBaseValue(creature, stat);
-		
+
 		final int level = creature.getLevel();
-		if (creature.isPlayer())
-		{
+		if (creature.isPlayer()) {
 			// [Square(DEX)] * 5 + lvl;
 			baseValue += (Math.sqrt(creature.getDEX()) * 5) + level;
-			if (level > 69)
-			{
+			if (level > 69) {
 				baseValue += level - 69;
 			}
-			if (level > 77)
-			{
+			if (level > 77) {
 				baseValue += 1;
 			}
-			if (level > 80)
-			{
+			if (level > 80) {
 				baseValue += 2;
 			}
-			if (level > 87)
-			{
+			if (level > 87) {
 				baseValue += 2;
 			}
-			if (level > 92)
-			{
+			if (level > 92) {
 				baseValue += 1;
 			}
-			if (level > 97)
-			{
+			if (level > 97) {
 				baseValue += 1;
 			}
-			
+
 			// Enchanted helm bonus
 			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_HEAD);
-		}
-		else
-		{
+		} else {
 			// [Square(DEX)] * 5 + lvl;
 			baseValue += (Math.sqrt(creature.getDEX()) * 5) + level;
-			if (level > 69)
-			{
+			if (level > 69) {
 				baseValue += (level - 69) + 2;
 			}
 		}
-		
+
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue), Double.NEGATIVE_INFINITY, PlayerConfig.MAX_EVASION);
 	}
-	
+
 	@Override
-	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed)
-	{
-		if (isBlessed)
-		{
+	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed) {
+		if (isBlessed) {
 			return (0.3 * Math.max(enchantLevel - 3, 0)) + (0.3 * Math.max(enchantLevel - 6, 0));
 		}
-		
+
 		return (0.2 * Math.max(enchantLevel - 3, 0)) + (0.2 * Math.max(enchantLevel - 6, 0));
 	}
 }

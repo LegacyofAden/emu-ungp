@@ -18,66 +18,58 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /**
  * @author Plim
  */
-public class RequestPetitionFeedback implements IClientIncomingPacket
-{
+public class RequestPetitionFeedback implements IClientIncomingPacket {
 	private static final String INSERT_FEEDBACK = "INSERT INTO petition_feedback VALUES (?,?,?,?,?)";
-	
+
 	// cdds
 	// private int _unknown;
 	private int _rate; // 4=VeryGood, 3=Good, 2=Fair, 1=Poor, 0=VeryPoor
 	private String _message;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// _unknown =
 		packet.readD(); // unknown
 		_rate = packet.readD();
 		_message = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		
-		if ((player == null) || (player.getLastPetitionGmName() == null))
-		{
+
+		if ((player == null) || (player.getLastPetitionGmName() == null)) {
 			return;
 		}
-		
-		if ((_rate > 4) || (_rate < 0))
-		{
+
+		if ((_rate > 4) || (_rate < 0)) {
 			return;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement(INSERT_FEEDBACK))
-		{
+			 PreparedStatement statement = con.prepareStatement(INSERT_FEEDBACK)) {
 			statement.setString(1, player.getName());
 			statement.setString(2, player.getLastPetitionGmName());
 			statement.setInt(3, _rate);
 			statement.setString(4, _message);
 			statement.setLong(5, System.currentTimeMillis());
 			statement.execute();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.error("Error while saving petition feedback");
 		}
 	}
-	
+
 }

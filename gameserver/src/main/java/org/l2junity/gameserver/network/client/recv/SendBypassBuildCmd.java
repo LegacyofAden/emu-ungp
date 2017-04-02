@@ -25,35 +25,31 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class handles all GM commands triggered by //command
+ *
  * @version $Revision: 1.3.4.2 $ $Date: 2005/03/27 15:29:29 $
  */
-public final class SendBypassBuildCmd implements IClientIncomingPacket
-{
+public final class SendBypassBuildCmd implements IClientIncomingPacket {
 	public static final int GM_MESSAGE = 9;
 	public static final int ANNOUNCEMENT = 10;
-	
+
 	private String _command;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_command = packet.readS();
-		if (_command != null)
-		{
+		if (_command != null) {
 			_command = _command.trim();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		AdminCommandHandler.getInstance().useAdminCommand(activeChar, "admin_" + _command, true);
 	}
 }

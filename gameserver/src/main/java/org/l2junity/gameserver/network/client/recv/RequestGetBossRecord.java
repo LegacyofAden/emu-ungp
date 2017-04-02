@@ -24,28 +24,25 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) d
+ *
  * @author -Wooden-
  */
-public class RequestGetBossRecord implements IClientIncomingPacket
-{
+public class RequestGetBossRecord implements IClientIncomingPacket {
 	private int _bossId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_bossId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		_log.warn("Player {} (boss ID: {}) used unsuded packet {}", activeChar, _bossId, RequestGetBossRecord.class.getSimpleName());
 	}
 }

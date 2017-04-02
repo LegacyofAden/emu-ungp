@@ -18,81 +18,68 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author ShanSoft
  */
-public class ExBuySellList extends AbstractItemPacket
-{
+public class ExBuySellList extends AbstractItemPacket {
 	private final Collection<ItemInstance> _sellList;
 	private Collection<ItemInstance> _refundList = null;
 	private final boolean _done;
 	private final int _inventorySlots;
 	private double _castleTaxRate = 1;
-	
-	public ExBuySellList(PlayerInstance player, boolean done)
-	{
+
+	public ExBuySellList(PlayerInstance player, boolean done) {
 		final Summon pet = player.getPet();
 		_sellList = player.getInventory().getItems(item -> !item.isEquipped() && item.isSellable() && ((pet == null) || (item.getObjectId() != pet.getControlObjectId())));
 		_inventorySlots = player.getInventory().getItems((item) -> !item.isQuestItem()).size();
-		if (player.hasRefund())
-		{
+		if (player.hasRefund()) {
 			_refundList = player.getRefund().getItems();
 		}
 		_done = done;
 	}
-	
-	public ExBuySellList(PlayerInstance player, boolean done, double castleTaxRate)
-	{
+
+	public ExBuySellList(PlayerInstance player, boolean done, double castleTaxRate) {
 		this(player, done);
 		_castleTaxRate = 1 - castleTaxRate;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BUY_SELL_LIST.writeId(packet);
-		
+
 		packet.writeD(0x01); // Type SELL
 		packet.writeD(_inventorySlots);
-		
-		if ((_sellList != null))
-		{
+
+		if ((_sellList != null)) {
 			packet.writeH(_sellList.size());
-			for (ItemInstance item : _sellList)
-			{
+			for (ItemInstance item : _sellList) {
 				writeItem(packet, item);
 				packet.writeQ((long) ((item.getItem().getReferencePrice() / 2) * _castleTaxRate));
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeH(0x00);
 		}
-		
-		if ((_refundList != null) && !_refundList.isEmpty())
-		{
+
+		if ((_refundList != null) && !_refundList.isEmpty()) {
 			packet.writeH(_refundList.size());
 			int i = 0;
-			for (ItemInstance item : _refundList)
-			{
+			for (ItemInstance item : _refundList) {
 				writeItem(packet, item);
 				packet.writeD(i++);
 				packet.writeQ((item.getItem().getReferencePrice() / 2) * item.getCount());
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeH(0x00);
 		}
-		
+
 		packet.writeC(_done ? 0x01 : 0x00);
 		return true;
 	}

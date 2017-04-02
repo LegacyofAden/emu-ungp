@@ -39,28 +39,23 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public class RequestItemEnsoul implements IClientIncomingPacket
-{
+public class RequestItemEnsoul implements IClientIncomingPacket {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RequestItemEnsoul.class);
 	private int _itemObjectId;
 	private EnsoulItemOption[] _options;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_itemObjectId = packet.readD();
 		int options = packet.readC();
-		if ((options > 0) && (options <= 3))
-		{
+		if ((options > 0) && (options <= 3)) {
 			_options = new EnsoulItemOption[options];
-			for (int i = 0; i < options; i++)
-			{
+			for (int i = 0; i < options; i++) {
 				final int slotType = packet.readC();
 				final int position = packet.readC();
 				final int soulCrystalObjectId = packet.readD();
 				final int soulCrystalOption = packet.readD();
-				if ((position > 0) && (position < 3) && ((slotType == 1) || (slotType == 2)))
-				{
+				if ((position > 0) && (position < 3) && ((slotType == 1) || (slotType == 2))) {
 					_options[i] = new EnsoulItemOption(slotType, position, soulCrystalObjectId, soulCrystalOption);
 				}
 			}
@@ -68,202 +63,156 @@ public class RequestItemEnsoul implements IClientIncomingPacket
 		}
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (player.getPrivateStoreType() != PrivateStoreType.NONE)
-		{
+
+		if (player.getPrivateStoreType() != PrivateStoreType.NONE) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_USING_THE_PRIVATE_STORE_WORKSHOP);
 			return;
-		}
-		else if (player.hasAbnormalType(AbnormalType.FREEZING))
-		{
+		} else if (player.hasAbnormalType(AbnormalType.FREEZING)) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_FROZEN);
-		}
-		else if (player.isDead())
-		{
+		} else if (player.isDead()) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_DEAD);
 			return;
-		}
-		else if ((player.getActiveTradeList() != null) || player.hasItemRequest())
-		{
+		} else if ((player.getActiveTradeList() != null) || player.hasItemRequest()) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_TRADING);
 			return;
-		}
-		else if (player.hasAbnormalType(AbnormalType.PARALYZE))
-		{
+		} else if (player.hasAbnormalType(AbnormalType.PARALYZE)) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_PETRIFIED);
 			return;
-		}
-		else if (player.isFishing())
-		{
+		} else if (player.isFishing()) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_FISHING);
 			return;
-		}
-		else if (player.isSitting())
-		{
+		} else if (player.isSitting()) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_SEATED);
 			return;
-		}
-		else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player))
-		{
+		} else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player)) {
 			player.sendPacket(SystemMessageId.CANNOT_USE_THE_SOUL_CRYSTAL_SYSTEM_WHILE_IN_BATTLE);
 			return;
 		}
-		
+
 		final ItemInstance item = player.getInventory().getItemByObjectId(_itemObjectId);
-		if (item == null)
-		{
+		if (item == null) {
 			LOGGER.warn("Player: {} attempting to ensoul item without having it!", player);
 			return;
-		}
-		else if (!item.isEquipable())
-		{
+		} else if (!item.isEquipable()) {
 			LOGGER.warn("Player: {} attempting to ensoul non equippable item: {}!", player, item);
 			return;
-		}
-		else if (!item.isWeapon())
-		{
+		} else if (!item.isWeapon()) {
 			LOGGER.warn("Player: {} attempting to ensoul item that's not a weapon: {}!", player, item);
 			return;
-		}
-		else if (item.isCommonItem())
-		{
+		} else if (item.isCommonItem()) {
 			LOGGER.warn("Player: {} attempting to ensoul common item: {}!", player, item);
 			return;
-		}
-		else if (item.isShadowItem())
-		{
+		} else if (item.isShadowItem()) {
 			LOGGER.warn("Player: {} attempting to ensoul shadow item: {}!", player, item);
 			return;
-		}
-		else if (item.isHeroItem())
-		{
+		} else if (item.isHeroItem()) {
 			LOGGER.warn("Player: {} attempting to ensoul hero item: {}!", player, item);
 			return;
 		}
-		
-		if ((_options == null) || (_options.length == 0))
-		{
+
+		if ((_options == null) || (_options.length == 0)) {
 			LOGGER.warn("Player: {} attempting to ensoul item without any special ability declared!", player);
 			return;
 		}
-		
+
 		int success = 0;
 		final InventoryUpdate iu = new InventoryUpdate();
-		for (EnsoulItemOption itemOption : _options)
-		{
+		for (EnsoulItemOption itemOption : _options) {
 			final int position = itemOption.getPosition() - 1;
 			final ItemInstance soulCrystal = player.getInventory().getItemByObjectId(itemOption.getSoulCrystalObjectId());
-			if (soulCrystal == null)
-			{
+			if (soulCrystal == null) {
 				player.sendPacket(SystemMessageId.INVALID_SOUL_CRYSTAL);
 				continue;
 			}
-			
+
 			final EnsoulStone stone = EnsoulData.getInstance().getStone(soulCrystal.getId());
-			if (stone == null)
-			{
+			if (stone == null) {
 				continue;
 			}
-			
-			if (stone.getSlotType() != itemOption.getSlotType())
-			{
+
+			if (stone.getSlotType() != itemOption.getSlotType()) {
 				LOGGER.warn("Player: {} attempting to ensoul item with a wrong slot type!", player);
 				continue;
 			}
-			
-			if ((stone.getSlotType() == 2) && (position != 0))
-			{
+
+			if ((stone.getSlotType() == 2) && (position != 0)) {
 				LOGGER.warn("Player: {} attempting to ensoul item with a wrong position!", player);
 				continue;
 			}
-			
-			if (!stone.getOptions().contains(itemOption.getSoulCrystalOption()))
-			{
+
+			if (!stone.getOptions().contains(itemOption.getSoulCrystalOption())) {
 				LOGGER.warn("Player: {} attempting to ensoul item option that stone doesn't contains!", player);
 				continue;
 			}
-			
+
 			final EnsoulOption option = EnsoulData.getInstance().getOption(itemOption.getSoulCrystalOption());
-			if (option == null)
-			{
+			if (option == null) {
 				LOGGER.warn("Player: {} attempting to ensoul item option that doesn't exists!", player);
 				continue;
 			}
-			
+
 			boolean isResoul = itemOption.getSlotType() == 2 ? (item.getAdditionalSpecialAbility(position) != null) : (item.getSpecialAbility(position) != null);
 			final ItemHolder fee = isResoul ? EnsoulData.getInstance().getResoulFee(item.getItem().getCrystalType(), position) : EnsoulData.getInstance().getEnsoulFee(item.getItem().getCrystalType(), position);
-			
-			if (fee == null)
-			{
+
+			if (fee == null) {
 				LOGGER.warn("Player: {} attempting to ensoul item option that doesn't exists!", player);
 				continue;
 			}
-			
+
 			final ItemInstance gemStones = player.getInventory().getItemByItemId(fee.getId());
-			if ((gemStones == null) || (gemStones.getCount() < fee.getCount()))
-			{
+			if ((gemStones == null) || (gemStones.getCount() < fee.getCount())) {
 				continue;
 			}
-			
-			if (player.destroyItem("EnsoulOption", soulCrystal, 1, player, true) && player.destroyItem("EnsoulOption", gemStones, fee.getCount(), player, true))
-			{
+
+			if (player.destroyItem("EnsoulOption", soulCrystal, 1, player, true) && player.destroyItem("EnsoulOption", gemStones, fee.getCount(), player, true)) {
 				item.addSpecialAbility(option, position, stone.getSlotType(), true);
 				success = 1;
 			}
-			
+
 			iu.addModifiedItem(soulCrystal);
 			iu.addModifiedItem(gemStones);
 			iu.addModifiedItem(item);
 		}
 		player.sendInventoryUpdate(iu);
-		if (item.isEquipped())
-		{
+		if (item.isEquipped()) {
 			item.applySpecialAbilities();
 		}
 		player.sendPacket(new ExEnsoulResult(success, item));
 	}
-	
-	static class EnsoulItemOption
-	{
+
+	static class EnsoulItemOption {
 		private final int _slotType;
 		private final int _position;
 		private final int _soulCrystalObjectId;
 		private final int _soulCrystalOption;
-		
-		EnsoulItemOption(int slotType, int position, int soulCrystalObjectId, int soulCrystalOption)
-		{
+
+		EnsoulItemOption(int slotType, int position, int soulCrystalObjectId, int soulCrystalOption) {
 			_slotType = slotType;
 			_position = position;
 			_soulCrystalObjectId = soulCrystalObjectId;
 			_soulCrystalOption = soulCrystalOption;
 		}
-		
-		public int getSlotType()
-		{
+
+		public int getSlotType() {
 			return _slotType;
 		}
-		
-		public int getPosition()
-		{
+
+		public int getPosition() {
 			return _position;
 		}
-		
-		public int getSoulCrystalObjectId()
-		{
+
+		public int getSoulCrystalObjectId() {
 			return _soulCrystalObjectId;
 		}
-		
-		public int getSoulCrystalOption()
-		{
+
+		public int getSoulCrystalOption() {
 			return _soulCrystalOption;
 		}
 	}

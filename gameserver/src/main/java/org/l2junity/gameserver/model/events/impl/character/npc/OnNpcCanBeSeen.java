@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnNpcCanBeSeen implements IBaseEvent
-{
+public class OnNpcCanBeSeen implements IBaseEvent {
 	private final Npc _npc;
 	private final PlayerInstance _activeChar;
-	
-	public OnNpcCanBeSeen(Npc npc, PlayerInstance activeChar)
-	{
+
+	public OnNpcCanBeSeen(Npc npc, PlayerInstance activeChar) {
 		_npc = npc;
 		_activeChar = activeChar;
 	}
-	
-	public Npc getNpc()
-	{
+
+	public Npc getNpc() {
 		return _npc;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_CAN_BE_SEEN;
 	}
 }

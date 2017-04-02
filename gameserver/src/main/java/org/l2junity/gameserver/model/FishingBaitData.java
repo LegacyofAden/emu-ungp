@@ -24,42 +24,35 @@ import java.util.List;
 /**
  * @author bit
  */
-public class FishingBaitData
-{
+public class FishingBaitData {
 	private final int _itemId;
 	private final int _level;
 	private final double _chance;
 	private final List<Integer> _rewards = new ArrayList<>();
-	
-	public FishingBaitData(int itemId, int level, double chance)
-	{
+
+	public FishingBaitData(int itemId, int level, double chance) {
 		_itemId = itemId;
 		_level = level;
 		_chance = chance;
 	}
-	
-	public int getItemId()
-	{
+
+	public int getItemId() {
 		return _itemId;
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return _level;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
-	
-	public List<Integer> getRewards()
-	{
+
+	public List<Integer> getRewards() {
 		return _rewards;
 	}
-	
-	public void addReward(int itemId)
-	{
+
+	public void addReward(int itemId) {
 		_rewards.add(itemId);
 	}
 }

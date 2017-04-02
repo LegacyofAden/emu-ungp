@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.skills;
 
 /**
  * Abnormal Visual Effect enumerated.
+ *
  * @author NosBit
  */
-public enum AbnormalVisualEffect
-{
+public enum AbnormalVisualEffect {
 	DOT_BLEEDING(1),
 	DOT_POISON(2),
 	DOT_FIRE(3),
@@ -194,34 +194,31 @@ public enum AbnormalVisualEffect
 	BIG_BODY_3(174),
 	DRAGON_ULTIMATE(700),
 	CHANGE_HALLOWEEN(1000);
-	
+
 	private final int _clientId;
-	
-	AbnormalVisualEffect(int clientId)
-	{
+
+	AbnormalVisualEffect(int clientId) {
 		_clientId = clientId;
 	}
-	
+
 	/**
 	 * Gets the client id.
+	 *
 	 * @return the client id
 	 */
-	public int getClientId()
-	{
+	public int getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * Finds abnormal visual effect by name.
+	 *
 	 * @param name the name
 	 * @return The abnormal visual effect if its found, {@code null} otherwise
 	 */
-	public static AbnormalVisualEffect findByName(String name)
-	{
-		for (AbnormalVisualEffect abnormalVisualEffect : values())
-		{
-			if (abnormalVisualEffect.name().equalsIgnoreCase(name))
-			{
+	public static AbnormalVisualEffect findByName(String name) {
+		for (AbnormalVisualEffect abnormalVisualEffect : values()) {
+			if (abnormalVisualEffect.name().equalsIgnoreCase(name)) {
 				return abnormalVisualEffect;
 			}
 		}

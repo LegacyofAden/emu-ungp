@@ -24,24 +24,20 @@ import java.util.List;
 /**
  * @author UnAfraid
  */
-public class CrystallizationDataHolder
-{
+public class CrystallizationDataHolder {
 	private final int _id;
 	private final List<ItemChanceHolder> _items;
-	
-	public CrystallizationDataHolder(int id, List<ItemChanceHolder> items)
-	{
+
+	public CrystallizationDataHolder(int id, List<ItemChanceHolder> items) {
 		_id = id;
 		_items = Collections.unmodifiableList(items);
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public List<ItemChanceHolder> getItems()
-	{
+
+	public List<ItemChanceHolder> getItems() {
 		return Collections.unmodifiableList(_items);
 	}
 }

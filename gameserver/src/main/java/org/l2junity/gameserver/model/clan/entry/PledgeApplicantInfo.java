@@ -24,8 +24,7 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author Sdw
  */
-public class PledgeApplicantInfo
-{
+public class PledgeApplicantInfo {
 	private final int _playerId;
 	private final int _requestClanId;
 	private String _playerName;
@@ -33,9 +32,8 @@ public class PledgeApplicantInfo
 	private int _classId;
 	private final int _karma;
 	private final String _message;
-	
-	public PledgeApplicantInfo(int playerId, String playerName, int playerLevel, int karma, int requestClanId, String message)
-	{
+
+	public PledgeApplicantInfo(int playerId, String playerName, int playerLevel, int karma, int requestClanId, String message) {
 		_playerId = playerId;
 		_requestClanId = requestClanId;
 		_playerName = playerName;
@@ -43,61 +41,49 @@ public class PledgeApplicantInfo
 		_karma = karma;
 		_message = message;
 	}
-	
-	public int getPlayerId()
-	{
+
+	public int getPlayerId() {
 		return _playerId;
 	}
-	
-	public int getRequestClanId()
-	{
+
+	public int getRequestClanId() {
 		return _requestClanId;
 	}
-	
-	public String getPlayerName()
-	{
-		if (isOnline() && !getPlayerInstance().getName().equalsIgnoreCase(_playerName))
-		{
+
+	public String getPlayerName() {
+		if (isOnline() && !getPlayerInstance().getName().equalsIgnoreCase(_playerName)) {
 			_playerName = getPlayerInstance().getName();
 		}
 		return _playerName;
 	}
-	
-	public int getPlayerLvl()
-	{
-		if (isOnline() && (getPlayerInstance().getLevel() != _playerLvl))
-		{
+
+	public int getPlayerLvl() {
+		if (isOnline() && (getPlayerInstance().getLevel() != _playerLvl)) {
 			_playerLvl = getPlayerInstance().getLevel();
 		}
 		return _playerLvl;
 	}
-	
-	public int getClassId()
-	{
-		if (isOnline() && (getPlayerInstance().getBaseClass() != _classId))
-		{
+
+	public int getClassId() {
+		if (isOnline() && (getPlayerInstance().getBaseClass() != _classId)) {
 			_classId = getPlayerInstance().getClassId().getId();
 		}
 		return _classId;
 	}
-	
-	public String getMessage()
-	{
+
+	public String getMessage() {
 		return _message;
 	}
-	
-	public int getKarma()
-	{
+
+	public int getKarma() {
 		return _karma;
 	}
-	
-	public PlayerInstance getPlayerInstance()
-	{
+
+	public PlayerInstance getPlayerInstance() {
 		return World.getInstance().getPlayer(_playerId);
 	}
-	
-	public boolean isOnline()
-	{
+
+	public boolean isOnline() {
 		return (getPlayerInstance() != null) && (getPlayerInstance().isOnlineInt() > 0);
 	}
 }

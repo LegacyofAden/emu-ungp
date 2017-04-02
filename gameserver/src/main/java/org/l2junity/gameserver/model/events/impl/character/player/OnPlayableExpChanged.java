@@ -25,37 +25,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayableExpChanged implements IBaseEvent
-{
+public class OnPlayableExpChanged implements IBaseEvent {
 	private final Playable _activeChar;
 	private final long _oldExp;
 	private final long _newExp;
-	
-	public OnPlayableExpChanged(Playable activeChar, long oldExp, long newExp)
-	{
+
+	public OnPlayableExpChanged(Playable activeChar, long oldExp, long newExp) {
 		_activeChar = activeChar;
 		_oldExp = oldExp;
 		_newExp = newExp;
 	}
-	
-	public Playable getActiveChar()
-	{
+
+	public Playable getActiveChar() {
 		return _activeChar;
 	}
-	
-	public long getOldExp()
-	{
+
+	public long getOldExp() {
 		return _oldExp;
 	}
-	
-	public long getNewExp()
-	{
+
+	public long getNewExp() {
 		return _newExp;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYABLE_EXP_CHANGED;
 	}
 }

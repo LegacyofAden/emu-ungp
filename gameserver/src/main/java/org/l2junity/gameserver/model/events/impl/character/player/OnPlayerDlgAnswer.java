@@ -25,45 +25,38 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerDlgAnswer implements IBaseEvent
-{
+public class OnPlayerDlgAnswer implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _messageId;
 	private final int _answer;
 	private final int _requesterId;
-	
-	public OnPlayerDlgAnswer(PlayerInstance activeChar, int messageId, int answer, int requesterId)
-	{
+
+	public OnPlayerDlgAnswer(PlayerInstance activeChar, int messageId, int answer, int requesterId) {
 		_activeChar = activeChar;
 		_messageId = messageId;
 		_answer = answer;
 		_requesterId = requesterId;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getMessageId()
-	{
+
+	public int getMessageId() {
 		return _messageId;
 	}
-	
-	public int getAnswer()
-	{
+
+	public int getAnswer() {
 		return _answer;
 	}
-	
-	public int getRequesterId()
-	{
+
+	public int getRequesterId() {
 		return _requesterId;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_DLG_ANSWER;
 	}
-	
+
 }

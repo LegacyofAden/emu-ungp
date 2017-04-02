@@ -27,25 +27,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class ExResponseCommissionBuyItem implements IClientOutgoingPacket
-{
+public class ExResponseCommissionBuyItem implements IClientOutgoingPacket {
 	public static final ExResponseCommissionBuyItem FAILED = new ExResponseCommissionBuyItem(null);
-	
+
 	private final CommissionItem _commissionItem;
-	
-	public ExResponseCommissionBuyItem(CommissionItem commissionItem)
-	{
+
+	public ExResponseCommissionBuyItem(CommissionItem commissionItem) {
 		_commissionItem = commissionItem;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESPONSE_COMMISSION_BUY_ITEM.writeId(packet);
-		
+
 		packet.writeD(_commissionItem != null ? 1 : 0);
-		if (_commissionItem != null)
-		{
+		if (_commissionItem != null) {
 			final ItemInfo itemInfo = _commissionItem.getItemInfo();
 			packet.writeD(itemInfo.getEnchantLevel());
 			packet.writeD(itemInfo.getItem().getId());

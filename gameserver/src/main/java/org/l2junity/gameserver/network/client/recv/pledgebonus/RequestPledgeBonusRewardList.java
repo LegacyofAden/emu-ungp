@@ -27,23 +27,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestPledgeBonusRewardList implements IClientIncomingPacket
-{
+public class RequestPledgeBonusRewardList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((player == null) || (player.getClan() == null))
-		{
+		if ((player == null) || (player.getClan() == null)) {
 			return;
 		}
-		
+
 		player.sendPacket(new ExPledgeBonusList());
 	}
 }

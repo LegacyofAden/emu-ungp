@@ -24,31 +24,26 @@ import org.l2junity.gameserver.model.skills.AbnormalType;
 /**
  * @author UnAfraid
  */
-public class AlterSkillHolder extends SkillHolder
-{
+public class AlterSkillHolder extends SkillHolder {
 	private static final long serialVersionUID = -5633544975663726126L;
 	private final int _chance;
 	private final AbnormalType _abnormalType;
-	
-	public AlterSkillHolder(int skillId, int skillLevel, int chance, AbnormalType abnormalType)
-	{
+
+	public AlterSkillHolder(int skillId, int skillLevel, int chance, AbnormalType abnormalType) {
 		super(skillId, skillLevel);
 		_chance = chance;
 		_abnormalType = abnormalType;
 	}
-	
-	public int getChance()
-	{
+
+	public int getChance() {
 		return _chance;
 	}
-	
-	public AbnormalType getAbnormalType()
-	{
+
+	public AbnormalType getAbnormalType() {
 		return _abnormalType;
 	}
-	
-	public static AlterSkillHolder fromStatsSet(StatsSet set)
-	{
+
+	public static AlterSkillHolder fromStatsSet(StatsSet set) {
 		return new AlterSkillHolder(set.getInt(".id"), set.getInt(".level", 1), set.getInt(".chance"), set.getEnum(".abnormalType", AbnormalType.class));
 	}
 }

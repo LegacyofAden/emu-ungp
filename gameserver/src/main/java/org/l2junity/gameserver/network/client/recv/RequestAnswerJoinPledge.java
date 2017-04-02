@@ -24,115 +24,95 @@ import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.ClanInvitationRequest;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.ExPledgeCount;
-import org.l2junity.gameserver.network.client.send.JoinPledge;
-import org.l2junity.gameserver.network.client.send.PledgeShowInfoUpdate;
-import org.l2junity.gameserver.network.client.send.PledgeShowMemberListAdd;
-import org.l2junity.gameserver.network.client.send.PledgeShowMemberListAll;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.4.2.1.2.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestAnswerJoinPledge implements IClientIncomingPacket
-{
+public final class RequestAnswerJoinPledge implements IClientIncomingPacket {
 	private int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_answer = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final ClanInvitationRequest request = activeChar.getRequest(ClanInvitationRequest.class);
-		if ((request == null) || request.isProcessing() || !activeChar.removeRequest(request.getClass()))
-		{
+		if ((request == null) || request.isProcessing() || !activeChar.removeRequest(request.getClass())) {
 			return;
 		}
 		request.setProcessing(true);
-		
+
 		final PlayerInstance requestor = request.getActiveChar();
-		if (requestor == null)
-		{
+		if (requestor == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = request.getClan();
 		final L2Clan requestorClan = requestor.getClan();
-		if ((requestorClan == null) || (requestorClan != clan))
-		{
+		if ((requestorClan == null) || (requestorClan != clan)) {
 			return;
 		}
-		
-		if (_answer == 0)
-		{
+
+		if (_answer == 0) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_DIDN_T_RESPOND_TO_S1_S_INVITATION_JOINING_HAS_BEEN_CANCELLED);
 			sm.addString(requestor.getName());
 			activeChar.sendPacket(sm);
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_DID_NOT_RESPOND_INVITATION_TO_THE_CLAN_HAS_BEEN_CANCELLED);
 			sm.addString(activeChar.getName());
 			requestor.sendPacket(sm);
-		}
-		else
-		{
+		} else {
 			// we must double check this cause during response time conditions can be changed, i.e. another player could join clan
-			if (clan.checkClanJoinCondition(requestor, activeChar, request.getPledgeType()))
-			{
+			if (clan.checkClanJoinCondition(requestor, activeChar, request.getPledgeType())) {
 				activeChar.sendPacket(new JoinPledge(requestor.getClanId()));
-				
+
 				activeChar.setPledgeType(request.getPledgeType());
-				if (request.getPledgeType() == L2Clan.SUBUNIT_ACADEMY)
-				{
+				if (request.getPledgeType() == L2Clan.SUBUNIT_ACADEMY) {
 					activeChar.setPowerGrade(9); // adademy
 					activeChar.setLvlJoinedAcademy(activeChar.getLevel());
-				}
-				else
-				{
+				} else {
 					activeChar.setPowerGrade(5); // new member starts at 5, not confirmed
 				}
-				
+
 				clan.addClanMember(activeChar);
 				activeChar.setClanPrivileges(activeChar.getClan().getRankPrivs(activeChar.getPowerGrade()));
 				activeChar.sendPacket(SystemMessageId.ENTERED_THE_CLAN);
-				
+
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_JOINED_THE_CLAN);
 				sm.addString(activeChar.getName());
 				clan.broadcastToOnlineMembers(sm);
-				
-				if (clan.getCastleId() > 0)
-				{
+
+				if (clan.getCastleId() > 0) {
 					CastleManager.getInstance().getCastleByOwner(clan).giveResidentialSkills(activeChar);
 				}
-				if (clan.getFortId() > 0)
-				{
+				if (clan.getFortId() > 0) {
 					FortManager.getInstance().getFortByOwner(clan).giveResidentialSkills(activeChar);
 				}
 				activeChar.sendSkillList();
-				
+
 				clan.broadcastToOtherOnlineMembers(new PledgeShowMemberListAdd(activeChar), activeChar);
 				clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
 				clan.broadcastToOnlineMembers(new ExPledgeCount(clan));
-				
+
 				// this activates the clan tab on the new member
 				PledgeShowMemberListAll.sendAllTo(activeChar);
 				activeChar.setClanJoinExpiryTime(0);
 				activeChar.broadcastUserInfo();
 			}
 		}
-		
+
 		activeChar.getRequest().onRequestResponse();
 	}
 }

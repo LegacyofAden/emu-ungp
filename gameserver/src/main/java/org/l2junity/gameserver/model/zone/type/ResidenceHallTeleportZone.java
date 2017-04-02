@@ -18,78 +18,64 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.commons.util.concurrent.ThreadPool;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Teleport residence zone for clan hall sieges
+ *
  * @author BiggBoss
  */
-public class ResidenceHallTeleportZone extends ResidenceTeleportZone
-{
+public class ResidenceHallTeleportZone extends ResidenceTeleportZone {
 	private int _id;
 	private ScheduledFuture<?> _teleTask;
-	
+
 	/**
 	 * @param id
 	 */
-	public ResidenceHallTeleportZone(int id)
-	{
+	public ResidenceHallTeleportZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		if (name.equals("residenceZoneId"))
-		{
+	public void setParameter(String name, String value) {
+		if (name.equals("residenceZoneId")) {
 			_id = Integer.parseInt(value);
-		}
-		else
-		{
+		} else {
 			super.setParameter(name, value);
 		}
 	}
-	
-	public int getResidenceZoneId()
-	{
+
+	public int getResidenceZoneId() {
 		return _id;
 	}
-	
-	public synchronized void checkTeleporTask()
-	{
-		if ((_teleTask == null) || _teleTask.isDone())
-		{
-			_teleTask = ThreadPool.schedule(new TeleportTask(), 30000, TimeUnit.MILLISECONDS);
+
+	public synchronized void checkTeleporTask() {
+		if ((_teleTask == null) || _teleTask.isDone()) {
+			_teleTask = ThreadPool.getInstance().scheduleGeneral(new TeleportTask(), 30000, TimeUnit.MILLISECONDS);
 		}
 	}
-	
-	protected class TeleportTask implements Runnable
-	{
+
+	protected class TeleportTask implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			int index = 0;
-			if (getSpawns().size() > 1)
-			{
+			if (getSpawns().size() > 1) {
 				index = Rnd.get(getSpawns().size());
 			}
-			
+
 			final Location loc = getSpawns().get(index);
-			if (loc == null)
-			{
+			if (loc == null) {
 				throw new NullPointerException();
 			}
-			
-			for (PlayerInstance pc : getPlayersInside())
-			{
-				if (pc != null)
-				{
+
+			for (PlayerInstance pc : getPlayersInside()) {
+				if (pc != null) {
 					pc.teleToLocation(loc, false);
 				}
 			}

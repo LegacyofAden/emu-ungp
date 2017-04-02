@@ -23,16 +23,13 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author UnAfraid
  */
-public class PrimeShopRequest extends AbstractRequest
-{
-	public PrimeShopRequest(PlayerInstance activeChar)
-	{
+public class PrimeShopRequest extends AbstractRequest {
+	public PrimeShopRequest(PlayerInstance activeChar) {
 		super(activeChar);
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return false;
 	}
 }

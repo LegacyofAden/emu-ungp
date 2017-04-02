@@ -26,44 +26,37 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnNpcEventReceived implements IBaseEvent
-{
+public class OnNpcEventReceived implements IBaseEvent {
 	private final String _eventName;
 	private final Npc _sender;
 	private final Npc _receiver;
 	private final WorldObject _reference;
-	
-	public OnNpcEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference)
-	{
+
+	public OnNpcEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference) {
 		_eventName = eventName;
 		_sender = sender;
 		_receiver = receiver;
 		_reference = reference;
 	}
-	
-	public String getEventName()
-	{
+
+	public String getEventName() {
 		return _eventName;
 	}
-	
-	public Npc getSender()
-	{
+
+	public Npc getSender() {
 		return _sender;
 	}
-	
-	public Npc getReceiver()
-	{
+
+	public Npc getReceiver() {
 		return _receiver;
 	}
-	
-	public WorldObject getReference()
-	{
+
+	public WorldObject getReference() {
 		return _reference;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_EVENT_RECEIVED;
 	}
 }

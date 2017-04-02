@@ -28,30 +28,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class ResponseAuthGameGuard implements IIncomingPacket<ClientHandler>
-{
+public class ResponseAuthGameGuard implements IIncomingPacket<ClientHandler> {
 	private int _connectionId;
 	private byte[] _gameGuard;
-	
+
 	@Override
-	public boolean read(ClientHandler client, PacketReader packet)
-	{
+	public boolean read(ClientHandler client, PacketReader packet) {
 		_connectionId = packet.readD();
 		_gameGuard = packet.readB(16);
 		return true;
 	}
-	
+
 	@Override
-	public void run(ClientHandler client)
-	{
-		if (_connectionId == client.getConnectionId())
-		{
+	public void run(ClientHandler client) {
+		if (_connectionId == client.getConnectionId()) {
 			client.setGameGuard(_gameGuard);
 			client.setConnectionState(ConnectionState.AUTHED_GG);
 			client.sendPacket(new AuthGameGuard(_connectionId));
-		}
-		else
-		{
+		} else {
 			client.close(LoginFail2.ACCESS_FAILED);
 		}
 	}

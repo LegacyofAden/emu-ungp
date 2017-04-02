@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerItemPickup implements IBaseEvent
-{
+public class OnPlayerItemPickup implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
-	
-	public OnPlayerItemPickup(PlayerInstance activeChar, ItemInstance item)
-	{
+
+	public OnPlayerItemPickup(PlayerInstance activeChar, ItemInstance item) {
 		_activeChar = activeChar;
 		_item = item;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_ITEM_PICKUP;
 	}
 }

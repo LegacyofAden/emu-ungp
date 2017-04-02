@@ -22,21 +22,17 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
 
-public class FolkStatus extends NpcStatus
-{
-	public FolkStatus(Npc activeChar)
-	{
+public class FolkStatus extends NpcStatus {
+	public FolkStatus(Npc activeChar) {
 		super(activeChar);
 	}
-	
+
 	@Override
-	public final void reduceHp(double value, Creature attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
-	{
+	public final void reduceHp(double value, Creature attacker, boolean awake, boolean isDOT, boolean isHpConsumption) {
 	}
-	
+
 	@Override
-	public L2NpcInstance getActiveChar()
-	{
+	public L2NpcInstance getActiveChar() {
 		return (L2NpcInstance) super.getActiveChar();
 	}
 }

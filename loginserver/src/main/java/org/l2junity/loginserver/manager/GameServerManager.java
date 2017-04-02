@@ -18,82 +18,61 @@
  */
 package org.l2junity.loginserver.manager;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.l2junity.commons.util.BasePathProvider;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.commons.util.XmlReaderException;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.loginserver.model.GameServer;
 import org.l2junity.loginserver.model.enums.AgeLimit;
 import org.l2junity.loginserver.model.enums.ServerType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
 /**
  * @author NosBit
  */
-public class GameServerManager implements /* ILoginXmlReader */IXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(GameServerManager.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class GameServerManager implements IXmlReader {
+	@Getter(lazy = true)
+	private static final GameServerManager instance = new GameServerManager();
+
 	private final Map<Short, GameServer> _gameServers = new HashMap<>();
-	
-	protected GameServerManager()
-	{
-		load();
-	}
-	
-	public void load()
-	{
-		try
-		{
-			parseFile(BasePathProvider.resolvePath(Paths.get("config/GameServers.xml")));
+
+	protected GameServerManager() {
+		try {
+			parseFile(Paths.get("config/xml/GameServers.xml"));
+		} catch (XmlReaderException | IOException e) {
+			log.error("Error loading game servers.", e);
 		}
-		catch (XmlReaderException | IOException e)
-		{
-			LOGGER.error("Error loading game servers.", e);
-		}
-		LOGGER.info("Loaded {} game servers.", _gameServers.size());
+		log.info("Loaded {} game servers.", _gameServers.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node gameServersNode = doc.getFirstChild(); gameServersNode != null; gameServersNode = gameServersNode.getNextSibling())
-		{
-			if (gameServersNode.getNodeName().equals("gameServers"))
-			{
-				for (Node gameServerNode = gameServersNode.getFirstChild(); gameServerNode != null; gameServerNode = gameServerNode.getNextSibling())
-				{
-					if (gameServerNode.getNodeName().equals("gameServer"))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node gameServersNode = doc.getFirstChild(); gameServersNode != null; gameServersNode = gameServersNode.getNextSibling()) {
+			if (gameServersNode.getNodeName().equals("gameServers")) {
+				for (Node gameServerNode = gameServersNode.getFirstChild(); gameServerNode != null; gameServerNode = gameServerNode.getNextSibling()) {
+					if (gameServerNode.getNodeName().equals("gameServer")) {
 						final NamedNodeMap attributes = gameServerNode.getAttributes();
 						final short id = parseShort(attributes, "id");
 						final String name = parseString(attributes, "name", "");
 						final boolean showing = parseBoolean(attributes, "showing", false);
 						final AgeLimit ageLimit = parseEnum(attributes, AgeLimit.class, "ageLimit", AgeLimit.NONE);
-						
+
 						Set<ServerType> serverTypes = null;
-						for (Node serverTypesNode = gameServerNode.getFirstChild(); serverTypesNode != null; serverTypesNode = serverTypesNode.getNextSibling())
-						{
-							if (serverTypesNode.getNodeName().equals("serverTypes"))
-							{
-								for (Node serverTypeNode = serverTypesNode.getFirstChild(); serverTypeNode != null; serverTypeNode = serverTypeNode.getNextSibling())
-								{
-									if (serverTypeNode.getNodeName().equals("serverType"))
-									{
-										if (serverTypes == null)
-										{
+						for (Node serverTypesNode = gameServerNode.getFirstChild(); serverTypesNode != null; serverTypesNode = serverTypesNode.getNextSibling()) {
+							if (serverTypesNode.getNodeName().equals("serverTypes")) {
+								for (Node serverTypeNode = serverTypesNode.getFirstChild(); serverTypeNode != null; serverTypeNode = serverTypeNode.getNextSibling()) {
+									if (serverTypeNode.getNodeName().equals("serverType")) {
+										if (serverTypes == null) {
 											serverTypes = new HashSet<>();
 										}
 										serverTypes.add(parseEnum(serverTypeNode.getFirstChild(), ServerType.class));
@@ -106,15 +85,5 @@ public class GameServerManager implements /* ILoginXmlReader */IXmlReader
 				}
 			}
 		}
-	}
-	
-	public static GameServerManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final GameServerManager INSTANCE = new GameServerManager();
 	}
 }

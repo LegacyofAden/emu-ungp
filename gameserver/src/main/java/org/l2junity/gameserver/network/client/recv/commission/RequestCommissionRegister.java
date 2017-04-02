@@ -28,16 +28,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestCommissionRegister implements IClientIncomingPacket
-{
+public class RequestCommissionRegister implements IClientIncomingPacket {
 	private int _itemObjectId;
 	private long _pricePerUnit;
 	private long _itemCount;
 	private int _durationType; // -1 = None, 0 = 1 Day, 1 = 3 Days, 2 = 5 Days, 3 = 7 Days
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_itemObjectId = packet.readD();
 		packet.readS(); // Item Name they use it for search we will use server side available names.
 		_pricePerUnit = packet.readQ();
@@ -47,28 +45,24 @@ public class RequestCommissionRegister implements IClientIncomingPacket
 		// packet.readD(); // Unknown
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if ((_durationType < 0) || (_durationType > 3))
-		{
+
+		if ((_durationType < 0) || (_durationType > 3)) {
 			_log.warn("Player " + player + " sent incorrect commission duration type: " + _durationType + ".");
 			return;
 		}
-		
-		if (!CommissionManager.isPlayerAllowedToInteract(player))
-		{
+
+		if (!CommissionManager.isPlayerAllowedToInteract(player)) {
 			client.sendPacket(ExCloseCommission.STATIC_PACKET);
 			return;
 		}
-		
+
 		CommissionManager.getInstance().registerItem(player, _itemObjectId, _itemCount, _pricePerUnit, (byte) ((_durationType * 2) + 1));
 	}
 }

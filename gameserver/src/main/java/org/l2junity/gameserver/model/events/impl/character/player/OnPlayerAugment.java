@@ -27,44 +27,37 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerAugment implements IBaseEvent
-{
+public class OnPlayerAugment implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final VariationInstance _augmentation;
 	private final boolean _isAugment; // true = is being augmented // false = augment is being removed
-	
-	public OnPlayerAugment(PlayerInstance activeChar, ItemInstance item, VariationInstance augment, boolean isAugment)
-	{
+
+	public OnPlayerAugment(PlayerInstance activeChar, ItemInstance item, VariationInstance augment, boolean isAugment) {
 		_activeChar = activeChar;
 		_item = item;
 		_augmentation = augment;
 		_isAugment = isAugment;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public VariationInstance getAugmentation()
-	{
+
+	public VariationInstance getAugmentation() {
 		return _augmentation;
 	}
-	
-	public boolean isAugment()
-	{
+
+	public boolean isAugment() {
 		return _isAugment;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_AUGMENT;
 	}
 }

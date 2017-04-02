@@ -25,21 +25,18 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExCuriousHouseRemainTime implements IClientOutgoingPacket
-{
+public class ExCuriousHouseRemainTime implements IClientOutgoingPacket {
 	final private int _time;
-	
-	public ExCuriousHouseRemainTime(int time)
-	{
+
+	public ExCuriousHouseRemainTime(int time) {
 		_time = time;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CURIOUS_HOUSE_REMAIN_TIME.writeId(packet);
 		packet.writeD(_time);
-		
+
 		return true;
 	}
 }

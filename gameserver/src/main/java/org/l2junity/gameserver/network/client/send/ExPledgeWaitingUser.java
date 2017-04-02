@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExPledgeWaitingUser implements IClientOutgoingPacket
-{
+public class ExPledgeWaitingUser implements IClientOutgoingPacket {
 	private final PledgeApplicantInfo _pledgeRecruitInfo;
-	
-	public ExPledgeWaitingUser(PledgeApplicantInfo pledgeRecruitInfo)
-	{
+
+	public ExPledgeWaitingUser(PledgeApplicantInfo pledgeRecruitInfo) {
 		_pledgeRecruitInfo = pledgeRecruitInfo;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_WAITING_USER.writeId(packet);
-		
+
 		packet.writeD(_pledgeRecruitInfo.getPlayerId());
 		packet.writeS(_pledgeRecruitInfo.getMessage());
 		return true;

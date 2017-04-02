@@ -26,94 +26,81 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
-public class L2EffectPointInstance extends Npc
-{
+public class L2EffectPointInstance extends Npc {
 	private final PlayerInstance _owner;
-	
-	public L2EffectPointInstance(L2NpcTemplate template, Creature owner)
-	{
+
+	public L2EffectPointInstance(L2NpcTemplate template, Creature owner) {
 		super(template);
 		setInstanceType(InstanceType.L2EffectPointInstance);
 		setIsInvul(false);
 		_owner = owner == null ? null : owner.getActingPlayer();
-		if (owner != null)
-		{
+		if (owner != null) {
 			setInstance(owner.getInstanceWorld());
 		}
 	}
-	
+
 	@Override
-	public PlayerInstance getActingPlayer()
-	{
+	public PlayerInstance getActingPlayer() {
 		return _owner;
 	}
-	
+
 	/**
 	 * this is called when a player interacts with this NPC
+	 *
 	 * @param player
 	 */
 	@Override
-	public void onAction(PlayerInstance player, boolean interact)
-	{
+	public void onAction(PlayerInstance player, boolean interact) {
 		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
+
 	@Override
-	public void onActionShift(PlayerInstance player)
-	{
-		if (player == null)
-		{
+	public void onActionShift(PlayerInstance player) {
+		if (player == null) {
 			return;
 		}
-		
+
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
+
 	/**
 	 * Return the L2Party object of its L2PcInstance owner or null.
 	 */
 	@Override
-	public Party getParty()
-	{
-		if (_owner == null)
-		{
+	public Party getParty() {
+		if (_owner == null) {
 			return null;
 		}
-		
+
 		return _owner.getParty();
 	}
-	
+
 	/**
 	 * Return True if the L2Character has a Party in progress.
 	 */
 	@Override
-	public boolean isInParty()
-	{
+	public boolean isInParty() {
 		return (_owner != null) && _owner.isInParty();
 	}
-	
+
 	@Override
-	public int getClanId()
-	{
+	public int getClanId() {
 		return (_owner != null) ? _owner.getClanId() : 0;
 	}
-	
+
 	@Override
-	public int getAllyId()
-	{
+	public int getAllyId() {
 		return (_owner != null) ? _owner.getAllyId() : 0;
 	}
-	
+
 	@Override
-	public final byte getPvpFlag()
-	{
+	public final byte getPvpFlag() {
 		return _owner != null ? _owner.getPvpFlag() : 0;
 	}
-	
+
 	@Override
-	public final Team getTeam()
-	{
+	public final Team getTeam() {
 		return _owner != null ? _owner.getTeam() : Team.NONE;
 	}
 }

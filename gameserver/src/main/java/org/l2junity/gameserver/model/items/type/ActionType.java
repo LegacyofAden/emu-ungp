@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.items.type;
 
 /**
  * Action Type enumerated.
+ *
  * @author nBd
  */
-public enum ActionType
-{
+public enum ActionType {
 	CALC,
 	CALL_SKILL,
 	CAPSULE,

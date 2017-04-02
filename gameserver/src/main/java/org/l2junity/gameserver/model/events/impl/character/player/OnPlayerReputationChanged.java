@@ -25,37 +25,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerReputationChanged implements IBaseEvent
-{
+public class OnPlayerReputationChanged implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _oldReputation;
 	private final int _newReputation;
-	
-	public OnPlayerReputationChanged(PlayerInstance activeChar, int oldReputation, int newReputation)
-	{
+
+	public OnPlayerReputationChanged(PlayerInstance activeChar, int oldReputation, int newReputation) {
 		_activeChar = activeChar;
 		_oldReputation = oldReputation;
 		_newReputation = newReputation;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getOldReputation()
-	{
+
+	public int getOldReputation() {
 		return _oldReputation;
 	}
-	
-	public int getNewReputation()
-	{
+
+	public int getNewReputation() {
 		return _newReputation;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_REPUTATION_CHANGED;
 	}
 }

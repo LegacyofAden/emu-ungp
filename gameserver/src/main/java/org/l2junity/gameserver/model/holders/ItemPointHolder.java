@@ -23,34 +23,30 @@ import org.l2junity.gameserver.model.StatsSet;
 /**
  * @author Sdw
  */
-public class ItemPointHolder extends ItemHolder
-{
+public class ItemPointHolder extends ItemHolder {
 	private static final long serialVersionUID = -4083112025688475858L;
 	private final int _points;
-	
-	public ItemPointHolder(StatsSet params)
-	{
+
+	public ItemPointHolder(StatsSet params) {
 		this(params.getInt("id"), params.getLong("count"), params.getInt("points"));
 	}
-	
-	public ItemPointHolder(int id, long count, int points)
-	{
+
+	public ItemPointHolder(int id, long count, int points) {
 		super(id, count);
 		_points = points;
 	}
-	
+
 	/**
 	 * Gets the point.
+	 *
 	 * @return the number of point to get the item
 	 */
-	public int getPoints()
-	{
+	public int getPoints() {
 		return _points;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[" + getClass().getSimpleName() + "] ID: " + getId() + ", count: " + getCount() + ", points: " + _points;
 	}
 }

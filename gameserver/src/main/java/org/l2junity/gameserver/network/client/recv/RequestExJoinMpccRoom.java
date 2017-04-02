@@ -27,29 +27,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestExJoinMpccRoom implements IClientIncomingPacket
-{
+public class RequestExJoinMpccRoom implements IClientIncomingPacket {
 	private int _roomId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || (activeChar.getMatchingRoom() != null))
-		{
+		if ((activeChar == null) || (activeChar.getMatchingRoom() != null)) {
 			return;
 		}
-		
+
 		final MatchingRoom room = MatchingRoomManager.getInstance().getCCMatchingRoom(_roomId);
-		if (room != null)
-		{
+		if (room != null) {
 			room.addMember(activeChar);
 		}
 	}

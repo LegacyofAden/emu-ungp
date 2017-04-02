@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.config.L2JModsConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.UserInfo;
@@ -27,28 +27,24 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Task dedicated to reward player with fame while standing on siege zone.
+ *
  * @author UnAfraid
  */
-public class FameTask implements Runnable
-{
+public class FameTask implements Runnable {
 	private final PlayerInstance _player;
 	private final int _value;
-	
-	public FameTask(PlayerInstance player, int value)
-	{
+
+	public FameTask(PlayerInstance player, int value) {
 		_player = player;
 		_value = value;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if ((_player == null) || (_player.isDead() && !PlayerConfig.FAME_FOR_DEAD_PLAYERS))
-		{
+	public void run() {
+		if ((_player == null) || (_player.isDead() && !PlayerConfig.FAME_FOR_DEAD_PLAYERS)) {
 			return;
 		}
-		if (((_player.getClient() == null) || _player.getClient().isDetached()) && !L2JModsConfig.OFFLINE_FAME)
-		{
+		if (((_player.getClient() == null) || _player.getClient().isDetached()) && !L2JModsConfig.OFFLINE_FAME) {
 			return;
 		}
 		_player.setFame(_player.getFame() + _value);

@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum ItemLocation
-{
+public enum ItemLocation {
 	VOID,
 	INVENTORY,
 	PAPERDOLL,

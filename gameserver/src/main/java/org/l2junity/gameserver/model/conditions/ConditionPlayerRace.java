@@ -26,26 +26,24 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionPlayerRace.
+ *
  * @author mkizub, Zoey76
  */
-public class ConditionPlayerRace extends Condition
-{
+public class ConditionPlayerRace extends Condition {
 	private final Race[] _races;
-	
+
 	/**
 	 * Instantiates a new condition player race.
+	 *
 	 * @param races the list containing the allowed races.
 	 */
-	public ConditionPlayerRace(Race[] races)
-	{
+	public ConditionPlayerRace(Race[] races) {
 		_races = races;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if ((effector == null) || !effector.isPlayer())
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if ((effector == null) || !effector.isPlayer()) {
 			return false;
 		}
 		return ArrayUtil.contains(_races, effector.getActingPlayer().getRace());

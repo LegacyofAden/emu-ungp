@@ -18,47 +18,41 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import java.util.Objects;
-
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
+import java.util.Objects;
 
 /**
  * @author UnAfraid
  */
-public class PartyRequest extends AbstractRequest
-{
+public class PartyRequest extends AbstractRequest {
 	private final PlayerInstance _targetPlayer;
 	private final Party _party;
-	
-	public PartyRequest(PlayerInstance activeChar, PlayerInstance targetPlayer, Party party)
-	{
+
+	public PartyRequest(PlayerInstance activeChar, PlayerInstance targetPlayer, Party party) {
 		super(activeChar);
 		Objects.requireNonNull(targetPlayer);
 		Objects.requireNonNull(party);
 		_targetPlayer = targetPlayer;
 		_party = party;
 	}
-	
-	public PlayerInstance getTargetPlayer()
-	{
+
+	public PlayerInstance getTargetPlayer() {
 		return _targetPlayer;
 	}
-	
-	public Party getParty()
-	{
+
+	public Party getParty() {
 		return _party;
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return false;
 	}
-	
+
 	@Override
-	public void onTimeout()
-	{
+	public void onTimeout() {
 		super.onTimeout();
 		getActiveChar().removeRequest(getClass());
 		_targetPlayer.removeRequest(getClass());

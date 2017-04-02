@@ -27,25 +27,22 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExValidateLocationInShuttle implements IClientOutgoingPacket
-{
+public class ExValidateLocationInShuttle implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _shipId, _heading;
 	private final Location _loc;
-	
-	public ExValidateLocationInShuttle(PlayerInstance player)
-	{
+
+	public ExValidateLocationInShuttle(PlayerInstance player) {
 		_activeChar = player;
 		_shipId = _activeChar.getShuttle().getObjectId();
 		_loc = player.getInVehiclePosition();
 		_heading = player.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_VALIDATE_LOCATION_IN_SHUTTLE.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_shipId);
 		packet.writeD((int) _loc.getX());

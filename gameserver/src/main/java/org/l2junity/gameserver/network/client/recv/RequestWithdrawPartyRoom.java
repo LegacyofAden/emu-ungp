@@ -27,37 +27,31 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik
  */
-public final class RequestWithdrawPartyRoom implements IClientIncomingPacket
-{
+public final class RequestWithdrawPartyRoom implements IClientIncomingPacket {
 	private int _roomId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final MatchingRoom room = activeChar.getMatchingRoom();
-		if (room == null)
-		{
+		if (room == null) {
 			return;
 		}
-		
-		if ((room.getId() != _roomId) || (room.getRoomType() != MatchingRoomType.PARTY))
-		{
+
+		if ((room.getId() != _roomId) || (room.getRoomType() != MatchingRoomType.PARTY)) {
 			return;
 		}
-		
+
 		room.deleteMember(activeChar, false);
 	}
 }

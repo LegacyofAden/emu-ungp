@@ -18,77 +18,70 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.skills.Skill;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.model.skills.Skill;
-
 /**
  * @author Nyaran
  */
-public class SummonEffectsTable
-{
-	/** Servitors **/
+public class SummonEffectsTable {
+	/**
+	 * Servitors
+	 **/
 	// Map tree
 	// -> key: charObjectId, value: classIndex Map
 	// --> key: classIndex, value: servitors Map
 	// ---> key: servitorSkillId, value: Effects list
 	private final Map<Integer, Map<Integer, Map<Integer, List<SummonEffect>>>> _servitorEffects = new HashMap<>();
-	
-	public Map<Integer, Map<Integer, Map<Integer, List<SummonEffect>>>> getServitorEffectsOwner()
-	{
+
+	public Map<Integer, Map<Integer, Map<Integer, List<SummonEffect>>>> getServitorEffectsOwner() {
 		return _servitorEffects;
 	}
-	
-	public Map<Integer, List<SummonEffect>> getServitorEffects(PlayerInstance owner)
-	{
+
+	public Map<Integer, List<SummonEffect>> getServitorEffects(PlayerInstance owner) {
 		final Map<Integer, Map<Integer, List<SummonEffect>>> servitorMap = _servitorEffects.get(owner.getObjectId());
-		if (servitorMap == null)
-		{
+		if (servitorMap == null) {
 			return null;
 		}
 		return servitorMap.get(owner.getClassIndex());
 	}
-	
-	/** Pets **/
+
+	/**
+	 * Pets
+	 **/
 	private final Map<Integer, List<SummonEffect>> _petEffects = new HashMap<>(); // key: petItemObjectId, value: Effects list
-	
-	public Map<Integer, List<SummonEffect>> getPetEffects()
-	{
+
+	public Map<Integer, List<SummonEffect>> getPetEffects() {
 		return _petEffects;
 	}
-	
-	public static class SummonEffect
-	{
+
+	public static class SummonEffect {
 		Skill _skill;
 		int _effectCurTime;
-		
-		public SummonEffect(Skill skill, int effectCurTime)
-		{
+
+		public SummonEffect(Skill skill, int effectCurTime) {
 			_skill = skill;
 			_effectCurTime = effectCurTime;
 		}
-		
-		public Skill getSkill()
-		{
+
+		public Skill getSkill() {
 			return _skill;
 		}
-		
-		public int getEffectCurTime()
-		{
+
+		public int getEffectCurTime() {
 			return _effectCurTime;
 		}
 	}
-	
-	public static SummonEffectsTable getInstance()
-	{
+
+	public static SummonEffectsTable getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final SummonEffectsTable _instance = new SummonEffectsTable();
 	}
 }

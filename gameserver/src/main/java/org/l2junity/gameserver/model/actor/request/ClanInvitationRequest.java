@@ -18,22 +18,20 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import java.util.Objects;
-
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
+import java.util.Objects;
 
 /**
  * @author Sdw
  */
-public class ClanInvitationRequest extends AbstractRequest
-{
+public class ClanInvitationRequest extends AbstractRequest {
 	private final PlayerInstance _targetPlayer;
 	private final L2Clan _clan;
 	private final int _pledgeType;
-	
-	public ClanInvitationRequest(PlayerInstance activeChar, PlayerInstance targetPlayer, int pledgeType)
-	{
+
+	public ClanInvitationRequest(PlayerInstance activeChar, PlayerInstance targetPlayer, int pledgeType) {
 		super(activeChar);
 		Objects.requireNonNull(targetPlayer);
 		Objects.requireNonNull(activeChar.getClan());
@@ -41,31 +39,26 @@ public class ClanInvitationRequest extends AbstractRequest
 		_clan = activeChar.getClan();
 		_pledgeType = pledgeType;
 	}
-	
-	public PlayerInstance getTargetPlayer()
-	{
+
+	public PlayerInstance getTargetPlayer() {
 		return _targetPlayer;
 	}
-	
-	public L2Clan getClan()
-	{
+
+	public L2Clan getClan() {
 		return _clan;
 	}
-	
-	public int getPledgeType()
-	{
+
+	public int getPledgeType() {
 		return _pledgeType;
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return false;
 	}
-	
+
 	@Override
-	public void onTimeout()
-	{
+	public void onTimeout() {
 		super.onTimeout();
 		getActiveChar().removeRequest(getClass());
 		_targetPlayer.removeRequest(getClass());

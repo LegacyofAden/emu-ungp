@@ -18,75 +18,55 @@
  */
 package org.l2junity.gameserver.taskmanager;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.threading.AbstractPeriodicTaskManager;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.model.actor.Creature;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.loader.ClientAccessLoadGroup;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Despite the name the class is not identical to the original l2jfree class, however serves the same purpose.<br>
  * I just could not stand GameTimeManager handling movement process.
+ *
  * @author lord_rex (the copy-paste work as always, MUHAHA)
  * @author Forsaiken (GameTimeController concept)
  * @author NB4L1 (original l2jfree concept)
  */
-public final class MovementController
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(MovementController.class);
-	
+
+@Slf4j
+@StartupComponent("Service")
+public final class MovementController extends AbstractPeriodicTaskManager {
+	@Getter(lazy = true)
+	private static final MovementController instance = new MovementController();
+
 	private final Set<Creature> _movingObjects = ConcurrentHashMap.newKeySet();
-	
-	protected MovementController()
-	{
+
+	private MovementController() {
+		super(100);
 	}
-	
-	@Load(group = ClientAccessLoadGroup.class)
-	private void load()
-	{
-		ThreadPool.scheduleAtFixedRate(this::run, 100, 100, TimeUnit.MILLISECONDS);
-	}
-	
+
 	/**
 	 * Registers a moving object into the controller.
+	 *
 	 * @param creature
 	 */
-	public void registerMovingObject(Creature creature)
-	{
-		if (creature == null)
-		{
+	public void registerMovingObject(Creature creature) {
+		if (creature == null) {
 			return;
 		}
-		
+
 		_movingObjects.add(creature);
 	}
 
-	public void run()
-	{
-		try
-		{
+	@Override
+	public void run() {
+		try {
 			_movingObjects.removeIf(Creature::updatePosition);
+		} catch (final Throwable e) {
+			log.error("Error while running MovementController task", e);
 		}
-		catch (final Throwable e)
-		{
-			LOGGER.warn("", e);
-		}
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final MovementController INSTANCE = new MovementController();
-	}
-	
-	@InstanceGetter
-	public static MovementController getInstance()
-	{
-		return SingletonHolder.INSTANCE;
 	}
 }

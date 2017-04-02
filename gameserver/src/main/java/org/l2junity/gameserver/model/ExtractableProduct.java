@@ -21,45 +21,40 @@ package org.l2junity.gameserver.model;
 /**
  * @author JIV
  */
-public class ExtractableProduct
-{
+public class ExtractableProduct {
 	private final int _id;
 	private final int _min;
 	private final int _max;
 	private final int _chance;
-	
+
 	/**
 	 * Create Extractable product
-	 * @param id crete item id
-	 * @param min item count max
-	 * @param max item count min
+	 *
+	 * @param id     crete item id
+	 * @param min    item count max
+	 * @param max    item count min
 	 * @param chance chance for creating
 	 */
-	public ExtractableProduct(int id, int min, int max, double chance)
-	{
+	public ExtractableProduct(int id, int min, int max, double chance) {
 		_id = id;
 		_min = min;
 		_max = max;
 		_chance = (int) (chance * 1000);
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public int getMin()
-	{
+
+	public int getMin() {
 		return _min;
 	}
-	
-	public int getMax()
-	{
+
+	public int getMax() {
 		return _max;
 	}
-	
-	public int getChance()
-	{
+
+	public int getChance() {
 		return _chance;
 	}
 }

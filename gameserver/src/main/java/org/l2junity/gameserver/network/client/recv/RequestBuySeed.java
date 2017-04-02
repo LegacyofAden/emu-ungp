@@ -18,13 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
@@ -44,32 +39,32 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author l3x
  */
-public class RequestBuySeed implements IClientIncomingPacket
-{
+public class RequestBuySeed implements IClientIncomingPacket {
 	private static final int BATCH_LENGTH = 12; // length of the one item
 	private int _manorId;
 	private List<ItemHolder> _items = null;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_manorId = packet.readD();
 		final int count = packet.readD();
-		if ((count <= 0) || (count > PlayerConfig.MAX_ITEM_IN_PACKET) || ((count * BATCH_LENGTH) != packet.getReadableBytes()))
-		{
+		if ((count <= 0) || (count > PlayerConfig.MAX_ITEM_IN_PACKET) || ((count * BATCH_LENGTH) != packet.getReadableBytes())) {
 			return false;
 		}
-		
+
 		_items = new ArrayList<>(count);
-		for (int i = 0; i < count; i++)
-		{
+		for (int i = 0; i < count; i++) {
 			final int itemId = packet.readD();
 			final long cnt = packet.readQ();
-			if ((cnt < 1) || (itemId < 1))
-			{
+			if ((cnt < 1) || (itemId < 1)) {
 				_items = null;
 				return false;
 			}
@@ -77,131 +72,107 @@ public class RequestBuySeed implements IClientIncomingPacket
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
-		}
-		else if (!client.getFloodProtectors().getManor().tryPerformAction("BuySeed"))
-		{
+		} else if (!client.getFloodProtectors().getManor().tryPerformAction("BuySeed")) {
 			player.sendMessage("You are buying seeds too fast!");
 			return;
-		}
-		else if (_items == null)
-		{
+		} else if (_items == null) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final CastleManorManager manor = CastleManorManager.getInstance();
-		if (manor.isUnderMaintenance())
-		{
+		if (manor.isUnderMaintenance()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final Castle castle = CastleManager.getInstance().getCastleById(_manorId);
-		if (castle == null)
-		{
+		if (castle == null) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final Npc manager = player.getLastFolkNPC();
-		if (!(manager instanceof L2MerchantInstance) || !manager.canInteract(player) || (manager.getParameters().getInt("manor_id", -1) != _manorId))
-		{
+		if (!(manager instanceof L2MerchantInstance) || !manager.canInteract(player) || (manager.getParameters().getInt("manor_id", -1) != _manorId)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		long totalPrice = 0;
 		int slots = 0;
 		int totalWeight = 0;
-		
+
 		final Map<Integer, SeedProduction> _productInfo = new HashMap<>();
-		for (ItemHolder ih : _items)
-		{
+		for (ItemHolder ih : _items) {
 			final SeedProduction sp = manor.getSeedProduct(_manorId, ih.getId(), false);
-			if ((sp == null) || (sp.getPrice() <= 0) || (sp.getAmount() < ih.getCount()) || !ItemContainer.validateCount(Inventory.ADENA_ID, ih.getCount() * sp.getPrice()))
-			{
+			if ((sp == null) || (sp.getPrice() <= 0) || (sp.getAmount() < ih.getCount()) || !ItemContainer.validateCount(Inventory.ADENA_ID, ih.getCount() * sp.getPrice())) {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			
+
 			// Calculate price
 			totalPrice += (sp.getPrice() * ih.getCount());
-			if (!ItemContainer.validateCount(Inventory.ADENA_ID, totalPrice))
-			{
+			if (!ItemContainer.validateCount(Inventory.ADENA_ID, totalPrice)) {
 				Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " tried to purchase " + totalPrice + " adena worth of goods.", GeneralConfig.DEFAULT_PUNISH);
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			
+
 			// Calculate weight
 			final L2Item template = ItemTable.getInstance().getTemplate(ih.getId());
 			totalWeight += ih.getCount() * template.getWeight();
-			
+
 			// Calculate slots
-			if (!template.isStackable())
-			{
+			if (!template.isStackable()) {
 				slots += ih.getCount();
-			}
-			else if (player.getInventory().getItemByItemId(ih.getId()) == null)
-			{
+			} else if (player.getInventory().getItemByItemId(ih.getId()) == null) {
 				slots++;
 			}
 			_productInfo.put(ih.getId(), sp);
 		}
-		
-		if (!player.getInventory().validateWeight(totalWeight))
-		{
+
+		if (!player.getInventory().validateWeight(totalWeight)) {
 			player.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_THE_WEIGHT_LIMIT);
 			return;
-		}
-		else if (!player.getInventory().validateCapacity(slots))
-		{
+		} else if (!player.getInventory().validateCapacity(slots)) {
 			player.sendPacket(SystemMessageId.YOUR_INVENTORY_IS_FULL);
 			return;
-		}
-		else if ((totalPrice < 0) || (player.getAdena() < totalPrice))
-		{
+		} else if ((totalPrice < 0) || (player.getAdena() < totalPrice)) {
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 			return;
 		}
-		
+
 		// Proceed the purchase
-		for (ItemHolder i : _items)
-		{
+		for (ItemHolder i : _items) {
 			final SeedProduction sp = _productInfo.get(i.getId());
 			final long price = sp.getPrice() * i.getCount();
-			
+
 			// Take Adena and decrease seed amount
-			if (!sp.decreaseAmount(i.getCount()) || !player.reduceAdena("Buy", price, player, false))
-			{
+			if (!sp.decreaseAmount(i.getCount()) || !player.reduceAdena("Buy", price, player, false)) {
 				// failed buy, reduce total price
 				totalPrice -= price;
 				continue;
 			}
-			
+
 			// Add item to player's inventory
 			player.addItem("Buy", i.getId(), i.getCount(), manager, true);
 		}
-		
+
 		// Adding to treasury for Manor Castle
-		if (totalPrice > 0)
-		{
+		if (totalPrice > 0) {
 			castle.addToTreasuryNoTax(totalPrice);
-			
+
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_ADENA_DISAPPEARED);
 			sm.addLong(totalPrice);
 			player.sendPacket(sm);
-			
-			if (GeneralConfig.ALT_MANOR_SAVE_ALL_ACTIONS)
-			{
+
+			if (GeneralConfig.ALT_MANOR_SAVE_ALL_ACTIONS) {
 				manor.updateCurrentProduction(_manorId, _productInfo.values());
 			}
 		}

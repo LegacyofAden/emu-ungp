@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.options;
 /**
  * @author Pere
  */
-public enum VariationWeaponType
-{
+public enum VariationWeaponType {
 	WARRIOR,
 	MAGE
 }

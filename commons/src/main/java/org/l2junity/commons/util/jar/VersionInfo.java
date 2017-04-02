@@ -29,82 +29,79 @@ import java.util.jar.JarFile;
 
 /**
  * A simple class to gather the manifest version information of JAR files.
+ *
  * @author lord_rex
  */
-public final class VersionInfo
-{
-	/** A default string for the cases when version info cannot be retrieved. (IDE Mode) */
+public final class VersionInfo {
+	/**
+	 * A default string for the cases when version info cannot be retrieved. (IDE Mode)
+	 */
 	private static final String IDE_MODE = "Version Info - IDE Mode.";
-	
+
 	private String _filename = null;
 	private final Map<String, String> _manifestAttributes;
-	
+
 	/**
 	 * Gather version information from the class.
+	 *
 	 * @param clazz
 	 */
-	public VersionInfo(final Class<?> clazz)
-	{
+	public VersionInfo(final Class<?> clazz) {
 		_manifestAttributes = new HashMap<>();
-		
+
 		final File file = Locator.getClassSource(clazz);
-		if (!file.isFile())
-		{
+		if (!file.isFile()) {
 			return;
 		}
-		
+
 		final String filename = file.getName();
 		_filename = filename.substring(0, filename.lastIndexOf("."));
-		
-		try (final JarFile jarFile = new JarFile(file);)
-		{
+
+		try (final JarFile jarFile = new JarFile(file);) {
 			final Attributes attributes = jarFile.getManifest().getMainAttributes();
 			attributes.entrySet().forEach((entry) -> _manifestAttributes.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			// ignore, IDE mode, etc...
 		}
 	}
-	
+
 	/**
 	 * Gets a manifest from the manifest attribute map, shows {@link #IDE_MODE} if null.
+	 *
 	 * @param name
 	 * @return manifest info
 	 */
-	public String getManifest(final String name)
-	{
+	public String getManifest(final String name) {
 		return _manifestAttributes.getOrDefault(name, IDE_MODE);
 	}
-	
+
 	/**
 	 * Gets a pretty formatted class info.
+	 *
 	 * @return formatted class info
 	 */
-	public String getFormattedClassInfo()
-	{
-		if ((_filename == null) || _filename.isEmpty())
-		{
+	public String getFormattedClassInfo() {
+		if ((_filename == null) || _filename.isEmpty()) {
 			return IDE_MODE;
 		}
-		
+
 		final StringBuilder sb = new StringBuilder();
-		
+
 		sb.append(_filename).append(": ");
 		sb.append(getManifest(VersionInfoManifest.GIT_HASH_SHORT)).append(", ");
 		sb.append(getManifest(VersionInfoManifest.GIT_COMMIT_COUNT)).append(", ");
 		sb.append(getManifest(VersionInfoManifest.IMPLEMENTATION_TIME));
 		sb.append(" [ ").append(getManifest(VersionInfoManifest.GIT_BRANCH)).append(" ]");
-		
+
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Standard manifest attribute constants.
+	 *
 	 * @author lord_rex
 	 */
-	public interface VersionInfoManifest
-	{
+	public interface VersionInfoManifest {
 		String CREATED_BY = "Created-By";
 		String BUILT_BY = "Built-By";
 		String IMPLEMENTATION_URL = "Implementation-URL";
@@ -114,21 +111,20 @@ public final class VersionInfo
 		String GIT_HASH_SHORT = "Git-Hash-Short";
 		String GIT_COMMIT_COUNT = "Git-Commit-Count";
 	}
-	
+
 	/**
 	 * Gather version info of multiply classes. You can use it to gather information of Commons/Network/MMOCore/GeoDriver/ETC from LS/GS or any other application.
+	 *
 	 * @param classes
 	 * @return string array of version info
 	 */
-	public static List<String> of(final Class<?>... classes)
-	{
+	public static List<String> of(final Class<?>... classes) {
 		List<String> versions = new ArrayList<>();
-		for (final Class<?> clazz : classes)
-		{
+		for (final Class<?> clazz : classes) {
 			final VersionInfo versionInfo = new VersionInfo(clazz);
 			versions.add(versionInfo.getFormattedClassInfo());
 		}
-		
+
 		return versions;
 	}
 }

@@ -18,10 +18,6 @@
  */
 package org.l2junity.loginserver.db;
 
-import java.io.Closeable;
-import java.sql.Timestamp;
-import java.util.List;
-
 import org.l2junity.loginserver.db.dto.Account;
 import org.l2junity.loginserver.db.dto.AccountBan;
 import org.l2junity.loginserver.db.mapper.AccountBanMapper;
@@ -31,30 +27,33 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
+import java.io.Closeable;
+import java.sql.Timestamp;
+import java.util.List;
+
 /**
  * @author NosBit
  */
 @RegisterMapper(AccountBanMapper.class)
-public interface AccountBansDAO extends Closeable
-{
+public interface AccountBansDAO extends Closeable {
 	@SqlUpdate("INSERT INTO `account_bans`(`account_id`, `expires_at`, `reason`) VALUES(:accountId, :expiresAt, :reason)")
 	long insert(@Bind("accountId") long accountId, @Bind("expiresAt") Timestamp expiresAt, @Bind("reason") String reason);
-	
+
 	@SqlUpdate("UPDATE `account_bans` SET `active` = :active WHERE `id` = :id")
 	int updateActive(@Bind("id") long id, @Bind("active") boolean active);
-	
+
 	@SqlQuery("SELECT * FROM `account_bans` WHERE `account_id` = :accountId")
 	List<AccountBan> findByAccountId(@Bind("accountId") long accountId);
-	
+
 	@SqlQuery("SELECT * FROM `account_bans` WHERE `account_id` = :id")
 	List<AccountBan> findByAccountId(@BindBean Account account);
-	
+
 	@SqlQuery("SELECT * FROM `account_bans` WHERE `active` = TRUE AND `expires_at` > CURRENT_TIMESTAMP AND `account_id` = :accountId")
 	List<AccountBan> findActiveByAccountId(@Bind("accountId") long accountId);
-	
+
 	@SqlQuery("SELECT * FROM `account_bans` WHERE `active` = TRUE AND `expires_at` > CURRENT_TIMESTAMP AND `account_id` = :id")
 	List<AccountBan> findActiveByAccountId(@BindBean Account account);
-	
+
 	@Override
 	void close();
 }

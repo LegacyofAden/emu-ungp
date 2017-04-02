@@ -24,40 +24,34 @@ import org.l2junity.gameserver.model.StatsSet;
 /**
  * @author Sdw
  */
-public class SuperpointNode extends Location
-{
+public class SuperpointNode extends Location {
 	private static final long serialVersionUID = 7383275335261090301L;
 	private final int _id;
 	private final int _fStringId;
 	private final int _socialId;
 	private final int _delay;
-	
-	public SuperpointNode(StatsSet set)
-	{
+
+	public SuperpointNode(StatsSet set) {
 		super(set.getInt("x"), set.getInt("y"), set.getInt("z"));
 		_id = set.getInt("id");
 		_fStringId = set.getInt("fstring_index");
 		_socialId = set.getInt("social_number");
 		_delay = set.getInt("delay");
 	}
-	
-	public int getFStringId()
-	{
+
+	public int getFStringId() {
 		return _fStringId;
 	}
-	
-	public int getSocialId()
-	{
+
+	public int getSocialId() {
 		return _socialId;
 	}
-	
-	public int getDelay()
-	{
+
+	public int getDelay() {
 		return _delay;
 	}
-	
-	public int getNodeId()
-	{
+
+	public int getNodeId() {
 		return _id;
 	}
 }

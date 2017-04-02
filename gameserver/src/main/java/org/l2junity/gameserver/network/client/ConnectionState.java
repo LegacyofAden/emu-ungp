@@ -23,8 +23,7 @@ import org.l2junity.network.IConnectionState;
 /**
  * @author Nos
  */
-public enum ConnectionState implements IConnectionState
-{
+public enum ConnectionState implements IConnectionState {
 	CONNECTED,
 	DISCONNECTED,
 	CLOSING,

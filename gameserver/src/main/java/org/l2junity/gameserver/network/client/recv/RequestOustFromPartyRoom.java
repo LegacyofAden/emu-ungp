@@ -29,49 +29,41 @@ import org.l2junity.network.PacketReader;
 
 /**
  * format (ch) d
+ *
  * @author -Wooden-
  */
-public final class RequestOustFromPartyRoom implements IClientIncomingPacket
-{
+public final class RequestOustFromPartyRoom implements IClientIncomingPacket {
 	private int _charObjId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_charObjId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		PlayerInstance member = World.getInstance().getPlayer(_charObjId);
-		if (member == null)
-		{
+		if (member == null) {
 			return;
 		}
-		
+
 		final MatchingRoom room = player.getMatchingRoom();
-		if ((room == null) || (room.getRoomType() != MatchingRoomType.PARTY) || (room.getLeader() != player) || (player == member))
-		{
+		if ((room == null) || (room.getRoomType() != MatchingRoomType.PARTY) || (room.getLeader() != player) || (player == member)) {
 			return;
 		}
-		
+
 		final Party playerParty = player.getParty();
 		final Party memberParty = player.getParty();
-		
-		if ((playerParty != null) && (memberParty != null) && (playerParty.getLeaderObjectId() == memberParty.getLeaderObjectId()))
-		{
+
+		if ((playerParty != null) && (memberParty != null) && (playerParty.getLeaderObjectId() == memberParty.getLeaderObjectId())) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_DISMISS_A_PARTY_MEMBER_BY_FORCE);
-		}
-		else
-		{
+		} else {
 			room.deleteMember(member, true);
 		}
 	}

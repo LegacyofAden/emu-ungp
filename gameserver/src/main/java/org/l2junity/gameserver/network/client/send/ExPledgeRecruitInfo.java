@@ -28,32 +28,26 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExPledgeRecruitInfo implements IClientOutgoingPacket
-{
+public class ExPledgeRecruitInfo implements IClientOutgoingPacket {
 	private final PledgeRecruitInfo _pledgeRecruitInfo;
 	private final L2Clan _clan;
-	
-	public ExPledgeRecruitInfo(int clanId)
-	{
+
+	public ExPledgeRecruitInfo(int clanId) {
 		_pledgeRecruitInfo = ClanEntryManager.getInstance().getClanById(clanId);
 		_clan = ClanTable.getInstance().getClan(clanId);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_RECRUIT_INFO.writeId(packet);
-		
-		if (_pledgeRecruitInfo == null)
-		{
+
+		if (_pledgeRecruitInfo == null) {
 			packet.writeS(_clan.getName());
 			packet.writeS(_clan.getLeaderName());
 			packet.writeD(_clan.getLevel());
 			packet.writeD(_clan.getMembersCount());
 			packet.writeD(0x00);
-		}
-		else
-		{
+		} else {
 			packet.writeS(_pledgeRecruitInfo.getClan().getName());
 			packet.writeS(_pledgeRecruitInfo.getClan().getLeaderName());
 			packet.writeD(_pledgeRecruitInfo.getClan().getLevel());

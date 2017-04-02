@@ -27,8 +27,7 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeRecruitBoardSearch implements IClientIncomingPacket
-{
+public class RequestPledgeRecruitBoardSearch implements IClientIncomingPacket {
 	private int _clanLevel;
 	private int _karma;
 	private int _type;
@@ -36,10 +35,9 @@ public class RequestPledgeRecruitBoardSearch implements IClientIncomingPacket
 	private int _sort;
 	private boolean _descending;
 	private int _page;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_clanLevel = packet.readD();
 		_karma = packet.readD();
 		_type = packet.readD();
@@ -49,32 +47,24 @@ public class RequestPledgeRecruitBoardSearch implements IClientIncomingPacket
 		_page = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		
-		if (activeChar == null)
-		{
+
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (_query.isEmpty())
-		{
-			if ((_karma < 0) && (_clanLevel < 0))
-			{
+
+		if (_query.isEmpty()) {
+			if ((_karma < 0) && (_clanLevel < 0)) {
 				activeChar.sendPacket(new ExPledgeRecruitBoardSearch(ClanEntryManager.getInstance().getUnSortedClanList(), _page));
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(new ExPledgeRecruitBoardSearch(ClanEntryManager.getInstance().getSortedClanList(_clanLevel, _karma, _sort, _descending), _page));
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(new ExPledgeRecruitBoardSearch(ClanEntryManager.getInstance().getSortedClanListByName(_query.toLowerCase(), _type), _page));
 		}
 	}
-	
+
 }

@@ -24,27 +24,24 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class BlockedAccountWithMsg implements IOutgoingPacket
-{
+public class BlockedAccountWithMsg implements IOutgoingPacket {
 	private final String _message;
-	
-	public BlockedAccountWithMsg(String message)
-	{
+
+	public BlockedAccountWithMsg(String message) {
 		_message = message;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.network.IOutgoingPacket#write(org.l2junity.network.PacketWriter)
 	 */
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x09);
 		packet.writeC(1); // The following [hS] is read in a loop but only last one is displayed so i sent only 1.
 		packet.writeH(1); // Unused by client
 		packet.writeS(_message);
 		return true;
 	}
-	
+
 }

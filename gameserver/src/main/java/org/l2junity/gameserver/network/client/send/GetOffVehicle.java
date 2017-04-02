@@ -24,10 +24,9 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Maktakien
  */
-public class GetOffVehicle implements IClientOutgoingPacket
-{
+public class GetOffVehicle implements IClientOutgoingPacket {
 	private final int _charObjId, _boatObjId, _x, _y, _z;
-	
+
 	/**
 	 * @param charObjId
 	 * @param boatObjId
@@ -35,20 +34,18 @@ public class GetOffVehicle implements IClientOutgoingPacket
 	 * @param y
 	 * @param z
 	 */
-	public GetOffVehicle(int charObjId, int boatObjId, int x, int y, int z)
-	{
+	public GetOffVehicle(int charObjId, int boatObjId, int x, int y, int z) {
 		_charObjId = charObjId;
 		_boatObjId = boatObjId;
 		_x = x;
 		_y = y;
 		_z = z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GET_OFF_VEHICLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_boatObjId);
 		packet.writeD(_x);

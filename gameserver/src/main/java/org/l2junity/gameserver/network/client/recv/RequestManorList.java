@@ -25,17 +25,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author l3x
  */
-public class RequestManorList implements IClientIncomingPacket
-{
+public class RequestManorList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		client.sendPacket(ExSendManorList.STATIC_PACKET);
 	}
 }

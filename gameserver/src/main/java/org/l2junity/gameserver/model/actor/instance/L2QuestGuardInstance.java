@@ -29,75 +29,63 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * This class extends Guard class for quests, that require tracking of onAttack and onKill events from monsters' attacks.
+ *
  * @author GKR
  */
-public final class L2QuestGuardInstance extends L2GuardInstance
-{
+public final class L2QuestGuardInstance extends L2GuardInstance {
 	private boolean _isAutoAttackable = true;
 	private boolean _isPassive = false;
-	
-	public L2QuestGuardInstance(L2NpcTemplate template)
-	{
+
+	public L2QuestGuardInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2QuestGuardInstance);
 	}
-	
+
 	@Override
-	public void addDamage(Creature attacker, int damage, Skill skill)
-	{
+	public void addDamage(Creature attacker, int damage, Skill skill) {
 		super.addDamage(attacker, damage, skill);
-		
-		if (attacker instanceof Attackable)
-		{
+
+		if (attacker instanceof Attackable) {
 			EventDispatcher.getInstance().notifyEventAsync(new OnAttackableAttack(null, this, damage, skill, false), this);
 		}
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
+	public boolean doDie(Creature killer) {
 		// Kill the L2NpcInstance (the corpse disappeared after 7 seconds)
-		if (!super.doDie(killer))
-		{
+		if (!super.doDie(killer)) {
 			return false;
 		}
-		
-		if (killer instanceof Attackable)
-		{
+
+		if (killer instanceof Attackable) {
 			// Delayed notification
 			EventDispatcher.getInstance().notifyEventAsync(new OnAttackableKill(null, this, false), this);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void addDamageHate(Creature attacker, int damage, int aggro)
-	{
-		if (!_isPassive && !(attacker instanceof PlayerInstance))
-		{
+	public void addDamageHate(Creature attacker, int damage, int aggro) {
+		if (!_isPassive && !(attacker instanceof PlayerInstance)) {
 			super.addDamageHate(attacker, damage, aggro);
 		}
 	}
-	
-	public void setPassive(boolean state)
-	{
+
+	public void setPassive(boolean state) {
 		_isPassive = state;
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return _isAutoAttackable && !(attacker instanceof PlayerInstance);
 	}
-	
+
 	@Override
-	public void setAutoAttackable(boolean state)
-	{
+	public void setAutoAttackable(boolean state) {
 		_isAutoAttackable = state;
 	}
-	
-	public boolean isPassive()
-	{
+
+	public boolean isPassive() {
 		return _isPassive;
 	}
 }

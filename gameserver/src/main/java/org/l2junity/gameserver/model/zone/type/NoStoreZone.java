@@ -24,29 +24,24 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * Zone where store is not allowed.
+ *
  * @author fordfrog
  */
-public class NoStoreZone extends ZoneType
-{
-	public NoStoreZone(final int id)
-	{
+public class NoStoreZone extends ZoneType {
+	public NoStoreZone(final int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(final Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onEnter(final Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.NO_STORE, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(final Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(final Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.NO_STORE, false);
 		}
 	}

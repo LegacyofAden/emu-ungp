@@ -18,35 +18,29 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class AbnormalStatusUpdate implements IClientOutgoingPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class AbnormalStatusUpdate implements IClientOutgoingPacket {
 	private final List<BuffInfo> _effects = new ArrayList<>();
-	
-	public void addSkill(BuffInfo info)
-	{
-		if (!info.getSkill().isHealingPotionSkill())
-		{
+
+	public void addSkill(BuffInfo info) {
+		if (!info.getSkill().isHealingPotionSkill()) {
 			_effects.add(info);
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ABNORMAL_STATUS_UPDATE.writeId(packet);
-		
+
 		packet.writeH(_effects.size());
-		for (BuffInfo info : _effects)
-		{
-			if ((info != null) && info.isInUse())
-			{
+		for (BuffInfo info : _effects) {
+			if ((info != null) && info.isInUse()) {
 				packet.writeD(info.getSkill().getDisplayId());
 				packet.writeH(info.getSkill().getDisplayLevel());
 				packet.writeH(info.getSkill().getSubLevel());

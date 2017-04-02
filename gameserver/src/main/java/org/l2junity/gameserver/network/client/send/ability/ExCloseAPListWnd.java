@@ -25,19 +25,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExCloseAPListWnd implements IClientOutgoingPacket
-{
+public class ExCloseAPListWnd implements IClientOutgoingPacket {
 	public static ExCloseAPListWnd STATIC_PACKET = new ExCloseAPListWnd();
-	
-	private ExCloseAPListWnd()
-	{
+
+	private ExCloseAPListWnd() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CLOSE_AP_LIST_WND.writeId(packet);
-		
+
 		return true;
 	}
 }

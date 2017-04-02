@@ -26,38 +26,32 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 /**
  * @author UnAfraid
  */
-public class OnCreatureZoneExit implements IBaseEvent
-{
+public class OnCreatureZoneExit implements IBaseEvent {
 	private final Creature _creature;
 	private final ZoneType _zone;
 	private final boolean _isLogout;
-	
-	public OnCreatureZoneExit(Creature creature, ZoneType zone, boolean isLogout)
-	{
+
+	public OnCreatureZoneExit(Creature creature, ZoneType zone, boolean isLogout) {
 		_creature = creature;
 		_zone = zone;
 		_isLogout = isLogout;
 	}
-	
-	public Creature getCreature()
-	{
+
+	public Creature getCreature() {
 		return _creature;
 	}
-	
-	public ZoneType getZone()
-	{
+
+	public ZoneType getZone() {
 		return _zone;
 	}
-	
-	public boolean isLogout()
-	{
+
+	public boolean isLogout() {
 		return _isLogout;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_ZONE_EXIT;
 	}
-	
+
 }

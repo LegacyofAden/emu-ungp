@@ -18,58 +18,51 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.model.SeedProduction;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author l3x
  */
-public class ExShowSeedSetting implements IClientOutgoingPacket
-{
+public class ExShowSeedSetting implements IClientOutgoingPacket {
 	private final int _manorId;
 	private final Set<L2Seed> _seeds;
 	private final Map<Integer, SeedProduction> _current = new HashMap<>();
 	private final Map<Integer, SeedProduction> _next = new HashMap<>();
-	
-	public ExShowSeedSetting(int manorId)
-	{
+
+	public ExShowSeedSetting(int manorId) {
 		final CastleManorManager manor = CastleManorManager.getInstance();
 		_manorId = manorId;
 		_seeds = manor.getSeedsForCastle(_manorId);
-		for (L2Seed s : _seeds)
-		{
+		for (L2Seed s : _seeds) {
 			// Current period
 			SeedProduction sp = manor.getSeedProduct(manorId, s.getSeedId(), false);
-			if (sp != null)
-			{
+			if (sp != null) {
 				_current.put(s.getSeedId(), sp);
 			}
 			// Next period
 			sp = manor.getSeedProduct(manorId, s.getSeedId(), true);
-			if (sp != null)
-			{
+			if (sp != null) {
 				_next.put(s.getSeedId(), sp);
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_SEED_SETTING.writeId(packet);
-		
+
 		packet.writeD(_manorId); // manor id
 		packet.writeD(_seeds.size()); // size
-		
-		for (L2Seed s : _seeds)
-		{
+
+		for (L2Seed s : _seeds) {
 			packet.writeD(s.getSeedId()); // seed id
 			packet.writeD(s.getLevel()); // level
 			packet.writeC(1);
@@ -81,26 +74,20 @@ public class ExShowSeedSetting implements IClientOutgoingPacket
 			packet.writeD((int) s.getSeedMinPrice()); // min seed price
 			packet.writeD((int) s.getSeedMaxPrice()); // max seed price
 			// Current period
-			if (_current.containsKey(s.getSeedId()))
-			{
+			if (_current.containsKey(s.getSeedId())) {
 				final SeedProduction sp = _current.get(s.getSeedId());
 				packet.writeQ(sp.getStartAmount()); // sales
 				packet.writeQ(sp.getPrice()); // price
-			}
-			else
-			{
+			} else {
 				packet.writeQ(0);
 				packet.writeQ(0);
 			}
 			// Next period
-			if (_next.containsKey(s.getSeedId()))
-			{
+			if (_next.containsKey(s.getSeedId())) {
 				final SeedProduction sp = _next.get(s.getSeedId());
 				packet.writeQ(sp.getStartAmount()); // sales
 				packet.writeQ(sp.getPrice()); // price
-			}
-			else
-			{
+			} else {
 				packet.writeQ(0);
 				packet.writeQ(0);
 			}

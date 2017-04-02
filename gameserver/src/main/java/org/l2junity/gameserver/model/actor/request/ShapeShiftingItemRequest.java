@@ -24,52 +24,43 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author Sdw
  */
-public class ShapeShiftingItemRequest extends AbstractRequest
-{
+public class ShapeShiftingItemRequest extends AbstractRequest {
 	private ItemInstance _appearanceStone;
 	private ItemInstance _appearanceExtractItem;
-	
-	public ShapeShiftingItemRequest(PlayerInstance activeChar, ItemInstance appearanceStone)
-	{
+
+	public ShapeShiftingItemRequest(PlayerInstance activeChar, ItemInstance appearanceStone) {
 		super(activeChar);
 		_appearanceStone = appearanceStone;
 	}
-	
-	public ItemInstance getAppearanceStone()
-	{
+
+	public ItemInstance getAppearanceStone() {
 		return _appearanceStone;
 	}
-	
-	public void setAppearanceStone(ItemInstance appearanceStone)
-	{
+
+	public void setAppearanceStone(ItemInstance appearanceStone) {
 		_appearanceStone = appearanceStone;
 	}
-	
-	public ItemInstance getAppearanceExtractItem()
-	{
+
+	public ItemInstance getAppearanceExtractItem() {
 		return _appearanceExtractItem;
 	}
-	
-	public void setAppearanceExtractItem(ItemInstance appearanceExtractItem)
-	{
+
+	public void setAppearanceExtractItem(ItemInstance appearanceExtractItem) {
 		_appearanceExtractItem = appearanceExtractItem;
 	}
-	
+
 	@Override
-	public boolean isItemRequest()
-	{
+	public boolean isItemRequest() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean canWorkWith(AbstractRequest request)
-	{
+	public boolean canWorkWith(AbstractRequest request) {
 		return !request.isItemRequest();
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return (objectId > 0) && ((objectId == _appearanceStone.getObjectId()) || (objectId == _appearanceExtractItem.getObjectId()));
 	}
 }

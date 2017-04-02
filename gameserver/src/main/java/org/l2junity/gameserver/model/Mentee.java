@@ -18,119 +18,96 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
  * @author UnAfraid
  */
-public class Mentee
-{
+public class Mentee {
 	private static final Logger _log = LoggerFactory.getLogger(Mentee.class);
-	
+
 	private final int _objectId;
 	private String _name;
 	private int _classId;
 	private int _currentLevel;
-	
-	public Mentee(int objectId)
-	{
+
+	public Mentee(int objectId) {
 		_objectId = objectId;
 		load();
 	}
-	
-	public void load()
-	{
+
+	public void load() {
 		PlayerInstance player = getPlayerInstance();
 		if (player == null) // Only if player is offline
 		{
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				PreparedStatement statement = con.prepareStatement("SELECT char_name, level, base_class FROM characters WHERE charId = ?"))
-			{
+				 PreparedStatement statement = con.prepareStatement("SELECT char_name, level, base_class FROM characters WHERE charId = ?")) {
 				statement.setInt(1, getObjectId());
-				try (ResultSet rset = statement.executeQuery())
-				{
-					if (rset.next())
-					{
+				try (ResultSet rset = statement.executeQuery()) {
+					if (rset.next()) {
 						_name = rset.getString("char_name");
 						_classId = rset.getInt("base_class");
 						_currentLevel = rset.getInt("level");
 					}
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				_log.warn(e.getMessage(), e);
 			}
-		}
-		else
-		{
+		} else {
 			_name = player.getName();
 			_classId = player.getBaseClass();
 			_currentLevel = player.getLevel();
 		}
 	}
-	
-	public int getObjectId()
-	{
+
+	public int getObjectId() {
 		return _objectId;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public int getClassId()
-	{
-		if (isOnline())
-		{
-			if (getPlayerInstance().getClassId().getId() != _classId)
-			{
+
+	public int getClassId() {
+		if (isOnline()) {
+			if (getPlayerInstance().getClassId().getId() != _classId) {
 				_classId = getPlayerInstance().getClassId().getId();
 			}
 		}
 		return _classId;
 	}
-	
-	public int getLevel()
-	{
-		if (isOnline())
-		{
-			if (getPlayerInstance().getLevel() != _currentLevel)
-			{
+
+	public int getLevel() {
+		if (isOnline()) {
+			if (getPlayerInstance().getLevel() != _currentLevel) {
 				_currentLevel = getPlayerInstance().getLevel();
 			}
 		}
 		return _currentLevel;
 	}
-	
-	public PlayerInstance getPlayerInstance()
-	{
+
+	public PlayerInstance getPlayerInstance() {
 		return World.getInstance().getPlayer(_objectId);
 	}
-	
-	public boolean isOnline()
-	{
+
+	public boolean isOnline() {
 		return (getPlayerInstance() != null) && (getPlayerInstance().isOnlineInt() > 0);
 	}
-	
-	public int isOnlineInt()
-	{
+
+	public int isOnlineInt() {
 		return isOnline() ? getPlayerInstance().isOnlineInt() : 0;
 	}
-	
-	public void sendPacket(IClientOutgoingPacket packet)
-	{
-		if (isOnline())
-		{
+
+	public void sendPacket(IClientOutgoingPacket packet) {
+		if (isOnline()) {
 			getPlayerInstance().sendPacket(packet);
 		}
 	}

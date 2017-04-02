@@ -26,49 +26,39 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestTargetCanceld implements IClientIncomingPacket
-{
+public final class RequestTargetCanceld implements IClientIncomingPacket {
 	private int _unselect;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_unselect = packet.readH();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isLockedTarget())
-		{
+
+		if (activeChar.isLockedTarget()) {
 			activeChar.sendPacket(SystemMessageId.FAILED_TO_REMOVE_ENMITY);
 			return;
 		}
-		
-		if (_unselect == 0)
-		{
+
+		if (_unselect == 0) {
 			// Try to abort cast, if that fails, then cancel target.
 			final boolean castAborted = activeChar.abortCast();
-			if (!castAborted && (activeChar.getTarget() != null))
-			{
+			if (!castAborted && (activeChar.getTarget() != null)) {
 				activeChar.setTarget(null);
 			}
-		}
-		else if (activeChar.getTarget() != null)
-		{
+		} else if (activeChar.getTarget() != null) {
 			activeChar.setTarget(null);
-		}
-		else if (activeChar.isInAirShip())
-		{
+		} else if (activeChar.isInAirShip()) {
 			activeChar.broadcastPacket(new TargetUnselected(activeChar));
 		}
 	}

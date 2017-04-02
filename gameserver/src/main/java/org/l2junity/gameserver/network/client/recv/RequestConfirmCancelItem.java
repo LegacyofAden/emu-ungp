@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.VariationData;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -31,58 +31,50 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format(ch) d
+ *
  * @author -Wooden-
  */
-public final class RequestConfirmCancelItem implements IClientIncomingPacket
-{
+public final class RequestConfirmCancelItem implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		final ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
-		if (item == null)
-		{
+		if (item == null) {
 			return;
 		}
-		
-		if (item.getOwnerId() != activeChar.getObjectId())
-		{
+
+		if (item.getOwnerId() != activeChar.getObjectId()) {
 			Util.handleIllegalPlayerAction(client.getActiveChar(), "Warning!! Character " + client.getActiveChar().getName() + " of account " + client.getActiveChar().getAccountName() + " tryied to destroy augment on item that doesn't own.", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (!item.isAugmented())
-		{
+
+		if (!item.isAugmented()) {
 			activeChar.sendPacket(SystemMessageId.AUGMENTATION_REMOVAL_CAN_ONLY_BE_DONE_ON_AN_AUGMENTED_ITEM);
 			return;
 		}
-		
-		if (item.isPvp() && !PlayerConfig.ALT_ALLOW_AUGMENT_PVP_ITEMS)
-		{
+
+		if (item.isPvp() && !PlayerConfig.ALT_ALLOW_AUGMENT_PVP_ITEMS) {
 			activeChar.sendPacket(SystemMessageId.THIS_IS_NOT_A_SUITABLE_ITEM);
 			return;
 		}
-		
+
 		final long price = VariationData.getInstance().getCancelFee(item.getId(), item.getAugmentation().getMineralId());
-		if (price < 0)
-		{
+		if (price < 0) {
 			activeChar.sendPacket(SystemMessageId.THIS_IS_NOT_A_SUITABLE_ITEM);
 			return;
 		}
-		
+
 		activeChar.sendPacket(new ExPutItemResultForVariationCancel(item, price));
 	}
 }

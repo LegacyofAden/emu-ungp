@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
@@ -29,50 +27,46 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PledgeShowMemberListAll implements IClientOutgoingPacket
-{
+import java.util.Collection;
+
+public class PledgeShowMemberListAll implements IClientOutgoingPacket {
 	private final L2Clan _clan;
 	private final SubPledge _pledge;
 	private final String _name;
 	private final String _leaderName;
 	private final Collection<ClanMember> _members;
 	private int _pledgeType;
-	
-	private PledgeShowMemberListAll(L2Clan clan, SubPledge pledge)
-	{
+
+	private PledgeShowMemberListAll(L2Clan clan, SubPledge pledge) {
 		_clan = clan;
 		_pledge = pledge;
 		_leaderName = pledge == null ? clan.getLeaderName() : CharNameTable.getInstance().getNameById(pledge.getLeaderId());
 		_name = pledge == null ? clan.getName() : pledge.getName();
 		_members = _clan.getMembers();
 	}
-	
-	public static void sendAllTo(PlayerInstance player)
-	{
+
+	public static void sendAllTo(PlayerInstance player) {
 		final L2Clan clan = player.getClan();
-		if (clan != null)
-		{
+		if (clan != null) {
 			player.sendPacket(new PledgeShowMemberListAll(clan, null));
-			for (SubPledge subPledge : clan.getAllSubPledges())
-			{
+			for (SubPledge subPledge : clan.getAllSubPledges()) {
 				player.sendPacket(new PledgeShowMemberListAll(clan, subPledge));
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		final int pledgeId = (_pledge == null ? 0x00 : _pledge.getId());
 		OutgoingPackets.PLEDGE_SHOW_MEMBER_LIST_ALL.writeId(packet);
-		
+
 		packet.writeD(_pledge == null ? 0 : 1);
 		packet.writeD(_clan.getId());
-		packet.writeD(HexIDConfig.SERVER_ID);
+		packet.writeD(GameserverConfig.SERVER_ID);
 		packet.writeD(pledgeId);
 		packet.writeS(_name);
 		packet.writeS(_leaderName);
-		
+
 		packet.writeD(_clan.getCrestId()); // crest id .. is used again
 		packet.writeD(_clan.getLevel());
 		packet.writeD(_clan.getCastleId());
@@ -89,24 +83,19 @@ public class PledgeShowMemberListAll implements IClientOutgoingPacket
 		packet.writeD(_clan.isAtWar() ? 1 : 0);// new c3
 		packet.writeD(0x00); // Territory castle ID
 		packet.writeD(_clan.getSubPledgeMembersCount(_pledgeType));
-		
-		for (ClanMember m : _members)
-		{
-			if (m.getPledgeType() != _pledgeType)
-			{
+
+		for (ClanMember m : _members) {
+			if (m.getPledgeType() != _pledgeType) {
 				continue;
 			}
 			packet.writeS(m.getName());
 			packet.writeD(m.getLevel());
 			packet.writeD(m.getClassId());
 			final PlayerInstance player = m.getPlayerInstance();
-			if (player != null)
-			{
+			if (player != null) {
 				packet.writeD(player.getAppearance().getSex() ? 1 : 0); // no visible effect
 				packet.writeD(player.getRace().ordinal());// packet.writeD(1);
-			}
-			else
-			{
+			} else {
 				packet.writeD(0x01); // no visible effect
 				packet.writeD(0x01); // packet.writeD(1);
 			}

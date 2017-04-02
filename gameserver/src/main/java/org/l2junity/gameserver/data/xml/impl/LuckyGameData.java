@@ -18,62 +18,56 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.holders.ItemChanceHolder;
+import org.l2junity.gameserver.model.holders.ItemPointHolder;
+import org.l2junity.gameserver.model.holders.LuckyGameDataHolder;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.holders.ItemChanceHolder;
-import org.l2junity.gameserver.model.holders.ItemPointHolder;
-import org.l2junity.gameserver.model.holders.LuckyGameDataHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author Sdw
  */
-public class LuckyGameData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(LuckyGameData.class);
+@Slf4j
+@StartupComponent("Data")
+public class LuckyGameData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final LuckyGameData instance = new LuckyGameData();
+
 	private final Map<Integer, LuckyGameDataHolder> _luckyGame = new HashMap<>();
-	
+
 	final AtomicInteger _serverPlay = new AtomicInteger();
-	
-	protected LuckyGameData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private LuckyGameData() {
 		_luckyGame.clear();
 		parseDatapackFile("data/LuckyGameData.xml");
-		LOGGER.info("Loaded {} lucky game data.", _luckyGame.size());
+		log.info("Loaded {} lucky game data.", _luckyGame.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "luckygame", rewardNode ->
 		{
 			final LuckyGameDataHolder holder = new LuckyGameDataHolder(new StatsSet(parseAttributes(rewardNode)));
-			
+
 			forEach(rewardNode, "common_reward", commonRewardNode -> forEach(commonRewardNode, "item", itemNode ->
 			{
 				holder.addCommonReward(new ItemChanceHolder(new StatsSet(parseAttributes(itemNode))));
 			}));
-			
+
 			forEach(rewardNode, "unique_reward", uniqueRewardNode -> forEach(uniqueRewardNode, "item", itemNode ->
 			{
 				holder.addUniqueReward(new ItemPointHolder(new StatsSet(parseAttributes(itemNode))));
 			}));
-			
+
 			forEach(rewardNode, "modify_reward", uniqueRewardNode ->
 			{
 				holder.setMinModifyRewardGame(parseInteger(uniqueRewardNode.getAttributes(), "min_game"));
@@ -83,43 +77,24 @@ public class LuckyGameData implements IGameXmlReader
 					holder.addModifyReward(new ItemChanceHolder(new StatsSet(parseAttributes(itemNode))));
 				});
 			});
-			
+
 			_luckyGame.put(parseInteger(rewardNode.getAttributes(), "index"), holder);
 		}));
 	}
-	
-	public int getLuckyGameCount()
-	{
+
+	public int getLuckyGameCount() {
 		return _luckyGame.size();
 	}
-	
-	public LuckyGameDataHolder getLuckyGameDataByIndex(int index)
-	{
+
+	public LuckyGameDataHolder getLuckyGameDataByIndex(int index) {
 		return _luckyGame.get(index);
 	}
-	
-	public int increaseGame()
-	{
+
+	public int increaseGame() {
 		return _serverPlay.incrementAndGet();
 	}
-	
-	public int getServerPlay()
-	{
+
+	public int getServerPlay() {
 		return _serverPlay.get();
-	}
-	
-	/**
-	 * Gets the single instance of OneDayRewardData.
-	 * @return single instance of OneDayRewardData
-	 */
-	@InstanceGetter
-	public static final LuckyGameData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final LuckyGameData _instance = new LuckyGameData();
 	}
 }

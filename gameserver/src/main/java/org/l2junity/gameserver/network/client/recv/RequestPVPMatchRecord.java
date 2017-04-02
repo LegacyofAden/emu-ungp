@@ -24,17 +24,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestPVPMatchRecord implements IClientIncomingPacket
-{
+public class RequestPVPMatchRecord implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// TODO: Implement me
 	}
 }

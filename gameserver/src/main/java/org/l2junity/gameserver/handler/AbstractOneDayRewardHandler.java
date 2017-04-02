@@ -18,13 +18,6 @@
  */
 package org.l2junity.gameserver.handler;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
@@ -34,140 +27,120 @@ import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Sdw
  */
-public abstract class AbstractOneDayRewardHandler extends ListenersContainer
-{
+public abstract class AbstractOneDayRewardHandler extends ListenersContainer {
 	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
-	
+
 	private final Map<Integer, OneDayRewardPlayerEntry> _entries = new ConcurrentHashMap<>();
 	private final OneDayRewardDataHolder _holder;
-	
-	protected AbstractOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+
+	protected AbstractOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		_holder = holder;
 		init();
 	}
-	
-	public OneDayRewardDataHolder getHolder()
-	{
+
+	public OneDayRewardDataHolder getHolder() {
 		return _holder;
 	}
-	
+
 	public abstract boolean isAvailable(PlayerInstance player);
-	
+
 	public abstract void init();
-	
-	public int getStatus(PlayerInstance player)
-	{
+
+	public int getStatus(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return entry != null ? entry.getStatus().getClientId() : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
-	
-	public int getProgress(PlayerInstance player)
-	{
+
+	public int getProgress(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return entry != null ? entry.getProgress() : 0;
 	}
-	
-	public boolean getRecentlyCompleted(PlayerInstance player)
-	{
+
+	public boolean getRecentlyCompleted(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return (entry != null) && entry.getRecentlyCompleted();
 	}
-	
-	public synchronized void reset()
-	{
+
+	public synchronized void reset() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("DELETE FROM character_daily_rewards WHERE rewardId = ? AND status = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("DELETE FROM character_daily_rewards WHERE rewardId = ? AND status = ?")) {
 			ps.setInt(1, _holder.getId());
 			ps.setInt(2, OneDayRewardStatus.COMPLETED.getClientId());
 			ps.execute();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Error while clearing data for: {}", getClass().getSimpleName(), e);
-		}
-		finally
-		{
+		} finally {
 			_entries.clear();
 		}
 	}
-	
-	public boolean requestReward(PlayerInstance player)
-	{
-		if (isAvailable(player))
-		{
+
+	public boolean requestReward(PlayerInstance player) {
+		if (isAvailable(player)) {
 			giveRewards(player);
-			
+
 			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
 			entry.setStatus(OneDayRewardStatus.COMPLETED);
 			entry.setLastCompleted(System.currentTimeMillis());
 			entry.setRecentlyCompleted(true);
 			storePlayerEntry(entry);
-			
+
 			return true;
 		}
 		return false;
 	}
-	
-	protected void giveRewards(PlayerInstance player)
-	{
+
+	protected void giveRewards(PlayerInstance player) {
 		_holder.getRewards().forEach(i -> player.addItem("One Day Reward", i, player, true));
 	}
-	
-	protected void storePlayerEntry(OneDayRewardPlayerEntry entry)
-	{
+
+	protected void storePlayerEntry(OneDayRewardPlayerEntry entry) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("REPLACE INTO character_daily_rewards (charId, rewardId, status, progress, lastCompleted) VALUES (?, ?, ?, ?, ?)"))
-		{
+			 PreparedStatement ps = con.prepareStatement("REPLACE INTO character_daily_rewards (charId, rewardId, status, progress, lastCompleted) VALUES (?, ?, ?, ?, ?)")) {
 			ps.setInt(1, entry.getObjectId());
 			ps.setInt(2, entry.getRewardId());
 			ps.setInt(3, entry.getStatus().getClientId());
 			ps.setInt(4, entry.getProgress());
 			ps.setLong(5, entry.getLastCompleted());
 			ps.execute();
-			
+
 			// Cache if not exists
 			_entries.computeIfAbsent(entry.getObjectId(), id -> entry);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while saving reward {} for player: {} in database: ", entry.getRewardId(), entry.getObjectId(), e);
 		}
 	}
-	
-	protected OneDayRewardPlayerEntry getPlayerEntry(int objectId, boolean createIfNone)
-	{
+
+	protected OneDayRewardPlayerEntry getPlayerEntry(int objectId, boolean createIfNone) {
 		final OneDayRewardPlayerEntry existingEntry = _entries.get(objectId);
-		if (existingEntry != null)
-		{
+		if (existingEntry != null) {
 			return existingEntry;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM character_daily_rewards WHERE charId = ? AND rewardId = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT * FROM character_daily_rewards WHERE charId = ? AND rewardId = ?")) {
 			ps.setInt(1, objectId);
 			ps.setInt(2, _holder.getId());
-			try (ResultSet rs = ps.executeQuery())
-			{
-				if (rs.next())
-				{
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
 					final OneDayRewardPlayerEntry entry = new OneDayRewardPlayerEntry(rs.getInt("charId"), rs.getInt("rewardId"), rs.getInt("status"), rs.getInt("progress"), rs.getLong("lastCompleted"));
 					_entries.put(objectId, entry);
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while loading reward {} for player: {} in database: ", _holder.getId(), objectId, e);
 		}
-		
-		if (createIfNone)
-		{
+
+		if (createIfNone) {
 			final OneDayRewardPlayerEntry entry = new OneDayRewardPlayerEntry(objectId, _holder.getId());
 			_entries.put(objectId, entry);
 			return entry;

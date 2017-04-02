@@ -22,12 +22,10 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExMoveToLocationAirShip implements IClientOutgoingPacket
-{
+public class ExMoveToLocationAirShip implements IClientOutgoingPacket {
 	private final int _objectId, _tx, _ty, _tz, _x, _y, _z;
-	
-	public ExMoveToLocationAirShip(Creature cha)
-	{
+
+	public ExMoveToLocationAirShip(Creature cha) {
 		_objectId = cha.getObjectId();
 		_tx = (int) cha.getXdestination();
 		_ty = (int) cha.getYdestination();
@@ -36,12 +34,11 @@ public class ExMoveToLocationAirShip implements IClientOutgoingPacket
 		_y = (int) cha.getY();
 		_z = (int) cha.getZ();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MOVE_TO_LOCATION_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_tx);
 		packet.writeD(_ty);

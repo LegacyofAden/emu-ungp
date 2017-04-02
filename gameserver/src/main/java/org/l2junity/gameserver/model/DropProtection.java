@@ -18,94 +18,81 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author DrHouse
  */
-public class DropProtection implements Runnable
-{
+public class DropProtection implements Runnable {
 	private volatile boolean _isProtected = false;
 	private PlayerInstance _owner = null;
 	private ScheduledFuture<?> _task = null;
-	
+
 	private static final long PROTECTED_MILLIS_TIME = 15000;
-	
+
 	@Override
-	public synchronized void run()
-	{
+	public synchronized void run() {
 		_isProtected = false;
 		_owner = null;
 		_task = null;
 	}
-	
-	public boolean isProtected()
-	{
+
+	public boolean isProtected() {
 		return _isProtected;
 	}
-	
-	public PlayerInstance getOwner()
-	{
+
+	public PlayerInstance getOwner() {
 		return _owner;
 	}
-	
-	public synchronized boolean tryPickUp(PlayerInstance actor)
-	{
-		if (!_isProtected)
-		{
+
+	public synchronized boolean tryPickUp(PlayerInstance actor) {
+		if (!_isProtected) {
 			return true;
 		}
-		
-		if (_owner == actor)
-		{
+
+		if (_owner == actor) {
 			return true;
 		}
-		
-		if ((_owner.getParty() != null) && (_owner.getParty() == actor.getParty()))
-		{
+
+		if ((_owner.getParty() != null) && (_owner.getParty() == actor.getParty())) {
 			return true;
 		}
-		
+
 		/*
 		 * if (_owner.getClan() != null && _owner.getClan() == actor.getClan()) return true;
 		 */
-		
+
 		return false;
 	}
-	
-	public boolean tryPickUp(L2PetInstance pet)
-	{
+
+	public boolean tryPickUp(L2PetInstance pet) {
 		return tryPickUp(pet.getOwner());
 	}
-	
-	public synchronized void unprotect()
-	{
-		if (_task != null)
-		{
+
+	public synchronized void unprotect() {
+		if (_task != null) {
 			_task.cancel(false);
 		}
 		_isProtected = false;
 		_owner = null;
 		_task = null;
 	}
-	
-	public synchronized void protect(PlayerInstance player)
-	{
+
+	public synchronized void protect(PlayerInstance player) {
 		unprotect();
-		
+
 		_isProtected = true;
 		_owner = player;
-		
-		if (_owner == null)
-		{
+
+		if (_owner == null) {
 			throw new NullPointerException("Trying to protect dropped item to null owner");
 		}
-		
-		_task = ThreadPool.schedule(this, PROTECTED_MILLIS_TIME, TimeUnit.MILLISECONDS);
+
+		_task = ThreadPool.getInstance().scheduleGeneral(this, PROTECTED_MILLIS_TIME, TimeUnit.MILLISECONDS);
 	}
 }

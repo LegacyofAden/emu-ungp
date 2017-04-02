@@ -18,13 +18,7 @@
  */
 package org.l2junity.gameserver.script.faenor;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import javax.script.ScriptContext;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.script.DateRange;
 import org.l2junity.gameserver.script.Parser;
 import org.l2junity.gameserver.script.ParserFactory;
@@ -33,108 +27,89 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
+import javax.script.ScriptContext;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Luis Arias
  */
-public class FaenorEventParser extends FaenorParser
-{
+public class FaenorEventParser extends FaenorParser {
 	static Logger _log = LoggerFactory.getLogger(FaenorEventParser.class);
 	private DateRange _eventDates = null;
-	
+
 	@Override
-	public void parseScript(final Node eventNode, ScriptContext context)
-	{
+	public void parseScript(final Node eventNode, ScriptContext context) {
 		String ID = attribute(eventNode, "ID");
 		_eventDates = DateRange.parse(attribute(eventNode, "Active"), DATE_FORMAT);
-		
+
 		Date currentDate = new Date();
-		if (_eventDates.getEndDate().before(currentDate))
-		{
+		if (_eventDates.getEndDate().before(currentDate)) {
 			_log.info("Event ID: (" + ID + ") has passed... Ignored.");
 			return;
 		}
-		
-		if (_eventDates.getStartDate().after(currentDate))
-		{
+
+		if (_eventDates.getStartDate().after(currentDate)) {
 			_log.info("Event ID: (" + ID + ") is not active yet... Ignored.");
-			ThreadPool.schedule(() -> parseEventDropAndMessage(eventNode), _eventDates.getStartDate().getTime() - currentDate.getTime(), TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(() -> parseEventDropAndMessage(eventNode), _eventDates.getStartDate().getTime() - currentDate.getTime(), TimeUnit.MILLISECONDS);
 			return;
 		}
-		
+
 		parseEventDropAndMessage(eventNode);
 	}
-	
-	protected void parseEventDropAndMessage(Node eventNode)
-	{
-		for (Node node = eventNode.getFirstChild(); node != null; node = node.getNextSibling())
-		{
-			if (isNodeName(node, "DropList"))
-			{
+
+	protected void parseEventDropAndMessage(Node eventNode) {
+		for (Node node = eventNode.getFirstChild(); node != null; node = node.getNextSibling()) {
+			if (isNodeName(node, "DropList")) {
 				parseEventDropList(node);
-			}
-			else if (isNodeName(node, "Message"))
-			{
+			} else if (isNodeName(node, "Message")) {
 				parseEventMessage(node);
 			}
 		}
 	}
-	
-	private void parseEventMessage(Node sysMsg)
-	{
-		try
-		{
+
+	private void parseEventMessage(Node sysMsg) {
+		try {
 			String type = attribute(sysMsg, "Type");
 			String message = attribute(sysMsg, "Msg");
-			
-			if (type.equalsIgnoreCase("OnJoin"))
-			{
+
+			if (type.equalsIgnoreCase("OnJoin")) {
 				_bridge.onPlayerLogin(message, _eventDates);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Error in event parser: " + e.getMessage(), e);
 		}
 	}
-	
-	private void parseEventDropList(Node dropList)
-	{
-		for (Node node = dropList.getFirstChild(); node != null; node = node.getNextSibling())
-		{
-			if (isNodeName(node, "AllDrop"))
-			{
+
+	private void parseEventDropList(Node dropList) {
+		for (Node node = dropList.getFirstChild(); node != null; node = node.getNextSibling()) {
+			if (isNodeName(node, "AllDrop")) {
 				parseEventDrop(node);
 			}
 		}
 	}
-	
-	private void parseEventDrop(Node drop)
-	{
-		try
-		{
+
+	private void parseEventDrop(Node drop) {
+		try {
 			int[] items = Arrays.stream(attribute(drop, "Items").split("(,|-)")).mapToInt(Integer::parseInt).toArray();
 			int[] count = Arrays.stream(attribute(drop, "Count").split("(,|-)")).mapToInt(Integer::parseInt).toArray();
 			double chance = getPercent(attribute(drop, "Chance"));
-			
+
 			_bridge.addEventDrop(items, count, chance, _eventDates);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("ERROR(parseEventDrop):" + e.getMessage(), e);
 		}
 	}
-	
-	static class FaenorEventParserFactory extends ParserFactory
-	{
+
+	static class FaenorEventParserFactory extends ParserFactory {
 		@Override
-		public Parser create()
-		{
+		public Parser create() {
 			return (new FaenorEventParser());
 		}
 	}
-	
-	static
-	{
+
+	static {
 		ScriptEngine.parserFactories.put(getParserName("Event"), new FaenorEventParserFactory());
 	}
 }

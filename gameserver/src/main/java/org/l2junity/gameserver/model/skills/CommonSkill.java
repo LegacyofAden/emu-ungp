@@ -22,10 +22,10 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 
 /**
  * An Enum to hold some important references to commonly used skills
+ *
  * @author DrHouse
  */
-public enum CommonSkill
-{
+public enum CommonSkill {
 	RAID_CURSE(4215, 1),
 	RAID_CURSE2(4515, 1),
 	SEAL_OF_RULER(246, 1),
@@ -63,26 +63,22 @@ public enum CommonSkill
 	CHILD_TRANSFORM(6202, 1),
 	NATIVE_TRANSFORM(6203, 1),
 	LUCKY_CLOVER(18103, 1);
-	
+
 	private final SkillHolder _holder;
-	
-	CommonSkill(int id, int level)
-	{
+
+	CommonSkill(int id, int level) {
 		_holder = new SkillHolder(id, level);
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _holder.getSkillId();
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return _holder.getSkillLevel();
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _holder.getSkill();
 	}
 }

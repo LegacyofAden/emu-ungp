@@ -18,117 +18,79 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.commons.threading.AbstractPeriodicTaskManager;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.ItemsAutoDestroy;
+import org.l2junity.gameserver.datatables.ItemTable;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+
+import java.sql.*;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.ItemsAutoDestroy;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This class manage all items on ground.
+ *
  * @author Enforcer
  */
-public final class ItemsOnGroundManager
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ItemsOnGroundManager.class);
-	
+@Slf4j
+@StartupComponent(value = "Service", dependency = {ItemTable.class, CursedWeaponsManager.class})
+public final class ItemsOnGroundManager extends AbstractPeriodicTaskManager {
+	@Getter(lazy = true)
+	private static final ItemsOnGroundManager instance = new ItemsOnGroundManager();
+
 	private final Set<ItemInstance> _items = ConcurrentHashMap.newKeySet();
-	
-	protected ItemsOnGroundManager()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies =
-	{
-		@Dependency(clazz = ItemTable.class),
-		@Dependency(clazz = CursedWeaponsManager.class)
-	})
-	private void load()
-	{
-		if (!GeneralConfig.SAVE_DROPPED_ITEM)
-		{
+
+	protected ItemsOnGroundManager() {
+		super(TimeUnit.MINUTES.toMillis(GeneralConfig.SAVE_DROPPED_ITEM_INTERVAL));
+		if (!GeneralConfig.SAVE_DROPPED_ITEM) {
 			return;
 		}
-		
-		if (GeneralConfig.SAVE_DROPPED_ITEM_INTERVAL > 0)
-		{
-			final long interval = TimeUnit.MINUTES.toMillis(GeneralConfig.SAVE_DROPPED_ITEM_INTERVAL);
-			ThreadPool.scheduleAtFixedRate(this::storeInDB, interval, interval, TimeUnit.MILLISECONDS);
-		}
-		
+
 		// If SaveDroppedItem is false, may want to delete all items previously stored to avoid add old items on reactivate
-		if (!GeneralConfig.SAVE_DROPPED_ITEM && GeneralConfig.CLEAR_DROPPED_ITEM_TABLE)
-		{
+		if (!GeneralConfig.SAVE_DROPPED_ITEM && GeneralConfig.CLEAR_DROPPED_ITEM_TABLE) {
 			emptyTable();
 		}
-		
-		if (!GeneralConfig.SAVE_DROPPED_ITEM)
-		{
-			return;
-		}
-		
+
 		// if DestroyPlayerDroppedItem was previously false, items currently protected will be added to ItemsAutoDestroy
-		if (GeneralConfig.DESTROY_DROPPED_PLAYER_ITEM)
-		{
+		if (GeneralConfig.DESTROY_DROPPED_PLAYER_ITEM) {
 			String str = null;
-			if (!GeneralConfig.DESTROY_EQUIPABLE_PLAYER_ITEM)
-			{
+			if (!GeneralConfig.DESTROY_EQUIPABLE_PLAYER_ITEM) {
 				// Recycle misc. items only
 				str = "UPDATE itemsonground SET drop_time = ? WHERE drop_time = -1 AND equipable = 0";
-			}
-			else if (GeneralConfig.DESTROY_EQUIPABLE_PLAYER_ITEM)
-			{
+			} else if (GeneralConfig.DESTROY_EQUIPABLE_PLAYER_ITEM) {
 				// Recycle all items including equip-able
 				str = "UPDATE itemsonground SET drop_time = ? WHERE drop_time = -1";
 			}
-			
+
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				PreparedStatement ps = con.prepareStatement(str))
-			{
+				 PreparedStatement ps = con.prepareStatement(str)) {
 				ps.setLong(1, System.currentTimeMillis());
 				ps.execute();
-			}
-			catch (Exception e)
-			{
-				LOGGER.error("Error while updating table ItemsOnGround: ", e);
+			} catch (Exception e) {
+				log.error("Error while updating table ItemsOnGround: ", e);
 			}
 		}
-		
+
 		// Add items to world
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT object_id, item_id, count, enchant_level, x, y, z, drop_time, equipable FROM itemsonground"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT object_id, item_id, count, enchant_level, x, y, z, drop_time, equipable FROM itemsonground")) {
 			int count = 0;
-			try (ResultSet rs = ps.executeQuery())
-			{
+			try (ResultSet rs = ps.executeQuery()) {
 				ItemInstance item;
-				while (rs.next())
-				{
+				while (rs.next()) {
 					item = new ItemInstance(rs.getInt(1), rs.getInt(2));
 					// this check and..
-					if (item.isStackable() && (rs.getInt(3) > 1))
-					{
+					if (item.isStackable() && (rs.getInt(3) > 1)) {
 						item.setCount(rs.getInt(3));
 					}
 					// this, are really necessary?
-					if (rs.getInt(4) > 0)
-					{
+					if (rs.getInt(4) > 0) {
 						item.setEnchantLevel(rs.getInt(4));
 					}
 					final long dropTime = rs.getLong(8);
@@ -139,101 +101,49 @@ public final class ItemsOnGroundManager
 					_items.add(item);
 					count++;
 					// add to ItemsAutoDestroy only items not protected
-					if (!GeneralConfig.LIST_PROTECTED_ITEMS.contains(item.getId()))
-					{
-						if (dropTime > -1)
-						{
-							if (((GeneralConfig.AUTODESTROY_ITEM_AFTER > 0) && !item.getItem().hasExImmediateEffect()) || ((GeneralConfig.HERB_AUTO_DESTROY_TIME > 0) && item.getItem().hasExImmediateEffect()))
-							{
+					if (!GeneralConfig.LIST_PROTECTED_ITEMS.contains(item.getId())) {
+						if (dropTime > -1) {
+							if (((GeneralConfig.AUTODESTROY_ITEM_AFTER > 0) && !item.getItem().hasExImmediateEffect()) || ((GeneralConfig.HERB_AUTO_DESTROY_TIME > 0) && item.getItem().hasExImmediateEffect())) {
 								ItemsAutoDestroy.getInstance().addItem(item);
 							}
 						}
 					}
 				}
 			}
-			LOGGER.info("Loaded {} items.", count);
+			log.info("Loaded {} items.", count);
+		} catch (Exception e) {
+			log.error("Error while loading ItemsOnGround: ", e);
 		}
-		catch (Exception e)
-		{
-			LOGGER.error("Error while loading ItemsOnGround: ", e);
-		}
-		
-		if (GeneralConfig.EMPTY_DROPPED_ITEM_TABLE_AFTER_LOAD)
-		{
+
+		if (GeneralConfig.EMPTY_DROPPED_ITEM_TABLE_AFTER_LOAD) {
 			emptyTable();
 		}
 	}
-	
-	public void save(ItemInstance item)
-	{
-		if (GeneralConfig.SAVE_DROPPED_ITEM)
-		{
-			_items.add(item);
-		}
-	}
-	
-	public void removeObject(ItemInstance item)
-	{
-		if (GeneralConfig.SAVE_DROPPED_ITEM)
-		{
-			_items.remove(item);
-		}
-	}
-	
-	public void saveInDb()
-	{
-		storeInDB();
-	}
-	
-	public void cleanUp()
-	{
-		_items.clear();
-	}
-	
-	public void emptyTable()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement s = con.createStatement())
-		{
-			s.executeUpdate("DELETE FROM itemsonground");
-		}
-		catch (Exception e)
-		{
-			LOGGER.error("Error while cleaning table ItemsOnGround: ", e);
-		}
-	}
-	
-	private synchronized void storeInDB()
-	{
-		if (!GeneralConfig.SAVE_DROPPED_ITEM)
-		{
+
+	@Override
+	public synchronized void run() {
+		if (!GeneralConfig.SAVE_DROPPED_ITEM) {
 			return;
 		}
-		
+
 		emptyTable();
-		
-		if (_items.isEmpty())
-		{
+
+		if (_items.isEmpty()) {
 			return;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("INSERT INTO itemsonground(object_id, item_id, count, enchant_level, x, y, z, drop_time, equipable) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"))
-		{
-			for (ItemInstance item : _items)
-			{
-				if (item == null)
-				{
+			 PreparedStatement statement = con.prepareStatement("INSERT INTO itemsonground(object_id, item_id, count, enchant_level, x, y, z, drop_time, equipable) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+			for (ItemInstance item : _items) {
+				if (item == null) {
 					continue;
 				}
-				
-				if (CursedWeaponsManager.getInstance().isCursed(item.getId()))
-				{
+
+				if (CursedWeaponsManager.getInstance().isCursed(item.getId())) {
 					continue; // Cursed Items not saved to ground, prevent double save
 				}
-				
-				try
-				{
+
+				try {
 					statement.setInt(1, item.getObjectId());
 					statement.setInt(2, item.getId());
 					statement.setLong(3, item.getCount());
@@ -244,31 +154,41 @@ public final class ItemsOnGroundManager
 					statement.setLong(8, (item.isProtected() ? -1 : item.getDropTime())); // item is protected or AutoDestroyed
 					statement.setLong(9, (item.isEquipable() ? 1 : 0)); // set equip-able
 					statement.execute();
-				}
-				catch (Exception e)
-				{
-					LOGGER.error("Error while inserting into table ItemsOnGround: ", e);
+				} catch (Exception e) {
+					log.error("Error while inserting into table ItemsOnGround: ", e);
 				}
 			}
-		}
-		catch (SQLException e)
-		{
-			LOGGER.error("SQL error while storing items on ground: ", e);
+		} catch (SQLException e) {
+			log.error("SQL error while storing items on ground: ", e);
 		}
 	}
-	
-	/**
-	 * Gets the single instance of {@code ItemsOnGroundManager}.
-	 * @return single instance of {@code ItemsOnGroundManager}
-	 */
-	@InstanceGetter
-	public static ItemsOnGroundManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
+
+	public void save(ItemInstance item) {
+		if (GeneralConfig.SAVE_DROPPED_ITEM) {
+			_items.add(item);
+		}
 	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ItemsOnGroundManager INSTANCE = new ItemsOnGroundManager();
+
+	public void removeObject(ItemInstance item) {
+		if (GeneralConfig.SAVE_DROPPED_ITEM) {
+			_items.remove(item);
+		}
+	}
+
+	public void saveInDb() {
+		run();
+	}
+
+	public void cleanUp() {
+		_items.clear();
+	}
+
+	private void emptyTable() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection();
+			 Statement s = con.createStatement()) {
+			s.executeUpdate("DELETE FROM itemsonground");
+		} catch (Exception e) {
+			log.error("Error while cleaning table ItemsOnGround: ", e);
+		}
 	}
 }

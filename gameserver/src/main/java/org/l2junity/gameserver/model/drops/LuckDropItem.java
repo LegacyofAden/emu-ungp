@@ -18,40 +18,35 @@
  */
 package org.l2junity.gameserver.model.drops;
 
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 
 /**
  * @author Sdw
  */
-public class LuckDropItem extends GeneralDropItem
-{
+public class LuckDropItem extends GeneralDropItem {
 	/**
 	 * @param itemId the item id
-	 * @param min the min count
-	 * @param max the max count
+	 * @param min    the min count
+	 * @param max    the max count
 	 * @param chance the chance of this drop item
 	 */
-	public LuckDropItem(int itemId, long min, long max, double chance)
-	{
+	public LuckDropItem(int itemId, long min, long max, double chance) {
 		super(itemId, min, max, chance);
 	}
-	
+
 	@Override
-	protected double getChanceMultiplier(Creature killer)
-	{
+	protected double getChanceMultiplier(Creature killer) {
 		return RatesConfig.BASE_LUCK_DROP_CHANCE_MULTIPLIER;
 	}
-	
+
 	@Override
-	protected double getGlobalAmountMultiplier()
-	{
+	protected double getGlobalAmountMultiplier() {
 		return RatesConfig.RATE_LUCK_DROP_AMOUNT_MULTIPLIER;
 	}
-	
+
 	@Override
-	protected double getGlobalChanceMultiplier()
-	{
+	protected double getGlobalChanceMultiplier() {
 		return RatesConfig.RATE_LUCK_DROP_CHANCE_MULTIPLIER;
 	}
 }

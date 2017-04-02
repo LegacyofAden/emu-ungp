@@ -23,15 +23,13 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class MoveToPawn implements IClientOutgoingPacket
-{
+public class MoveToPawn implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _targetId;
 	private final int _distance;
 	private final int _x, _y, _z, _tx, _ty, _tz;
-	
-	public MoveToPawn(Creature cha, WorldObject target, int distance)
-	{
+
+	public MoveToPawn(Creature cha, WorldObject target, int distance) {
 		_charObjId = cha.getObjectId();
 		_targetId = target.getObjectId();
 		_distance = distance;
@@ -42,16 +40,15 @@ public class MoveToPawn implements IClientOutgoingPacket
 		_ty = (int) target.getY();
 		_tz = (int) target.getZ();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MOVE_TO_PAWN.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_targetId);
 		packet.writeD(_distance);
-		
+
 		packet.writeD(_x);
 		packet.writeD(_y);
 		packet.writeD(_z);

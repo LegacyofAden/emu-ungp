@@ -25,24 +25,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * The Class ConditionPlayerIsNoble.
  */
-public class ConditionPlayerIsNoble extends Condition
-{
+public class ConditionPlayerIsNoble extends Condition {
 	private final boolean _val;
-	
+
 	/**
 	 * Instantiates a new condition player is hero.
+	 *
 	 * @param val the val
 	 */
-	public ConditionPlayerIsNoble(boolean val)
-	{
+	public ConditionPlayerIsNoble(boolean val) {
 		_val = val;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
 		return (effector.getActingPlayer().isNoble() == _val);

@@ -23,11 +23,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-
-import java.nio.ByteOrder;
-
-import javax.crypto.SecretKey;
-
 import org.l2junity.loginserver.network.client.crypt.Crypt;
 import org.l2junity.loginserver.network.client.crypt.KeyManager;
 import org.l2junity.network.codecs.CryptCodec;
@@ -35,17 +30,18 @@ import org.l2junity.network.codecs.LengthFieldBasedFrameEncoder;
 import org.l2junity.network.codecs.PacketDecoder;
 import org.l2junity.network.codecs.PacketEncoder;
 
+import javax.crypto.SecretKey;
+import java.nio.ByteOrder;
+
 /**
  * @author NosBit
  */
-public class GameServerInitializer extends ChannelInitializer<SocketChannel>
-{
+public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
 	private static final LengthFieldBasedFrameEncoder LENGTH_ENCODER = new LengthFieldBasedFrameEncoder();
 	private static final PacketEncoder PACKET_ENCODER = new PacketEncoder(0x8000 - 2);
-	
+
 	@Override
-	protected void initChannel(SocketChannel ch)
-	{
+	protected void initChannel(SocketChannel ch) {
 		final SecretKey blowfishKey = KeyManager.getInstance().generateBlowfishKey();
 		ch.pipeline().addLast("length-decoder", new LengthFieldBasedFrameDecoder(ByteOrder.LITTLE_ENDIAN, 0x8000 - 2, 0, 2, -2, 2, false));
 		ch.pipeline().addLast("length-encoder", LENGTH_ENCODER);

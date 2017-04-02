@@ -27,30 +27,25 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExEnsoulResult implements IClientOutgoingPacket
-{
+public class ExEnsoulResult implements IClientOutgoingPacket {
 	private final int _success;
 	private final ItemInstance _item;
-	
-	public ExEnsoulResult(int success, ItemInstance item)
-	{
+
+	public ExEnsoulResult(int success, ItemInstance item) {
 		_success = success;
 		_item = item;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ENSOUL_RESULT.writeId(packet);
 		packet.writeC(_success); // success / failure
 		packet.writeC(_item.getSpecialAbilities().size());
-		for (EnsoulOption option : _item.getSpecialAbilities())
-		{
+		for (EnsoulOption option : _item.getSpecialAbilities()) {
 			packet.writeD(option.getId());
 		}
 		packet.writeC(_item.getAdditionalSpecialAbilities().size());
-		for (EnsoulOption option : _item.getAdditionalSpecialAbilities())
-		{
+		for (EnsoulOption option : _item.getAdditionalSpecialAbilities()) {
 			packet.writeD(option.getId());
 		}
 		return true;

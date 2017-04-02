@@ -18,15 +18,6 @@
  */
 package org.l2junity.gameserver.model.eventengine;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.eventengine.drop.IEventDrop;
@@ -37,130 +28,120 @@ import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
 import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogout;
 
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
- * @author UnAfraid
  * @param <T>
+ * @author UnAfraid
  */
-public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends AbstractScript
-{
+public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends AbstractScript {
 	private String _name;
 	private volatile StatsSet _variables = StatsSet.EMPTY_STATSET;
 	private volatile Set<EventScheduler> _schedulers = Collections.emptySet();
 	private volatile Set<IConditionalEventScheduler> _conditionalSchedulers = Collections.emptySet();
 	private volatile Map<String, IEventDrop> _rewards = Collections.emptyMap();
-	
+
 	private final Set<T> _events = ConcurrentHashMap.newKeySet();
 	private final Queue<PlayerInstance> _registeredPlayers = new ConcurrentLinkedDeque<>();
 	private final AtomicReference<IEventState> _state = new AtomicReference<>();
-	
+
 	public abstract void onInitialized();
-	
+
 	/* ********************** */
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public void setName(String name)
-	{
+
+	public void setName(String name) {
 		_name = name;
 	}
 	
 	/* ********************** */
-	
-	public StatsSet getVariables()
-	{
+
+	public StatsSet getVariables() {
 		return _variables;
 	}
-	
-	public void setVariables(StatsSet variables)
-	{
+
+	public void setVariables(StatsSet variables) {
 		_variables = new StatsSet(Collections.unmodifiableMap(variables.getSet()));
 	}
 	
 	/* ********************** */
-	
-	public EventScheduler getScheduler(String name)
-	{
+
+	public EventScheduler getScheduler(String name) {
 		return _schedulers.stream().filter(scheduler -> scheduler.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
-	
-	public void setSchedulers(Set<EventScheduler> schedulers)
-	{
+
+	public void setSchedulers(Set<EventScheduler> schedulers) {
 		_schedulers = Collections.unmodifiableSet(schedulers);
 	}
 	
 	/* ********************** */
-	
-	public Set<IConditionalEventScheduler> getConditionalSchedulers()
-	{
+
+	public Set<IConditionalEventScheduler> getConditionalSchedulers() {
 		return _conditionalSchedulers;
 	}
-	
-	public void setConditionalSchedulers(Set<IConditionalEventScheduler> schedulers)
-	{
+
+	public void setConditionalSchedulers(Set<IConditionalEventScheduler> schedulers) {
 		_conditionalSchedulers = Collections.unmodifiableSet(schedulers);
 	}
 	
 	/* ********************** */
-	
-	public IEventDrop getRewards(String name)
-	{
+
+	public IEventDrop getRewards(String name) {
 		return _rewards.get(name);
 	}
-	
-	public void setRewards(Map<String, IEventDrop> rewards)
-	{
+
+	public void setRewards(Map<String, IEventDrop> rewards) {
 		_rewards = Collections.unmodifiableMap(rewards);
 	}
 	
 	/* ********************** */
-	
-	public Set<T> getEvents()
-	{
+
+	public Set<T> getEvents() {
 		return _events;
 	}
 	
 	/* ********************** */
-	
-	public void startScheduler()
-	{
+
+	public void startScheduler() {
 		_schedulers.forEach(EventScheduler::startScheduler);
 	}
-	
-	public void stopScheduler()
-	{
+
+	public void stopScheduler() {
 		_schedulers.forEach(EventScheduler::stopScheduler);
 	}
-	
-	public void startConditionalSchedulers()
-	{
+
+	public void startConditionalSchedulers() {
 		//@formatter:off
 		_conditionalSchedulers.stream()
-			.filter(IConditionalEventScheduler::test)
-			.forEach(IConditionalEventScheduler::run);
+				.filter(IConditionalEventScheduler::test)
+				.forEach(IConditionalEventScheduler::run);
 		//@formatter:on
 	}
 	
 	/* ********************** */
-	
-	public IEventState getState()
-	{
+
+	public IEventState getState() {
 		return _state.get();
 	}
-	
-	public void setState(IEventState newState)
-	{
+
+	public void setState(IEventState newState) {
 		final IEventState previousState = _state.get();
 		_state.set(newState);
 		onStateChange(previousState, newState);
 	}
-	
-	public boolean setState(IEventState previousState, IEventState newState)
-	{
-		if (_state.compareAndSet(previousState, newState))
-		{
+
+	public boolean setState(IEventState previousState, IEventState newState) {
+		if (_state.compareAndSet(previousState, newState)) {
 			onStateChange(previousState, newState);
 			return true;
 		}
@@ -168,77 +149,68 @@ public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends A
 	}
 	
 	/* ********************** */
-	
-	public final boolean registerPlayer(PlayerInstance player)
-	{
+
+	public final boolean registerPlayer(PlayerInstance player) {
 		return canRegister(player, true) && _registeredPlayers.offer(player);
 	}
-	
-	public final boolean unregisterPlayer(PlayerInstance player)
-	{
+
+	public final boolean unregisterPlayer(PlayerInstance player) {
 		return _registeredPlayers.remove(player);
 	}
-	
-	public final boolean isRegistered(PlayerInstance player)
-	{
+
+	public final boolean isRegistered(PlayerInstance player) {
 		return _registeredPlayers.contains(player);
 	}
-	
-	public boolean canRegister(PlayerInstance player, boolean sendMessage)
-	{
+
+	public boolean canRegister(PlayerInstance player, boolean sendMessage) {
 		return !_registeredPlayers.contains(player);
 	}
-	
-	public final Queue<PlayerInstance> getRegisteredPlayers()
-	{
+
+	public final Queue<PlayerInstance> getRegisteredPlayers() {
 		return _registeredPlayers;
 	}
 	
 	/* ********************** */
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LOGOUT)
 	@RegisterType(ListenerRegisterType.GLOBAL)
-	private void onPlayerLogout(OnPlayerLogout event)
-	{
+	private void onPlayerLogout(OnPlayerLogout event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (_registeredPlayers.remove(player))
-		{
+		if (_registeredPlayers.remove(player)) {
 			onUnregisteredPlayer(player);
 		}
 	}
 	
 	/* ********************** */
-	
+
 	/**
 	 * Triggered when a player is automatically removed from the event manager because he disconnected
+	 *
 	 * @param player
 	 */
-	protected void onUnregisteredPlayer(PlayerInstance player)
-	{
-		
+	protected void onUnregisteredPlayer(PlayerInstance player) {
+
 	}
-	
+
 	/**
 	 * Triggered when state is changed
+	 *
 	 * @param previousState
 	 * @param newState
 	 */
-	protected void onStateChange(IEventState previousState, IEventState newState)
-	{
-		
+	protected void onStateChange(IEventState previousState, IEventState newState) {
+
 	}
 	
 	/* ********************** */
-	
+
 	@Override
-	public String getScriptName()
-	{
+	public String getScriptName() {
 		return getClass().getSimpleName();
 	}
-	
+
 	@Override
-	public Path getScriptPath()
-	{
+	public Path getScriptPath() {
 		return null;
 	}
 }

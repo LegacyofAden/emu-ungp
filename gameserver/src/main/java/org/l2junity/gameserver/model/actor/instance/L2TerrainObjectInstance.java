@@ -23,29 +23,22 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
-public final class L2TerrainObjectInstance extends Npc
-{
-	public L2TerrainObjectInstance(L2NpcTemplate template)
-	{
+public final class L2TerrainObjectInstance extends Npc {
+	public L2TerrainObjectInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2TerrainObjectInstance);
 	}
-	
+
 	@Override
-	public void onAction(PlayerInstance player, boolean interact)
-	{
+	public void onAction(PlayerInstance player, boolean interact) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
+
 	@Override
-	public void onActionShift(PlayerInstance player)
-	{
-		if (player.isGM())
-		{
+	public void onActionShift(PlayerInstance player) {
+		if (player.isGM()) {
 			super.onActionShift(player);
-		}
-		else
-		{
+		} else {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 	}

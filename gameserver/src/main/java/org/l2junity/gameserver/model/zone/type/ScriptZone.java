@@ -24,24 +24,21 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * A scripted zone... Creation of such a zone should require somekind of script reference which can handle onEnter() / onExit()
+ *
  * @author durgus
  */
-public class ScriptZone extends ZoneType
-{
-	public ScriptZone(int id)
-	{
+public class ScriptZone extends ZoneType {
+	public ScriptZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.setInsideZone(ZoneId.SCRIPT, true);
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		character.setInsideZone(ZoneId.SCRIPT, false);
 	}
 }

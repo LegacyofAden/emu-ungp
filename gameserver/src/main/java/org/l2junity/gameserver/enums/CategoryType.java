@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * This class defines all category types.
+ *
  * @author xban1x
  */
-public enum CategoryType
-{
+public enum CategoryType {
 	FIGHTER_GROUP,
 	MAGE_GROUP,
 	WIZARD_GROUP,
@@ -307,18 +307,16 @@ public enum CategoryType
 	LIGHT_ARMOR_CLASS,
 	ROBE_CLASS,
 	EXCEPT_ERTHEIA_CLASS;
-	
+
 	/**
 	 * Finds category by it's name
+	 *
 	 * @param categoryName
 	 * @return A {@code CategoryType} if category was found, {@code null} if category was not found
 	 */
-	public static final CategoryType findByName(String categoryName)
-	{
-		for (CategoryType type : values())
-		{
-			if (type.name().equalsIgnoreCase(categoryName))
-			{
+	public static final CategoryType findByName(String categoryName) {
+		for (CategoryType type : values()) {
+			if (type.name().equalsIgnoreCase(categoryName)) {
 				return type;
 			}
 		}

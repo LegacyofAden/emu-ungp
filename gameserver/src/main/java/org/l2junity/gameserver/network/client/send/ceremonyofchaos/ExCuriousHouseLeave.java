@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExCuriousHouseLeave implements IClientOutgoingPacket
-{
+public class ExCuriousHouseLeave implements IClientOutgoingPacket {
 	public static final ExCuriousHouseLeave STATIC_PACKET = new ExCuriousHouseLeave();
-	
-	private ExCuriousHouseLeave()
-	{
+
+	private ExCuriousHouseLeave() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CURIOUS_HOUSE_LEAVE.writeId(packet);
 		return true;
 	}

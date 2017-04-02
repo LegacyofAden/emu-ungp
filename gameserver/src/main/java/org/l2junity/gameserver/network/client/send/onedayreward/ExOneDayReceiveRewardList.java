@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send.onedayreward;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,31 +25,31 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * @author Sdw
  */
-public class ExOneDayReceiveRewardList implements IClientOutgoingPacket
-{
+public class ExOneDayReceiveRewardList implements IClientOutgoingPacket {
 	final PlayerInstance _player;
 	private final Collection<OneDayRewardDataHolder> _rewards;
-	
-	public ExOneDayReceiveRewardList(PlayerInstance player, boolean sendRewards)
-	{
+
+	public ExOneDayReceiveRewardList(PlayerInstance player, boolean sendRewards) {
 		_player = player;
 		_rewards = sendRewards ? OneDayRewardData.getInstance().getOneDayRewardData(player) : Collections.emptyList();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ONE_DAY_RECEIVE_REWARD_LIST.writeId(packet);
-		
+
 		packet.writeC(0x17);
 		packet.writeD(_player.getClassId().getId());
 		packet.writeD(LocalDate.now().getDayOfWeek().ordinal()); // Day of week
 		packet.writeD(_rewards.size());
-		for (OneDayRewardDataHolder reward : _rewards)
-		{
+		for (OneDayRewardDataHolder reward : _rewards) {
 			packet.writeH(reward.getId());
 			packet.writeC(reward.getStatus(_player));
 			packet.writeC(reward.getRequiredCompletions() > 0 ? 0x01 : 0x00);

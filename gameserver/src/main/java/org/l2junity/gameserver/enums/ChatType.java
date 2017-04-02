@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author St3eT
  */
-public enum ChatType
-{
+public enum ChatType {
 	GENERAL(0),
 	SHOUT(1),
 	WHISPER(2),
@@ -49,33 +48,29 @@ public enum ChatType
 	NPC_SHOUT(23),
 	NPC_WHISPER(24),
 	WORLD(25);
-	
+
 	private final int _clientId;
-	
-	private ChatType(int clientId)
-	{
+
+	private ChatType(int clientId) {
 		_clientId = clientId;
 	}
-	
+
 	/**
 	 * @return the client id.
 	 */
-	public int getClientId()
-	{
+	public int getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * Finds the {@code ChatType} by its clientId
+	 *
 	 * @param clientId the clientId
 	 * @return the {@code ChatType} if its found, {@code null} otherwise.
 	 */
-	public static ChatType findByClientId(int clientId)
-	{
-		for (ChatType ChatType : values())
-		{
-			if (ChatType.getClientId() == clientId)
-			{
+	public static ChatType findByClientId(int clientId) {
+		for (ChatType ChatType : values()) {
+			if (ChatType.getClientId() == clientId) {
 				return ChatType;
 			}
 		}

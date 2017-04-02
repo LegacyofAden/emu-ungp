@@ -25,27 +25,25 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * update 27.8.10
+ *
  * @author kerberos JIV
  */
-public class ExValidateLocationInAirShip implements IClientOutgoingPacket
-{
+public class ExValidateLocationInAirShip implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _shipId, _heading;
 	private final Location _loc;
-	
-	public ExValidateLocationInAirShip(PlayerInstance player)
-	{
+
+	public ExValidateLocationInAirShip(PlayerInstance player) {
 		_activeChar = player;
 		_shipId = _activeChar.getAirShip().getObjectId();
 		_loc = player.getInVehiclePosition();
 		_heading = player.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_VALIDATE_LOCATION_IN_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_shipId);
 		packet.writeD((int) _loc.getX());

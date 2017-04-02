@@ -24,11 +24,10 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public interface IActionHandler
-{
+public interface IActionHandler {
 	Logger _log = LoggerFactory.getLogger(IActionHandler.class);
-	
+
 	boolean action(PlayerInstance activeChar, WorldObject target, boolean interact);
-	
+
 	InstanceType getInstanceType();
 }

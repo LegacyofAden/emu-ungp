@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -26,61 +26,48 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 
-/**
- * This class ...
- * @version $Revision: 1.3.4.4 $ $Date: 2005/03/29 23:15:33 $
- */
-public final class RequestGetItemFromPet implements IClientIncomingPacket
-{
+public final class RequestGetItemFromPet implements IClientIncomingPacket {
 	private int _objectId;
 	private long _amount;
 	@SuppressWarnings("unused")
 	private int _unknown;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		_amount = packet.readQ();
 		_unknown = packet.readD();// = 0 for most trades
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((_amount <= 0) || (player == null) || !player.hasPet())
-		{
+		if ((_amount <= 0) || (player == null) || !player.hasPet()) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("getfrompet"))
-		{
+
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("getfrompet")) {
 			player.sendMessage("You get items from pet too fast.");
 			return;
 		}
-		
-		if (player.hasItemRequest())
-		{
+
+		if (player.hasItemRequest()) {
 			return;
 		}
-		
+
 		final L2PetInstance pet = player.getPet();
 		final ItemInstance item = pet.getInventory().getItemByObjectId(_objectId);
-		if (item == null)
-		{
+		if (item == null) {
 			return;
 		}
-		
-		if (_amount > item.getCount())
-		{
+
+		if (_amount > item.getCount()) {
 			Util.handleIllegalPlayerAction(player, getClass().getSimpleName() + ": Character " + player.getName() + " of account " + player.getAccountName() + " tried to get item with oid " + _objectId + " from pet but has invalid count " + _amount + " item count: " + item.getCount(), GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (pet.transferItem("Transfer", _objectId, _amount, player.getInventory(), player, pet) == null)
-		{
+
+		if (pet.transferItem("Transfer", _objectId, _amount, player.getInventory(), player, pet) == null) {
 			_log.warn("Invalid item transfer request: " + pet.getName() + "(pet) --> " + player.getName());
 		}
 	}

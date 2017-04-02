@@ -18,52 +18,44 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.timers.TimerHolder;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author UnAfraid
  */
-public class TimersManager
-{
+public class TimersManager {
 	private final Map<Integer, Set<TimerHolder<?>>> _timers = new ConcurrentHashMap<>();
-	
-	public void registerTimer(TimerHolder<?> timer)
-	{
+
+	public void registerTimer(TimerHolder<?> timer) {
 		final Npc npc = timer.getNpc();
-		if (npc != null)
-		{
+		if (npc != null) {
 			_timers.computeIfAbsent(npc.getObjectId(), key -> ConcurrentHashMap.newKeySet()).add(timer);
 		}
-		
+
 		final PlayerInstance player = timer.getPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			_timers.computeIfAbsent(player.getObjectId(), key -> ConcurrentHashMap.newKeySet()).add(timer);
 		}
 	}
-	
-	public void cancelTimers(int objectId)
-	{
+
+	public void cancelTimers(int objectId) {
 		final Set<TimerHolder<?>> timers = _timers.remove(objectId);
-		if (timers != null)
-		{
+		if (timers != null) {
 			timers.forEach(TimerHolder::cancelTimer);
 		}
 	}
-	
-	public static TimersManager getInstance()
-	{
+
+	public static TimersManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final TimersManager _instance = new TimersManager();
 	}
 }

@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerPvPKill implements IBaseEvent
-{
+public class OnPlayerPvPKill implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final PlayerInstance _target;
-	
-	public OnPlayerPvPKill(PlayerInstance activeChar, PlayerInstance target)
-	{
+
+	public OnPlayerPvPKill(PlayerInstance activeChar, PlayerInstance target) {
 		_activeChar = activeChar;
 		_target = target;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public PlayerInstance getTarget()
-	{
+
+	public PlayerInstance getTarget() {
 		return _target;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_PVP_KILL;
 	}
 }

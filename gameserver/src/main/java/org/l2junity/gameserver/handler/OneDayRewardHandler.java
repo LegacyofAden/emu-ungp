@@ -18,64 +18,43 @@
  */
 package org.l2junity.gameserver.handler;
 
+import lombok.Getter;
+import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.model.OneDayRewardDataHolder;
+import org.l2junity.gameserver.scripting.GameScriptsLoader;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.scripting.ScriptEngineManager;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.OneDayRewardDataHolder;
-import org.l2junity.gameserver.scripting.GameScriptsLoader;
-
 /**
  * @author Sdw
  */
-public class OneDayRewardHandler
-{
+@StartupComponent("Scripts")
+public class OneDayRewardHandler {
+	@Getter(lazy = true)
+	private static final OneDayRewardHandler instance = new OneDayRewardHandler();
+
 	private final Map<String, Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler>> _handlerFactories = new HashMap<>();
-	
-	public void registerHandler(String name, Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> handlerFactory)
-	{
+
+	public void registerHandler(String name, Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> handlerFactory) {
 		_handlerFactories.put(name, handlerFactory);
 	}
-	
-	public Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> getHandler(String name)
-	{
+
+	public Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> getHandler(String name) {
 		return _handlerFactories.get(name);
 	}
-	
-	public int size()
-	{
+
+	public int size() {
 		return _handlerFactories.size();
 	}
-	
-	protected OneDayRewardHandler()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
-		try
-		{
+
+	private OneDayRewardHandler() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.ONE_DAY_REWARD_MASTER_HANDLER);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Error("Problems while running OneDayRewardMasterHandler", e);
 		}
-	}
-	
-	@InstanceGetter
-	public static OneDayRewardHandler getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final OneDayRewardHandler _instance = new OneDayRewardHandler();
 	}
 }

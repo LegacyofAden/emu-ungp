@@ -28,29 +28,25 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class ExBRProductInfo implements IClientOutgoingPacket
-{
+public class ExBRProductInfo implements IClientOutgoingPacket {
 	private final PrimeShopGroup _item;
 	private final int _charPoints;
 	private final long _charAdena;
-	
-	public ExBRProductInfo(PrimeShopGroup item, PlayerInstance player)
-	{
+
+	public ExBRProductInfo(PrimeShopGroup item, PlayerInstance player) {
 		_item = item;
 		_charPoints = player.getPrimePoints();
 		_charAdena = player.getAdena();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BR_PRODUCT_INFO.writeId(packet);
-		
+
 		packet.writeD(_item.getBrId());
 		packet.writeD(_item.getPrice());
 		packet.writeD(_item.getItems().size());
-		for (PrimeShopItem item : _item.getItems())
-		{
+		for (PrimeShopItem item : _item.getItems()) {
 			packet.writeD(item.getId());
 			packet.writeD((int) item.getCount());
 			packet.writeD(item.getWeight());

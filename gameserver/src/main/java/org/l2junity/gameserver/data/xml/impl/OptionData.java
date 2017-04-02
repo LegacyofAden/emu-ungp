@@ -18,64 +18,56 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.handler.EffectHandler;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.options.Options;
 import org.l2junity.gameserver.model.options.OptionsSkillHolder;
 import org.l2junity.gameserver.model.options.OptionsSkillType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author UnAfraid
  */
-public class OptionData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(OptionData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = EffectHandler.class)
+public class OptionData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final OptionData instance = new OptionData();
+
 	private final Map<Integer, Options> _optionData = new HashMap<>();
-	
-	protected OptionData()
-	{
+
+	private OptionData() {
+		reload();
 	}
-	
-	@Reload("options")
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = EffectHandler.class))
-	private void load() throws Exception
-	{
+
+	private void reload() {
 		_optionData.clear();
 		parseDatapackDirectory("data/stats/options", false);
-		LOGGER.info("Loaded: {} Options.", _optionData.size());
+		log.info("Loaded: {} Options.", _optionData.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "option", optionNode ->
 		{
 			final int id = parseInteger(optionNode.getAttributes(), "id");
 			final Options option = new Options(id);
-			
+
 			forEach(optionNode, IXmlReader::isNode, innerNode ->
 			{
-				switch (innerNode.getNodeName())
-				{
-					case "effects":
-					{
+				switch (innerNode.getNodeName()) {
+					case "effects": {
 						forEach(innerNode, "effect", effectNode ->
 						{
 							final String name = parseString(effectNode.getAttributes(), "name");
@@ -88,28 +80,23 @@ public class OptionData implements IGameXmlReader
 						});
 						break;
 					}
-					case "active_skill":
-					{
+					case "active_skill": {
 						option.addActiveSkill(new SkillHolder(parseInteger(innerNode.getAttributes(), "id"), parseInteger(innerNode.getAttributes(), "level")));
 						break;
 					}
-					case "passive_skill":
-					{
+					case "passive_skill": {
 						option.addPassiveSkill(new SkillHolder(parseInteger(innerNode.getAttributes(), "id"), parseInteger(innerNode.getAttributes(), "level")));
 						break;
 					}
-					case "attack_skill":
-					{
+					case "attack_skill": {
 						option.addActivationSkill(new OptionsSkillHolder(parseInteger(innerNode.getAttributes(), "id"), parseInteger(innerNode.getAttributes(), "level"), parseDouble(innerNode.getAttributes(), "chance"), OptionsSkillType.ATTACK));
 						break;
 					}
-					case "magic_skill":
-					{
+					case "magic_skill": {
 						option.addActivationSkill(new OptionsSkillHolder(parseInteger(innerNode.getAttributes(), "id"), parseInteger(innerNode.getAttributes(), "level"), parseDouble(innerNode.getAttributes(), "chance"), OptionsSkillType.MAGIC));
 						break;
 					}
-					case "critical_skill":
-					{
+					case "critical_skill": {
 						option.addActivationSkill(new OptionsSkillHolder(parseInteger(innerNode.getAttributes(), "id"), parseInteger(innerNode.getAttributes(), "level"), parseDouble(innerNode.getAttributes(), "chance"), OptionsSkillType.CRITICAL));
 						break;
 					}
@@ -118,29 +105,12 @@ public class OptionData implements IGameXmlReader
 			_optionData.put(option.getId(), option);
 		}));
 	}
-	
-	public int getOptionCount()
-	{
+
+	public int getOptionCount() {
 		return _optionData.size();
 	}
-	
-	public Options getOptions(int id)
-	{
+
+	public Options getOptions(int id) {
 		return _optionData.get(id);
-	}
-	
-	/**
-	 * Gets the single instance of OptionsData.
-	 * @return single instance of OptionsData
-	 */
-	@InstanceGetter
-	public static final OptionData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final OptionData _instance = new OptionData();
 	}
 }

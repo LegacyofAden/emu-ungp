@@ -28,26 +28,22 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExMPCCRoomMember implements IClientOutgoingPacket
-{
+public class ExMPCCRoomMember implements IClientOutgoingPacket {
 	private final CommandChannelMatchingRoom _room;
 	private final MatchingMemberType _type;
-	
-	public ExMPCCRoomMember(PlayerInstance player, CommandChannelMatchingRoom room)
-	{
+
+	public ExMPCCRoomMember(PlayerInstance player, CommandChannelMatchingRoom room) {
 		_room = room;
 		_type = room.getMemberType(player);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MPCC_ROOM_MEMBER.writeId(packet);
-		
+
 		packet.writeD(_type.ordinal());
 		packet.writeD(_room.getMembersCount());
-		for (PlayerInstance member : _room.getMembers())
-		{
+		for (PlayerInstance member : _room.getMembers()) {
 			packet.writeD(member.getObjectId());
 			packet.writeS(member.getName());
 			packet.writeD(member.getLevel());

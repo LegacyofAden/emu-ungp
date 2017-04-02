@@ -23,39 +23,33 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 /**
  * @author UnAfraid
  */
-public class EnsoulOption extends SkillHolder
-{
+public class EnsoulOption extends SkillHolder {
 	private static final long serialVersionUID = 8006504041653360204L;
 	private final int _id;
 	private final String _name;
 	private final String _desc;
-	
-	public EnsoulOption(int id, String name, String desc, int skillId, int skillLevel)
-	{
+
+	public EnsoulOption(int id, String name, String desc, int skillId, int skillLevel) {
 		super(skillId, skillLevel);
 		_id = id;
 		_name = name;
 		_desc = desc;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public String getDesc()
-	{
+
+	public String getDesc() {
 		return _desc;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "Ensoul Id: " + _id + " Name: " + _name + " Desc: " + _desc;
 	}
 }

@@ -18,82 +18,61 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.enums.Faction;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.holders.FactionHolder;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.enums.Faction;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.holders.FactionHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author Sdw
  */
-public class FactionData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(FactionData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class FactionData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final FactionData instance = new FactionData();
+
 	private final Map<Faction, FactionHolder> _factions = new HashMap<>();
-	
-	protected FactionData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private FactionData() {
 		_factions.clear();
 		parseDatapackFile("data/FactionData.xml");
 		LOGGER.info("Loaded {} factions.", _factions.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "faction", factionNode ->
 		{
 			final FactionHolder holder = new FactionHolder(new StatsSet(parseAttributes(factionNode)));
-			
+
 			forEach(factionNode, "point", pointNode ->
 			{
 				holder.addPointsForLevel(parseInteger(pointNode.getAttributes(), "level"), parseInteger(pointNode.getAttributes(), "val"));
 			});
-			
+
 			_factions.put(holder.getName(), holder);
 		}));
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _factions.size();
 	}
-	
-	public Collection<FactionHolder> getFactions()
-	{
+
+	public Collection<FactionHolder> getFactions() {
 		return _factions.values();
 	}
-	
-	public FactionHolder getFaction(Faction faction)
-	{
+
+	public FactionHolder getFaction(Faction faction) {
 		return _factions.get(faction);
-	}
-	
-	@InstanceGetter
-	public static final FactionData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final FactionData _instance = new FactionData();
 	}
 }

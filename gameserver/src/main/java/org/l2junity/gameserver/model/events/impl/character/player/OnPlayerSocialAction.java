@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author St3eT
  */
-public final class OnPlayerSocialAction implements IBaseEvent
-{
+public final class OnPlayerSocialAction implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _socialActionId;
-	
-	public OnPlayerSocialAction(PlayerInstance activeChar, int socialActionId)
-	{
+
+	public OnPlayerSocialAction(PlayerInstance activeChar, int socialActionId) {
 		_activeChar = activeChar;
 		_socialActionId = socialActionId;
 	}
-	
-	public final PlayerInstance getActiveChar()
-	{
+
+	public final PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public final int getSocialActionId()
-	{
+
+	public final int getSocialActionId() {
 		return _socialActionId;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_SOCIAL_ACTION;
 	}
 }

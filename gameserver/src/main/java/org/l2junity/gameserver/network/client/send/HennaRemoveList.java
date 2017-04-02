@@ -26,28 +26,23 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Zoey76
  */
-public class HennaRemoveList implements IClientOutgoingPacket
-{
+public class HennaRemoveList implements IClientOutgoingPacket {
 	private final PlayerInstance _player;
-	
-	public HennaRemoveList(PlayerInstance player)
-	{
+
+	public HennaRemoveList(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.HENNA_UNEQUIP_LIST.writeId(packet);
-		
+
 		packet.writeQ(_player.getAdena());
 		packet.writeD(0x03); // seems to be max size
 		packet.writeD(3 - _player.getHennaEmptySlots());
-		
-		for (Henna henna : _player.getHennaList())
-		{
-			if (henna != null)
-			{
+
+		for (Henna henna : _player.getHennaList()) {
+			if (henna != null) {
 				packet.writeD(henna.getDyeId());
 				packet.writeD(henna.getDyeItemId());
 				packet.writeQ(henna.getCancelCount());

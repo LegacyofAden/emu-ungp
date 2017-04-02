@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author St3eT
  */
-public enum DoorOpenType
-{
+public enum DoorOpenType {
 	NONE,
 	BY_CLICK,
 	BY_TIME,

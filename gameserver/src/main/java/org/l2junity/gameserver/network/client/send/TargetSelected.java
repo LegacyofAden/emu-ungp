@@ -21,14 +21,13 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class TargetSelected implements IClientOutgoingPacket
-{
+public final class TargetSelected implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _targetObjId;
 	private final int _x;
 	private final int _y;
 	private final int _z;
-	
+
 	/**
 	 * @param objectId
 	 * @param targetId
@@ -36,20 +35,18 @@ public final class TargetSelected implements IClientOutgoingPacket
 	 * @param y
 	 * @param z
 	 */
-	public TargetSelected(int objectId, int targetId, double x, double y, double z)
-	{
+	public TargetSelected(int objectId, int targetId, double x, double y, double z) {
 		_objectId = objectId;
 		_targetObjId = targetId;
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TARGET_SELECTED.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_targetObjId);
 		packet.writeD(_x);

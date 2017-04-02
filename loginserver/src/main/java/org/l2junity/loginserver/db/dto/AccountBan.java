@@ -24,26 +24,25 @@ import java.util.StringJoiner;
 /**
  * @author NosBit
  */
-public class AccountBan
-{
+public class AccountBan {
 	private final long _id;
 	private final long _accountId;
 	private boolean _active;
 	private final Instant _startedAt;
 	private final Instant _expiresAt;
 	private final String _reason;
-	
+
 	/**
 	 * Creates an account ban instance.
-	 * @param id the id
+	 *
+	 * @param id        the id
 	 * @param accountId the account id
-	 * @param active the active
+	 * @param active    the active
 	 * @param startedAt the started at
 	 * @param expiresAt the expires at
-	 * @param reason the reason
+	 * @param reason    the reason
 	 */
-	public AccountBan(long id, long accountId, boolean active, Instant startedAt, Instant expiresAt, String reason)
-	{
+	public AccountBan(long id, long accountId, boolean active, Instant startedAt, Instant expiresAt, String reason) {
 		super();
 		_id = id;
 		_accountId = accountId;
@@ -52,72 +51,70 @@ public class AccountBan
 		_expiresAt = expiresAt;
 		_reason = reason;
 	}
-	
+
 	/**
 	 * Gets the id.
+	 *
 	 * @return the id
 	 */
-	public long getId()
-	{
+	public long getId() {
 		return _id;
 	}
-	
+
 	/**
 	 * @return the account id
 	 */
-	public long getAccountId()
-	{
+	public long getAccountId() {
 		return _accountId;
 	}
-	
+
 	/**
 	 * Checks if is active.
+	 *
 	 * @return the active
 	 */
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return _active;
 	}
-	
+
 	/**
 	 * Sets if is active.
+	 *
 	 * @param active the active to set
 	 */
-	public void setActive(boolean active)
-	{
+	public void setActive(boolean active) {
 		_active = active;
 	}
-	
+
 	/**
 	 * Gets the started at.
+	 *
 	 * @return the started at
 	 */
-	public Instant getStartedAt()
-	{
+	public Instant getStartedAt() {
 		return _startedAt;
 	}
-	
+
 	/**
 	 * Gets the expires at.
+	 *
 	 * @return the expires at
 	 */
-	public Instant getExpiresAt()
-	{
+	public Instant getExpiresAt() {
 		return _expiresAt;
 	}
-	
+
 	/**
 	 * Gets the reason.
+	 *
 	 * @return the reason
 	 */
-	public String getReason()
-	{
+	public String getReason() {
 		return _reason;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		final StringJoiner sj = new StringJoiner(", ", "AccountBan[", "]");
 		sj.add("id: " + _id);
 		sj.add("account id: " + _accountId);

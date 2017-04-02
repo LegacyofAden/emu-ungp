@@ -18,23 +18,21 @@
  */
 package org.l2junity.gameserver.model.actor.transform;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author UnAfraid
  */
-public final class TransformLevelData
-{
+public final class TransformLevelData {
 	private final int _level;
 	private final double _levelMod;
 	private Map<Integer, Double> _stats;
-	
-	public TransformLevelData(StatsSet set)
-	{
+
+	public TransformLevelData(StatsSet set) {
 		_level = set.getInt("val");
 		_levelMod = set.getDouble("levelMod");
 		addStats(DoubleStat.MAX_HP, set.getDouble("hp"));
@@ -44,28 +42,23 @@ public final class TransformLevelData
 		addStats(DoubleStat.REGENERATE_MP_RATE, set.getDouble("mpRegen"));
 		addStats(DoubleStat.REGENERATE_CP_RATE, set.getDouble("cpRegen"));
 	}
-	
-	private void addStats(DoubleStat stat, double val)
-	{
-		if (_stats == null)
-		{
+
+	private void addStats(DoubleStat stat, double val) {
+		if (_stats == null) {
 			_stats = new HashMap<>();
 		}
 		_stats.put(stat.ordinal(), val);
 	}
-	
-	public double getStats(DoubleStat stats, double defaultValue)
-	{
+
+	public double getStats(DoubleStat stats, double defaultValue) {
 		return _stats == null ? defaultValue : _stats.getOrDefault(stats.ordinal(), defaultValue);
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return _level;
 	}
-	
-	public double getLevelMod()
-	{
+
+	public double getLevelMod() {
 		return _levelMod;
 	}
 }

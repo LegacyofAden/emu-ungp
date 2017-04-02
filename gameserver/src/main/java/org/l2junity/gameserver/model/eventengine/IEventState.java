@@ -21,6 +21,5 @@ package org.l2junity.gameserver.model.eventengine;
 /**
  * @author UnAfraid
  */
-public interface IEventState
-{
+public interface IEventState {
 }

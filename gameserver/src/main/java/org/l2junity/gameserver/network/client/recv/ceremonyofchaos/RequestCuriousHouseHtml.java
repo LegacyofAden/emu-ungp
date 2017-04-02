@@ -30,38 +30,30 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestCuriousHouseHtml implements IClientIncomingPacket
-{
+public class RequestCuriousHouseHtml implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// Nothing to read
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (CeremonyOfChaosManager.getInstance().getState() != CeremonyOfChaosState.REGISTRATION)
-		{
+
+		if (CeremonyOfChaosManager.getInstance().getState() != CeremonyOfChaosState.REGISTRATION) {
 			return;
-		}
-		else if (CeremonyOfChaosManager.getInstance().isRegistered(player))
-		{
+		} else if (CeremonyOfChaosManager.getInstance().isRegistered(player)) {
 			player.sendPacket(SystemMessageId.YOU_ARE_ON_THE_WAITING_LIST_FOR_THE_CEREMONY_OF_CHAOS);
 			return;
 		}
-		
-		if (CeremonyOfChaosManager.getInstance().canRegister(player, true))
-		{
+
+		if (CeremonyOfChaosManager.getInstance().canRegister(player, true)) {
 			final NpcHtmlMessage message = new NpcHtmlMessage(0);
-			message.setFile(player.getHtmlPrefix(), "data/html/CeremonyOfChaos/invite.htm");
+			message.setFile(player.getHtmlPrefix(), "CeremonyOfChaos/invite.htm");
 			player.sendPacket(message);
 		}
 	}

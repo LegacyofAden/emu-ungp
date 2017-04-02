@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.List;
-
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.SkillLearn;
@@ -29,64 +27,49 @@ import org.l2junity.gameserver.network.client.send.ExAcquirableSkillListByClass;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public final class L2FishermanInstance extends L2MerchantInstance
-{
-	public L2FishermanInstance(L2NpcTemplate template)
-	{
+import java.util.List;
+
+public final class L2FishermanInstance extends L2MerchantInstance {
+	public L2FishermanInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FishermanInstance);
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		String pom = "";
-		
-		if (val == 0)
-		{
+
+		if (val == 0) {
 			pom = "" + npcId;
-		}
-		else
-		{
+		} else {
 			pom = npcId + "-" + val;
 		}
-		
-		return "data/html/fisherman/" + pom + ".htm";
+
+		return "fisherman/" + pom + ".htm";
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (command.equalsIgnoreCase("FishSkillList"))
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (command.equalsIgnoreCase("FishSkillList")) {
 			showFishSkillList(player);
-		}
-		else
-		{
+		} else {
 			super.onBypassFeedback(player, command);
 		}
 	}
-	
-	public static void showFishSkillList(PlayerInstance player)
-	{
+
+	public static void showFishSkillList(PlayerInstance player) {
 		final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableFishingSkills(player);
-		
-		if (skills.isEmpty())
-		{
+
+		if (skills.isEmpty()) {
 			final int minlLevel = SkillTreesData.getInstance().getMinLevelForNewSkill(player, SkillTreesData.getInstance().getFishingSkillTree());
-			if (minlLevel > 0)
-			{
+			if (minlLevel > 0) {
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_DO_NOT_HAVE_ANY_FURTHER_SKILLS_TO_LEARN_COME_BACK_WHEN_YOU_HAVE_REACHED_LEVEL_S1);
 				sm.addInt(minlLevel);
 				player.sendPacket(sm);
-			}
-			else
-			{
+			} else {
 				player.sendPacket(SystemMessageId.THERE_ARE_NO_OTHER_SKILLS_TO_LEARN);
 			}
-		}
-		else
-		{
+		} else {
 			player.sendPacket(new ExAcquirableSkillListByClass(skills, AcquireSkillType.FISHING));
 		}
 	}

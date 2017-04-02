@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class RecipeShopMsg implements IClientOutgoingPacket
-{
+public class RecipeShopMsg implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public RecipeShopMsg(PlayerInstance player)
-	{
+
+	public RecipeShopMsg(PlayerInstance player) {
 		_activeChar = player;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RECIPE_SHOP_MSG.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeS(_activeChar.getStoreName());
 		return true;

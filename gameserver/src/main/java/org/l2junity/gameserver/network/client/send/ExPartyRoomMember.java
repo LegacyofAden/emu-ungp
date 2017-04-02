@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.gameserver.enums.MatchingMemberType;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
@@ -30,29 +26,29 @@ import org.l2junity.gameserver.model.matching.PartyMatchingRoom;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Gnacik
  */
-public class ExPartyRoomMember implements IClientOutgoingPacket
-{
+public class ExPartyRoomMember implements IClientOutgoingPacket {
 	private final PartyMatchingRoom _room;
 	private final MatchingMemberType _type;
-	
-	public ExPartyRoomMember(PlayerInstance player, PartyMatchingRoom room)
-	{
+
+	public ExPartyRoomMember(PlayerInstance player, PartyMatchingRoom room) {
 		_room = room;
 		_type = room.getMemberType(player);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PARTY_ROOM_MEMBER.writeId(packet);
-		
+
 		packet.writeD(_type.ordinal());
 		packet.writeD(_room.getMembersCount());
-		for (PlayerInstance member : _room.getMembers())
-		{
+		for (PlayerInstance member : _room.getMembers()) {
 			packet.writeD(member.getObjectId());
 			packet.writeS(member.getName());
 			packet.writeD(member.getActiveClass());
@@ -61,8 +57,7 @@ public class ExPartyRoomMember implements IClientOutgoingPacket
 			packet.writeD(_room.getMemberType(member).ordinal());
 			final Map<Integer, Long> _instanceTimes = InstanceManager.getInstance().getAllInstanceTimes(member);
 			packet.writeD(_instanceTimes.size());
-			for (Entry<Integer, Long> entry : _instanceTimes.entrySet())
-			{
+			for (Entry<Integer, Long> entry : _instanceTimes.entrySet()) {
 				final long instanceTime = TimeUnit.MILLISECONDS.toSeconds(entry.getValue() - System.currentTimeMillis());
 				packet.writeD(entry.getKey());
 				packet.writeD((int) instanceTime);

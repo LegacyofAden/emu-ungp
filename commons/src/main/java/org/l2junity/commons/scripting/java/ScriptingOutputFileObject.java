@@ -18,132 +18,108 @@
  */
 package org.l2junity.commons.scripting.java;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.URI;
-import java.nio.file.Path;
-
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.JavaFileObject;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.Path;
 
 /**
  * @author HorridoJoho
  */
-final class ScriptingOutputFileObject implements JavaFileObject
-{
+final class ScriptingOutputFileObject implements JavaFileObject {
 	private final Path _sourcePath;
 	private final String _javaName;
 	private final String _javaSimpleName;
 	private final ByteArrayOutputStream _out;
-	
-	public ScriptingOutputFileObject(Path sourcePath, String javaName, String javaSimpleName)
-	{
+
+	public ScriptingOutputFileObject(Path sourcePath, String javaName, String javaSimpleName) {
 		_sourcePath = sourcePath;
 		_javaName = javaName;
 		_javaSimpleName = javaSimpleName;
 		_out = new ByteArrayOutputStream();
 	}
-	
-	public Path getSourcePath()
-	{
+
+	public Path getSourcePath() {
 		return _sourcePath;
 	}
-	
-	public String getJavaName()
-	{
+
+	public String getJavaName() {
 		return _javaName;
 	}
-	
-	public String getJavaSimpleName()
-	{
+
+	public String getJavaSimpleName() {
 		return _javaSimpleName;
 	}
-	
-	public byte[] getJavaData()
-	{
+
+	public byte[] getJavaData() {
 		return _out.toByteArray();
 	}
-	
+
 	@Override
-	public URI toUri()
-	{
+	public URI toUri() {
 		return null;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return null;
 	}
-	
+
 	@Override
-	public InputStream openInputStream()
-	{
+	public InputStream openInputStream() {
 		return null;
 	}
-	
+
 	@Override
-	public OutputStream openOutputStream()
-	{
+	public OutputStream openOutputStream() {
 		return _out;
 	}
-	
+
 	@Override
-	public Reader openReader(boolean ignoreEncodingErrors)
-	{
+	public Reader openReader(boolean ignoreEncodingErrors) {
 		return null;
 	}
-	
+
 	@Override
-	public CharSequence getCharContent(boolean ignoreEncodingErrors)
-	{
+	public CharSequence getCharContent(boolean ignoreEncodingErrors) {
 		return null;
 	}
-	
+
 	@Override
-	public Writer openWriter()
-	{
+	public Writer openWriter() {
 		return null;
 	}
-	
+
 	@Override
-	public long getLastModified()
-	{
+	public long getLastModified() {
 		return 0;
 	}
-	
+
 	@Override
-	public boolean delete()
-	{
+	public boolean delete() {
 		return false;
 	}
-	
+
 	@Override
-	public Kind getKind()
-	{
+	public Kind getKind() {
 		return Kind.CLASS;
 	}
-	
+
 	@Override
-	public boolean isNameCompatible(String simpleName, Kind kind)
-	{
+	public boolean isNameCompatible(String simpleName, Kind kind) {
 		return (kind == Kind.CLASS) && (_javaSimpleName == simpleName);
 	}
-	
+
 	@Override
-	public NestingKind getNestingKind()
-	{
+	public NestingKind getNestingKind() {
 		return NestingKind.TOP_LEVEL;
 	}
-	
+
 	@Override
-	public Modifier getAccessLevel()
-	{
+	public Modifier getAccessLevel() {
 		return null;
 	}
-	
+
 }

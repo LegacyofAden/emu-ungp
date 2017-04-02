@@ -25,27 +25,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionPlayerChaotic.
+ *
  * @author mkizub
  */
-public class ConditionPlayerChaotic extends Condition
-{
+public class ConditionPlayerChaotic extends Condition {
 	private final boolean _required;
-	
+
 	/**
 	 * Instantiates a new condition player state.
+	 *
 	 * @param required the required value.
 	 */
-	public ConditionPlayerChaotic(boolean required)
-	{
+	public ConditionPlayerChaotic(boolean required) {
 		_required = required;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
 		final PlayerInstance player = effector.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			return ((player.getReputation() < 0) == _required);
 		}
 		return !_required;

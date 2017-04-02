@@ -23,23 +23,19 @@ import org.l2junity.gameserver.enums.CombatState;
 /**
  * @author lord_rex
  */
-public final class CombatStateReturn extends AbstractEventReturn
-{
+public final class CombatStateReturn extends AbstractEventReturn {
 	private final CombatState _value;
-	
-	public CombatStateReturn(boolean override, boolean abort, CombatState value)
-	{
+
+	public CombatStateReturn(boolean override, boolean abort, CombatState value) {
 		super(override, abort);
 		_value = value;
 	}
-	
-	public CombatState getValue()
-	{
+
+	public CombatState getValue() {
 		return _value;
 	}
-	
-	public static CombatStateReturn of(CombatState combatState)
-	{
+
+	public static CombatStateReturn of(CombatState combatState) {
 		return new CombatStateReturn(false, false, combatState);
 	}
 }

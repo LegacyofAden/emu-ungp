@@ -18,32 +18,28 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author UnAfraid
  */
-public class SpiritshotsBonusFinalizer implements IStatsFunction
-{
+public class SpiritshotsBonusFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = 1;
 		final PlayerInstance player = creature.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			final ItemInstance weapon = player.getActiveWeaponInstance();
-			if ((weapon != null) && weapon.isEnchanted())
-			{
+			if ((weapon != null) && weapon.isEnchanted()) {
 				baseValue += (weapon.getEnchantLevel() * 0.7) / 100;
 			}
 		}

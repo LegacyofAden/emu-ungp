@@ -26,56 +26,49 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM, Gnacik
  */
-public class RequestChangeNicknameColor implements IClientIncomingPacket
-{
+public class RequestChangeNicknameColor implements IClientIncomingPacket {
 	private static final int COLORS[] =
-	{
-		0x9393FF, // Pink
-		0x7C49FC, // Rose Pink
-		0x97F8FC, // Lemon Yellow
-		0xFA9AEE, // Lilac
-		0xFF5D93, // Cobalt Violet
-		0x00FCA0, // Mint Green
-		0xA0A601, // Peacock Green
-		0x7898AF, // Yellow Ochre
-		0x486295, // Chocolate
-		0x999999, // Silver
-	};
-	
+			{
+					0x9393FF, // Pink
+					0x7C49FC, // Rose Pink
+					0x97F8FC, // Lemon Yellow
+					0xFA9AEE, // Lilac
+					0xFF5D93, // Cobalt Violet
+					0x00FCA0, // Mint Green
+					0xA0A601, // Peacock Green
+					0x7898AF, // Yellow Ochre
+					0x486295, // Chocolate
+					0x999999, // Silver
+			};
+
 	private int _colorNum, _itemId;
 	private String _title;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_colorNum = packet.readD();
 		_title = packet.readS();
 		_itemId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((_colorNum < 0) || (_colorNum >= COLORS.length))
-		{
+
+		if ((_colorNum < 0) || (_colorNum >= COLORS.length)) {
 			return;
 		}
-		
+
 		final ItemInstance item = activeChar.getInventory().getItemByItemId(_itemId);
-		if ((item == null) || (item.getEtcItem() == null) || (item.getEtcItem().getHandlerName() == null) || !item.getEtcItem().getHandlerName().equalsIgnoreCase("NicknameColor"))
-		{
+		if ((item == null) || (item.getEtcItem() == null) || (item.getEtcItem().getHandlerName() == null) || !item.getEtcItem().getHandlerName().equalsIgnoreCase("NicknameColor")) {
 			return;
 		}
-		
-		if (activeChar.destroyItem("Consume", item, 1, null, true))
-		{
+
+		if (activeChar.destroyItem("Consume", item, 1, null, true)) {
 			activeChar.setTitle(_title);
 			activeChar.getAppearance().setTitleColor(COLORS[_colorNum]);
 			activeChar.broadcastUserInfo();

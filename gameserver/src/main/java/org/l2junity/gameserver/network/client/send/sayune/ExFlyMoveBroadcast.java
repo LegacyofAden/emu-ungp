@@ -28,33 +28,30 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExFlyMoveBroadcast implements IClientOutgoingPacket
-{
+public class ExFlyMoveBroadcast implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _mapId;
 	private final ILocational _currentLoc;
 	private final ILocational _targetLoc;
 	private final SayuneType _type;
-	
-	public ExFlyMoveBroadcast(PlayerInstance activeChar, SayuneType type, int mapId, ILocational targetLoc)
-	{
+
+	public ExFlyMoveBroadcast(PlayerInstance activeChar, SayuneType type, int mapId, ILocational targetLoc) {
 		_objectId = activeChar.getObjectId();
 		_type = type;
 		_mapId = mapId;
 		_currentLoc = activeChar;
 		_targetLoc = targetLoc;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_FLY_MOVE_BROADCAST.writeId(packet);
-		
+
 		packet.writeD(_objectId);
-		
+
 		packet.writeD(_type.ordinal());
 		packet.writeD(_mapId);
-		
+
 		packet.writeD((int) _targetLoc.getX());
 		packet.writeD((int) _targetLoc.getY());
 		packet.writeD((int) _targetLoc.getZ());

@@ -24,22 +24,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExAlterSkillRequest implements IClientOutgoingPacket
-{
+public class ExAlterSkillRequest implements IClientOutgoingPacket {
 	private final int _currentSkillId;
 	private final int _nextSkillId;
 	private final int _alterTime;
-	
-	public ExAlterSkillRequest(int currentSkill, int nextSkill, int alterTime)
-	{
+
+	public ExAlterSkillRequest(int currentSkill, int nextSkill, int alterTime) {
 		_currentSkillId = currentSkill;
 		_nextSkillId = nextSkill;
 		_alterTime = alterTime;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ALTER_SKILL_REQUEST.writeId(packet);
 		packet.writeD(_nextSkillId);
 		packet.writeD(_currentSkillId);

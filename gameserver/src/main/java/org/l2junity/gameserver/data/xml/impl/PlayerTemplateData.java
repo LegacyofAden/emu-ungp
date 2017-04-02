@@ -18,69 +18,57 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.util.IXmlReader;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
+import org.l2junity.gameserver.model.base.ClassId;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.util.IXmlReader;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
-import org.l2junity.gameserver.model.base.ClassId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * Loads player's base stats.
+ *
  * @author UnAfraid
  */
-public final class PlayerTemplateData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(PlayerTemplateData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = ExperienceData.class)
+public final class PlayerTemplateData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final PlayerTemplateData instance = new PlayerTemplateData();
+
 	private final Map<Integer, L2PcTemplate> _playerTemplates = new HashMap<>();
-	
-	protected PlayerTemplateData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ExperienceData.class))
-	private void load() throws Exception
-	{
+
+	private PlayerTemplateData() {
 		_playerTemplates.clear();
 		parseDatapackDirectory("data/stats/chars/baseStats", false);
-		LOGGER.info("Loaded {} character templates.", _playerTemplates.size());
+		log.info("Loaded {} character templates.", _playerTemplates.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		final StatsSet set = new StatsSet();
 		forEach(doc, "list", listNode -> forEach(listNode, IXmlReader::isNode, firstNode ->
 		{
-			switch (firstNode.getNodeName())
-			{
-				case "classId":
-				{
+			switch (firstNode.getNodeName()) {
+				case "classId": {
 					set.set("classId", Integer.parseInt(firstNode.getTextContent()));
 					break;
 				}
-				case "staticData":
-				{
+				case "staticData": {
 					forEach(firstNode, IXmlReader::isNode, staticDataNode ->
 					{
-						switch (staticDataNode.getNodeName())
-						{
-							case "creationPoints":
-							{
+						switch (staticDataNode.getNodeName()) {
+							case "creationPoints": {
 								final List<Location> creationPoints = new ArrayList<>();
 								forEach(staticDataNode, "node", innerNode ->
 								{
@@ -92,92 +80,81 @@ public final class PlayerTemplateData implements IGameXmlReader
 								set.set("creationPoints", creationPoints);
 								break;
 							}
-							case "basePDef":
-							{
+							case "basePDef": {
 								forEach(staticDataNode, "chest|legs|head|feet|gloves|underwear|cloak", innerNode ->
 								{
 									set.set(staticDataNode.getNodeName() + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							case "baseMDef":
-							{
+							case "baseMDef": {
 								forEach(staticDataNode, "rear|lear|rfinger|lfinger|neck", innerNode ->
 								{
 									set.set(staticDataNode.getNodeName() + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							case "baseDamRange":
-							{
+							case "baseDamRange": {
 								forEach(staticDataNode, "verticalDirection|horizontalDirection|distance|distance|width", innerNode ->
 								{
 									set.set(staticDataNode.getNodeName() + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							case "baseMoveSpd":
-							{
+							case "baseMoveSpd": {
 								forEach(staticDataNode, "walk|run|slowSwim|fastSwim", innerNode ->
 								{
 									set.set(staticDataNode.getNodeName() + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							case "collisionMale":
-							{
+							case "collisionMale": {
 								forEach(staticDataNode, "radius|height", innerNode ->
 								{
 									set.set("collision_" + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							case "collisionFemale":
-							{
+							case "collisionFemale": {
 								forEach(staticDataNode, "radius|height", innerNode ->
 								{
 									set.set(staticDataNode.getNodeName() + innerNode.getNodeName(), innerNode.getTextContent());
 								});
 								break;
 							}
-							default:
-							{
+							default: {
 								set.set(staticDataNode.getNodeName(), staticDataNode.getTextContent());
 								break;
 							}
 						}
 					});
-					
+
 					// calculate total pdef and mdef from parts
 					set.set("basePDef", (set.getInt("basePDefchest", 0) + set.getInt("basePDeflegs", 0) + set.getInt("basePDefhead", 0) + set.getInt("basePDeffeet", 0) + set.getInt("basePDefgloves", 0) + set.getInt("basePDefunderwear", 0) + set.getInt("basePDefcloak", 0)));
 					set.set("baseMDef", (set.getInt("baseMDefrear", 0) + set.getInt("baseMDeflear", 0) + set.getInt("baseMDefrfinger", 0) + set.getInt("baseMDefrfinger", 0) + set.getInt("baseMDefneck", 0)));
-					
+
 					_playerTemplates.put(set.getInt("classId"), new L2PcTemplate(set));
 					break;
 				}
-				case "lvlUpgainData":
-				{
+				case "lvlUpgainData": {
 					forEach(firstNode, "level", lvlUpNode ->
 					{
 						final int level = parseInteger(lvlUpNode.getAttributes(), "val");
 						final L2PcTemplate template = _playerTemplates.get(set.getInt("classId"));
-						if (template == null)
-						{
-							LOGGER.warn("No template but parsing lvlUpgainData?? file: {}", path);
+						if (template == null) {
+							log.warn("No template but parsing lvlUpgainData?? file: {}", path);
 							return;
 						}
-						
+
 						forEach(lvlUpNode, IXmlReader::isNode, innerNode ->
 						{
-							switch (innerNode.getNodeName())
-							{
+							switch (innerNode.getNodeName()) {
 								case "hp":
 								case "mp":
 								case "cp":
 								case "hpRegen":
 								case "mpRegen":
-								case "cpRegen":
-								{
+								case "cpRegen": {
 									template.setUpgainValue(innerNode.getNodeName(), level, Double.parseDouble(innerNode.getTextContent()));
 									break;
 								}
@@ -189,30 +166,16 @@ public final class PlayerTemplateData implements IGameXmlReader
 			}
 		}));
 	}
-	
-	public int getTemplateCount()
-	{
+
+	public int getTemplateCount() {
 		return _playerTemplates.size();
 	}
-	
-	public L2PcTemplate getTemplate(int classId)
-	{
+
+	public L2PcTemplate getTemplate(int classId) {
 		return _playerTemplates.get(classId);
 	}
-	
-	public L2PcTemplate getTemplate(ClassId classId)
-	{
+
+	public L2PcTemplate getTemplate(ClassId classId) {
 		return _playerTemplates.get(classId.getId());
-	}
-	
-	@InstanceGetter
-	public static final PlayerTemplateData getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final PlayerTemplateData INSTANCE = new PlayerTemplateData();
 	}
 }

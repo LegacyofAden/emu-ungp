@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.World;
@@ -38,138 +38,111 @@ import org.l2junity.network.PacketReader;
 /**
  * This packet manages the trade request.
  */
-public final class TradeRequest implements IClientIncomingPacket
-{
+public final class TradeRequest implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!player.getAccessLevel().allowTransaction())
-		{
+
+		if (!player.getAccessLevel().allowTransaction()) {
 			player.sendMessage("Transactions are disabled for your current Access Level.");
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final WorldObject target = World.getInstance().findObject(_objectId);
 		// If there is no target, target is far away or
 		// they are in different instances
 		// trade request is ignored and there is no system message.
-		if ((target == null) || !player.isInSurroundingRegion(target) || (target.getInstanceWorld() != player.getInstanceWorld()))
-		{
+		if ((target == null) || !player.isInSurroundingRegion(target) || (target.getInstanceWorld() != player.getInstanceWorld())) {
 			return;
 		}
-		
+
 		// If target and acting player are the same, trade request is ignored
 		// and the following system message is sent to acting player.
-		if (target.getObjectId() == player.getObjectId())
-		{
+		if (target.getObjectId() == player.getObjectId()) {
 			client.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 			return;
 		}
-		
-		if (!target.isPlayer())
-		{
+
+		if (!target.isPlayer()) {
 			client.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		
+
 		final PlayerInstance partner = target.getActingPlayer();
-		
+
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerTrade(player, partner), player, BooleanReturn.class);
-		if ((term != null) && !term.getValue())
-		{
+		if ((term != null) && !term.getValue()) {
 			return;
 		}
-		
-		if (partner.isInOlympiadMode() || player.isInOlympiadMode())
-		{
+
+		if (partner.isInOlympiadMode() || player.isInOlympiadMode()) {
 			player.sendMessage("A user currently participating in the Olympiad cannot accept or request a trade.");
 			return;
 		}
-		
+
 		// L2J Customs: Karma punishment
-		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_TRADE && (player.getReputation() < 0))
-		{
+		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_TRADE && (player.getReputation() < 0)) {
 			player.sendMessage("You cannot trade while you are in a chaotic state.");
 			return;
 		}
-		
-		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_TRADE && (partner.getReputation() < 0))
-		{
+
+		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_TRADE && (partner.getReputation() < 0)) {
 			player.sendMessage("You cannot request a trade while your target is in a chaotic state.");
 			return;
 		}
-		
-		if (GeneralConfig.JAIL_DISABLE_TRANSACTION && (player.isJailed() || partner.isJailed()))
-		{
+
+		if (GeneralConfig.JAIL_DISABLE_TRANSACTION && (player.isJailed() || partner.isJailed())) {
 			player.sendMessage("You cannot trade while you are in in Jail.");
 			return;
 		}
-		
-		if ((player.getPrivateStoreType() != PrivateStoreType.NONE) || (partner.getPrivateStoreType() != PrivateStoreType.NONE))
-		{
+
+		if ((player.getPrivateStoreType() != PrivateStoreType.NONE) || (partner.getPrivateStoreType() != PrivateStoreType.NONE)) {
 			client.sendPacket(SystemMessageId.WHILE_OPERATING_A_PRIVATE_STORE_OR_WORKSHOP_YOU_CANNOT_DISCARD_DESTROY_OR_TRADE_AN_ITEM);
 			return;
 		}
-		
-		if (player.isProcessingTransaction())
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.debug("Already trading with someone else.");
-			}
+
+		if (player.isProcessingTransaction()) {
 			client.sendPacket(SystemMessageId.YOU_ARE_ALREADY_TRADING_WITH_SOMEONE);
 			return;
 		}
-		
+
 		SystemMessage sm;
-		if (partner.isProcessingRequest() || partner.isProcessingTransaction())
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.info("Transaction already in progress.");
-			}
+		if (partner.isProcessingRequest() || partner.isProcessingTransaction()) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ON_ANOTHER_TASK_PLEASE_TRY_AGAIN_LATER);
 			sm.addString(partner.getName());
 			client.sendPacket(sm);
 			return;
 		}
-		
-		if (partner.getTradeRefusal())
-		{
+
+		if (partner.getTradeRefusal()) {
 			player.sendMessage("That person is in trade refusal mode.");
 			return;
 		}
-		
-		if (BlockList.isBlocked(partner, player))
-		{
+
+		if (BlockList.isBlocked(partner, player)) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_PLACED_YOU_ON_HIS_HER_IGNORE_LIST);
 			sm.addCharName(partner);
 			client.sendPacket(sm);
 			return;
 		}
-		
-		if (!player.isInRadius3d(partner, 150))
-		{
+
+		if (!player.isInRadius3d(partner, 150)) {
 			client.sendPacket(SystemMessageId.YOUR_TARGET_IS_OUT_OF_RANGE);
 			return;
 		}
-		
+
 		player.onTransactionRequest(partner);
 		partner.sendPacket(new SendTradeRequest(player.getObjectId()));
 		sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_REQUESTED_A_TRADE_WITH_C1);

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author malyelfik
  */
-public enum SubclassInfoType
-{
+public enum SubclassInfoType {
 	NO_CHANGES,
 	NEW_SLOT_USED,
 	CLASS_CHANGED

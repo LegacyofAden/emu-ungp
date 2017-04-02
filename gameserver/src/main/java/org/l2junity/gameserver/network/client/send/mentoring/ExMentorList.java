@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send.mentoring;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.Mentee;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,48 +25,42 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * @author UnAfraid
  */
-public class ExMentorList implements IClientOutgoingPacket
-{
+public class ExMentorList implements IClientOutgoingPacket {
 	private final int _type;
 	private final Collection<Mentee> _mentees;
-	
-	public ExMentorList(PlayerInstance activeChar)
-	{
-		if (activeChar.isMentor())
-		{
+
+	public ExMentorList(PlayerInstance activeChar) {
+		if (activeChar.isMentor()) {
 			_type = 0x01;
 			_mentees = MentorManager.getInstance().getMentees(activeChar.getObjectId());
-		}
-		else if (activeChar.isMentee())
-		{
+		} else if (activeChar.isMentee()) {
 			_type = 0x02;
 			_mentees = Arrays.asList(MentorManager.getInstance().getMentor(activeChar.getObjectId()));
-		}
-		else if (activeChar.isAwakenedClass()) // Not a mentor, Not a mentee, so can be a mentor
+		} else if (activeChar.isAwakenedClass()) // Not a mentor, Not a mentee, so can be a mentor
 		{
 			_mentees = Collections.emptyList();
 			_type = 0x01;
-		}
-		else
-		{
+		} else {
 			_mentees = Collections.emptyList();
 			_type = 0x00;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MENTOR_LIST.writeId(packet);
-		
+
 		packet.writeD(_type);
 		packet.writeD(0x00);
 		packet.writeD(_mentees.size());
-		for (Mentee mentee : _mentees)
-		{
+		for (Mentee mentee : _mentees) {
 			packet.writeD(mentee.getObjectId());
 			packet.writeS(mentee.getName());
 			packet.writeD(mentee.getClassId());

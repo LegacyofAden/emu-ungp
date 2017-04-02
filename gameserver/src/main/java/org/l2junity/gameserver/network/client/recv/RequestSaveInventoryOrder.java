@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -28,58 +25,55 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Format:(ch) d[dd]
+ *
  * @author -Wooden-
  */
-public final class RequestSaveInventoryOrder implements IClientIncomingPacket
-{
+public final class RequestSaveInventoryOrder implements IClientIncomingPacket {
 	private List<InventoryOrder> _order;
-	
-	/** client limit */
+
+	/**
+	 * client limit
+	 */
 	private static final int LIMIT = 125;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		int sz = packet.readD();
 		sz = Math.min(sz, LIMIT);
 		_order = new ArrayList<>(sz);
-		for (int i = 0; i < sz; i++)
-		{
+		for (int i = 0; i < sz; i++) {
 			int objectId = packet.readD();
 			int order = packet.readD();
 			_order.add(new InventoryOrder(objectId, order));
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			Inventory inventory = player.getInventory();
-			for (InventoryOrder order : _order)
-			{
+			for (InventoryOrder order : _order) {
 				ItemInstance item = inventory.getItemByObjectId(order.objectID);
-				if ((item != null) && (item.getItemLocation() == ItemLocation.INVENTORY))
-				{
+				if ((item != null) && (item.getItemLocation() == ItemLocation.INVENTORY)) {
 					item.setItemLocation(ItemLocation.INVENTORY, order.order);
 				}
 			}
 		}
 	}
-	
-	private static class InventoryOrder
-	{
+
+	private static class InventoryOrder {
 		int order;
-		
+
 		int objectID;
-		
-		public InventoryOrder(int id, int ord)
-		{
+
+		public InventoryOrder(int id, int ord) {
 			objectID = id;
 			order = ord;
 		}

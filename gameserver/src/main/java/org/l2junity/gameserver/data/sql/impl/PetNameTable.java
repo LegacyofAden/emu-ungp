@@ -18,6 +18,14 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
+import lombok.Getter;
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.configs.GameserverConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.impl.PetDataTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,92 +34,65 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.config.ServerConfig;
-import org.l2junity.gameserver.data.xml.impl.PetDataTable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@StartupComponent("Service")
+public class PetNameTable {
+	@Getter(lazy = true)
+	private static final PetNameTable instance = new PetNameTable();
 
-public class PetNameTable
-{
 	private static Logger LOGGER = LoggerFactory.getLogger(PetNameTable.class);
-	
-	public static PetNameTable getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	public boolean doesPetNameExist(String name, int petNpcId)
-	{
+
+	public boolean doesPetNameExist(String name, int petNpcId) {
 		boolean result = true;
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT name FROM pets p, items i WHERE p.item_obj_id = i.object_id AND name=? AND i.item_id IN (?)"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT name FROM pets p, items i WHERE p.item_obj_id = i.object_id AND name=? AND i.item_id IN (?)")) {
 			ps.setString(1, name);
 			StringBuilder cond = new StringBuilder();
-			if (!cond.toString().isEmpty())
-			{
+			if (!cond.toString().isEmpty()) {
 				cond.append(", ");
 			}
-			
+
 			cond.append(PetDataTable.getInstance().getPetItemsByNpc(petNpcId));
 			ps.setString(2, cond.toString());
-			try (ResultSet rs = ps.executeQuery())
-			{
+			try (ResultSet rs = ps.executeQuery()) {
 				result = rs.next();
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Could not check existing petname: {}", e.getMessage(), e);
 		}
 		return result;
 	}
-	
-	public boolean isValidPetName(String name)
-	{
+
+	public boolean isValidPetName(String name) {
 		boolean result = true;
-		
-		if (!isAlphaNumeric(name))
-		{
+
+		if (!isAlphaNumeric(name)) {
 			return result;
 		}
-		
+
 		Pattern pattern;
-		try
-		{
-			pattern = Pattern.compile(ServerConfig.PET_NAME_TEMPLATE);
-		}
-		catch (PatternSyntaxException e) // case of illegal pattern
+		try {
+			pattern = Pattern.compile(GameserverConfig.PET_NAME_TEMPLATE);
+		} catch (PatternSyntaxException e) // case of illegal pattern
 		{
 			LOGGER.warn("Pet name pattern of config is wrong!");
 			pattern = Pattern.compile(".*");
 		}
 		Matcher regexp = pattern.matcher(name);
-		if (!regexp.matches())
-		{
+		if (!regexp.matches()) {
 			result = false;
 		}
 		return result;
 	}
-	
-	private boolean isAlphaNumeric(String text)
-	{
+
+	private boolean isAlphaNumeric(String text) {
 		boolean result = true;
 		char[] chars = text.toCharArray();
-		for (int i = 0; i < chars.length; i++)
-		{
-			if (!Character.isLetterOrDigit(chars[i]))
-			{
+		for (char aChar : chars) {
+			if (!Character.isLetterOrDigit(aChar)) {
 				result = false;
 				break;
 			}
 		}
 		return result;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final PetNameTable _instance = new PetNameTable();
 	}
 }

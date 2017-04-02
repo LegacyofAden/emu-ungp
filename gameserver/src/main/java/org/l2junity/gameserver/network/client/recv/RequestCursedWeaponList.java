@@ -25,25 +25,22 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)
+ *
  * @author -Wooden-
  */
-public class RequestCursedWeaponList implements IClientIncomingPacket
-{
+public class RequestCursedWeaponList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		Creature activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new ExCursedWeaponList());
 	}
 }

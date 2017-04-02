@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Luis Arias
  */
-public enum QuestType
-{
+public enum QuestType {
 	REPEATABLE,
 	ONE_TIME,
 	DAILY

@@ -24,21 +24,18 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author JIV
  */
-public class ExRotation implements IClientOutgoingPacket
-{
+public class ExRotation implements IClientOutgoingPacket {
 	private final int _charId, _heading;
-	
-	public ExRotation(int charId, int heading)
-	{
+
+	public ExRotation(int charId, int heading) {
 		_charId = charId;
 		_heading = heading;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ROTATION.writeId(packet);
-		
+
 		packet.writeD(_charId);
 		packet.writeD(_heading);
 		return true;

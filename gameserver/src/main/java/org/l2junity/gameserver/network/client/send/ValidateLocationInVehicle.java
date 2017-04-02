@@ -23,26 +23,23 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ValidateLocationInVehicle implements IClientOutgoingPacket
-{
+public class ValidateLocationInVehicle implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _boatObjId;
 	private final int _heading;
 	private final Location _pos;
-	
-	public ValidateLocationInVehicle(PlayerInstance player)
-	{
+
+	public ValidateLocationInVehicle(PlayerInstance player) {
 		_charObjId = player.getObjectId();
 		_boatObjId = player.getBoat().getObjectId();
 		_heading = player.getHeading();
 		_pos = player.getInVehiclePosition();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VALIDATE_LOCATION_IN_VEHICLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_boatObjId);
 		packet.writeD((int) _pos.getX());

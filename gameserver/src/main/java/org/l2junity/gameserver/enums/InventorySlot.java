@@ -24,8 +24,7 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 /**
  * @author UnAfraid
  */
-public enum InventorySlot implements IUpdateTypeComponent
-{
+public enum InventorySlot implements IUpdateTypeComponent {
 	UNDER(Inventory.PAPERDOLL_UNDER),
 	REAR(Inventory.PAPERDOLL_REAR),
 	LEAR(Inventory.PAPERDOLL_LEAR),
@@ -59,22 +58,19 @@ public enum InventorySlot implements IUpdateTypeComponent
 	BROOCH_JEWEL4(Inventory.PAPERDOLL_BROOCH_JEWEL4),
 	BROOCH_JEWEL5(Inventory.PAPERDOLL_BROOCH_JEWEL5),
 	BROOCH_JEWEL6(Inventory.PAPERDOLL_BROOCH_JEWEL6);
-	
+
 	private final int _paperdollSlot;
-	
-	private InventorySlot(int paperdollSlot)
-	{
+
+	private InventorySlot(int paperdollSlot) {
 		_paperdollSlot = paperdollSlot;
 	}
-	
-	public int getSlot()
-	{
+
+	public int getSlot() {
 		return _paperdollSlot;
 	}
-	
+
 	@Override
-	public int getMask()
-	{
+	public int getMask() {
 		return ordinal();
 	}
 }

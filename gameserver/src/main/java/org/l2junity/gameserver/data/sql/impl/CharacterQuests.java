@@ -18,13 +18,8 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.sql.ICharacterQuests;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -34,12 +29,17 @@ import org.l2junity.gameserver.model.quest.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Implementation of {@link ICharacterQuests} interface.
+ *
  * @author malyelfik
  */
-public class CharacterQuests implements ICharacterQuests
-{
+public class CharacterQuests implements ICharacterQuests {
 	// Logger
 	private static final Logger _log = LoggerFactory.getLogger(CharacterQuests.class);
 	// SQL queries
@@ -49,144 +49,118 @@ public class CharacterQuests implements ICharacterQuests
 	private static final String DELETE_VAR = "DELETE FROM character_quests WHERE charId=? AND name=? AND var=?";
 	private static final String DELETE_QUEST = "DELETE FROM character_quests WHERE charId=? AND name=? AND var!=?";
 	private static final String DELETE_QUEST_REPEAT = "DELETE FROM character_quests WHERE charId=? AND name=?";
-	
+
 	@Override
-	public void loadPlayerQuests(PlayerInstance player)
-	{
+	public void loadPlayerQuests(PlayerInstance player) {
 		try (Connection conn = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement stateSel = conn.prepareStatement(SELECT_STATES);
-			PreparedStatement delInvalid = conn.prepareStatement(DELETE_QUEST_REPEAT);
-			PreparedStatement variableSel = conn.prepareStatement(SELECT_VARIABLES))
-		{
+			 PreparedStatement stateSel = conn.prepareStatement(SELECT_STATES);
+			 PreparedStatement delInvalid = conn.prepareStatement(DELETE_QUEST_REPEAT);
+			 PreparedStatement variableSel = conn.prepareStatement(SELECT_VARIABLES)) {
 			stateSel.setInt(1, player.getObjectId());
 			stateSel.setString(2, STATE_VAR);
-			
+
 			// Fetch pairs<questName, state>
-			try (ResultSet rs = stateSel.executeQuery())
-			{
-				while (rs.next())
-				{
+			try (ResultSet rs = stateSel.executeQuery()) {
+				while (rs.next()) {
 					// Check if quest with name exists
 					final String questName = rs.getString("name");
 					final Quest quest = QuestManager.getInstance().getQuest(questName);
-					if (quest == null)
-					{
+					if (quest == null) {
 						_log.debug("Unknown quest: {} for player {}!", questName, player.getName());
-						if (GeneralConfig.AUTODELETE_INVALID_QUEST_DATA)
-						{
+						if (GeneralConfig.AUTODELETE_INVALID_QUEST_DATA) {
 							delInvalid.setInt(1, player.getObjectId());
 							delInvalid.setString(2, questName);
 							delInvalid.executeUpdate();
 						}
 						continue;
 					}
-					
+
 					// Create new quest state
 					new QuestState(quest, player, State.getStateId(rs.getString("value")));
 				}
 			}
-			
+
 			// Load other quest variables
 			variableSel.setInt(1, player.getObjectId());
 			variableSel.setString(2, STATE_VAR);
-			try (ResultSet rs = variableSel.executeQuery())
-			{
-				while (rs.next())
-				{
+			try (ResultSet rs = variableSel.executeQuery()) {
+				while (rs.next()) {
 					final String questId = rs.getString("name");
 					final String var = rs.getString("var");
 					final String value = rs.getString("value");
-					
+
 					// Check if quest state exists
 					final QuestState qs = player.getQuestState(questId);
-					if (qs == null)
-					{
+					if (qs == null) {
 						_log.debug("Lost variable {} in quest {} for player {}!", var, questId, player.getName());
 						continue;
 					}
-					
+
 					// Add parameter to the quest
 					qs.set(var, value, false);
 				}
 			}
-			
-		}
-		catch (SQLException e)
-		{
+
+		} catch (SQLException e) {
 			_log.warn("Error occurred while loading player quests: ", e);
 		}
 	}
-	
+
 	@Override
-	public void updateQuestVar(QuestState qs, String key, String val)
-	{
+	public void updateQuestVar(QuestState qs, String key, String val) {
 		try (Connection conn = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = conn.prepareStatement(INSERT_OR_UPDATE_VAR))
-		{
+			 PreparedStatement ps = conn.prepareStatement(INSERT_OR_UPDATE_VAR)) {
 			ps.setInt(1, qs.getPlayer().getObjectId());
 			ps.setString(2, qs.getQuestName());
 			ps.setString(3, key);
 			ps.setString(4, val);
 			ps.setString(5, val);
 			ps.executeUpdate();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.warn("Error occurred while updating player quest variable: ", e);
 		}
 	}
-	
+
 	@Override
-	public void deleteQuestVar(QuestState qs, String key)
-	{
+	public void deleteQuestVar(QuestState qs, String key) {
 		try (Connection conn = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = conn.prepareStatement(DELETE_VAR))
-		{
+			 PreparedStatement ps = conn.prepareStatement(DELETE_VAR)) {
 			ps.setInt(1, qs.getPlayer().getObjectId());
 			ps.setString(2, qs.getQuestName());
 			ps.setString(3, key);
 			ps.executeUpdate();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.warn("Error occurred while deleting player quest variable: ", e);
 		}
 	}
-	
+
 	@Override
-	public void deletePlayerQuest(QuestState qs, boolean repeatable)
-	{
+	public void deletePlayerQuest(QuestState qs, boolean repeatable) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement(repeatable ? DELETE_QUEST_REPEAT : DELETE_QUEST))
-		{
+			 PreparedStatement ps = con.prepareStatement(repeatable ? DELETE_QUEST_REPEAT : DELETE_QUEST)) {
 			ps.setInt(1, qs.getPlayer().getObjectId());
 			ps.setString(2, qs.getQuestName());
-			if (!repeatable)
-			{
+			if (!repeatable) {
 				ps.setString(3, STATE_VAR);
 			}
 			ps.executeUpdate();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Error occurred while deleting player quest: ", e);
 		}
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------
 	// Singleton
 	// NOTE: Using simple singleton instead of singleton factory since only one implementation exist.
 	// ----: Would be nice if we have some kind of service container or full DI implementation.
 	// ----------------------------------------------------------------------------------------------
-	
-	public static ICharacterQuests getInstance()
-	{
+
+	public static ICharacterQuests getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final ICharacterQuests INSTANCE = new CharacterQuests();
 	}
 }

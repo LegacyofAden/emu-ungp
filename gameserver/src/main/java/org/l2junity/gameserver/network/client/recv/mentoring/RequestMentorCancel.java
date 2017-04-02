@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv.mentoring;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.Mentee;
@@ -35,70 +35,58 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestMentorCancel implements IClientIncomingPacket
-{
+public class RequestMentorCancel implements IClientIncomingPacket {
 	private int _confirmed;
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_confirmed = packet.readD();
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (_confirmed != 1)
-		{
+	public void run(L2GameClient client) {
+		if (_confirmed != 1) {
 			return;
 		}
-		
+
 		PlayerInstance player = client.getActiveChar();
 		int objectId = CharNameTable.getInstance().getIdByName(_name);
-		if (player != null)
-		{
-			if (player.isMentor())
-			{
+		if (player != null) {
+			if (player.isMentor()) {
 				final Mentee mentee = MentorManager.getInstance().getMentee(player.getObjectId(), objectId);
-				if (mentee != null)
-				{
+				if (mentee != null) {
 					MentorManager.getInstance().cancelAllMentoringBuffs(mentee.getPlayerInstance());
-					
-					if (MentorManager.getInstance().isAllMenteesOffline(player.getObjectId(), mentee.getObjectId()))
-					{
+
+					if (MentorManager.getInstance().isAllMenteesOffline(player.getObjectId(), mentee.getObjectId())) {
 						MentorManager.getInstance().cancelAllMentoringBuffs(player);
 					}
-					
+
 					player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_MENTORING_RELATIONSHIP_WITH_S1_HAS_BEEN_CANCELED_THE_MENTOR_CANNOT_OBTAIN_ANOTHER_MENTEE_FOR_TWO_DAYS).addString(_name));
 					MentorManager.getInstance().setPenalty(player.getObjectId(), PlayerConfig.MENTOR_PENALTY_FOR_MENTEE_LEAVE);
 					MentorManager.getInstance().deleteMentor(player.getObjectId(), mentee.getObjectId());
-					
+
 					// Notify to scripts
 					EventDispatcher.getInstance().notifyEventAsync(new OnPlayerMenteeRemove(player, mentee), player);
 				}
-				
-			}
-			else if (player.isMentee())
-			{
+
+			} else if (player.isMentee()) {
 				final Mentee mentor = MentorManager.getInstance().getMentor(player.getObjectId());
-				if ((mentor != null) && (mentor.getObjectId() == objectId))
-				{
+				if ((mentor != null) && (mentor.getObjectId() == objectId)) {
 					MentorManager.getInstance().cancelAllMentoringBuffs(player);
-					
-					if (MentorManager.getInstance().isAllMenteesOffline(mentor.getObjectId(), player.getObjectId()))
-					{
+
+					if (MentorManager.getInstance().isAllMenteesOffline(mentor.getObjectId(), player.getObjectId())) {
 						MentorManager.getInstance().cancelAllMentoringBuffs(mentor.getPlayerInstance());
 					}
-					
+
 					MentorManager.getInstance().setPenalty(mentor.getObjectId(), PlayerConfig.MENTOR_PENALTY_FOR_MENTEE_LEAVE);
 					MentorManager.getInstance().deleteMentor(mentor.getObjectId(), player.getObjectId());
-					
+
 					// Notify to scripts
 					EventDispatcher.getInstance().notifyEventAsync(new OnPlayerMenteeLeft(mentor, player), player);
-					
+
 					mentor.getPlayerInstance().sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_MENTORING_RELATIONSHIP_WITH_S1_HAS_BEEN_CANCELED_THE_MENTOR_CANNOT_OBTAIN_ANOTHER_MENTEE_FOR_TWO_DAYS).addString(_name));
 				}
 			}

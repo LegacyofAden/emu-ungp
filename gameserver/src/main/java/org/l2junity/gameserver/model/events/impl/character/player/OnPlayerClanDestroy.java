@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerClanDestroy implements IBaseEvent
-{
+public class OnPlayerClanDestroy implements IBaseEvent {
 	private final ClanMember _activeChar;
 	private final L2Clan _clan;
-	
-	public OnPlayerClanDestroy(ClanMember activeChar, L2Clan clan)
-	{
+
+	public OnPlayerClanDestroy(ClanMember activeChar, L2Clan clan) {
 		_activeChar = activeChar;
 		_clan = clan;
 	}
-	
-	public ClanMember getActiveChar()
-	{
+
+	public ClanMember getActiveChar() {
 		return _activeChar;
 	}
-	
-	public L2Clan getClan()
-	{
+
+	public L2Clan getClan() {
 		return _clan;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CLAN_DESTROY;
 	}
 }

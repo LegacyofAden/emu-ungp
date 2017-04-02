@@ -21,18 +21,15 @@ package org.l2junity.gameserver.model.events.returns;
 /**
  * @author Sdw
  */
-public class LongReturn extends TerminateReturn
-{
+public class LongReturn extends TerminateReturn {
 	private final long _value;
-	
-	public LongReturn(boolean terminate, boolean override, boolean abort, long value)
-	{
+
+	public LongReturn(boolean terminate, boolean override, boolean abort, long value) {
 		super(terminate, override, abort);
 		_value = value;
 	}
-	
-	public long getValue()
-	{
+
+	public long getValue() {
 		return _value;
 	}
 }

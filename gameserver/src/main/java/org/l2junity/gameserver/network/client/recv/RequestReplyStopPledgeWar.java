@@ -26,43 +26,36 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.4.2.1.2.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestReplyStopPledgeWar implements IClientIncomingPacket
-{
+public final class RequestReplyStopPledgeWar implements IClientIncomingPacket {
 	private int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readS();
 		_answer = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		PlayerInstance requestor = activeChar.getActiveRequester();
-		if (requestor == null)
-		{
+		if (requestor == null) {
 			return;
 		}
-		
-		if (_answer == 1)
-		{
+
+		if (_answer == 1) {
 			ClanTable.getInstance().deleteClansWar(requestor.getClanId(), activeChar.getClanId());
-		}
-		else
-		{
+		} else {
 			requestor.sendPacket(SystemMessageId.REQUEST_TO_END_WAR_HAS_BEEN_DENIED);
 		}
-		
+
 		activeChar.setActiveRequester(null);
 		requestor.onTransactionResponse();
 	}

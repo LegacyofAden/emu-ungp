@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExConfirmAddingContact;
@@ -26,38 +26,33 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)S S: Character Name
+ *
  * @author UnAfraid & mrTJO
  */
-public class RequestExAddContactToContactList implements IClientIncomingPacket
-{
+public class RequestExAddContactToContactList implements IClientIncomingPacket {
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!GeneralConfig.ALLOW_MAIL)
-		{
+	public void run(L2GameClient client) {
+		if (!GeneralConfig.ALLOW_MAIL) {
 			return;
 		}
-		
-		if (_name == null)
-		{
+
+		if (_name == null) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		boolean charAdded = activeChar.getContactList().add(_name);
 		activeChar.sendPacket(new ExConfirmAddingContact(_name, charAdded));
 	}

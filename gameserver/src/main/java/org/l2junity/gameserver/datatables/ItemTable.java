@@ -18,39 +18,17 @@
  */
 package org.l2junity.gameserver.datatables;
 
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
-
-import java.io.IOException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.idfactory.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.BasePathProvider;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.IXmlReader;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
-import org.l2junity.gameserver.config.ServerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.engines.items.DocumentItem;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.idfactory.IdFactory;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
@@ -66,20 +44,34 @@ import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.*;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+
 /**
  * This class serves as a container for all item templates in the game.
  */
-public class ItemTable
-{
-	private static Logger LOGGER = LoggerFactory.getLogger(ItemTable.class);
+
+@Slf4j
+@StartupComponent("Data")
+public class ItemTable {
+	@Getter(lazy = true)
+	private static final ItemTable instance = new ItemTable();
+
 	private static Logger LOGGER_ITEMS = LoggerFactory.getLogger("item");
-	
+
 	public static final Map<String, Integer> _slots = new HashMap<>();
-	
+
 	private L2Item[] _allTemplates;
-	
-	static
-	{
+
+	static {
 		_slots.put("shirt", L2Item.SLOT_UNDERWEAR);
 		_slots.put("lbracelet", L2Item.SLOT_L_BRACELET);
 		_slots.put("rbracelet", L2Item.SLOT_R_BRACELET);
@@ -110,7 +102,7 @@ public class ItemTable
 		_slots.put("brooch", L2Item.SLOT_BROOCH);
 		_slots.put("brooch_jewel", L2Item.SLOT_BROOCH_JEWEL);
 		_slots.put("none", L2Item.SLOT_NONE);
-		
+
 		// retail compatibility
 		_slots.put("onepiece", L2Item.SLOT_FULL_ARMOR);
 		_slots.put("hair2", L2Item.SLOT_HAIR2);
@@ -119,212 +111,174 @@ public class ItemTable
 		_slots.put("deco1", L2Item.SLOT_DECO);
 		_slots.put("waist", L2Item.SLOT_BELT);
 	}
-	
-	protected ItemTable()
-	{
+
+	protected ItemTable() {
+		reload();
 	}
-	
-	@Reload("item")
-	@Load(group = LoadGroup.class)
-	public void load()
-	{
+
+	public void reload() {
 		final List<L2Item> allItems = loadItems();
 		int highest = 0;
 		int etcItems = 0;
 		int armors = 0;
 		int weapons = 0;
-		for (L2Item item : allItems)
-		{
-			if (highest < item.getId())
-			{
+		for (L2Item item : allItems) {
+			if (highest < item.getId()) {
 				highest = item.getId();
 			}
-			
-			if (item instanceof EtcItem)
-			{
+
+			if (item instanceof EtcItem) {
 				etcItems++;
-			}
-			else if (item instanceof Armor)
-			{
+			} else if (item instanceof Armor) {
 				armors++;
-			}
-			else
-			{
+			} else {
 				weapons++;
 			}
 		}
-		
+
 		// Build lookup table.
 		_allTemplates = new L2Item[highest + 1];
 		allItems.forEach(i -> _allTemplates[i.getId()] = i);
-		
-		LOGGER.info("Highest Item Id used: {}.", highest);
-		LOGGER.info("Loaded {} EtcItem(s).", etcItems);
-		LOGGER.info("Loaded {} Armor(s).", armors);
-		LOGGER.info("Loaded {} Weapon(s).", weapons);
-		LOGGER.info("Loaded {} Item(s) in total.", (etcItems + armors + weapons));
+
+		log.info("Highest Item Id used: {}.", highest);
+		log.info("Loaded {} EtcItem(s).", etcItems);
+		log.info("Loaded {} Armor(s).", armors);
+		log.info("Loaded {} Weapon(s).", weapons);
+		log.info("Loaded {} Item(s) in total.", (etcItems + armors + weapons));
 	}
-	
-	private static List<L2Item> loadItems()
-	{
+
+	private static List<L2Item> loadItems() {
 		final List<L2Item> list = new ArrayList<>();
-		
-		list.addAll(loadItems(BasePathProvider.resolveDatapackPath(ServerConfig.DATAPACK_ROOT, "data/stats/items")));
-		
-		if (GeneralConfig.CUSTOM_ITEMS_LOAD)
-		{
-			list.addAll(loadItems(BasePathProvider.resolveDatapackPath(ServerConfig.DATAPACK_ROOT, "data/stats/items/custom")));
+
+		list.addAll(loadItems(Paths.get("data/stats/items")));
+
+		if (GeneralConfig.CUSTOM_ITEMS_LOAD) {
+			list.addAll(loadItems(Paths.get("data/stats/items/custom")));
 		}
-		
+
 		return list;
 	}
-	
-	private static List<L2Item> loadItems(final Path path)
-	{
+
+	private static List<L2Item> loadItems(final Path path) {
 		final List<L2Item> list = new ArrayList<>();
-		try
-		{
-			Files.walkFileTree(path, EnumSet.noneOf(FileVisitOption.class), 1/* Non-recursive load, because of custom sub-directory. */, new SimpleFileVisitor<Path>()
-			{
+		try {
+			Files.walkFileTree(path, EnumSet.noneOf(FileVisitOption.class), 1/* Non-recursive load, because of custom sub-directory. */, new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
-				{
-					if (!IXmlReader.XML_FILTER.accept(file))
-					{
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					if (!IXmlReader.XML_FILTER.accept(file)) {
 						return FileVisitResult.CONTINUE;
 					}
-					
+
 					final DocumentItem document = new DocumentItem(file.toFile());
 					document.parse();
 					list.addAll(document.getItemList());
 					return super.visitFile(file, attrs);
 				}
 			});
+		} catch (final IOException e) {
+			log.warn("Failed to load diractory: " + path, e);
 		}
-		catch (final IOException e)
-		{
-			LOGGER.warn("Failed to load diractory: " + path, e);
-		}
-		
+
 		return list;
 	}
-	
+
 	/**
 	 * Returns the item corresponding to the item ID
+	 *
 	 * @param id : int designating the item
 	 * @return L2Item
 	 */
-	public L2Item getTemplate(int id)
-	{
-		if ((id >= _allTemplates.length) || (id < 0))
-		{
+	public L2Item getTemplate(int id) {
+		if ((id >= _allTemplates.length) || (id < 0)) {
 			return null;
 		}
-		
+
 		return _allTemplates[id];
 	}
-	
+
 	/**
 	 * Create the L2ItemInstance corresponding to the Item Identifier and quantitiy add logs the activity. <B><U> Actions</U> :</B>
 	 * <li>Create and Init the L2ItemInstance corresponding to the Item Identifier and quantity</li>
 	 * <li>Add the L2ItemInstance object to _allObjects of L2world</li>
 	 * <li>Logs Item creation according to log settings</li>
-	 * @param process : String Identifier of process triggering this action
-	 * @param itemId : int Item Identifier of the item to be created
-	 * @param count : int Quantity of items to be created for stackable items
-	 * @param actor : L2PcInstance Player requesting the item creation
+	 *
+	 * @param process   : String Identifier of process triggering this action
+	 * @param itemId    : int Item Identifier of the item to be created
+	 * @param count     : int Quantity of items to be created for stackable items
+	 * @param actor     : L2PcInstance Player requesting the item creation
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the new item
 	 */
-	public ItemInstance createItem(String process, int itemId, long count, PlayerInstance actor, Object reference)
-	{
+	public ItemInstance createItem(String process, int itemId, long count, PlayerInstance actor, Object reference) {
 		// Create and Init the L2ItemInstance corresponding to the Item Identifier
 		ItemInstance item = new ItemInstance(IdFactory.getInstance().getNextId(), itemId);
-		
-		if (process.equalsIgnoreCase("loot"))
-		{
+
+		if (process.equalsIgnoreCase("loot")) {
 			ScheduledFuture<?> itemLootShedule;
 			if ((reference instanceof Attackable) && ((Attackable) reference).isRaid()) // loot privilege for raids
 			{
 				Attackable raid = (Attackable) reference;
 				// if in CommandChannel and was killing a World/RaidBoss
-				if ((raid.getFirstCommandChannelAttacked() != null) && !PlayerConfig.AUTO_LOOT_RAIDS)
-				{
+				if ((raid.getFirstCommandChannelAttacked() != null) && !PlayerConfig.AUTO_LOOT_RAIDS) {
 					item.setOwnerId(raid.getFirstCommandChannelAttacked().getLeaderObjectId());
-					itemLootShedule = ThreadPool.schedule(new ResetOwner(item), PlayerConfig.LOOT_RAIDS_PRIVILEGE_INTERVAL, TimeUnit.MILLISECONDS);
+					itemLootShedule = ThreadPool.getInstance().scheduleGeneral(new ResetOwner(item), PlayerConfig.LOOT_RAIDS_PRIVILEGE_INTERVAL, TimeUnit.MILLISECONDS);
 					item.setItemLootShedule(itemLootShedule);
 					item.setInstance(actor.getInstanceWorld());
 				}
-			}
-			else if (!PlayerConfig.AUTO_LOOT || ((reference instanceof L2EventMonsterInstance) && ((L2EventMonsterInstance) reference).eventDropOnGround()))
-			{
+			} else if (!PlayerConfig.AUTO_LOOT || ((reference instanceof L2EventMonsterInstance) && ((L2EventMonsterInstance) reference).eventDropOnGround())) {
 				item.setOwnerId(actor.getObjectId());
-				itemLootShedule = ThreadPool.schedule(new ResetOwner(item), 15000, TimeUnit.MILLISECONDS);
+				itemLootShedule = ThreadPool.getInstance().scheduleGeneral(new ResetOwner(item), 15000, TimeUnit.MILLISECONDS);
 				item.setItemLootShedule(itemLootShedule);
 				item.setInstance(actor.getInstanceWorld());
 			}
 		}
-		
-		if (GeneralConfig.DEBUG)
-		{
-			LOGGER.debug("Item created: {}", item);
+
+		if (GeneralConfig.DEBUG) {
+			log.debug("Item created: {}", item);
 		}
-		
+
 		// Add the L2ItemInstance object to _allObjects of L2world
 		World.getInstance().addObject(item);
-		
+
 		// Set Item parameters
-		if (item.isStackable() && (count > 1))
-		{
+		if (item.isStackable() && (count > 1)) {
 			item.setCount(count);
 		}
-		
-		if (GeneralConfig.LOG_ITEMS && !process.equals("Reset"))
-		{
-			if (!GeneralConfig.LOG_ITEMS_SMALL_LOG || (GeneralConfig.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getId() == ADENA_ID))))
-			{
-				if (item.getEnchantLevel() > 0)
-				{
+
+		if (GeneralConfig.LOG_ITEMS && !process.equals("Reset")) {
+			if (!GeneralConfig.LOG_ITEMS_SMALL_LOG || (GeneralConfig.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getId() == ADENA_ID)))) {
+				if (item.getEnchantLevel() > 0) {
 					LOGGER_ITEMS.info("CREATE:{}, item {}:+{} {}({}), {}, {}", process, item.getObjectId(), item.getEnchantLevel(), item.getItem().getName(), item.getCount(), actor, reference);
-				}
-				else
-				{
+				} else {
 					LOGGER_ITEMS.info("CREATE:{}, item {}:{}({}), {}, {}", process, item.getObjectId(), item.getItem().getName(), item.getCount(), actor, reference);
 				}
 			}
 		}
-		
-		if (actor != null)
-		{
-			if (actor.isGM())
-			{
+
+		if (actor != null) {
+			if (actor.isGM()) {
 				String referenceName = "no-reference";
-				if (reference instanceof WorldObject)
-				{
+				if (reference instanceof WorldObject) {
 					referenceName = (((WorldObject) reference).getName() != null ? ((WorldObject) reference).getName() : "no-name");
-				}
-				else if (reference instanceof String)
-				{
+				} else if (reference instanceof String) {
 					referenceName = (String) reference;
 				}
 				String targetName = (actor.getTarget() != null ? actor.getTarget().getName() : "no-target");
-				if (GeneralConfig.GMAUDIT)
-				{
+				if (GeneralConfig.GMAUDIT) {
 					GMAudit.auditGMAction(actor.getName() + " [" + actor.getObjectId() + "]", process + "(id: " + itemId + " count: " + count + " name: " + item.getItemName() + " objId: " + item.getObjectId() + ")", targetName, "L2Object referencing this action is: " + referenceName);
 				}
 			}
 		}
-		
+
 		// Notify to scripts
 		EventDispatcher.getInstance().notifyEventAsync(new OnItemCreate(process, item, actor, reference), item.getItem());
 		return item;
 	}
-	
-	public ItemInstance createItem(String process, int itemId, int count, PlayerInstance actor)
-	{
+
+	public ItemInstance createItem(String process, int itemId, int count, PlayerInstance actor) {
 		return createItem(process, itemId, count, actor, null);
 	}
-	
+
 	/**
 	 * Destroys the L2ItemInstance.<br>
 	 * <B><U> Actions</U> :</B>
@@ -333,116 +287,81 @@ public class ItemTable
 	 * <li>Removes the L2ItemInstance object to _allObjects of L2world</li>
 	 * <li>Logs Item deletion according to log settings</li>
 	 * </ul>
-	 * @param process a string identifier of process triggering this action.
-	 * @param item the item instance to be destroyed.
-	 * @param actor the player requesting the item destroy.
+	 *
+	 * @param process   a string identifier of process triggering this action.
+	 * @param item      the item instance to be destroyed.
+	 * @param actor     the player requesting the item destroy.
 	 * @param reference the object referencing current action like NPC selling item or previous item in transformation.
 	 */
-	public void destroyItem(String process, ItemInstance item, PlayerInstance actor, Object reference)
-	{
-		synchronized (item)
-		{
+	public void destroyItem(String process, ItemInstance item, PlayerInstance actor, Object reference) {
+		synchronized (item) {
 			long old = item.getCount();
 			item.setCount(0);
 			item.setOwnerId(0);
 			item.setItemLocation(ItemLocation.VOID);
 			item.setLastChange(ItemInstance.REMOVED);
-			
+
 			World.getInstance().removeObject(item);
 			IdFactory.getInstance().releaseId(item.getObjectId());
-			
-			if (GeneralConfig.LOG_ITEMS)
-			{
-				if (!GeneralConfig.LOG_ITEMS_SMALL_LOG || (GeneralConfig.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getId() == ADENA_ID))))
-				{
-					if (item.getEnchantLevel() > 0)
-					{
+
+			if (GeneralConfig.LOG_ITEMS) {
+				if (!GeneralConfig.LOG_ITEMS_SMALL_LOG || (GeneralConfig.LOG_ITEMS_SMALL_LOG && (item.isEquipable() || (item.getId() == ADENA_ID)))) {
+					if (item.getEnchantLevel() > 0) {
 						LOGGER_ITEMS.info("DELETE:{}, item {}:+{} {}({}), PrevCount({}), {}, {}", process, item.getObjectId(), item.getEnchantLevel(), item.getItem().getName(), item.getCount(), old, actor, reference);
-					}
-					else
-					{
+					} else {
 						LOGGER_ITEMS.info("DELETE:{}, item {}:{}({}), PrevCount({}), {}, {}", process, item.getObjectId(), item.getItem().getName(), item.getCount(), old, actor, reference);
 					}
 				}
 			}
-			
-			if (actor != null)
-			{
-				if (actor.isGM())
-				{
+
+			if (actor != null) {
+				if (actor.isGM()) {
 					String referenceName = "no-reference";
-					if (reference instanceof WorldObject)
-					{
+					if (reference instanceof WorldObject) {
 						referenceName = (((WorldObject) reference).getName() != null ? ((WorldObject) reference).getName() : "no-name");
-					}
-					else if (reference instanceof String)
-					{
+					} else if (reference instanceof String) {
 						referenceName = (String) reference;
 					}
 					String targetName = (actor.getTarget() != null ? actor.getTarget().getName() : "no-target");
-					if (GeneralConfig.GMAUDIT)
-					{
+					if (GeneralConfig.GMAUDIT) {
 						GMAudit.auditGMAction(actor.getName() + " [" + actor.getObjectId() + "]", process + "(id: " + item.getId() + " count: " + item.getCount() + " itemObjId: " + item.getObjectId() + ")", targetName, "L2Object referencing this action is: " + referenceName);
 					}
 				}
 			}
-			
+
 			// if it's a pet control item, delete the pet as well
-			if (item.getItem().isPetItem())
-			{
+			if (item.getItem().isPetItem()) {
 				try (Connection con = DatabaseFactory.getInstance().getConnection();
-					PreparedStatement statement = con.prepareStatement("DELETE FROM pets WHERE item_obj_id=?"))
-				{
+					 PreparedStatement statement = con.prepareStatement("DELETE FROM pets WHERE item_obj_id=?")) {
 					// Delete the pet in db
 					statement.setInt(1, item.getObjectId());
 					statement.execute();
-				}
-				catch (Exception e)
-				{
-					LOGGER.warn("could not delete pet objectid:", e);
+				} catch (Exception e) {
+					log.warn("could not delete pet objectid:", e);
 				}
 			}
 		}
 	}
-	
-	protected static class ResetOwner implements Runnable
-	{
+
+	protected static class ResetOwner implements Runnable {
 		ItemInstance _item;
-		
-		public ResetOwner(ItemInstance item)
-		{
+
+		public ResetOwner(ItemInstance item) {
 			_item = item;
 		}
-		
+
 		@Override
-		public void run()
-		{
+		public void run() {
 			_item.setOwnerId(0);
 			_item.setItemLootShedule(null);
 		}
 	}
-	
-	public L2Item[] getAllItems()
-	{
+
+	public L2Item[] getAllItems() {
 		return _allTemplates;
 	}
-	
-	public int getArraySize()
-	{
+
+	public int getArraySize() {
 		return _allTemplates.length;
-	}
-	
-	/**
-	 * @return a reference to this ItemTable object
-	 */
-	@InstanceGetter
-	public static ItemTable getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ItemTable _instance = new ItemTable();
 	}
 }

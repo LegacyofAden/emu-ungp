@@ -26,37 +26,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerQuestComplete implements IBaseEvent
-{
+public class OnPlayerQuestComplete implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _questId;
 	private final QuestType _questType;
-	
-	public OnPlayerQuestComplete(PlayerInstance activeChar, int questId, QuestType questType)
-	{
+
+	public OnPlayerQuestComplete(PlayerInstance activeChar, int questId, QuestType questType) {
 		_activeChar = activeChar;
 		_questId = questId;
 		_questType = questType;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getQuestId()
-	{
+
+	public int getQuestId() {
 		return _questId;
 	}
-	
-	public QuestType getQuestType()
-	{
+
+	public QuestType getQuestType() {
 		return _questType;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_QUEST_COMPLETE;
 	}
 }

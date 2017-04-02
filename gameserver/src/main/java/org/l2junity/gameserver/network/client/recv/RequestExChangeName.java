@@ -24,26 +24,24 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Reply for {@link ExNeedToChangeName}
+ *
  * @author JIV
  */
-public class RequestExChangeName implements IClientIncomingPacket
-{
+public class RequestExChangeName implements IClientIncomingPacket {
 	private String _newName;
 	private int _type;
 	private int _charSlot;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_type = packet.readD();
 		_newName = packet.readS();
 		_charSlot = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		_log.info("Recieved " + getClass().getSimpleName() + " name: " + _newName + " type: " + _type + " CharSlot: " + _charSlot);
 	}
 }

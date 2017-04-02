@@ -18,11 +18,8 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import java.lang.ref.WeakReference;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.Fishing;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -31,51 +28,40 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.fishing.ExAutoFishAvailable;
 
+import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
+
 /**
  * A fishing zone
+ *
  * @author durgus
  */
-public class FishingZone extends ZoneType
-{
-	public FishingZone(int id)
-	{
+public class FishingZone extends ZoneType {
+	public FishingZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer())
-		{
-			if ((GeneralConfig.ALLOWFISHING || character.canOverrideCond(PcCondOverride.ZONE_CONDITIONS)) && !character.isInsideZone(ZoneId.FISHING))
-			{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
+			if ((GeneralConfig.ALLOWFISHING || character.canOverrideCond(PcCondOverride.ZONE_CONDITIONS)) && !character.isInsideZone(ZoneId.FISHING)) {
 				WeakReference<PlayerInstance> weakPlayer = new WeakReference<>(character.getActingPlayer());
-				ThreadPool.execute(new Runnable()
-				{
+				ThreadPool.getInstance().executeGeneral(new Runnable() {
 					@Override
-					public void run()
-					{
+					public void run() {
 						PlayerInstance player = weakPlayer.get();
-						if (player != null)
-						{
+						if (player != null) {
 							Fishing fishing = player.getFishing();
-							if (player.isInsideZone(ZoneId.FISHING))
-							{
-								if (fishing.canFish() && !fishing.isFishing())
-								{
-									if (fishing.isAtValidLocation())
-									{
+							if (player.isInsideZone(ZoneId.FISHING)) {
+								if (fishing.canFish() && !fishing.isFishing()) {
+									if (fishing.isAtValidLocation()) {
 										player.sendPacket(ExAutoFishAvailable.YES);
-									}
-									else
-									{
+									} else {
 										player.sendPacket(ExAutoFishAvailable.NO);
 									}
 								}
-								ThreadPool.schedule(this, 7000, TimeUnit.MILLISECONDS);
-							}
-							else
-							{
+								ThreadPool.getInstance().scheduleGeneral(this, 7000, TimeUnit.MILLISECONDS);
+							} else {
 								player.sendPacket(ExAutoFishAvailable.NO);
 							}
 						}
@@ -85,22 +71,19 @@ public class FishingZone extends ZoneType
 			character.setInsideZone(ZoneId.FISHING, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.FISHING, false);
 			character.sendPacket(ExAutoFishAvailable.NO);
 		}
 	}
-	
+
 	/*
 	 * getWaterZ() this added function returns the Z value for the water surface. In effect this simply returns the upper Z value of the zone. This required some modification of L2ZoneForm, and zone form extensions.
 	 */
-	public int getWaterZ()
-	{
+	public int getWaterZ() {
 		return getZone().getHighZ();
 	}
 }

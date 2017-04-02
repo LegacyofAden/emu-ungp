@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.stats;
 /**
  * @author UnAfraid
  */
-public enum MoveType
-{
+public enum MoveType {
 	WALKING,
 	RUNNING,
 	SITTING,

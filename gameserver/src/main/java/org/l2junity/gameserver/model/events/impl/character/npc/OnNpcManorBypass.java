@@ -26,51 +26,43 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author malyelfik
  */
-public final class OnNpcManorBypass implements IBaseEvent
-{
+public final class OnNpcManorBypass implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Npc _target;
 	private final int _request;
 	private final int _manorId;
 	private final boolean _nextPeriod;
-	
-	public OnNpcManorBypass(PlayerInstance activeChar, Npc target, int request, int manorId, boolean nextPeriod)
-	{
+
+	public OnNpcManorBypass(PlayerInstance activeChar, Npc target, int request, int manorId, boolean nextPeriod) {
 		_activeChar = activeChar;
 		_target = target;
 		_request = request;
 		_manorId = manorId;
 		_nextPeriod = nextPeriod;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Npc getTarget()
-	{
+
+	public Npc getTarget() {
 		return _target;
 	}
-	
-	public int getRequest()
-	{
+
+	public int getRequest() {
 		return _request;
 	}
-	
-	public int getManorId()
-	{
+
+	public int getManorId() {
 		return _manorId;
 	}
-	
-	public boolean isNextPeriod()
-	{
+
+	public boolean isNextPeriod() {
 		return _nextPeriod;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_MANOR_BYPASS;
 	}
 }

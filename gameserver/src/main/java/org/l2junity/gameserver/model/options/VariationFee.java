@@ -21,31 +21,26 @@ package org.l2junity.gameserver.model.options;
 /**
  * @author Pere
  */
-public final class VariationFee
-{
+public final class VariationFee {
 	private final int _itemId;
 	private final long _itemCount;
 	private final long _cancelFee;
-	
-	public VariationFee(int itemId, long itemCount, long cancelFee)
-	{
+
+	public VariationFee(int itemId, long itemCount, long cancelFee) {
 		_itemId = itemId;
 		_itemCount = itemCount;
 		_cancelFee = cancelFee;
 	}
-	
-	public int getItemId()
-	{
+
+	public int getItemId() {
 		return _itemId;
 	}
-	
-	public long getItemCount()
-	{
+
+	public long getItemCount() {
 		return _itemCount;
 	}
-	
-	public long getCancelFee()
-	{
+
+	public long getCancelFee() {
 		return _cancelFee;
 	}
 }

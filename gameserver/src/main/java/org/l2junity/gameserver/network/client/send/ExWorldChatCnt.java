@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -26,20 +26,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExWorldChatCnt implements IClientOutgoingPacket
-{
+public class ExWorldChatCnt implements IClientOutgoingPacket {
 	private final int _points;
-	
-	public ExWorldChatCnt(PlayerInstance activeChar)
-	{
+
+	public ExWorldChatCnt(PlayerInstance activeChar) {
 		_points = activeChar.getLevel() < GeneralConfig.WORLD_CHAT_MIN_LEVEL ? 0 : Math.max(activeChar.getWorldChatPoints() - activeChar.getWorldChatUsed(), 0);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_WORLD_CHAT_CNT.writeId(packet);
-		
+
 		packet.writeD(_points);
 		return true;
 	}

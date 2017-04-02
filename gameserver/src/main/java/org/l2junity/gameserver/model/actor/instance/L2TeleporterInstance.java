@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.TeleportType;
@@ -34,150 +32,126 @@ import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.StringTokenizer;
+
 /**
  * @author NightMarez
  */
-public final class L2TeleporterInstance extends Npc
-{
+public final class L2TeleporterInstance extends Npc {
 	private static final Logger LOGGER = LoggerFactory.getLogger(L2TeleporterInstance.class);
 
 	private static final CommonSkill[] FORBIDDEN_TRANSFORM =
-	{
-		CommonSkill.FROG_TRANSFORM,
-		CommonSkill.CHILD_TRANSFORM,
-		CommonSkill.NATIVE_TRANSFORM
-	};
-	
-	public L2TeleporterInstance(L2NpcTemplate template)
-	{
+			{
+					CommonSkill.FROG_TRANSFORM,
+					CommonSkill.CHILD_TRANSFORM,
+					CommonSkill.NATIVE_TRANSFORM
+			};
+
+	public L2TeleporterInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2TeleporterInstance);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return attacker.isMonster() || super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
+	public void onBypassFeedback(PlayerInstance player, String command) {
 		// Check if transformed
-		for (CommonSkill skill : FORBIDDEN_TRANSFORM)
-		{
-			if (player.isAffectedBySkill(skill.getId()))
-			{
-				sendHtmlMessage(player, "data/html/teleporter/epictransformed.htm");
+		for (CommonSkill skill : FORBIDDEN_TRANSFORM) {
+			if (player.isAffectedBySkill(skill.getId())) {
+				sendHtmlMessage(player, "teleporter/epictransformed.htm");
 				return;
 			}
 		}
-		
+
 		// Process bypass
 		final StringTokenizer st = new StringTokenizer(command, " ");
-		switch (st.nextToken())
-		{
-			case "showNoblesSelect":
-			{
-				sendHtmlMessage(player, "data/html/teleporter/" + (player.isNoble() ? "nobles_select" : "not_nobles") + ".htm");
+		switch (st.nextToken()) {
+			case "showNoblesSelect": {
+				sendHtmlMessage(player, "teleporter/" + (player.isNoble() ? "nobles_select" : "not_nobles") + ".htm");
 				break;
 			}
-			case "showTeleports":
-			{
+			case "showTeleports": {
 				final String listName = (st.hasMoreTokens()) ? st.nextToken() : TeleportType.NORMAL.name();
 				final TeleportHolder holder = TeleportersData.getInstance().getHolder(getId(), listName);
-				if (holder == null)
-				{
+				if (holder == null) {
 					LOGGER.warn("Player {} requested show teleports for list with name {} at NPC {}!", player.getObjectId(), listName, getId());
 					return;
 				}
 				holder.showTeleportList(player, this);
 				break;
 			}
-			case "teleport":
-			{
+			case "teleport": {
 				// Check for required count of params.
-				if (st.countTokens() != 2)
-				{
+				if (st.countTokens() != 2) {
 					LOGGER.warn("Player {} send unhandled teleport command: {}", player.getObjectId(), command);
 					return;
 				}
-				
+
 				final String listName = st.nextToken();
 				final TeleportHolder holder = TeleportersData.getInstance().getHolder(getId(), listName);
-				if (holder == null)
-				{
+				if (holder == null) {
 					LOGGER.warn("Player {} requested unknown teleport list: {} for npc: {}!", player.getObjectId(), listName, getId());
 					return;
 				}
 				holder.doTeleport(player, this, parseNextInt(st, -1));
 				break;
 			}
-			case "chat":
-			{
+			case "chat": {
 				int val = 0;
-				try
-				{
+				try {
 					val = Integer.parseInt(command.substring(5));
-				}
-				catch (IndexOutOfBoundsException | NumberFormatException ignored)
-				{
+				} catch (IndexOutOfBoundsException | NumberFormatException ignored) {
 				}
 				showChatWindow(player, val);
 				break;
 			}
-			default:
-			{
+			default: {
 				super.onBypassFeedback(player, command);
 			}
 		}
 	}
-	
-	private int parseNextInt(StringTokenizer st, int defaultVal)
-	{
-		if (st.hasMoreTokens())
-		{
+
+	private int parseNextInt(StringTokenizer st, int defaultVal) {
+		if (st.hasMoreTokens()) {
 			final String token = st.nextToken();
-			if (Util.isDigit(token))
-			{
+			if (Util.isDigit(token)) {
 				return Integer.valueOf(token);
 			}
 		}
 		return defaultVal;
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		final String pom = (val == 0) ? String.valueOf(npcId) : (npcId + "-" + val);
-		return "data/html/teleporter/" + pom + ".htm";
+		return "teleporter/" + pom + ".htm";
 	}
-	
+
 	@Override
-	public void showChatWindow(PlayerInstance player)
-	{
+	public void showChatWindow(PlayerInstance player) {
 		// Teleporter isn't on castle ground
-		if (CastleManager.getInstance().getCastle(this) == null)
-		{
+		if (CastleManager.getInstance().getCastle(this) == null) {
 			super.showChatWindow(player);
 			return;
 		}
-		
+
 		// Teleporter is on castle ground
-		String filename = "data/html/teleporter/castleteleporter-no.htm";
+		String filename = "teleporter/castleteleporter-no.htm";
 		if ((player.getClan() != null) && (getCastle().getOwnerId() == player.getClanId())) // Clan owns castle
 		{
 			filename = getHtmlPath(getId(), 0); // Owner message window
-		}
-		else if (getCastle().getSiege().isInProgress()) // Teleporter is busy due siege
+		} else if (getCastle().getSiege().isInProgress()) // Teleporter is busy due siege
 		{
-			filename = "data/html/teleporter/castleteleporter-busy.htm"; // Busy because of siege
+			filename = "teleporter/castleteleporter-busy.htm"; // Busy because of siege
 		}
 		sendHtmlMessage(player, filename);
 	}
-	
-	private void sendHtmlMessage(PlayerInstance player, String filename)
-	{
+
+	private void sendHtmlMessage(PlayerInstance player, String filename) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getHtmlPrefix(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));

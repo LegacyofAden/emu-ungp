@@ -18,48 +18,41 @@
  */
 package org.l2junity.gameserver.data.sql.migrations;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.sql.migrations.IDatabaseMigration;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /**
  * @author UnAfraid
  */
-public class ExtendDropMigration implements IDatabaseMigration
-{
+public class ExtendDropMigration implements IDatabaseMigration {
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "2017-02-16_ExtendDropMigration";
 	}
-	
+
 	@Override
-	public boolean onUp() throws SQLException
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
-			try (PreparedStatement st = con.prepareStatement("DELETE FROM character_variables WHERE var = ?"))
-			{
+	public boolean onUp() throws SQLException {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
+			try (PreparedStatement st = con.prepareStatement("DELETE FROM character_variables WHERE var = ?")) {
 				st.setString(1, PlayerVariables.EXTEND_DROP);
 				st.execute();
 				return true;
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean onDown()
-	{
+	public boolean onDown() {
 		return false;
 	}
-	
+
 	@Override
-	public boolean isReversable()
-	{
+	public boolean isReversable() {
 		return false;
 	}
 }

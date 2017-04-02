@@ -18,11 +18,7 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
+import lombok.Getter;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.alchemy.AlchemyCraftData;
@@ -33,80 +29,67 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Sdw
  */
-public class AlchemyData implements IGameXmlReader
-{
+public class AlchemyData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final AlchemyData instance = new AlchemyData();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AlchemyData.class);
-	
+
 	private final Map<Long, AlchemyCraftData> _alchemy = new HashMap<>();
-	
-	protected AlchemyData()
-	{
+
+	protected AlchemyData() {
 	}
-	
-	protected void load() throws Exception
-	{
+
+	protected void load() throws Exception {
 		_alchemy.clear();
 		parseDatapackFile("data/AlchemyData.xml");
 		LOGGER.info("Loaded {} alchemy craft skills.", _alchemy.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		StatsSet set;
 		Node att;
 		NamedNodeMap attrs;
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("skill".equalsIgnoreCase(d.getNodeName()))
-					{
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("skill".equalsIgnoreCase(d.getNodeName())) {
 						attrs = d.getAttributes();
 						set = new StatsSet();
-						for (int i = 0; i < attrs.getLength(); i++)
-						{
+						for (int i = 0; i < attrs.getLength(); i++) {
 							att = attrs.item(i);
 							set.set(att.getNodeName(), att.getNodeValue());
 						}
-						
+
 						final AlchemyCraftData alchemyCraft = new AlchemyCraftData(set);
-						
-						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling())
-						{
-							if ("ingredients".equalsIgnoreCase(c.getNodeName()))
-							{
-								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling())
-								{
-									if ("item".equalsIgnoreCase(b.getNodeName()))
-									{
+
+						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling()) {
+							if ("ingredients".equalsIgnoreCase(c.getNodeName())) {
+								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling()) {
+									if ("item".equalsIgnoreCase(b.getNodeName())) {
 										int ingId = Integer.parseInt(b.getAttributes().getNamedItem("id").getNodeValue());
 										int ingCount = Integer.parseInt(b.getAttributes().getNamedItem("count").getNodeValue());
 										alchemyCraft.addIngredient(new ItemHolder(ingId, ingCount));
 									}
 								}
-							}
-							else if ("production".equalsIgnoreCase(c.getNodeName()))
-							{
-								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling())
-								{
-									if ("item".equalsIgnoreCase(b.getNodeName()))
-									{
+							} else if ("production".equalsIgnoreCase(c.getNodeName())) {
+								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling()) {
+									if ("item".equalsIgnoreCase(b.getNodeName())) {
 										final String type = b.getAttributes().getNamedItem("type").getNodeValue();
 										int prodId = Integer.parseInt(b.getAttributes().getNamedItem("id").getNodeValue());
 										int prodCount = Integer.parseInt(b.getAttributes().getNamedItem("count").getNodeValue());
-										
-										if (type.equalsIgnoreCase("ON_SUCCESS"))
-										{
+
+										if (type.equalsIgnoreCase("ON_SUCCESS")) {
 											alchemyCraft.setProductionSuccess(new ItemHolder(prodId, prodCount));
-										}
-										else if (type.equalsIgnoreCase("ON_FAILURE"))
-										{
+										} else if (type.equalsIgnoreCase("ON_FAILURE")) {
 											alchemyCraft.setProductionFailure(new ItemHolder(prodId, prodCount));
 										}
 									}
@@ -119,29 +102,12 @@ public class AlchemyData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _alchemy.size();
 	}
-	
-	public AlchemyCraftData getCraftData(int skillId, int skillLevel)
-	{
+
+	public AlchemyCraftData getCraftData(int skillId, int skillLevel) {
 		return _alchemy.get(SkillData.getSkillHashCode(skillId, skillLevel));
-	}
-	
-	/**
-	 * Gets the single instance of AlchemyData.
-	 * @return single instance of AlchemyData
-	 */
-	@InstanceGetter
-	public static final AlchemyData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final AlchemyData _instance = new AlchemyData();
 	}
 }

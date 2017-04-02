@@ -24,16 +24,13 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Kerberos
  */
-public class AcquireSkillDone implements IClientOutgoingPacket
-{
-	public AcquireSkillDone()
-	{
+public class AcquireSkillDone implements IClientOutgoingPacket {
+	public AcquireSkillDone() {
 		//
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ACQUIRE_SKILL_DONE.writeId(packet);
 		return true;
 	}

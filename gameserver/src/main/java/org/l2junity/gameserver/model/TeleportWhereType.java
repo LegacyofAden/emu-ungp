@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model;
 
 /**
  * All teleport types.
+ *
  * @author xban1x
  */
-public enum TeleportWhereType
-{
+public enum TeleportWhereType {
 	CASTLE,
 	CLANHALL,
 	SIEGEFLAG,

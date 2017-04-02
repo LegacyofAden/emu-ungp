@@ -25,52 +25,42 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 /**
  * @author Sdw
  */
-public class TeleportZone extends ZoneType
-{
+public class TeleportZone extends ZoneType {
 	private int _x = -1;
 	private int _y = -1;
 	private int _z = -1;
-	
-	public TeleportZone(int id)
-	{
+
+	public TeleportZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		switch (name)
-		{
-			case "oustX":
-			{
+	public void setParameter(String name, String value) {
+		switch (name) {
+			case "oustX": {
 				_x = Integer.parseInt(value);
 				break;
 			}
-			case "oustY":
-			{
+			case "oustY": {
 				_y = Integer.parseInt(value);
 				break;
 			}
-			case "oustZ":
-			{
+			case "oustZ": {
 				_z = Integer.parseInt(value);
 				break;
 			}
-			default:
-			{
+			default: {
 				super.setParameter(name, value);
 			}
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.teleToLocation(new Location(_x, _y, _z));
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 	}
 }

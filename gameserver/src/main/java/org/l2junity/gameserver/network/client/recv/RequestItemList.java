@@ -23,21 +23,18 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestItemList implements IClientIncomingPacket
-{
+public final class RequestItemList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if ((client != null) && (client.getActiveChar() != null) && !client.getActiveChar().isInventoryDisabled())
-		{
+	public void run(L2GameClient client) {
+		if ((client != null) && (client.getActiveChar() != null) && !client.getActiveChar().isInventoryDisabled()) {
 			client.getActiveChar().sendItemList(true);
 		}
 	}

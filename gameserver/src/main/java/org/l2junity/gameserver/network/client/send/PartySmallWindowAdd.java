@@ -23,27 +23,24 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class PartySmallWindowAdd implements IClientOutgoingPacket
-{
+public final class PartySmallWindowAdd implements IClientOutgoingPacket {
 	private final PlayerInstance _member;
 	private final Party _party;
-	
-	public PartySmallWindowAdd(PlayerInstance member, Party party)
-	{
+
+	public PartySmallWindowAdd(PlayerInstance member, Party party) {
 		_member = member;
 		_party = party;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PARTY_SMALL_WINDOW_ADD.writeId(packet);
-		
+
 		packet.writeD(_party.getLeaderObjectId()); // c3
 		packet.writeD(_party.getDistributionType().getId()); // c3
 		packet.writeD(_member.getObjectId());
 		packet.writeS(_member.getName());
-		
+
 		packet.writeD((int) _member.getCurrentCp()); // c4
 		packet.writeD(_member.getMaxCp()); // c4
 		packet.writeD((int) _member.getCurrentHp());

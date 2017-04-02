@@ -27,33 +27,28 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestWithDrawalParty implements IClientIncomingPacket
-{
+public final class RequestWithDrawalParty implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final Party party = player.getParty();
-		if (party != null)
-		{
+		if (party != null) {
 			party.removePartyMember(player, MessageType.LEFT);
-			
+
 			final MatchingRoom room = player.getMatchingRoom();
-			if (room != null)
-			{
+			if (room != null) {
 				room.deleteMember(player, false);
 			}
 		}

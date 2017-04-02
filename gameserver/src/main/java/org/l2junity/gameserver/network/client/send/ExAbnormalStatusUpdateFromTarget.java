@@ -18,41 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExAbnormalStatusUpdateFromTarget implements IClientOutgoingPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+public class ExAbnormalStatusUpdateFromTarget implements IClientOutgoingPacket {
 	private final Creature _character;
 	private List<Effect> _effects = new ArrayList<>();
-	
-	private static class Effect
-	{
+
+	private static class Effect {
 		protected int _skillId;
 		protected int _level;
 		protected int _subLevel;
 		protected int _abnormalType;
 		protected int _duration;
 		protected int _caster;
-		
-		public Effect(BuffInfo info)
-		{
+
+		public Effect(BuffInfo info) {
 			final Skill skill = info.getSkill();
 			final Creature caster = info.getEffector();
 			int casterId = 0;
-			if (caster != null)
-			{
+			if (caster != null) {
 				casterId = caster.getObjectId();
 			}
-			
+
 			_skillId = skill.getDisplayId();
 			_level = skill.getDisplayLevel();
 			_subLevel = skill.getSubLevel();
@@ -61,31 +57,28 @@ public class ExAbnormalStatusUpdateFromTarget implements IClientOutgoingPacket
 			_caster = casterId;
 		}
 	}
-	
-	public ExAbnormalStatusUpdateFromTarget(Creature character)
-	{
+
+	public ExAbnormalStatusUpdateFromTarget(Creature character) {
 		//@formatter:off
 		_character = character;
 		_effects = character.getEffectList().getEffects()
-					.stream()
-					.filter(Objects::nonNull)
-					.filter(BuffInfo::isInUse)
-					.filter(b -> !b.getSkill().isToggle())
-					.map(Effect::new)
-					.collect(Collectors.toList());
+				.stream()
+				.filter(Objects::nonNull)
+				.filter(BuffInfo::isInUse)
+				.filter(b -> !b.getSkill().isToggle())
+				.map(Effect::new)
+				.collect(Collectors.toList());
 		//@formatter:on
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ABNORMAL_STATUS_UPDATE_FROM_TARGET.writeId(packet);
-		
+
 		packet.writeD(_character.getObjectId());
 		packet.writeH(_effects.size());
-		
-		for (Effect info : _effects)
-		{
+
+		for (Effect info : _effects) {
 			packet.writeD(info._skillId);
 			packet.writeH(info._level);
 			packet.writeH(info._subLevel);

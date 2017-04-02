@@ -23,29 +23,26 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExMoveToLocationInAirShip implements IClientOutgoingPacket
-{
+public class ExMoveToLocationInAirShip implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _airShipId;
 	private final Location _destination;
 	private final int _heading;
-	
+
 	/**
 	 * @param player
 	 */
-	public ExMoveToLocationInAirShip(PlayerInstance player)
-	{
+	public ExMoveToLocationInAirShip(PlayerInstance player) {
 		_charObjId = player.getObjectId();
 		_airShipId = player.getAirShip().getObjectId();
 		_destination = player.getInVehiclePosition();
 		_heading = player.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MOVE_TO_LOCATION_IN_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_airShipId);
 		packet.writeD((int) _destination.getX());

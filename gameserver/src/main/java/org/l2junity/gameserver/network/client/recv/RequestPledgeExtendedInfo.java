@@ -23,23 +23,21 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (c) S S: pledge name?
+ *
  * @author -Wooden-
  */
-public class RequestPledgeExtendedInfo implements IClientIncomingPacket
-{
+public class RequestPledgeExtendedInfo implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// TODO: Implement
 	}
 }

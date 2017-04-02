@@ -24,27 +24,23 @@ import org.l2junity.network.PacketReader;
 
 /**
  * format ch c: (id) 0xD0 h: (subid) 0x12
+ *
  * @author -Wooden-
  */
-public final class RequestOlympiadObserverEnd implements IClientIncomingPacket
-{
+public final class RequestOlympiadObserverEnd implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.inObserverMode())
-		{
+
+		if (activeChar.inObserverMode()) {
 			activeChar.leaveOlympiadObserverMode();
 		}
 	}

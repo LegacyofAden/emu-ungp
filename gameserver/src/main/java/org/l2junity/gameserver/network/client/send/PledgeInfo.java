@@ -18,26 +18,23 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PledgeInfo implements IClientOutgoingPacket
-{
+public class PledgeInfo implements IClientOutgoingPacket {
 	private final L2Clan _clan;
-	
-	public PledgeInfo(L2Clan clan)
-	{
+
+	public PledgeInfo(L2Clan clan) {
 		_clan = clan;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_INFO.writeId(packet);
-		
-		packet.writeD(HexIDConfig.SERVER_ID);
+
+		packet.writeD(GameserverConfig.SERVER_ID);
 		packet.writeD(_clan.getId());
 		packet.writeS(_clan.getName());
 		packet.writeS(_clan.getAllyName());

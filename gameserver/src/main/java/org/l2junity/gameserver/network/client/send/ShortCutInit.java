@@ -23,35 +23,28 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class ShortCutInit implements IClientOutgoingPacket
-{
+public final class ShortCutInit implements IClientOutgoingPacket {
 	private Shortcut[] _shortCuts;
-	
-	public ShortCutInit(PlayerInstance activeChar)
-	{
-		if (activeChar == null)
-		{
+
+	public ShortCutInit(PlayerInstance activeChar) {
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		_shortCuts = activeChar.getAllShortCuts();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHORT_CUT_INIT.writeId(packet);
-		
+
 		packet.writeD(_shortCuts.length);
-		for (Shortcut sc : _shortCuts)
-		{
+		for (Shortcut sc : _shortCuts) {
 			packet.writeD(sc.getType().ordinal());
 			packet.writeD(sc.getSlot() + (sc.getPage() * 12));
-			
-			switch (sc.getType())
-			{
-				case ITEM:
-				{
+
+			switch (sc.getType()) {
+				case ITEM: {
 					packet.writeD(sc.getId());
 					packet.writeD(0x01); // Enabled or not
 					packet.writeD(sc.getSharedReuseGroup());
@@ -61,8 +54,7 @@ public final class ShortCutInit implements IClientOutgoingPacket
 					packet.writeD(0x00); // Visual id
 					break;
 				}
-				case SKILL:
-				{
+				case SKILL: {
 					packet.writeD(sc.getId());
 					packet.writeH(sc.getLevel());
 					packet.writeH(sc.getSubLevel());
@@ -74,8 +66,7 @@ public final class ShortCutInit implements IClientOutgoingPacket
 				case ACTION:
 				case MACRO:
 				case RECIPE:
-				case BOOKMARK:
-				{
+				case BOOKMARK: {
 					packet.writeD(sc.getId());
 					packet.writeD(0x01); // C6
 				}

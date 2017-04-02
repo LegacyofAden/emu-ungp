@@ -18,43 +18,38 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author UnAfraid
  */
-public class MEvasionRateFinalizer implements IStatsFunction
-{
+public class MEvasionRateFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = calcEquippedItemsBaseValue(creature, stat);
-		
-		if (creature.isPlayer())
-		{
+
+		if (creature.isPlayer()) {
 			// Enchanted helm bonus
 			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_HEAD);
 		}
-		
+
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue + (Math.sqrt(creature.getWIT()) * 3) + (creature.getLevel() * 2)), Double.NEGATIVE_INFINITY, PlayerConfig.MAX_EVASION);
 	}
-	
+
 	@Override
-	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed)
-	{
-		if (isBlessed)
-		{
+	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed) {
+		if (isBlessed) {
 			return (0.3 * Math.max(enchantLevel - 3, 0)) + (0.3 * Math.max(enchantLevel - 6, 0));
 		}
-		
+
 		return (0.2 * Math.max(enchantLevel - 3, 0)) + (0.2 * Math.max(enchantLevel - 6, 0));
 	}
 }

@@ -18,46 +18,35 @@
  */
 package org.l2junity.commons.sql.migrations;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.startup.StartupComponent;
 import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.sql.*;
+import java.util.*;
 
 /**
  * @author UnAfraid
  */
-public final class DatabaseMigrationManager
-{
-	private final Logger LOGGER = LoggerFactory.getLogger(DatabaseMigrationManager.class);
+@Slf4j
+@StartupComponent(value = "Database", dependency = DatabaseFactory.class)
+public final class DatabaseMigrationManager {
+	@Getter(lazy = true)
+	private static final DatabaseMigrationManager instance = new DatabaseMigrationManager();
+
 	private final Map<String, IDatabaseMigration> _migrations = new HashMap<>();
-	
-	protected DatabaseMigrationManager()
-	{
+
+	protected DatabaseMigrationManager() {
 		init();
 	}
-	
-	private void init()
-	{
+
+	private void init() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement ps = con.createStatement();
-			ResultSet rs = ps.executeQuery("SHOW TABLES LIKE \"migrations\""))
-		{
-			if (!rs.next())
-			{
+			 Statement ps = con.createStatement();
+			 ResultSet rs = ps.executeQuery("SHOW TABLES LIKE \"migrations\"")) {
+			if (!rs.next()) {
 				final StringJoiner sj = new StringJoiner(System.lineSeparator());
 				sj.add("CREATE TABLE IF NOT EXISTS `migrations` (");
 				sj.add("`id` int(10) unsigned NOT NULL AUTO_INCREMENT,");
@@ -66,127 +55,95 @@ public final class DatabaseMigrationManager
 				sj.add("PRIMARY KEY (`id`,`name`)");
 				sj.add(") ENGINE=InnoDB DEFAULT CHARSET=utf8");
 				ps.execute(sj.toString());
-				LOGGER.info("Migrations table created!");
+				log.info("Migrations table created!");
 			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed to create migrations table", e);
+		} catch (Exception e) {
+			log.warn("Failed to create migrations table", e);
 		}
 	}
-	
-	public void processPackage(Package packageName)
-	{
+
+	public void processPackage(Package packageName) {
 		final Reflections reflections = new Reflections(packageName.getName());
 		reflections.getSubTypesOf(IDatabaseMigration.class).forEach(migrationClass ->
 		{
-			try
-			{
+			try {
 				final IDatabaseMigration migration = migrationClass.newInstance();
 				_migrations.put(migration.getName(), migration);
-			}
-			catch (Exception e)
-			{
-				LOGGER.warn("Failed to initialize migration: {}", migrationClass.getName(), e);
+			} catch (Exception e) {
+				log.warn("Failed to initialize migration: {}", migrationClass.getName(), e);
 			}
 		});
-		
+
 		final Set<String> migrated = new HashSet<>();
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement ps = con.createStatement();
-			ResultSet rs = ps.executeQuery("SELECT * FROM migrations"))
-		{
-			while (rs.next())
-			{
-				if (rs.getInt("migrated") > 0)
-				{
+			 Statement ps = con.createStatement();
+			 ResultSet rs = ps.executeQuery("SELECT * FROM migrations")) {
+			while (rs.next()) {
+				if (rs.getInt("migrated") > 0) {
 					migrated.add(rs.getString("name"));
 				}
 			}
+		} catch (Exception e) {
+			log.warn("Failed to retreive database migrations: ", e);
 		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed to retreive database migrations: ", e);
-		}
-		
+
 		//@formatter:off
 		final IDatabaseMigration[] notMigrated = _migrations.values().stream()
-			.filter(migration -> !migrated.contains(migration.getName()))
-			.sorted(Comparator.comparing(IDatabaseMigration::getName))
-			.toArray(IDatabaseMigration[]::new);
+				.filter(migration -> !migrated.contains(migration.getName()))
+				.sorted(Comparator.comparing(IDatabaseMigration::getName))
+				.toArray(IDatabaseMigration[]::new);
 		//@formatter:on
-		
-		for (IDatabaseMigration migration : notMigrated)
-		{
-			if (migrate(migration))
-			{
-				LOGGER.info("Successfully migrated: {}", migration.getName());
-			}
-			else
-			{
-				LOGGER.info("Failed to migrate migrated: {}", migration.getName());
+
+		for (IDatabaseMigration migration : notMigrated) {
+			if (migrate(migration)) {
+				log.info("Successfully migrated: {}", migration.getName());
+			} else {
+				log.info("Failed to migrate migrated: {}", migration.getName());
 			}
 		}
-		LOGGER.info("Processed: {} of {} migrations", notMigrated.length, _migrations.size());
+		log.info("Processed: {} of {} migrations", notMigrated.length, _migrations.size());
 	}
-	
-	public Collection<IDatabaseMigration> getMigrated()
-	{
+
+	public Collection<IDatabaseMigration> getMigrated() {
 		return Collections.unmodifiableCollection(_migrations.values());
 	}
-	
-	public boolean migrate(IDatabaseMigration migration)
-	{
-		try
-		{
+
+	public boolean migrate(IDatabaseMigration migration) {
+		try {
 			_migrations.putIfAbsent(migration.getName(), migration);
-			
-			if (!migration.onUp())
-			{
+
+			if (!migration.onUp()) {
 				return false;
 			}
-			
+
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				PreparedStatement ps = con.prepareStatement("INSERT INTO migrations (name, migrated) VALUES (?, ?)"))
-			{
+				 PreparedStatement ps = con.prepareStatement("INSERT INTO migrations (name, migrated) VALUES (?, ?)")) {
 				ps.setString(1, migration.getName());
 				ps.setInt(2, 1);
 				ps.execute();
-			}
-			catch (Exception e)
-			{
-				LOGGER.warn("Failed to retreive database migrations: ", e);
+			} catch (Exception e) {
+				log.warn("Failed to retreive database migrations: ", e);
 			}
 			return true;
-		}
-		catch (SQLException e)
-		{
-			LOGGER.warn("Failed to migrate: {}", migration.getClass().getName(), e);
+		} catch (SQLException e) {
+			log.warn("Failed to migrate: {}", migration.getClass().getName(), e);
 		}
 		return false;
 	}
-	
-	public boolean rollback(IDatabaseMigration migration)
-	{
-		if (!migration.isReversable())
-		{
+
+	public boolean rollback(IDatabaseMigration migration) {
+		if (!migration.isReversable()) {
 			return false;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM migrations WHERE name = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT * FROM migrations WHERE name = ?")) {
 			ps.setString(1, migration.getName());
-			try (ResultSet rs = ps.executeQuery())
-			{
-				if (rs.next())
-				{
-					if (rs.getInt("migrated") > 0)
-					{
-						if (migration.onDown())
-						{
-							try (PreparedStatement delPs = con.prepareStatement("DELETE FROM migrations WHERE id = ?"))
-							{
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					if (rs.getInt("migrated") > 0) {
+						if (migration.onDown()) {
+							try (PreparedStatement delPs = con.prepareStatement("DELETE FROM migrations WHERE id = ?")) {
 								delPs.setInt(1, rs.getInt("id"));
 								delPs.execute();
 							}
@@ -195,25 +152,9 @@ public final class DatabaseMigrationManager
 					}
 				}
 			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed to retreive database migrations: ", e);
+		} catch (Exception e) {
+			log.warn("Failed to retreive database migrations: ", e);
 		}
 		return false;
-	}
-	
-	/**
-	 * Gets the single instance of {@code DatabaseMigrationManager}.
-	 * @return single instance of {@code DatabaseMigrationManager}
-	 */
-	public static DatabaseMigrationManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final DatabaseMigrationManager INSTANCE = new DatabaseMigrationManager();
 	}
 }

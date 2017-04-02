@@ -25,23 +25,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestResetNickname implements IClientIncomingPacket
-{
+public class RequestResetNickname implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		activeChar.getAppearance().setTitleColor(0xFFFF77);
 		activeChar.setTitle("");
 		activeChar.broadcastTitleInfo();

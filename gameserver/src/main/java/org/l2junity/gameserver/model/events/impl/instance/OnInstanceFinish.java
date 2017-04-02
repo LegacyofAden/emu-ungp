@@ -25,32 +25,28 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 
 /**
  * Fired whenever player finishes an instance
+ *
  * @author UnAfraid
  */
-public final class OnInstanceFinish implements IBaseEvent
-{
+public final class OnInstanceFinish implements IBaseEvent {
 	private final PlayerInstance _player;
 	private final Instance _instance;
-	
-	public OnInstanceFinish(PlayerInstance player, Instance instance)
-	{
+
+	public OnInstanceFinish(PlayerInstance player, Instance instance) {
 		_player = player;
 		_instance = instance;
 	}
-	
-	public PlayerInstance getPlayer()
-	{
+
+	public PlayerInstance getPlayer() {
 		return _player;
 	}
-	
-	public Instance getInstanceWorld()
-	{
+
+	public Instance getInstanceWorld() {
 		return _instance;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_INSTANCE_FINISH;
 	}
 }

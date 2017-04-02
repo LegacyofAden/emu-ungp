@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author St3eT
  */
-public enum CastleSide
-{
+public enum CastleSide {
 	NEUTRAL,
 	LIGHT,
 	DARK;

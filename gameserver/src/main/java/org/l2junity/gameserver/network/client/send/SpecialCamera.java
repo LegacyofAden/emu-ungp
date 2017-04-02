@@ -24,10 +24,10 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Special Camera server packet implementation.
+ *
  * @author Zoey76
  */
-public class SpecialCamera implements IClientOutgoingPacket
-{
+public class SpecialCamera implements IClientOutgoingPacket {
 	private final int _id;
 	private final int _force;
 	private final int _angle1;
@@ -39,9 +39,10 @@ public class SpecialCamera implements IClientOutgoingPacket
 	private final int _isWide;
 	private final int _relAngle;
 	private final int _unk;
-	
+
 	/**
 	 * Special Camera packet constructor.
+	 *
 	 * @param creature the creature
 	 * @param force
 	 * @param angle1
@@ -54,13 +55,13 @@ public class SpecialCamera implements IClientOutgoingPacket
 	 * @param isWide
 	 * @param relAngle
 	 */
-	public SpecialCamera(Creature creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle)
-	{
+	public SpecialCamera(Creature creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle) {
 		this(creature, force, angle1, angle2, time, duration, range, relYaw, relPitch, isWide, relAngle, 0);
 	}
-	
+
 	/**
 	 * Special Camera Ex packet constructor.
+	 *
 	 * @param creature the creature
 	 * @param talker
 	 * @param force
@@ -73,13 +74,13 @@ public class SpecialCamera implements IClientOutgoingPacket
 	 * @param isWide
 	 * @param relAngle
 	 */
-	public SpecialCamera(Creature creature, Creature talker, int force, int angle1, int angle2, int time, int duration, int relYaw, int relPitch, int isWide, int relAngle)
-	{
+	public SpecialCamera(Creature creature, Creature talker, int force, int angle1, int angle2, int time, int duration, int relYaw, int relPitch, int isWide, int relAngle) {
 		this(creature, force, angle1, angle2, time, duration, 0, relYaw, relPitch, isWide, relAngle, 0);
 	}
-	
+
 	/**
 	 * Special Camera 3 packet constructor.
+	 *
 	 * @param creature the creature
 	 * @param force
 	 * @param angle1
@@ -91,10 +92,9 @@ public class SpecialCamera implements IClientOutgoingPacket
 	 * @param relPitch
 	 * @param isWide
 	 * @param relAngle
-	 * @param unk unknown post-C4 parameter
+	 * @param unk      unknown post-C4 parameter
 	 */
-	public SpecialCamera(Creature creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle, int unk)
-	{
+	public SpecialCamera(Creature creature, int force, int angle1, int angle2, int time, int range, int duration, int relYaw, int relPitch, int isWide, int relAngle, int unk) {
 		_id = creature.getObjectId();
 		_force = force;
 		_angle1 = angle1;
@@ -107,12 +107,11 @@ public class SpecialCamera implements IClientOutgoingPacket
 		_relAngle = relAngle;
 		_unk = unk;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SPECIAL_CAMERA.writeId(packet);
-		
+
 		packet.writeD(_id);
 		packet.writeD(_force);
 		packet.writeD(_angle1);

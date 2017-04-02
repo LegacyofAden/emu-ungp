@@ -18,52 +18,48 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.items.combination.CombinationItem;
+import org.l2junity.gameserver.model.items.combination.CombinationItemReward;
+import org.l2junity.gameserver.model.items.combination.CombinationItemType;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.items.combination.CombinationItem;
-import org.l2junity.gameserver.model.items.combination.CombinationItemReward;
-import org.l2junity.gameserver.model.items.combination.CombinationItemType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author UnAfraid
  */
-public class CombinationItemsData implements IGameXmlReader
-{
-	private final Logger LOGGER = LoggerFactory.getLogger(CombinationItemsData.class);
+@Slf4j
+@StartupComponent("Data")
+public class CombinationItemsData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final CombinationItemsData instance = new CombinationItemsData();
+
 	private final List<CombinationItem> _items = new ArrayList<>();
-	
-	protected CombinationItemsData()
-	{
+
+	private CombinationItemsData() {
+		reload();
 	}
-	
-	@Reload("combination")
-	@Load(group = LoadGroup.class)
-	protected void load() throws Exception
-	{
+
+	protected void reload() {
 		_items.clear();
 		parseDatapackFile("data/combinationItems.xml");
 		LOGGER.info("Loaded: {} combination items", _items.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path file)
-	{
+	public void parseDocument(Document doc, Path file) {
 		forEach(doc, "list", listNode -> forEach(listNode, "item", itemNode ->
 		{
 			final CombinationItem item = new CombinationItem(new StatsSet(parseAttributes(itemNode)));
-			
+
 			forEach(itemNode, "reward", rewardNode ->
 			{
 				final int id = parseInteger(rewardNode.getAttributes(), "id");
@@ -74,44 +70,24 @@ public class CombinationItemsData implements IGameXmlReader
 			_items.add(item);
 		}));
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _items.size();
 	}
-	
-	public List<CombinationItem> getItems()
-	{
+
+	public List<CombinationItem> getItems() {
 		return _items;
 	}
-	
-	public CombinationItem getItemsBySlots(int firstSlot, int secondSlot)
-	{
+
+	public CombinationItem getItemsBySlots(int firstSlot, int secondSlot) {
 		return _items.stream().filter(item -> (item.getItemOne() == firstSlot) && (item.getItemTwo() == secondSlot)).findFirst().orElse(null);
 	}
-	
-	public List<CombinationItem> getItemsByFirstSlot(int id)
-	{
+
+	public List<CombinationItem> getItemsByFirstSlot(int id) {
 		return _items.stream().filter(item -> item.getItemOne() == id).collect(Collectors.toList());
 	}
-	
-	public List<CombinationItem> getItemsBySecondSlot(int id)
-	{
+
+	public List<CombinationItem> getItemsBySecondSlot(int id) {
 		return _items.stream().filter(item -> item.getItemTwo() == id).collect(Collectors.toList());
-	}
-	
-	/**
-	 * Gets the single instance of CombinationItemsData.
-	 * @return single instance of CombinationItemsData
-	 */
-	@InstanceGetter
-	public static final CombinationItemsData getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final CombinationItemsData INSTANCE = new CombinationItemsData();
 	}
 }

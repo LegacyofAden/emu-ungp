@@ -29,10 +29,10 @@ import org.l2junity.gameserver.model.actor.Creature;
  * <li>If attack isn't aborted and hit isn't missed, reduce HP of the target and calculate reflection damage to reduce HP of attacker if necessary</li>
  * <li>if attack isn't aborted and hit isn't missed, manage attack or cast break of the target (calculating rate, sending message...)</li>
  * </ul>
+ *
  * @author xban1x
  */
-public final class HitTask implements Runnable
-{
+public final class HitTask implements Runnable {
 	private final Creature _character;
 	private final Creature _hitTarget;
 	private final int _damage;
@@ -40,9 +40,8 @@ public final class HitTask implements Runnable
 	private final boolean _miss;
 	private final byte _shld;
 	private final boolean _soulshot;
-	
-	public HitTask(Creature character, Creature target, int damage, boolean crit, boolean miss, boolean soulshot, byte shld)
-	{
+
+	public HitTask(Creature character, Creature target, int damage, boolean crit, boolean miss, boolean soulshot, byte shld) {
 		_character = character;
 		_hitTarget = target;
 		_damage = damage;
@@ -51,12 +50,10 @@ public final class HitTask implements Runnable
 		_miss = miss;
 		_soulshot = soulshot;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_character != null)
-		{
+	public void run() {
+		if (_character != null) {
 			_character.onHitTimer(_hitTarget, _damage, _crit, _miss, _soulshot, _shld);
 		}
 	}

@@ -24,8 +24,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class ExSetCompassZoneCode implements IClientOutgoingPacket
-{
+public class ExSetCompassZoneCode implements IClientOutgoingPacket {
 	// TODO: Enum
 	public static final int ALTEREDZONE = 0x08;
 	public static final int SIEGEWARZONE1 = 0x0A;
@@ -34,19 +33,17 @@ public class ExSetCompassZoneCode implements IClientOutgoingPacket
 	public static final int SEVENSIGNSZONE = 0x0D;
 	public static final int PVPZONE = 0x0E;
 	public static final int GENERALZONE = 0x0F;
-	
+
 	private final int _zoneType;
-	
-	public ExSetCompassZoneCode(int val)
-	{
+
+	public ExSetCompassZoneCode(int val) {
 		_zoneType = val;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SET_COMPASS_ZONE_CODE.writeId(packet);
-		
+
 		packet.writeD(_zoneType);
 		return true;
 	}

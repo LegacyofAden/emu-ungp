@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class JoinPledge implements IClientOutgoingPacket
-{
+public final class JoinPledge implements IClientOutgoingPacket {
 	private final int _pledgeId;
-	
-	public JoinPledge(int pledgeId)
-	{
+
+	public JoinPledge(int pledgeId) {
 		_pledgeId = pledgeId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.JOIN_PLEDGE.writeId(packet);
-		
+
 		packet.writeD(_pledgeId);
 		return true;
 	}

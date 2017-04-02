@@ -25,68 +25,60 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Forsaiken, UnAfraid
  */
-public final class SystemMessage extends AbstractMessagePacket<SystemMessage>
-{
-	private SystemMessage(final SystemMessageId smId)
-	{
+public final class SystemMessage extends AbstractMessagePacket<SystemMessage> {
+	private SystemMessage(final SystemMessageId smId) {
 		super(smId);
 	}
-	
-	public static SystemMessage sendString(final String text)
-	{
-		if (text == null)
-		{
+
+	public static SystemMessage sendString(final String text) {
+		if (text == null) {
 			throw new NullPointerException();
 		}
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S13);
 		sm.addString(text);
 		return sm;
 	}
-	
-	public static SystemMessage getSystemMessage(final SystemMessageId smId)
-	{
+
+	public static SystemMessage getSystemMessage(final SystemMessageId smId) {
 		SystemMessage sm = smId.getStaticSystemMessage();
-		if (sm != null)
-		{
+		if (sm != null) {
 			return sm;
 		}
-		
+
 		sm = new SystemMessage(smId);
-		if (smId.getParamCount() == 0)
-		{
+		if (smId.getParamCount() == 0) {
 			smId.setStaticSystemMessage(sm);
 		}
-		
+
 		return sm;
 	}
-	
+
 	/**
 	 * Use {@link #getSystemMessage(SystemMessageId)} where possible instead
+	 *
 	 * @param id
 	 * @return the system message associated to the given Id.
 	 */
-	public static SystemMessage getSystemMessage(int id)
-	{
+	public static SystemMessage getSystemMessage(int id) {
 		return getSystemMessage(SystemMessageId.getSystemMessageId(id));
 	}
-	
+
 	/**
 	 * Use SystemMessage.getSystemMessage(SystemMessageId smId) where possible instead
+	 *
 	 * @param id
 	 * @deprecated
 	 */
 	@Deprecated
-	private SystemMessage(final int id)
-	{
+	private SystemMessage(final int id) {
 		this(SystemMessageId.getSystemMessageId(id));
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SYSTEM_MESSAGE.writeId(packet);
-		
+
 		packet.writeH(getId());
 		writeMe(packet);
 		return true;

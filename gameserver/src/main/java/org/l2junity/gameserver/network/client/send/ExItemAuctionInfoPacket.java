@@ -27,50 +27,42 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Forsaiken
  */
-public final class ExItemAuctionInfoPacket extends AbstractItemPacket
-{
+public final class ExItemAuctionInfoPacket extends AbstractItemPacket {
 	private final boolean _refresh;
 	private final int _timeRemaining;
 	private final ItemAuction _currentAuction;
 	private final ItemAuction _nextAuction;
-	
-	public ExItemAuctionInfoPacket(final boolean refresh, final ItemAuction currentAuction, final ItemAuction nextAuction)
-	{
-		if (currentAuction == null)
-		{
+
+	public ExItemAuctionInfoPacket(final boolean refresh, final ItemAuction currentAuction, final ItemAuction nextAuction) {
+		if (currentAuction == null) {
 			throw new NullPointerException();
 		}
-		
-		if (currentAuction.getAuctionState() != ItemAuctionState.STARTED)
-		{
+
+		if (currentAuction.getAuctionState() != ItemAuctionState.STARTED) {
 			_timeRemaining = 0;
-		}
-		else
-		{
+		} else {
 			_timeRemaining = (int) (currentAuction.getFinishingTimeRemaining() / 1000); // in seconds
 		}
-		
+
 		_refresh = refresh;
 		_currentAuction = currentAuction;
 		_nextAuction = nextAuction;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ITEM_AUCTION_INFO.writeId(packet);
-		
+
 		packet.writeC(_refresh ? 0x00 : 0x01);
 		packet.writeD(_currentAuction.getInstanceId());
-		
+
 		final ItemAuctionBid highestBid = _currentAuction.getHighestBid();
 		packet.writeQ(highestBid != null ? highestBid.getLastBid() : _currentAuction.getAuctionInitBid());
-		
+
 		packet.writeD(_timeRemaining);
 		writeItem(packet, _currentAuction.getItemInfo());
-		
-		if (_nextAuction != null)
-		{
+
+		if (_nextAuction != null) {
 			packet.writeQ(_nextAuction.getAuctionInitBid());
 			packet.writeD((int) (_nextAuction.getStartingTime() / 1000)); // unix time in seconds
 			writeItem(packet, _nextAuction.getItemInfo());

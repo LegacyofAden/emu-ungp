@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author St3eT
  */
-public class OnPlayerSummonTalk implements IBaseEvent
-{
+public class OnPlayerSummonTalk implements IBaseEvent {
 	private final Summon _summon;
-	
-	public OnPlayerSummonTalk(Summon summon)
-	{
+
+	public OnPlayerSummonTalk(Summon summon) {
 		_summon = summon;
 	}
-	
-	public Summon getSummon()
-	{
+
+	public Summon getSummon() {
 		return _summon;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_SUMMON_TALK;
 	}
 }

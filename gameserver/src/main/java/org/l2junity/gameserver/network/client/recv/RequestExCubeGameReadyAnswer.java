@@ -25,34 +25,30 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: chddd d: Arena d: Answer
+ *
  * @author mrTJO
  */
-public final class RequestExCubeGameReadyAnswer implements IClientIncomingPacket
-{
+public final class RequestExCubeGameReadyAnswer implements IClientIncomingPacket {
 	private int _arena;
 	private int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// client sends -1,0,1,2 for arena parameter
 		_arena = packet.readD() + 1;
 		// client sends 1 if clicked confirm on not clicked, 0 if clicked cancel
 		_answer = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		switch (_answer)
-		{
+
+		switch (_answer) {
 			case 0:
 				// Cancel - Answer No
 				break;

@@ -26,23 +26,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author chris_00
  */
-public class ExMPCCShowPartyMemberInfo implements IClientOutgoingPacket
-{
+public class ExMPCCShowPartyMemberInfo implements IClientOutgoingPacket {
 	private final Party _party;
-	
-	public ExMPCCShowPartyMemberInfo(Party party)
-	{
+
+	public ExMPCCShowPartyMemberInfo(Party party) {
 		_party = party;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MPCCSHOW_PARTY_MEMBER_INFO.writeId(packet);
-		
+
 		packet.writeD(_party.getMemberCount());
-		for (PlayerInstance pc : _party.getMembers())
-		{
+		for (PlayerInstance pc : _party.getMembers()) {
 			packet.writeS(pc.getName());
 			packet.writeD(pc.getObjectId());
 			packet.writeD(pc.getClassId().getId());

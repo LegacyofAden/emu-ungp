@@ -24,35 +24,29 @@ import java.util.List;
 /**
  * @author UnAfraid
  */
-public class EnsoulStone
-{
+public class EnsoulStone {
 	private final int _id;
 	private final int _slotType;
 	private final List<Integer> _options = new ArrayList<>();
-	
-	public EnsoulStone(int id, int slotType)
-	{
+
+	public EnsoulStone(int id, int slotType) {
 		_id = id;
 		_slotType = slotType;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public int getSlotType()
-	{
+
+	public int getSlotType() {
 		return _slotType;
 	}
-	
-	public List<Integer> getOptions()
-	{
+
+	public List<Integer> getOptions() {
 		return _options;
 	}
-	
-	public void addOption(int option)
-	{
+
+	public void addOption(int option) {
 		_options.add(option);
 	}
 }

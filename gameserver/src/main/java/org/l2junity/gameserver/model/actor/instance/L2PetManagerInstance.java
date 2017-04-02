@@ -23,56 +23,45 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Evolve;
 
-public class L2PetManagerInstance extends L2MerchantInstance
-{
-	public L2PetManagerInstance(L2NpcTemplate template)
-	{
+public class L2PetManagerInstance extends L2MerchantInstance {
+	public L2PetManagerInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2PetManagerInstance);
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		String pom = "";
-		
-		if (val == 0)
-		{
+
+		if (val == 0) {
 			pom = "" + npcId;
-		}
-		else
-		{
+		} else {
 			pom = npcId + "-" + val;
 		}
-		
-		return "data/html/petmanager/" + pom + ".htm";
+
+		return "petmanager/" + pom + ".htm";
 	}
-	
+
 	@Override
-	public void showChatWindow(PlayerInstance player)
-	{
-		String filename = "data/html/petmanager/" + getId() + ".htm";
-		if ((getId() == 36478) && player.hasSummon())
-		{
-			filename = "data/html/petmanager/restore-unsummonpet.htm";
+	public void showChatWindow(PlayerInstance player) {
+		String filename = "petmanager/" + getId() + ".htm";
+		if ((getId() == 36478) && player.hasSummon()) {
+			filename = "petmanager/restore-unsummonpet.htm";
 		}
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getHtmlPrefix(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcname%", getName());
 		player.sendPacket(html);
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (command.startsWith("exchange"))
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (command.startsWith("exchange")) {
 			String[] params = command.split(" ");
 			int val = Integer.parseInt(params[1]);
-			switch (val)
-			{
+			switch (val) {
 				case 1:
 					exchange(player, 7585, 6650);
 					break;
@@ -84,14 +73,11 @@ public class L2PetManagerInstance extends L2MerchantInstance
 					break;
 			}
 			return;
-		}
-		else if (command.startsWith("evolve"))
-		{
+		} else if (command.startsWith("evolve")) {
 			String[] params = command.split(" ");
 			int val = Integer.parseInt(params[1]);
 			boolean ok = false;
-			switch (val)
-			{
+			switch (val) {
 				// Info evolve(player, "curent pet summon item", "new pet summon item", "lvl required to evolve")
 				// To ignore evolve just put value 0 where do you like example: evolve(player, 0, 9882, 55);
 				case 1:
@@ -110,21 +96,17 @@ public class L2PetManagerInstance extends L2MerchantInstance
 					ok = Evolve.doEvolve(player, this, 6649, 10312, 55);
 					break;
 			}
-			if (!ok)
-			{
+			if (!ok) {
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-				html.setFile(player.getHtmlPrefix(), "data/html/petmanager/evolve_no.htm");
+				html.setFile(player.getHtmlPrefix(), "petmanager/evolve_no.htm");
 				player.sendPacket(html);
 			}
 			return;
-		}
-		else if (command.startsWith("restore"))
-		{
+		} else if (command.startsWith("restore")) {
 			String[] params = command.split(" ");
 			int val = Integer.parseInt(params[1]);
 			boolean ok = false;
-			switch (val)
-			{
+			switch (val) {
 				// Info evolve(player, "curent pet summon item", "new pet summon item", "lvl required to evolve")
 				case 1:
 					ok = Evolve.doRestore(player, this, 10307, 9882, 55);
@@ -142,32 +124,25 @@ public class L2PetManagerInstance extends L2MerchantInstance
 					ok = Evolve.doRestore(player, this, 10310, 4424, 55);
 					break;
 			}
-			if (!ok)
-			{
+			if (!ok) {
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-				html.setFile(player.getHtmlPrefix(), "data/html/petmanager/restore_no.htm");
+				html.setFile(player.getHtmlPrefix(), "petmanager/restore_no.htm");
 				player.sendPacket(html);
 			}
 			return;
-		}
-		else
-		{
+		} else {
 			super.onBypassFeedback(player, command);
 		}
 	}
-	
-	public final void exchange(PlayerInstance player, int itemIdtake, int itemIdgive)
-	{
+
+	public final void exchange(PlayerInstance player, int itemIdtake, int itemIdgive) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		if (player.destroyItemByItemId("Consume", itemIdtake, 1, this, true))
-		{
+		if (player.destroyItemByItemId("Consume", itemIdtake, 1, this, true)) {
 			player.addItem("", itemIdgive, 1, this, true);
-			html.setFile(player.getHtmlPrefix(), "data/html/petmanager/" + getId() + ".htm");
+			html.setFile(player.getHtmlPrefix(), "petmanager/" + getId() + ".htm");
 			player.sendPacket(html);
-		}
-		else
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/petmanager/exchange_no.htm");
+		} else {
+			html.setFile(player.getHtmlPrefix(), "petmanager/exchange_no.htm");
 			player.sendPacket(html);
 		}
 	}

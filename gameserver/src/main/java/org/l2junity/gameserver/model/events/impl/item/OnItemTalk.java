@@ -26,31 +26,26 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnItemTalk implements IBaseEvent
-{
+public class OnItemTalk implements IBaseEvent {
 	private final ItemInstance _item;
 	private final PlayerInstance _activeChar;
-	
-	public OnItemTalk(ItemInstance item, PlayerInstance activeChar)
-	{
+
+	public OnItemTalk(ItemInstance item, PlayerInstance activeChar) {
 		_item = item;
 		_activeChar = activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_ITEM_TALK;
 	}
-	
+
 }

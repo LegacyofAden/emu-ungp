@@ -18,56 +18,48 @@
  */
 package org.l2junity.gameserver.model.superpoint;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.SuperpointMoveType;
 import org.l2junity.gameserver.model.StatsSet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sdw
  */
-public class Superpoint
-{
+public class Superpoint {
 	private final String _alias;
 	private final SuperpointMoveType _moveType;
 	private final boolean _isRunning;
 	private final List<SuperpointNode> _nodes = new ArrayList<>();
-	
-	public Superpoint(StatsSet set)
-	{
+
+	public Superpoint(StatsSet set) {
 		_alias = set.getString("alias");
 		_moveType = set.getEnum("move_type", SuperpointMoveType.class);
 		_isRunning = set.getBoolean("isRunning", false);
 	}
-	
-	public void addNode(SuperpointNode node)
-	{
+
+	public void addNode(SuperpointNode node) {
 		_nodes.add(node);
 	}
-	
-	public String getAlias()
-	{
+
+	public String getAlias() {
 		return _alias;
 	}
-	
-	public SuperpointMoveType getMoveType()
-	{
+
+	public SuperpointMoveType getMoveType() {
 		return _moveType;
 	}
-	
-	public int getNodeSize()
-	{
+
+	public int getNodeSize() {
 		return _nodes.size();
 	}
-	
-	public boolean isRunning()
-	{
+
+	public boolean isRunning() {
 		return _isRunning;
 	}
-	
-	public SuperpointNode getNode(int id)
-	{
+
+	public SuperpointNode getNode(int id) {
 		return _nodes.stream().filter(node -> node.getNodeId() == id).findFirst().orElse(null);
 	}
 }

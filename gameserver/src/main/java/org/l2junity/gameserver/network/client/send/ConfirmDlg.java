@@ -24,58 +24,50 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * ConfirmDlg server packet implementation.
+ *
  * @author kombat, UnAfraid
  */
-public class ConfirmDlg extends AbstractMessagePacket<ConfirmDlg>
-{
+public class ConfirmDlg extends AbstractMessagePacket<ConfirmDlg> {
 	private int _time;
 	private int _requesterId;
-	
-	public ConfirmDlg(SystemMessageId smId)
-	{
+
+	public ConfirmDlg(SystemMessageId smId) {
 		super(smId);
 	}
-	
-	public ConfirmDlg(int id)
-	{
+
+	public ConfirmDlg(int id) {
 		this(SystemMessageId.getSystemMessageId(id));
 	}
-	
-	public ConfirmDlg(String text)
-	{
+
+	public ConfirmDlg(String text) {
 		this(SystemMessageId.S13);
 		addString(text);
 	}
-	
-	public ConfirmDlg addTime(int time)
-	{
+
+	public ConfirmDlg addTime(int time) {
 		_time = time;
 		return this;
 	}
-	
-	public ConfirmDlg addRequesterId(int id)
-	{
+
+	public ConfirmDlg addRequesterId(int id) {
 		_requesterId = id;
 		return this;
 	}
-	
+
 	@Override
-	protected void writeParamsSize(PacketWriter packet, int size)
-	{
+	protected void writeParamsSize(PacketWriter packet, int size) {
 		packet.writeD(size);
 	}
-	
+
 	@Override
-	protected void writeParamType(PacketWriter packet, int type)
-	{
+	protected void writeParamType(PacketWriter packet, int type) {
 		packet.writeD(type);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CONFIRM_DLG.writeId(packet);
-		
+
 		packet.writeD(getId());
 		writeMe(packet);
 		packet.writeD(_time);

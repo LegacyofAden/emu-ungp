@@ -18,79 +18,61 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+
+import java.nio.file.Path;
 
 /**
  * A table containing pre-calculated values of the previously hardcodded levelMod formula ((level + 89) / 100).
+ *
  * @author Nik
  */
-public final class LevelBonusData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(LevelBonusData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = ExperienceData.class)
+public final class LevelBonusData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final LevelBonusData instance = new LevelBonusData();
+
 	private double[] LEVEL_BONUS;
-	
-	protected LevelBonusData()
-	{
+
+	private LevelBonusData() {
+		reload();
 	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ExperienceData.class))
-	private void load() throws Exception
-	{
+
+	private void reload() {
 		parseDatapackFile("data/stats/levelBonus.xml");
-		
+
 		// Check if bonuses for all levels are set.
-		for (int i = 1; i < LEVEL_BONUS.length; i++)
-		{
-			if (LEVEL_BONUS[i] == 0)
-			{
-				LOGGER.warn("Level bonus for level {} is not set!", i);
+		for (int i = 1; i < LEVEL_BONUS.length; i++) {
+			if (LEVEL_BONUS[i] == 0) {
+				log.warn("Level bonus for level {} is not set!", i);
 			}
 		}
-		LOGGER.info("Loaded level bonus table. Max level with bonus is {}.", (LEVEL_BONUS.length - 1));
+		log.info("Loaded level bonus table. Max level with bonus is {}.", (LEVEL_BONUS.length - 1));
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		LEVEL_BONUS = new double[ExperienceData.getInstance().getMaxLevel()];
-		
+
 		forEach(doc.getFirstChild(), "levelbonus", levelBonusNode ->
 		{
 			final byte level = parseByte(levelBonusNode.getAttributes(), "level");
-			if (level < LEVEL_BONUS.length)
-			{
+			if (level < LEVEL_BONUS.length) {
 				LEVEL_BONUS[level] = parseDouble(levelBonusNode.getAttributes(), "value");
 			}
 		});
 	}
-	
+
 	/**
 	 * @param level
 	 * @return the level bonus modifier for the given level.
 	 */
-	public double getLevelBonus(int level)
-	{
+	public double getLevelBonus(int level) {
 		return level >= LEVEL_BONUS.length ? LEVEL_BONUS[LEVEL_BONUS.length - 1] : LEVEL_BONUS[level];
-	}
-	
-	@InstanceGetter
-	public static LevelBonusData getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final LevelBonusData INSTANCE = new LevelBonusData();
 	}
 }

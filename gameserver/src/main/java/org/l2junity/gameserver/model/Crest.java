@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.network.client.send.AllyCrest;
@@ -28,110 +28,90 @@ import org.l2junity.gameserver.network.client.send.PledgeCrest;
 /**
  * @author NosBit
  */
-public final class Crest implements IIdentifiable
-{
-	public enum CrestType
-	{
+public final class Crest implements IIdentifiable {
+	public enum CrestType {
 		PLEDGE(1),
 		PLEDGE_LARGE(2),
 		ALLY(3);
-		
+
 		private final int _id;
-		
-		CrestType(int id)
-		{
+
+		CrestType(int id) {
 			_id = id;
 		}
-		
-		public int getId()
-		{
+
+		public int getId() {
 			return _id;
 		}
-		
-		public static CrestType getById(int id)
-		{
-			for (CrestType crestType : values())
-			{
-				if (crestType.getId() == id)
-				{
+
+		public static CrestType getById(int id) {
+			for (CrestType crestType : values()) {
+				if (crestType.getId() == id) {
 					return crestType;
 				}
 			}
 			return null;
 		}
 	}
-	
+
 	private final int _id;
 	private final byte[] _data;
 	private final CrestType _type;
-	
-	public Crest(int id, byte[] data, CrestType type)
-	{
+
+	public Crest(int id, byte[] data, CrestType type) {
 		_id = id;
 		_data = data;
 		_type = type;
 	}
-	
+
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
-	public byte[] getData()
-	{
+
+	public byte[] getData() {
 		return _data;
 	}
-	
-	public CrestType getType()
-	{
+
+	public CrestType getType() {
 		return _type;
 	}
-	
+
 	/**
 	 * Gets the client path to crest for use in html and sends the crest to {@code L2PcInstance}
+	 *
 	 * @param activeChar the @{code L2PcInstance} where html is send to.
 	 * @return the client path to crest
 	 */
-	public String getClientPath(PlayerInstance activeChar)
-	{
+	public String getClientPath(PlayerInstance activeChar) {
 		String path = null;
-		switch (getType())
-		{
-			case PLEDGE:
-			{
+		switch (getType()) {
+			case PLEDGE: {
 				activeChar.sendPacket(new PledgeCrest(getId(), getData()));
-				path = "Crest.crest_" + HexIDConfig.SERVER_ID + "_" + getId();
+				path = "Crest.crest_" + GameserverConfig.SERVER_ID + "_" + getId();
 				break;
 			}
-			case PLEDGE_LARGE:
-			{
+			case PLEDGE_LARGE: {
 				final byte[] data = getData();
-				if (data != null)
-				{
-					for (int i = 0; i <= 4; i++)
-					{
-						if (i < 4)
-						{
+				if (data != null) {
+					for (int i = 0; i <= 4; i++) {
+						if (i < 4) {
 							final byte[] fullChunk = new byte[14336];
 							System.arraycopy(data, (14336 * i), fullChunk, 0, 14336);
 							activeChar.sendPacket(new ExPledgeEmblem(getId(), fullChunk, 0, i));
-						}
-						else
-						{
+						} else {
 							final byte[] lastChunk = new byte[8320];
 							System.arraycopy(data, (14336 * i), lastChunk, 0, 8320);
 							activeChar.sendPacket(new ExPledgeEmblem(getId(), lastChunk, 0, i));
 						}
 					}
 				}
-				path = "Crest.crest_" + HexIDConfig.SERVER_ID + "_" + getId() + "_l";
+				path = "Crest.crest_" + GameserverConfig.SERVER_ID + "_" + getId() + "_l";
 				break;
 			}
-			case ALLY:
-			{
+			case ALLY: {
 				activeChar.sendPacket(new AllyCrest(getId(), getData()));
-				path = "Crest.crest_" + HexIDConfig.SERVER_ID + "_" + getId();
+				path = "Crest.crest_" + GameserverConfig.SERVER_ID + "_" + getId();
 				break;
 			}
 		}

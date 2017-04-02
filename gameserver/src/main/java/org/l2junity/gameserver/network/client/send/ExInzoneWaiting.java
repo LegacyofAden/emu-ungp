@@ -18,40 +18,36 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author UnAfraid
  */
-public class ExInzoneWaiting implements IClientOutgoingPacket
-{
+public class ExInzoneWaiting implements IClientOutgoingPacket {
 	private final int _currentTemplateId;
 	private final Map<Integer, Long> _instanceTimes;
-	
-	public ExInzoneWaiting(PlayerInstance activeChar)
-	{
+
+	public ExInzoneWaiting(PlayerInstance activeChar) {
 		final Instance instance = InstanceManager.getInstance().getPlayerInstance(activeChar, false);
 		_currentTemplateId = ((instance != null) && (instance.getTemplateId() >= 0)) ? instance.getTemplateId() : -1;
 		_instanceTimes = InstanceManager.getInstance().getAllInstanceTimes(activeChar);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_INZONE_WAITING_INFO.writeId(packet);
-		
+
 		packet.writeD(_currentTemplateId);
 		packet.writeD(_instanceTimes.size());
-		for (Entry<Integer, Long> entry : _instanceTimes.entrySet())
-		{
+		for (Entry<Integer, Long> entry : _instanceTimes.entrySet()) {
 			final long instanceTime = TimeUnit.MILLISECONDS.toSeconds(entry.getValue() - System.currentTimeMillis());
 			packet.writeD(entry.getKey());
 			packet.writeD((int) instanceTime);

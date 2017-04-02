@@ -18,21 +18,20 @@
  */
 package org.l2junity.gameserver.model.interfaces;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.zone.type.BannedSpawnTerritory;
 import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
+
+import java.util.List;
 
 /**
  * @author UnAfraid
  */
-public interface ITerritorized
-{
+public interface ITerritorized {
 	void addTerritory(SpawnTerritory territory);
-	
+
 	List<SpawnTerritory> getTerritories();
-	
+
 	void addBannedTerritory(BannedSpawnTerritory territory);
-	
+
 	List<BannedSpawnTerritory> getBannedTerritories();
 }

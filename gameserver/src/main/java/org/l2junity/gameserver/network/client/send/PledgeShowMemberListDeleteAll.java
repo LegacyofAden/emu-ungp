@@ -21,17 +21,14 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PledgeShowMemberListDeleteAll implements IClientOutgoingPacket
-{
+public class PledgeShowMemberListDeleteAll implements IClientOutgoingPacket {
 	public static final PledgeShowMemberListDeleteAll STATIC_PACKET = new PledgeShowMemberListDeleteAll();
-	
-	private PledgeShowMemberListDeleteAll()
-	{
+
+	private PledgeShowMemberListDeleteAll() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_SHOW_MEMBER_LIST_DELETE_ALL.writeId(packet);
 		return true;
 	}

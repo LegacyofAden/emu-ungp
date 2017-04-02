@@ -21,19 +21,16 @@ package org.l2junity.gameserver.model.holders;
 /**
  * @author UnAfraid
  */
-public class AdditionalItemHolder extends ItemHolder
-{
+public class AdditionalItemHolder extends ItemHolder {
 	private static final long serialVersionUID = -7775687592823123902L;
 	private final boolean _allowed;
-	
-	public AdditionalItemHolder(int id, boolean allowed)
-	{
+
+	public AdditionalItemHolder(int id, boolean allowed) {
 		super(id, 0);
 		_allowed = allowed;
 	}
-	
-	public boolean isAllowedToUse()
-	{
+
+	public boolean isAllowedToUse() {
 		return _allowed;
 	}
 }

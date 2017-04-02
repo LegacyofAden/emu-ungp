@@ -29,132 +29,105 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) dSS
+ *
  * @author -Wooden-
  */
-public final class RequestPledgeSetAcademyMaster implements IClientIncomingPacket
-{
+public final class RequestPledgeSetAcademyMaster implements IClientIncomingPacket {
 	private String _currPlayerName;
 	private int _set; // 1 set, 0 delete
 	private String _targetPlayerName;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_set = packet.readD();
 		_currPlayerName = packet.readS();
 		_targetPlayerName = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance activeChar = client.getActiveChar();
 		L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
-		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_APPRENTICE))
-		{
+
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_APPRENTICE)) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_DISMISS_AN_APPRENTICE);
 			return;
 		}
-		
+
 		ClanMember currentMember = clan.getClanMember(_currPlayerName);
 		ClanMember targetMember = clan.getClanMember(_targetPlayerName);
-		if ((currentMember == null) || (targetMember == null))
-		{
+		if ((currentMember == null) || (targetMember == null)) {
 			return;
 		}
-		
+
 		ClanMember apprenticeMember, sponsorMember;
-		if (currentMember.isAcademyMember())
-		{
+		if (currentMember.isAcademyMember()) {
 			apprenticeMember = currentMember;
 			sponsorMember = targetMember;
-		}
-		else
-		{
+		} else {
 			apprenticeMember = targetMember;
 			sponsorMember = currentMember;
 		}
-		
+
 		PlayerInstance apprentice = apprenticeMember.getPlayerInstance();
 		PlayerInstance sponsor = sponsorMember.getPlayerInstance();
-		
+
 		SystemMessage sm = null;
-		if (_set == 0)
-		{
+		if (_set == 0) {
 			// test: do we get the current sponsor & apprentice from this packet or no?
-			if (apprentice != null)
-			{
+			if (apprentice != null) {
 				apprentice.setSponsor(0);
-			}
-			else
-			{
+			} else {
 				apprenticeMember.setApprenticeAndSponsor(0, 0);
 			}
-			
-			if (sponsor != null)
-			{
+
+			if (sponsor != null) {
 				sponsor.setApprentice(0);
-			}
-			else
-			{
+			} else {
 				sponsorMember.setApprenticeAndSponsor(0, 0);
 			}
-			
+
 			apprenticeMember.saveApprenticeAndSponsor(0, 0);
 			sponsorMember.saveApprenticeAndSponsor(0, 0);
-			
+
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S2_CLAN_MEMBER_C1_S_APPRENTICE_HAS_BEEN_REMOVED);
-		}
-		else
-		{
-			if ((apprenticeMember.getSponsor() != 0) || (sponsorMember.getApprentice() != 0) || (apprenticeMember.getApprentice() != 0) || (sponsorMember.getSponsor() != 0))
-			{
+		} else {
+			if ((apprenticeMember.getSponsor() != 0) || (sponsorMember.getApprentice() != 0) || (apprenticeMember.getApprentice() != 0) || (sponsorMember.getSponsor() != 0)) {
 				// TODO retail message
 				activeChar.sendMessage("Remove previous connections first.");
 				return;
 			}
-			if (apprentice != null)
-			{
+			if (apprentice != null) {
 				apprentice.setSponsor(sponsorMember.getObjectId());
-			}
-			else
-			{
+			} else {
 				apprenticeMember.setApprenticeAndSponsor(0, sponsorMember.getObjectId());
 			}
-			
-			if (sponsor != null)
-			{
+
+			if (sponsor != null) {
 				sponsor.setApprentice(apprenticeMember.getObjectId());
-			}
-			else
-			{
+			} else {
 				sponsorMember.setApprenticeAndSponsor(apprenticeMember.getObjectId(), 0);
 			}
-			
+
 			// saving to database even if online, since both must match
 			apprenticeMember.saveApprenticeAndSponsor(0, sponsorMember.getObjectId());
 			sponsorMember.saveApprenticeAndSponsor(apprenticeMember.getObjectId(), 0);
-			
+
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S2_HAS_BEEN_DESIGNATED_AS_THE_APPRENTICE_OF_CLAN_MEMBER_S1);
 		}
 		sm.addString(sponsorMember.getName());
 		sm.addString(apprenticeMember.getName());
-		if ((sponsor != activeChar) && (sponsor != apprentice))
-		{
+		if ((sponsor != activeChar) && (sponsor != apprentice)) {
 			activeChar.sendPacket(sm);
 		}
-		if (sponsor != null)
-		{
+		if (sponsor != null) {
 			sponsor.sendPacket(sm);
 		}
-		if (apprentice != null)
-		{
+		if (apprentice != null) {
 			apprentice.sendPacket(sm);
 		}
 	}

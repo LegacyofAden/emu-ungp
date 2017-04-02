@@ -18,77 +18,63 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
+import org.l2junity.gameserver.model.ItemInfo;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.network.PacketWriter;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.l2junity.gameserver.model.ItemInfo;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.network.PacketWriter;
-
 /**
  * @author UnAfraid
  */
-public abstract class AbstractInventoryUpdate extends AbstractItemPacket
-{
+public abstract class AbstractInventoryUpdate extends AbstractItemPacket {
 	private final Map<Integer, ItemInfo> _items = new ConcurrentSkipListMap<>();
-	
-	public AbstractInventoryUpdate()
-	{
+
+	public AbstractInventoryUpdate() {
 	}
-	
-	public AbstractInventoryUpdate(ItemInstance item)
-	{
+
+	public AbstractInventoryUpdate(ItemInstance item) {
 		addItem(item);
 	}
-	
-	public AbstractInventoryUpdate(List<ItemInfo> items)
-	{
-		for (ItemInfo item : items)
-		{
+
+	public AbstractInventoryUpdate(List<ItemInfo> items) {
+		for (ItemInfo item : items) {
 			_items.put(item.getObjectId(), item);
 		}
 	}
-	
-	public final void addItem(ItemInstance item)
-	{
+
+	public final void addItem(ItemInstance item) {
 		_items.put(item.getObjectId(), new ItemInfo(item));
 	}
-	
-	public final void addNewItem(ItemInstance item)
-	{
+
+	public final void addNewItem(ItemInstance item) {
 		_items.put(item.getObjectId(), new ItemInfo(item, 1));
 	}
-	
-	public final void addModifiedItem(ItemInstance item)
-	{
+
+	public final void addModifiedItem(ItemInstance item) {
 		_items.put(item.getObjectId(), new ItemInfo(item, 2));
 	}
-	
-	public final void addRemovedItem(ItemInstance item)
-	{
+
+	public final void addRemovedItem(ItemInstance item) {
 		_items.put(item.getObjectId(), new ItemInfo(item, 3));
 	}
-	
-	public final void addItems(List<ItemInstance> items)
-	{
-		for (ItemInstance item : items)
-		{
+
+	public final void addItems(List<ItemInstance> items) {
+		for (ItemInstance item : items) {
 			_items.put(item.getObjectId(), new ItemInfo(item));
 		}
 	}
-	
-	public final Collection<ItemInfo> getItems()
-	{
+
+	public final Collection<ItemInfo> getItems() {
 		return _items.values();
 	}
-	
-	protected final void writeItems(PacketWriter packet)
-	{
+
+	protected final void writeItems(PacketWriter packet) {
 		packet.writeH(_items.size());
-		for (ItemInfo item : _items.values())
-		{
+		for (ItemInfo item : _items.values()) {
 			packet.writeH(item.getChange()); // Update type : 01-add, 02-modify, 03-remove
 			writeItem(packet, item);
 		}

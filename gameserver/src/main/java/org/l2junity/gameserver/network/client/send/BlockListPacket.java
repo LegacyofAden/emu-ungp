@@ -18,32 +18,28 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class BlockListPacket implements IClientOutgoingPacket
-{
+public class BlockListPacket implements IClientOutgoingPacket {
 	private final List<Integer> _playersId;
-	
-	public BlockListPacket(List<Integer> playersId)
-	{
+
+	public BlockListPacket(List<Integer> playersId) {
 		_playersId = playersId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.BLOCK_LIST.writeId(packet);
-		
+
 		packet.writeD(_playersId.size());
-		for (int playerId : _playersId)
-		{
+		for (int playerId : _playersId) {
 			packet.writeS(CharNameTable.getInstance().getNameById(playerId));
 			packet.writeS(""); // memo ?
 		}

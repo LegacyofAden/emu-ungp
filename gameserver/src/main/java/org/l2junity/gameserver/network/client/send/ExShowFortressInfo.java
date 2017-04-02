@@ -18,35 +18,31 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author KenM
  */
-public class ExShowFortressInfo implements IClientOutgoingPacket
-{
+public class ExShowFortressInfo implements IClientOutgoingPacket {
 	public static final ExShowFortressInfo STATIC_PACKET = new ExShowFortressInfo();
-	
-	private ExShowFortressInfo()
-	{
-		
+
+	private ExShowFortressInfo() {
+
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_FORTRESS_INFO.writeId(packet);
-		
+
 		final Collection<Fort> forts = FortManager.getInstance().getForts();
 		packet.writeD(forts.size());
-		for (Fort fort : forts)
-		{
+		for (Fort fort : forts) {
 			final L2Clan clan = fort.getOwnerClan();
 			packet.writeD(fort.getResidenceId());
 			packet.writeS(clan != null ? clan.getName() : "");

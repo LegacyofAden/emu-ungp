@@ -28,38 +28,32 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Nos
  */
-public class ExPacket implements IClientIncomingPacket
-{
+public class ExPacket implements IClientIncomingPacket {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExPacket.class);
-	
+
 	private ExIncomingPackets _exIncomingPacket;
 	private IIncomingPacket<L2GameClient> _exPacket;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		int exPacketId = packet.readH() & 0xFFFF;
-		if ((exPacketId < 0) || (exPacketId >= ExIncomingPackets.PACKET_ARRAY.length))
-		{
+		if ((exPacketId < 0) || (exPacketId >= ExIncomingPackets.PACKET_ARRAY.length)) {
 			return false;
 		}
-		
+
 		_exIncomingPacket = ExIncomingPackets.PACKET_ARRAY[exPacketId];
-		if (_exIncomingPacket == null)
-		{
+		if (_exIncomingPacket == null) {
 			LOGGER.debug("{}: Unknown packet: {}", getClass().getSimpleName(), Integer.toHexString(exPacketId));
 			return false;
 		}
-		
+
 		_exPacket = _exIncomingPacket.newIncomingPacket();
 		return (_exPacket != null) && _exPacket.read(client, packet);
 	}
-	
+
 	@Override
-	public void run(L2GameClient client) throws Exception
-	{
-		if (!_exIncomingPacket.getConnectionStates().contains(client.getConnectionState()))
-		{
+	public void run(L2GameClient client) throws Exception {
+		if (!_exIncomingPacket.getConnectionStates().contains(client.getConnectionState())) {
 			LOGGER.debug("{}: Connection at invalid state: {} Required State: {}", _exIncomingPacket, client.getConnectionState(), _exIncomingPacket.getConnectionStates());
 			return;
 		}

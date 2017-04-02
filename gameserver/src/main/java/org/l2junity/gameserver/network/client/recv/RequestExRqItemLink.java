@@ -28,26 +28,21 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestExRqItemLink implements IClientIncomingPacket
-{
+public class RequestExRqItemLink implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final WorldObject object = World.getInstance().findObject(_objectId);
-		if (object instanceof ItemInstance)
-		{
+		if (object instanceof ItemInstance) {
 			final ItemInstance item = (ItemInstance) object;
-			if (item.isPublished())
-			{
+			if (item.isPublished()) {
 				client.sendPacket(new ExRpItemLink(item));
 			}
 		}

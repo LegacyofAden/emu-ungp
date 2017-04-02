@@ -18,13 +18,8 @@
  */
 package org.l2junity.gameserver.model.stats;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.NoSuchElementException;
-
 import org.l2junity.commons.util.IXmlReader;
-import org.l2junity.commons.util.XmlReaderException;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.slf4j.Logger;
@@ -32,11 +27,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 
+import java.nio.file.Path;
+import java.util.NoSuchElementException;
+
 /**
  * @author DS, Sdw, UnAfraid
  */
-public enum BaseStats
-{
+public enum BaseStats {
 	STR(DoubleStat.STAT_STR),
 	INT(DoubleStat.STAT_INT),
 	DEX(DoubleStat.STAT_DEX),
@@ -45,100 +42,74 @@ public enum BaseStats
 	MEN(DoubleStat.STAT_MEN),
 	CHA(DoubleStat.STAT_CHA),
 	LUC(DoubleStat.STAT_LUC);
-	
+
 	private final double[] _bonus = new double[PlayerConfig.MAX_BASE_STAT + 1];
 	private final DoubleStat _stat;
-	
-	BaseStats(DoubleStat stat)
-	{
+
+	BaseStats(DoubleStat stat) {
 		_stat = stat;
 	}
-	
-	public DoubleStat getStat()
-	{
+
+	public DoubleStat getStat() {
 		return _stat;
 	}
-	
-	public int calcValue(Creature creature)
-	{
-		if ((creature != null) && (_stat != null))
-		{
+
+	public int calcValue(Creature creature) {
+		if ((creature != null) && (_stat != null)) {
 			return (int) creature.getStat().getValue(_stat);
 		}
 		return 0;
 	}
-	
-	public double calcBonus(Creature creature)
-	{
-		if (creature != null)
-		{
+
+	public double calcBonus(Creature creature) {
+		if (creature != null) {
 			final int value = calcValue(creature);
-			if (value < 1)
-			{
+			if (value < 1) {
 				return 1;
 			}
 			return _bonus[value];
 		}
-		
+
 		return 1;
 	}
-	
-	void setValue(int index, double value)
-	{
+
+	void setValue(int index, double value) {
 		_bonus[index] = value;
 	}
-	
-	public double getValue(int index)
-	{
+
+	public double getValue(int index) {
 		return _bonus[index];
 	}
-	
-	public static BaseStats valueOf(DoubleStat stat)
-	{
-		for (BaseStats baseStat : values())
-		{
-			if (baseStat.getStat() == stat)
-			{
+
+	public static BaseStats valueOf(DoubleStat stat) {
+		for (BaseStats baseStat : values()) {
+			if (baseStat.getStat() == stat) {
 				return baseStat;
 			}
 		}
 		throw new NoSuchElementException("Unknown base stat '" + stat + "' for enum BaseStats");
 	}
-	
-	static
-	{
-		new IGameXmlReader()
-		{
+
+	static {
+		new IGameXmlReader() {
 			final Logger LOGGER = LoggerFactory.getLogger(BaseStats.class);
-			
-			protected void load()
-			{
-				try
-				{
-					parseDatapackFile("data/stats/statBonus.xml");
-				}
-				catch (XmlReaderException | IOException e)
-				{
-					LOGGER.info("Error loading stat bonus.", e);
-				}
+
+			protected void load() {
+				parseDatapackFile("data/stats/statBonus.xml");
 			}
-			
+
 			@Override
-			public void parseDocument(Document doc, Path path)
-			{
+			public void parseDocument(Document doc, Path path) {
 				forEach(doc, "list", listNode -> forEach(listNode, IXmlReader::isNode, statNode ->
 				{
 					final BaseStats baseStat;
-					try
-					{
+					try {
 						baseStat = valueOf(statNode.getNodeName());
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						LOGGER.error("Invalid base stats type: {}, skipping", statNode.getNodeValue());
 						return;
 					}
-					
+
 					forEach(statNode, "stat", statValue ->
 					{
 						final NamedNodeMap attrs = statValue.getAttributes();

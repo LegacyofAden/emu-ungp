@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.network.client;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import org.l2junity.gameserver.network.client.recv.*;
 import org.l2junity.gameserver.network.client.recv.friend.RequestAnswerFriendInvite;
 import org.l2junity.gameserver.network.client.recv.friend.RequestFriendDel;
@@ -32,11 +27,15 @@ import org.l2junity.network.IConnectionState;
 import org.l2junity.network.IIncomingPacket;
 import org.l2junity.network.IIncomingPackets;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Supplier;
+
 /**
  * @author UnAfraid
  */
-public enum IncomingPackets implements IIncomingPackets<L2GameClient>
-{
+public enum IncomingPackets implements IIncomingPackets<L2GameClient> {
 	LOGOUT(0x00, Logout::new, ConnectionState.AUTHENTICATED, ConnectionState.IN_GAME),
 	ATTACK(0x01, Attack::new, ConnectionState.IN_GAME),
 	REQUEST_START_PLEDGE_WAR(0x03, RequestStartPledgeWar::new, ConnectionState.IN_GAME),
@@ -207,51 +206,44 @@ public enum IncomingPackets implements IIncomingPackets<L2GameClient>
 	REQUEST_DELETE_MACRO(0xCE, RequestDeleteMacro::new, ConnectionState.IN_GAME),
 	REQUEST_BUY_PROCURE(0xCF, null, ConnectionState.IN_GAME),
 	EX_PACKET(0xD0, ExPacket::new, ConnectionState.values()); // This packet has its own connection state checking so we allow all of them
-	
+
 	public static final IncomingPackets[] PACKET_ARRAY;
-	
-	static
-	{
+
+	static {
 		final short maxPacketId = (short) Arrays.stream(values()).mapToInt(IIncomingPackets::getPacketId).max().orElse(0);
 		PACKET_ARRAY = new IncomingPackets[maxPacketId + 1];
-		for (IncomingPackets incomingPacket : values())
-		{
+		for (IncomingPackets incomingPacket : values()) {
 			PACKET_ARRAY[incomingPacket.getPacketId()] = incomingPacket;
 		}
 	}
-	
+
 	private short _packetId;
 	private Supplier<IIncomingPacket<L2GameClient>> _incomingPacketFactory;
 	private Set<IConnectionState> _connectionStates;
-	
-	IncomingPackets(int packetId, Supplier<IIncomingPacket<L2GameClient>> incomingPacketFactory, IConnectionState... connectionStates)
-	{
+
+	IncomingPackets(int packetId, Supplier<IIncomingPacket<L2GameClient>> incomingPacketFactory, IConnectionState... connectionStates) {
 		// packetId is an unsigned byte
-		if (packetId > 0xFF)
-		{
+		if (packetId > 0xFF) {
 			throw new IllegalArgumentException("packetId must not be bigger than 0xFF");
 		}
-		
+
 		_packetId = (short) packetId;
 		_incomingPacketFactory = incomingPacketFactory != null ? incomingPacketFactory : () -> null;
 		_connectionStates = new HashSet<>(Arrays.asList(connectionStates));
 	}
-	
+
 	@Override
-	public int getPacketId()
-	{
+	public int getPacketId() {
 		return _packetId;
 	}
-	
+
 	@Override
-	public IIncomingPacket<L2GameClient> newIncomingPacket()
-	{
+	public IIncomingPacket<L2GameClient> newIncomingPacket() {
 		return _incomingPacketFactory.get();
 	}
-	
+
 	@Override
-	public Set<IConnectionState> getConnectionStates()
-	{
+	public Set<IConnectionState> getConnectionStates() {
 		return _connectionStates;
 	}
 }

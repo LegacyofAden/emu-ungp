@@ -18,18 +18,17 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Luca Baldi
  */
-public final class RelationChanged implements IClientOutgoingPacket
-{
+public final class RelationChanged implements IClientOutgoingPacket {
 	// TODO: Enum
 	public static final int RELATION_PARTY1 = 0x00001; // party member
 	public static final int RELATION_PARTY2 = 0x00002; // party member
@@ -48,25 +47,23 @@ public final class RelationChanged implements IClientOutgoingPacket
 	public static final int RELATION_MUTUAL_WAR = 0x08000; // single fist
 	public static final int RELATION_ALLY_MEMBER = 0x10000; // clan is in alliance
 	public static final int RELATION_TERRITORY_WAR = 0x80000; // show Territory War icon
-	
+
 	// Masks
 	public static final byte SEND_ONE = (byte) 0x00;
 	public static final byte SEND_DEFAULT = (byte) 0x01;
 	public static final byte SEND_MULTI = (byte) 0x04;
-	
-	protected static class Relation
-	{
+
+	protected static class Relation {
 		int _objId, _relation, _autoAttackable, _reputation, _pvpFlag;
 	}
-	
+
 	private Relation _singled;
 	private final List<Relation> _multi;
 	private byte _mask = (byte) 0x00;
-	
-	public RelationChanged(Playable activeChar, int relation, boolean autoattackable)
-	{
+
+	public RelationChanged(Playable activeChar, int relation, boolean autoattackable) {
 		_mask |= SEND_ONE;
-		
+
 		_singled = new Relation();
 		_singled._objId = activeChar.getObjectId();
 		_singled._relation = relation;
@@ -75,15 +72,13 @@ public final class RelationChanged implements IClientOutgoingPacket
 		_singled._pvpFlag = activeChar.getPvpFlag();
 		_multi = null;
 	}
-	
-	public RelationChanged()
-	{
+
+	public RelationChanged() {
 		_mask |= SEND_MULTI;
 		_multi = new LinkedList<>();
 	}
-	
-	public void addRelation(Playable activeChar, int relation, boolean autoattackable)
-	{
+
+	public void addRelation(Playable activeChar, int relation, boolean autoattackable) {
 		Relation r = new Relation();
 		r._objId = activeChar.getObjectId();
 		r._relation = relation;
@@ -92,34 +87,27 @@ public final class RelationChanged implements IClientOutgoingPacket
 		r._pvpFlag = activeChar.getPvpFlag();
 		_multi.add(r);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RELATION_CHANGED.writeId(packet);
-		
+
 		packet.writeC(_mask);
-		if (_multi == null)
-		{
+		if (_multi == null) {
 			writeRelation(packet, _singled);
-		}
-		else
-		{
+		} else {
 			packet.writeH(_multi.size());
-			for (Relation r : _multi)
-			{
+			for (Relation r : _multi) {
 				writeRelation(packet, r);
 			}
 		}
 		return true;
 	}
-	
-	private void writeRelation(PacketWriter packet, Relation relation)
-	{
+
+	private void writeRelation(PacketWriter packet, Relation relation) {
 		packet.writeD(relation._objId);
-		
-		if ((_mask & SEND_DEFAULT) == 0)
-		{
+
+		if ((_mask & SEND_DEFAULT) == 0) {
 			packet.writeD(relation._relation);
 			packet.writeC(relation._autoAttackable);
 			packet.writeD(relation._reputation);

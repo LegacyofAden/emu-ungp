@@ -18,36 +18,30 @@
  */
 package org.l2junity.gameserver.model.options;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
+
+import java.util.List;
 
 /**
  * @author Pere
  */
-public final class OptionDataGroup
-{
+public final class OptionDataGroup {
 	private final List<OptionDataCategory> _categories;
-	
-	public OptionDataGroup(List<OptionDataCategory> categories)
-	{
+
+	public OptionDataGroup(List<OptionDataCategory> categories) {
 		_categories = categories;
 	}
-	
-	Options getRandomEffect()
-	{
+
+	Options getRandomEffect() {
 		Options result = null;
-		do
-		{
+		do {
 			double random = Rnd.get() * 100.0;
-			for (OptionDataCategory category : _categories)
-			{
-				if (category.getChance() >= random)
-				{
+			for (OptionDataCategory category : _categories) {
+				if (category.getChance() >= random) {
 					result = category.getRandomOptions();
 					break;
 				}
-				
+
 				random -= category.getChance();
 			}
 		}

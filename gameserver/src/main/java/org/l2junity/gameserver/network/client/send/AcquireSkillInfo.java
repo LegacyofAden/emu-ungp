@@ -18,10 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.holders.ItemHolder;
@@ -29,80 +26,76 @@ import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Acquire Skill Info server packet implementation.
+ *
  * @author Zoey76
  */
-public class AcquireSkillInfo implements IClientOutgoingPacket
-{
+public class AcquireSkillInfo implements IClientOutgoingPacket {
 	private final AcquireSkillType _type;
 	private final int _id;
 	private final int _level;
 	private final int _spCost;
 	private final List<Req> _reqs;
-	
+
 	/**
 	 * Private class containing learning skill requisites.
 	 */
-	private static class Req
-	{
+	private static class Req {
 		public int itemId;
 		public long count;
 		public int type;
 		public int unk;
-		
+
 		/**
-		 * @param pType TODO identify.
-		 * @param pItemId the item Id.
+		 * @param pType     TODO identify.
+		 * @param pItemId   the item Id.
 		 * @param itemCount the item count.
-		 * @param pUnk TODO identify.
+		 * @param pUnk      TODO identify.
 		 */
-		public Req(int pType, int pItemId, long itemCount, int pUnk)
-		{
+		public Req(int pType, int pItemId, long itemCount, int pUnk) {
 			itemId = pItemId;
 			type = pType;
 			count = itemCount;
 			unk = pUnk;
 		}
 	}
-	
+
 	/**
 	 * Constructor for the acquire skill info object.
-	 * @param skillType the skill learning type.
+	 *
+	 * @param skillType  the skill learning type.
 	 * @param skillLearn the skill learn.
 	 */
-	public AcquireSkillInfo(AcquireSkillType skillType, SkillLearn skillLearn)
-	{
+	public AcquireSkillInfo(AcquireSkillType skillType, SkillLearn skillLearn) {
 		_id = skillLearn.getSkillId();
 		_level = skillLearn.getSkillLevel();
 		_spCost = skillLearn.getLevelUpSp();
 		_type = skillType;
 		_reqs = new ArrayList<>();
-		if ((skillType != AcquireSkillType.PLEDGE) || PlayerConfig.LIFE_CRYSTAL_NEEDED)
-		{
-			for (ItemHolder item : skillLearn.getRequiredItems())
-			{
-				if (!PlayerConfig.DIVINE_SP_BOOK_NEEDED && (_id == CommonSkill.DIVINE_INSPIRATION.getId()))
-				{
+		if ((skillType != AcquireSkillType.PLEDGE) || PlayerConfig.LIFE_CRYSTAL_NEEDED) {
+			for (ItemHolder item : skillLearn.getRequiredItems()) {
+				if (!PlayerConfig.DIVINE_SP_BOOK_NEEDED && (_id == CommonSkill.DIVINE_INSPIRATION.getId())) {
 					continue;
 				}
 				_reqs.add(new Req(99, item.getId(), item.getCount(), 50));
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ACQUIRE_SKILL_INFO.writeId(packet);
-		
+
 		packet.writeD(_id);
 		packet.writeD(_level);
 		packet.writeQ(_spCost);
 		packet.writeD(_type.getId());
 		packet.writeD(_reqs.size());
-		for (Req temp : _reqs)
-		{
+		for (Req temp : _reqs) {
 			packet.writeD(temp.type);
 			packet.writeD(temp.itemId);
 			packet.writeQ(temp.count);

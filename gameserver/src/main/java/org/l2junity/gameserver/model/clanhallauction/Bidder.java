@@ -18,55 +18,47 @@
  */
 package org.l2junity.gameserver.model.clanhallauction;
 
+import org.l2junity.gameserver.model.L2Clan;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import org.l2junity.gameserver.model.L2Clan;
-
 /**
  * @author Sdw
  */
-public class Bidder
-{
+public class Bidder {
 	private final L2Clan _clan;
 	private final long _bid;
 	private final long _time;
-	
-	public Bidder(L2Clan clan, long bid, long time)
-	{
+
+	public Bidder(L2Clan clan, long bid, long time) {
 		_clan = clan;
 		_bid = bid;
 		_time = time == 0 ? Instant.now().toEpochMilli() : time;
 	}
-	
-	public L2Clan getClan()
-	{
+
+	public L2Clan getClan() {
 		return _clan;
 	}
-	
-	public String getClanName()
-	{
+
+	public String getClanName() {
 		return _clan.getName();
 	}
-	
-	public String getLeaderName()
-	{
+
+	public String getLeaderName() {
 		return _clan.getLeaderName();
 	}
-	
-	public long getBid()
-	{
+
+	public long getBid() {
 		return _bid;
 	}
-	
-	public long getTime()
-	{
+
+	public long getTime() {
 		return _time;
 	}
-	
-	public String getFormattedTime()
-	{
+
+	public String getFormattedTime() {
 		return DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(Instant.ofEpochMilli(_time).atZone(ZoneId.systemDefault()));
 	}
 }

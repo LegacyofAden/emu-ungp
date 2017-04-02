@@ -18,13 +18,8 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.Collections;
-import java.util.List;
-
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.config.TrainingCampConfig;
+import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.ClanMember;
@@ -49,25 +44,26 @@ import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>>
-{
+public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DailyTaskManager.class);
-	
-	protected DailyTaskManager()
-	{
+
+	protected DailyTaskManager() {
 	}
-	
+
 	@Override
-	public void onInitialized()
-	{
+	public void onInitialized() {
 	}
-	
+
 	@ScheduleTarget
-	private void onReset()
-	{
+	private void onReset() {
 		resetClanBonus();
 		resetExtendDrop();
 		resetDailySkills();
@@ -75,142 +71,113 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>>
 		resetOneDayReward();
 		resetRecommends();
 		resetTrainingCamp();
-		
+
 		// Notify to scripts
 		EventDispatcher.getInstance().notifyEventAsync(new OnDailyReset(), Containers.Global());
 	}
-	
+
 	@ScheduleTarget
-	private void onSave()
-	{
+	private void onSave() {
 		GlobalVariablesManager.getInstance().storeMe();
-		
-		if (Olympiad.getInstance().inCompPeriod())
-		{
+
+		if (Olympiad.getInstance().inCompPeriod()) {
 			Olympiad.getInstance().saveOlympiadStatus();
 			LOGGER.info("Olympiad System: Data updated.");
 		}
 	}
-	
+
 	@ScheduleTarget
-	private void onClanLeaderApply()
-	{
-		for (L2Clan clan : ClanTable.getInstance().getClans())
-		{
-			if (clan.getNewLeaderId() != 0)
-			{
+	private void onClanLeaderApply() {
+		for (L2Clan clan : ClanTable.getInstance().getClans()) {
+			if (clan.getNewLeaderId() != 0) {
 				final ClanMember member = clan.getClanMember(clan.getNewLeaderId());
-				if (member == null)
-				{
+				if (member == null) {
 					continue;
 				}
-				
+
 				clan.setNewLeader(member);
 			}
 		}
 		LOGGER.info("Clan leaders has been updated");
 	}
-	
+
 	@ScheduleTarget
-	private void onVitalityReset()
-	{
-		for (PlayerInstance player : World.getInstance().getPlayers())
-		{
+	private void onVitalityReset() {
+		for (PlayerInstance player : World.getInstance().getPlayers()) {
 			player.setVitalityPoints(PcStat.MAX_VITALITY_POINTS, false);
-			
-			for (SubClass subclass : player.getSubClasses().values())
-			{
+
+			for (SubClass subclass : player.getSubClasses().values()) {
 				subclass.setVitalityPoints(PcStat.MAX_VITALITY_POINTS);
 			}
 		}
-		
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
-			try (PreparedStatement st = con.prepareStatement("UPDATE character_subclasses SET vitality_points = ?"))
-			{
+
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
+			try (PreparedStatement st = con.prepareStatement("UPDATE character_subclasses SET vitality_points = ?")) {
 				st.setInt(1, PcStat.MAX_VITALITY_POINTS);
 				st.execute();
 			}
-			
-			try (PreparedStatement st = con.prepareStatement("UPDATE characters SET vitality_points = ?"))
-			{
+
+			try (PreparedStatement st = con.prepareStatement("UPDATE characters SET vitality_points = ?")) {
 				st.setInt(1, PcStat.MAX_VITALITY_POINTS);
 				st.execute();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while updating vitality", e);
 		}
 		LOGGER.info("Vitality resetted");
 	}
-	
-	private void resetClanBonus()
-	{
+
+	private void resetClanBonus() {
 		ClanTable.getInstance().getClans().forEach(L2Clan::resetClanBonus);
 		LOGGER.info("Daily clan bonus has been resetted.");
 	}
-	
-	private void resetExtendDrop()
-	{
+
+	private void resetExtendDrop() {
 		// Update data for offline players.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("DELETE FROM character_variables WHERE var = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("DELETE FROM character_variables WHERE var = ?")) {
 			ps.setString(1, PlayerVariables.EXTEND_DROP);
 			ps.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Could not reset extend drop : ", e);
 		}
-		
+
 		// Update data for online players.
 		World.getInstance().getPlayers().stream().forEach(player ->
 		{
 			player.getVariables().remove(PlayerVariables.EXTEND_DROP);
 			player.getVariables().storeMe();
 		});
-		
+
 		LOGGER.info("Extend drop has been resetted.");
 	}
-	
-	private void resetDailySkills()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+
+	private void resetDailySkills() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			final List<SkillHolder> dailySkills = getVariables().getList("reset_skills", SkillHolder.class, Collections.emptyList());
-			for (SkillHolder skill : dailySkills)
-			{
-				try (PreparedStatement ps = con.prepareStatement("DELETE FROM character_skills_save WHERE skill_id = ?"))
-				{
+			for (SkillHolder skill : dailySkills) {
+				try (PreparedStatement ps = con.prepareStatement("DELETE FROM character_skills_save WHERE skill_id = ?")) {
 					ps.setInt(1, skill.getSkillId());
 					ps.execute();
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Could not reset daily skill reuse: ", e);
 		}
 		LOGGER.info("Daily skill reuse cleaned.");
 	}
-	
-	private void resetWorldChatPoints()
-	{
+
+	private void resetWorldChatPoints() {
 		// Update data for offline players.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("UPDATE character_variables SET value = ? WHERE var = ?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("UPDATE character_variables SET value = ? WHERE var = ?")) {
 			ps.setObject(1, new Integer(0));
 			ps.setString(2, PlayerVariables.WORLD_CHAT_VARIABLE_NAME);
 			ps.executeUpdate();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Could not reset daily world chat points: ", e);
 		}
-		
+
 		// Update data for online players.
 		World.getInstance().getPlayers().stream().forEach(player ->
 		{
@@ -218,31 +185,25 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>>
 			player.sendPacket(new ExWorldChatCnt(player));
 			player.getVariables().storeMe();
 		});
-		
+
 		LOGGER.info("Daily world chat points has been resetted.");
 	}
-	
-	private void resetRecommends()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
-			try (PreparedStatement ps = con.prepareStatement("UPDATE character_reco_bonus SET rec_left = ?, rec_have = 0 WHERE rec_have <= 20"))
-			{
+
+	private void resetRecommends() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
+			try (PreparedStatement ps = con.prepareStatement("UPDATE character_reco_bonus SET rec_left = ?, rec_have = 0 WHERE rec_have <= 20")) {
 				ps.setInt(1, 0); // Rec left = 0
 				ps.execute();
 			}
-			
-			try (PreparedStatement ps = con.prepareStatement("UPDATE character_reco_bonus SET rec_left = ?, rec_have = GREATEST(rec_have - 20,0) WHERE rec_have > 20"))
-			{
+
+			try (PreparedStatement ps = con.prepareStatement("UPDATE character_reco_bonus SET rec_left = ?, rec_have = GREATEST(rec_have - 20,0) WHERE rec_have > 20")) {
 				ps.setInt(1, 0); // Rec left = 0
 				ps.execute();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Could not reset Recommendations System: ", e);
 		}
-		
+
 		World.getInstance().getPlayers().stream().forEach(player ->
 		{
 			player.setRecomLeft(0);
@@ -251,46 +212,38 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>>
 			player.broadcastUserInfo();
 		});
 	}
-	
-	public void resetTrainingCamp()
-	{
-		if (TrainingCampConfig.ENABLE)
-		{
+
+	public void resetTrainingCamp() {
+		if (TrainingCampConfig.ENABLE) {
 			// Update data for offline players.
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				PreparedStatement ps = con.prepareStatement("DELETE FROM account_gsdata WHERE var = ?"))
-			{
+				 PreparedStatement ps = con.prepareStatement("DELETE FROM account_gsdata WHERE var = ?")) {
 				ps.setString(1, AccountVariables.TRAINING_CAMP_DURATION);
 				ps.executeUpdate();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOGGER.error("Could not reset Training Camp: ", e);
 			}
-			
+
 			// Update data for online players.
 			World.getInstance().getPlayers().stream().forEach(player ->
 			{
 				player.getAccountVariables().remove(AccountVariables.TRAINING_CAMP_DURATION);
 				player.getAccountVariables().storeMe();
 			});
-			
+
 			LOGGER.info("Training Camp daily time has been resetted.");
 		}
 	}
-	
-	private void resetOneDayReward()
-	{
+
+	private void resetOneDayReward() {
 		OneDayRewardData.getInstance().getOneDayRewardData().forEach(OneDayRewardDataHolder::reset);
 	}
-	
-	public static DailyTaskManager getInstance()
-	{
+
+	public static DailyTaskManager getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final DailyTaskManager INSTANCE = new DailyTaskManager();
 	}
 }

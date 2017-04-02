@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.PremiumItem;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -30,86 +30,63 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik
  */
-public final class RequestWithDrawPremiumItem implements IClientIncomingPacket
-{
+public final class RequestWithDrawPremiumItem implements IClientIncomingPacket {
 	private int _itemNum;
 	private int _charId;
 	private long _itemCount;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_itemNum = packet.readD();
 		_charId = packet.readD();
 		_itemCount = packet.readQ();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		
-		if (activeChar == null)
-		{
+
+		if (activeChar == null) {
 			return;
-		}
-		else if (_itemCount <= 0)
-		{
+		} else if (_itemCount <= 0) {
 			return;
-		}
-		else if (activeChar.getObjectId() != _charId)
-		{
+		} else if (activeChar.getObjectId() != _charId) {
 			Util.handleIllegalPlayerAction(activeChar, "[RequestWithDrawPremiumItem] Incorrect owner, Player: " + activeChar.getName(), GeneralConfig.DEFAULT_PUNISH);
 			return;
-		}
-		else if (activeChar.getPremiumItemList().isEmpty())
-		{
+		} else if (activeChar.getPremiumItemList().isEmpty()) {
 			Util.handleIllegalPlayerAction(activeChar, "[RequestWithDrawPremiumItem] Player: " + activeChar.getName() + " try to get item with empty list!", GeneralConfig.DEFAULT_PUNISH);
 			return;
-		}
-		else if ((activeChar.getWeightPenalty() >= 3) || !activeChar.isInventoryUnder90(false))
-		{
+		} else if ((activeChar.getWeightPenalty() >= 3) || !activeChar.isInventoryUnder90(false)) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_RECEIVE_THE_DIMENSIONAL_ITEM_BECAUSE_YOU_HAVE_EXCEED_YOUR_INVENTORY_WEIGHT_QUANTITY_LIMIT);
 			return;
-		}
-		else if (activeChar.isProcessingTransaction())
-		{
+		} else if (activeChar.isProcessingTransaction()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_RECEIVE_A_DIMENSIONAL_ITEM_DURING_AN_EXCHANGE);
 			return;
 		}
-		
+
 		PremiumItem _item = activeChar.getPremiumItemList().get(_itemNum);
-		if (_item == null)
-		{
+		if (_item == null) {
+			return;
+		} else if (_item.getCount() < _itemCount) {
 			return;
 		}
-		else if (_item.getCount() < _itemCount)
-		{
-			return;
-		}
-		
+
 		long itemsLeft = (_item.getCount() - _itemCount);
-		
+
 		activeChar.addItem("PremiumItem", _item.getItemId(), _itemCount, activeChar.getTarget(), true);
-		
-		if (itemsLeft > 0)
-		{
+
+		if (itemsLeft > 0) {
 			_item.updateCount(itemsLeft);
 			activeChar.updatePremiumItem(_itemNum, itemsLeft);
-		}
-		else
-		{
+		} else {
 			activeChar.getPremiumItemList().remove(_itemNum);
 			activeChar.deletePremiumItem(_itemNum);
 		}
-		
-		if (activeChar.getPremiumItemList().isEmpty())
-		{
+
+		if (activeChar.getPremiumItemList().isEmpty()) {
 			client.sendPacket(SystemMessageId.THERE_ARE_NO_MORE_DIMENSIONAL_ITEMS_TO_BE_FOUND);
-		}
-		else
-		{
+		} else {
 			client.sendPacket(new ExGetPremiumItemList(activeChar));
 		}
 	}

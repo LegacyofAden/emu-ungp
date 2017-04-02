@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
@@ -33,72 +33,58 @@ import org.slf4j.LoggerFactory;
 /**
  * Task that handles illegal player actions.
  */
-public final class IllegalPlayerActionTask implements Runnable
-{
+public final class IllegalPlayerActionTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger("audit");
-	
+
 	private final String _message;
 	private final IllegalActionPunishmentType _punishment;
 	private final PlayerInstance _actor;
-	
-	public IllegalPlayerActionTask(PlayerInstance actor, String message, IllegalActionPunishmentType punishment)
-	{
+
+	public IllegalPlayerActionTask(PlayerInstance actor, String message, IllegalActionPunishmentType punishment) {
 		_message = message;
 		_punishment = punishment;
 		_actor = actor;
-		
-		switch (punishment)
-		{
-			case KICK:
-			{
+
+		switch (punishment) {
+			case KICK: {
 				_actor.sendMessage("You will be kicked for illegal action, GM informed.");
 				break;
 			}
-			case KICKBAN:
-			{
-				if (!_actor.isGM())
-				{
+			case KICKBAN: {
+				if (!_actor.isGM()) {
 					_actor.setAccessLevel(-1, false, true);
 					_actor.setAccountAccesslevel(-1);
 				}
 				_actor.sendMessage("You are banned for illegal action, GM informed.");
 				break;
 			}
-			case JAIL:
-			{
+			case JAIL: {
 				_actor.sendMessage("Illegal action performed!");
 				_actor.sendMessage("You will be teleported to GM Consultation Service area and jailed.");
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		_log.info("AUDIT, {}, {}, {}", _message, _actor, _punishment);
-		
+
 		AdminData.getInstance().broadcastMessageToGMs(_message);
-		if (!_actor.isGM())
-		{
-			switch (_punishment)
-			{
-				case BROADCAST:
-				{
+		if (!_actor.isGM()) {
+			switch (_punishment) {
+				case BROADCAST: {
 					return;
 				}
-				case KICK:
-				{
+				case KICK: {
 					Disconnection.of(_actor).defaultSequence(false);
 					break;
 				}
-				case KICKBAN:
-				{
+				case KICKBAN: {
 					PunishmentManager.getInstance().startPunishment(new PunishmentTask(_actor.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.BAN, System.currentTimeMillis() + (GeneralConfig.DEFAULT_PUNISH_PARAM * 1000), _message, getClass().getSimpleName()));
 					break;
 				}
-				case JAIL:
-				{
+				case JAIL: {
 					PunishmentManager.getInstance().startPunishment(new PunishmentTask(_actor.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.JAIL, System.currentTimeMillis() + (GeneralConfig.DEFAULT_PUNISH_PARAM * 1000), _message, getClass().getSimpleName()));
 					break;
 				}

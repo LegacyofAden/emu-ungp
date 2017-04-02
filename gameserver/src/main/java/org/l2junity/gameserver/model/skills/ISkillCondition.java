@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author NosBit
  */
-public interface ISkillCondition
-{
+public interface ISkillCondition {
 	boolean canUse(Creature caster, Skill skill, WorldObject target);
 }

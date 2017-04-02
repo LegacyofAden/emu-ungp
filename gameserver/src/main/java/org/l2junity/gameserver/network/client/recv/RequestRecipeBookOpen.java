@@ -25,44 +25,37 @@ import org.l2junity.gameserver.network.client.send.RecipeBookItemList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestRecipeBookOpen implements IClientIncomingPacket
-{
+public final class RequestRecipeBookOpen implements IClientIncomingPacket {
 	private boolean _isDwarvenCraft;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_isDwarvenCraft = (packet.readD() == 0);
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isCastingNow())
-		{
+
+		if (activeChar.isCastingNow()) {
 			client.sendPacket(SystemMessageId.YOUR_RECIPE_BOOK_MAY_NOT_BE_ACCESSED_WHILE_USING_A_SKILL);
 			return;
 		}
-		
-		if (activeChar.getPrivateStoreType() == PrivateStoreType.MANUFACTURE)
-		{
+
+		if (activeChar.getPrivateStoreType() == PrivateStoreType.MANUFACTURE) {
 			client.sendPacket(SystemMessageId.YOU_MAY_NOT_ALTER_YOUR_RECIPE_BOOK_WHILE_ENGAGED_IN_MANUFACTURING);
 			return;
 		}
-		
-		if (activeChar.isProcessingTransaction())
-		{
+
+		if (activeChar.isProcessingTransaction()) {
 			client.sendPacket(SystemMessageId.ITEM_CREATION_IS_NOT_POSSIBLE_WHILE_ENGAGED_IN_A_TRADE);
 			return;
 		}
-		
+
 		final RecipeBookItemList response = new RecipeBookItemList(activeChar, _isDwarvenCraft);
 		activeChar.sendPacket(response);
 	}

@@ -24,29 +24,24 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * The Monster Derby Track Zone
+ *
  * @author durgus
  */
-public class DerbyTrackZone extends ZoneType
-{
-	public DerbyTrackZone(int id)
-	{
+public class DerbyTrackZone extends ZoneType {
+	public DerbyTrackZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayable())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayable()) {
 			character.setInsideZone(ZoneId.MONSTER_TRACK, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayable())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayable()) {
 			character.setInsideZone(ZoneId.MONSTER_TRACK, false);
 		}
 	}

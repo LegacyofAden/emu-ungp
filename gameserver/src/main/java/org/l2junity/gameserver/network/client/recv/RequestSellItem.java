@@ -18,13 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.model.WorldObject;
@@ -42,34 +37,34 @@ import org.l2junity.gameserver.network.client.send.ExUserInfoInvenWeight;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
+
 /**
  * RequestSellItem client packet class.
  */
-public final class RequestSellItem implements IClientIncomingPacket
-{
+public final class RequestSellItem implements IClientIncomingPacket {
 	private static final int BATCH_LENGTH = 16;
-	
+
 	private int _listId;
 	private List<UniqueItemHolder> _items = null;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_listId = packet.readD();
 		int size = packet.readD();
-		if ((size <= 0) || (size > PlayerConfig.MAX_ITEM_IN_PACKET) || ((size * BATCH_LENGTH) != packet.getReadableBytes()))
-		{
+		if ((size <= 0) || (size > PlayerConfig.MAX_ITEM_IN_PACKET) || ((size * BATCH_LENGTH) != packet.getReadableBytes())) {
 			return false;
 		}
-		
+
 		_items = new ArrayList<>(size);
-		for (int i = 0; i < size; i++)
-		{
+		for (int i = 0; i < size; i++) {
 			int objectId = packet.readD();
 			int itemId = packet.readD();
 			long count = packet.readQ();
-			if ((objectId < 1) || (itemId < 1) || (count < 1))
-			{
+			if ((objectId < 1) || (itemId < 1) || (count < 1)) {
 				_items = null;
 				return false;
 			}
@@ -77,107 +72,88 @@ public final class RequestSellItem implements IClientIncomingPacket
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("buy"))
-		{
+
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("buy")) {
 			player.sendMessage("You are buying too fast.");
 			return;
 		}
-		
-		if (_items == null)
-		{
+
+		if (_items == null) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Alt game - Karma punishment
-		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (player.getReputation() < 0))
-		{
+		if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (player.getReputation() < 0)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		WorldObject target = player.getTarget();
 		L2MerchantInstance merchant = null;
-		if (!player.isGM())
-		{
-			if ((target == null) || (!player.isInRadius3d(target, INTERACTION_DISTANCE)) || (player.getInstanceWorld() != target.getInstanceWorld()))
-			{
+		if (!player.isGM()) {
+			if ((target == null) || (!player.isInRadius3d(target, INTERACTION_DISTANCE)) || (player.getInstanceWorld() != target.getInstanceWorld())) {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			if (target instanceof L2MerchantInstance)
-			{
+			if (target instanceof L2MerchantInstance) {
 				merchant = (L2MerchantInstance) target;
-			}
-			else
-			{
+			} else {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
 		}
-		
+
 		final ProductList buyList = BuyListData.getInstance().getBuyList(_listId);
-		if (buyList == null)
-		{
+		if (buyList == null) {
 			Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if ((merchant != null) && !buyList.isNpcAllowed(merchant.getId()))
-		{
+
+		if ((merchant != null) && !buyList.isNpcAllowed(merchant.getId())) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		long totalPrice = 0;
 		// Proceed the sell
-		for (UniqueItemHolder i : _items)
-		{
+		for (UniqueItemHolder i : _items) {
 			ItemInstance item = player.checkItemManipulation(i.getObjectId(), i.getCount(), "sell");
-			if ((item == null) || (!item.isSellable()))
-			{
+			if ((item == null) || (!item.isSellable())) {
 				continue;
 			}
-			
+
 			long price = item.getReferencePrice() / 2;
 			totalPrice += price * i.getCount();
-			if (!ItemContainer.validateCount(Inventory.ADENA_ID, totalPrice))
-			{
+			if (!ItemContainer.validateCount(Inventory.ADENA_ID, totalPrice)) {
 				Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " tried to purchase " + totalPrice + " adena worth of goods.", GeneralConfig.DEFAULT_PUNISH);
 				return;
 			}
-			
-			if (GeneralConfig.ALLOW_REFUND)
-			{
+
+			if (GeneralConfig.ALLOW_REFUND) {
 				player.getInventory().transferItem("Sell", i.getObjectId(), i.getCount(), player.getRefund(), player, merchant);
-			}
-			else
-			{
+			} else {
 				player.getInventory().destroyItem("Sell", i.getObjectId(), i.getCount(), player, merchant);
 			}
 		}
-		
+
 		// add to castle treasury
-		if (merchant != null)
-		{
+		if (merchant != null) {
 			// Keep here same formula as in {@link ExBuySellList} to produce same result.
 			final long profit = (long) (totalPrice * (1.0 - merchant.getCastleTaxRate(TaxType.SELL)));
 			merchant.handleTaxPayment(totalPrice - profit);
 			totalPrice = profit;
 		}
-		
+
 		player.addAdena("Sell", totalPrice, merchant, false);
-		
+
 		// Update current load as well
 		client.sendPacket(new ExUserInfoInvenWeight(player));
 		client.sendPacket(new ExBuySellList(player, true));

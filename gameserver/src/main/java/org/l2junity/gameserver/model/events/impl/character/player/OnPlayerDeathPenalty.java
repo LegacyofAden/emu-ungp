@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Nik
  */
-public class OnPlayerDeathPenalty implements IBaseEvent
-{
+public class OnPlayerDeathPenalty implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Creature _killer;
-	
-	public OnPlayerDeathPenalty(PlayerInstance activeChar, Creature killer)
-	{
+
+	public OnPlayerDeathPenalty(PlayerInstance activeChar, Creature killer) {
 		_activeChar = activeChar;
 		_killer = killer;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Creature getKiller()
-	{
+
+	public Creature getKiller() {
 		return _killer;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_DEATH_PENALTY;
 	}
 }

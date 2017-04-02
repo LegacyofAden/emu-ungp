@@ -18,38 +18,34 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Objects;
-
 import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Objects;
+
 /**
  * @author chris_00
  */
-public class ExMultiPartyCommandChannelInfo implements IClientOutgoingPacket
-{
+public class ExMultiPartyCommandChannelInfo implements IClientOutgoingPacket {
 	private final CommandChannel _channel;
-	
-	public ExMultiPartyCommandChannelInfo(CommandChannel channel)
-	{
+
+	public ExMultiPartyCommandChannelInfo(CommandChannel channel) {
 		Objects.requireNonNull(channel);
 		_channel = channel;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MULTI_PARTY_COMMAND_CHANNEL_INFO.writeId(packet);
-		
+
 		packet.writeS(_channel.getLeader().getName());
 		packet.writeD(0x00); // Channel loot 0 or 1
 		packet.writeD(_channel.getMemberCount());
-		
+
 		packet.writeD(_channel.getPartys().size());
-		for (Party p : _channel.getPartys())
-		{
+		for (Party p : _channel.getPartys()) {
 			packet.writeS(p.getLeader().getName());
 			packet.writeD(p.getLeaderObjectId());
 			packet.writeD(p.getMemberCount());

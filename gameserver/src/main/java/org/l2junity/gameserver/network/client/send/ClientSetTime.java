@@ -18,25 +18,22 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.DateTimeConfig;
+import org.l2junity.core.configs.DateTimeConfig;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class ClientSetTime implements IClientOutgoingPacket
-{
+public final class ClientSetTime implements IClientOutgoingPacket {
 	private final int _timeInMinutesOfDay;
 
-	public ClientSetTime()
-	{
+	public ClientSetTime() {
 		_timeInMinutesOfDay = GameTimeManager.getInstance().getGameTimeInMinutesOfDay();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CLIENT_SET_TIME.writeId(packet);
-		
+
 		packet.writeD(_timeInMinutesOfDay);
 		packet.writeD(DateTimeConfig.TIME_MULTIPLIER);
 		return true;

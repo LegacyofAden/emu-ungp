@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class ExPartyPetWindowUpdate implements IClientOutgoingPacket
-{
+public class ExPartyPetWindowUpdate implements IClientOutgoingPacket {
 	private final Summon _summon;
-	
-	public ExPartyPetWindowUpdate(Summon summon)
-	{
+
+	public ExPartyPetWindowUpdate(Summon summon) {
 		_summon = summon;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PARTY_PET_WINDOW_UPDATE.writeId(packet);
-		
+
 		packet.writeD(_summon.getObjectId());
 		packet.writeD(_summon.getTemplate().getDisplayId() + 1000000);
 		packet.writeC(_summon.getSummonType());

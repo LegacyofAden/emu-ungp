@@ -18,65 +18,56 @@
  */
 package org.l2junity.gameserver.network.loginserver;
 
-import org.l2junity.gameserver.config.ServerConfig;
-import org.l2junity.gameserver.network.EventLoopGroupManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.l2junity.core.configs.GameserverConfig;
+import org.l2junity.gameserver.network.EventLoopGroupManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author NosBit
  */
-public class LoginServerNetworkManager
-{
+public class LoginServerNetworkManager {
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	
+
 	private final Bootstrap _bootstrap;
-	
+
 	private ChannelFuture _channelFuture;
-	
-	public LoginServerNetworkManager()
-	{
+
+	public LoginServerNetworkManager() {
 		//@formatter:off
 		_bootstrap = new Bootstrap()
-			.group(EventLoopGroupManager.getInstance().getWorkerGroup())
-			.channel(NioSocketChannel.class)
-			.option(ChannelOption.SO_KEEPALIVE, true)
-			.handler(new LoginServerInitializer());
+				.group(EventLoopGroupManager.getInstance().getWorkerGroup())
+				.channel(NioSocketChannel.class)
+				.option(ChannelOption.SO_KEEPALIVE, true)
+				.handler(new LoginServerInitializer());
 		//@formatter:on
 	}
-	
-	public ChannelFuture getChannelFuture()
-	{
+
+	public ChannelFuture getChannelFuture() {
 		return _channelFuture;
 	}
-	
-	public void connect() throws InterruptedException
-	{
-		if ((_channelFuture != null) && _channelFuture.isSuccess())
-		{
+
+	public void connect() throws InterruptedException {
+		if ((_channelFuture != null) && _channelFuture.isSuccess()) {
 			return;
 		}
-		_channelFuture = _bootstrap.connect(ServerConfig.GAME_SERVER_LOGIN_HOST, ServerConfig.GAME_SERVER_LOGIN_PORT).sync();
-		LOGGER.info("Connected to {}:{}", ServerConfig.GAME_SERVER_LOGIN_HOST, ServerConfig.GAME_SERVER_LOGIN_PORT);
+		_channelFuture = _bootstrap.connect(GameserverConfig.GAME_SERVER_LOGIN_HOST, GameserverConfig.GAME_SERVER_LOGIN_PORT).sync();
+		LOGGER.info("Connected to {}:{}", GameserverConfig.GAME_SERVER_LOGIN_HOST, GameserverConfig.GAME_SERVER_LOGIN_PORT);
 	}
-	
-	public void disconnect() throws InterruptedException
-	{
+
+	public void disconnect() throws InterruptedException {
 		_channelFuture.channel().close().sync();
 	}
-	
-	public static LoginServerNetworkManager getInstance()
-	{
+
+	public static LoginServerNetworkManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final LoginServerNetworkManager _instance = new LoginServerNetworkManager();
 	}
 }

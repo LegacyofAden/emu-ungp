@@ -18,33 +18,30 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Set;
-
 import org.l2junity.gameserver.data.xml.impl.EnchantSkillGroupsData;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class ExEnchantSkillInfo implements IClientOutgoingPacket
-{
+import java.util.Set;
+
+public final class ExEnchantSkillInfo implements IClientOutgoingPacket {
 	private final Set<Integer> _routes;
-	
+
 	private final int _skillId;
 	private final int _skillLevel;
 	private final int _skillSubLevel;
 	private final int _currentSubLevel;
-	
-	public ExEnchantSkillInfo(int skillId, int skillLevel, int skillSubLevel, int currentSubLevel)
-	{
+
+	public ExEnchantSkillInfo(int skillId, int skillLevel, int skillSubLevel, int currentSubLevel) {
 		_skillId = skillId;
 		_skillLevel = skillLevel;
 		_skillSubLevel = skillSubLevel;
 		_currentSubLevel = currentSubLevel;
 		_routes = EnchantSkillGroupsData.getInstance().getRouteForSkill(_skillId, _skillLevel);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ENCHANT_SKILL_INFO.writeId(packet);
 		packet.writeD(_skillId);
 		packet.writeH(_skillLevel);

@@ -18,43 +18,38 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class GMViewWarehouseWithdrawList extends AbstractItemPacket
-{
+import java.util.Collection;
+
+public class GMViewWarehouseWithdrawList extends AbstractItemPacket {
 	private final Collection<ItemInstance> _items;
 	private final String _playerName;
 	private final long _money;
-	
-	public GMViewWarehouseWithdrawList(PlayerInstance cha)
-	{
+
+	public GMViewWarehouseWithdrawList(PlayerInstance cha) {
 		_items = cha.getWarehouse().getItems();
 		_playerName = cha.getName();
 		_money = cha.getWarehouse().getAdena();
 	}
-	
-	public GMViewWarehouseWithdrawList(L2Clan clan)
-	{
+
+	public GMViewWarehouseWithdrawList(L2Clan clan) {
 		_playerName = clan.getLeaderName();
 		_items = clan.getWarehouse().getItems();
 		_money = clan.getWarehouse().getAdena();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GM_VIEW_WAREHOUSE_WITHDRAW_LIST.writeId(packet);
 		packet.writeS(_playerName);
 		packet.writeQ(_money);
 		packet.writeH(_items.size());
-		for (ItemInstance item : _items)
-		{
+		for (ItemInstance item : _items) {
 			writeItem(packet, item);
 			packet.writeD(item.getObjectId());
 		}

@@ -18,6 +18,14 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.Mentee;
+import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,174 +37,132 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author UnAfraid
  */
-public class MentorManager
-{
+public class MentorManager {
 	private static final Logger _log = LoggerFactory.getLogger(MentorManager.class);
-	
+
 	private final Map<Integer, Map<Integer, Mentee>> _menteeData = new ConcurrentHashMap<>();
 	private final Map<Integer, Mentee> _mentors = new ConcurrentHashMap<>();
-	
-	protected MentorManager()
-	{
+
+	protected MentorManager() {
 		load();
 	}
-	
-	private void load()
-	{
+
+	private void load() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement statement = con.createStatement();
-			ResultSet rset = statement.executeQuery("SELECT * FROM character_mentees"))
-		{
-			while (rset.next())
-			{
+			 Statement statement = con.createStatement();
+			 ResultSet rset = statement.executeQuery("SELECT * FROM character_mentees")) {
+			while (rset.next()) {
 				addMentor(rset.getInt("mentorId"), rset.getInt("charId"));
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * Removes mentee for current L2PcInstance
+	 *
 	 * @param mentorId
 	 * @param menteeId
 	 */
-	public void deleteMentee(int mentorId, int menteeId)
-	{
+	public void deleteMentee(int mentorId, int menteeId) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("DELETE FROM character_mentees WHERE mentorId = ? AND charId = ?"))
-		{
+			 PreparedStatement statement = con.prepareStatement("DELETE FROM character_mentees WHERE mentorId = ? AND charId = ?")) {
 			statement.setInt(1, mentorId);
 			statement.setInt(2, menteeId);
 			statement.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * @param mentorId
 	 * @param menteeId
 	 */
-	public void deleteMentor(int mentorId, int menteeId)
-	{
+	public void deleteMentor(int mentorId, int menteeId) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("DELETE FROM character_mentees WHERE mentorId = ? AND charId = ?"))
-		{
+			 PreparedStatement statement = con.prepareStatement("DELETE FROM character_mentees WHERE mentorId = ? AND charId = ?")) {
 			statement.setInt(1, mentorId);
 			statement.setInt(2, menteeId);
 			statement.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(e.getMessage(), e);
-		}
-		finally
-		{
+		} finally {
 			removeMentor(mentorId, menteeId);
 		}
 	}
-	
-	public boolean isMentor(int objectId)
-	{
+
+	public boolean isMentor(int objectId) {
 		return _menteeData.containsKey(objectId);
 	}
-	
-	public boolean isMentee(int objectId)
-	{
+
+	public boolean isMentee(int objectId) {
 		return _menteeData.values().stream().anyMatch(map -> map.containsKey(objectId));
 	}
-	
-	public Map<Integer, Map<Integer, Mentee>> getMentorData()
-	{
+
+	public Map<Integer, Map<Integer, Mentee>> getMentorData() {
 		return _menteeData;
 	}
-	
-	public void cancelAllMentoringBuffs(PlayerInstance player)
-	{
-		if (player == null)
-		{
+
+	public void cancelAllMentoringBuffs(PlayerInstance player) {
+		if (player == null) {
 			return;
 		}
-		
+
 		player.getEffectList().stopEffects(info -> info.getSkill().isMentoring(), true, true);
 	}
-	
-	public void setPenalty(int mentorId, long penalty)
-	{
+
+	public void setPenalty(int mentorId, long penalty) {
 		final PlayerInstance player = World.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		vars.set("Mentor-Penalty-" + mentorId, String.valueOf(System.currentTimeMillis() + penalty));
 	}
-	
-	public long getMentorPenalty(int mentorId)
-	{
+
+	public long getMentorPenalty(int mentorId) {
 		final PlayerInstance player = World.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		return vars.getLong("Mentor-Penalty-" + mentorId, 0);
 	}
-	
+
 	/**
 	 * @param mentorId
 	 * @param menteeId
 	 */
-	public void addMentor(int mentorId, int menteeId)
-	{
+	public void addMentor(int mentorId, int menteeId) {
 		final Map<Integer, Mentee> mentees = _menteeData.computeIfAbsent(mentorId, map -> new ConcurrentHashMap<>());
-		if (mentees.containsKey(menteeId))
-		{
+		if (mentees.containsKey(menteeId)) {
 			mentees.get(menteeId).load(); // Just reloading data if is already there
-		}
-		else
-		{
+		} else {
 			mentees.put(menteeId, new Mentee(menteeId));
 		}
 	}
-	
+
 	/**
 	 * @param mentorId
 	 * @param menteeId
 	 */
-	public void removeMentor(int mentorId, int menteeId)
-	{
-		if (_menteeData.containsKey(mentorId))
-		{
+	public void removeMentor(int mentorId, int menteeId) {
+		if (_menteeData.containsKey(mentorId)) {
 			_menteeData.get(mentorId).remove(menteeId);
-			if (_menteeData.get(mentorId).isEmpty())
-			{
+			if (_menteeData.get(mentorId).isEmpty()) {
 				_menteeData.remove(mentorId);
 				_mentors.remove(mentorId);
 			}
 		}
 	}
-	
+
 	/**
 	 * @param menteeId
 	 * @return
 	 */
-	public Mentee getMentor(int menteeId)
-	{
-		for (Entry<Integer, Map<Integer, Mentee>> map : _menteeData.entrySet())
-		{
-			if (map.getValue().containsKey(menteeId))
-			{
-				if (!_mentors.containsKey(map.getKey()))
-				{
+	public Mentee getMentor(int menteeId) {
+		for (Entry<Integer, Map<Integer, Mentee>> map : _menteeData.entrySet()) {
+			if (map.getValue().containsKey(menteeId)) {
+				if (!_mentors.containsKey(map.getKey())) {
 					_mentors.put(map.getKey(), new Mentee(map.getKey()));
 				}
 				return _mentors.get(map.getKey());
@@ -204,39 +170,31 @@ public class MentorManager
 		}
 		return null;
 	}
-	
-	public Collection<Mentee> getMentees(int mentorId)
-	{
-		if (_menteeData.containsKey(mentorId))
-		{
+
+	public Collection<Mentee> getMentees(int mentorId) {
+		if (_menteeData.containsKey(mentorId)) {
 			return _menteeData.get(mentorId).values();
 		}
 		return Collections.emptyList();
 	}
-	
+
 	/**
 	 * @param mentorId
 	 * @param menteeId
 	 * @return
 	 */
-	public Mentee getMentee(int mentorId, int menteeId)
-	{
-		if (_menteeData.containsKey(mentorId))
-		{
+	public Mentee getMentee(int mentorId, int menteeId) {
+		if (_menteeData.containsKey(mentorId)) {
 			return _menteeData.get(mentorId).get(menteeId);
 		}
 		return null;
 	}
-	
-	public boolean isAllMenteesOffline(int menteorId, int menteeId)
-	{
+
+	public boolean isAllMenteesOffline(int menteorId, int menteeId) {
 		boolean isAllMenteesOffline = true;
-		for (Mentee men : getMentees(menteorId))
-		{
-			if (men.isOnline() && (men.getObjectId() != menteeId))
-			{
-				if (isAllMenteesOffline)
-				{
+		for (Mentee men : getMentees(menteorId)) {
+			if (men.isOnline() && (men.getObjectId() != menteeId)) {
+				if (isAllMenteesOffline) {
 					isAllMenteesOffline = false;
 					break;
 				}
@@ -244,19 +202,16 @@ public class MentorManager
 		}
 		return isAllMenteesOffline;
 	}
-	
-	public boolean hasOnlineMentees(int menteorId)
-	{
+
+	public boolean hasOnlineMentees(int menteorId) {
 		return getMentees(menteorId).stream().filter(Objects::nonNull).filter(Mentee::isOnline).count() > 0;
 	}
-	
-	public static MentorManager getInstance()
-	{
+
+	public static MentorManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final MentorManager _instance = new MentorManager();
 	}
 }

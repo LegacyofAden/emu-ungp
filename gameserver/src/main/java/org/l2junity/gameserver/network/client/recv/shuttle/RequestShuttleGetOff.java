@@ -26,33 +26,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestShuttleGetOff implements IClientIncomingPacket
-{
+public class RequestShuttleGetOff implements IClientIncomingPacket {
 	private int _x;
 	private int _y;
 	private int _z;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readD(); // charId
 		_x = packet.readD();
 		_y = packet.readD();
 		_z = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.getShuttle() != null)
-		{
+
+		if (activeChar.getShuttle() != null) {
 			activeChar.getShuttle().removePassenger(activeChar, _x, _y, _z);
 		}
 	}

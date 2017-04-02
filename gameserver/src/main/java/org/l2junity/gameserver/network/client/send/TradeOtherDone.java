@@ -21,17 +21,14 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class TradeOtherDone implements IClientOutgoingPacket
-{
+public class TradeOtherDone implements IClientOutgoingPacket {
 	public static final TradeOtherDone STATIC_PACKET = new TradeOtherDone();
-	
-	private TradeOtherDone()
-	{
+
+	private TradeOtherDone() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TRADE_PRESS_OTHER_OK.writeId(packet);
 		return true;
 	}

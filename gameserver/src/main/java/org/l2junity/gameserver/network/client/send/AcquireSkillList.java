@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,46 +26,44 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * @author Sdw
  */
-public class AcquireSkillList implements IClientOutgoingPacket
-{
+public class AcquireSkillList implements IClientOutgoingPacket {
 	final PlayerInstance _activeChar;
 	final List<SkillLearn> _learnable;
-	
-	public AcquireSkillList(PlayerInstance activeChar)
-	{
+
+	public AcquireSkillList(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 		_learnable = SkillTreesData.getInstance().getAvailableSkills(activeChar, activeChar.getClassId(), false, false);
 		_learnable.addAll(SkillTreesData.getInstance().getNextAvailableSkills(activeChar, activeChar.getClassId(), false, false));
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ACQUIRE_SKILL_LIST.writeId(packet);
-		
+
 		packet.writeH(_learnable.size());
-		for (SkillLearn skill : _learnable)
-		{
+		for (SkillLearn skill : _learnable) {
 			packet.writeD(skill.getSkillId());
 			packet.writeD(skill.getSkillLevel());
 			packet.writeQ(skill.getLevelUpSp());
 			packet.writeC(skill.getGetLevel());
 			packet.writeC(skill.getDualClassLevel());
 			packet.writeC(skill.getRequiredItems().size());
-			for (ItemHolder item : skill.getRequiredItems())
-			{
+			for (ItemHolder item : skill.getRequiredItems()) {
 				packet.writeD(item.getId());
 				packet.writeQ(item.getCount());
 			}
-			
+
 			final List<Skill> skillRem = skill.getRemoveSkills().stream().map(_activeChar::getKnownSkill).filter(Objects::nonNull).collect(Collectors.toList());
-			
+
 			packet.writeC(skillRem.size());
-			for (Skill skillRemove : skillRem)
-			{
+			for (Skill skillRemove : skillRem) {
 				packet.writeD(skillRemove.getId());
 				packet.writeD(skillRemove.getLevel());
 			}

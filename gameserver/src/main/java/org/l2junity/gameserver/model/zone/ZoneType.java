@@ -18,13 +18,6 @@
  */
 package org.l2junity.gameserver.model.zone;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
@@ -42,20 +35,25 @@ import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Abstract base class for any zone type handles basic operations.
+ *
  * @author durgus
  */
-public abstract class ZoneType extends ListenersContainer
-{
+public abstract class ZoneType extends ListenersContainer {
 	protected static final Logger _log = LoggerFactory.getLogger(ZoneType.class);
-	
+
 	private final int _id;
 	protected L2ZoneForm _zone;
 	protected List<L2ZoneForm> _blockedZone;
 	protected Map<Integer, Creature> _characterList = new ConcurrentHashMap<>();
-	
-	/** Parameters to affect specific characters */
+
+	/**
+	 * Parameters to affect specific characters
+	 */
 	private boolean _checkAffected = false;
 	private String _name = null;
 	private int _minLvl;
@@ -69,585 +67,484 @@ public abstract class ZoneType extends ListenersContainer
 	private AbstractZoneSettings _settings;
 	private int _instanceTemplateId;
 	private Map<Integer, Boolean> _enabledInInstance;
-	
-	protected ZoneType(int id)
-	{
+
+	protected ZoneType(int id) {
 		_id = id;
-		
+
 		_minLvl = 0;
 		_maxLvl = 0xFF;
-		
+
 		_classType = 0;
-		
+
 		_race = null;
 		_class = null;
 		_allowStore = true;
 		_enabled = true;
 	}
-	
+
 	/**
 	 * @return Returns the id.
 	 */
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
+
 	/**
 	 * Setup new parameters for this zone
+	 *
 	 * @param name
 	 * @param value
 	 */
-	public void setParameter(String name, String value)
-	{
+	public void setParameter(String name, String value) {
 		_checkAffected = true;
-		
+
 		// Zone name
-		if (name.equals("name"))
-		{
+		if (name.equals("name")) {
 			_name = value;
 		}
 		// Minimum level
-		else if (name.equals("affectedLvlMin"))
-		{
+		else if (name.equals("affectedLvlMin")) {
 			_minLvl = Integer.parseInt(value);
 		}
 		// Maximum level
-		else if (name.equals("affectedLvlMax"))
-		{
+		else if (name.equals("affectedLvlMax")) {
 			_maxLvl = Integer.parseInt(value);
 		}
 		// Affected Races
-		else if (name.equals("affectedRace"))
-		{
+		else if (name.equals("affectedRace")) {
 			// Create a new array holding the affected race
-			if (_race == null)
-			{
+			if (_race == null) {
 				_race = new int[1];
 				_race[0] = Integer.parseInt(value);
-			}
-			else
-			{
+			} else {
 				int[] temp = new int[_race.length + 1];
-				
+
 				int i = 0;
-				for (; i < _race.length; i++)
-				{
+				for (; i < _race.length; i++) {
 					temp[i] = _race[i];
 				}
-				
+
 				temp[i] = Integer.parseInt(value);
-				
+
 				_race = temp;
 			}
 		}
 		// Affected classes
-		else if (name.equals("affectedClassId"))
-		{
+		else if (name.equals("affectedClassId")) {
 			// Create a new array holding the affected classIds
-			if (_class == null)
-			{
+			if (_class == null) {
 				_class = new int[1];
 				_class[0] = Integer.parseInt(value);
-			}
-			else
-			{
+			} else {
 				int[] temp = new int[_class.length + 1];
-				
+
 				int i = 0;
-				for (; i < _class.length; i++)
-				{
+				for (; i < _class.length; i++) {
 					temp[i] = _class[i];
 				}
-				
+
 				temp[i] = Integer.parseInt(value);
-				
+
 				_class = temp;
 			}
 		}
 		// Affected class type
-		else if (name.equals("affectedClassType"))
-		{
-			if (value.equals("Fighter"))
-			{
+		else if (name.equals("affectedClassType")) {
+			if (value.equals("Fighter")) {
 				_classType = 1;
-			}
-			else
-			{
+			} else {
 				_classType = 2;
 			}
-		}
-		else if (name.equals("targetClass"))
-		{
+		} else if (name.equals("targetClass")) {
 			_target = Enum.valueOf(InstanceType.class, value);
-		}
-		else if (name.equals("allowStore"))
-		{
+		} else if (name.equals("allowStore")) {
 			_allowStore = Boolean.parseBoolean(value);
-		}
-		else if (name.equals("default_enabled"))
-		{
+		} else if (name.equals("default_enabled")) {
 			_enabled = Boolean.parseBoolean(value);
-		}
-		else if (name.equals("instanceId"))
-		{
+		} else if (name.equals("instanceId")) {
 			_instanceTemplateId = Integer.parseInt(value);
-		}
-		else
-		{
+		} else {
 			_log.info(getClass().getSimpleName() + ": Unknown parameter - " + name + " in zone: " + getId());
 		}
 	}
-	
+
 	/**
 	 * @param character the player to verify.
 	 * @return {@code true} if the given character is affected by this zone, {@code false} otherwise.
 	 */
-	private boolean isAffected(Creature character)
-	{
+	private boolean isAffected(Creature character) {
 		// Check instance
 		final Instance world = character.getInstanceWorld();
-		if (world != null)
-		{
-			if (world.getTemplateId() != getInstanceTemplateId())
-			{
+		if (world != null) {
+			if (world.getTemplateId() != getInstanceTemplateId()) {
 				return false;
 			}
-			if (!isEnabled(character.getInstanceId()))
-			{
+			if (!isEnabled(character.getInstanceId())) {
 				return false;
 			}
-		}
-		else if (getInstanceTemplateId() > 0)
-		{
+		} else if (getInstanceTemplateId() > 0) {
 			return false;
 		}
-		
+
 		// Check lvl
-		if ((character.getLevel() < _minLvl) || (character.getLevel() > _maxLvl))
-		{
+		if ((character.getLevel() < _minLvl) || (character.getLevel() > _maxLvl)) {
 			return false;
 		}
-		
+
 		// check obj class
-		if (!character.isInstanceTypes(_target))
-		{
+		if (!character.isInstanceTypes(_target)) {
 			return false;
 		}
-		
-		if (character instanceof PlayerInstance)
-		{
+
+		if (character instanceof PlayerInstance) {
 			// Check class type
-			if (_classType != 0)
-			{
-				if (character.isInCategory(CategoryType.MAGE_GROUP))
-				{
-					if (_classType == 1)
-					{
+			if (_classType != 0) {
+				if (character.isInCategory(CategoryType.MAGE_GROUP)) {
+					if (_classType == 1) {
 						return false;
 					}
-				}
-				else if (_classType == 2)
-				{
+				} else if (_classType == 2) {
 					return false;
 				}
 			}
-			
+
 			// Check race
-			if (_race != null)
-			{
+			if (_race != null) {
 				boolean ok = false;
-				
-				for (int element : _race)
-				{
-					if (character.getRace().ordinal() == element)
-					{
+
+				for (int element : _race) {
+					if (character.getRace().ordinal() == element) {
 						ok = true;
 						break;
 					}
 				}
-				
-				if (!ok)
-				{
+
+				if (!ok) {
 					return false;
 				}
 			}
-			
+
 			// Check class
-			if (_class != null)
-			{
+			if (_class != null) {
 				boolean ok = false;
-				
-				for (int _clas : _class)
-				{
-					if (((PlayerInstance) character).getClassId().ordinal() == _clas)
-					{
+
+				for (int _clas : _class) {
+					if (((PlayerInstance) character).getClassId().ordinal() == _clas) {
 						ok = true;
 						break;
 					}
 				}
-				
-				if (!ok)
-				{
+
+				if (!ok) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Set the zone for this L2ZoneType Instance
+	 *
 	 * @param zone
 	 */
-	public void setZone(L2ZoneForm zone)
-	{
-		if (_zone != null)
-		{
+	public void setZone(L2ZoneForm zone) {
+		if (_zone != null) {
 			throw new IllegalStateException("Zone already set");
 		}
 		_zone = zone;
 	}
-	
+
 	/**
 	 * Returns this zones zone form.
+	 *
 	 * @return {@link #_zone}
 	 */
-	public L2ZoneForm getZone()
-	{
+	public L2ZoneForm getZone() {
 		return _zone;
 	}
-	
-	public void setBlockedZones(List<L2ZoneForm> blockedZones)
-	{
-		if (_blockedZone != null)
-		{
+
+	public void setBlockedZones(List<L2ZoneForm> blockedZones) {
+		if (_blockedZone != null) {
 			throw new IllegalStateException("Blocked zone already set");
 		}
 		_blockedZone = blockedZones;
 	}
-	
-	public List<L2ZoneForm> getBlockedZones()
-	{
+
+	public List<L2ZoneForm> getBlockedZones() {
 		return _blockedZone;
 	}
-	
+
 	/**
 	 * Set the zone name.
+	 *
 	 * @param name
 	 */
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		_name = name;
 	}
-	
+
 	/**
 	 * Returns zone name
+	 *
 	 * @return
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Checks if the given coordinates are within the zone, ignores instanceId check
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @return
 	 */
-	public boolean isInsideZone(double x, double y, double z)
-	{
+	public boolean isInsideZone(double x, double y, double z) {
 		return _zone.isInsideZone(x, y, z) && !isInsideBannedZone(x, y, z);
 	}
-	
+
 	/**
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @return {@code true} if this location is within banned zone boundaries, {@code false} otherwise
 	 */
-	public boolean isInsideBannedZone(double x, double y, double z)
-	{
+	public boolean isInsideBannedZone(double x, double y, double z) {
 		return (_blockedZone != null) && _blockedZone.stream().allMatch(zone -> !zone.isInsideZone(x, y, z));
 	}
-	
+
 	/**
 	 * Checks if the given coordinates are within zone's plane
+	 *
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public boolean isInsideZone(double x, double y)
-	{
+	public boolean isInsideZone(double x, double y) {
 		return isInsideZone(x, y, _zone.getHighZ());
 	}
-	
+
 	/**
 	 * Checks if the given coordinates are within the zone, ignores instanceId check
+	 *
 	 * @param loc
 	 * @return
 	 */
-	public boolean isInsideZone(ILocational loc)
-	{
+	public boolean isInsideZone(ILocational loc) {
 		return isInsideZone(loc.getX(), loc.getY(), loc.getZ());
 	}
-	
+
 	/**
 	 * Checks if the given object is inside the zone.
+	 *
 	 * @param object
 	 * @return
 	 */
-	public boolean isInsideZone(WorldObject object)
-	{
+	public boolean isInsideZone(WorldObject object) {
 		return isInsideZone(object.getX(), object.getY(), object.getZ());
 	}
-	
-	public double getDistanceToZone(int x, int y)
-	{
+
+	public double getDistanceToZone(int x, int y) {
 		return getZone().getDistanceToZone(x, y);
 	}
-	
-	public double getDistanceToZone(WorldObject object)
-	{
+
+	public double getDistanceToZone(WorldObject object) {
 		return getZone().getDistanceToZone(object.getX(), object.getY());
 	}
-	
-	public void revalidateInZone(Creature character)
-	{
+
+	public void revalidateInZone(Creature character) {
 		// If the object is inside the zone...
-		if (isInsideZone(character))
-		{
+		if (isInsideZone(character)) {
 			// If the character can't be affected by this zone return
-			if (_checkAffected)
-			{
-				if (!isAffected(character))
-				{
+			if (_checkAffected) {
+				if (!isAffected(character)) {
 					return;
 				}
 			}
-			
-			if (_characterList.putIfAbsent(character.getObjectId(), character) == null)
-			{
+
+			if (_characterList.putIfAbsent(character.getObjectId(), character) == null) {
 				// Notify to scripts.
 				EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneEnter(character, this), this);
 				// Notify Zone implementation.
 				onEnter(character);
 			}
-		}
-		else
-		{
+		} else {
 			removeCharacter(character, false);
 		}
 	}
-	
+
 	/**
 	 * Force fully removes a character from the zone Should use during teleport / logoff
+	 *
 	 * @param character
 	 * @param isLogout
 	 */
-	public void removeCharacter(Creature character, boolean isLogout)
-	{
+	public void removeCharacter(Creature character, boolean isLogout) {
 		// Was the character inside this zone?
-		if (_characterList.containsKey(character.getObjectId()))
-		{
+		if (_characterList.containsKey(character.getObjectId())) {
 			// Notify to scripts.
 			EventDispatcher.getInstance().notifyEventAsync(new OnCreatureZoneExit(character, this, isLogout), this);
-			
+
 			// Unregister player.
 			_characterList.remove(character.getObjectId());
-			
+
 			// Notify Zone implementation.
 			onExit(character);
 		}
 	}
-	
+
 	/**
 	 * Will scan the zones char list for the character
+	 *
 	 * @param character
 	 * @return
 	 */
-	public boolean isCharacterInZone(Creature character)
-	{
+	public boolean isCharacterInZone(Creature character) {
 		return _characterList.containsKey(character.getObjectId());
 	}
-	
-	public AbstractZoneSettings getSettings()
-	{
+
+	public AbstractZoneSettings getSettings() {
 		return _settings;
 	}
-	
-	public void setSettings(AbstractZoneSettings settings)
-	{
-		if (_settings != null)
-		{
+
+	public void setSettings(AbstractZoneSettings settings) {
+		if (_settings != null) {
 			_settings.clear();
 		}
 		_settings = settings;
 	}
-	
+
 	protected abstract void onEnter(Creature character);
-	
+
 	protected abstract void onExit(Creature character);
-	
-	public void onDieInside(Creature character)
-	{
+
+	public void onDieInside(Creature character) {
 	}
-	
-	public void onReviveInside(Creature character)
-	{
+
+	public void onReviveInside(Creature character) {
 	}
-	
-	public void onPlayerLoginInside(PlayerInstance player)
-	{
+
+	public void onPlayerLoginInside(PlayerInstance player) {
 	}
-	
-	public void onPlayerLogoutInside(PlayerInstance player)
-	{
+
+	public void onPlayerLogoutInside(PlayerInstance player) {
 	}
-	
-	public Map<Integer, Creature> getCharacters()
-	{
+
+	public Map<Integer, Creature> getCharacters() {
 		return _characterList;
 	}
-	
-	public Collection<Creature> getCharactersInside()
-	{
+
+	public Collection<Creature> getCharactersInside() {
 		return _characterList.values();
 	}
-	
-	public List<PlayerInstance> getPlayersInside()
-	{
+
+	public List<PlayerInstance> getPlayersInside() {
 		List<PlayerInstance> players = new ArrayList<>();
-		for (Creature ch : _characterList.values())
-		{
-			if ((ch != null) && ch.isPlayer())
-			{
+		for (Creature ch : _characterList.values()) {
+			if ((ch != null) && ch.isPlayer()) {
 				players.add(ch.getActingPlayer());
 			}
 		}
-		
+
 		return players;
 	}
-	
+
 	/**
 	 * Broadcasts packet to all players inside the zone
+	 *
 	 * @param packet
 	 */
-	public void broadcastPacket(IClientOutgoingPacket packet)
-	{
-		if (_characterList.isEmpty())
-		{
+	public void broadcastPacket(IClientOutgoingPacket packet) {
+		if (_characterList.isEmpty()) {
 			return;
 		}
-		
-		for (Creature character : _characterList.values())
-		{
-			if ((character != null) && character.isPlayer())
-			{
+
+		for (Creature character : _characterList.values()) {
+			if ((character != null) && character.isPlayer()) {
 				character.sendPacket(packet);
 			}
 		}
 	}
-	
-	public InstanceType getTargetType()
-	{
+
+	public InstanceType getTargetType() {
 		return _target;
 	}
-	
-	public void setTargetType(InstanceType type)
-	{
+
+	public void setTargetType(InstanceType type) {
 		_target = type;
 		_checkAffected = true;
 	}
-	
-	public boolean getAllowStore()
-	{
+
+	public boolean getAllowStore() {
 		return _allowStore;
 	}
-	
-	public int getInstanceTemplateId()
-	{
+
+	public int getInstanceTemplateId() {
 		return _instanceTemplateId;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getClass().getSimpleName() + "[" + _name + "/" + _id + "]";
 	}
-	
-	public void visualizeZone(double z)
-	{
+
+	public void visualizeZone(double z) {
 		getZone().visualizeZone(z);
 	}
-	
-	public void setEnabled(boolean state)
-	{
+
+	public void setEnabled(boolean state) {
 		_enabled = state;
 	}
-	
-	public boolean isEnabled()
-	{
+
+	public boolean isEnabled() {
 		return _enabled;
 	}
-	
-	public void setEnabled(boolean state, int instanceId)
-	{
-		if (_enabledInInstance == null)
-		{
-			synchronized (this)
-			{
-				if (_enabledInInstance == null)
-				{
+
+	public void setEnabled(boolean state, int instanceId) {
+		if (_enabledInInstance == null) {
+			synchronized (this) {
+				if (_enabledInInstance == null) {
 					_enabledInInstance = new ConcurrentHashMap<>();
 				}
 			}
 		}
-		
+
 		_enabledInInstance.put(instanceId, state);
 	}
-	
-	public boolean isEnabled(int instanceId)
-	{
-		if (_enabledInInstance != null)
-		{
+
+	public boolean isEnabled(int instanceId) {
+		if (_enabledInInstance != null) {
 			return _enabledInInstance.getOrDefault(instanceId, isEnabled());
 		}
-		
+
 		return isEnabled();
 	}
-	
-	public void oustAllPlayers()
-	{
+
+	public void oustAllPlayers() {
 		//@formatter:off
 		_characterList.values().stream()
-			.filter(Objects::nonNull)
-			.filter(WorldObject::isPlayer)
-			.map(WorldObject::getActingPlayer)
-			.filter(PlayerInstance::isOnline)
-			.forEach(player -> player.teleToLocation(TeleportWhereType.TOWN));
+				.filter(Objects::nonNull)
+				.filter(WorldObject::isPlayer)
+				.map(WorldObject::getActingPlayer)
+				.filter(PlayerInstance::isOnline)
+				.forEach(player -> player.teleToLocation(TeleportWhereType.TOWN));
 		//@formatter:off
 	}
 
 	/**
 	 * @param loc
 	 */
-	public void movePlayersTo(Location loc)
-	{
-		if (_characterList.isEmpty())
-		{
+	public void movePlayersTo(Location loc) {
+		if (_characterList.isEmpty()) {
 			return;
 		}
-		
-		for (Creature character : getCharactersInside())
-		{
-			if ((character != null) && character.isPlayer())
-			{
+
+		for (Creature character : getCharactersInside()) {
+			if ((character != null) && character.isPlayer()) {
 				PlayerInstance player = character.getActingPlayer();
-				if (player.isOnline())
-				{
+				if (player.isOnline()) {
 					player.teleToLocation(loc);
 				}
 			}

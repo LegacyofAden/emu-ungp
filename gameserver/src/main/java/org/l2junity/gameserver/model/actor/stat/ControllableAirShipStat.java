@@ -20,24 +20,19 @@ package org.l2junity.gameserver.model.actor.stat;
 
 import org.l2junity.gameserver.model.actor.instance.L2ControllableAirShipInstance;
 
-public class ControllableAirShipStat extends VehicleStat
-{
-	public ControllableAirShipStat(L2ControllableAirShipInstance activeChar)
-	{
+public class ControllableAirShipStat extends VehicleStat {
+	public ControllableAirShipStat(L2ControllableAirShipInstance activeChar) {
 		super(activeChar);
 	}
-	
+
 	@Override
-	public L2ControllableAirShipInstance getActiveChar()
-	{
+	public L2ControllableAirShipInstance getActiveChar() {
 		return (L2ControllableAirShipInstance) super.getActiveChar();
 	}
-	
+
 	@Override
-	public double getMoveSpeed()
-	{
-		if (getActiveChar().isInDock() || (getActiveChar().getFuel() > 0))
-		{
+	public double getMoveSpeed() {
+		if (getActiveChar().isInDock() || (getActiveChar().getFuel() > 0)) {
 			return super.getMoveSpeed();
 		}
 		return super.getMoveSpeed() * 0.05f;

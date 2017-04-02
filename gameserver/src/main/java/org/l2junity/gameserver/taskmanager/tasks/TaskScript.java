@@ -18,35 +18,29 @@
  */
 package org.l2junity.gameserver.taskmanager.tasks;
 
-import java.nio.file.Paths;
-
 import org.l2junity.commons.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;
 import org.l2junity.gameserver.taskmanager.Task;
 import org.l2junity.gameserver.taskmanager.TaskManager.ExecutedTask;
 
+import java.nio.file.Paths;
+
 /**
  * @author janiii
  */
-public class TaskScript extends Task
-{
+public class TaskScript extends Task {
 	public static final String NAME = "script";
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return NAME;
 	}
-	
+
 	@Override
-	public void onTimeElapsed(ExecutedTask task)
-	{
-		try
-		{
+	public void onTimeElapsed(ExecutedTask task) {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, Paths.get("cron", task.getParams()[2]));
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Script execution failed!", e);
 		}
 	}

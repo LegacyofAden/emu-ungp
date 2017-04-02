@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExShowSentPostList;
@@ -27,29 +27,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Migi, DS
  */
-public final class RequestSentPostList implements IClientIncomingPacket
-{
+public final class RequestSentPostList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL)
-		{
+		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL) {
 			return;
 		}
-		
-		// if (!activeChar.isInsideZone(ZoneId.PEACE))
-		// {
-		// activeChar.sendPacket(SystemMessageId.YOU_CANNOT_RECEIVE_OR_SEND_MAIL_WITH_ATTACHED_ITEMS_IN_NON_PEACE_ZONE_REGIONS);
-		// return;
-		// }
-		
+
 		client.sendPacket(new ExShowSentPostList(activeChar.getObjectId()));
 	}
 }

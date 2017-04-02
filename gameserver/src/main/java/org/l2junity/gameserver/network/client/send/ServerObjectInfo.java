@@ -26,17 +26,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author devScarlet, mrTJO
  */
-public final class ServerObjectInfo implements IClientOutgoingPacket
-{
+public final class ServerObjectInfo implements IClientOutgoingPacket {
 	private final Npc _activeChar;
 	private final int _x, _y, _z, _heading;
 	private final int _idTemplate;
 	private final boolean _isAttackable;
 	private final double _collisionHeight, _collisionRadius;
 	private final String _name;
-	
-	public ServerObjectInfo(Npc activeChar, Creature actor)
-	{
+
+	public ServerObjectInfo(Npc activeChar, Creature actor) {
 		_activeChar = activeChar;
 		_idTemplate = _activeChar.getTemplate().getDisplayId();
 		_isAttackable = _activeChar.isAutoAttackable(actor);
@@ -48,12 +46,11 @@ public final class ServerObjectInfo implements IClientOutgoingPacket
 		_heading = _activeChar.getHeading();
 		_name = _activeChar.getTemplate().isUsingServerSideName() ? _activeChar.getTemplate().getName() : "";
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SERVER_OBJECT_INFO.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_idTemplate + 1000000);
 		packet.writeS(_name); // name

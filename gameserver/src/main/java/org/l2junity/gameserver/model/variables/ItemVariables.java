@@ -18,153 +18,122 @@
  */
 package org.l2junity.gameserver.model.variables;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author UnAfraid
  */
-public class ItemVariables extends AbstractVariables
-{
+public class ItemVariables extends AbstractVariables {
 	private static final Logger _log = LoggerFactory.getLogger(ItemVariables.class);
-	
+
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM item_variables WHERE id = ?";
 	private static final String SELECT_COUNT = "SELECT COUNT(*) FROM item_variables WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE FROM item_variables WHERE id = ?";
 	private static final String INSERT_QUERY = "INSERT INTO item_variables (id, var, val) VALUES (?, ?, ?)";
-	
+
 	private final int _objectId;
-	
+
 	// Static Constants
 	public static final String VISUAL_ID = "visualId";
 	public static final String VISUAL_APPEARANCE_STONE_ID = "visualAppearanceStoneId";
 	public static final String VISUAL_APPEARANCE_LIFE_TIME = "visualAppearanceLifetime";
-	
-	public ItemVariables(int objectId)
-	{
+
+	public ItemVariables(int objectId) {
 		_objectId = objectId;
 		restoreMe();
 	}
-	
-	public static boolean hasVariables(int objectId)
-	{
+
+	public static boolean hasVariables(int objectId) {
 		// Restore previous variables.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement st = con.prepareStatement(SELECT_COUNT))
-		{
+			 PreparedStatement st = con.prepareStatement(SELECT_COUNT)) {
 			st.setInt(1, objectId);
-			try (ResultSet rset = st.executeQuery())
-			{
-				if (rset.next())
-				{
+			try (ResultSet rset = st.executeQuery()) {
+				if (rset.next()) {
 					return rset.getInt(1) > 0;
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.warn(ItemVariables.class.getSimpleName() + ": Couldn't select variables count for: " + objectId, e);
 			return false;
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean restoreMe()
-	{
+	public boolean restoreMe() {
 		// Restore previous variables.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement st = con.prepareStatement(SELECT_QUERY))
-		{
+			 PreparedStatement st = con.prepareStatement(SELECT_QUERY)) {
 			st.setInt(1, _objectId);
-			try (ResultSet rset = st.executeQuery())
-			{
-				while (rset.next())
-				{
+			try (ResultSet rset = st.executeQuery()) {
+				while (rset.next()) {
 					set(rset.getString("var"), rset.getString("val"), false);
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.warn(getClass().getSimpleName() + ": Couldn't restore variables for: " + _objectId, e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean storeMe()
-	{
+	public boolean storeMe() {
 		// No changes, nothing to store.
-		if (!hasChanges())
-		{
+		if (!hasChanges()) {
 			return false;
 		}
-		
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setInt(1, _objectId);
 				st.execute();
 			}
-			
+
 			// Insert all variables.
-			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY)) {
 				st.setInt(1, _objectId);
-				for (Entry<String, Object> entry : getSet().entrySet())
-				{
+				for (Entry<String, Object> entry : getSet().entrySet()) {
 					st.setString(2, entry.getKey());
 					st.setString(3, String.valueOf(entry.getValue()));
 					st.addBatch();
 				}
 				st.executeBatch();
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			_log.warn(getClass().getSimpleName() + ": Couldn't update variables for: " + _objectId, e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+	public boolean deleteMe() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setInt(1, _objectId);
 				st.execute();
 			}
-			
+
 			// Clear all entries
 			getSet().clear();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(getClass().getSimpleName() + ": Couldn't delete variables for: " + _objectId, e);
 			return false;
 		}

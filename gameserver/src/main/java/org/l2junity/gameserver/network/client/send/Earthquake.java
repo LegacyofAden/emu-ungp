@@ -22,28 +22,26 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class Earthquake implements IClientOutgoingPacket
-{
+public class Earthquake implements IClientOutgoingPacket {
 	private final int _x;
 	private final int _y;
 	private final int _z;
 	private final int _intensity;
 	private final int _duration;
-	
+
 	/**
 	 * @param location
 	 * @param intensity
 	 * @param duration
 	 */
-	public Earthquake(ILocational location, int intensity, int duration)
-	{
+	public Earthquake(ILocational location, int intensity, int duration) {
 		_x = (int) location.getX();
 		_y = (int) location.getY();
 		_z = (int) location.getZ();
 		_intensity = intensity;
 		_duration = duration;
 	}
-	
+
 	/**
 	 * @param x
 	 * @param y
@@ -51,20 +49,18 @@ public class Earthquake implements IClientOutgoingPacket
 	 * @param intensity
 	 * @param duration
 	 */
-	public Earthquake(double x, double y, double z, int intensity, int duration)
-	{
+	public Earthquake(double x, double y, double z, int intensity, int duration) {
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 		_intensity = intensity;
 		_duration = duration;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EARTHQUAKE.writeId(packet);
-		
+
 		packet.writeD(_x);
 		packet.writeD(_y);
 		packet.writeD(_z);

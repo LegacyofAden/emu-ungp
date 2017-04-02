@@ -18,42 +18,38 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GraciaSeedsConfig;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GraciaSeedsConfig;
 import org.l2junity.gameserver.instancemanager.tasks.UpdateSoDStateTask;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class GraciaSeedsManager
-{
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
+public final class GraciaSeedsManager {
 	private static final Logger _log = LoggerFactory.getLogger(GraciaSeedsManager.class);
-	
+
 	public static String ENERGY_SEEDS = "EnergySeeds";
-	
+
 	private static final byte SOITYPE = 2;
 	private static final byte SOATYPE = 3;
-	
+
 	// Seed of Destruction
 	private static final byte SODTYPE = 1;
 	private int _SoDTiatKilled = 0;
 	private int _SoDState = 1;
 	private final Calendar _SoDLastStateChangeDate;
-	
-	protected GraciaSeedsManager()
-	{
+
+	protected GraciaSeedsManager() {
 		_SoDLastStateChangeDate = Calendar.getInstance();
 		loadData();
 		handleSodStages();
 	}
-	
-	public void saveData(byte seedType)
-	{
-		switch (seedType)
-		{
+
+	public void saveData(byte seedType) {
+		switch (seedType) {
 			case SODTYPE:
 				// Seed of Destruction
 				GlobalVariablesManager.getInstance().set(GlobalVariablesManager.SOD_STATE_VAR, _SoDState);
@@ -71,41 +67,32 @@ public final class GraciaSeedsManager
 				break;
 		}
 	}
-	
-	public void loadData()
-	{
+
+	public void loadData() {
 		// Seed of Destruction variables
-		if (GlobalVariablesManager.getInstance().hasVariable(GlobalVariablesManager.SOD_STATE_VAR))
-		{
+		if (GlobalVariablesManager.getInstance().hasVariable(GlobalVariablesManager.SOD_STATE_VAR)) {
 			_SoDState = GlobalVariablesManager.getInstance().getInt(GlobalVariablesManager.SOD_STATE_VAR);
 			_SoDTiatKilled = GlobalVariablesManager.getInstance().getInt(GlobalVariablesManager.SOD_TIAT_KILLED_VAR);
 			_SoDLastStateChangeDate.setTimeInMillis(GlobalVariablesManager.getInstance().getLong(GlobalVariablesManager.SOD_LSC_DATE_VAR));
-		}
-		else
-		{
+		} else {
 			// save Initial values
 			saveData(SODTYPE);
 		}
 	}
-	
-	private void handleSodStages()
-	{
-		switch (_SoDState)
-		{
+
+	private void handleSodStages() {
+		switch (_SoDState) {
 			case 1:
 				// do nothing, players should kill Tiat a few times
 				break;
 			case 2:
 				// Conquest Complete state, if too much time is passed than change to defense state
 				long timePast = System.currentTimeMillis() - _SoDLastStateChangeDate.getTimeInMillis();
-				if (timePast >= GraciaSeedsConfig.SOD_STAGE_2_LENGTH)
-				{
+				if (timePast >= GraciaSeedsConfig.SOD_STAGE_2_LENGTH) {
 					// change to Attack state because Defend statet is not implemented
 					setSoDState(1, true);
-				}
-				else
-				{
-					ThreadPool.schedule(new UpdateSoDStateTask(), GraciaSeedsConfig.SOD_STAGE_2_LENGTH - timePast, TimeUnit.MILLISECONDS);
+				} else {
+					ThreadPool.getInstance().scheduleGeneral(new UpdateSoDStateTask(), GraciaSeedsConfig.SOD_STAGE_2_LENGTH - timePast, TimeUnit.MILLISECONDS);
 				}
 				break;
 			case 3:
@@ -116,70 +103,54 @@ public final class GraciaSeedsManager
 				_log.warn(getClass().getSimpleName() + ": Unknown Seed of Destruction state(" + _SoDState + ")! ");
 		}
 	}
-	
-	public void updateSodState()
-	{
+
+	public void updateSodState() {
 		final Quest quest = QuestManager.getInstance().getQuest(ENERGY_SEEDS);
-		if (quest == null)
-		{
+		if (quest == null) {
 			_log.warn(getClass().getSimpleName() + ": missing EnergySeeds Quest!");
-		}
-		else
-		{
+		} else {
 			quest.notifyEvent("StopSoDAi", null, null);
 		}
 	}
-	
-	public void increaseSoDTiatKilled()
-	{
-		if (_SoDState == 1)
-		{
+
+	public void increaseSoDTiatKilled() {
+		if (_SoDState == 1) {
 			_SoDTiatKilled++;
-			if (_SoDTiatKilled >= GraciaSeedsConfig.SOD_TIAT_KILL_COUNT)
-			{
+			if (_SoDTiatKilled >= GraciaSeedsConfig.SOD_TIAT_KILL_COUNT) {
 				setSoDState(2, false);
 			}
 			saveData(SODTYPE);
 			Quest esQuest = QuestManager.getInstance().getQuest(ENERGY_SEEDS);
-			if (esQuest == null)
-			{
+			if (esQuest == null) {
 				_log.warn(getClass().getSimpleName() + ": missing EnergySeeds Quest!");
-			}
-			else
-			{
+			} else {
 				esQuest.notifyEvent("StartSoDAi", null, null);
 			}
 		}
 	}
-	
-	public int getSoDTiatKilled()
-	{
+
+	public int getSoDTiatKilled() {
 		return _SoDTiatKilled;
 	}
-	
-	public void setSoDState(int value, boolean doSave)
-	{
+
+	public void setSoDState(int value, boolean doSave) {
 		_log.info(getClass().getSimpleName() + ": New Seed of Destruction state -> " + value + ".");
 		_SoDLastStateChangeDate.setTimeInMillis(System.currentTimeMillis());
 		_SoDState = value;
 		// reset number of Tiat kills
-		if (_SoDState == 1)
-		{
+		if (_SoDState == 1) {
 			_SoDTiatKilled = 0;
 		}
-		
+
 		handleSodStages();
-		
-		if (doSave)
-		{
+
+		if (doSave) {
 			saveData(SODTYPE);
 		}
 	}
-	
-	public long getSoDTimeForNextStateChange()
-	{
-		switch (_SoDState)
-		{
+
+	public long getSoDTimeForNextStateChange() {
+		switch (_SoDState) {
 			case 1:
 				return -1;
 			case 2:
@@ -192,28 +163,25 @@ public final class GraciaSeedsManager
 				return -1;
 		}
 	}
-	
-	public Calendar getSoDLastStateChangeDate()
-	{
+
+	public Calendar getSoDLastStateChangeDate() {
 		return _SoDLastStateChangeDate;
 	}
-	
-	public int getSoDState()
-	{
+
+	public int getSoDState() {
 		return _SoDState;
 	}
-	
+
 	/**
 	 * Gets the single instance of {@code GraciaSeedsManager}.
+	 *
 	 * @return single instance of {@code GraciaSeedsManager}
 	 */
-	public static GraciaSeedsManager getInstance()
-	{
+	public static GraciaSeedsManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final GraciaSeedsManager _instance = new GraciaSeedsManager();
 	}
 }

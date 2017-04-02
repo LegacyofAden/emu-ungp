@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.zone;
 
 /**
  * Zone Ids.
+ *
  * @author Zoey76
  */
-public enum ZoneId
-{
+public enum ZoneId {
 	PVP,
 	PEACE,
 	SIEGE,
@@ -50,9 +50,8 @@ public enum ZoneId
 	FISHING,
 	UNDYING,
 	TAX;
-	
-	public static int getZoneCount()
-	{
+
+	public static int getZoneCount() {
 		return values().length;
 	}
 }

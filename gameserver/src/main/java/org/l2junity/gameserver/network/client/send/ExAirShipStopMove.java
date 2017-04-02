@@ -23,24 +23,21 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExAirShipStopMove implements IClientOutgoingPacket
-{
+public class ExAirShipStopMove implements IClientOutgoingPacket {
 	private final int _playerId, _airShipId, _x, _y, _z;
-	
-	public ExAirShipStopMove(PlayerInstance player, L2AirShipInstance ship, int x, int y, int z)
-	{
+
+	public ExAirShipStopMove(PlayerInstance player, L2AirShipInstance ship, int x, int y, int z) {
 		_playerId = player.getObjectId();
 		_airShipId = ship.getObjectId();
 		_x = x;
 		_y = y;
 		_z = z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MOVE_TO_LOCATION_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_airShipId);
 		packet.writeD(_playerId);
 		packet.writeD(_x);

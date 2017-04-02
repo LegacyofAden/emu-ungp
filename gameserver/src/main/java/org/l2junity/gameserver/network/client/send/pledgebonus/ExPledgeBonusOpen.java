@@ -32,62 +32,51 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public class ExPledgeBonusOpen implements IClientOutgoingPacket
-{
+public class ExPledgeBonusOpen implements IClientOutgoingPacket {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExPledgeBonusOpen.class);
-	
+
 	private final PlayerInstance _player;
-	
-	public ExPledgeBonusOpen(PlayerInstance player)
-	{
+
+	public ExPledgeBonusOpen(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		final L2Clan clan = _player.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			LOGGER.warn("Player: {} attempting to write to a null clan!", _player);
 			return false;
 		}
-		
+
 		final ClanRewardBonus highestMembersOnlineBonus = ClanRewardData.getInstance().getHighestReward(ClanRewardType.MEMBERS_ONLINE);
 		final ClanRewardBonus highestHuntingBonus = ClanRewardData.getInstance().getHighestReward(ClanRewardType.HUNTING_MONSTERS);
 		final ClanRewardBonus membersOnlineBonus = ClanRewardType.MEMBERS_ONLINE.getAvailableBonus(clan);
 		final ClanRewardBonus huntingBonus = ClanRewardType.HUNTING_MONSTERS.getAvailableBonus(clan);
-		if (highestMembersOnlineBonus == null)
-		{
+		if (highestMembersOnlineBonus == null) {
 			LOGGER.warn("Couldn't find highest available clan members online bonus!!");
 			return false;
-		}
-		else if (highestHuntingBonus == null)
-		{
+		} else if (highestHuntingBonus == null) {
 			LOGGER.warn("Couldn't find highest available clan hunting bonus!!");
 			return false;
-		}
-		else if (highestMembersOnlineBonus.getSkillReward() == null)
-		{
+		} else if (highestMembersOnlineBonus.getSkillReward() == null) {
 			LOGGER.warn("Couldn't find skill reward for highest available members online bonus!!");
 			return false;
-		}
-		else if (highestHuntingBonus.getItemReward() == null)
-		{
+		} else if (highestHuntingBonus.getItemReward() == null) {
 			LOGGER.warn("Couldn't find item reward for highest available hunting bonus!!");
 			return false;
 		}
-		
+
 		// General OP Code
 		OutgoingPackets.EX_PLEDGE_BONUS_OPEN.writeId(packet);
-		
+
 		// Members online bonus
 		packet.writeD(highestMembersOnlineBonus.getRequiredAmount());
 		packet.writeD(clan.getMaxOnlineMembers());
 		packet.writeD(highestMembersOnlineBonus.getSkillReward().getSkillId());
 		packet.writeC(membersOnlineBonus != null ? membersOnlineBonus.getLevel() : 0x00);
 		packet.writeC(membersOnlineBonus != null ? 0x01 : 0x00);
-		
+
 		// Hunting bonus
 		packet.writeD(highestHuntingBonus.getRequiredAmount());
 		packet.writeD(clan.getHuntingPoints());

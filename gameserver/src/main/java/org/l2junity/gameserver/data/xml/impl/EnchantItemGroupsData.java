@@ -18,15 +18,11 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.RangeChanceHolder;
 import org.l2junity.gameserver.model.items.L2Item;
@@ -34,102 +30,79 @@ import org.l2junity.gameserver.model.items.enchant.EnchantItemGroup;
 import org.l2junity.gameserver.model.items.enchant.EnchantRateItem;
 import org.l2junity.gameserver.model.items.enchant.EnchantScrollGroup;
 import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author UnAfraid
  */
-public final class EnchantItemGroupsData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(EnchantItemGroupsData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class EnchantItemGroupsData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final EnchantItemGroupsData instance = new EnchantItemGroupsData();
+
 	private final Map<String, EnchantItemGroup> _itemGroups = new HashMap<>();
 	private final Map<Integer, EnchantScrollGroup> _scrollGroups = new HashMap<>();
-	
-	protected EnchantItemGroupsData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	public void load() throws Exception
-	{
+
+	private EnchantItemGroupsData() {
 		_itemGroups.clear();
 		_scrollGroups.clear();
 		parseDatapackFile("data/enchantItemGroups.xml");
-		LOGGER.info("Loaded: {} item group templates.", _itemGroups.size());
-		LOGGER.info("Loaded: {} scroll group templates.", _scrollGroups.size());
+		log.info("Loaded: {} item group templates.", _itemGroups.size());
+		log.info("Loaded: {} scroll group templates.", _scrollGroups.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("enchantRateGroup".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("enchantRateGroup".equalsIgnoreCase(d.getNodeName())) {
 						final String name = parseString(d.getAttributes(), "name");
 						final EnchantItemGroup group = new EnchantItemGroup(name);
-						for (Node cd = d.getFirstChild(); cd != null; cd = cd.getNextSibling())
-						{
-							if ("current".equalsIgnoreCase(cd.getNodeName()))
-							{
+						for (Node cd = d.getFirstChild(); cd != null; cd = cd.getNextSibling()) {
+							if ("current".equalsIgnoreCase(cd.getNodeName())) {
 								String range = parseString(cd.getAttributes(), "enchant");
 								double chance = parseDouble(cd.getAttributes(), "chance");
 								int min = -1;
 								int max = 0;
-								if (range.contains("-"))
-								{
+								if (range.contains("-")) {
 									String[] split = range.split("-");
-									if ((split.length == 2) && Util.isDigit(split[0]) && Util.isDigit(split[1]))
-									{
+									if ((split.length == 2) && Util.isDigit(split[0]) && Util.isDigit(split[1])) {
 										min = Integer.parseInt(split[0]);
 										max = Integer.parseInt(split[1]);
 									}
-								}
-								else if (Util.isDigit(range))
-								{
+								} else if (Util.isDigit(range)) {
 									min = Integer.parseInt(range);
 									max = min;
 								}
-								if ((min > -1) && (max > 0))
-								{
+								if ((min > -1) && (max > 0)) {
 									group.addChance(new RangeChanceHolder(min, max, chance));
 								}
 							}
 						}
 						_itemGroups.put(name, group);
-					}
-					else if ("enchantScrollGroup".equals(d.getNodeName()))
-					{
+					} else if ("enchantScrollGroup".equals(d.getNodeName())) {
 						final EnchantScrollGroup group = new EnchantScrollGroup(new StatsSet(parseAttributes(d)));
-						for (Node cd = d.getFirstChild(); cd != null; cd = cd.getNextSibling())
-						{
-							if ("enchantRate".equalsIgnoreCase(cd.getNodeName()))
-							{
+						for (Node cd = d.getFirstChild(); cd != null; cd = cd.getNextSibling()) {
+							if ("enchantRate".equalsIgnoreCase(cd.getNodeName())) {
 								final EnchantRateItem rateGroup = new EnchantRateItem(parseString(cd.getAttributes(), "group"));
-								for (Node z = cd.getFirstChild(); z != null; z = z.getNextSibling())
-								{
-									if ("item".equals(z.getNodeName()))
-									{
+								for (Node z = cd.getFirstChild(); z != null; z = z.getNextSibling()) {
+									if ("item".equals(z.getNodeName())) {
 										final NamedNodeMap attrs = z.getAttributes();
-										if (attrs.getNamedItem("slot") != null)
-										{
+										if (attrs.getNamedItem("slot") != null) {
 											rateGroup.addSlot(ItemTable._slots.get(parseString(attrs, "slot")));
 										}
-										if (attrs.getNamedItem("magicWeapon") != null)
-										{
+										if (attrs.getNamedItem("magicWeapon") != null) {
 											rateGroup.setMagicWeapon(parseBoolean(attrs, "magicWeapon"));
 										}
-										if (attrs.getNamedItem("id") != null)
-										{
+										if (attrs.getNamedItem("id") != null) {
 											rateGroup.setItemId(parseInteger(attrs, "id"));
 										}
 									}
@@ -143,37 +116,22 @@ public final class EnchantItemGroupsData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _itemGroups.size() + _scrollGroups.size();
 	}
-	
-	public EnchantItemGroup getItemGroup(L2Item item, int scrollGroup)
-	{
+
+	public EnchantItemGroup getItemGroup(L2Item item, int scrollGroup) {
 		final EnchantScrollGroup group = _scrollGroups.get(scrollGroup);
 		final EnchantRateItem rateGroup = group.getRateGroup(item);
 		return rateGroup != null ? _itemGroups.get(rateGroup.getName()) : null;
 	}
-	
-	public EnchantItemGroup getItemGroup(String name)
-	{
+
+	public EnchantItemGroup getItemGroup(String name) {
 		return _itemGroups.get(name);
 	}
-	
-	public EnchantScrollGroup getScrollGroup(int id)
-	{
+
+	public EnchantScrollGroup getScrollGroup(int id) {
 		return _scrollGroups.get(id);
-	}
-	
-	@InstanceGetter
-	public static EnchantItemGroupsData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final EnchantItemGroupsData _instance = new EnchantItemGroupsData();
 	}
 }

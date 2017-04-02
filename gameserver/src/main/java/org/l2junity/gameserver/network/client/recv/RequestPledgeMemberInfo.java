@@ -27,46 +27,41 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) dS
+ *
  * @author -Wooden-
  */
-public final class RequestPledgeMemberInfo implements IClientIncomingPacket
-{
+public final class RequestPledgeMemberInfo implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _unk1;
 	private String _player;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_unk1 = packet.readD();
 		_player = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// LOGGER.info("C5: RequestPledgeMemberInfo d:"+_unk1);
 		// LOGGER.info("C5: RequestPledgeMemberInfo S:"+_player);
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		// do we need powers to do that??
 		final L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
+
 		final ClanMember member = clan.getClanMember(_player);
-		if (member == null)
-		{
+		if (member == null) {
 			return;
 		}
 		client.sendPacket(new PledgeReceiveMemberInfo(member));
 	}
-	
+
 }

@@ -26,52 +26,41 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 
 /**
  * A clan hall zone
+ *
  * @author durgus
  */
-public class ClanHallZone extends ResidenceZone
-{
-	public ClanHallZone(int id)
-	{
+public class ClanHallZone extends ResidenceZone {
+	public ClanHallZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		if (name.equals("clanHallId"))
-		{
+	public void setParameter(String name, String value) {
+		if (name.equals("clanHallId")) {
 			setResidenceId(Integer.parseInt(value));
-		}
-		else
-		{
+		} else {
 			super.setParameter(name, value);
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.CLAN_HALL, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.CLAN_HALL, false);
 		}
 	}
-	
+
 	@Override
-	public final Location getBanishSpawnLoc()
-	{
+	public final Location getBanishSpawnLoc() {
 		final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(getResidenceId());
-		if (clanHall == null)
-		{
+		if (clanHall == null) {
 			return null;
 		}
 		return clanHall.getBanishLocation();

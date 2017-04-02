@@ -18,44 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.data.sql.impl.CrestTable;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class AllyCrest implements IClientOutgoingPacket
-{
+public class AllyCrest implements IClientOutgoingPacket {
 	private final int _crestId;
 	private final byte[] _data;
-	
-	public AllyCrest(int crestId)
-	{
+
+	public AllyCrest(int crestId) {
 		_crestId = crestId;
 		final Crest crest = CrestTable.getInstance().getCrest(crestId);
 		_data = crest != null ? crest.getData() : null;
 	}
-	
-	public AllyCrest(int crestId, byte[] data)
-	{
+
+	public AllyCrest(int crestId, byte[] data) {
 		_crestId = crestId;
 		_data = data;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ALLIANCE_CREST.writeId(packet);
-		
-		packet.writeD(HexIDConfig.SERVER_ID);
+
+		packet.writeD(GameserverConfig.SERVER_ID);
 		packet.writeD(_crestId);
-		if (_data != null)
-		{
+		if (_data != null) {
 			packet.writeD(_data.length);
 			packet.writeB(_data);
-		}
-		else
-		{
+		} else {
 			packet.writeD(0);
 		}
 		return true;

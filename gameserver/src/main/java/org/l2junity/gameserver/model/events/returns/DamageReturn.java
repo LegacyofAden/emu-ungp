@@ -21,18 +21,15 @@ package org.l2junity.gameserver.model.events.returns;
 /**
  * @author Sdw
  */
-public class DamageReturn extends TerminateReturn
-{
+public class DamageReturn extends TerminateReturn {
 	private final double _damage;
-	
-	public DamageReturn(boolean terminate, boolean override, boolean abort, double damage)
-	{
+
+	public DamageReturn(boolean terminate, boolean override, boolean abort, double damage) {
 		super(terminate, override, abort);
 		_damage = damage;
 	}
-	
-	public double getDamage()
-	{
+
+	public double getDamage() {
 		return _damage;
 	}
 }

@@ -18,55 +18,47 @@
  */
 package org.l2junity.gameserver.model.items.enchant;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.holders.RangeChanceHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public final class EnchantItemGroup
-{
+public final class EnchantItemGroup {
 	private static final Logger _log = LoggerFactory.getLogger(EnchantItemGroup.class);
 	private final List<RangeChanceHolder> _chances = new ArrayList<>();
 	private final String _name;
-	
-	public EnchantItemGroup(String name)
-	{
+
+	public EnchantItemGroup(String name) {
 		_name = name;
 	}
-	
+
 	/**
 	 * @return name of current enchant item group.
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * @param holder
 	 */
-	public void addChance(RangeChanceHolder holder)
-	{
+	public void addChance(RangeChanceHolder holder) {
 		_chances.add(holder);
 	}
-	
+
 	/**
 	 * @param index
 	 * @return chance for success rate for current enchant item group.
 	 */
-	public double getChance(int index)
-	{
-		if (!_chances.isEmpty())
-		{
-			for (RangeChanceHolder holder : _chances)
-			{
-				if ((holder.getMin() <= index) && (holder.getMax() >= index))
-				{
+	public double getChance(int index) {
+		if (!_chances.isEmpty()) {
+			for (RangeChanceHolder holder : _chances) {
+				if ((holder.getMin() <= index) && (holder.getMax() >= index)) {
 					return holder.getChance();
 				}
 			}

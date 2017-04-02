@@ -22,13 +22,12 @@ import org.l2junity.gameserver.instancemanager.GraciaSeedsManager;
 
 /**
  * Task which updates Seed of Destruction state.
+ *
  * @author xban1x
  */
-public final class UpdateSoDStateTask implements Runnable
-{
+public final class UpdateSoDStateTask implements Runnable {
 	@Override
-	public void run()
-	{
+	public void run() {
 		final GraciaSeedsManager manager = GraciaSeedsManager.getInstance();
 		manager.setSoDState(1, true);
 		manager.updateSodState();

@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExIsCharNameCreatable implements IClientOutgoingPacket
-{
+public class ExIsCharNameCreatable implements IClientOutgoingPacket {
 	private final int _allowed;
-	
-	public ExIsCharNameCreatable(int allowed)
-	{
+
+	public ExIsCharNameCreatable(int allowed) {
 		_allowed = allowed;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_IS_CHAR_NAME_CREATABLE.writeId(packet);
-		
+
 		packet.writeD(_allowed);
 		return true;
 	}

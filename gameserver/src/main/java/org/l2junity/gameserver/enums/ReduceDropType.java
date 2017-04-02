@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum ReduceDropType
-{
+public enum ReduceDropType {
 	MOB,
 	PK,
 	RAID

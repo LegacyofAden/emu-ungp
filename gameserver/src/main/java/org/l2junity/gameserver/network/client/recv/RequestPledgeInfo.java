@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -26,37 +25,28 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PledgeInfo;
 import org.l2junity.network.PacketReader;
 
-public final class RequestPledgeInfo implements IClientIncomingPacket
-{
+public final class RequestPledgeInfo implements IClientIncomingPacket {
 	private int _clanId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_clanId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		
+	public void run(L2GameClient client) {
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = ClanTable.getInstance().getClan(_clanId);
-		if (clan == null)
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.warn(getClass().getSimpleName() + ": Clan data for clanId " + _clanId + " is missing for player " + activeChar);
-			}
+		if (clan == null) {
 			return; // we have no clan data ?!? should not happen
 		}
-		
+
 		client.sendPacket(new PledgeInfo(clan));
 	}
 }

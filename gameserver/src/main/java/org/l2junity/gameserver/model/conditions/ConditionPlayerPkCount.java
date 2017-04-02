@@ -25,24 +25,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * The Class ConditionPlayerPkCount.
  */
-public class ConditionPlayerPkCount extends Condition
-{
+public class ConditionPlayerPkCount extends Condition {
 	public final int _pk;
-	
+
 	/**
 	 * Instantiates a new condition player pk count.
+	 *
 	 * @param pk the pk
 	 */
-	public ConditionPlayerPkCount(int pk)
-	{
+	public ConditionPlayerPkCount(int pk) {
 		_pk = pk;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
 		return effector.getActingPlayer().getPkKills() <= _pk;

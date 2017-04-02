@@ -18,26 +18,24 @@
  */
 package org.l2junity.gameserver.communitybbs.BB;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.communitybbs.Manager.PostBBSManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.communitybbs.Manager.PostBBSManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Maktakien
  */
-public class Post
-{
+public class Post {
 	private static Logger LOGGER = LoggerFactory.getLogger(Post.class);
-	
-	public static class CPost
-	{
+
+	public static class CPost {
 		public int postId;
 		public String postOwner;
 		public int postOwnerId;
@@ -46,9 +44,9 @@ public class Post
 		public int postForumId;
 		public String postTxt;
 	}
-	
+
 	private final List<CPost> _post;
-	
+
 	/**
 	 * @param _PostOwner
 	 * @param _PostOwnerID
@@ -57,8 +55,7 @@ public class Post
 	 * @param _PostForumID
 	 * @param txt
 	 */
-	public Post(String _PostOwner, int _PostOwnerID, long date, int tid, int _PostForumID, String txt)
-	{
+	public Post(String _PostOwner, int _PostOwnerID, long date, int tid, int _PostForumID, String txt) {
 		_post = new CopyOnWriteArrayList<>();
 		CPost cp = new CPost();
 		cp.postId = 0;
@@ -70,14 +67,12 @@ public class Post
 		cp.postTxt = txt;
 		_post.add(cp);
 		insertindb(cp);
-		
+
 	}
-	
-	public void insertindb(CPost cp)
-	{
+
+	public void insertindb(CPost cp) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("INSERT INTO posts (post_id,post_owner_name,post_ownerid,post_date,post_topic_id,post_forum_id,post_txt) values (?,?,?,?,?,?,?)"))
-		{
+			 PreparedStatement ps = con.prepareStatement("INSERT INTO posts (post_id,post_owner_name,post_ownerid,post_date,post_topic_id,post_forum_id,post_txt) values (?,?,?,?,?,?,?)")) {
 			ps.setInt(1, cp.postId);
 			ps.setString(2, cp.postOwner);
 			ps.setInt(3, cp.postOwnerId);
@@ -86,62 +81,48 @@ public class Post
 			ps.setInt(6, cp.postForumId);
 			ps.setString(7, cp.postTxt);
 			ps.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while saving new Post to db " + e.getMessage(), e);
 		}
 	}
-	
-	public Post(Topic t)
-	{
+
+	public Post(Topic t) {
 		_post = new CopyOnWriteArrayList<>();
 		load(t);
 	}
-	
-	public CPost getCPost(int id)
-	{
+
+	public CPost getCPost(int id) {
 		int i = 0;
-		for (CPost cp : _post)
-		{
-			if (i++ == id)
-			{
+		for (CPost cp : _post) {
+			if (i++ == id) {
 				return cp;
 			}
 		}
 		return null;
 	}
-	
-	public void deleteme(Topic t)
-	{
+
+	public void deleteme(Topic t) {
 		PostBBSManager.getInstance().delPostByTopic(t);
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("DELETE FROM posts WHERE post_forum_id=? AND post_topic_id=?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("DELETE FROM posts WHERE post_forum_id=? AND post_topic_id=?")) {
 			ps.setInt(1, t.getForumID());
 			ps.setInt(2, t.getID());
 			ps.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while deleting post: " + e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * @param t
 	 */
-	private void load(Topic t)
-	{
+	private void load(Topic t) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM posts WHERE post_forum_id=? AND post_topic_id=? ORDER BY post_id ASC"))
-		{
+			 PreparedStatement ps = con.prepareStatement("SELECT * FROM posts WHERE post_forum_id=? AND post_topic_id=? ORDER BY post_id ASC")) {
 			ps.setInt(1, t.getForumID());
 			ps.setInt(2, t.getID());
-			try (ResultSet rs = ps.executeQuery())
-			{
-				while (rs.next())
-				{
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
 					CPost cp = new CPost();
 					cp.postId = rs.getInt("post_id");
 					cp.postOwner = rs.getString("post_owner_name");
@@ -153,30 +134,24 @@ public class Post
 					_post.add(cp);
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Data error on Post " + t.getForumID() + "/" + t.getID() + " : " + e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * @param i
 	 */
-	public void updatetxt(int i)
-	{
+	public void updatetxt(int i) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement("UPDATE posts SET post_txt=? WHERE post_id=? AND post_topic_id=? AND post_forum_id=?"))
-		{
+			 PreparedStatement ps = con.prepareStatement("UPDATE posts SET post_txt=? WHERE post_id=? AND post_topic_id=? AND post_forum_id=?")) {
 			CPost cp = getCPost(i);
 			ps.setString(1, cp.postTxt);
 			ps.setInt(2, cp.postId);
 			ps.setInt(3, cp.postTopicId);
 			ps.setInt(4, cp.postForumId);
 			ps.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while saving new Post to db " + e.getMessage(), e);
 		}
 	}

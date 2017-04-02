@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerMentorStatus implements IBaseEvent
-{
+public class OnPlayerMentorStatus implements IBaseEvent {
 	private final PlayerInstance _mentor;
 	private final boolean _isOnline;
-	
-	public OnPlayerMentorStatus(PlayerInstance mentor, boolean isOnline)
-	{
+
+	public OnPlayerMentorStatus(PlayerInstance mentor, boolean isOnline) {
 		_mentor = mentor;
 		_isOnline = isOnline;
 	}
-	
-	public PlayerInstance getMentor()
-	{
+
+	public PlayerInstance getMentor() {
 		return _mentor;
 	}
-	
-	public boolean isMentorOnline()
-	{
+
+	public boolean isMentorOnline() {
 		return _isOnline;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_MENTOR_STATUS;
 	}
 }

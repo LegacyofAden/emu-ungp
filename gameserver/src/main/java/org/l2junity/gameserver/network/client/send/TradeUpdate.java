@@ -26,20 +26,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author daemon
  */
-public class TradeUpdate extends AbstractItemPacket
-{
+public class TradeUpdate extends AbstractItemPacket {
 	private final TradeItem _item;
-	
-	public TradeUpdate(PlayerInstance player, TradeItem item)
-	{
+
+	public TradeUpdate(PlayerInstance player, TradeItem item) {
 		_item = new TradeItem(item, player.getInventory().getItemByObjectId(item.getObjectId()).getCount() - item.getCount(), item.getPrice());
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TRADE_UPDATE.writeId(packet);
-		
+
 		packet.writeH(1);
 		packet.writeH((_item.getCount() > 0) && _item.getItem().isStackable() ? 3 : 2);
 		writeItem(packet, _item);

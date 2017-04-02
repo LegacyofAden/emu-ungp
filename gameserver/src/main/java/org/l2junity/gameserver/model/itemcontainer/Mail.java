@@ -18,148 +18,120 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
  * @author DS
  */
-public class Mail extends ItemContainer
-{
+public class Mail extends ItemContainer {
 	private final int _ownerId;
 	private int _messageId;
-	
-	public Mail(int objectId, int messageId)
-	{
+
+	public Mail(int objectId, int messageId) {
 		_ownerId = objectId;
 		_messageId = messageId;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "Mail";
 	}
-	
+
 	@Override
-	public PlayerInstance getOwner()
-	{
+	public PlayerInstance getOwner() {
 		return null;
 	}
-	
+
 	@Override
-	public ItemLocation getBaseLocation()
-	{
+	public ItemLocation getBaseLocation() {
 		return ItemLocation.MAIL;
 	}
-	
-	public int getMessageId()
-	{
+
+	public int getMessageId() {
 		return _messageId;
 	}
-	
-	public void setNewMessageId(int messageId)
-	{
+
+	public void setNewMessageId(int messageId) {
 		_messageId = messageId;
-		for (ItemInstance item : _items.values())
-		{
+		for (ItemInstance item : _items.values()) {
 			item.setItemLocation(getBaseLocation(), messageId);
 		}
-		
+
 		updateDatabase();
 	}
-	
-	public void returnToWh(ItemContainer wh)
-	{
-		for (ItemInstance item : _items.values())
-		{
-			if (wh == null)
-			{
+
+	public void returnToWh(ItemContainer wh) {
+		for (ItemInstance item : _items.values()) {
+			if (wh == null) {
 				item.setItemLocation(ItemLocation.WAREHOUSE);
-			}
-			else
-			{
+			} else {
 				transferItem("Expire", item.getObjectId(), item.getCount(), wh, null, null);
 			}
 		}
 	}
-	
+
 	@Override
-	protected void addItem(ItemInstance item)
-	{
+	protected void addItem(ItemInstance item) {
 		super.addItem(item);
 		item.setItemLocation(getBaseLocation(), _messageId);
 	}
-	
+
 	/*
 	 * Allow saving of the items without owner
 	 */
 	@Override
-	public void updateDatabase()
-	{
-		for (ItemInstance item : _items.values())
-		{
+	public void updateDatabase() {
+		for (ItemInstance item : _items.values()) {
 			item.updateDatabase(true);
 		}
 	}
-	
+
 	@Override
-	public void restore()
-	{
+	public void restore() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM items WHERE owner_id=? AND loc=? AND loc_data=?"))
-		{
+			 PreparedStatement statement = con.prepareStatement("SELECT * FROM items WHERE owner_id=? AND loc=? AND loc_data=?")) {
 			statement.setInt(1, getOwnerId());
 			statement.setString(2, getBaseLocation().name());
 			statement.setInt(3, getMessageId());
-			try (ResultSet inv = statement.executeQuery())
-			{
-				while (inv.next())
-				{
+			try (ResultSet inv = statement.executeQuery()) {
+				while (inv.next()) {
 					final ItemInstance item = new ItemInstance(inv);
 					World.getInstance().addObject(item);
-					
+
 					// If stackable item is found just add to current quantity
-					if (item.isStackable() && (getItemByItemId(item.getId()) != null))
-					{
+					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {
 						addItem("Restore", item, null, null);
-					}
-					else
-					{
+					} else {
 						addItem(item);
 					}
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("could not restore container:", e);
 		}
 	}
-	
+
 	@Override
-	public void deleteMe()
-	{
-		for (ItemInstance item : _items.values())
-		{
+	public void deleteMe() {
+		for (ItemInstance item : _items.values()) {
 			item.updateDatabase(true);
 			item.deleteMe();
 			World.getInstance().removeObject(item);
 		}
-		
+
 		_items.clear();
 	}
-	
+
 	@Override
-	public int getOwnerId()
-	{
+	public int getOwnerId() {
 		return _ownerId;
 	}
 }

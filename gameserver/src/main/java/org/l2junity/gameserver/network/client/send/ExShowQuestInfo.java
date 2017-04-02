@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Luca Baldi
  */
-public class ExShowQuestInfo implements IClientOutgoingPacket
-{
+public class ExShowQuestInfo implements IClientOutgoingPacket {
 	public static final ExShowQuestInfo STATIC_PACKET = new ExShowQuestInfo();
-	
-	private ExShowQuestInfo()
-	{
+
+	private ExShowQuestInfo() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_QUEST_INFO.writeId(packet);
-		
+
 		return true;
 	}
 }

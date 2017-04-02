@@ -18,50 +18,43 @@
  */
 package org.l2junity.gameserver.model.holders;
 
-import java.util.List;
-import java.util.Map;
-
 import org.l2junity.commons.util.Rnd;
+import org.l2junity.gameserver.handler.IConditionHandler;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.handler.IConditionHandler;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Sdw
  */
-public class ExtendDropDataHolder
-{
+public class ExtendDropDataHolder {
 	private final int _id;
 	private final List<ExtendDropItemHolder> _items;
 	private final List<IConditionHandler> _conditions;
 	private final Map<Long, SystemMessageId> _systemMessages;
-	
-	public ExtendDropDataHolder(StatsSet set)
-	{
+
+	public ExtendDropDataHolder(StatsSet set) {
 		_id = set.getInt("id");
 		_items = set.getList("items", ExtendDropItemHolder.class);
 		_conditions = set.getList("conditions", IConditionHandler.class);
 		_systemMessages = set.getMap("systemMessages", Long.class, SystemMessageId.class);
 	}
-	
-	public void reward(PlayerInstance player, Npc npc)
-	{
-		if (_conditions.isEmpty() || _conditions.stream().allMatch(cond -> cond.test(player, npc)))
-		{
+
+	public void reward(PlayerInstance player, Npc npc) {
+		if (_conditions.isEmpty() || _conditions.stream().allMatch(cond -> cond.test(player, npc))) {
 			_items.forEach(i ->
 			{
 				final long currentAmount = player.getVariables().getExtendDropCount(_id, i.getId());
-				if ((Rnd.nextDouble() < i.getChance()) && (currentAmount < i.getMaxCount()))
-				{
+				if ((Rnd.nextDouble() < i.getChance()) && (currentAmount < i.getMaxCount())) {
 					boolean sendMessage = true;
 					final long newAmount = currentAmount + i.getCount();
-					if (_systemMessages != null)
-					{
+					if (_systemMessages != null) {
 						final SystemMessageId systemMessageId = _systemMessages.get(newAmount);
-						if (systemMessageId != null)
-						{
+						if (systemMessageId != null) {
 							sendMessage = false;
 							player.sendPacket(systemMessageId);
 						}

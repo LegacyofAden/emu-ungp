@@ -24,17 +24,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author devScarlet, mrTJO
  */
-public class ServerClose implements IClientOutgoingPacket
-{
+public class ServerClose implements IClientOutgoingPacket {
 	public static final ServerClose STATIC_PACKET = new ServerClose();
-	
-	private ServerClose()
-	{
+
+	private ServerClose() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SEVER_CLOSE.writeId(packet);
 		return true;
 	}

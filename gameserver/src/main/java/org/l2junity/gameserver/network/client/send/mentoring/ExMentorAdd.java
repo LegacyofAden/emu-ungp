@@ -26,20 +26,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik, UnAfraid
  */
-public class ExMentorAdd implements IClientOutgoingPacket
-{
+public class ExMentorAdd implements IClientOutgoingPacket {
 	final PlayerInstance _mentor;
-	
-	public ExMentorAdd(PlayerInstance mentor)
-	{
+
+	public ExMentorAdd(PlayerInstance mentor) {
 		_mentor = mentor;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MENTOR_ADD.writeId(packet);
-		
+
 		packet.writeS(_mentor.getName());
 		packet.writeD(_mentor.getActiveClass());
 		packet.writeD(_mentor.getLevel());

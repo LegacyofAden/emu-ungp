@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum SubclassType
-{
+public enum SubclassType {
 	BASECLASS,
 	DUALCLASS,
 	SUBCLASS

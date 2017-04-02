@@ -23,28 +23,26 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (c) dddd d: dx d: dy d: dz d: AirShip id ??
+ *
  * @author -Wooden-
  */
-public class ExGetOnAirShip implements IClientIncomingPacket
-{
+public class ExGetOnAirShip implements IClientIncomingPacket {
 	private int _x;
 	private int _y;
 	private int _z;
 	private int _shipId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_x = packet.readD();
 		_y = packet.readD();
 		_z = packet.readD();
 		_shipId = packet.readD();
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		_log.info("[T1:ExGetOnAirShip] x: " + _x);
 		_log.info("[T1:ExGetOnAirShip] y: " + _y);
 		_log.info("[T1:ExGetOnAirShip] z: " + _z);

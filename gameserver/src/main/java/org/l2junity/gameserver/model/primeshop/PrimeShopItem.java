@@ -24,26 +24,22 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
  * @author UnAfraid
  */
 
-public class PrimeShopItem extends ItemHolder
-{
+public class PrimeShopItem extends ItemHolder {
 	private static final long serialVersionUID = 4228850273393782548L;
 	private final int _weight;
 	private final int _isTradable;
-	
-	public PrimeShopItem(int itemId, int count, int weight, int isTradable)
-	{
+
+	public PrimeShopItem(int itemId, int count, int weight, int isTradable) {
 		super(itemId, count);
 		_weight = weight;
 		_isTradable = isTradable;
 	}
-	
-	public int getWeight()
-	{
+
+	public int getWeight() {
 		return _weight;
 	}
-	
-	public int isTradable()
-	{
+
+	public int isTradable() {
 		return _isTradable;
 	}
 }

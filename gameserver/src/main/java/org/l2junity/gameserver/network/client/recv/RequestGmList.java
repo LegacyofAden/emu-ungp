@@ -25,25 +25,22 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class handles RequestGmLista packet triggered by /gmlist command
+ *
  * @version $Revision: 1.1.4.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestGmList implements IClientIncomingPacket
-{
+public final class RequestGmList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		AdminData.getInstance().sendListToPlayer(activeChar);
 	}
 }

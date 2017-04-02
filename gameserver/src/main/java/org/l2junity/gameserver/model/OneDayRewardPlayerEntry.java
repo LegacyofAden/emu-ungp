@@ -23,82 +23,68 @@ import org.l2junity.gameserver.enums.OneDayRewardStatus;
 /**
  * @author UnAfraid
  */
-public class OneDayRewardPlayerEntry
-{
+public class OneDayRewardPlayerEntry {
 	private final int _objectId;
 	private final int _rewardId;
 	private OneDayRewardStatus _status = OneDayRewardStatus.NOT_AVAILABLE;
 	private int _progress;
 	private long _lastCompleted;
 	private boolean _recentlyCompleted; // Has been completed this login session.
-	
-	public OneDayRewardPlayerEntry(int objectId, int rewardId)
-	{
+
+	public OneDayRewardPlayerEntry(int objectId, int rewardId) {
 		_objectId = objectId;
 		_rewardId = rewardId;
 	}
-	
-	public OneDayRewardPlayerEntry(int objectId, int rewardId, int status, int progress, long lastCompleted)
-	{
+
+	public OneDayRewardPlayerEntry(int objectId, int rewardId, int status, int progress, long lastCompleted) {
 		this(objectId, rewardId);
 		_status = OneDayRewardStatus.valueOf(status);
 		_progress = progress;
 		_lastCompleted = lastCompleted;
 	}
-	
-	public int getObjectId()
-	{
+
+	public int getObjectId() {
 		return _objectId;
 	}
-	
-	public int getRewardId()
-	{
+
+	public int getRewardId() {
 		return _rewardId;
 	}
-	
-	public OneDayRewardStatus getStatus()
-	{
+
+	public OneDayRewardStatus getStatus() {
 		return _status;
 	}
-	
-	public void setStatus(OneDayRewardStatus status)
-	{
+
+	public void setStatus(OneDayRewardStatus status) {
 		_status = status;
 	}
-	
-	public boolean getRecentlyCompleted()
-	{
+
+	public boolean getRecentlyCompleted() {
 		return _recentlyCompleted;
 	}
-	
-	public void setRecentlyCompleted(boolean recentlyCompleted)
-	{
+
+	public void setRecentlyCompleted(boolean recentlyCompleted) {
 		_recentlyCompleted = recentlyCompleted;
 	}
-	
-	public int getProgress()
-	{
+
+	public int getProgress() {
 		return _progress;
 	}
-	
-	public void setProgress(int progress)
-	{
+
+	public void setProgress(int progress) {
 		_progress = progress;
 	}
-	
-	public int increaseProgress()
-	{
+
+	public int increaseProgress() {
 		_progress++;
 		return _progress;
 	}
-	
-	public long getLastCompleted()
-	{
+
+	public long getLastCompleted() {
 		return _lastCompleted;
 	}
-	
-	public void setLastCompleted(long lastCompleted)
-	{
+
+	public void setLastCompleted(long lastCompleted) {
 		_lastCompleted = lastCompleted;
 	}
 }

@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class ExSearchOrc implements IClientOutgoingPacket
-{
+public class ExSearchOrc implements IClientOutgoingPacket {
 	public static final ExSearchOrc STATIC_PACKET = new ExSearchOrc();
-	
-	private ExSearchOrc()
-	{
+
+	private ExSearchOrc() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SEARCH_ORC.writeId(packet);
-		
+
 		return true;
 	}
 }

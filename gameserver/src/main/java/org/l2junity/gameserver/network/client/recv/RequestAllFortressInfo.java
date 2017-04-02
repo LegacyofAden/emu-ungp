@@ -25,17 +25,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestAllFortressInfo implements IClientIncomingPacket
-{
+public class RequestAllFortressInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		client.sendPacket(ExShowFortressInfo.STATIC_PACKET);
 	}
 }

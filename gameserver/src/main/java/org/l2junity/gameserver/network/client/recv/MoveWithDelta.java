@@ -23,29 +23,27 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (c) ddd d: dx d: dy d: dz
+ *
  * @author -Wooden-
  */
-public class MoveWithDelta implements IClientIncomingPacket
-{
+public class MoveWithDelta implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _dx;
 	@SuppressWarnings("unused")
 	private int _dy;
 	@SuppressWarnings("unused")
 	private int _dz;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_dx = packet.readD();
 		_dy = packet.readD();
 		_dz = packet.readD();
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// TODO this
 	}
 }

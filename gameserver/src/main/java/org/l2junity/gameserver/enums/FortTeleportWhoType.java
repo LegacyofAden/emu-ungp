@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum FortTeleportWhoType
-{
+public enum FortTeleportWhoType {
 	All,
 	Attacker,
 	Owner,

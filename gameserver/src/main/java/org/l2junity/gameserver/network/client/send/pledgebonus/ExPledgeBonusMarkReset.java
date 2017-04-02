@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExPledgeBonusMarkReset implements IClientOutgoingPacket
-{
+public class ExPledgeBonusMarkReset implements IClientOutgoingPacket {
 	public static ExPledgeBonusMarkReset STATIC_PACKET = new ExPledgeBonusMarkReset();
-	
-	private ExPledgeBonusMarkReset()
-	{
+
+	private ExPledgeBonusMarkReset() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_BONUS_MARK_RESET.writeId(packet);
 		return true;
 	}

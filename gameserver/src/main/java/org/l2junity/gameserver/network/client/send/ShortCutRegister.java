@@ -22,30 +22,26 @@ import org.l2junity.gameserver.model.Shortcut;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class ShortCutRegister implements IClientOutgoingPacket
-{
+public final class ShortCutRegister implements IClientOutgoingPacket {
 	private final Shortcut _shortcut;
-	
+
 	/**
 	 * Register new skill shortcut
+	 *
 	 * @param shortcut
 	 */
-	public ShortCutRegister(Shortcut shortcut)
-	{
+	public ShortCutRegister(Shortcut shortcut) {
 		_shortcut = shortcut;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHORT_CUT_REGISTER.writeId(packet);
-		
+
 		packet.writeD(_shortcut.getType().ordinal());
 		packet.writeD(_shortcut.getSlot() + (_shortcut.getPage() * 12)); // C4 Client
-		switch (_shortcut.getType())
-		{
-			case ITEM:
-			{
+		switch (_shortcut.getType()) {
+			case ITEM: {
 				packet.writeD(_shortcut.getId());
 				packet.writeD(_shortcut.getCharacterType());
 				packet.writeD(_shortcut.getSharedReuseGroup());
@@ -55,8 +51,7 @@ public final class ShortCutRegister implements IClientOutgoingPacket
 				packet.writeD(0x00); // TODO: Find me, item visual id ?
 				break;
 			}
-			case SKILL:
-			{
+			case SKILL: {
 				packet.writeD(_shortcut.getId());
 				packet.writeH(_shortcut.getLevel());
 				packet.writeH(_shortcut.getSubLevel());
@@ -70,8 +65,7 @@ public final class ShortCutRegister implements IClientOutgoingPacket
 			case ACTION:
 			case MACRO:
 			case RECIPE:
-			case BOOKMARK:
-			{
+			case BOOKMARK: {
 				packet.writeD(_shortcut.getId());
 				packet.writeD(_shortcut.getCharacterType());
 			}

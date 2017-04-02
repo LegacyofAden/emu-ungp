@@ -18,111 +18,97 @@
  */
 package org.l2junity.gameserver.taskmanager;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.network.client.send.AutoAttackStop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Attack stance task manager.
+ *
  * @author Luca Baldi, Zoey76
  */
-public class AttackStanceTaskManager
-{
+public class AttackStanceTaskManager {
 	protected static final Logger _log = LoggerFactory.getLogger(AttackStanceTaskManager.class);
-	
+
 	protected static final Map<Creature, Long> _attackStanceTasks = new ConcurrentHashMap<>();
-	
+
 	public static final long COMBAT_TIME = 15_000;
-	
+
 	/**
 	 * Instantiates a new attack stance task manager.
 	 */
-	protected AttackStanceTaskManager()
-	{
-		ThreadPool.scheduleAtFixedRate(new FightModeScheduler(), 0, 1000, TimeUnit.MILLISECONDS);
+	protected AttackStanceTaskManager() {
+		ThreadPool.getInstance().scheduleGeneralAtFixedRate(new FightModeScheduler(), 0, 1000, TimeUnit.MILLISECONDS);
 	}
-	
+
 	/**
 	 * Adds the attack stance task.
+	 *
 	 * @param actor the actor
 	 */
-	public void addAttackStanceTask(Creature actor)
-	{
-		if (actor != null)
-		{
+	public void addAttackStanceTask(Creature actor) {
+		if (actor != null) {
 			_attackStanceTasks.put(actor, System.currentTimeMillis());
 		}
 	}
-	
+
 	/**
 	 * Removes the attack stance task.
+	 *
 	 * @param actor the actor
 	 */
-	public void removeAttackStanceTask(Creature actor)
-	{
-		if (actor != null)
-		{
-			if (actor.isSummon())
-			{
+	public void removeAttackStanceTask(Creature actor) {
+		if (actor != null) {
+			if (actor.isSummon()) {
 				actor = actor.getActingPlayer();
 			}
 			_attackStanceTasks.remove(actor);
 		}
 	}
-	
+
 	/**
 	 * Checks for attack stance task.<br>
+	 *
 	 * @param actor the actor
 	 * @return {@code true} if the character has an attack stance task, {@code false} otherwise
 	 */
-	public boolean hasAttackStanceTask(Creature actor)
-	{
-		if (actor != null)
-		{
-			if (actor.isSummon())
-			{
+	public boolean hasAttackStanceTask(Creature actor) {
+		if (actor != null) {
+			if (actor.isSummon()) {
 				actor = actor.getActingPlayer();
 			}
 			return _attackStanceTasks.containsKey(actor);
 		}
 		return false;
 	}
-	
-	protected class FightModeScheduler implements Runnable
-	{
+
+	protected class FightModeScheduler implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			long current = System.currentTimeMillis();
-			try
-			{
+			try {
 				final Iterator<Entry<Creature, Long>> iter = _attackStanceTasks.entrySet().iterator();
 				Entry<Creature, Long> e;
 				Creature actor;
-				while (iter.hasNext())
-				{
+				while (iter.hasNext()) {
 					e = iter.next();
-					if ((current - e.getValue()) > COMBAT_TIME)
-					{
+					if ((current - e.getValue()) > COMBAT_TIME) {
 						actor = e.getKey();
-						if (actor != null)
-						{
+						if (actor != null) {
 							actor.broadcastPacket(new AutoAttackStop(actor.getObjectId()));
 							actor.getAI().setAutoAttacking(false);
-							if (actor.isPlayer() && actor.hasSummon())
-							{
+							if (actor.isPlayer() && actor.hasSummon()) {
 								final Summon pet = actor.getPet();
-								if (pet != null)
-								{
+								if (pet != null) {
 									pet.broadcastPacket(new AutoAttackStop(pet.getObjectId()));
 								}
 								actor.getServitors().values().forEach(s -> s.broadcastPacket(new AutoAttackStop(s.getObjectId())));
@@ -131,26 +117,23 @@ public class AttackStanceTaskManager
 						iter.remove();
 					}
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// Unless caught here, players remain in attack positions.
 				_log.warn("Error in FightModeScheduler: " + e.getMessage(), e);
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the single instance of AttackStanceTaskManager.
+	 *
 	 * @return single instance of AttackStanceTaskManager
 	 */
-	public static AttackStanceTaskManager getInstance()
-	{
+	public static AttackStanceTaskManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final AttackStanceTaskManager _instance = new AttackStanceTaskManager();
 	}
 }

@@ -18,29 +18,26 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+
 /**
- ** @author Gnacik
+ * * @author Gnacik
  */
-public class ShopPreviewInfo implements IClientOutgoingPacket
-{
+public class ShopPreviewInfo implements IClientOutgoingPacket {
 	private final Map<Integer, Integer> _itemlist;
-	
-	public ShopPreviewInfo(Map<Integer, Integer> itemlist)
-	{
+
+	public ShopPreviewInfo(Map<Integer, Integer> itemlist) {
 		_itemlist = itemlist;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOP_PREVIEW_INFO.writeId(packet);
-		
+
 		packet.writeD(Inventory.PAPERDOLL_TOTALSLOTS);
 		// Slots
 		packet.writeD(getFromList(Inventory.PAPERDOLL_UNDER));
@@ -64,9 +61,8 @@ public class ShopPreviewInfo implements IClientOutgoingPacket
 		packet.writeD(getFromList(Inventory.PAPERDOLL_LBRACELET));
 		return true;
 	}
-	
-	private int getFromList(int key)
-	{
+
+	private int getFromList(int key) {
 		return (_itemlist.containsKey(key) ? _itemlist.get(key) : 0);
 	}
 }

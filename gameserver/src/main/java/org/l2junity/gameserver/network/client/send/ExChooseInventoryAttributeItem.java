@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.EnchantItemAttributeRequest;
@@ -28,44 +25,41 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Kerberos
  */
-public class ExChooseInventoryAttributeItem implements IClientOutgoingPacket
-{
+public class ExChooseInventoryAttributeItem implements IClientOutgoingPacket {
 	private int _itemId;
 	private long _count;
 	private AttributeType _atribute;
 	private int _level;
 	private final Set<Integer> _items = new HashSet<>();
-	
-	public ExChooseInventoryAttributeItem(PlayerInstance activeChar, ItemInstance stone)
-	{
+
+	public ExChooseInventoryAttributeItem(PlayerInstance activeChar, ItemInstance stone) {
 		final EnchantItemAttributeRequest request = activeChar.getRequest(EnchantItemAttributeRequest.class);
-		if (request == null)
-		{
+		if (request == null) {
 			return;
 		}
 		_itemId = stone.getDisplayId();
 		_count = stone.getCount();
 		_atribute = request.getWeaponAttribute();
 		_level = request.getMaxLevel();
-		
+
 		// Register only items that can be put an attribute stone/crystal
-		for (ItemInstance item : activeChar.getInventory().getItems())
-		{
-			if (item.isElementable())
-			{
+		for (ItemInstance item : activeChar.getInventory().getItems()) {
+			if (item.isElementable()) {
 				_items.add(item.getObjectId());
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CHOOSE_INVENTORY_ATTRIBUTE_ITEM.writeId(packet);
-		
+
 		packet.writeD(_itemId);
 		packet.writeQ(_count);
 		packet.writeD(_atribute == AttributeType.FIRE ? 1 : 0); // Fire

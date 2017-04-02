@@ -23,86 +23,77 @@ import java.util.Map;
 
 /**
  * Class hold information about basic pet stats which are same on each level.
+ *
  * @author JIV
  */
-public class PetData
-{
+public class PetData {
 	private final Map<Integer, PetLevelData> _levelStats = new HashMap<>();
-	
+
 	private final int _npcId;
 	private final int _itemId;
 	private int _load = 20000;
 	private boolean _syncLevel = false;
-	
-	public PetData(int npcId, int itemId)
-	{
+
+	public PetData(int npcId, int itemId) {
 		_npcId = npcId;
 		_itemId = itemId;
 	}
-	
+
 	/**
 	 * @return the npc id representing this pet.
 	 */
-	public int getNpcId()
-	{
+	public int getNpcId() {
 		return _npcId;
 	}
-	
+
 	/**
 	 * @return the item id that could summon this pet.
 	 */
-	public int getItemId()
-	{
+	public int getItemId() {
 		return _itemId;
 	}
-	
+
 	/**
 	 * @param level the pet's level.
-	 * @param data the pet's data.
+	 * @param data  the pet's data.
 	 */
-	public void addNewStat(int level, PetLevelData data)
-	{
+	public void addNewStat(int level, PetLevelData data) {
 		_levelStats.put(level, data);
 	}
-	
+
 	/**
 	 * @param petLevel the pet's level.
 	 * @return the pet data associated to that pet level.
 	 */
-	public PetLevelData getPetLevelData(int petLevel)
-	{
+	public PetLevelData getPetLevelData(int petLevel) {
 		return _levelStats.get(petLevel);
 	}
-	
+
 	/**
 	 * @return the pet's weight load.
 	 */
-	public int getLoad()
-	{
+	public int getLoad() {
 		return _load;
 	}
-	
+
 	/**
 	 * @return {@code true} if pet synchronizes it's level with his master's
 	 */
-	public boolean isSynchLevel()
-	{
+	public boolean isSynchLevel() {
 		return _syncLevel;
 	}
-	
+
 	/**
 	 * @param load the weight load to set.
 	 */
-	public void setLoad(int load)
-	{
+	public void setLoad(int load) {
 		_load = load;
 	}
-	
+
 	/**
 	 * @param val synchronizes level with master or not.
 	 */
-	public void setSyncLevel(boolean val)
-	{
+	public void setSyncLevel(boolean val) {
 		_syncLevel = val;
 	}
 }

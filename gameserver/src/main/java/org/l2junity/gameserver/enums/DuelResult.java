@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum DuelResult
-{
+public enum DuelResult {
 	Continue,
 	Team1Win,
 	Team2Win,

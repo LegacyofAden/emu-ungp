@@ -18,59 +18,47 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.handler.ConditionHandler;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.handler.IConditionHandler;
+import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.ExtendDropDataHolder;
 import org.l2junity.gameserver.model.holders.ExtendDropItemHolder;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.nio.file.Path;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Sdw
  */
 
-public class ExtendDropData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExtendDropData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = ConditionHandler.class)
+public class ExtendDropData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ExtendDropData instance = new ExtendDropData();
+
 	private final Map<Integer, ExtendDropDataHolder> _extendDrop = new HashMap<>();
-	
-	protected ExtendDropData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ConditionHandler.class))
-	private void load() throws Exception
-	{
+
+	private ExtendDropData() {
 		_extendDrop.clear();
 		parseDatapackFile("data/ExtendDrop.xml");
-		LOGGER.info("Loaded {} ExtendDrop.", _extendDrop.size());
+		log.info("Loaded {} ExtendDrop.", _extendDrop.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "drop", dropNode ->
 		{
 			final StatsSet set = new StatsSet(parseAttributes(dropNode));
-			
+
 			final List<ExtendDropItemHolder> items = new ArrayList<>(1);
 			forEach(dropNode, "items", itemsNode -> forEach(itemsNode, "item", itemNode ->
 			{
@@ -82,25 +70,22 @@ public class ExtendDropData implements IGameXmlReader
 				items.add(new ExtendDropItemHolder(itemId, itemCount, itemMaxCount, itemChance, itemAdditionalChance));
 			}));
 			set.set("items", items);
-			
+
 			final List<IConditionHandler> conditions = new ArrayList<>(1);
 			forEach(dropNode, "conditions", conditionsNode -> forEach(conditionsNode, "condition", conditionNode ->
 			{
 				final String conditionName = parseString(conditionNode.getAttributes(), "name");
 				final StatsSet params = (StatsSet) parseValue(conditionNode);
 				final Function<StatsSet, IConditionHandler> conditionFunction = ConditionHandler.getInstance().getHandlerFactory(conditionName);
-				if (conditionFunction != null)
-				{
+				if (conditionFunction != null) {
 					conditions.add(conditionFunction.apply(params));
+				} else {
+					log.warn("Missing condition for ExtendDrop Id[{}] Condition Name[{}]", set.getInt("id"), conditionName);
 				}
-				else
-				{
-					LOGGER.warn("Missing condition for ExtendDrop Id[{}] Condition Name[{}]", set.getInt("id"), conditionName);
-				}
-				
+
 			}));
 			set.set("conditions", conditions);
-			
+
 			final Map<Long, SystemMessageId> systemMessages = new HashMap<>();
 			forEach(dropNode, "systemMessages", systemMessagesNode -> forEach(systemMessagesNode, "systemMessage", systemMessageNode ->
 			{
@@ -109,110 +94,76 @@ public class ExtendDropData implements IGameXmlReader
 				systemMessages.put(amount, systemMessageId);
 			}));
 			set.set("systemMessages", systemMessages);
-			
+
 			_extendDrop.put(set.getInt("id"), new ExtendDropDataHolder(set));
 		}));
 	}
-	
-	private Object parseValue(Node node)
-	{
+
+	private Object parseValue(Node node) {
 		StatsSet statsSet = null;
 		List<Object> list = null;
 		Object text = null;
-		for (node = node.getFirstChild(); node != null; node = node.getNextSibling())
-		{
+		for (node = node.getFirstChild(); node != null; node = node.getNextSibling()) {
 			final String nodeName = node.getNodeName();
-			switch (node.getNodeName())
-			{
-				case "#text":
-				{
+			switch (node.getNodeName()) {
+				case "#text": {
 					final String value = node.getNodeValue().trim();
-					if (!value.isEmpty())
-					{
+					if (!value.isEmpty()) {
 						text = value;
 					}
 					break;
 				}
-				case "item":
-				{
-					if (list == null)
-					{
+				case "item": {
+					if (list == null) {
 						list = new LinkedList<>();
 					}
-					
+
 					final Object value = parseValue(node);
-					if (value != null)
-					{
+					if (value != null) {
 						list.add(value);
 					}
 					break;
 				}
-				default:
-				{
+				default: {
 					final Object value = parseValue(node);
-					if (value != null)
-					{
-						if (statsSet == null)
-						{
+					if (value != null) {
+						if (statsSet == null) {
 							statsSet = new StatsSet();
 						}
-						
+
 						statsSet.set(nodeName, value);
 					}
 				}
 			}
 		}
-		if (list != null)
-		{
-			if (text != null)
-			{
+		if (list != null) {
+			if (text != null) {
 				throw new IllegalArgumentException("Text and list in same node are not allowed. Node[" + node + "]");
 			}
-			if (statsSet != null)
-			{
+			if (statsSet != null) {
 				statsSet.set(".", list);
-			}
-			else
-			{
+			} else {
 				return list;
 			}
 		}
-		if (text != null)
-		{
-			if (list != null)
-			{
+		if (text != null) {
+			if (list != null) {
 				throw new IllegalArgumentException("Text and list in same node are not allowed. Node[" + node + "]");
 			}
-			if (statsSet != null)
-			{
+			if (statsSet != null) {
 				statsSet.set(".", text);
-			}
-			else
-			{
+			} else {
 				return text;
 			}
 		}
 		return statsSet;
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _extendDrop.size();
 	}
-	
-	public ExtendDropDataHolder getExtendDropById(int id)
-	{
+
+	public ExtendDropDataHolder getExtendDropById(int id) {
 		return _extendDrop.getOrDefault(id, null);
-	}
-	
-	@InstanceGetter
-	public static ExtendDropData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ExtendDropData _instance = new ExtendDropData();
 	}
 }

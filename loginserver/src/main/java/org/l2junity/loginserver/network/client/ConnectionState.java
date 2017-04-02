@@ -23,8 +23,7 @@ import org.l2junity.network.IConnectionState;
 /**
  * @author NosBit
  */
-public enum ConnectionState implements IConnectionState
-{
+public enum ConnectionState implements IConnectionState {
 	CONNECTED,
 	CLOSED,
 	AUTHED_GG,

@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
@@ -31,61 +29,56 @@ import org.l2junity.gameserver.network.client.send.ExPutEnchantSupportItemResult
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
+import java.util.List;
+
 /**
  * @author KenM
  */
-public class RequestExTryToPutEnchantSupportItem implements IClientIncomingPacket
-{
+public class RequestExTryToPutEnchantSupportItem implements IClientIncomingPacket {
 	private int _supportObjectId;
 	private int _enchantObjectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_supportObjectId = packet.readD();
 		_enchantObjectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final EnchantItemRequest request = activeChar.getRequest(EnchantItemRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			return;
 		}
-		
+
 		request.setSupportItem(_supportObjectId);
-		
+
 		final ItemInstance item = request.getEnchantingItem();
 		final ItemInstance scroll = request.getEnchantingScroll();
 		final ItemInstance support = request.getSupportItem();
-		if ((item == null) || (scroll == null) || (support == null) || (request.getEnchantingItem().getObjectId() != _enchantObjectId))
-		{
+		if ((item == null) || (scroll == null) || (support == null) || (request.getEnchantingItem().getObjectId() != _enchantObjectId)) {
 			// message may be custom
 			activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
 			request.setEnchantingItem(PlayerInstance.ID_NONE);
 			request.setSupportItem(PlayerInstance.ID_NONE);
 			return;
 		}
-		
+
 		final List<ItemSkillHolder> skills = support.getItem().getSkills(ItemSkillType.NORMAL);
-		
-		if (!skills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item)))
-		{
+
+		if (!skills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item))) {
 			activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
 			request.setSupportItem(PlayerInstance.ID_NONE);
 			activeChar.sendPacket(new ExPutEnchantSupportItemResult(0));
 			return;
 		}
-		
+
 		request.setSupportItem(support.getObjectId());
 		request.setTimestamp(System.currentTimeMillis());
 		activeChar.sendPacket(new ExPutEnchantSupportItemResult(_supportObjectId));

@@ -18,11 +18,7 @@
  */
 package org.l2junity.gameserver.model.teleporter;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.SpecialItemType;
 import org.l2junity.gameserver.enums.TeleportType;
@@ -40,318 +36,282 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * Teleport holder
+ *
  * @author UnAfraid
  */
-public final class TeleportHolder
-{
+public final class TeleportHolder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TeleportHolder.class);
-	
+
 	private final String _name;
 	private final TeleportType _type;
 	private final List<TeleportLocation> _teleportData = new ArrayList<>();
-	
+
 	/**
 	 * Constructor
+	 *
 	 * @param name name of teleport list
 	 * @param type type of teleport list
 	 */
-	public TeleportHolder(String name, TeleportType type)
-	{
+	public TeleportHolder(String name, TeleportType type) {
 		_name = name;
 		_type = type;
 	}
-	
+
 	/**
 	 * Gets list identification (name).
+	 *
 	 * @return list name
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Check if teleport list is for noblesse or not.
+	 *
 	 * @return {@code true} if is for noblesse otherwise {@code false}
 	 */
-	public boolean isNoblesse()
-	{
+	public boolean isNoblesse() {
 		return _type.equals(TeleportType.NOBLES_ADENA) || _type.equals(TeleportType.NOBLES_TOKEN);
 	}
-	
+
 	/**
 	 * Gets type of teleport list.
+	 *
 	 * @return type of list
 	 */
-	public TeleportType getType()
-	{
+	public TeleportType getType() {
 		return _type;
 	}
-	
+
 	/**
 	 * Create new teleport location in this holder.
+	 *
 	 * @param locData information about teleport location
 	 */
-	public void registerLocation(StatsSet locData)
-	{
+	public void registerLocation(StatsSet locData) {
 		_teleportData.add(new TeleportLocation(_teleportData.size(), locData));
 	}
-	
+
 	/**
 	 * Gets teleport location with specific index.
+	 *
 	 * @param locationId index of location (begins with {@code 0})
 	 * @return instance of {@link TeleportLocation} if found otherwise {@code null}
 	 */
-	public TeleportLocation getLocation(int locationId)
-	{
+	public TeleportLocation getLocation(int locationId) {
 		return _teleportData.get(locationId);
 	}
-	
+
 	/**
 	 * Gets all teleport locations registered in current holder.
+	 *
 	 * @return collection of {@link TeleportLocation}
 	 */
-	public List<TeleportLocation> getLocations()
-	{
+	public List<TeleportLocation> getLocations() {
 		return _teleportData;
 	}
-	
+
 	/**
 	 * Build HTML message from teleport list and send it to player.
+	 *
 	 * @param player receiver of HTML message
-	 * @param npc teleporter
+	 * @param npc    teleporter
 	 */
-	public void showTeleportList(PlayerInstance player, Npc npc)
-	{
+	public void showTeleportList(PlayerInstance player, Npc npc) {
 		showTeleportList(player, npc, "npc_" + npc.getObjectId() + "_teleport");
 	}
-	
+
 	/**
 	 * Build HTML message from teleport list and send it to player.
+	 *
 	 * @param player receiver of HTML message
-	 * @param npc teleporter
+	 * @param npc    teleporter
 	 * @param bypass bypass used while building message
 	 */
-	public void showTeleportList(PlayerInstance player, Npc npc, String bypass)
-	{
-		if (isNoblesse() && !player.isNoble())
-		{
+	public void showTeleportList(PlayerInstance player, Npc npc, String bypass) {
+		if (isNoblesse() && !player.isNoble()) {
 			LOGGER.warn("Player {} requested noblesse teleport without being noble!", player.getObjectId());
 			return;
 		}
-		
+
 		// Load variables
 		final int questZoneId = (_type == TeleportType.NORMAL) ? player.getQuestZoneId() : -1;
-		
+
 		// Build html
 		final StringBuilder sb = new StringBuilder();
 		final StringBuilder sb_f = new StringBuilder();
-		for (TeleportLocation loc : getLocations())
-		{
+		for (TeleportLocation loc : getLocations()) {
 			String finalName = loc.getName();
 			String confirmDesc = loc.getName();
-			if (loc.getNpcStringId() != null)
-			{
+			if (loc.getNpcStringId() != null) {
 				final int stringId = loc.getNpcStringId().getId();
 				finalName = "<fstring>" + stringId + "</fstring>";
 				confirmDesc = "F;" + stringId;
 			}
-			
-			if (shouldPayFee(player, loc))
-			{
+
+			if (shouldPayFee(player, loc)) {
 				final long fee = calculateFee(player, loc);
-				if (fee != 0)
-				{
+				if (fee != 0) {
 					finalName += " - " + fee + " " + getItemName(loc.getFeeId(), true);
 				}
 			}
-			
+
 			final boolean isQuestTeleport = (questZoneId >= 0) && (loc.getQuestZoneId() == questZoneId);
-			if (isQuestTeleport)
-			{
+			if (isQuestTeleport) {
 				sb_f.append("<button align=left icon=\"quest\" action=\"bypass -h " + bypass + " " + _name + " " + loc.getId() + "\" msg=\"811;" + confirmDesc + "\">" + finalName + "</button>");
-			}
-			else
-			{
+			} else {
 				sb.append("<button align=left icon=\"teleport\" action=\"bypass -h " + bypass + " " + _name + " " + loc.getId() + "\" msg=\"811;" + confirmDesc + "\">" + finalName + "</button>");
 			}
 		}
 		sb_f.append(sb.toString());
-		
+
 		// Send html message
 		final NpcHtmlMessage msg = new NpcHtmlMessage(npc.getObjectId());
-		msg.setFile(player.getHtmlPrefix(), "data/html/teleporter/teleports.htm");
+		msg.setFile(player.getHtmlPrefix(), "teleporter/teleports.htm");
 		msg.replace("%locations%", sb_f.toString());
 		player.sendPacket(msg);
 	}
-	
+
 	/**
 	 * Teleports player to final location
+	 *
 	 * @param player player being teleported
-	 * @param npc teleporter
-	 * @param locId destination
+	 * @param npc    teleporter
+	 * @param locId  destination
 	 */
-	public void doTeleport(PlayerInstance player, Npc npc, int locId)
-	{
-		if (isNoblesse() && !player.isNoble())
-		{
+	public void doTeleport(PlayerInstance player, Npc npc, int locId) {
+		if (isNoblesse() && !player.isNoble()) {
 			LOGGER.warn("Player {} requested noblesse teleport without being noble!", player.getObjectId());
 			return;
 		}
-		
+
 		final TeleportLocation loc = getLocation(locId);
-		if (loc == null)
-		{
+		if (loc == null) {
 			LOGGER.warn("Player {} requested unknown teleport location {} within list {}!", player.getObjectId(), locId, _name);
 			return;
 		}
-		
+
 		// Check if castle is in siege
-		for (int castleId : loc.getCastleId())
-		{
-			if (CastleManager.getInstance().isCastleInSiege(castleId))
-			{
+		for (int castleId : loc.getCastleId()) {
+			if (CastleManager.getInstance().isCastleInSiege(castleId)) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_TELEPORT_TO_A_VILLAGE_THAT_IS_IN_A_SIEGE);
 				return;
 			}
 		}
-		
+
 		// Validate conditions for NORMAL teleport
-		if (_type == TeleportType.NORMAL)
-		{
-			if (npc.getCastle().getSiege().isInProgress())
-			{
+		if (_type == TeleportType.NORMAL) {
+			if (npc.getCastle().getSiege().isInProgress()) {
 				final NpcHtmlMessage msg = new NpcHtmlMessage(npc.getObjectId());
-				msg.setFile(player.getHtmlPrefix(), "data/html/teleporter/castleteleporter-busy.htm");
+				msg.setFile(player.getHtmlPrefix(), "teleporter/castleteleporter-busy.htm");
 				player.sendPacket(msg);
 				return;
-			}
-			else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (player.getReputation() < 0))
-			{
+			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (player.getReputation() < 0)) {
 				player.sendMessage("Go away, you're not welcome here.");
 				return;
-			}
-			else if (player.isCombatFlagEquipped())
-			{
+			} else if (player.isCombatFlagEquipped()) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_TELEPORT_WHILE_IN_POSSESSION_OF_A_WARD);
 				return;
 			}
 		}
-		
+
 		// Notify listeners
 		final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnNpcTeleportRequest(player, npc, loc), npc, TerminateReturn.class);
-		if ((term != null) && term.terminate())
-		{
+		if ((term != null) && term.terminate()) {
 			return;
 		}
-		
+
 		// Check rest of conditions
-		if (shouldPayFee(player, loc) && !player.destroyItemByItemId("Teleport", loc.getFeeId(), calculateFee(player, loc), npc, true))
-		{
-			if (loc.getFeeId() == Inventory.ADENA_ID)
-			{
+		if (shouldPayFee(player, loc) && !player.destroyItemByItemId("Teleport", loc.getFeeId(), calculateFee(player, loc), npc, true)) {
+			if (loc.getFeeId() == Inventory.ADENA_ID) {
 				player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
-			}
-			else
-			{
+			} else {
 				player.sendMessage("You do not have enough " + getItemName(loc.getFeeId(), false));
 			}
-		}
-		else if (!player.isAlikeDead())
-		{
+		} else if (!player.isAlikeDead()) {
 			player.teleToLocation(loc);
 		}
 	}
-	
+
 	/**
 	 * Check if player have to play fee or not.
+	 *
 	 * @param player player which request teleport
-	 * @param loc location where player should be teleported
+	 * @param loc    location where player should be teleported
 	 * @return {@code true} when all requirements are met otherwise {@code false}
 	 */
-	private boolean shouldPayFee(PlayerInstance player, TeleportLocation loc)
-	{
+	private boolean shouldPayFee(PlayerInstance player, TeleportLocation loc) {
 		return (_type != TeleportType.NORMAL) || (!PlayerConfig.ALT_GAME_FREE_TELEPORT && ((player.getLevel() > 76) || player.isSubClassActive()) && ((loc.getFeeId() != 0) && (loc.getFeeCount() > 0)));
 	}
-	
+
 	/**
 	 * Calculate fee amount for requested teleport.<br>
 	 * For characters below level 77 teleport service is free.<br>
 	 * From 8.00 pm to 00.00 from Monday till Tuesday for all characters there's a 50% discount on teleportation services
+	 *
 	 * @param player player which request teleport
-	 * @param loc location where player should be teleported
+	 * @param loc    location where player should be teleported
 	 * @return fee amount
 	 */
-	private long calculateFee(PlayerInstance player, TeleportLocation loc)
-	{
-		if (_type == TeleportType.NORMAL)
-		{
-			if (!player.isSubClassActive() && (player.getLevel() < 77))
-			{
+	private long calculateFee(PlayerInstance player, TeleportLocation loc) {
+		if (_type == TeleportType.NORMAL) {
+			if (!player.isSubClassActive() && (player.getLevel() < 77)) {
 				return 0;
 			}
-			
+
 			final Calendar cal = Calendar.getInstance();
 			final int hour = cal.get(Calendar.HOUR_OF_DAY);
 			final int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-			if ((hour >= 20) && ((dayOfWeek >= Calendar.MONDAY) && (dayOfWeek <= Calendar.TUESDAY)))
-			{
+			if ((hour >= 20) && ((dayOfWeek >= Calendar.MONDAY) && (dayOfWeek <= Calendar.TUESDAY))) {
 				return loc.getFeeCount() / 2;
 			}
 		}
 		return loc.getFeeCount();
 	}
-	
+
 	/**
 	 * Gets name of specified item.
-	 * @param itemId template id of item
+	 *
+	 * @param itemId  template id of item
 	 * @param fstring prefer using client strings
 	 * @return item name
 	 */
-	private String getItemName(int itemId, boolean fstring)
-	{
-		if (fstring)
-		{
-			if (itemId == Inventory.ADENA_ID)
-			{
+	private String getItemName(int itemId, boolean fstring) {
+		if (fstring) {
+			if (itemId == Inventory.ADENA_ID) {
 				return "<fstring>1000308</fstring>";
-			}
-			else if (itemId == Inventory.ANCIENT_ADENA_ID)
-			{
+			} else if (itemId == Inventory.ANCIENT_ADENA_ID) {
 				return "<fstring>1000309</fstring>";
 			}
 		}
 		final L2Item item = ItemTable.getInstance().getTemplate(itemId);
-		if (item != null)
-		{
+		if (item != null) {
 			return item.getName();
 		}
-		
+
 		final SpecialItemType specialItem = SpecialItemType.getByClientId(itemId);
-		if (specialItem != null)
-		{
-			switch (specialItem)
-			{
-				case PC_CAFE_POINTS:
-				{
+		if (specialItem != null) {
+			switch (specialItem) {
+				case PC_CAFE_POINTS: {
 					return "Player Commendation Points";
 				}
-				case CLAN_REPUTATION:
-				{
+				case CLAN_REPUTATION: {
 					return "Clan Reputation Points";
 				}
-				case FAME:
-				{
+				case FAME: {
 					return "Fame";
 				}
-				case FIELD_CYCLE_POINTS:
-				{
+				case FIELD_CYCLE_POINTS: {
 					return "Field Cycle Points";
 				}
-				case RAIDBOSS_POINTS:
-				{
+				case RAIDBOSS_POINTS: {
 					return "Raid Points";
 				}
 			}

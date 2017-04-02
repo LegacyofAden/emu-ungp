@@ -18,45 +18,38 @@
  */
 package org.l2junity.gameserver.network.gameserverpackets;
 
-import java.security.interfaces.RSAPublicKey;
-
-import javax.crypto.Cipher;
-
 import org.l2junity.util.network.BaseSendablePacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.Cipher;
+import java.security.interfaces.RSAPublicKey;
+
 /**
  * @author -Wooden-
  */
-public class BlowFishKey extends BaseSendablePacket
-{
+public class BlowFishKey extends BaseSendablePacket {
 	private static Logger _log = LoggerFactory.getLogger(BlowFishKey.class);
-	
+
 	/**
 	 * @param blowfishKey
 	 * @param publicKey
 	 */
-	public BlowFishKey(byte[] blowfishKey, RSAPublicKey publicKey)
-	{
+	public BlowFishKey(byte[] blowfishKey, RSAPublicKey publicKey) {
 		writeC(0x00);
-		try
-		{
+		try {
 			final Cipher rsaCipher = Cipher.getInstance("RSA/ECB/nopadding");
 			rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
 			byte[] encrypted = rsaCipher.doFinal(blowfishKey);
 			writeD(encrypted.length);
 			writeB(encrypted);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.error("Error While encrypting blowfish key for transmision (Crypt error): " + e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
-	public byte[] getContent()
-	{
+	public byte[] getContent() {
 		return getBytes();
 	}
 }

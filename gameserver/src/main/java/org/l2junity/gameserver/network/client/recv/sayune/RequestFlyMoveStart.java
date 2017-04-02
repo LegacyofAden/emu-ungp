@@ -33,60 +33,50 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestFlyMoveStart implements IClientIncomingPacket
-{
+public class RequestFlyMoveStart implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || !activeChar.isInsideZone(ZoneId.SAYUNE) || activeChar.hasRequest(SayuneRequest.class) || !activeChar.isAwakenedClass())
-		{
+		if ((activeChar == null) || !activeChar.isInsideZone(ZoneId.SAYUNE) || activeChar.hasRequest(SayuneRequest.class) || !activeChar.isAwakenedClass()) {
 			return;
 		}
-		
-		if (activeChar.hasSummon())
-		{
+
+		if (activeChar.hasSummon()) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_USE_SAYUNE_WHILE_PET_OR_SUMMONED_PET_IS_OUT);
 			return;
 		}
-		
-		if (activeChar.getReputation() < 0)
-		{
+
+		if (activeChar.getReputation() < 0) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_SAYUNE_WHILE_IN_A_CHAOTIC_STATE);
 			return;
 		}
-		
-		if (activeChar.hasRequests())
-		{
+
+		if (activeChar.hasRequests()) {
 			activeChar.sendPacket(SystemMessageId.SAYUNE_CANNOT_BE_USED_WHILE_TAKING_OTHER_ACTIONS);
 			return;
 		}
-		
+
 		final SayuneZone zone = ZoneManager.getInstance().getZone(activeChar, SayuneZone.class);
-		if (zone.getMapId() == -1)
-		{
+		if (zone.getMapId() == -1) {
 			activeChar.sendMessage("That zone is not supported yet!");
 			_log.warn(getClass().getSimpleName() + ": " + activeChar + " Requested sayune on zone with no map id set");
 			return;
 		}
-		
+
 		final SayuneEntry map = SayuneData.getInstance().getMap(zone.getMapId());
-		if (map == null)
-		{
+		if (map == null) {
 			activeChar.sendMessage("This zone is not handled yet!!");
 			_log.warn(getClass().getSimpleName() + ": " + activeChar + " Requested sayune on unhandled map zone " + zone.getName());
 			return;
 		}
-		
+
 		final SayuneRequest request = new SayuneRequest(activeChar, map.getId());
-		if (activeChar.addRequest(request))
-		{
+		if (activeChar.addRequest(request)) {
 			request.move(activeChar, 0);
 		}
 	}

@@ -18,64 +18,43 @@
  */
 package org.l2junity.gameserver.handler;
 
+import lombok.Getter;
+import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.scripting.GameScriptsLoader;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.scripting.ScriptEngineManager;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.scripting.GameScriptsLoader;
-
 /**
  * @author Sdw
  */
-public final class ConditionHandler
-{
+@StartupComponent("Scripts")
+public final class ConditionHandler {
+	@Getter(lazy = true)
+	private static final ConditionHandler instance = new ConditionHandler();
+
 	private final Map<String, Function<StatsSet, IConditionHandler>> _conditionHandlerFactories = new HashMap<>();
-	
-	public void registerHandler(String name, Function<StatsSet, IConditionHandler> handlerFactory)
-	{
+
+	public void registerHandler(String name, Function<StatsSet, IConditionHandler> handlerFactory) {
 		_conditionHandlerFactories.put(name, handlerFactory);
 	}
-	
-	public Function<StatsSet, IConditionHandler> getHandlerFactory(String name)
-	{
+
+	public Function<StatsSet, IConditionHandler> getHandlerFactory(String name) {
 		return _conditionHandlerFactories.get(name);
 	}
-	
-	public int size()
-	{
+
+	public int size() {
 		return _conditionHandlerFactories.size();
 	}
-	
-	protected ConditionHandler()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	protected void load()
-	{
-		try
-		{
+
+	protected ConditionHandler() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.CONDITION_HANDLER_FILE);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Error("Problems while running ConditionMasterHandler", e);
 		}
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final ConditionHandler _instance = new ConditionHandler();
-	}
-	
-	@InstanceGetter
-	public static ConditionHandler getInstance()
-	{
-		return SingletonHolder._instance;
 	}
 }

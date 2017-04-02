@@ -22,28 +22,25 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class TeleportToLocation implements IClientOutgoingPacket
-{
+public final class TeleportToLocation implements IClientOutgoingPacket {
 	private final int _targetObjId;
 	private final int _x;
 	private final int _y;
 	private final int _z;
 	private final int _heading;
-	
-	public TeleportToLocation(WorldObject obj, double x, double y, double z, int heading)
-	{
+
+	public TeleportToLocation(WorldObject obj, double x, double y, double z, int heading) {
 		_targetObjId = obj.getObjectId();
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 		_heading = heading;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TELEPORT_TO_LOCATION.writeId(packet);
-		
+
 		packet.writeD(_targetObjId);
 		packet.writeD(_x);
 		packet.writeD(_y);

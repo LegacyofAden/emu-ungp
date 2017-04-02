@@ -28,23 +28,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestExCancelShape_Shifting_Item implements IClientIncomingPacket
-{
+public class RequestExCancelShape_Shifting_Item implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		player.removeRequest(ShapeShiftingItemRequest.class);
 		client.sendPacket(ExShapeShiftingResult.FAILED);
 	}

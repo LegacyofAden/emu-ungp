@@ -27,21 +27,16 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestFortressSiegeInfo implements IClientIncomingPacket
-{
+public class RequestFortressSiegeInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		for (Fort fort : FortManager.getInstance().getForts())
-		{
-			if ((fort != null) && fort.getSiege().isInProgress())
-			{
+	public void run(L2GameClient client) {
+		for (Fort fort : FortManager.getInstance().getForts()) {
+			if ((fort != null) && fort.getSiege().isInProgress()) {
 				client.sendPacket(new ExShowFortressSiegeInfo(fort));
 			}
 		}

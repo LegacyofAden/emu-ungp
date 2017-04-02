@@ -18,18 +18,10 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.List;
-
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
-import org.l2junity.gameserver.config.ServerConfig;
+import org.l2junity.core.configs.GameserverConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.data.xml.impl.CategoryData;
-import org.l2junity.gameserver.data.xml.impl.InitialEquipmentData;
-import org.l2junity.gameserver.data.xml.impl.InitialShortcutData;
-import org.l2junity.gameserver.data.xml.impl.PlayerTemplateData;
-import org.l2junity.gameserver.data.xml.impl.SkillData;
-import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
+import org.l2junity.gameserver.data.xml.impl.*;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.SkillLearn;
@@ -54,11 +46,12 @@ import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
-public final class CharacterCreate implements IClientIncomingPacket
-{
+public final class CharacterCreate implements IClientIncomingPacket {
 	protected static final Logger _logAccounting = LoggerFactory.getLogger("accounting");
-	
+
 	// cSdddddddddddd
 	private String _name;
 	private int _race;
@@ -73,10 +66,9 @@ public final class CharacterCreate implements IClientIncomingPacket
 	private byte _hairStyle;
 	private byte _hairColor;
 	private byte _face;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		_race = packet.readD();
 		_sex = (byte) packet.readD();
@@ -92,210 +84,147 @@ public final class CharacterCreate implements IClientIncomingPacket
 		_face = (byte) packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// Last Verified: May 30, 2009 - Gracia Final - Players are able to create characters with names consisting of as little as 1,2,3 letter/number combinations.
-		if ((_name.length() < 1) || (_name.length() > 16))
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.debug("Character Creation Failure: Character name " + _name + " is invalid. Message generated: Your title cannot exceed 16 characters in length. Please try again.");
-			}
-			
+		if ((_name.length() < 1) || (_name.length() > 16)) {
+
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_16_ENG_CHARS));
 			return;
 		}
-		
-		if (PlayerConfig.FORBIDDEN_NAMES.length > 1)
-		{
-			for (String st : PlayerConfig.FORBIDDEN_NAMES)
-			{
-				if (_name.toLowerCase().contains(st.toLowerCase()))
-				{
+
+		if (PlayerConfig.FORBIDDEN_NAMES.length > 1) {
+			for (String st : PlayerConfig.FORBIDDEN_NAMES) {
+				if (_name.toLowerCase().contains(st.toLowerCase())) {
 					client.sendPacket(new CharCreateFail(CharCreateFail.REASON_INCORRECT_NAME));
 					return;
 				}
 			}
 		}
-		
+
 		// Last Verified: May 30, 2009 - Gracia Final
-		if (!Util.isAlphaNumeric(_name) || !isValidName(_name))
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.debug("Character Creation Failure: Character name " + _name + " is invalid. Message generated: Incorrect name. Please try again.");
-			}
-			
+		if (!Util.isAlphaNumeric(_name) || !isValidName(_name)) {
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_INCORRECT_NAME));
 			return;
 		}
-		
-		if ((_face > 2) || (_face < 0))
-		{
+
+		if ((_face > 2) || (_face < 0)) {
 			_log.warn("Character Creation Failure: Character face " + _face + " is invalid. Possible client hack. " + client);
-			
+
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_CREATION_FAILED));
 			return;
 		}
-		
-		if ((_hairStyle < 0) || ((_sex == 0) && (_hairStyle > 4)) || ((_sex != 0) && (_hairStyle > 6)))
-		{
+
+		if ((_hairStyle < 0) || ((_sex == 0) && (_hairStyle > 4)) || ((_sex != 0) && (_hairStyle > 6))) {
 			_log.warn("Character Creation Failure: Character hair style " + _hairStyle + " is invalid. Possible client hack. " + client);
-			
+
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_CREATION_FAILED));
 			return;
 		}
-		
-		if ((_hairColor > 3) || (_hairColor < 0))
-		{
+
+		if ((_hairColor > 3) || (_hairColor < 0)) {
 			_log.warn("Character Creation Failure: Character hair color " + _hairColor + " is invalid. Possible client hack. " + client);
-			
+
 			client.sendPacket(new CharCreateFail(CharCreateFail.REASON_CREATION_FAILED));
 			return;
 		}
-		
+
 		PlayerInstance newChar = null;
 		L2PcTemplate template = null;
-		
+
 		/*
 		 * DrHouse: Since checks for duplicate names are done using SQL, lock must be held until data is written to DB as well.
 		 */
-		synchronized (CharNameTable.getInstance())
-		{
-			if ((CharNameTable.getInstance().getAccountCharacterCount(client.getAccountName()) >= ServerConfig.MAX_CHARACTERS_NUMBER_PER_ACCOUNT) && (ServerConfig.MAX_CHARACTERS_NUMBER_PER_ACCOUNT != 0))
-			{
-				if (GeneralConfig.DEBUG)
-				{
-					_log.debug("Max number of characters reached. Creation failed.");
-				}
-				
+		synchronized (CharNameTable.getInstance()) {
+			if ((CharNameTable.getInstance().getAccountCharacterCount(client.getAccountName()) >= GameserverConfig.MAX_CHARACTERS_NUMBER_PER_ACCOUNT) && (GameserverConfig.MAX_CHARACTERS_NUMBER_PER_ACCOUNT != 0)) {
 				client.sendPacket(new CharCreateFail(CharCreateFail.REASON_TOO_MANY_CHARACTERS));
 				return;
-			}
-			else if (CharNameTable.getInstance().doesCharNameExist(_name))
-			{
-				if (GeneralConfig.DEBUG)
-				{
-					_log.debug("Character Creation Failure: Message generated: You cannot create another character. Please delete the existing character and try again.");
-				}
-				
+			} else if (CharNameTable.getInstance().doesCharNameExist(_name)) {
+
 				client.sendPacket(new CharCreateFail(CharCreateFail.REASON_NAME_ALREADY_EXISTS));
 				return;
 			}
-			
+
 			template = PlayerTemplateData.getInstance().getTemplate(_classId);
-			if ((template == null) || (ClassId.getClassId(_classId).getParent() != null) || !CategoryData.getInstance().isInCategory(CategoryType.FIRST_CLASS_GROUP, _classId))
-			{
-				if (GeneralConfig.DEBUG)
-				{
-					_log.debug("Character Creation Failure: " + _name + " classId: " + _classId + " Template: " + template + " Message generated: Your character creation has failed.");
-				}
-				
+			if ((template == null) || (ClassId.getClassId(_classId).getParent() != null) || !CategoryData.getInstance().isInCategory(CategoryType.FIRST_CLASS_GROUP, _classId)) {
+
 				client.sendPacket(new CharCreateFail(CharCreateFail.REASON_CREATION_FAILED));
 				return;
 			}
 			final PcAppearance app = new PcAppearance(_face, _hairColor, _hairStyle, _sex != 0);
 			newChar = PlayerInstance.create(template, client.getAccountName(), _name, app);
 		}
-		
+
 		// HP and MP are at maximum and CP is zero by default.
 		newChar.setCurrentHp(newChar.getMaxHp());
 		newChar.setCurrentMp(newChar.getMaxMp());
 		// newChar.setMaxLoad(template.getBaseLoad());
-		
+
 		client.sendPacket(CharCreateOk.STATIC_PACKET);
-		
+
 		initNewChar(client, newChar);
-		
+
 		_logAccounting.info("Created new character, {}, {}", newChar, client);
 	}
-	
-	private static boolean isValidName(String text)
-	{
-		return ServerConfig.CHARNAME_TEMPLATE_PATTERN.matcher(text).matches();
+
+	private static boolean isValidName(String text) {
+		return GameserverConfig.CHARNAME_TEMPLATE_PATTERN.matcher(text).matches();
 	}
-	
-	private void initNewChar(L2GameClient client, PlayerInstance newChar)
-	{
-		if (GeneralConfig.DEBUG)
-		{
-			_log.debug("Character init start");
-		}
-		
+
+	private void initNewChar(L2GameClient client, PlayerInstance newChar) {
 		World.getInstance().addObject(newChar);
-		
-		if (PlayerConfig.STARTING_ADENA > 0)
-		{
+
+		if (PlayerConfig.STARTING_ADENA > 0) {
 			newChar.addAdena("Init", PlayerConfig.STARTING_ADENA, null, false);
 		}
-		
+
 		final L2PcTemplate template = newChar.getTemplate();
 		Location createLoc = template.getCreationPoint();
 		newChar.setXYZInvisible(createLoc.getX(), createLoc.getY(), createLoc.getZ());
 		newChar.setTitle("");
-		
-		if (PlayerConfig.ENABLE_VITALITY)
-		{
+
+		if (PlayerConfig.ENABLE_VITALITY) {
 			newChar.setVitalityPoints(Math.min(PlayerConfig.STARTING_VITALITY_POINTS, PcStat.MAX_VITALITY_POINTS), true);
 		}
-		if (PlayerConfig.STARTING_LEVEL > 1)
-		{
+		if (PlayerConfig.STARTING_LEVEL > 1) {
 			newChar.getStat().addLevel((byte) (PlayerConfig.STARTING_LEVEL - 1));
 		}
-		if (PlayerConfig.STARTING_SP > 0)
-		{
+		if (PlayerConfig.STARTING_SP > 0) {
 			newChar.getStat().addSp(PlayerConfig.STARTING_SP);
 		}
-		
+
 		final List<PcItemTemplate> initialItems = InitialEquipmentData.getInstance().getEquipmentList(newChar.getClassId());
-		if (initialItems != null)
-		{
-			for (PcItemTemplate ie : initialItems)
-			{
+		if (initialItems != null) {
+			for (PcItemTemplate ie : initialItems) {
 				final ItemInstance item = newChar.getInventory().addItem("Init", ie.getId(), ie.getCount(), newChar, null);
-				if (item == null)
-				{
+				if (item == null) {
 					_log.warn("Could not create item during char creation: itemId " + ie.getId() + ", amount " + ie.getCount() + ".");
 					continue;
 				}
-				
-				if (item.isEquipable() && ie.isEquipped())
-				{
+
+				if (item.isEquipable() && ie.isEquipped()) {
 					newChar.getInventory().equipItem(item);
 				}
 			}
 		}
-		
-		for (SkillLearn skill : SkillTreesData.getInstance().getAvailableSkills(newChar, newChar.getClassId(), false, true))
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.debug("Adding starter skill:" + skill.getSkillId() + " / " + skill.getSkillLevel());
-			}
-			
+
+		for (SkillLearn skill : SkillTreesData.getInstance().getAvailableSkills(newChar, newChar.getClassId(), false, true)) {
 			newChar.addSkill(SkillData.getInstance().getSkill(skill.getSkillId(), skill.getSkillLevel()), true);
 		}
-		
+
 		// Register all shortcuts for actions, skills and items for this new character.
 		InitialShortcutData.getInstance().registerAllShortcuts(newChar);
-		
+
 		EventDispatcher.getInstance().notifyEvent(new OnPlayerCreate(newChar, newChar.getObjectId(), newChar.getName(), client), Containers.Players());
-		
+
 		newChar.setOnlineStatus(true, false);
-		if (PlayerConfig.SHOW_GOD_VIDEO_INTRO)
-		{
+		if (PlayerConfig.SHOW_GOD_VIDEO_INTRO) {
 			newChar.getVariables().set("intro_god_video", true);
 		}
 		Disconnection.of(client, newChar).storeMe().deleteMe();
-		
+
 		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
 		client.setCharSelection(cl.getCharInfo());
-		
-		if (GeneralConfig.DEBUG)
-		{
-			_log.debug("Character init end");
-		}
 	}
 }

@@ -24,21 +24,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionLogicAnd.
+ *
  * @author mkizub
  */
-public class ConditionLogicAnd extends Condition
-{
+public class ConditionLogicAnd extends Condition {
 	private static Condition[] _emptyConditions = new Condition[0];
 	public Condition[] conditions = _emptyConditions;
-	
+
 	/**
 	 * Adds the.
+	 *
 	 * @param condition the condition
 	 */
-	public void add(Condition condition)
-	{
-		if (condition == null)
-		{
+	public void add(Condition condition) {
+		if (condition == null) {
 			return;
 		}
 		final int len = conditions.length;
@@ -47,14 +46,11 @@ public class ConditionLogicAnd extends Condition
 		tmp[len] = condition;
 		conditions = tmp;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		for (Condition c : conditions)
-		{
-			if (!c.test(effector, effected, skill, item))
-			{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		for (Condition c : conditions) {
+			if (!c.test(effector, effected, skill, item)) {
 				return false;
 			}
 		}

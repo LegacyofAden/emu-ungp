@@ -26,30 +26,25 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 /**
  * @author UnAfraid
  */
-public class OnPlayerLogout implements IBaseEvent
-{
+public class OnPlayerLogout implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final L2GameClient _client;
-	
-	public OnPlayerLogout(PlayerInstance activeChar, L2GameClient client)
-	{
+
+	public OnPlayerLogout(PlayerInstance activeChar, L2GameClient client) {
 		_activeChar = activeChar;
 		_client = client;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public L2GameClient getClient()
-	{
+
+	public L2GameClient getClient() {
 		return _client;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_LOGOUT;
 	}
 }

@@ -26,88 +26,77 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 
 /**
  * Function template.
+ *
  * @author mkizub, Zoey76
  */
-public final class FuncTemplate
-{
+public final class FuncTemplate {
 	private final Class<?> _functionClass;
 	private final Condition _attachCond;
 	private final Condition _applayCond;
 	private final DoubleStat _stat;
 	private final int _order;
 	private final double _value;
-	
-	public FuncTemplate(Condition attachCond, Condition applayCond, String functionName, int order, DoubleStat stat, double value)
-	{
+
+	public FuncTemplate(Condition attachCond, Condition applayCond, String functionName, int order, DoubleStat stat, double value) {
 		final StatFunction function = StatFunction.valueOf(functionName.toUpperCase());
-		if (order >= 0)
-		{
+		if (order >= 0) {
 			_order = order;
-		}
-		else
-		{
+		} else {
 			_order = function.getOrder();
 		}
-		
+
 		_attachCond = attachCond;
 		_applayCond = applayCond;
 		_stat = stat;
 		_value = value;
-		
-		try
-		{
+
+		try {
 			_functionClass = Class.forName(AbstractFunction.class.getPackage().getName() + ".Func" + function.getName());
-		}
-		catch (ClassNotFoundException e)
-		{
+		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public Class<?> getFunctionClass()
-	{
+
+	public Class<?> getFunctionClass() {
 		return _functionClass;
 	}
-	
+
 	/**
 	 * Gets the function stat.
+	 *
 	 * @return the stat.
 	 */
-	public DoubleStat getStat()
-	{
+	public DoubleStat getStat() {
 		return _stat;
 	}
-	
+
 	/**
 	 * Gets the function priority order.
+	 *
 	 * @return the order
 	 */
-	public int getOrder()
-	{
+	public int getOrder() {
 		return _order;
 	}
-	
+
 	/**
 	 * Gets the function value.
+	 *
 	 * @return the value
 	 */
-	public double getValue()
-	{
+	public double getValue() {
 		return _value;
 	}
-	
-	public boolean meetCondition(Creature effected, Skill skill)
-	{
-		if ((_attachCond != null) && !_attachCond.test(effected, effected, skill))
-		{
+
+	public boolean meetCondition(Creature effected, Skill skill) {
+		if ((_attachCond != null) && !_attachCond.test(effected, effected, skill)) {
 			return false;
 		}
-		
-		if ((_applayCond != null) && !_applayCond.test(effected, effected, skill))
-		{
+
+		if ((_applayCond != null) && !_applayCond.test(effected, effected, skill)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 }

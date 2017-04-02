@@ -21,21 +21,18 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum InventoryBlockType
-{
+public enum InventoryBlockType {
 	NONE(-1),
 	BLACKLIST(0),
 	WHITELIST(1);
-	
+
 	private int _clientId;
-	
-	private InventoryBlockType(int clientId)
-	{
+
+	private InventoryBlockType(int clientId) {
 		_clientId = clientId;
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
 }

@@ -22,20 +22,21 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public interface IUserCommandHandler
-{
+public interface IUserCommandHandler {
 	Logger _log = LoggerFactory.getLogger(IUserCommandHandler.class);
-	
+
 	/**
 	 * this is the worker method that is called when someone uses an admin command.
+	 *
 	 * @param id
 	 * @param activeChar
 	 * @return command success
 	 */
 	boolean useUserCommand(int id, PlayerInstance activeChar);
-	
+
 	/**
 	 * this method is called at initialization to register all the item ids automatically
+	 *
 	 * @return all known itemIds
 	 */
 	int[] getUserCommandList();

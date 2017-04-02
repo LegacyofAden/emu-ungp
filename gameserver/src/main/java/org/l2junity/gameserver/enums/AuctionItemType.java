@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum AuctionItemType
-{
+public enum AuctionItemType {
 	ClanHall
 }

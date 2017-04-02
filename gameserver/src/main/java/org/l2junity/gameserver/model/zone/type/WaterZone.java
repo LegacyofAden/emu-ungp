@@ -27,75 +27,55 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.NpcInfo;
 import org.l2junity.gameserver.network.client.send.ServerObjectInfo;
 
-public class WaterZone extends ZoneType
-{
-	public WaterZone(int id)
-	{
+public class WaterZone extends ZoneType {
+	public WaterZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.setInsideZone(ZoneId.WATER, true);
-		
+
 		// TODO: update to only send speed status when that packet is known
-		if (character.isPlayer())
-		{
+		if (character.isPlayer()) {
 			PlayerInstance player = character.getActingPlayer();
-			if (player.checkTransformed(transform -> !transform.canSwim()))
-			{
+			if (player.checkTransformed(transform -> !transform.canSwim())) {
 				character.stopTransformation(true);
-			}
-			else
-			{
+			} else {
 				player.broadcastUserInfo();
 			}
-		}
-		else if (character.isNpc())
-		{
+		} else if (character.isNpc()) {
 			World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
 			{
-				if (character.getRunSpeed() == 0)
-				{
+				if (character.getRunSpeed() == 0) {
 					player.sendPacket(new ServerObjectInfo((Npc) character, player));
-				}
-				else
-				{
+				} else {
 					player.sendPacket(new NpcInfo((Npc) character));
 				}
 			});
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		character.setInsideZone(ZoneId.WATER, false);
-		
+
 		// TODO: update to only send speed status when that packet is known
-		if (character.isPlayer())
-		{
+		if (character.isPlayer()) {
 			character.getActingPlayer().broadcastUserInfo();
-		}
-		else if (character.isNpc())
-		{
+		} else if (character.isNpc()) {
 			World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
 			{
-				if (character.getRunSpeed() == 0)
-				{
+				if (character.getRunSpeed() == 0) {
 					player.sendPacket(new ServerObjectInfo((Npc) character, player));
-				}
-				else
-				{
+				} else {
 					player.sendPacket(new NpcInfo((Npc) character));
 				}
 			});
 		}
 	}
-	
-	public int getWaterZ()
-	{
+
+	public int getWaterZ() {
 		return getZone().getHighZ();
 	}
 }

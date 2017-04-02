@@ -24,29 +24,26 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class GMViewPledgeInfo implements IClientOutgoingPacket
-{
+public class GMViewPledgeInfo implements IClientOutgoingPacket {
 	private final L2Clan _clan;
 	private final PlayerInstance _activeChar;
-	
-	public GMViewPledgeInfo(L2Clan clan, PlayerInstance activeChar)
-	{
+
+	public GMViewPledgeInfo(L2Clan clan, PlayerInstance activeChar) {
 		_clan = clan;
 		_activeChar = activeChar;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GM_VIEW_PLEDGE_INFO.writeId(packet);
-		
+
 		packet.writeD(0x00);
 		packet.writeS(_activeChar.getName());
 		packet.writeD(_clan.getId());
 		packet.writeD(0x00);
 		packet.writeS(_clan.getName());
 		packet.writeS(_clan.getLeaderName());
-		
+
 		packet.writeD(_clan.getCrestId()); // -> no, it's no longer used (nuocnam) fix by game
 		packet.writeD(_clan.getLevel());
 		packet.writeD(_clan.getCastleId());
@@ -62,12 +59,10 @@ public class GMViewPledgeInfo implements IClientOutgoingPacket
 		packet.writeD(_clan.getAllyCrestId()); // c2
 		packet.writeD(_clan.isAtWar() ? 1 : 0); // c3
 		packet.writeD(0x00); // T3 Unknown
-		
+
 		packet.writeD(_clan.getMembers().size());
-		for (ClanMember member : _clan.getMembers())
-		{
-			if (member != null)
-			{
+		for (ClanMember member : _clan.getMembers()) {
+			if (member != null) {
 				packet.writeS(member.getName());
 				packet.writeD(member.getLevel());
 				packet.writeD(member.getClassId());

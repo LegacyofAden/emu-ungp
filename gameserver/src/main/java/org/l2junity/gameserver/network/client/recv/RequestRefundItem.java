@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
-
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -38,175 +36,148 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 
+import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
+
 /**
  * RequestRefundItem client packet class.
  */
-public final class RequestRefundItem implements IClientIncomingPacket
-{
+public final class RequestRefundItem implements IClientIncomingPacket {
 	private static final int BATCH_LENGTH = 4; // length of the one item
-	
+
 	private int _listId;
 	private int[] _items = null;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_listId = packet.readD();
 		final int count = packet.readD();
-		if ((count <= 0) || (count > PlayerConfig.MAX_ITEM_IN_PACKET) || ((count * BATCH_LENGTH) != packet.getReadableBytes()))
-		{
+		if ((count <= 0) || (count > PlayerConfig.MAX_ITEM_IN_PACKET) || ((count * BATCH_LENGTH) != packet.getReadableBytes())) {
 			return false;
 		}
-		
+
 		_items = new int[count];
-		for (int i = 0; i < count; i++)
-		{
+		for (int i = 0; i < count; i++) {
 			_items[i] = packet.readD();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("refund"))
-		{
+
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("refund")) {
 			player.sendMessage("You are using refund too fast.");
 			return;
 		}
-		
-		if ((_items == null) || !player.hasRefund())
-		{
+
+		if ((_items == null) || !player.hasRefund()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		WorldObject target = player.getTarget();
-		if (!player.isGM() && ((target == null) || !(target instanceof L2MerchantInstance) || (player.getInstanceWorld() != target.getInstanceWorld()) || !player.isInRadius3d(target, INTERACTION_DISTANCE)))
-		{
+		if (!player.isGM() && ((target == null) || !(target instanceof L2MerchantInstance) || (player.getInstanceWorld() != target.getInstanceWorld()) || !player.isInRadius3d(target, INTERACTION_DISTANCE))) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		Creature merchant = null;
-		if (target instanceof L2MerchantInstance)
-		{
+		if (target instanceof L2MerchantInstance) {
 			merchant = (Creature) target;
-		}
-		else if (!player.isGM())
-		{
+		} else if (!player.isGM()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (merchant == null)
-		{
+
+		if (merchant == null) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final ProductList buyList = BuyListData.getInstance().getBuyList(_listId);
-		if (buyList == null)
-		{
+		if (buyList == null) {
 			Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (!buyList.isNpcAllowed(merchant.getId()))
-		{
+
+		if (!buyList.isNpcAllowed(merchant.getId())) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		long weight = 0;
 		long adena = 0;
 		long slots = 0;
-		
+
 		ItemInstance[] refund = player.getRefund().getItems().toArray(new ItemInstance[0]);
 		int[] objectIds = new int[_items.length];
-		
-		for (int i = 0; i < _items.length; i++)
-		{
+
+		for (int i = 0; i < _items.length; i++) {
 			int idx = _items[i];
-			if ((idx < 0) || (idx >= refund.length))
-			{
+			if ((idx < 0) || (idx >= refund.length)) {
 				Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent invalid refund index", GeneralConfig.DEFAULT_PUNISH);
 				return;
 			}
-			
+
 			// check for duplicates - indexes
-			for (int j = i + 1; j < _items.length; j++)
-			{
-				if (idx == _items[j])
-				{
+			for (int j = i + 1; j < _items.length; j++) {
+				if (idx == _items[j]) {
 					Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " sent duplicate refund index", GeneralConfig.DEFAULT_PUNISH);
 					return;
 				}
 			}
-			
+
 			final ItemInstance item = refund[idx];
 			final L2Item template = item.getItem();
 			objectIds[i] = item.getObjectId();
-			
+
 			// second check for duplicates - object ids
-			for (int j = 0; j < i; j++)
-			{
-				if (objectIds[i] == objectIds[j])
-				{
+			for (int j = 0; j < i; j++) {
+				if (objectIds[i] == objectIds[j]) {
 					Util.handleIllegalPlayerAction(player, "Warning!! Character " + player.getName() + " of account " + player.getAccountName() + " has duplicate items in refund list", GeneralConfig.DEFAULT_PUNISH);
 					return;
 				}
 			}
-			
+
 			long count = item.getCount();
 			weight += count * template.getWeight();
 			adena += (count * template.getReferencePrice()) / 2;
-			if (!template.isStackable())
-			{
+			if (!template.isStackable()) {
 				slots += count;
-			}
-			else if (player.getInventory().getItemByItemId(template.getId()) == null)
-			{
+			} else if (player.getInventory().getItemByItemId(template.getId()) == null) {
 				slots++;
 			}
 		}
-		
-		if ((weight > Integer.MAX_VALUE) || (weight < 0) || !player.getInventory().validateWeight((int) weight))
-		{
+
+		if ((weight > Integer.MAX_VALUE) || (weight < 0) || !player.getInventory().validateWeight((int) weight)) {
 			client.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_THE_WEIGHT_LIMIT);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((slots > Integer.MAX_VALUE) || (slots < 0) || !player.getInventory().validateCapacity((int) slots))
-		{
+
+		if ((slots > Integer.MAX_VALUE) || (slots < 0) || !player.getInventory().validateCapacity((int) slots)) {
 			client.sendPacket(SystemMessageId.YOUR_INVENTORY_IS_FULL);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((adena < 0) || !player.reduceAdena("Refund", adena, player.getLastFolkNPC(), false))
-		{
+
+		if ((adena < 0) || !player.reduceAdena("Refund", adena, player.getLastFolkNPC(), false)) {
 			client.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		for (int i = 0; i < _items.length; i++)
-		{
+
+		for (int i = 0; i < _items.length; i++) {
 			ItemInstance item = player.getRefund().transferItem("Refund", objectIds[i], Long.MAX_VALUE, player.getInventory(), player, player.getLastFolkNPC());
-			if (item == null)
-			{
+			if (item == null) {
 				_log.warn("Error refunding object for char " + player.getName() + " (newitem == null)");
 			}
 		}
-		
+
 		// Update current load status on player
 		client.sendPacket(new ExUserInfoInvenWeight(player));
 		client.sendPacket(new ExBuySellList(player, true));

@@ -18,58 +18,51 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.L2JModsConfig;
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
 
+import java.util.OptionalDouble;
+
 /**
  * @author UnAfraid
  */
-public class MAttackFinalizer implements IStatsFunction
-{
+public class MAttackFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = creature.getStat().getValue(DoubleStat.MAGIC_ATTACK_ADD, calcWeaponBaseValue(creature, stat));
 		baseValue += calcEnchantedItemBonus(creature, stat);
-		if (creature.isPlayer())
-		{
+		if (creature.isPlayer()) {
 			// Enchanted chest bonus
 			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_CHEST, L2Item.SLOT_FULL_ARMOR);
 		}
-		
-		if (L2JModsConfig.L2JMOD_CHAMPION_ENABLE && creature.isChampion())
-		{
+
+		if (L2JModsConfig.L2JMOD_CHAMPION_ENABLE && creature.isChampion()) {
 			baseValue *= L2JModsConfig.L2JMOD_CHAMPION_ATK;
 		}
-		if (creature.isRaid())
-		{
+		if (creature.isRaid()) {
 			baseValue *= NpcConfig.RAID_MATTACK_MULTIPLIER;
 		}
-		
+
 		// Calculate modifiers Magic Attack
 		final double chaMod = creature.isPlayer() ? BaseStats.CHA.calcBonus(creature) : 1.;
 		final double intBonus = BaseStats.INT.calcBonus(creature);
 		baseValue *= Math.pow(intBonus, 2) * Math.pow(creature.getLevelMod(), 2) * chaMod;
 		return DoubleStat.defaultValue(creature, stat, baseValue);
 	}
-	
+
 	@Override
-	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed)
-	{
-		if (isBlessed)
-		{
+	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed) {
+		if (isBlessed) {
 			return (2 * Math.max(enchantLevel - 3, 0)) + (2 * Math.max(enchantLevel - 6, 0));
 		}
-		
+
 		return (1.4 * Math.max(enchantLevel - 3, 0)) + (1.4 * Math.max(enchantLevel - 6, 0));
 	}
 }

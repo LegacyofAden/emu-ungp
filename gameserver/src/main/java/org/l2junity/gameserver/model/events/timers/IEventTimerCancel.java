@@ -19,14 +19,14 @@
 package org.l2junity.gameserver.model.events.timers;
 
 /**
- * @author UnAfraid
  * @param <T>
+ * @author UnAfraid
  */
 @FunctionalInterface
-public interface IEventTimerCancel<T>
-{
+public interface IEventTimerCancel<T> {
 	/**
 	 * Notified upon timer cancellation.
+	 *
 	 * @param holder
 	 */
 	void onTimerCancel(TimerHolder<T> holder);

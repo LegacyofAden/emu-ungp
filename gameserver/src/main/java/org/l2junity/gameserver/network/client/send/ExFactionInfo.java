@@ -27,30 +27,26 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExFactionInfo implements IClientOutgoingPacket
-{
+public class ExFactionInfo implements IClientOutgoingPacket {
 	private final PlayerInstance _player;
 	private final boolean _open;
-	
-	public ExFactionInfo(PlayerInstance player, boolean open)
-	{
+
+	public ExFactionInfo(PlayerInstance player, boolean open) {
 		_player = player;
 		_open = open;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_FACTION_INFO.writeId(packet);
-		
+
 		packet.writeD(_player.getObjectId());
 		packet.writeC(_open ? 0x01 : 0x00);
 		packet.writeD(_player.getFactionsPoints().size());
 		_player.getFactionsPoints().entrySet().forEach(entry ->
 		{
 			final FactionHolder holder = FactionData.getInstance().getFaction(entry.getKey());
-			if (holder != null)
-			{
+			if (holder != null) {
 				packet.writeC(holder.getId());
 				packet.writeH(holder.getLevel(entry.getValue()));
 				packet.writeE(holder.getProgressToNextLevel(entry.getValue()));

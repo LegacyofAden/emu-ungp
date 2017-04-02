@@ -22,10 +22,10 @@ import org.l2junity.gameserver.model.actor.Npc;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
  */
 
-public interface SpawnListener
-{
+public interface SpawnListener {
 	void npcSpawned(Npc npc);
 }

@@ -18,43 +18,37 @@
  */
 package org.l2junity.gameserver.model.stats;
 
-import java.util.function.BiPredicate;
-
 import org.l2junity.gameserver.model.actor.Creature;
+
+import java.util.function.BiPredicate;
 
 /**
  * @author UnAfraid
  */
-public class StatsHolder
-{
+public class StatsHolder {
 	private final DoubleStat _stat;
 	private final double _value;
 	private final BiPredicate<Creature, StatsHolder> _condition;
-	
-	public StatsHolder(DoubleStat stat, double value, BiPredicate<Creature, StatsHolder> condition)
-	{
+
+	public StatsHolder(DoubleStat stat, double value, BiPredicate<Creature, StatsHolder> condition) {
 		_stat = stat;
 		_value = value;
 		_condition = condition;
 	}
-	
-	public StatsHolder(DoubleStat stat, double value)
-	{
+
+	public StatsHolder(DoubleStat stat, double value) {
 		this(stat, value, null);
 	}
-	
-	public DoubleStat getStat()
-	{
+
+	public DoubleStat getStat() {
 		return _stat;
 	}
-	
-	public double getValue()
-	{
+
+	public double getValue() {
 		return _value;
 	}
-	
-	public boolean verifyCondition(Creature creature)
-	{
+
+	public boolean verifyCondition(Creature creature) {
 		return (_condition == null) || _condition.test(creature, this);
 	}
 }

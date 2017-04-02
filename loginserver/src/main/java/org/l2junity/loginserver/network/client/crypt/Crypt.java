@@ -18,134 +18,119 @@
  */
 package org.l2junity.loginserver.network.client.crypt;
 
-import javax.crypto.SecretKey;
-
+import io.netty.buffer.ByteBuf;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.network.ICrypt;
 
-import io.netty.buffer.ByteBuf;
+import javax.crypto.SecretKey;
 
 /**
  * @author NosBit
  */
-public class Crypt implements ICrypt
-{
+public class Crypt implements ICrypt {
 	private static final byte[] STATIC_BLOWFISH_KEY =
-	{
-		(byte) 0x6b,
-		(byte) 0x60,
-		(byte) 0xcb,
-		(byte) 0x5b,
-		(byte) 0x82,
-		(byte) 0xce,
-		(byte) 0x90,
-		(byte) 0xb1,
-		(byte) 0xcc,
-		(byte) 0x2b,
-		(byte) 0x6c,
-		(byte) 0x55,
-		(byte) 0x6c,
-		(byte) 0x6c,
-		(byte) 0x6c,
-		(byte) 0x6c
-	};
-	
+			{
+					(byte) 0x6b,
+					(byte) 0x60,
+					(byte) 0xcb,
+					(byte) 0x5b,
+					(byte) 0x82,
+					(byte) 0xce,
+					(byte) 0x90,
+					(byte) 0xb1,
+					(byte) 0xcc,
+					(byte) 0x2b,
+					(byte) 0x6c,
+					(byte) 0x55,
+					(byte) 0x6c,
+					(byte) 0x6c,
+					(byte) 0x6c,
+					(byte) 0x6c
+			};
+
 	private static final BlowfishEngine STATIC_BLOWFISH_ENGINE = new BlowfishEngine();
-	
-	static
-	{
+
+	static {
 		STATIC_BLOWFISH_ENGINE.init(STATIC_BLOWFISH_KEY);
 	}
-	
+
 	private final BlowfishEngine _blowfishEngine = new BlowfishEngine();
 	private boolean _static = true;
-	
-	public Crypt(SecretKey blowfishKey)
-	{
+
+	public Crypt(SecretKey blowfishKey) {
 		_blowfishEngine.init(blowfishKey.getEncoded());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.l2jserver.commons.network.ICrypt#encrypt(io.netty.buffer.ByteBuf)
 	 */
 	@Override
-	public void encrypt(ByteBuf buf)
-	{
+	public void encrypt(ByteBuf buf) {
 		// Checksum & XOR Key or Checksum only
 		buf.writeZero(_static ? 8 : 4);
-		
+
 		// Padding
 		buf.writeZero(8 - (buf.readableBytes() % 8));
-		
-		if (_static)
-		{
+
+		if (_static) {
 			_static = false;
-			
+
 			int key = Rnd.nextInt();
 			buf.skipBytes(4); // The first 4 bytes are ignored
-			while (buf.readerIndex() < (buf.writerIndex() - 8))
-			{
+			while (buf.readerIndex() < (buf.writerIndex() - 8)) {
 				int data = buf.readIntLE();
 				key += data;
 				data ^= key;
 				buf.setInt(buf.readerIndex() - 4, data);
 			}
 			buf.setInt(buf.readerIndex(), key);
-			
+
 			buf.resetReaderIndex();
-			
+
 			final byte[] block = new byte[8];
-			while (buf.isReadable(8))
-			{
+			while (buf.isReadable(8)) {
 				buf.readBytes(block);
 				STATIC_BLOWFISH_ENGINE.encryptBlock(block, 0);
 				buf.setBytes(buf.readerIndex() - block.length, block);
 			}
-		}
-		else
-		{
+		} else {
 			int checksum = 0;
-			while (buf.isReadable(8))
-			{
+			while (buf.isReadable(8)) {
 				checksum ^= buf.readIntLE();
 			}
 			buf.setInt(buf.readerIndex(), checksum);
-			
+
 			buf.resetReaderIndex();
-			
+
 			final byte[] block = new byte[8];
-			while (buf.isReadable(8))
-			{
+			while (buf.isReadable(8)) {
 				buf.readBytes(block);
 				_blowfishEngine.encryptBlock(block, 0);
 				buf.setBytes(buf.readerIndex() - block.length, block);
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.l2jserver.commons.network.ICrypt#decrypt(io.netty.buffer.ByteBuf)
 	 */
 	@Override
-	public void decrypt(ByteBuf buf)
-	{
+	public void decrypt(ByteBuf buf) {
 		// Packet size must be multiple of 8
-		if ((buf.readableBytes() % 8) != 0)
-		{
+		if ((buf.readableBytes() % 8) != 0) {
 			buf.clear();
 			return;
 		}
-		
+
 		final byte[] block = new byte[8];
-		while (buf.isReadable(8))
-		{
+		while (buf.isReadable(8)) {
 			buf.readBytes(block);
 			_blowfishEngine.decryptBlock(block, 0);
 			buf.setBytes(buf.readerIndex() - block.length, block);
 		}
-		
+
 		// verify checksum also dont forget!
 	}
 }

@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class TutorialEnableClientEvent implements IClientOutgoingPacket
-{
+public class TutorialEnableClientEvent implements IClientOutgoingPacket {
 	private int _eventId = 0;
-	
-	public TutorialEnableClientEvent(int event)
-	{
+
+	public TutorialEnableClientEvent(int event) {
 		_eventId = event;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TUTORIAL_ENABLE_CLIENT_EVENT.writeId(packet);
-		
+
 		packet.writeD(_eventId);
 		return true;
 	}

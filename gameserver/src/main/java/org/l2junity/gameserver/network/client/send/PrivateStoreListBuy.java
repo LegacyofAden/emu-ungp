@@ -18,44 +18,41 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.TradeItem;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * This class ...
+ *
  * @version $Revision: 1.7.2.2.2.3 $ $Date: 2005/03/27 15:29:39 $
  */
-public class PrivateStoreListBuy extends AbstractItemPacket
-{
+public class PrivateStoreListBuy extends AbstractItemPacket {
 	private final int _objId;
 	private final long _playerAdena;
 	private final Collection<TradeItem> _items;
-	
-	public PrivateStoreListBuy(PlayerInstance player, PlayerInstance storePlayer)
-	{
+
+	public PrivateStoreListBuy(PlayerInstance player, PlayerInstance storePlayer) {
 		_objId = storePlayer.getObjectId();
 		_playerAdena = player.getAdena();
 		storePlayer.getSellList().updateItems(); // Update SellList for case inventory content has changed
 		_items = storePlayer.getBuyList().getAvailableItems(player.getInventory());
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PRIVATE_STORE_BUY_LIST.writeId(packet);
-		
+
 		packet.writeD(_objId);
 		packet.writeQ(_playerAdena);
 		packet.writeD(0x00); // unk
 		packet.writeD(_items.size());
-		
+
 		int i = 0;
-		for (TradeItem item : _items)
-		{
+		for (TradeItem item : _items) {
 			writeItem(packet, item);
 			packet.writeD(++i); // Number
 			packet.writeQ(item.getPrice());

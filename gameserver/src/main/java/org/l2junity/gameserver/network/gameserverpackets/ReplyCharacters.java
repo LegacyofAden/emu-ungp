@@ -18,32 +18,28 @@
  */
 package org.l2junity.gameserver.network.gameserverpackets;
 
-import java.util.List;
-
 import org.l2junity.util.network.BaseSendablePacket;
+
+import java.util.List;
 
 /**
  * @author mrTJO Thanks to mochitto
  */
-public class ReplyCharacters extends BaseSendablePacket
-{
-	
-	public ReplyCharacters(String account, int chars, List<Long> timeToDel)
-	{
+public class ReplyCharacters extends BaseSendablePacket {
+
+	public ReplyCharacters(String account, int chars, List<Long> timeToDel) {
 		writeC(0x08);
 		writeS(account);
 		writeC(chars);
 		writeC(timeToDel.size());
-		for (long time : timeToDel)
-		{
+		for (long time : timeToDel) {
 			writeQ(time);
 		}
 	}
-	
+
 	@Override
-	public byte[] getContent()
-	{
+	public byte[] getContent() {
 		return getBytes();
 	}
-	
+
 }

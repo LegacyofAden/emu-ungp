@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExDissmissMPCCRoom implements IClientOutgoingPacket
-{
+public class ExDissmissMPCCRoom implements IClientOutgoingPacket {
 	public static final ExDissmissMPCCRoom STATIC_PACKET = new ExDissmissMPCCRoom();
-	
-	private ExDissmissMPCCRoom()
-	{
+
+	private ExDissmissMPCCRoom() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_DISSMISS_MPCC_ROOM.writeId(packet);
-		
+
 		return true;
 	}
 }

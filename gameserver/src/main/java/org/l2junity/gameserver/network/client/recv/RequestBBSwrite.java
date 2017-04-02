@@ -24,20 +24,19 @@ import org.l2junity.network.PacketReader;
 
 /**
  * RequestBBSwrite client packet implementation.
+ *
  * @author -Wooden-, Zoey76
  */
-public final class RequestBBSwrite implements IClientIncomingPacket
-{
+public final class RequestBBSwrite implements IClientIncomingPacket {
 	private String _url;
 	private String _arg1;
 	private String _arg2;
 	private String _arg3;
 	private String _arg4;
 	private String _arg5;
-	
+
 	@Override
-	public final boolean read(L2GameClient client, PacketReader packet)
-	{
+	public final boolean read(L2GameClient client, PacketReader packet) {
 		_url = packet.readS();
 		_arg1 = packet.readS();
 		_arg2 = packet.readS();
@@ -46,10 +45,9 @@ public final class RequestBBSwrite implements IClientIncomingPacket
 		_arg5 = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public final void run(L2GameClient client)
-	{
+	public final void run(L2GameClient client) {
 		CommunityBoardHandler.getInstance().handleWriteCommand(client.getActiveChar(), _url, _arg1, _arg2, _arg3, _arg4, _arg5);
 	}
 }

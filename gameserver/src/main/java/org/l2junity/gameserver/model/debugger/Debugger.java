@@ -18,86 +18,69 @@
  */
 package org.l2junity.gameserver.model.debugger;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author UnAfraid
  */
-public class Debugger
-{
+public class Debugger {
 	private final int _objectId;
 	private final String _name;
 	private final Set<Integer> _types = ConcurrentHashMap.newKeySet();
-	
-	public Debugger(PlayerInstance player)
-	{
+
+	public Debugger(PlayerInstance player) {
 		_objectId = player.getObjectId();
 		_name = player.getName();
 	}
-	
-	public int getObjectId()
-	{
+
+	public int getObjectId() {
 		return _objectId;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public PlayerInstance getPlayer()
-	{
+
+	public PlayerInstance getPlayer() {
 		return World.getInstance().getPlayer(_objectId);
 	}
-	
-	public boolean hasDebugType(DebugType... types)
-	{
-		if (types != null)
-		{
-			for (DebugType type : types)
-			{
-				if (_types.contains(type.ordinal()))
-				{
+
+	public boolean hasDebugType(DebugType... types) {
+		if (types != null) {
+			for (DebugType type : types) {
+				if (_types.contains(type.ordinal())) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	public void addDebugType(DebugType... types)
-	{
-		if (types != null)
-		{
-			for (DebugType type : types)
-			{
+
+	public void addDebugType(DebugType... types) {
+		if (types != null) {
+			for (DebugType type : types) {
 				_types.add(type.ordinal());
 			}
 		}
 	}
-	
-	public void sendPacket(IClientOutgoingPacket... packets)
-	{
+
+	public void sendPacket(IClientOutgoingPacket... packets) {
 		final PlayerInstance player = getPlayer();
-		if (player != null)
-		{
-			for (IClientOutgoingPacket packet : packets)
-			{
+		if (player != null) {
+			for (IClientOutgoingPacket packet : packets) {
 				player.sendPacket(packet);
 			}
 		}
 	}
-	
-	public void sendMessage(String message)
-	{
+
+	public void sendMessage(String message) {
 		final PlayerInstance player = getPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.sendMessage(message);
 		}
 	}

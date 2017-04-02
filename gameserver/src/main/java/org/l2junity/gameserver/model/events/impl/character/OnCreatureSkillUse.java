@@ -25,39 +25,34 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Executed when the caster Creature tries to use a skill.
+ *
  * @author UnAfraid, Nik
  */
-public class OnCreatureSkillUse implements IBaseEvent
-{
+public class OnCreatureSkillUse implements IBaseEvent {
 	private final Creature _caster;
 	private final Skill _skill;
 	private final boolean _simultaneously;
-	
-	public OnCreatureSkillUse(Creature caster, Skill skill, boolean simultaneously)
-	{
+
+	public OnCreatureSkillUse(Creature caster, Skill skill, boolean simultaneously) {
 		_caster = caster;
 		_skill = skill;
 		_simultaneously = simultaneously;
 	}
-	
-	public final Creature getCaster()
-	{
+
+	public final Creature getCaster() {
 		return _caster;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill;
 	}
-	
-	public boolean isSimultaneously()
-	{
+
+	public boolean isSimultaneously() {
 		return _simultaneously;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_SKILL_USE;
 	}
 }

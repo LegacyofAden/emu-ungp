@@ -18,23 +18,22 @@
  */
 package org.l2junity.gameserver.model.events.timers;
 
-import java.util.Objects;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.instancemanager.TimersManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.TimerExecutor;
 
+import java.util.Objects;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
- * @author UnAfraid
  * @param <T>
+ * @author UnAfraid
  */
-public class TimerHolder<T> implements Runnable
-{
+public class TimerHolder<T> implements Runnable {
 	private final T _event;
 	private final StatsSet _params;
 	private final long _time;
@@ -45,9 +44,8 @@ public class TimerHolder<T> implements Runnable
 	private final IEventTimerCancel<T> _cancelScript;
 	private final TimerExecutor<T> _postExecutor;
 	private final ScheduledFuture<?> _task;
-	
-	public TimerHolder(T event, StatsSet params, long time, Npc npc, PlayerInstance player, boolean isRepeating, IEventTimerEvent<T> eventScript, IEventTimerCancel<T> cancelScript, TimerExecutor<T> postExecutor)
-	{
+
+	public TimerHolder(T event, StatsSet params, long time, Npc npc, PlayerInstance player, boolean isRepeating, IEventTimerEvent<T> eventScript, IEventTimerCancel<T> cancelScript, TimerExecutor<T> postExecutor) {
 		Objects.requireNonNull(event, getClass().getSimpleName() + ": \"event\" cannot be null!");
 		Objects.requireNonNull(eventScript, getClass().getSimpleName() + ": \"script\" cannot be null!");
 		Objects.requireNonNull(postExecutor, getClass().getSimpleName() + ": \"postExecutor\" cannot be null!");
@@ -60,134 +58,116 @@ public class TimerHolder<T> implements Runnable
 		_eventScript = eventScript;
 		_cancelScript = cancelScript;
 		_postExecutor = postExecutor;
-		_task = isRepeating ? ThreadPool.scheduleAtFixedRate(this, _time, _time, TimeUnit.MILLISECONDS) : ThreadPool.schedule(this, _time, TimeUnit.MILLISECONDS);
+		_task = isRepeating ? ThreadPool.getInstance().scheduleGeneralAtFixedRate(this, _time, _time, TimeUnit.MILLISECONDS) : ThreadPool.getInstance().scheduleGeneral(this, _time, TimeUnit.MILLISECONDS);
 		TimersManager.getInstance().registerTimer(this);
 	}
-	
+
 	/**
 	 * @return the event/key of this timer
 	 */
-	public T getEvent()
-	{
+	public T getEvent() {
 		return _event;
 	}
-	
+
 	/**
 	 * @return the parameters of this timer
 	 */
-	public StatsSet getParams()
-	{
+	public StatsSet getParams() {
 		return _params;
 	}
-	
+
 	/**
 	 * @return the npc of this timer
 	 */
-	public Npc getNpc()
-	{
+	public Npc getNpc() {
 		return _npc;
 	}
-	
+
 	/**
 	 * @return the player of this timer
 	 */
-	public PlayerInstance getPlayer()
-	{
+	public PlayerInstance getPlayer() {
 		return _player;
 	}
-	
+
 	/**
 	 * @return {@code true} if the timer will repeat itself, {@code false} otherwise
 	 */
-	public boolean isRepeating()
-	{
+	public boolean isRepeating() {
 		return _isRepeating;
 	}
-	
+
 	/**
 	 * @return {@code true} if timer for the given event, npc, player were stopped, {@code false} otheriwse
 	 */
-	public boolean cancelTimer()
-	{
-		if (_task.isCancelled() || _task.isDone())
-		{
+	public boolean cancelTimer() {
+		if (_task.isCancelled() || _task.isDone()) {
 			return false;
 		}
-		
+
 		_task.cancel(true);
 		_cancelScript.onTimerCancel(this);
 		return true;
 	}
-	
+
 	/**
 	 * @return the remaining time of the timer, or -1 in case it doesn't exists.
 	 */
-	public long getRemainingTime()
-	{
-		if (_task == null)
-		{
+	public long getRemainingTime() {
+		if (_task == null) {
 			return -1;
 		}
-		
-		if (_task.isCancelled() || _task.isDone())
-		{
+
+		if (_task.isCancelled() || _task.isDone()) {
 			return -1;
 		}
 		return _task.getDelay(TimeUnit.MILLISECONDS);
 	}
-	
+
 	/**
 	 * @param event
 	 * @param npc
 	 * @param player
 	 * @return {@code true} if event, npc, player are equals to the ones stored in this TimerHolder, {@code false} otherwise
 	 */
-	public boolean isEqual(T event, Npc npc, PlayerInstance player)
-	{
+	public boolean isEqual(T event, Npc npc, PlayerInstance player) {
 		return _event.equals(event) && (_npc == npc) && (_player == player);
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		// Notify the post executor to remove this timer from the map
 		_postExecutor.onTimerPostExecute(this);
-		
+
 		// Notify the script that the event has been fired.
 		_eventScript.onTimerEvent(this);
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		
-		if (!(obj instanceof TimerHolder))
-		{
+
+		if (!(obj instanceof TimerHolder)) {
 			return false;
 		}
-		
-		@SuppressWarnings("unchecked")
-		final TimerHolder<T> holder = (TimerHolder<T>) obj;
+
+		@SuppressWarnings("unchecked")        final TimerHolder<T> holder = (TimerHolder<T>) obj;
 		return isEqual(holder._event, holder._npc, holder._player);
 	}
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int result = _event.hashCode();
 		result = (31 * result) + ((_npc == null) ? 0 : _npc.hashCode());
 		result = (31 * result) + ((_params == null) ? 0 : _params.hashCode());
 		result = (31 * result) + ((_player == null) ? 0 : _player.hashCode());
 		return result;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "event: " + _event + " params: " + _params + " time: " + _time + " npc: " + _npc + " player: " + _player + " repeating: " + _isRepeating + " script: " + _eventScript.getClass().getSimpleName() + " postExecutor: " + _postExecutor.getClass().getSimpleName();
 	}
 }

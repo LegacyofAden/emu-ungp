@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,74 +28,64 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * A jail zone
+ *
  * @author durgus
  */
-public class JailZone extends ZoneType
-{
+public class JailZone extends ZoneType {
 	private static final Location JAIL_IN_LOC = new Location(-114356, -249645, -2984);
 	private static final Location JAIL_OUT_LOC = new Location(17836, 170178, -3507);
-	
-	public JailZone(int id)
-	{
+
+	public JailZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.JAIL, true);
 			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
-			if (GeneralConfig.JAIL_IS_PVP)
-			{
+			if (GeneralConfig.JAIL_IS_PVP) {
 				character.setInsideZone(ZoneId.PVP, true);
 				character.sendPacket(SystemMessageId.YOU_HAVE_ENTERED_A_COMBAT_ZONE);
 			}
-			if (GeneralConfig.JAIL_DISABLE_TRANSACTION)
-			{
+			if (GeneralConfig.JAIL_DISABLE_TRANSACTION) {
 				character.setInsideZone(ZoneId.NO_STORE, true);
 			}
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
 			final PlayerInstance player = character.getActingPlayer();
 			player.setInsideZone(ZoneId.JAIL, false);
 			player.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
-			
-			if (GeneralConfig.JAIL_IS_PVP)
-			{
+
+			if (GeneralConfig.JAIL_IS_PVP) {
 				character.setInsideZone(ZoneId.PVP, false);
 				character.sendPacket(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 			}
-			
-			if (player.isJailed())
-			{
+
+			if (player.isJailed()) {
 				// when a player wants to exit jail even if he is still jailed, teleport him back to jail
-				ThreadPool.schedule(new TeleportTask(player, JAIL_IN_LOC), 2000, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new TeleportTask(player, JAIL_IN_LOC), 2000, TimeUnit.MILLISECONDS);
 				character.sendMessage("You cannot cheat your way out of here. You must wait until your jail time is over.");
 			}
-			if (GeneralConfig.JAIL_DISABLE_TRANSACTION)
-			{
+			if (GeneralConfig.JAIL_DISABLE_TRANSACTION) {
 				character.setInsideZone(ZoneId.NO_STORE, false);
 			}
 		}
 	}
-	
-	public static Location getLocationIn()
-	{
+
+	public static Location getLocationIn() {
 		return JAIL_IN_LOC;
 	}
-	
-	public static Location getLocationOut()
-	{
+
+	public static Location getLocationOut() {
 		return JAIL_OUT_LOC;
 	}
 }

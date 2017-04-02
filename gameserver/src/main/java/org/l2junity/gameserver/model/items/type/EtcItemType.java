@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.items.type;
 /**
  * EtcItem Type enumerated.
  */
-public enum EtcItemType implements ItemType
-{
+public enum EtcItemType implements ItemType {
 	NONE,
 	SCROLL,
 	ARROW,
@@ -88,13 +87,12 @@ public enum EtcItemType implements ItemType
 	ENSOUL_STONE,
 	NICK_COLOR_OLD,
 	NICK_COLOR_NEW;
-	
+
 	/**
 	 * @return the ID of the item after applying the mask.
 	 */
 	@Override
-	public int mask()
-	{
+	public int mask() {
 		return 0;
 	}
 }

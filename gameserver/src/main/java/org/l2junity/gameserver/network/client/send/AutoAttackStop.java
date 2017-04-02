@@ -21,23 +21,20 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class AutoAttackStop implements IClientOutgoingPacket
-{
+public class AutoAttackStop implements IClientOutgoingPacket {
 	private final int _targetObjId;
-	
+
 	/**
 	 * @param targetObjId
 	 */
-	public AutoAttackStop(int targetObjId)
-	{
+	public AutoAttackStop(int targetObjId) {
 		_targetObjId = targetObjId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.AUTO_ATTACK_STOP.writeId(packet);
-		
+
 		packet.writeD(_targetObjId);
 		return true;
 	}

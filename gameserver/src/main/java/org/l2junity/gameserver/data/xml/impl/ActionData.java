@@ -18,89 +18,64 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.ActionDataHolder;
+import org.l2junity.gameserver.model.StatsSet;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.ActionDataHolder;
-import org.l2junity.gameserver.model.StatsSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author UnAfraid
  */
-public class ActionData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ActionData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class ActionData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ActionData instance = new ActionData();
+
 	private final Map<Integer, ActionDataHolder> _actionData = new HashMap<>();
 	private final Map<Integer, Integer> _actionSkillsData = new HashMap<>(); // skillId, actionId
-	
-	protected ActionData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	protected void load() throws Exception
-	{
+
+	private ActionData() {
 		_actionData.clear();
 		_actionSkillsData.clear();
 		parseDatapackFile("data/ActionData.xml");
 		_actionData.values().stream().filter(h -> h.getHandler().equals("PetSkillUse") || h.getHandler().equals("ServitorSkillUse")).forEach(h -> _actionSkillsData.put(h.getOptionId(), h.getId()));
-		LOGGER.info("Loaded {} player actions.", _actionData.size());
+		log.info("Loaded {} player actions.", _actionData.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "action", actionNode ->
 		{
 			final ActionDataHolder holder = new ActionDataHolder(new StatsSet(parseAttributes(actionNode)));
 			_actionData.put(holder.getId(), holder);
 		}));
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _actionData.size() + _actionSkillsData.size();
 	}
-	
+
 	/**
 	 * @param id
 	 * @return the ActionDataHolder for specified id
 	 */
-	public ActionDataHolder getActionData(int id)
-	{
+	public ActionDataHolder getActionData(int id) {
 		return _actionData.get(id);
 	}
-	
+
 	/**
 	 * @param skillId
 	 * @return the actionId corresponding to the skillId or -1 if no actionId is found for the specified skill.
 	 */
-	public int getSkillActionId(int skillId)
-	{
+	public int getSkillActionId(int skillId) {
 		return _actionSkillsData.getOrDefault(skillId, -1);
-	}
-	
-	/**
-	 * Gets the single instance of ActionData.
-	 * @return single instance of ActionData
-	 */
-	@InstanceGetter
-	public static final ActionData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ActionData _instance = new ActionData();
 	}
 }

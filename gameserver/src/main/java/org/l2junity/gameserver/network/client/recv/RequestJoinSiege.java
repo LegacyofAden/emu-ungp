@@ -34,69 +34,54 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public final class RequestJoinSiege implements IClientIncomingPacket
-{
+public final class RequestJoinSiege implements IClientIncomingPacket {
 	private int _castleId;
 	private int _isAttacker;
 	private int _isJoining;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_castleId = packet.readD();
 		_isAttacker = packet.readD();
 		_isJoining = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerJoinSiege(activeChar, _castleId), activeChar, BooleanReturn.class);
-		if ((term != null) && !term.getValue())
-		{
+		if ((term != null) && !term.getValue()) {
 			return;
 		}
-		
-		if (!activeChar.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE))
-		{
+
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE)) {
 			client.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-		
+
 		L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
+
 		Castle castle = CastleManager.getInstance().getCastleById(_castleId);
-		if (castle != null)
-		{
-			if (_isJoining == 1)
-			{
-				if (System.currentTimeMillis() < clan.getDissolvingExpiryTime())
-				{
+		if (castle != null) {
+			if (_isJoining == 1) {
+				if (System.currentTimeMillis() < clan.getDissolvingExpiryTime()) {
 					client.sendPacket(SystemMessageId.YOUR_CLAN_MAY_NOT_REGISTER_TO_PARTICIPATE_IN_A_SIEGE_WHILE_UNDER_A_GRACE_PERIOD_OF_THE_CLAN_S_DISSOLUTION);
 					return;
 				}
-				if (_isAttacker == 1)
-				{
+				if (_isAttacker == 1) {
 					castle.getSiege().registerAttacker(activeChar);
-				}
-				else
-				{
+				} else {
 					castle.getSiege().registerDefender(activeChar);
 				}
-			}
-			else
-			{
+			} else {
 				castle.getSiege().removeSiegeClan(activeChar);
 			}
 			castle.getSiege().listRegisterClan(activeChar);

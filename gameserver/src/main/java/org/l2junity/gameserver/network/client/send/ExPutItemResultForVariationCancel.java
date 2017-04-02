@@ -22,28 +22,25 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExPutItemResultForVariationCancel implements IClientOutgoingPacket
-{
+public class ExPutItemResultForVariationCancel implements IClientOutgoingPacket {
 	private final int _itemObjId;
 	private final int _itemId;
 	private final int _itemAug1;
 	private final int _itemAug2;
 	private final long _price;
-	
-	public ExPutItemResultForVariationCancel(ItemInstance item, long price)
-	{
+
+	public ExPutItemResultForVariationCancel(ItemInstance item, long price) {
 		_itemObjId = item.getObjectId();
 		_itemId = item.getDisplayId();
 		_price = price;
 		_itemAug1 = item.getAugmentation().getOption1Id();
 		_itemAug2 = item.getAugmentation().getOption2Id();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PUT_ITEM_RESULT_FOR_VARIATION_CANCEL.writeId(packet);
-		
+
 		packet.writeD(_itemObjId);
 		packet.writeD(_itemId);
 		packet.writeD(_itemAug1);

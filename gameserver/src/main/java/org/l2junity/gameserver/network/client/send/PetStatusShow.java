@@ -25,22 +25,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Yme
  */
-public class PetStatusShow implements IClientOutgoingPacket
-{
+public class PetStatusShow implements IClientOutgoingPacket {
 	private final int _summonType;
 	private final int _summonObjectId;
-	
-	public PetStatusShow(Summon summon)
-	{
+
+	public PetStatusShow(Summon summon) {
 		_summonType = summon.getSummonType();
 		_summonObjectId = summon.getObjectId();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PET_STATUS_SHOW.writeId(packet);
-		
+
 		packet.writeD(_summonType);
 		packet.writeD(_summonObjectId);
 		return true;

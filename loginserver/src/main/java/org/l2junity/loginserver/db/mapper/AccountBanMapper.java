@@ -18,21 +18,19 @@
  */
 package org.l2junity.loginserver.db.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.l2junity.loginserver.db.dto.AccountBan;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author NosBit
  */
-public class AccountBanMapper implements ResultSetMapper<AccountBan>
-{
+public class AccountBanMapper implements ResultSetMapper<AccountBan> {
 	@Override
-	public AccountBan map(int index, ResultSet r, StatementContext ctx) throws SQLException
-	{
+	public AccountBan map(int index, ResultSet r, StatementContext ctx) throws SQLException {
 		return new AccountBan(r.getLong("id"), r.getLong("account_id"), r.getBoolean("active"), r.getTimestamp("started_at").toInstant(), r.getTimestamp("expires_at").toInstant(), r.getString("reason"));
 	}
 }

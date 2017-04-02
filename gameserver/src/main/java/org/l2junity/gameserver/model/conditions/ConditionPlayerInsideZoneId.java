@@ -18,38 +18,32 @@
  */
 package org.l2junity.gameserver.model.conditions;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
 
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class ConditionPlayerInsideZoneId extends Condition
-{
+public class ConditionPlayerInsideZoneId extends Condition {
 	private final List<Integer> _zones;
-	
-	public ConditionPlayerInsideZoneId(List<Integer> zones)
-	{
+
+	public ConditionPlayerInsideZoneId(List<Integer> zones) {
 		_zones = zones;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
-		
-		for (ZoneType zone : ZoneManager.getInstance().getZones(effector))
-		{
-			if (_zones.contains(zone.getId()))
-			{
+
+		for (ZoneType zone : ZoneManager.getInstance().getZones(effector)) {
+			if (_zones.contains(zone.getId())) {
 				return true;
 			}
 		}

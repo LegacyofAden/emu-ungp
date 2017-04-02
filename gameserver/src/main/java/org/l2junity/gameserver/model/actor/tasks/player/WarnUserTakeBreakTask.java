@@ -18,37 +18,31 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Task dedicated to warn user to take a break.
+ *
  * @author UnAfraid
  */
-public final class WarnUserTakeBreakTask implements Runnable
-{
+public final class WarnUserTakeBreakTask implements Runnable {
 	private final PlayerInstance _player;
-	
-	public WarnUserTakeBreakTask(PlayerInstance player)
-	{
+
+	public WarnUserTakeBreakTask(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_player != null)
-		{
-			if (_player.isOnline())
-			{
+	public void run() {
+		if (_player != null) {
+			if (_player.isOnline()) {
 				final long hours = TimeUnit.MILLISECONDS.toHours(_player.getUptime());
 				_player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_PLAYED_FOR_S1_HOUR_S_PLEASE_TAKE_A_BREAK).addLong(hours));
-			}
-			else
-			{
+			} else {
 				_player.stopWarnUserTakeBreak();
 			}
 		}

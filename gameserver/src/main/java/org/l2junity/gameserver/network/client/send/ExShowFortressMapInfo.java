@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.model.FortSiegeSpawn;
 import org.l2junity.gameserver.model.L2Spawn;
@@ -27,43 +25,36 @@ import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * TODO: Rewrite!!!!!!
+ *
  * @author KenM
  */
-public class ExShowFortressMapInfo implements IClientOutgoingPacket
-{
+public class ExShowFortressMapInfo implements IClientOutgoingPacket {
 	private final Fort _fortress;
-	
-	public ExShowFortressMapInfo(Fort fortress)
-	{
+
+	public ExShowFortressMapInfo(Fort fortress) {
 		_fortress = fortress;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_FORTRESS_MAP_INFO.writeId(packet);
-		
+
 		packet.writeD(_fortress.getResidenceId());
 		packet.writeD(_fortress.getSiege().isInProgress() ? 1 : 0); // fortress siege status
 		packet.writeD(_fortress.getFortSize()); // barracks count
-		
+
 		List<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortress.getResidenceId());
-		if ((commanders != null) && (commanders.size() != 0) && _fortress.getSiege().isInProgress())
-		{
-			switch (commanders.size())
-			{
-				case 3:
-				{
-					for (FortSiegeSpawn spawn : commanders)
-					{
-						if (isSpawned(spawn.getId()))
-						{
+		if ((commanders != null) && (commanders.size() != 0) && _fortress.getSiege().isInProgress()) {
+			switch (commanders.size()) {
+				case 3: {
+					for (FortSiegeSpawn spawn : commanders) {
+						if (isSpawned(spawn.getId())) {
 							packet.writeD(0);
-						}
-						else
-						{
+						} else {
 							packet.writeD(1);
 						}
 					}
@@ -72,47 +63,36 @@ public class ExShowFortressMapInfo implements IClientOutgoingPacket
 				case 4: // TODO: change 4 to 5 once control room supported
 				{
 					int count = 0;
-					for (FortSiegeSpawn spawn : commanders)
-					{
+					for (FortSiegeSpawn spawn : commanders) {
 						count++;
-						if (count == 4)
-						{
+						if (count == 4) {
 							packet.writeD(1); // TODO: control room emulated
 						}
-						if (isSpawned(spawn.getId()))
-						{
+						if (isSpawned(spawn.getId())) {
 							packet.writeD(0);
-						}
-						else
-						{
+						} else {
 							packet.writeD(1);
 						}
 					}
 					break;
 				}
 			}
-		}
-		else
-		{
-			for (int i = 0; i < _fortress.getFortSize(); i++)
-			{
+		} else {
+			for (int i = 0; i < _fortress.getFortSize(); i++) {
 				packet.writeD(0);
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param npcId
 	 * @return
 	 */
-	private boolean isSpawned(int npcId)
-	{
+	private boolean isSpawned(int npcId) {
 		boolean ret = false;
-		for (L2Spawn spawn : _fortress.getSiege().getCommanders())
-		{
-			if (spawn.getId() == npcId)
-			{
+		for (L2Spawn spawn : _fortress.getSiege().getCommanders()) {
+			if (spawn.getId() == npcId) {
 				ret = true;
 				break;
 			}

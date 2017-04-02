@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
@@ -29,17 +28,15 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class Action implements IClientIncomingPacket
-{
+public final class Action implements IClientIncomingPacket {
 	private int _objectId;
 	private int _originX;
 	private int _originY;
 	private int _originZ;
 	private int _actionId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD(); // Target object Identifier
 		_originX = packet.readD();
 		_originY = packet.readD();
@@ -47,100 +44,75 @@ public final class Action implements IClientIncomingPacket
 		_actionId = packet.readC(); // Action identifier : 0-Simple click, 1-Shift click
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (GeneralConfig.DEBUG)
-		{
-			_log.info(getClass().getSimpleName() + ": " + (_actionId == 0 ? "Simple-click" : "Shift-click") + " Target object ID: " + _objectId + " orignX: " + _originX + " orignY: " + _originY + " orignZ: " + _originZ);
-		}
-		
+	public void run(L2GameClient client) {
 		// Get the current L2PcInstance of the player
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.inObserverMode())
-		{
+
+		if (activeChar.inObserverMode()) {
 			activeChar.sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final WorldObject obj;
-		if (activeChar.getTargetId() == _objectId)
-		{
+		if (activeChar.getTargetId() == _objectId) {
 			obj = activeChar.getTarget();
-		}
-		else if (activeChar.isInAirShip() && (activeChar.getAirShip().getHelmObjectId() == _objectId))
-		{
+		} else if (activeChar.isInAirShip() && (activeChar.getAirShip().getHelmObjectId() == _objectId)) {
 			obj = activeChar.getAirShip();
-		}
-		else
-		{
+		} else {
 			obj = World.getInstance().findObject(_objectId);
 		}
-		
+
 		// If object requested does not exist, add warn msg into logs
-		if (obj == null)
-		{
+		if (obj == null) {
 			// pressing e.g. pickup many times quickly would get you here
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((!obj.isTargetable() || activeChar.isTargetingDisabled()) && !activeChar.canOverrideCond(PcCondOverride.TARGET_ALL))
-		{
+
+		if ((!obj.isTargetable() || activeChar.isTargetingDisabled()) && !activeChar.canOverrideCond(PcCondOverride.TARGET_ALL)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Players can't interact with objects in the other instances
-		if (obj.getInstanceWorld() != activeChar.getInstanceWorld())
-		{
+		if (obj.getInstanceWorld() != activeChar.getInstanceWorld()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Only GMs can directly interact with invisible characters
-		if (!obj.isVisibleFor(activeChar))
-		{
+		if (!obj.isVisibleFor(activeChar)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Check if the target is valid, if the player haven't a shop or isn't the requester of a transaction (ex : FriendInvite, JoinAlly, JoinParty...)
-		if (activeChar.getActiveRequester() != null)
-		{
+		if (activeChar.getActiveRequester() != null) {
 			// Actions prohibited when in trade
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		switch (_actionId)
-		{
-			case 0:
-			{
+
+		switch (_actionId) {
+			case 0: {
 				obj.onAction(activeChar);
 				break;
 			}
-			case 1:
-			{
-				if (!activeChar.isGM() && !(obj.isNpc() && NpcConfig.ALT_GAME_VIEWNPC))
-				{
+			case 1: {
+				if (!activeChar.isGM() && !(obj.isNpc() && NpcConfig.ALT_GAME_VIEWNPC)) {
 					obj.onAction(activeChar, false);
-				}
-				else
-				{
+				} else {
 					obj.onActionShift(activeChar);
 				}
 				break;
 			}
-			default:
-			{
+			default: {
 				// Invalid action detected (probably client cheating), log this
 				_log.warn(getClass().getSimpleName() + ": Character: " + activeChar.getName() + " requested invalid action: " + _actionId);
 				client.sendPacket(ActionFailed.STATIC_PACKET);

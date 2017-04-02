@@ -18,10 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.ability;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.AbilityPointsData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
@@ -31,40 +28,37 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class ExAcquireAPSkillList implements IClientOutgoingPacket
-{
+public class ExAcquireAPSkillList implements IClientOutgoingPacket {
 	private final int _abilityPoints, _usedAbilityPoints;
 	private final long _price;
 	private final boolean _enable;
 	private final List<Skill> _skills = new ArrayList<>();
-	
-	public ExAcquireAPSkillList(PlayerInstance activeChar)
-	{
+
+	public ExAcquireAPSkillList(PlayerInstance activeChar) {
 		_abilityPoints = activeChar.getAbilityPoints();
 		_usedAbilityPoints = activeChar.getAbilityPointsUsed();
 		_price = AbilityPointsData.getInstance().getPrice(_abilityPoints);
-		for (SkillLearn sk : SkillTreesData.getInstance().getAbilitySkillTree().values())
-		{
+		for (SkillLearn sk : SkillTreesData.getInstance().getAbilitySkillTree().values()) {
 			final Skill knownSkill = activeChar.getKnownSkill(sk.getSkillId());
-			if (knownSkill != null)
-			{
-				if (knownSkill.getLevel() == sk.getSkillLevel())
-				{
+			if (knownSkill != null) {
+				if (knownSkill.getLevel() == sk.getSkillLevel()) {
 					_skills.add(knownSkill);
 				}
 			}
 		}
 		_enable = (!activeChar.isSubClassActive() || activeChar.isDualClassActive()) && (activeChar.getLevel() >= 99) && activeChar.isNoble();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ACQUIRE_AP_SKILL_LIST.writeId(packet);
-		
+
 		packet.writeD(_enable ? 1 : 0);
 		packet.writeQ(PlayerConfig.ABILITY_POINTS_RESET_ADENA);
 		packet.writeQ(_price);
@@ -72,8 +66,7 @@ public class ExAcquireAPSkillList implements IClientOutgoingPacket
 		packet.writeD(_abilityPoints);
 		packet.writeD(_usedAbilityPoints);
 		packet.writeD(_skills.size());
-		for (Skill skill : _skills)
-		{
+		for (Skill skill : _skills) {
 			packet.writeD(skill.getId());
 			packet.writeD(skill.getLevel());
 		}

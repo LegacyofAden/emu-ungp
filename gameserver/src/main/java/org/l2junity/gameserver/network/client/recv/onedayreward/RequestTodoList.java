@@ -27,31 +27,26 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestTodoList implements IClientIncomingPacket
-{
+public class RequestTodoList implements IClientIncomingPacket {
 	private int _tab;
 	@SuppressWarnings("unused")
 	private int _allLevels;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_tab = packet.readC();
 		_allLevels = packet.readC();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		switch (_tab)
-		{
+
+		switch (_tab) {
 			case 9: // Daily Rewards
 			{
 				// Initial EW request should be false

@@ -18,68 +18,51 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.enums.SiegeGuardType;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.holders.CastleSpawnHolder;
 import org.l2junity.gameserver.model.holders.SiegeGuardHolder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * @author St3eT
  */
-public final class CastleData implements IGameXmlReader
-{
+@StartupComponent("Data")
+public final class CastleData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final CastleData instance = new CastleData();
+
 	private final Map<Integer, List<CastleSpawnHolder>> _spawns = new HashMap<>();
 	private static final Map<Integer, List<SiegeGuardHolder>> _siegeGuards = new HashMap<>();
-	
-	protected CastleData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private CastleData() {
 		_spawns.clear();
 		_siegeGuards.clear();
 		parseDatapackDirectory("data/residences/castles", true);
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node listNode = doc.getFirstChild(); listNode != null; listNode = listNode.getNextSibling())
-		{
-			if ("list".equals(listNode.getNodeName()))
-			{
-				for (Node castleNode = listNode.getFirstChild(); castleNode != null; castleNode = castleNode.getNextSibling())
-				{
-					if ("castle".equals(castleNode.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node listNode = doc.getFirstChild(); listNode != null; listNode = listNode.getNextSibling()) {
+			if ("list".equals(listNode.getNodeName())) {
+				for (Node castleNode = listNode.getFirstChild(); castleNode != null; castleNode = castleNode.getNextSibling()) {
+					if ("castle".equals(castleNode.getNodeName())) {
 						final int castleId = parseInteger(castleNode.getAttributes(), "id");
-						for (Node tpNode = castleNode.getFirstChild(); tpNode != null; tpNode = tpNode.getNextSibling())
-						{
+						for (Node tpNode = castleNode.getFirstChild(); tpNode != null; tpNode = tpNode.getNextSibling()) {
 							final List<CastleSpawnHolder> spawns = new ArrayList<>();
-							
-							if ("spawns".equals(tpNode.getNodeName()))
-							{
-								for (Node npcNode = tpNode.getFirstChild(); npcNode != null; npcNode = npcNode.getNextSibling())
-								{
-									if ("npc".equals(npcNode.getNodeName()))
-									{
+
+							if ("spawns".equals(tpNode.getNodeName())) {
+								for (Node npcNode = tpNode.getFirstChild(); npcNode != null; npcNode = npcNode.getNextSibling()) {
+									if ("npc".equals(npcNode.getNodeName())) {
 										final NamedNodeMap np = npcNode.getAttributes();
 										final int npcId = parseInteger(np, "id");
 										final CastleSide side = parseEnum(np, CastleSide.class, "castleSide", CastleSide.NEUTRAL);
@@ -87,27 +70,23 @@ public final class CastleData implements IGameXmlReader
 										final int y = parseInteger(np, "y");
 										final int z = parseInteger(np, "z");
 										final int heading = parseInteger(np, "heading");
-										
+
 										spawns.add(new CastleSpawnHolder(npcId, side, x, y, z, heading));
 									}
 								}
 								_spawns.put(castleId, spawns);
-							}
-							else if ("siegeGuards".equals(tpNode.getNodeName()))
-							{
+							} else if ("siegeGuards".equals(tpNode.getNodeName())) {
 								final List<SiegeGuardHolder> guards = new ArrayList<>();
-								
-								for (Node npcNode = tpNode.getFirstChild(); npcNode != null; npcNode = npcNode.getNextSibling())
-								{
-									if ("guard".equals(npcNode.getNodeName()))
-									{
+
+								for (Node npcNode = tpNode.getFirstChild(); npcNode != null; npcNode = npcNode.getNextSibling()) {
+									if ("guard".equals(npcNode.getNodeName())) {
 										final NamedNodeMap np = npcNode.getAttributes();
 										final int itemId = parseInteger(np, "itemId");
 										final SiegeGuardType type = parseEnum(tpNode.getAttributes(), SiegeGuardType.class, "type");
 										final boolean stationary = parseBoolean(np, "stationary", false);
 										final int npcId = parseInteger(np, "npcId");
 										final int npcMaxAmount = parseInteger(np, "npcMaxAmount");
-										
+
 										guards.add(new SiegeGuardHolder(castleId, itemId, type, stationary, npcId, npcMaxAmount));
 									}
 								}
@@ -119,34 +98,16 @@ public final class CastleData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public final List<CastleSpawnHolder> getSpawnsForSide(int castleId, CastleSide side)
-	{
+
+	public final List<CastleSpawnHolder> getSpawnsForSide(int castleId, CastleSide side) {
 		return _spawns.getOrDefault(castleId, Collections.emptyList()).stream().filter(s -> s.getSide() == side).collect(Collectors.toList());
 	}
-	
-	public final List<SiegeGuardHolder> getSiegeGuardsForCastle(int castleId)
-	{
+
+	public final List<SiegeGuardHolder> getSiegeGuardsForCastle(int castleId) {
 		return _siegeGuards.getOrDefault(castleId, Collections.emptyList());
 	}
-	
-	public final Map<Integer, List<SiegeGuardHolder>> getSiegeGuards()
-	{
+
+	public final Map<Integer, List<SiegeGuardHolder>> getSiegeGuards() {
 		return _siegeGuards;
-	}
-	
-	/**
-	 * Gets the single instance of CastleData.
-	 * @return single instance of CastleData
-	 */
-	@InstanceGetter
-	public static CastleData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final CastleData _instance = new CastleData();
 	}
 }

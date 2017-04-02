@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import static org.l2junity.gameserver.data.xml.impl.MultisellData.PAGE_SIZE;
-
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.ItemInfo;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
@@ -30,33 +28,29 @@ import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class MultiSellList extends AbstractItemPacket
-{
+import static org.l2junity.gameserver.data.xml.impl.MultisellData.PAGE_SIZE;
+
+public final class MultiSellList extends AbstractItemPacket {
 	private int _size, _index;
 	private final PreparedMultisellListHolder _list;
 	private final boolean _finished;
-	
-	public MultiSellList(PreparedMultisellListHolder list, int index)
-	{
+
+	public MultiSellList(PreparedMultisellListHolder list, int index) {
 		_list = list;
 		_index = index;
 		_size = list.getEntries().size() - index;
-		if (_size > PAGE_SIZE)
-		{
+		if (_size > PAGE_SIZE) {
 			_finished = false;
 			_size = PAGE_SIZE;
-		}
-		else
-		{
+		} else {
 			_finished = true;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MULTI_SELL_LIST.writeId(packet);
-		
+
 		packet.writeC(0x00);
 		packet.writeD(_list.getId()); // list id
 		packet.writeC(0x00); // GOD Unknown
@@ -66,37 +60,32 @@ public final class MultiSellList extends AbstractItemPacket
 		packet.writeD(_size); // list length
 		packet.writeC(_list.isChanceMultisell() ? 0x01 : 0x00); // new multisell window
 		packet.writeD(0x20); // Always 32 oO
-		
-		while (_size-- > 0)
-		{
+
+		while (_size-- > 0) {
 			final ItemInfo itemEnchantment = _list.getItemEnchantment(_index);
 			final MultisellEntryHolder entry = _list.getEntries().get(_index++);
-			
+
 			packet.writeD(_index); // Entry ID. Start from 1.
 			packet.writeC(entry.isStackable() ? 1 : 0);
-			
+
 			// Those values will be passed down to MultiSellChoose packet.
 			packet.writeH(itemEnchantment != null ? itemEnchantment.getEnchantLevel() : 0); // enchant level
 			writeItemAugment(packet, itemEnchantment);
 			writeItemElemental(packet, itemEnchantment);
 			writeItemEnsoulOptions(packet, itemEnchantment);
-			
+
 			packet.writeH(entry.getProducts().size());
 			packet.writeH(entry.getIngredients().size());
-			
-			for (ItemChanceHolder product : entry.getProducts())
-			{
+
+			for (ItemChanceHolder product : entry.getProducts()) {
 				final L2Item template = ItemTable.getInstance().getTemplate(product.getId());
 				final ItemInfo displayItemEnchantment = (_list.isMaintainEnchantment() && (itemEnchantment != null) && (template != null) && template.getClass().equals(itemEnchantment.getItem().getClass())) ? itemEnchantment : null;
-				
+
 				packet.writeD(product.getId());
-				if (template != null)
-				{
+				if (template != null) {
 					packet.writeQ(template.getBodyPart());
 					packet.writeH(template.getType2());
-				}
-				else
-				{
+				} else {
 					packet.writeQ(0);
 					packet.writeH(65535);
 				}
@@ -107,12 +96,11 @@ public final class MultiSellList extends AbstractItemPacket
 				writeItemElemental(packet, displayItemEnchantment);
 				writeItemEnsoulOptions(packet, displayItemEnchantment);
 			}
-			
-			for (ItemHolder ingredient : entry.getIngredients())
-			{
+
+			for (ItemHolder ingredient : entry.getIngredients()) {
 				final L2Item template = ItemTable.getInstance().getTemplate(ingredient.getId());
 				final ItemInfo displayItemEnchantment = ((itemEnchantment != null) && (itemEnchantment.getItem().getId() == ingredient.getId())) ? itemEnchantment : null;
-				
+
 				packet.writeD(ingredient.getId());
 				packet.writeH(template != null ? template.getType2() : 65535);
 				packet.writeQ(_list.getIngredientCount(ingredient));

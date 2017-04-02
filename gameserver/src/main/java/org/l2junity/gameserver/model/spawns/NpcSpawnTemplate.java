@@ -18,13 +18,6 @@
  */
 package org.l2junity.gameserver.model.spawns;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.datatables.SpawnTable;
@@ -46,13 +39,19 @@ import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author UnAfraid
  */
-public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
-{
+public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NpcSpawnTemplate.class);
-	
+
 	private final int _id;
 	private final int _count;
 	private final Duration _respawnTime;
@@ -67,9 +66,8 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
 	private final SpawnTemplate _spawnTemplate;
 	private final SpawnGroup _group;
 	private final Set<Npc> _spawnedNpcs = ConcurrentHashMap.newKeySet();
-	
-	private NpcSpawnTemplate(NpcSpawnTemplate template)
-	{
+
+	private NpcSpawnTemplate(NpcSpawnTemplate template) {
 		_spawnTemplate = template._spawnTemplate;
 		_group = template._group;
 		_id = template._id;
@@ -84,9 +82,8 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
 		_parameters = template._parameters;
 		_minions = template._minions;
 	}
-	
-	public NpcSpawnTemplate(SpawnTemplate spawnTemplate, SpawnGroup group, StatsSet set)
-	{
+
+	public NpcSpawnTemplate(SpawnTemplate spawnTemplate, SpawnGroup group, StatsSet set) {
 		_spawnTemplate = spawnTemplate;
 		_group = group;
 		_id = set.getInt("id");
@@ -97,252 +94,196 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
 		_saveInDB = set.getBoolean("dbSave", false);
 		_dbName = set.getString("dbName", null);
 		_parameters = mergeParameters(spawnTemplate, group);
-		
+
 		final int x = set.getInt("x", Integer.MAX_VALUE);
 		final int y = set.getInt("y", Integer.MAX_VALUE);
 		final int z = set.getInt("z", Integer.MAX_VALUE);
 		final boolean xDefined = x != Integer.MAX_VALUE;
 		final boolean yDefined = y != Integer.MAX_VALUE;
 		final boolean zDefined = z != Integer.MAX_VALUE;
-		if (xDefined && yDefined && zDefined)
-		{
+		if (xDefined && yDefined && zDefined) {
 			_locations = new ArrayList<>();
 			_locations.add(new ChanceLocation(x, y, z, set.getInt("heading", 0), 100));
-		}
-		else
-		{
-			if (xDefined || yDefined || zDefined)
-			{
+		} else {
+			if (xDefined || yDefined || zDefined) {
 				throw new IllegalStateException(String.format("Spawn with partially declared and x: %s y: %s z: %s!", processParam(x), processParam(y), processParam(z)));
 			}
-			
+
 			final String zoneName = set.getString("zone", null);
-			if (zoneName != null)
-			{
+			if (zoneName != null) {
 				final SpawnTerritory zone = ZoneManager.getInstance().getSpawnTerritory(zoneName);
-				if (zone == null)
-				{
+				if (zone == null) {
 					throw new NullPointerException("Spawn with non existing zone requested " + zoneName);
 				}
 				_zone = zone;
 			}
 		}
-		
+
 		mergeParameters(spawnTemplate, group);
 	}
-	
-	private StatsSet mergeParameters(SpawnTemplate spawnTemplate, SpawnGroup group)
-	{
-		if ((_parameters == null) && (spawnTemplate.getParameters() == null) && (group.getParameters() == null))
-		{
+
+	private StatsSet mergeParameters(SpawnTemplate spawnTemplate, SpawnGroup group) {
+		if ((_parameters == null) && (spawnTemplate.getParameters() == null) && (group.getParameters() == null)) {
 			return null;
 		}
-		
+
 		final StatsSet set = new StatsSet();
-		if (spawnTemplate.getParameters() != null)
-		{
+		if (spawnTemplate.getParameters() != null) {
 			set.merge(spawnTemplate.getParameters());
 		}
-		if (group.getParameters() != null)
-		{
+		if (group.getParameters() != null) {
 			set.merge(group.getParameters());
 		}
-		if (_parameters != null)
-		{
+		if (_parameters != null) {
 			set.merge(_parameters);
 		}
 		return set;
 	}
-	
-	public void addSpawnLocation(ChanceLocation loc)
-	{
-		if (_locations == null)
-		{
+
+	public void addSpawnLocation(ChanceLocation loc) {
+		if (_locations == null) {
 			_locations = new ArrayList<>();
 		}
 		_locations.add(loc);
 	}
-	
-	public SpawnTemplate getSpawnTemplate()
-	{
+
+	public SpawnTemplate getSpawnTemplate() {
 		return _spawnTemplate;
 	}
-	
-	public SpawnGroup getGroup()
-	{
+
+	public SpawnGroup getGroup() {
 		return _group;
 	}
-	
-	private String processParam(int value)
-	{
+
+	private String processParam(int value) {
 		return value != Integer.MAX_VALUE ? Integer.toString(value) : "undefined";
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public int getCount()
-	{
+
+	public int getCount() {
 		return _count;
 	}
-	
-	public Duration getRespawnTime()
-	{
+
+	public Duration getRespawnTime() {
 		return _respawnTime;
 	}
-	
-	public Duration getRespawnTimeRandom()
-	{
+
+	public Duration getRespawnTimeRandom() {
 		return _respawnTimeRandom;
 	}
-	
-	public List<ChanceLocation> getLocation()
-	{
+
+	public List<ChanceLocation> getLocation() {
 		return _locations;
 	}
-	
-	public SpawnTerritory getZone()
-	{
+
+	public SpawnTerritory getZone() {
 		return _zone;
 	}
-	
+
 	@Override
-	public StatsSet getParameters()
-	{
+	public StatsSet getParameters() {
 		return _parameters;
 	}
-	
+
 	@Override
-	public void setParameters(StatsSet parameters)
-	{
-		if (_parameters == null)
-		{
+	public void setParameters(StatsSet parameters) {
+		if (_parameters == null) {
 			_parameters = parameters;
-		}
-		else
-		{
+		} else {
 			_parameters.merge(parameters);
 		}
 	}
-	
-	public boolean hasSpawnAnimation()
-	{
+
+	public boolean hasSpawnAnimation() {
 		return _spawnAnimation;
 	}
-	
-	public boolean hasDBSave()
-	{
+
+	public boolean hasDBSave() {
 		return _saveInDB;
 	}
-	
-	public String getDBName()
-	{
+
+	public String getDBName() {
 		return _dbName;
 	}
-	
-	public List<MinionHolder> getMinions()
-	{
+
+	public List<MinionHolder> getMinions() {
 		return _minions != null ? _minions : Collections.emptyList();
 	}
-	
-	public void addMinion(MinionHolder minion)
-	{
-		if (_minions == null)
-		{
+
+	public void addMinion(MinionHolder minion) {
+		if (_minions == null) {
 			_minions = new ArrayList<>();
 		}
 		_minions.add(minion);
 	}
-	
-	public Set<Npc> getSpawnedNpcs()
-	{
+
+	public Set<Npc> getSpawnedNpcs() {
 		return _spawnedNpcs;
 	}
-	
-	public final Location getSpawnLocation()
-	{
-		if (_locations != null)
-		{
+
+	public final Location getSpawnLocation() {
+		if (_locations != null) {
 			final double locRandom = (100 * Rnd.nextDouble());
 			float cumulativeChance = 0;
-			for (ChanceLocation loc : _locations)
-			{
-				if (locRandom <= (cumulativeChance += loc.getChance()))
-				{
+			for (ChanceLocation loc : _locations) {
+				if (locRandom <= (cumulativeChance += loc.getChance())) {
 					return loc;
 				}
 			}
 			LOGGER.warn("Couldn't match location by chance turning first..");
 			return null;
-		}
-		else if (_zone != null)
-		{
+		} else if (_zone != null) {
 			final Location loc = _zone.getRandomPoint();
 			loc.setHeading(Rnd.get(65535));
 			return loc;
-		}
-		else if (!_group.getTerritories().isEmpty())
-		{
+		} else if (!_group.getTerritories().isEmpty()) {
 			final SpawnTerritory territory = _group.getTerritories().get(Rnd.get(_group.getTerritories().size()));
-			for (int i = 0; i < 100; i++)
-			{
+			for (int i = 0; i < 100; i++) {
 				final Location loc = territory.getRandomPoint();
-				if (_group.getBannedTerritories().isEmpty() || _group.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ())))
-				{
+				if (_group.getBannedTerritories().isEmpty() || _group.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()))) {
 					return loc;
 				}
 			}
-		}
-		else if (!_spawnTemplate.getTerritories().isEmpty())
-		{
+		} else if (!_spawnTemplate.getTerritories().isEmpty()) {
 			final SpawnTerritory territory = _spawnTemplate.getTerritories().get(Rnd.get(_spawnTemplate.getTerritories().size()));
-			for (int i = 0; i < 100; i++)
-			{
+			for (int i = 0; i < 100; i++) {
 				final Location loc = territory.getRandomPoint();
-				if (_spawnTemplate.getBannedTerritories().isEmpty() || _spawnTemplate.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ())))
-				{
+				if (_spawnTemplate.getBannedTerritories().isEmpty() || _spawnTemplate.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()))) {
 					return loc;
 				}
 			}
 		}
 		return null;
 	}
-	
-	public void spawn()
-	{
+
+	public void spawn() {
 		spawn(null);
 	}
-	
-	public void spawn(Instance instance)
-	{
-		try
-		{
+
+	public void spawn(Instance instance) {
+		try {
 			final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_id);
-			if (npcTemplate == null)
-			{
+			if (npcTemplate == null) {
 				LOGGER.warn("Attempting to spawn unexisting npc id: {} file: {} spawn: {} group: {}", _id, _spawnTemplate.getFileName(), _spawnTemplate.getName(), _group.getName());
 				return;
 			}
-			
-			if (npcTemplate.isType("L2Defender"))
-			{
+
+			if (npcTemplate.isType("L2Defender")) {
 				LOGGER.warn("Attempting to spawn npc id: {} type: {} file: {} spawn: {} group: {}", _id, npcTemplate.getType(), _spawnTemplate.getFileName(), _spawnTemplate.getName(), _group.getName());
 				return;
 			}
-			
-			for (int i = 0; i < _count; i++)
-			{
+
+			for (int i = 0; i < _count; i++) {
 				spawnNpc(npcTemplate, instance);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Couldn't spawn npc {}", _id, e);
 		}
 	}
-	
+
 	/**
 	 * @param npcTemplate
 	 * @param instance
@@ -351,71 +292,57 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
 	 * @throws ClassNotFoundException
 	 * @throws SecurityException
 	 */
-	private void spawnNpc(L2NpcTemplate npcTemplate, Instance instance) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException
-	{
+	private void spawnNpc(L2NpcTemplate npcTemplate, Instance instance) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException {
 		final L2Spawn spawn = new L2Spawn(npcTemplate);
 		final Location loc = getSpawnLocation();
-		if (loc == null)
-		{
+		if (loc == null) {
 			LOGGER.warn("Couldn't initialize new spawn, no location found!");
 			return;
 		}
-		
+
 		spawn.setInstanceId(instance != null ? instance.getId() : 0);
 		spawn.setAmount(1);
 		spawn.setXYZ(loc);
 		spawn.setHeading(loc.getHeading());
 		spawn.setLocation(loc);
 		int respawn = 0, respawnRandom = 0;
-		if (_respawnTime != null)
-		{
+		if (_respawnTime != null) {
 			respawn = (int) _respawnTime.getSeconds();
 		}
-		if (_respawnTimeRandom != null)
-		{
+		if (_respawnTimeRandom != null) {
 			respawnRandom = (int) _respawnTimeRandom.getSeconds();
 		}
-		
-		if (respawn > 0)
-		{
+
+		if (respawn > 0) {
 			spawn.setRespawnDelay(respawn, respawnRandom);
 			spawn.startRespawn();
-		}
-		else
-		{
+		} else {
 			spawn.stopRespawn();
 		}
-		
+
 		spawn.setSpawnTemplate(this);
-		
-		if (_saveInDB)
-		{
-			if (!DBSpawnManager.getInstance().isDefined(_id))
-			{
+
+		if (_saveInDB) {
+			if (!DBSpawnManager.getInstance().isDefined(_id)) {
 				final Npc spawnedNpc = DBSpawnManager.getInstance().addNewSpawn(spawn, true);
-				if ((spawnedNpc != null) && spawnedNpc.isMonster() && (_minions != null))
-				{
+				if ((spawnedNpc != null) && spawnedNpc.isMonster() && (_minions != null)) {
 					((L2MonsterInstance) spawnedNpc).getMinionList().spawnMinions(_minions);
 				}
-				
+
 				_spawnedNpcs.add(spawnedNpc);
 			}
-		}
-		else
-		{
+		} else {
 			final Npc npc = spawn.doSpawn(_spawnAnimation);
-			if (npc.isMonster() && (_minions != null))
-			{
+			if (npc.isMonster() && (_minions != null)) {
 				((L2MonsterInstance) npc).getMinionList().spawnMinions(_minions);
 			}
 			_spawnedNpcs.add(npc);
-			
+
 			SpawnTable.getInstance().addNewSpawn(spawn, false);
 		}
 	}
-	
-	public void despawn()
-	{
+
+	public void despawn() {
 		_spawnedNpcs.forEach(npc ->
 		{
 			npc.getSpawn().stopRespawn();
@@ -424,59 +351,43 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet>
 		});
 		_spawnedNpcs.clear();
 	}
-	
-	public boolean isInMyTerritory(ILocational loc)
-	{
-		if (_zone != null)
-		{
+
+	public boolean isInMyTerritory(ILocational loc) {
+		if (_zone != null) {
 			return _zone.isInsideZone(loc.getX(), loc.getY(), loc.getZ());
-		}
-		else if (!_group.getTerritories().isEmpty())
-		{
-			for (SpawnTerritory territory : _group.getTerritories())
-			{
-				if (((territory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()) && (_group.getBannedTerritories().isEmpty())) || _group.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()))))
-				{
+		} else if (!_group.getTerritories().isEmpty()) {
+			for (SpawnTerritory territory : _group.getTerritories()) {
+				if (((territory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()) && (_group.getBannedTerritories().isEmpty())) || _group.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ())))) {
 					return true;
 				}
 			}
 			return false;
-		}
-		else if (!_spawnTemplate.getTerritories().isEmpty())
-		{
-			for (SpawnTerritory territory : _spawnTemplate.getTerritories())
-			{
-				if (((territory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()) && (_spawnTemplate.getBannedTerritories().isEmpty())) || _spawnTemplate.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()))))
-				{
+		} else if (!_spawnTemplate.getTerritories().isEmpty()) {
+			for (SpawnTerritory territory : _spawnTemplate.getTerritories()) {
+				if (((territory.isInsideZone(loc.getX(), loc.getY(), loc.getZ()) && (_spawnTemplate.getBannedTerritories().isEmpty())) || _spawnTemplate.getBannedTerritories().stream().allMatch(bannedTerritory -> !bannedTerritory.isInsideZone(loc.getX(), loc.getY(), loc.getZ())))) {
 					return true;
 				}
 			}
 			return false;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
-	
-	public void notifySpawnNpc(Npc npc)
-	{
+
+	public void notifySpawnNpc(Npc npc) {
 		_spawnTemplate.notifyEvent(event -> event.onSpawnNpc(_spawnTemplate, _group, npc));
 	}
-	
-	public void notifyDespawnNpc(Npc npc)
-	{
+
+	public void notifyDespawnNpc(Npc npc) {
 		_spawnTemplate.notifyEvent(event -> event.onSpawnDespawnNpc(_spawnTemplate, _group, npc));
 	}
-	
-	public void notifyNpcDeath(Npc npc, Creature killer)
-	{
+
+	public void notifyNpcDeath(Npc npc, Creature killer) {
 		_spawnTemplate.notifyEvent(event -> event.onSpawnNpcDeath(_spawnTemplate, _group, npc, killer));
 	}
-	
+
 	@Override
-	public NpcSpawnTemplate clone()
-	{
+	public NpcSpawnTemplate clone() {
 		return new NpcSpawnTemplate(this);
 	}
 }

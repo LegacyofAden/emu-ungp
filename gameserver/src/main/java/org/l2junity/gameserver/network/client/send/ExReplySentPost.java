@@ -18,62 +18,51 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author Migi, DS
  */
-public class ExReplySentPost extends AbstractItemPacket
-{
+public class ExReplySentPost extends AbstractItemPacket {
 	private final Message _msg;
 	private Collection<ItemInstance> _items = null;
-	
-	public ExReplySentPost(Message msg)
-	{
+
+	public ExReplySentPost(Message msg) {
 		_msg = msg;
-		if (msg.hasAttachments())
-		{
+		if (msg.hasAttachments()) {
 			final ItemContainer attachments = msg.getAttachments();
-			if ((attachments != null) && (attachments.getSize() > 0))
-			{
+			if ((attachments != null) && (attachments.getSize() > 0)) {
 				_items = attachments.getItems();
-			}
-			else
-			{
+			} else {
 				_log.warn("Message " + msg.getId() + " has attachments but itemcontainer is empty.");
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_REPLY_SENT_POST.writeId(packet);
-		
+
 		packet.writeD(0x00); // GOD
 		packet.writeD(_msg.getId());
 		packet.writeD(_msg.isLocked() ? 1 : 0);
 		packet.writeS(_msg.getReceiverName());
 		packet.writeS(_msg.getSubject());
 		packet.writeS(_msg.getContent());
-		
-		if ((_items != null) && !_items.isEmpty())
-		{
+
+		if ((_items != null) && !_items.isEmpty()) {
 			packet.writeD(_items.size());
-			for (ItemInstance item : _items)
-			{
+			for (ItemInstance item : _items) {
 				writeItem(packet, item);
 				packet.writeD(item.getObjectId());
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0x00);
 		}
 		packet.writeQ(_msg.getReqAdena());

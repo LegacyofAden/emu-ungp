@@ -18,73 +18,65 @@
  */
 package org.l2junity.gameserver.model.items.enchant;
 
+import org.l2junity.gameserver.data.xml.impl.EnchantItemGroupsData;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.items.L2Item;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.l2junity.gameserver.data.xml.impl.EnchantItemGroupsData;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.items.L2Item;
-
 /**
  * @author UnAfraid
  */
-public final class EnchantScrollGroup
-{
+public final class EnchantScrollGroup {
 	private final int _id;
 	private final int _extendId;
 	private List<EnchantRateItem> _rateGroups;
-	
-	public EnchantScrollGroup(StatsSet set)
-	{
+
+	public EnchantScrollGroup(StatsSet set) {
 		_id = set.getInt("id");
 		_extendId = set.getInt("extend", 0);
 	}
-	
+
 	/**
 	 * Adds new rate group.
+	 *
 	 * @param group
 	 */
-	public void addRateGroup(EnchantRateItem group)
-	{
-		if (_rateGroups == null)
-		{
+	public void addRateGroup(EnchantRateItem group) {
+		if (_rateGroups == null) {
 			_rateGroups = new ArrayList<>();
 		}
 		_rateGroups.add(group);
 	}
-	
+
 	/**
 	 * @return {@code List} of all enchant rate items, Empty list if none.
 	 */
-	public List<EnchantRateItem> getRateGroups()
-	{
-		return Stream.concat(_extendId != 0 ? EnchantItemGroupsData.getInstance().getScrollGroup(_extendId).getRateGroups().stream() : Collections.<EnchantRateItem> emptyList().stream(), _rateGroups != null ? _rateGroups.stream() : Collections.<EnchantRateItem> emptyList().stream()).collect(Collectors.toList());
+	public List<EnchantRateItem> getRateGroups() {
+		return Stream.concat(_extendId != 0 ? EnchantItemGroupsData.getInstance().getScrollGroup(_extendId).getRateGroups().stream() : Collections.<EnchantRateItem>emptyList().stream(), _rateGroups != null ? _rateGroups.stream() : Collections.<EnchantRateItem>emptyList().stream()).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * @param item
 	 * @return {@link EnchantRateItem}, {@code NULL} in case non of rate items can be used with.
 	 */
-	public EnchantRateItem getRateGroup(L2Item item)
-	{
-		for (EnchantRateItem group : getRateGroups())
-		{
-			if (group.validate(item))
-			{
+	public EnchantRateItem getRateGroup(L2Item item) {
+		for (EnchantRateItem group : getRateGroups()) {
+			if (group.validate(item)) {
 				return group;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return id of current enchant scroll group.
 	 */
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
 }

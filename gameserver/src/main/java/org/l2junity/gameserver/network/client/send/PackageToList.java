@@ -18,33 +18,29 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author -Wooden-
  * @author UnAfraid, mrTJO
  */
-public class PackageToList implements IClientOutgoingPacket
-{
+public class PackageToList implements IClientOutgoingPacket {
 	private final Map<Integer, String> _players;
-	
-	public PackageToList(Map<Integer, String> chars)
-	{
+
+	public PackageToList(Map<Integer, String> chars) {
 		_players = chars;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PACKAGE_TO_LIST.writeId(packet);
-		
+
 		packet.writeD(_players.size());
-		for (Entry<Integer, String> entry : _players.entrySet())
-		{
+		for (Entry<Integer, String> entry : _players.entrySet()) {
 			packet.writeD(entry.getKey());
 			packet.writeS(entry.getValue());
 		}

@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class ExShowAdventurerGuideBook implements IClientOutgoingPacket
-{
+public class ExShowAdventurerGuideBook implements IClientOutgoingPacket {
 	public static final ExShowAdventurerGuideBook STATIC_PACKET = new ExShowAdventurerGuideBook();
-	
-	private ExShowAdventurerGuideBook()
-	{
+
+	private ExShowAdventurerGuideBook() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_ADVENTURER_GUIDE_BOOK.writeId(packet);
-		
+
 		return true;
 	}
 }

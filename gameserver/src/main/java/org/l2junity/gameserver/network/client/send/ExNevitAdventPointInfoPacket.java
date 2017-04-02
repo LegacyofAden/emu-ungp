@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author mochitto
  */
-public class ExNevitAdventPointInfoPacket implements IClientOutgoingPacket
-{
+public class ExNevitAdventPointInfoPacket implements IClientOutgoingPacket {
 	private final int _points;
-	
-	public ExNevitAdventPointInfoPacket(int points)
-	{
+
+	public ExNevitAdventPointInfoPacket(int points) {
 		_points = points;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BR_AGATHION_ENERGY_INFO.writeId(packet);
-		
+
 		packet.writeD(_points); // 72 = 1%, max 7200 = 100%
 		return true;
 	}

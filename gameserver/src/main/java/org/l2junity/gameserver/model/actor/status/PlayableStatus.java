@@ -20,16 +20,13 @@ package org.l2junity.gameserver.model.actor.status;
 
 import org.l2junity.gameserver.model.actor.Playable;
 
-public class PlayableStatus extends CharStatus
-{
-	public PlayableStatus(Playable activeChar)
-	{
+public class PlayableStatus extends CharStatus {
+	public PlayableStatus(Playable activeChar) {
 		super(activeChar);
 	}
-	
+
 	@Override
-	public Playable getActiveChar()
-	{
+	public Playable getActiveChar() {
 		return (Playable) super.getActiveChar();
 	}
 }

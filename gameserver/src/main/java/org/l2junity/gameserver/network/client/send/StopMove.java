@@ -22,19 +22,17 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class StopMove implements IClientOutgoingPacket
-{
+public final class StopMove implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _x;
 	private final int _y;
 	private final int _z;
 	private final int _heading;
-	
-	public StopMove(Creature cha)
-	{
+
+	public StopMove(Creature cha) {
 		this(cha.getObjectId(), cha.getX(), cha.getY(), cha.getZ(), cha.getHeading());
 	}
-	
+
 	/**
 	 * @param objectId
 	 * @param x
@@ -42,20 +40,18 @@ public final class StopMove implements IClientOutgoingPacket
 	 * @param z
 	 * @param heading
 	 */
-	public StopMove(int objectId, double x, double y, double z, int heading)
-	{
+	public StopMove(int objectId, double x, double y, double z, int heading) {
 		_objectId = objectId;
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 		_heading = heading;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.STOP_MOVE.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_x);
 		packet.writeD(_y);

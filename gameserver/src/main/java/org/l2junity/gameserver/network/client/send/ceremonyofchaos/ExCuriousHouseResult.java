@@ -28,20 +28,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExCuriousHouseResult implements IClientOutgoingPacket
-{
+public class ExCuriousHouseResult implements IClientOutgoingPacket {
 	private final CeremonyOfChaosResult _result;
 	private final CeremonyOfChaosEvent _event;
-	
-	public ExCuriousHouseResult(CeremonyOfChaosResult result, CeremonyOfChaosEvent event)
-	{
+
+	public ExCuriousHouseResult(CeremonyOfChaosResult result, CeremonyOfChaosEvent event) {
 		_result = result;
 		_event = event;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CURIOUS_HOUSE_RESULT.writeId(packet);
 		packet.writeD(_event.getId());
 		packet.writeH(_result.ordinal());
@@ -57,5 +54,5 @@ public class ExCuriousHouseResult implements IClientOutgoingPacket
 		});
 		return true;
 	}
-	
+
 }

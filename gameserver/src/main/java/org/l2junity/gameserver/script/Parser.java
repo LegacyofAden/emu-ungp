@@ -18,14 +18,13 @@
  */
 package org.l2junity.gameserver.script;
 
-import javax.script.ScriptContext;
-
 import org.w3c.dom.Node;
+
+import javax.script.ScriptContext;
 
 /**
  * @author Luis Arias
  */
-public abstract class Parser
-{
+public abstract class Parser {
 	public abstract void parseScript(Node node, ScriptContext context);
 }

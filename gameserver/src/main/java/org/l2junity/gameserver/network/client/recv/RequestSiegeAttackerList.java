@@ -27,25 +27,22 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestSiegeAttackerList implements IClientIncomingPacket
-{
+public final class RequestSiegeAttackerList implements IClientIncomingPacket {
 	private int _castleId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_castleId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final Castle castle = CastleManager.getInstance().getCastleById(_castleId);
-		if (castle != null)
-		{
+		if (castle != null) {
 			client.sendPacket(new SiegeAttackerList(castle));
 		}
 	}

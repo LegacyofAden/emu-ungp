@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class GetPlayerCombatState implements IBaseEvent
-{
+public final class GetPlayerCombatState implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Creature _target;
-	
-	public GetPlayerCombatState(PlayerInstance activeChar, Creature target)
-	{
+
+	public GetPlayerCombatState(PlayerInstance activeChar, Creature target) {
 		_activeChar = activeChar;
 		_target = target;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Creature getTarget()
-	{
+
+	public Creature getTarget() {
 		return _target;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.GET_COMBAT_STATE;
 	}
 }

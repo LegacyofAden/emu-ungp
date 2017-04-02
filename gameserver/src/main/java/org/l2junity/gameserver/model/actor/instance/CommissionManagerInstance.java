@@ -27,34 +27,26 @@ import org.l2junity.gameserver.network.client.send.commission.ExShowCommission;
 /**
  * @author NosBit
  */
-public class CommissionManagerInstance extends Npc
-{
-	public CommissionManagerInstance(L2NpcTemplate template)
-	{
+public class CommissionManagerInstance extends Npc {
+	public CommissionManagerInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.CommissionManagerInstance);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if (attacker.isMonster())
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker.isMonster()) {
 			return true;
 		}
-		
+
 		return super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (command.equalsIgnoreCase("show_commission"))
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (command.equalsIgnoreCase("show_commission")) {
 			player.sendPacket(ExShowCommission.STATIC_PACKET);
-		}
-		else
-		{
+		} else {
 			super.onBypassFeedback(player, command);
 		}
 	}

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv.ability;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.SkillLearn;
@@ -34,65 +34,46 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestResetAbilityPoint implements IClientIncomingPacket
-{
+public class RequestResetAbilityPoint implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isSubClassActive() && !activeChar.isDualClassActive())
-		{
+
+		if (activeChar.isSubClassActive() && !activeChar.isDualClassActive()) {
 			return;
 		}
-		
-		if ((activeChar.getPrivateStoreType() != PrivateStoreType.NONE) || (activeChar.getActiveRequester() != null))
-		{
+
+		if ((activeChar.getPrivateStoreType() != PrivateStoreType.NONE) || (activeChar.getActiveRequester() != null)) {
 			return;
-		}
-		else if ((activeChar.getLevel() < 99) || !activeChar.isNoble())
-		{
+		} else if ((activeChar.getLevel() < 99) || !activeChar.isNoble()) {
 			client.sendPacket(SystemMessageId.ABILITIES_CAN_BE_USED_BY_NOBLESSE_EXALTED_LV_99_OR_ABOVE);
 			return;
-		}
-		else if (activeChar.isInOlympiadMode() || activeChar.isOnEvent(CeremonyOfChaosEvent.class))
-		{
+		} else if (activeChar.isInOlympiadMode() || activeChar.isOnEvent(CeremonyOfChaosEvent.class)) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_USE_OR_RESET_ABILITY_POINTS_WHILE_PARTICIPATING_IN_THE_OLYMPIAD_OR_CEREMONY_OF_CHAOS);
 			return;
-		}
-		else if (activeChar.getAbilityPoints() == 0)
-		{
+		} else if (activeChar.getAbilityPoints() == 0) {
 			activeChar.sendMessage("You don't have ability points to reset!");
 			return;
-		}
-		else if (activeChar.getAbilityPointsUsed() == 0)
-		{
+		} else if (activeChar.getAbilityPointsUsed() == 0) {
 			activeChar.sendMessage("You haven't used your ability points yet!");
 			return;
-		}
-		else if (activeChar.getAdena() < PlayerConfig.ABILITY_POINTS_RESET_ADENA)
-		{
+		} else if (activeChar.getAdena() < PlayerConfig.ABILITY_POINTS_RESET_ADENA) {
 			client.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 			return;
 		}
-		
-		if (activeChar.reduceAdena("AbilityPointsReset", PlayerConfig.ABILITY_POINTS_RESET_ADENA, activeChar, true))
-		{
-			for (SkillLearn sk : SkillTreesData.getInstance().getAbilitySkillTree().values())
-			{
+
+		if (activeChar.reduceAdena("AbilityPointsReset", PlayerConfig.ABILITY_POINTS_RESET_ADENA, activeChar, true)) {
+			for (SkillLearn sk : SkillTreesData.getInstance().getAbilitySkillTree().values()) {
 				final Skill skill = activeChar.getKnownSkill(sk.getSkillId());
-				if (skill != null)
-				{
+				if (skill != null) {
 					activeChar.removeSkill(skill);
 				}
 			}

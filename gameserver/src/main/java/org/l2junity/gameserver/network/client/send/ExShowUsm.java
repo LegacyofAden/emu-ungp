@@ -24,8 +24,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExShowUsm implements IClientOutgoingPacket
-{
+public class ExShowUsm implements IClientOutgoingPacket {
 	public static final ExShowUsm GOD_INTRO = new ExShowUsm(2);
 	public static final ExShowUsm SECOND_TRANSFER_QUEST = new ExShowUsm(4);
 	public static final ExShowUsm OCTAVIS_INSTANCE_END = new ExShowUsm(6);
@@ -33,19 +32,17 @@ public class ExShowUsm implements IClientOutgoingPacket
 	public static final ExShowUsm ERTHEIA_FIRST_QUEST = new ExShowUsm(14);
 	public static final ExShowUsm ERTHEIA_INTRO_FOR_ERTHEIA = new ExShowUsm(147);
 	public static final ExShowUsm ERTHEIA_INTRO_FOR_OTHERS = new ExShowUsm(148);
-	
+
 	private final int _videoId;
-	
-	private ExShowUsm(int videoId)
-	{
+
+	private ExShowUsm(int videoId) {
 		_videoId = videoId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_USM.writeId(packet);
-		
+
 		packet.writeD(_videoId);
 		return true;
 	}

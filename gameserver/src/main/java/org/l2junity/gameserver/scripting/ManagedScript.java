@@ -18,86 +18,77 @@
  */
 package org.l2junity.gameserver.scripting;
 
-import java.nio.file.Path;
-
 import org.l2junity.commons.scripting.ScriptEngineManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
+
 /**
  * Abstract class for classes that are meant to be implemented by scripts.<BR>
+ *
  * @author KenM
  */
-public abstract class ManagedScript
-{
+public abstract class ManagedScript {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManagedScript.class);
-	
+
 	private final Path _scriptFile;
 	private long _lastLoadTime;
 	private boolean _isActive;
-	
-	public ManagedScript()
-	{
+
+	public ManagedScript() {
 		_scriptFile = getScriptPath();
 		setLastLoadTime(System.currentTimeMillis());
 	}
-	
+
 	public abstract Path getScriptPath();
-	
+
 	/**
 	 * Attempts to reload this script and to refresh the necessary bindings with it ScriptControler.<BR>
 	 * Subclasses of this class should override this method to properly refresh their bindings when necessary.
+	 *
 	 * @return true if and only if the script was reloaded, false otherwise.
 	 */
-	public boolean reload()
-	{
-		try
-		{
+	public boolean reload() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, getScriptFile());
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Failed to reload script!", e);
 			return false;
 		}
 	}
-	
+
 	public abstract boolean unload();
-	
-	public void setActive(boolean status)
-	{
+
+	public void setActive(boolean status) {
 		_isActive = status;
 	}
-	
-	public boolean isActive()
-	{
+
+	public boolean isActive() {
 		return _isActive;
 	}
-	
+
 	/**
 	 * @return Returns the scriptFile.
 	 */
-	public Path getScriptFile()
-	{
+	public Path getScriptFile() {
 		return _scriptFile;
 	}
-	
+
 	/**
 	 * @param lastLoadTime The lastLoadTime to set.
 	 */
-	protected void setLastLoadTime(long lastLoadTime)
-	{
+	protected void setLastLoadTime(long lastLoadTime) {
 		_lastLoadTime = lastLoadTime;
 	}
-	
+
 	/**
 	 * @return Returns the lastLoadTime.
 	 */
-	protected long getLastLoadTime()
-	{
+	protected long getLastLoadTime() {
 		return _lastLoadTime;
 	}
-	
+
 	public abstract String getScriptName();
 }

@@ -32,53 +32,43 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestNewEnchantRemoveOne implements IClientIncomingPacket
-{
+public class RequestNewEnchantRemoveOne implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
-		}
-		else if (activeChar.isInStoreMode())
-		{
+		} else if (activeChar.isInStoreMode()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_DO_THAT_WHILE_IN_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP);
 			client.sendPacket(ExEnchantOneFail.STATIC_PACKET);
 			return;
-		}
-		else if (activeChar.isProcessingTransaction() || activeChar.isProcessingRequest())
-		{
+		} else if (activeChar.isProcessingTransaction() || activeChar.isProcessingRequest()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_USE_THIS_SYSTEM_DURING_TRADING_PRIVATE_STORE_AND_WORKSHOP_SETUP);
 			client.sendPacket(ExEnchantOneFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		final CompoundRequest request = activeChar.getRequest(CompoundRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			client.sendPacket(ExEnchantOneRemoveFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		final ItemInstance item = request.getItemOne();
-		if ((item == null) || (item.getObjectId() != _objectId))
-		{
+		if ((item == null) || (item.getObjectId() != _objectId)) {
 			client.sendPacket(ExEnchantOneRemoveFail.STATIC_PACKET);
 			return;
 		}
 		request.setItemOne(0);
-		
+
 		client.sendPacket(ExEnchantOneRemoveOK.STATIC_PACKET);
 	}
 }

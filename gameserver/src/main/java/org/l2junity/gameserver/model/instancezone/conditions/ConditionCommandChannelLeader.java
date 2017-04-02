@@ -27,20 +27,18 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Command channel leader condition
+ *
  * @author malyelfik
  */
-public final class ConditionCommandChannelLeader extends Condition
-{
-	
-	public ConditionCommandChannelLeader(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionCommandChannelLeader extends Condition {
+
+	public ConditionCommandChannelLeader(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, true, showMessageAndHtml);
 		setSystemMessage(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_MAKE_THE_REQUEST_TO_ENTER);
 	}
-	
+
 	@Override
-	public boolean test(PlayerInstance player, Npc npc)
-	{
+	public boolean test(PlayerInstance player, Npc npc) {
 		final AbstractPlayerGroup group = player.getCommandChannel();
 		return (group != null) && group.isLeader(player);
 	}

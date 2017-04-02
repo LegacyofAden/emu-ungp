@@ -27,20 +27,16 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik, UnAfraid
  */
-public final class RequestBRGamePoint implements IClientIncomingPacket
-{
+public final class RequestBRGamePoint implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			client.sendPacket(new ExBRGamePoint(player));
 		}
 	}

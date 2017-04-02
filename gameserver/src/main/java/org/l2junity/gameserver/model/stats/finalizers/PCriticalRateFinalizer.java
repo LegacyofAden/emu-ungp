@@ -18,43 +18,38 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.stats.BaseStats;
-import org.l2junity.gameserver.model.stats.IStatsFunction;
 import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.IStatsFunction;
+
+import java.util.OptionalDouble;
 
 /**
  * @author UnAfraid
  */
-public class PCriticalRateFinalizer implements IStatsFunction
-{
+public class PCriticalRateFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = calcWeaponBaseValue(creature, stat);
-		if (creature.isPlayer())
-		{
+		if (creature.isPlayer()) {
 			// Enchanted legs bonus
 			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_LEGS);
 		}
 		final double dexBonus = creature.getDEX() > 0 ? BaseStats.DEX.calcBonus(creature) : 1.;
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue * dexBonus * 10), 0, PlayerConfig.MAX_PCRIT_RATE);
 	}
-	
+
 	@Override
-	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed)
-	{
-		if (isBlessed)
-		{
+	public double calcEnchantBodyPartBonus(int enchantLevel, boolean isBlessed) {
+		if (isBlessed) {
 			return (0.5 * Math.max(enchantLevel - 3, 0)) + (0.5 * Math.max(enchantLevel - 6, 0));
 		}
-		
+
 		return (0.34 * Math.max(enchantLevel - 3, 0)) + (0.34 * Math.max(enchantLevel - 6, 0));
 	}
 }

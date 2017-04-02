@@ -18,39 +18,34 @@
  */
 package org.l2junity.gameserver.model.events.impl.ceremonyofchaos;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class OnCeremonyOfChaosMatchResult implements IBaseEvent
-{
+public class OnCeremonyOfChaosMatchResult implements IBaseEvent {
 	private final List<CeremonyOfChaosMember> _winners;
 	private final List<CeremonyOfChaosMember> _members;
-	
-	public OnCeremonyOfChaosMatchResult(List<CeremonyOfChaosMember> winners, List<CeremonyOfChaosMember> members)
-	{
+
+	public OnCeremonyOfChaosMatchResult(List<CeremonyOfChaosMember> winners, List<CeremonyOfChaosMember> members) {
 		_winners = winners;
 		_members = members;
 	}
-	
-	public List<CeremonyOfChaosMember> getWinners()
-	{
+
+	public List<CeremonyOfChaosMember> getWinners() {
 		return _winners;
 	}
-	
-	public List<CeremonyOfChaosMember> getMembers()
-	{
+
+	public List<CeremonyOfChaosMember> getMembers() {
 		return _members;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CEREMONY_OF_CHAOS_MATCH_RESULT;
 	}
 }

@@ -18,48 +18,39 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class QuestList implements IClientOutgoingPacket
-{
+import java.util.LinkedList;
+import java.util.List;
+
+public class QuestList implements IClientOutgoingPacket {
 	private final List<QuestState> _activeQuests;
 	private final byte[] _oneTimeQuestMask;
-	
-	public QuestList(PlayerInstance player)
-	{
+
+	public QuestList(PlayerInstance player) {
 		_activeQuests = new LinkedList<>();
 		_oneTimeQuestMask = new byte[128];
-		
-		for (QuestState qs : player.getAllQuestStates())
-		{
+
+		for (QuestState qs : player.getAllQuestStates()) {
 			final int questId = qs.getQuestId();
-			if (questId > 0)
-			{
-				if (qs.isStarted())
-				{
+			if (questId > 0) {
+				if (qs.isStarted()) {
 					_activeQuests.add(qs);
-				}
-				else if (qs.isCompleted() && !(((questId > 255) && (questId < 10256)) || (questId > 11023)))
-				{
+				} else if (qs.isCompleted() && !(((questId > 255) && (questId < 10256)) || (questId > 11023))) {
 					_oneTimeQuestMask[(questId % 10000) / 8] |= 1 << (questId % 8);
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.QUEST_LIST.writeId(packet);
 		packet.writeH(_activeQuests.size());
-		for (QuestState qs : _activeQuests)
-		{
+		for (QuestState qs : _activeQuests) {
 			packet.writeD(qs.getQuestId()); // Quest ID
 			packet.writeD(qs.getRawCond()); // Quest state
 		}

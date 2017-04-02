@@ -27,33 +27,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik
  */
-public class RequestDismissPartyRoom implements IClientIncomingPacket
-{
+public class RequestDismissPartyRoom implements IClientIncomingPacket {
 	private int _roomid;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomid = packet.readD();
 		packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final MatchingRoom room = player.getMatchingRoom();
-		if ((room == null) || (room.getId() != _roomid) || (room.getRoomType() != MatchingRoomType.PARTY) || (room.getLeader() != player))
-		{
+		if ((room == null) || (room.getId() != _roomid) || (room.getRoomType() != MatchingRoomType.PARTY) || (room.getLeader() != player)) {
 			return;
 		}
-		
+
 		room.disbandRoom();
 	}
 }

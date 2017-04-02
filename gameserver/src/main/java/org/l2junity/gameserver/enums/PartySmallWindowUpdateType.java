@@ -23,8 +23,7 @@ import org.l2junity.gameserver.model.interfaces.IUpdateTypeComponent;
 /**
  * @author UnAfraid
  */
-public enum PartySmallWindowUpdateType implements IUpdateTypeComponent
-{
+public enum PartySmallWindowUpdateType implements IUpdateTypeComponent {
 	CURRENT_CP(0x01),
 	MAX_CP(0x02),
 	CURRENT_HP(0x04),
@@ -35,17 +34,15 @@ public enum PartySmallWindowUpdateType implements IUpdateTypeComponent
 	CLASS_ID(0x80),
 	PARTY_SUBSTITUTE(0x100),
 	VITALITY_POINTS(0x200);
-	
+
 	private final int _mask;
-	
-	private PartySmallWindowUpdateType(int mask)
-	{
+
+	private PartySmallWindowUpdateType(int mask) {
 		_mask = mask;
 	}
-	
+
 	@Override
-	public int getMask()
-	{
+	public int getMask() {
 		return _mask;
 	}
 }

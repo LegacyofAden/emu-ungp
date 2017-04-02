@@ -18,44 +18,39 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class ExAcquirableSkillListByClass implements IClientOutgoingPacket
-{
+public class ExAcquirableSkillListByClass implements IClientOutgoingPacket {
 	final List<SkillLearn> _learnable;
 	final AcquireSkillType _type;
-	
-	public ExAcquirableSkillListByClass(List<SkillLearn> learnable, AcquireSkillType type)
-	{
+
+	public ExAcquirableSkillListByClass(List<SkillLearn> learnable, AcquireSkillType type) {
 		_learnable = learnable;
 		_type = type;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ACQUIRABLE_SKILL_LIST_BY_CLASS.writeId(packet);
-		
+
 		packet.writeH(_type.getId());
 		packet.writeH(_learnable.size());
-		for (SkillLearn skill : _learnable)
-		{
+		for (SkillLearn skill : _learnable) {
 			packet.writeD(skill.getSkillId());
 			packet.writeH(skill.getSkillLevel());
 			packet.writeH(skill.getSkillLevel()); // Max level
 			packet.writeC(skill.getGetLevel());
 			packet.writeQ(skill.getLevelUpSp());
 			packet.writeC(skill.getRequiredItems().size());
-			if (_type == AcquireSkillType.SUBPLEDGE)
-			{
+			if (_type == AcquireSkillType.SUBPLEDGE) {
 				packet.writeH(0x00);
 			}
 		}

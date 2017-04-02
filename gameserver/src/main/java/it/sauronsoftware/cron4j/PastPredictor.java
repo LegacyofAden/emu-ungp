@@ -26,117 +26,114 @@ import java.util.TimeZone;
 /**
  * @author Carlo Pelliccia
  */
-public class PastPredictor
-{
+public class PastPredictor {
 	/**
 	 * The scheduling pattern on which the predictor works.
 	 */
 	private final SchedulingPattern _schedulingPattern;
-	
+
 	/**
 	 * The start time for the next prediction.
 	 */
 	private long _time;
-	
+
 	/**
 	 * The time zone for the prediction.
 	 */
 	private TimeZone _timeZone = TimeZone.getDefault();
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
-	 * @param start The start time of the prediction.
+	 * @param start             The start time of the prediction.
 	 * @throws InvalidPatternException In the given scheduling pattern isn't valid.
 	 */
-	public PastPredictor(String schedulingPattern, long start) throws InvalidPatternException
-	{
+	public PastPredictor(String schedulingPattern, long start) throws InvalidPatternException {
 		_schedulingPattern = new SchedulingPattern(schedulingPattern);
 		_time = (start / (1000 * 60)) * 1000 * 60;
 	}
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
-	 * @param start The start time of the prediction.
+	 * @param start             The start time of the prediction.
 	 * @throws InvalidPatternException In the given scheduling pattern isn't valid.
 	 */
-	public PastPredictor(String schedulingPattern, Date start) throws InvalidPatternException
-	{
+	public PastPredictor(String schedulingPattern, Date start) throws InvalidPatternException {
 		this(schedulingPattern, start.getTime());
 	}
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and the current system time as the prediction start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
 	 * @throws InvalidPatternException In the given scheduling pattern isn't valid.
 	 */
-	public PastPredictor(String schedulingPattern) throws InvalidPatternException
-	{
+	public PastPredictor(String schedulingPattern) throws InvalidPatternException {
 		this(schedulingPattern, System.currentTimeMillis());
 	}
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
-	 * @param start The start time of the prediction.
+	 * @param start             The start time of the prediction.
 	 * @since 2.0
 	 */
-	public PastPredictor(SchedulingPattern schedulingPattern, long start)
-	{
+	public PastPredictor(SchedulingPattern schedulingPattern, long start) {
 		_schedulingPattern = schedulingPattern;
 		_time = (start / (1000 * 60)) * 1000 * 60;
 	}
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
-	 * @param start The start time of the prediction.
+	 * @param start             The start time of the prediction.
 	 * @since 2.0
 	 */
-	public PastPredictor(SchedulingPattern schedulingPattern, Date start)
-	{
+	public PastPredictor(SchedulingPattern schedulingPattern, Date start) {
 		this(schedulingPattern, start.getTime());
 	}
-	
+
 	/**
 	 * It builds a predictor with the given scheduling pattern and the current system time as the prediction start time.
+	 *
 	 * @param schedulingPattern The pattern on which the prediction will be based.
 	 * @since 2.0
 	 */
-	public PastPredictor(SchedulingPattern schedulingPattern)
-	{
+	public PastPredictor(SchedulingPattern schedulingPattern) {
 		this(schedulingPattern, System.currentTimeMillis());
 	}
-	
+
 	/**
 	 * Sets the time zone for predictions.
+	 *
 	 * @param timeZone The time zone for predictions.
 	 * @since 2.2.5
 	 */
-	public void setTimeZone(TimeZone timeZone)
-	{
+	public void setTimeZone(TimeZone timeZone) {
 		_timeZone = timeZone;
 	}
-	
+
 	/**
 	 * It returns the previous matching moment as a millis value.
+	 *
 	 * @return The previous matching moment as a millis value.
 	 */
-	public synchronized long prevMatchingTime()
-	{
+	public synchronized long prevMatchingTime() {
 		// Go a minute back.
 		_time -= 60000;
 		// Is it matching?
-		if (_schedulingPattern.match(_time))
-		{
+		if (_schedulingPattern.match(_time)) {
 			return _time;
 		}
 		// Go through the matcher groups.
 		int size = _schedulingPattern.matcherSize;
 		long[] times = new long[size];
-		for (int k = 0; k < size; k++)
-		{
+		for (int k = 0; k < size; k++) {
 			// Ok, split the time!
 			GregorianCalendar c = new GregorianCalendar();
 			c.setTimeInMillis(_time);
@@ -152,73 +149,55 @@ public class PastPredictor
 			ValueMatcher dayOfMonthMatcher = (ValueMatcher) _schedulingPattern.dayOfMonthMatchers.get(k);
 			ValueMatcher dayOfWeekMatcher = (ValueMatcher) _schedulingPattern.dayOfWeekMatchers.get(k);
 			ValueMatcher monthMatcher = (ValueMatcher) _schedulingPattern.monthMatchers.get(k);
-			for (;;)
-			{ // day of week
-				for (;;)
-				{ // month
-					for (;;)
-					{ // day of month
-						for (;;)
-						{ // hour
-							for (;;)
-							{ // minutes
-								if (minuteMatcher.match(minute))
-								{
+			for (; ; ) { // day of week
+				for (; ; ) { // month
+					for (; ; ) { // day of month
+						for (; ; ) { // hour
+							for (; ; ) { // minutes
+								if (minuteMatcher.match(minute)) {
 									break;
 								}
 								minute--;
-								if (minute < 0)
-								{
+								if (minute < 0) {
 									minute = 59;
 									hour--;
 								}
 							}
-							if (hour < 0)
-							{
+							if (hour < 0) {
 								hour = 23;
 								dayOfMonth--;
 							}
-							if (hourMatcher.match(hour))
-							{
+							if (hourMatcher.match(hour)) {
 								break;
 							}
 							hour--;
 							minute = 59;
 						}
-						if (dayOfMonth < 1)
-						{
+						if (dayOfMonth < 1) {
 							dayOfMonth = 31;
 							month--;
 						}
-						if (month < Calendar.JANUARY)
-						{
+						if (month < Calendar.JANUARY) {
 							month = Calendar.DECEMBER;
 							year--;
 						}
-						if (dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
-						{
+						if (dayOfMonthMatcher instanceof DayOfMonthValueMatcher) {
 							DayOfMonthValueMatcher aux = (DayOfMonthValueMatcher) dayOfMonthMatcher;
-							if (aux.match(dayOfMonth, month + 1, c.isLeapYear(year)))
-							{
+							if (aux.match(dayOfMonth, month + 1, c.isLeapYear(year))) {
 								break;
 							}
 							dayOfMonth--;
 							hour = 23;
 							minute = 59;
-						}
-						else if (dayOfMonthMatcher.match(dayOfMonth))
-						{
+						} else if (dayOfMonthMatcher.match(dayOfMonth)) {
 							break;
-						}
-						else
-						{
+						} else {
 							dayOfMonth--;
 							hour = 23;
 							minute = 59;
 						}
 					}
-					if (monthMatcher.match(month + 1))
-					{
+					if (monthMatcher.match(month + 1)) {
 						break;
 					}
 					month--;
@@ -241,10 +220,8 @@ public class PastPredictor
 				dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 				month = c.get(Calendar.MONTH);
 				year = c.get(Calendar.YEAR);
-				if ((month != oldMonth) || (dayOfMonth != oldDayOfMonth) || (year != oldYear))
-				{
-					do
-					{
+				if ((month != oldMonth) || (dayOfMonth != oldDayOfMonth) || (year != oldYear)) {
+					do {
 						dayOfMonth = oldDayOfMonth - 1;
 						month = oldMonth;
 						year = oldYear;
@@ -262,7 +239,7 @@ public class PastPredictor
 						dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 						month = c.get(Calendar.MONTH);
 						year = c.get(Calendar.YEAR);
-						
+
 					}
 					while ((month != oldMonth) || (dayOfMonth != oldDayOfMonth) || (year != oldYear));
 					// Take another spin!
@@ -270,19 +247,16 @@ public class PastPredictor
 				}
 				// Day of week.
 				int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-				if (dayOfWeekMatcher.match(dayOfWeek - 1))
-				{
+				if (dayOfWeekMatcher.match(dayOfWeek - 1)) {
 					break;
 				}
 				dayOfMonth--;
 				hour = 23;
 				minute = 59;
-				if (dayOfMonth < 1)
-				{
+				if (dayOfMonth < 1) {
 					dayOfMonth = 31;
 					month--;
-					if (month < Calendar.JANUARY)
-					{
+					if (month < Calendar.JANUARY) {
 						month = Calendar.DECEMBER;
 						year--;
 					}
@@ -293,10 +267,8 @@ public class PastPredictor
 		}
 		// Which one?
 		long min = Long.MAX_VALUE;
-		for (int k = 0; k < size; k++)
-		{
-			if (times[k] < min)
-			{
+		for (int k = 0; k < size; k++) {
+			if (times[k] < min) {
 				min = times[k];
 			}
 		}
@@ -305,13 +277,13 @@ public class PastPredictor
 		// Here it is.
 		return _time;
 	}
-	
+
 	/**
 	 * It returns the previous matching moment as a {@link Date} object.
+	 *
 	 * @return The previous matching moment as a {@link Date} object.
 	 */
-	public synchronized Date prevMatchingDate()
-	{
+	public synchronized Date prevMatchingDate() {
 		return new Date(prevMatchingTime());
 	}
 }

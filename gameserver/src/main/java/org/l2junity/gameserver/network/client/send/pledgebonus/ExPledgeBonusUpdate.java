@@ -26,20 +26,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExPledgeBonusUpdate implements IClientOutgoingPacket
-{
+public class ExPledgeBonusUpdate implements IClientOutgoingPacket {
 	private final ClanRewardType _type;
 	private final int _value;
-	
-	public ExPledgeBonusUpdate(ClanRewardType type, int value)
-	{
+
+	public ExPledgeBonusUpdate(ClanRewardType type, int value) {
 		_type = type;
 		_value = value;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_BONUS_UPDATE.writeId(packet);
 		packet.writeC(_type.getClientId());
 		packet.writeD(_value);

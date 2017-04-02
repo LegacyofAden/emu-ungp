@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 /**
  * @author NosBit
  */
-public enum EffectScope
-{
+public enum EffectScope {
 	GENERAL("effects"),
 	START("startEffects"),
 	SELF("selfEffects"),
@@ -34,28 +33,24 @@ public enum EffectScope
 	PVP("pvpEffects"),
 	PVE("pveEffects"),
 	END("endEffects");
-	
+
 	private static final Map<String, EffectScope> XML_NODE_NAME_TO_EFFECT_SCOPE;
-	
-	static
-	{
+
+	static {
 		XML_NODE_NAME_TO_EFFECT_SCOPE = Arrays.stream(values()).collect(Collectors.toMap(e -> e.getXmlNodeName(), e -> e));
 	}
-	
+
 	private final String _xmlNodeName;
-	
-	EffectScope(String xmlNodeName)
-	{
+
+	EffectScope(String xmlNodeName) {
 		_xmlNodeName = xmlNodeName;
 	}
-	
-	public String getXmlNodeName()
-	{
+
+	public String getXmlNodeName() {
 		return _xmlNodeName;
 	}
-	
-	public static EffectScope findByXmlNodeName(String xmlNodeName)
-	{
+
+	public static EffectScope findByXmlNodeName(String xmlNodeName) {
 		return XML_NODE_NAME_TO_EFFECT_SCOPE.get(xmlNodeName);
 	}
 }

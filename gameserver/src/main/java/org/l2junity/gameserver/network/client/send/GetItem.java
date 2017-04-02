@@ -22,25 +22,22 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class GetItem implements IClientOutgoingPacket
-{
+public final class GetItem implements IClientOutgoingPacket {
 	private final ItemInstance _item;
 	private final int _playerId;
-	
-	public GetItem(ItemInstance item, int playerId)
-	{
+
+	public GetItem(ItemInstance item, int playerId) {
 		_item = item;
 		_playerId = playerId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GET_ITEM.writeId(packet);
-		
+
 		packet.writeD(_playerId);
 		packet.writeD(_item.getObjectId());
-		
+
 		packet.writeD((int) _item.getX());
 		packet.writeD((int) _item.getY());
 		packet.writeD((int) _item.getZ());

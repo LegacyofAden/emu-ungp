@@ -21,19 +21,16 @@ package org.l2junity.gameserver.model;
 /**
  * @author UnAfraid
  */
-public class ChanceLocation extends Location
-{
+public class ChanceLocation extends Location {
 	private static final long serialVersionUID = 7754628145256859929L;
 	private final double _chance;
-	
-	public ChanceLocation(int x, int y, int z, int heading, double chance)
-	{
+
+	public ChanceLocation(int x, int y, int z, int heading, double chance) {
 		super(x, y, z, heading);
 		_chance = chance;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
 }

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author HorridoJoho
  */
-public enum HtmlActionScope
-{
+public enum HtmlActionScope {
 	NPC_HTML,
 	NPC_ITEM_HTML,
 	NPC_QUEST_HTML,

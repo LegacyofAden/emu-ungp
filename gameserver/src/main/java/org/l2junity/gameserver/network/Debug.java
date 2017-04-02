@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network;
 
-import java.util.Map.Entry;
-
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.AttributeType;
@@ -32,54 +30,48 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 
+import java.util.Map.Entry;
+
 /**
  * @author UnAfraid
  */
-public class Debug
-{
-	public static void sendStatsDebug(Creature creature, DoubleStat stat, StatsSet set)
-	{
-		if (!creature.isPlayer())
-		{
+public class Debug {
+	public static void sendStatsDebug(Creature creature, DoubleStat stat, StatsSet set) {
+		if (!creature.isPlayer()) {
 			return;
 		}
-		
+
 		final StringBuilder sb = new StringBuilder();
 		final ItemInstance weapon = creature.getActiveWeaponInstance();
-		for (Entry<String, Object> entry : set.getSet().entrySet())
-		{
+		for (Entry<String, Object> entry : set.getSet().entrySet()) {
 			sb.append("<tr><td>" + entry.getKey() + "</td><td><font color=\"LEVEL\">" + parseValue(entry.getValue()) + "</font></td></tr>");
 		}
-		
+
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(creature.getActingPlayer().getHtmlPrefix(), "data/html/admin/statsdebug.htm");
+		msg.setFile(creature.getActingPlayer().getHtmlPrefix(), "admin/statsdebug.htm");
 		msg.replace("%stat%", String.valueOf(stat));
 		msg.replace("%mulValue%", CommonUtil.formatDouble(creature.getStat().getMul(stat), "#.##"));
 		msg.replace("%addValue%", creature.getStat().getAdd(stat));
 		msg.replace("%templateValue%", CommonUtil.formatDouble(creature.getTemplate().getBaseValue(stat, 0), "#.##"));
-		if (weapon != null)
-		{
+		if (weapon != null) {
 			msg.replace("%weaponBaseValue%", CommonUtil.formatDouble(weapon.getItem().getStats(stat, 0), "#.##"));
 		}
 		msg.replace("%details%", sb.toString());
 		creature.sendPacket(new TutorialShowHtml(msg.getHtml()));
 	}
-	
-	public static void sendSkillDebug(Creature attacker, Creature target, Skill skill, StatsSet set)
-	{
-		if (!attacker.isPlayer())
-		{
+
+	public static void sendSkillDebug(Creature attacker, Creature target, Skill skill, StatsSet set) {
+		if (!attacker.isPlayer()) {
 			return;
 		}
-		
+
 		final StringBuilder sb = new StringBuilder();
-		for (Entry<String, Object> entry : set.getSet().entrySet())
-		{
+		for (Entry<String, Object> entry : set.getSet().entrySet()) {
 			sb.append("<tr><td>" + entry.getKey() + "</td><td><font color=\"LEVEL\">" + parseValue(entry.getValue()) + "</font></td></tr>");
 		}
-		
+
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(attacker.getActingPlayer().getHtmlPrefix(), "data/html/admin/skilldebug.htm");
+		msg.setFile(attacker.getActingPlayer().getHtmlPrefix(), "admin/skilldebug.htm");
 		msg.replace("%patk%", target.getPAtk());
 		msg.replace("%matk%", target.getMAtk());
 		msg.replace("%pdef%", target.getPDef());
@@ -108,17 +100,15 @@ public class Debug
 		msg.replace("%details%", sb.toString());
 		attacker.sendPacket(new TutorialShowHtml(msg.getHtml()));
 	}
-	
-	public static void sendItemDebug(PlayerInstance player, ItemInstance item, StatsSet set)
-	{
+
+	public static void sendItemDebug(PlayerInstance player, ItemInstance item, StatsSet set) {
 		final StringBuilder sb = new StringBuilder();
-		for (Entry<String, Object> entry : set.getSet().entrySet())
-		{
+		for (Entry<String, Object> entry : set.getSet().entrySet()) {
 			sb.append("<tr><td>" + entry.getKey() + "</td><td><font color=\"LEVEL\">" + parseValue(entry.getValue()) + "</font></td></tr>");
 		}
-		
+
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(player.getHtmlPrefix(), "data/html/admin/itemdebug.htm");
+		msg.setFile(player.getHtmlPrefix(), "admin/itemdebug.htm");
 		msg.replace("%itemName%", item.getName());
 		msg.replace("%itemSlot%", getBodyPart(item.getItem().getBodyPart()));
 		msg.replace("%itemType%", item.isArmor() ? "Armor" : item.isWeapon() ? "Weapon" : "Etc");
@@ -128,22 +118,17 @@ public class Debug
 		msg.replace("%details%", sb.toString());
 		player.sendPacket(new TutorialShowHtml(msg.getHtml()));
 	}
-	
-	private static String parseValue(Object value)
-	{
-		if (value instanceof Double)
-		{
+
+	private static String parseValue(Object value) {
+		if (value instanceof Double) {
 			return CommonUtil.formatDouble((double) value, "#.##");
 		}
 		return String.valueOf(value);
 	}
-	
-	private static String getBodyPart(int bodyPart)
-	{
-		for (Entry<String, Integer> entry : ItemTable._slots.entrySet())
-		{
-			if ((entry.getValue() & bodyPart) == bodyPart)
-			{
+
+	private static String getBodyPart(int bodyPart) {
+		for (Entry<String, Integer> entry : ItemTable._slots.entrySet()) {
+			if ((entry.getValue() & bodyPart) == bodyPart) {
 				return entry.getKey();
 			}
 		}

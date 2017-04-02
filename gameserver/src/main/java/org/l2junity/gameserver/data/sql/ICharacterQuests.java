@@ -23,46 +23,50 @@ import org.l2junity.gameserver.model.quest.QuestState;
 
 /**
  * Interface representing access to character quests data holder.
+ *
  * @author malyelfik
  */
-public interface ICharacterQuests
-{
+public interface ICharacterQuests {
 	String STATE_VAR = "<state>";
-	
+
 	/**
 	 * Load player QuestStates from database.
+	 *
 	 * @param player player which request fetch
 	 */
 	void loadPlayerQuests(PlayerInstance player);
-	
+
 	/**
 	 * Insert or update player's quest variable depending on {@code created} parameter.
-	 * @param qs player's quest state
+	 *
+	 * @param qs  player's quest state
 	 * @param key variable key
 	 * @param val variable value
 	 */
 	void updateQuestVar(QuestState qs, String key, String val);
-	
+
 	/**
 	 * Insert or update state of player's quest.
-	 * @param qs player's quest state
+	 *
+	 * @param qs       player's quest state
 	 * @param newState name of new state
 	 */
-	default void updateStateVar(QuestState qs, String newState)
-	{
+	default void updateStateVar(QuestState qs, String newState) {
 		updateQuestVar(qs, STATE_VAR, newState);
 	}
-	
+
 	/**
 	 * Delete player's quest variable from database.
-	 * @param qs player's quest state
+	 *
+	 * @param qs  player's quest state
 	 * @param key variable key
 	 */
 	void deleteQuestVar(QuestState qs, String key);
-	
+
 	/**
 	 * Delete player's quest from database.
-	 * @param qs player's quest state
+	 *
+	 * @param qs         player's quest state
 	 * @param repeatable type of quest
 	 */
 	void deletePlayerQuest(QuestState qs, boolean repeatable);

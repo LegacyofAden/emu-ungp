@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * Shortcut type enumerated.
+ *
  * @author Zoey76
  */
-public enum ShortcutType
-{
+public enum ShortcutType {
 	NONE,
 	ITEM,
 	SKILL,

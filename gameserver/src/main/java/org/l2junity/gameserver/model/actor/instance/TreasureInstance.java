@@ -24,56 +24,48 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 
 /**
  * This class manages all chest.
+ *
  * @author Julian
  */
-public final class TreasureInstance extends L2MonsterInstance
-{
+public final class TreasureInstance extends L2MonsterInstance {
 	private volatile boolean _dropEnabled;
-	
-	public TreasureInstance(L2NpcTemplate template)
-	{
+
+	public TreasureInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ChestInstance);
 		setRandomWalking(false);
 	}
-	
-	public void setDropEnabled(boolean val)
-	{
+
+	public void setDropEnabled(boolean val) {
 		_dropEnabled = val;
 	}
-	
+
 	@Override
-	public void doItemDrop(L2NpcTemplate npcTemplate, Creature lastAttacker)
-	{
-		if (!_dropEnabled)
-		{
+	public void doItemDrop(L2NpcTemplate npcTemplate, Creature lastAttacker) {
+		if (!_dropEnabled) {
 			return;
 		}
-		
+
 		super.doItemDrop(npcTemplate, lastAttacker);
 	}
-	
+
 	@Override
-	public boolean isMovementDisabled()
-	{
+	public boolean isMovementDisabled() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean hasRandomAnimation()
-	{
+	public boolean hasRandomAnimation() {
 		return false;
 	}
-	
+
 	@Override
-	public boolean isTreasure()
-	{
+	public boolean isTreasure() {
 		return true;
 	}
-	
+
 	@Override
-	public TreasureInstance asTreasure()
-	{
+	public TreasureInstance asTreasure() {
 		return this;
 	}
 }

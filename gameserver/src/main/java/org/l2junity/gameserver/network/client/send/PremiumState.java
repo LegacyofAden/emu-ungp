@@ -24,22 +24,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author GodKratos
  */
-public class PremiumState implements IClientOutgoingPacket
-{
+public class PremiumState implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _state;
-	
-	public PremiumState(int objectId, int state)
-	{
+
+	public PremiumState(int objectId, int state) {
 		_objectId = objectId;
 		_state = state;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_NOTICE_POST_ARRIVED.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeC(_state);
 		return true;

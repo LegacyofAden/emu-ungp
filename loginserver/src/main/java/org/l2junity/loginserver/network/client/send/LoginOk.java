@@ -24,18 +24,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class LoginOk implements IOutgoingPacket
-{
+public class LoginOk implements IOutgoingPacket {
 	private final long _loginSessionId;
-	
-	public LoginOk(long loginSessionId)
-	{
+
+	public LoginOk(long loginSessionId) {
 		_loginSessionId = loginSessionId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x03);
 		packet.writeQ(_loginSessionId);
 		packet.writeD(0);
@@ -44,7 +41,7 @@ public class LoginOk implements IOutgoingPacket
 		packet.writeD(0);
 		packet.writeD(0);
 		packet.writeD(0);
-		
+
 		// forbidden server makes name red
 		// its a mask
 		// 0x01 is server id 1

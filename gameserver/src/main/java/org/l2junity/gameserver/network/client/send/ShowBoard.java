@@ -18,35 +18,30 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ShowBoard implements IClientOutgoingPacket
-{
+import java.util.List;
+
+public class ShowBoard implements IClientOutgoingPacket {
 	private final String _content;
-	
-	public ShowBoard(String htmlCode, String id)
-	{
+
+	public ShowBoard(String htmlCode, String id) {
 		_content = id + "\u0008" + htmlCode;
 	}
-	
-	public ShowBoard(List<String> arg)
-	{
+
+	public ShowBoard(List<String> arg) {
 		StringBuilder builder = new StringBuilder(256).append("1002\u0008");
-		for (String str : arg)
-		{
+		for (String str : arg) {
 			builder.append(str).append("\u0008");
 		}
 		_content = builder.toString();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_BOARD.writeId(packet);
-		
+
 		packet.writeC(0x01); // c4 1 to show community 00 to hide
 		packet.writeS("bypass _bbshome"); // top
 		packet.writeS("bypass _bbsgetfav"); // favorite

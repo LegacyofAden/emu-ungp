@@ -24,27 +24,24 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)S S: numerical password
+ *
  * @author mrTJO
  */
-public class RequestEx2ndPasswordVerify implements IClientIncomingPacket
-{
+public class RequestEx2ndPasswordVerify implements IClientIncomingPacket {
 	private String _password;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_password = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!SecondaryAuthData.getInstance().isEnabled())
-		{
+	public void run(L2GameClient client) {
+		if (!SecondaryAuthData.getInstance().isEnabled()) {
 			return;
 		}
-		
+
 		client.getSecondaryAuth().checkPassword(_password, false);
 	}
 }

@@ -22,25 +22,22 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ChangeMoveType implements IClientOutgoingPacket
-{
+public class ChangeMoveType implements IClientOutgoingPacket {
 	public static final int WALK = 0;
 	public static final int RUN = 1;
-	
+
 	private final int _charObjId;
 	private final boolean _running;
-	
-	public ChangeMoveType(Creature character)
-	{
+
+	public ChangeMoveType(Creature character) {
 		_charObjId = character.getObjectId();
 		_running = character.isRunning();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHANGE_MOVE_TYPE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_running ? RUN : WALK);
 		packet.writeD(0); // c2

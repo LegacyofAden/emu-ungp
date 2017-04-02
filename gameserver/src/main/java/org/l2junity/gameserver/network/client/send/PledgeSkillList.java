@@ -26,46 +26,39 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class PledgeSkillList implements IClientOutgoingPacket
-{
+public class PledgeSkillList implements IClientOutgoingPacket {
 	private final Skill[] _skills;
 	private final SubPledgeSkill[] _subSkills;
-	
-	public static class SubPledgeSkill
-	{
+
+	public static class SubPledgeSkill {
 		int _subType;
 		int _skillId;
 		int _skillLvl;
-		
-		public SubPledgeSkill(int subType, int skillId, int skillLvl)
-		{
+
+		public SubPledgeSkill(int subType, int skillId, int skillLvl) {
 			_subType = subType;
 			_skillId = skillId;
 			_skillLvl = skillLvl;
 		}
 	}
-	
-	public PledgeSkillList(L2Clan clan)
-	{
+
+	public PledgeSkillList(L2Clan clan) {
 		_skills = clan.getAllSkills();
 		_subSkills = clan.getAllSubSkills();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_SKILL_LIST.writeId(packet);
-		
+
 		packet.writeD(_skills.length);
 		packet.writeD(_subSkills.length); // Squad skill length
-		for (Skill sk : _skills)
-		{
+		for (Skill sk : _skills) {
 			packet.writeD(sk.getDisplayId());
 			packet.writeH(sk.getDisplayLevel());
 			packet.writeH(0x00); // Sub level
 		}
-		for (SubPledgeSkill sk : _subSkills)
-		{
+		for (SubPledgeSkill sk : _subSkills) {
 			packet.writeD(sk._subType); // Clan Sub-unit types
 			packet.writeD(sk._skillId);
 			packet.writeH(sk._skillLvl);

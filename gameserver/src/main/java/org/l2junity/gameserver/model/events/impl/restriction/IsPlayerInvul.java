@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class IsPlayerInvul implements IBaseEvent
-{
+public final class IsPlayerInvul implements IBaseEvent {
 	private final PlayerInstance _activeChar;
-	
-	public IsPlayerInvul(PlayerInstance activeChar)
-	{
+
+	public IsPlayerInvul(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.IS_PLAYER_INVUL;
 	}
 }

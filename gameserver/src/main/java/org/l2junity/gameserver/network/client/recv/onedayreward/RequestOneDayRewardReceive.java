@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv.onedayreward;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,35 +27,32 @@ import org.l2junity.gameserver.network.client.send.ExConnectedTimeAndGettableRew
 import org.l2junity.gameserver.network.client.send.onedayreward.ExOneDayReceiveRewardList;
 import org.l2junity.network.PacketReader;
 
+import java.util.Collection;
+
 /**
  * @author Sdw
  */
-public class RequestOneDayRewardReceive implements IClientIncomingPacket
-{
+public class RequestOneDayRewardReceive implements IClientIncomingPacket {
 	private int _id;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_id = packet.readH();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final Collection<OneDayRewardDataHolder> reward = OneDayRewardData.getInstance().getOneDayRewardData(_id);
-		if ((reward == null) || reward.isEmpty())
-		{
+		if ((reward == null) || reward.isEmpty()) {
 			return;
 		}
-		
+
 		reward.stream().filter(o -> o.isDisplayable(player)).forEach(r -> r.requestReward(player));
 		player.sendPacket(new ExConnectedTimeAndGettableReward(player));
 		player.sendPacket(new ExOneDayReceiveRewardList(player, true));

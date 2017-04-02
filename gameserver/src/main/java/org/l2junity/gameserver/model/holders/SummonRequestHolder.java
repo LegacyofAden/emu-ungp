@@ -24,24 +24,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class SummonRequestHolder
-{
+public class SummonRequestHolder {
 	private final PlayerInstance _target;
 	private final Skill _skill;
-	
-	public SummonRequestHolder(PlayerInstance destination, Skill skill)
-	{
+
+	public SummonRequestHolder(PlayerInstance destination, Skill skill) {
 		_target = destination;
 		_skill = skill;
 	}
-	
-	public PlayerInstance getTarget()
-	{
+
+	public PlayerInstance getTarget() {
 		return _target;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill;
 	}
 }

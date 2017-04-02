@@ -30,49 +30,43 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ... cdd
+ *
  * @version $Revision: 1.1.2.1.2.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestRecipeShopMakeInfo implements IClientIncomingPacket
-{
+public final class RequestRecipeShopMakeInfo implements IClientIncomingPacket {
 	private int _playerObjectId;
 	private int _recipeId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_playerObjectId = packet.readD();
 		_recipeId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final PlayerInstance manufacturer = World.getInstance().getPlayer(_playerObjectId);
-		if ((manufacturer == null) || (manufacturer.getPrivateStoreType() != PrivateStoreType.MANUFACTURE))
-		{
+		if ((manufacturer == null) || (manufacturer.getPrivateStoreType() != PrivateStoreType.MANUFACTURE)) {
 			return;
 		}
-		
+
 		final RecipeHolder recipe = RecipeData.getInstance().getRecipe(_recipeId);
-		if (recipe == null)
-		{
+		if (recipe == null) {
 			player.sendPacket(SystemMessageId.THE_RECIPE_IS_INCORRECT);
 			return;
 		}
-		
+
 		final Long manufactureRecipeCost = manufacturer.getManufactureItems().get(_recipeId);
-		if (manufactureRecipeCost == null)
-		{
+		if (manufactureRecipeCost == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new RecipeShopItemInfo(manufacturer, _recipeId, manufactureRecipeCost, recipe.getMaxOffering()));
 	}
 }

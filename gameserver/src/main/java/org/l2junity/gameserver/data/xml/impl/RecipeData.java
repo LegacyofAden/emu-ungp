@@ -18,98 +18,72 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.StatusUpdateType;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * @author Nik
  */
-public class RecipeData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(RecipeData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class RecipeData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final RecipeData instance = new RecipeData();
+
 	private final Map<Integer, RecipeHolder> _recipes = new HashMap<>();
-	
-	protected RecipeData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	protected RecipeData() {
 		_recipes.clear();
 		parseDatapackFile("data/recipes.xml");
-		LOGGER.info("Loaded " + _recipes.size() + " recipes.");
+		log.info("Loaded {} recipes.", _recipes.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		StatsSet set;
 		Node att;
 		NamedNodeMap attrs;
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("recipe".equalsIgnoreCase(d.getNodeName()))
-					{
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("recipe".equalsIgnoreCase(d.getNodeName())) {
 						attrs = d.getAttributes();
 						set = new StatsSet();
-						for (int i = 0; i < attrs.getLength(); i++)
-						{
+						for (int i = 0; i < attrs.getLength(); i++) {
 							att = attrs.item(i);
 							set.set(att.getNodeName(), att.getNodeValue());
 						}
-						
+
 						final int recipeId = set.getInt("id");
 						List<ItemHolder> materials = Collections.emptyList();
 						List<ItemChanceHolder> productGroup = Collections.emptyList();
 						List<ItemHolder> npcFee = Collections.emptyList();
 						final Map<StatusUpdateType, Double> statUse = new HashMap<>();
-						
-						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling())
-						{
-							if ("materials".equalsIgnoreCase(c.getNodeName()))
-							{
+
+						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling()) {
+							if ("materials".equalsIgnoreCase(c.getNodeName())) {
 								materials = getItemList(c);
-							}
-							else if ("product".equalsIgnoreCase(c.getNodeName()))
-							{
+							} else if ("product".equalsIgnoreCase(c.getNodeName())) {
 								productGroup = getItemList(c).stream().map(ItemChanceHolder.class::cast).collect(Collectors.toList());
-							}
-							else if ("npcFee".equalsIgnoreCase(c.getNodeName()))
-							{
+							} else if ("npcFee".equalsIgnoreCase(c.getNodeName())) {
 								npcFee = getItemList(c);
-							}
-							else if ("statUse".equalsIgnoreCase(c.getNodeName()))
-							{
-								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling())
-								{
-									if ("stat".equalsIgnoreCase(b.getNodeName()))
-									{
+							} else if ("statUse".equalsIgnoreCase(c.getNodeName())) {
+								for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling()) {
+									if ("stat".equalsIgnoreCase(b.getNodeName())) {
 										StatusUpdateType stat = StatusUpdateType.valueOf(b.getAttributes().getNamedItem("name").getNodeValue());
 										double value = Double.parseDouble(b.getAttributes().getNamedItem("val").getNodeValue());
 										statUse.put(stat, value);
@@ -117,78 +91,52 @@ public class RecipeData implements IGameXmlReader
 								}
 							}
 						}
-						
+
 						_recipes.put(recipeId, new RecipeHolder(set, materials, productGroup, npcFee, statUse));
 					}
 				}
 			}
 		}
 	}
-	
-	public int getRecipeCount()
-	{
+
+	public int getRecipeCount() {
 		return _recipes.size();
 	}
-	
-	private List<ItemHolder> getItemList(Node c)
-	{
+
+	private List<ItemHolder> getItemList(Node c) {
 		final List<ItemHolder> items = new ArrayList<>();
-		for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling())
-		{
-			if ("item".equalsIgnoreCase(b.getNodeName()))
-			{
+		for (Node b = c.getFirstChild(); b != null; b = b.getNextSibling()) {
+			if ("item".equalsIgnoreCase(b.getNodeName())) {
 				int itemId = Integer.parseInt(b.getAttributes().getNamedItem("id").getNodeValue());
 				long itemCount = Long.parseLong(b.getAttributes().getNamedItem("count").getNodeValue());
-				
-				if (b.getAttributes().getNamedItem("chance") != null)
-				{
+
+				if (b.getAttributes().getNamedItem("chance") != null) {
 					double chance = Double.parseDouble(b.getAttributes().getNamedItem("chance").getNodeValue());
 					items.add(new ItemChanceHolder(itemId, chance, itemCount));
-				}
-				else
-				{
+				} else {
 					items.add(new ItemHolder(itemId, itemCount));
 				}
 			}
 		}
-		
+
 		return items;
 	}
-	
+
 	/**
 	 * Gets the recipe by recipe item id.
+	 *
 	 * @param itemId the recipe's item id
 	 * @return {@code RecipeHolder} for the given recipe item id {@code null} if there is no recipe data connected with this recipe item id.
 	 */
-	public RecipeHolder getRecipeByRecipeItemId(int itemId)
-	{
+	public RecipeHolder getRecipeByRecipeItemId(int itemId) {
 		return _recipes.values().stream().filter(r -> r.getItemId() == itemId).findAny().orElse(null);
 	}
-	
+
 	/**
 	 * @param recipeId the id of the recipe, NOT the recipe item id.
 	 * @return {@code RecipeHolder} containing all the info necessary for crafting a recipe or {@code null} if there is no data for this recipeId.
 	 */
-	public RecipeHolder getRecipe(int recipeId)
-	{
+	public RecipeHolder getRecipe(int recipeId) {
 		return _recipes.get(recipeId);
-	}
-	
-	/**
-	 * Gets the single instance of RecipeData.
-	 * @return single instance of RecipeData
-	 */
-	@InstanceGetter
-	public static RecipeData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	/**
-	 * The Class SingletonHolder.
-	 */
-	private static class SingletonHolder
-	{
-		protected static final RecipeData _instance = new RecipeData();
 	}
 }

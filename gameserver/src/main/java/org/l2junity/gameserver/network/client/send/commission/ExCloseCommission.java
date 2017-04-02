@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class ExCloseCommission implements IClientOutgoingPacket
-{
+public class ExCloseCommission implements IClientOutgoingPacket {
 	public static final ExCloseCommission STATIC_PACKET = new ExCloseCommission();
-	
-	private ExCloseCommission()
-	{
+
+	private ExCloseCommission() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CLOSE_COMMISSION.writeId(packet);
 		return true;
 	}

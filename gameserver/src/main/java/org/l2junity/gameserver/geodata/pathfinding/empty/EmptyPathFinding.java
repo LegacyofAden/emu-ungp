@@ -18,36 +18,31 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding.empty;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
 import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
 import org.l2junity.gameserver.model.instancezone.Instance;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author lord_rex
  */
-public final class EmptyPathFinding extends PathFinding
-{
-	public EmptyPathFinding()
-	{
+public final class EmptyPathFinding extends PathFinding {
+	public EmptyPathFinding() {
 	}
-	
+
 	@Override
-	public void load()
-	{
+	public void load() {
 	}
-	
+
 	@Override
-	public boolean pathNodesExist(short regionoffset)
-	{
+	public boolean pathNodesExist(short regionoffset) {
 		return false;
 	}
-	
+
 	@Override
-	public List<AbstractNodeLoc> findPath(double x, double y, double z, double tx, double ty, double tz, Instance instance, boolean playable)
-	{
+	public List<AbstractNodeLoc> findPath(double x, double y, double z, double tx, double ty, double tz, Instance instance, boolean playable) {
 		return Collections.emptyList();
 	}
 }

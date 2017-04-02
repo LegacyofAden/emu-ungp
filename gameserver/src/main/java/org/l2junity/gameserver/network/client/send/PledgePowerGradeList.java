@@ -22,23 +22,19 @@ import org.l2junity.gameserver.model.L2Clan.RankPrivs;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PledgePowerGradeList implements IClientOutgoingPacket
-{
+public class PledgePowerGradeList implements IClientOutgoingPacket {
 	private final RankPrivs[] _privs;
-	
-	public PledgePowerGradeList(RankPrivs[] privs)
-	{
+
+	public PledgePowerGradeList(RankPrivs[] privs) {
 		_privs = privs;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_POWER_GRADE_LIST.writeId(packet);
-		
+
 		packet.writeD(_privs.length);
-		for (RankPrivs temp : _privs)
-		{
+		for (RankPrivs temp : _privs) {
 			packet.writeD(temp.getRank());
 			packet.writeD(temp.getParty());
 		}

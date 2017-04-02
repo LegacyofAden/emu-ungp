@@ -18,52 +18,51 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author JIV
  */
-public interface Siegable
-{
+public interface Siegable {
 	void startSiege();
-	
+
 	void endSiege();
-	
+
 	SiegeClan getAttackerClan(int clanId);
-	
+
 	SiegeClan getAttackerClan(L2Clan clan);
-	
+
 	Collection<SiegeClan> getAttackerClans();
-	
+
 	List<PlayerInstance> getAttackersInZone();
-	
+
 	boolean checkIsAttacker(L2Clan clan);
-	
+
 	SiegeClan getDefenderClan(int clanId);
-	
+
 	SiegeClan getDefenderClan(L2Clan clan);
-	
+
 	List<SiegeClan> getDefenderClans();
-	
+
 	boolean checkIsDefender(L2Clan clan);
-	
+
 	Set<Npc> getFlag(L2Clan clan);
-	
+
 	Calendar getSiegeDate();
-	
+
 	boolean giveFame();
-	
+
 	int getFameFrequency();
-	
+
 	int getFameAmount();
-	
+
 	void updateSiege();
 }

@@ -29,56 +29,45 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Message deletion task.
+ *
  * @author xban1x
  */
-public final class MessageDeletionTask implements Runnable
-{
+public final class MessageDeletionTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger(MessageDeletionTask.class);
-	
+
 	final int _msgId;
-	
-	public MessageDeletionTask(int msgId)
-	{
+
+	public MessageDeletionTask(int msgId) {
 		_msgId = msgId;
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		final Message msg = MailManager.getInstance().getMessage(_msgId);
-		if (msg == null)
-		{
+		if (msg == null) {
 			return;
 		}
-		
-		if (msg.hasAttachments())
-		{
-			try
-			{
+
+		if (msg.hasAttachments()) {
+			try {
 				final PlayerInstance sender = World.getInstance().getPlayer(msg.getSenderId());
-				if (sender != null)
-				{
+				if (sender != null) {
 					msg.getAttachments().returnToWh(sender.getWarehouse());
 					sender.sendPacket(SystemMessageId.THE_MAIL_WAS_RETURNED_DUE_TO_THE_EXCEEDED_WAITING_TIME);
-				}
-				else
-				{
+				} else {
 					msg.getAttachments().returnToWh(null);
 				}
-				
+
 				msg.getAttachments().deleteMe();
 				msg.removeAttachments();
-				
+
 				final PlayerInstance receiver = World.getInstance().getPlayer(msg.getReceiverId());
-				if (receiver != null)
-				{
+				if (receiver != null) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_MAIL_WAS_RETURNED_DUE_TO_THE_EXCEEDED_WAITING_TIME);
 					// sm.addString(msg.getReceiverName());
 					receiver.sendPacket(sm);
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				_log.warn(getClass().getSimpleName() + ": Error returning items:" + e.getMessage(), e);
 			}
 		}

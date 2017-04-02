@@ -18,28 +18,25 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Set;
-
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
+
+import java.util.Set;
 
 /**
  * @author Sdw
  */
-public class ExMPCCPartymasterList implements IClientOutgoingPacket
-{
+public class ExMPCCPartymasterList implements IClientOutgoingPacket {
 	private final Set<String> _leadersName;
-	
-	public ExMPCCPartymasterList(Set<String> leadersName)
-	{
+
+	public ExMPCCPartymasterList(Set<String> leadersName) {
 		_leadersName = leadersName;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MPCC_PARTYMASTER_LIST.writeId(packet);
-		
+
 		packet.writeD(_leadersName.size());
 		_leadersName.forEach(packet::writeS);
 		return true;

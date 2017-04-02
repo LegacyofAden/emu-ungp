@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Nik
  */
-public class OnPlayerVitalityConsume implements IBaseEvent
-{
+public class OnPlayerVitalityConsume implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _points;
-	
-	public OnPlayerVitalityConsume(PlayerInstance activeChar, int points)
-	{
+
+	public OnPlayerVitalityConsume(PlayerInstance activeChar, int points) {
 		_activeChar = activeChar;
 		_points = points;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public long getPoints()
-	{
+
+	public long getPoints() {
 		return _points;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_VITALITY_CONSUME;
 	}
 }

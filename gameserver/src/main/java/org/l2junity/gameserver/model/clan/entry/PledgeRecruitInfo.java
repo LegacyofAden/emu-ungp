@@ -24,8 +24,7 @@ import org.l2junity.gameserver.model.L2Clan;
 /**
  * @author Sdw
  */
-public class PledgeRecruitInfo
-{
+public class PledgeRecruitInfo {
 	private int _clanId;
 	private int _karma;
 	private String _information;
@@ -33,9 +32,8 @@ public class PledgeRecruitInfo
 	private final L2Clan _clan;
 	private final int _applicationType;
 	private final int _recruitType;
-	
-	public PledgeRecruitInfo(int clanId, int karma, String information, String detailedInformation, int applicationType, int recruitType)
-	{
+
+	public PledgeRecruitInfo(int clanId, int karma, String information, String detailedInformation, int applicationType, int recruitType) {
 		_clanId = clanId;
 		_karma = karma;
 		_information = information;
@@ -44,74 +42,60 @@ public class PledgeRecruitInfo
 		_applicationType = applicationType;
 		_recruitType = recruitType;
 	}
-	
-	public int getClanId()
-	{
+
+	public int getClanId() {
 		return _clanId;
 	}
-	
-	public void setClanId(int clanId)
-	{
+
+	public void setClanId(int clanId) {
 		_clanId = clanId;
 	}
-	
-	public String getClanName()
-	{
+
+	public String getClanName() {
 		return _clan.getName();
 	}
-	
-	public String getClanLeaderName()
-	{
+
+	public String getClanLeaderName() {
 		return _clan.getLeaderName();
 	}
-	
-	public int getClanLevel()
-	{
+
+	public int getClanLevel() {
 		return _clan.getLevel();
 	}
-	
-	public int getKarma()
-	{
+
+	public int getKarma() {
 		return _karma;
 	}
-	
-	public void setKarma(int karma)
-	{
+
+	public void setKarma(int karma) {
 		_karma = karma;
 	}
-	
-	public String getInformation()
-	{
+
+	public String getInformation() {
 		return _information;
 	}
-	
-	public void setInformation(String information)
-	{
+
+	public void setInformation(String information) {
 		_information = information;
 	}
-	
-	public String getDetailedInformation()
-	{
+
+	public String getDetailedInformation() {
 		return _detailedInformation;
 	}
-	
-	public void setDetailedInformation(String detailedInformation)
-	{
+
+	public void setDetailedInformation(String detailedInformation) {
 		_detailedInformation = detailedInformation;
 	}
-	
-	public int getApplicationType()
-	{
+
+	public int getApplicationType() {
 		return _applicationType;
 	}
-	
-	public int getRecruitType()
-	{
+
+	public int getRecruitType() {
 		return _recruitType;
 	}
-	
-	public L2Clan getClan()
-	{
+
+	public L2Clan getClan() {
 		return _clan;
 	}
 }
