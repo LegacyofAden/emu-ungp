@@ -18,18 +18,17 @@
  */
 package ai.individual.KeucereusAllianceBase.SeedTeleportDevice;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Seed Teleport Device AI.
+ *
  * @author St3eT
  */
-public final class SeedTeleportDevice extends AbstractNpcAI
-{
+public final class SeedTeleportDevice extends AbstractNpcAI {
 	// NPCs
 	private static final int SEED_TELEPORT_DEVICE = 15929;
 	// Locations
@@ -39,39 +38,31 @@ public final class SeedTeleportDevice extends AbstractNpcAI
 	private static final Location SOH = new Location(-147354, 152581, -14048);
 	// Misc
 	private static final int SOH_MIN_LV = 97;
-	
-	private SeedTeleportDevice()
-	{
+
+	private SeedTeleportDevice() {
 		addStartNpc(SEED_TELEPORT_DEVICE);
 		addFirstTalkId(SEED_TELEPORT_DEVICE);
 		addTalkId(SEED_TELEPORT_DEVICE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		
-		switch (event)
-		{
-			case "seedOfAnnihilation":
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+
+		switch (event) {
+			case "seedOfAnnihilation": {
 				player.teleToLocation(SOA);
 				break;
 			}
-			case "seedOfDestruction":
-			{
+			case "seedOfDestruction": {
 				player.teleToLocation(SOD);
 				break;
 			}
-			case "seedOfInfinity":
-			{
+			case "seedOfInfinity": {
 				player.teleToLocation(SOI);
 				break;
 			}
-			case "seedOfHellfire":
-			{
-				if (player.getLevel() < SOH_MIN_LV)
-				{
+			case "seedOfHellfire": {
+				if (player.getLevel() < SOH_MIN_LV) {
 					return "SeedOfHellfire-noLv.html";
 				}
 				player.teleToLocation(SOH);
@@ -80,9 +71,8 @@ public final class SeedTeleportDevice extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new SeedTeleportDevice();
 	}
 }

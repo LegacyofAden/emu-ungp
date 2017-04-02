@@ -18,31 +18,29 @@
  */
 package ai.individual.KeucereusAllianceBase.Nottingale;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.RadarControl;
-
-import ai.AbstractNpcAI;
 import quests.Q10273_GoodDayToFly.Q10273_GoodDayToFly;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Nottingale AI.
+ *
  * @author xban1x
  */
-public final class Nottingale extends AbstractNpcAI
-{
+public final class Nottingale extends AbstractNpcAI {
 	// NPC
 	private static final int NOTTINGALE = 32627;
 	// Misc
 	private static final Map<Integer, RadarControl> RADARS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		RADARS.put(2, new RadarControl(0, 2, -184545, 243120, 1581));
 		RADARS.put(5, new RadarControl(0, 1, -192361, 254528, 3598));
 		RADARS.put(6, new RadarControl(0, 1, -174600, 219711, 4424));
@@ -51,51 +49,35 @@ public final class Nottingale extends AbstractNpcAI
 		RADARS.put(9, new RadarControl(0, 1, -212819, 209813, 4288));
 		RADARS.put(10, new RadarControl(0, 1, -246899, 251918, 4352));
 	}
-	
-	public Nottingale()
-	{
+
+	public Nottingale() {
 		addStartNpc(NOTTINGALE);
 		addTalkId(NOTTINGALE);
 		addFirstTalkId(NOTTINGALE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32627-02.html":
 			case "32627-03.html":
-			case "32627-04.html":
-			{
-				if (player.getClan() != null)
-				{
-					if (player.hasClanPrivilege(ClanPrivilege.CL_SUMMON_AIRSHIP) && AirShipManager.getInstance().hasAirShipLicense(player.getClanId()) && !AirShipManager.getInstance().hasAirShip(player.getClanId()))
-					{
+			case "32627-04.html": {
+				if (player.getClan() != null) {
+					if (player.hasClanPrivilege(ClanPrivilege.CL_SUMMON_AIRSHIP) && AirShipManager.getInstance().hasAirShipLicense(player.getClanId()) && !AirShipManager.getInstance().hasAirShip(player.getClanId())) {
 						htmltext = event;
-					}
-					else
-					{
-						if (player.hasQuestCompleted(Q10273_GoodDayToFly.class.getSimpleName()))
-						{
+					} else {
+						if (player.hasQuestCompleted(Q10273_GoodDayToFly.class.getSimpleName())) {
 							htmltext = event;
-						}
-						else
-						{
+						} else {
 							player.sendPacket(RADARS.get(2));
 							htmltext = "32627-01.html";
 						}
 					}
-				}
-				else
-				{
-					if (player.hasQuestCompleted(Q10273_GoodDayToFly.class.getSimpleName()))
-					{
+				} else {
+					if (player.hasQuestCompleted(Q10273_GoodDayToFly.class.getSimpleName())) {
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						player.sendPacket(RADARS.get(2));
 						htmltext = "32627-01.html";
 					}
@@ -107,8 +89,7 @@ public final class Nottingale extends AbstractNpcAI
 			case "32627-07.html":
 			case "32627-08.html":
 			case "32627-09.html":
-			case "32627-10.html":
-			{
+			case "32627-10.html": {
 				player.sendPacket(RADARS.get(Integer.valueOf(event.substring(6, 8))));
 				htmltext = event;
 				break;
@@ -116,9 +97,8 @@ public final class Nottingale extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Nottingale();
 	}
 }

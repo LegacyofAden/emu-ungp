@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.handler.EffectHandler;
 import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.effects.EffectType;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.options.Options;
 import org.l2junity.gameserver.model.options.OptionsSkillHolder;
@@ -40,7 +40,7 @@ import java.util.Map;
  * @author UnAfraid
  */
 @Slf4j
-@StartupComponent(value = "Data", dependency = EffectHandler.class)
+@StartupComponent(value = "Data")
 public class OptionData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final OptionData instance = new OptionData();
@@ -70,13 +70,13 @@ public class OptionData implements IGameXmlReader {
 					case "effects": {
 						forEach(innerNode, "effect", effectNode ->
 						{
-							final String name = parseString(effectNode.getAttributes(), "name");
+							EffectType effectType = parseEnum(effectNode.getAttributes(), EffectType.class, "name");
 							final StatsSet params = new StatsSet();
 							forEach(effectNode, IXmlReader::isNode, paramNode ->
 							{
 								params.set(paramNode.getNodeName(), SkillData.parseValue(paramNode, true, false, Collections.emptyMap()));
 							});
-							option.addEffect(EffectHandler.getInstance().getHandlerFactory(name).apply(params));
+							option.addEffect(effectType.getNew(params));
 						});
 						break;
 					}

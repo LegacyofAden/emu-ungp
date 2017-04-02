@@ -23,15 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.handler.EffectHandler;
-import org.l2junity.gameserver.handler.SkillConditionHandler;
-import org.l2junity.gameserver.handler.TargetHandler;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.effects.AbstractEffect;
+import org.l2junity.gameserver.model.effects.EffectType;
 import org.l2junity.gameserver.model.skills.EffectScope;
-import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillConditionScope;
+import org.l2junity.gameserver.model.skills.SkillConditionType;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -39,7 +36,6 @@ import org.w3c.dom.Node;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -48,7 +44,7 @@ import java.util.stream.Stream;
  * @author NosBit
  */
 @Slf4j
-@StartupComponent(value = "Data", dependency = {EffectHandler.class, SkillConditionHandler.class, TargetHandler.class, EnchantSkillGroupsData.class})
+@StartupComponent(value = "Data", dependency = {EnchantSkillGroupsData.class})
 public class SkillData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final SkillData instance = new SkillData();
@@ -299,34 +295,20 @@ public class SkillData implements IGameXmlReader {
 								final Skill skill = new Skill(statsSet);
 								forEachNamedParamInfoParam(effectParamInfo, level, subLevel, ((effectScope, params) ->
 								{
-									final String effectName = params.getString(".name");
+									final EffectType effectType = params.getEnum(".name", EffectType.class);
 									params.remove(".name");
 									try {
-										final Function<StatsSet, AbstractEffect> effectFunction = EffectHandler.getInstance().getHandlerFactory(effectName);
-										if (effectFunction != null) {
-											skill.addEffect(effectScope, effectFunction.apply(params));
-										} else {
-											log.warn("Missing effect for Skill Id[{}] Level[{}] SubLevel[{}] Effect Scope[{}] Effect Name[{}]", statsSet.getInt(".id"), level, subLevel, effectScope, effectName);
-										}
+										skill.addEffect(effectScope, effectType.getNew(params));
 									} catch (Exception e) {
-										log.warn("Failed loading effect for Skill Id[{}] Level[{}] SubLevel[{}] Effect Scope[{}] Effect Name[{}]", statsSet.getInt(".id"), level, subLevel, effectScope, effectName, e);
+										log.warn("Failed loading effect for Skill Id[{}] Level[{}] SubLevel[{}] Effect Scope[{}] Effect Name[{}]", statsSet.getInt(".id"), level, subLevel, effectScope, effectType, e);
 									}
 								}));
 
 								forEachNamedParamInfoParam(conditionParamInfo, level, subLevel, ((skillConditionScope, params) ->
 								{
-									final String conditionName = params.getString(".name");
+									final SkillConditionType conditionType = params.getEnum(".name", SkillConditionType.class);
 									params.remove(".name");
-									try {
-										final Function<StatsSet, ISkillCondition> conditionFunction = SkillConditionHandler.getInstance().getHandlerFactory(conditionName);
-										if (conditionFunction != null) {
-											skill.addCondition(skillConditionScope, conditionFunction.apply(params));
-										} else {
-											log.warn("Missing condition for Skill Id[{}] Level[{}] SubLevel[{}] Effect Scope[{}] Effect Name[{}]", statsSet.getInt(".id"), level, subLevel, skillConditionScope, conditionName);
-										}
-									} catch (Exception e) {
-										log.warn("Failed loading condition for Skill Id[{}] Level[{}] SubLevel[{}] Condition Scope[{}] Condition Name[{}]", statsSet.getInt(".id"), level, subLevel, skillConditionScope, conditionName, e);
-									}
+									skill.addCondition(skillConditionScope, conditionType.getNew(params));
 								}));
 
 								_skills.put(getSkillHashCode(skill), skill);

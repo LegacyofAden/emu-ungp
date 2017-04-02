@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.handler.IConditionHandler;
+import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -34,13 +34,13 @@ import java.util.Map;
 public class ExtendDropDataHolder {
 	private final int _id;
 	private final List<ExtendDropItemHolder> _items;
-	private final List<IConditionHandler> _conditions;
+	private final List<IExDropCondition> _conditions;
 	private final Map<Long, SystemMessageId> _systemMessages;
 
 	public ExtendDropDataHolder(StatsSet set) {
 		_id = set.getInt("id");
 		_items = set.getList("items", ExtendDropItemHolder.class);
-		_conditions = set.getList("conditions", IConditionHandler.class);
+		_conditions = set.getList("conditions", IExDropCondition.class);
 		_systemMessages = set.getMap("systemMessages", Long.class, SystemMessageId.class);
 	}
 
