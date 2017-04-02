@@ -73,6 +73,10 @@ public class DBSpawnManager {
 	 * Instantiates a new raid npc spawn manager.
 	 */
 	protected DBSpawnManager() {
+		reload();
+	}
+
+	public void reload() {
 		if (GeneralConfig.ALT_DEV_NO_SPAWNS) {
 			return;
 		}

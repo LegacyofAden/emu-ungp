@@ -92,6 +92,11 @@ public class HtmRepository {
 		}
 	}
 
+	public void reload() {
+		caches.clear();
+		loadHtmls();
+	}
+
 	public String getHtm(Language language, String htmPath) {
 		String htm = caches.get(language).get(htmPath);
 		if (htm != null && !htm.isEmpty()) {

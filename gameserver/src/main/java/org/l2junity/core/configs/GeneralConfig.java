@@ -911,7 +911,7 @@ public class GeneralConfig {
 		}
 	}
 
-	private static int getServerTypeId(String[] serverTypes) {
+	public static int getServerTypeId(String[] serverTypes) {
 		int serverType = 0;
 		for (String cType : serverTypes) {
 			switch (cType.trim().toLowerCase()) {

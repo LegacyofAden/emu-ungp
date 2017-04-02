@@ -43,7 +43,7 @@ public class MultiboxData implements IGameXmlReader {
 
 	private MultiboxData() {
 		try {
-			parseDatapackFile("config/MultiboxProtection.xml");
+			parseDatapackFile("config/xml/MultiboxProtection.xml");
 			LOGGER.info("Loaded {} settings.", _data.size());
 		} catch (Exception e) {
 			log.error("Error while loading MultiboxData", e);
