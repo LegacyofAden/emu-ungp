@@ -18,20 +18,50 @@
  */
 package org.l2junity.gameserver.model.actor;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.core.configs.*;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.NpcConfig;
+import org.l2junity.core.configs.OlympiadConfig;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.ItemsAutoDestroy;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.enums.*;
+import org.l2junity.gameserver.enums.AISkillScope;
+import org.l2junity.gameserver.enums.AIType;
+import org.l2junity.gameserver.enums.ChatType;
+import org.l2junity.gameserver.enums.InstanceType;
+import org.l2junity.gameserver.enums.MpRewardAffectType;
+import org.l2junity.gameserver.enums.PrivateStoreType;
+import org.l2junity.gameserver.enums.Race;
+import org.l2junity.gameserver.enums.ShotType;
+import org.l2junity.gameserver.enums.TaxType;
+import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
-import org.l2junity.gameserver.instancemanager.*;
+import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.instancemanager.DBSpawnManager;
 import org.l2junity.gameserver.instancemanager.DBSpawnManager.DBStatusType;
-import org.l2junity.gameserver.model.*;
-import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.instancemanager.SuperpointManager;
+import org.l2junity.gameserver.instancemanager.ZoneManager;
+import org.l2junity.gameserver.model.L2Spawn;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.MpRewardTask;
+import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.actor.instance.L2FishermanInstance;
+import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.L2TeleporterInstance;
+import org.l2junity.gameserver.model.actor.instance.L2WarehouseInstance;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.status.NpcStatus;
 import org.l2junity.gameserver.model.actor.tasks.npc.RandomAnimationTask;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
@@ -40,7 +70,12 @@ import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.npc.*;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcDespawn;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleport;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -52,16 +87,22 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.spawns.NpcSpawnTemplate;
 import org.l2junity.gameserver.model.variables.NpcVariables;
 import org.l2junity.gameserver.model.zone.type.TaxZone;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.ExChangeNpcState;
+import org.l2junity.gameserver.network.client.send.ExShowChannelingEffect;
+import org.l2junity.gameserver.network.client.send.MagicSkillUse;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.NpcInfo;
+import org.l2junity.gameserver.network.client.send.NpcInfoAbnormalVisualEffect;
+import org.l2junity.gameserver.network.client.send.NpcSay;
+import org.l2junity.gameserver.network.client.send.ServerObjectInfo;
+import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.l2junity.gameserver.util.Broadcast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class represents a Non-Player-Character in the world.<br>
@@ -1062,7 +1103,7 @@ public class Npc extends Creature {
 	}
 
 	public Npc scheduleDespawn(long delay) {
-		ThreadPool.getInstance().scheduleAi(() ->
+		ThreadPool.getInstance().scheduleGeneral(() ->
 		{
 			if (!isDecayed()) {
 				deleteMe();

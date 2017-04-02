@@ -18,17 +18,47 @@
  */
 package org.l2junity.gameserver.model.actor;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.core.configs.*;
-import org.l2junity.gameserver.ai.*;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.configs.NpcConfig;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.configs.PremiumConfig;
+import org.l2junity.core.configs.RatesConfig;
+import org.l2junity.gameserver.ai.AttackableAI;
+import org.l2junity.gameserver.ai.CharacterAI;
+import org.l2junity.gameserver.ai.CtrlEvent;
+import org.l2junity.gameserver.ai.CtrlIntention;
+import org.l2junity.gameserver.ai.FortSiegeGuardAI;
+import org.l2junity.gameserver.ai.SiegeGuardAI;
 import org.l2junity.gameserver.data.xml.impl.ExtendDropData;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.AggroInfo;
+import org.l2junity.gameserver.model.CommandChannel;
+import org.l2junity.gameserver.model.DamageDoneInfo;
+import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.L2Seed;
+import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
@@ -55,13 +85,6 @@ import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.ref.WeakReference;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class Attackable extends Npc {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Attackable.class);
@@ -195,7 +218,7 @@ public class Attackable extends Npc {
 						if (_firstCommandChannelAttacked != null) {
 							_commandChannelTimer = new CommandChannelTimer(this);
 							_commandChannelLastAttack = System.currentTimeMillis();
-							ThreadPool.getInstance().scheduleAi(_commandChannelTimer, 10000, TimeUnit.MILLISECONDS); // check for last attack
+							ThreadPool.getInstance().scheduleGeneral(_commandChannelTimer, 10000, TimeUnit.MILLISECONDS); // check for last attack
 							_firstCommandChannelAttacked.broadcastPacket(new CreatureSay(0, ChatType.PARTYROOM_ALL, "", "You have looting rights!")); // TODO: retail msg
 						}
 					}
