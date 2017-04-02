@@ -63,7 +63,7 @@ public class NetworkManager {
 		}
 
 		_channelFuture = _serverBootstrap.bind(_host, _port).sync();
-		LOGGER.info("Listening on {}:{}", _host, _port);
+		LOGGER.info("{} listening on {}:{}", getClass().getSimpleName(), _host, _port);
 	}
 
 	public void stop() throws InterruptedException {

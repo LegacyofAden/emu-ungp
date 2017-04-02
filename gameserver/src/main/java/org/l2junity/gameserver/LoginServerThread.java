@@ -112,6 +112,7 @@ public class LoginServerThread extends Thread {
 		_acceptAlternate = false;
 		_reserveHost = false;
 		_maxPlayer = GameserverConfig.MAXIMUM_ONLINE_USERS;
+		start();
 	}
 
 	@Override
