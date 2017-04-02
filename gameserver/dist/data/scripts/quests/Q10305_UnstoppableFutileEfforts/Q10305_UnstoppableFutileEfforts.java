@@ -18,9 +18,6 @@
  */
 package quests.Q10305_UnstoppableFutileEfforts;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -28,78 +25,68 @@ import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10302_UnsettlingShadowAndRumors.Q10302_UnsettlingShadowAndRumors;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Unstoppable Futile Efforts (10305)
+ *
  * @author Gladicek
  */
-public final class Q10305_UnstoppableFutileEfforts extends Quest
-{
+public final class Q10305_UnstoppableFutileEfforts extends Quest {
 	// NPCs
 	private static final int NOETI_MIMILEAD = 32895;
 	private static final int LARGE_COCOON = 32920;
 	private static final int COCOON = 32919;
 	// Misc
 	private static final int MIN_LEVEL = 88;
-	
-	public Q10305_UnstoppableFutileEfforts()
-	{
+
+	public Q10305_UnstoppableFutileEfforts() {
 		super(10305);
 		addStartNpc(NOETI_MIMILEAD);
 		addTalkId(NOETI_MIMILEAD);
-		
+
 		addCondMinLevel(MIN_LEVEL, "32895-06.htm");
 		addCondCompletedQuest(Q10302_UnsettlingShadowAndRumors.class.getSimpleName(), "32895-06.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32895-02.htm":
 			case "32895-03.htm":
-			case "32895-04.htm":
-			{
+			case "32895-04.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32895-05.html":
-			{
+			case "32895-05.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "NOTIFY_Q10305":
-			{
+			case "NOTIFY_Q10305": {
 				int killedCocoon = qs.getMemoStateEx(LARGE_COCOON);
-				
+
 				killedCocoon++;
-				if (killedCocoon < 5)
-				{
+				if (killedCocoon < 5) {
 					qs.setMemoStateEx(LARGE_COCOON, killedCocoon);
 					sendNpcLogList(player);
 					playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
-				}
-				else
-				{
+				} else {
 					qs.setCond(2, true);
 				}
 				break;
 			}
-			default:
-			{
-				if (event.startsWith("giveReward_") && qs.isCond(2) && (player.getLevel() >= MIN_LEVEL))
-				{
+			default: {
+				if (event.startsWith("giveReward_") && qs.isCond(2) && (player.getLevel() >= MIN_LEVEL)) {
 					final int itemId = Integer.parseInt(event.replace("giveReward_", ""));
 					giveAdena(player, 1_007_735, false);
 					giveItems(player, itemId, 15);
@@ -107,57 +94,45 @@ public final class Q10305_UnstoppableFutileEfforts extends Quest
 					addSp(player, 8_393);
 					qs.exitQuest(false, true);
 					htmltext = "32895-09.html";
-				}
-				else
-				{
+				} else {
 					htmltext = getNoQuestLevelRewardMsg(player);
 				}
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = "32895-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				if (qs.isCond(1))
-				{
+			case State.STARTED: {
+				if (qs.isCond(1)) {
 					htmltext = "32895-07.html";
-				}
-				else if (qs.isCond(2))
-				{
+				} else if (qs.isCond(2)) {
 					htmltext = "32895-08.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "32895-10.html";
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
 		final QuestState qs = getQuestState(activeChar, false);
-		
-		if ((qs != null) && qs.isCond(1))
-		{
+
+		if ((qs != null) && qs.isCond(1)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(1);
 			npcLogList.add(new NpcLogListHolder(COCOON, false, qs.getMemoStateEx(LARGE_COCOON)));
 			return npcLogList;

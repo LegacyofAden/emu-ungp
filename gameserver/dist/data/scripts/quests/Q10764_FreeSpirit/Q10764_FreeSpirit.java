@@ -27,15 +27,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10763_TerrifyingChertuba.Q10763_TerrifyingChertuba;
 
 /**
  * Free Spirit (10764)
+ *
  * @author malyelfik
  */
-public final class Q10764_FreeSpirit extends Quest
-{
+public final class Q10764_FreeSpirit extends Quest {
 	// NPC
 	private static final int VORBOS = 33966;
 	private static final int TREE_SPIRIT = 33964;
@@ -50,9 +49,8 @@ public final class Q10764_FreeSpirit extends Quest
 	private static final Location SYLPH_LOCATION = new Location(-85001, 106057, -3592);
 	// Misc
 	private static final int MIN_LEVEL = 38;
-	
-	public Q10764_FreeSpirit()
-	{
+
+	public Q10764_FreeSpirit() {
 		super(10764);
 		addStartNpc(VORBOS);
 		addTalkId(VORBOS, TREE_SPIRIT, WIND_SPIRIT);
@@ -62,41 +60,32 @@ public final class Q10764_FreeSpirit extends Quest
 		addCondCompletedQuest(Q10763_TerrifyingChertuba.class.getSimpleName(), "33966-00.htm");
 		registerQuestItems(MAGIC_CHAIN_KEY_BUNDLE, LOOSENED_CHAIN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33966-02.htm":
 				break;
-			case "33966-03.htm":
-			{
+			case "33966-03.htm": {
 				qs.startQuest();
 				giveItems(player, MAGIC_CHAIN_KEY_BUNDLE, 10);
 				break;
 			}
-			case "33966-06.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33966-06.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						addSpawn(SYLPH, SYLPH_LOCATION, false, 4000);
 						giveStoryQuestReward(npc, player);
 						addExp(player, 1_312_934);
 						addSp(player, 315);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -107,17 +96,14 @@ public final class Q10764_FreeSpirit extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == VORBOS)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == VORBOS) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "33966-01.htm";
 					break;
@@ -128,40 +114,30 @@ public final class Q10764_FreeSpirit extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else
-		{
-			if (qs.isStarted() && qs.isCond(1))
-			{
+		} else {
+			if (qs.isStarted() && qs.isCond(1)) {
 				final int npcId = (npc.getId() == WIND_SPIRIT) ? LIBERATED_WIND_SPIRIT : LIBERATED_TREE_SPIRIT;
-				
+
 				giveItems(player, LOOSENED_CHAIN, 1);
 				addSpawn(npcId, npc, false, 2500);
 				npc.deleteMe();
-				
-				if (getQuestItemsCount(player, LOOSENED_CHAIN) >= 10)
-				{
+
+				if (getQuestItemsCount(player, LOOSENED_CHAIN) >= 10) {
 					qs.setCond(2, true);
 				}
 				htmltext = null;
-			}
-			else
-			{
+			} else {
 				htmltext = npc.getId() + "-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == SYLPH)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == SYLPH) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THANK_YOU_YOU_ARE_KIND);
-		}
-		else
-		{
+		} else {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THANK_YOU_THANK_YOU_FOR_HELPING);
 		}
 		return super.onSpawn(npc);

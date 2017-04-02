@@ -18,17 +18,16 @@
  */
 package ai.individual.TownOfGludio.Acateo;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Acateo AI.
+ *
  * @author Gladicek
  */
-public final class Acateo extends AbstractNpcAI
-{
+public final class Acateo extends AbstractNpcAI {
 	// NPC
 	private static final int ACATEO = 33905;
 	// Item
@@ -36,52 +35,39 @@ public final class Acateo extends AbstractNpcAI
 	private static final int ENCHANCED_ACADEMY_CIRCLET = 47211;
 	// Misc
 	private static final int MIN_LEVEL = 80;
-	
-	private Acateo()
-	{
+
+	private Acateo() {
 		addStartNpc(ACATEO);
 		addFirstTalkId(ACATEO);
 		addTalkId(ACATEO);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33905-01.html":
-			case "33905-04.html":
-			{
+			case "33905-04.html": {
 				htmltext = event;
 				break;
 			}
-			case "give_circlet":
-			{
-				if (!hasQuestItems(player, ACADEMY_CIRCLET))
-				{
-					if (player.getLevel() < MIN_LEVEL)
-					{
+			case "give_circlet": {
+				if (!hasQuestItems(player, ACADEMY_CIRCLET)) {
+					if (player.getLevel() < MIN_LEVEL) {
 						giveItems(player, ACADEMY_CIRCLET, 1);
 						htmltext = "33905-02.html";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "33905-03.html";
 				}
 				break;
 			}
-			case "upgrade":
-			{
-				if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, ACADEMY_CIRCLET))
-				{
+			case "upgrade": {
+				if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, ACADEMY_CIRCLET)) {
 					giveItems(player, ENCHANCED_ACADEMY_CIRCLET, 1);
 					takeItems(player, ACADEMY_CIRCLET, -1);
 					htmltext = "33905-05.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "33905-06.html";
 				}
 				break;
@@ -89,15 +75,13 @@ public final class Acateo extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return player.isAcademyMember() ? "33905-01.html" : "33905.html";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Acateo();
 	}
 }

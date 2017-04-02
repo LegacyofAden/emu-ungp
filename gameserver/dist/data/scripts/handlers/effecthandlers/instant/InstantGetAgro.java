@@ -29,25 +29,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Get Agro effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantGetAgro extends AbstractEffect
-{
-	public InstantGetAgro(StatsSet params)
-	{
+public final class InstantGetAgro extends AbstractEffect {
+	public InstantGetAgro(StatsSet params) {
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.AGGRESSION;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (target.isAttackable())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (target.isAttackable()) {
 			target.asAttackable().getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, caster);
 		}
 	}

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpSkillPower extends AbstractDoubleStatEffect
-{
-	public PumpSkillPower(StatsSet params)
-	{
+public class PumpSkillPower extends AbstractDoubleStatEffect {
+	public PumpSkillPower(StatsSet params) {
 		super(params, DoubleStat.PHYSICAL_SKILL_POWER);
 	}
 }

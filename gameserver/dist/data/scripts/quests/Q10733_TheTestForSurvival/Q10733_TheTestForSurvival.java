@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
-
 import quests.Q10732_AForeignLand.Q10732_AForeignLand;
 
 /**
  * The Test For Survival (10733)
+ *
  * @author Sdw
  */
-public final class Q10733_TheTestForSurvival extends Quest
-{
+public final class Q10733_TheTestForSurvival extends Quest {
 	// NPC's
 	private static final int GERETH = 33932;
 	private static final int DIA = 34005;
@@ -42,9 +41,8 @@ public final class Q10733_TheTestForSurvival extends Quest
 	private static final int GERETH_RECOMMENDATION = 39519;
 	// Misc
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10733_TheTestForSurvival()
-	{
+
+	public Q10733_TheTestForSurvival() {
 		super(10733);
 		addStartNpc(GERETH);
 		addTalkId(GERETH, DIA, KATALIN, AYANTHE);
@@ -52,38 +50,29 @@ public final class Q10733_TheTestForSurvival extends Quest
 		addCondMaxLevel(MAX_LEVEL, "33932-04.htm");
 		addCondCompletedQuest(Q10732_AForeignLand.class.getSimpleName(), "33932-04.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "34005-02.html":
 				break;
-			case "33932-02.htm":
-			{
+			case "33932-02.htm": {
 				qs.startQuest();
 				player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_027_Quest_01.htm", TutorialShowHtml.LARGE_WINDOW));
 				giveItems(player, GERETH_RECOMMENDATION, 1);
 				break;
 			}
-			case "34005-03.html":
-			{
-				if (qs.isCond(1) && hasQuestItems(player, GERETH_RECOMMENDATION))
-				{
-					if (player.isInCategory(CategoryType.MAGE_GROUP))
-					{
+			case "34005-03.html": {
+				if (qs.isCond(1) && hasQuestItems(player, GERETH_RECOMMENDATION)) {
+					if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 						qs.setCond(3, true);
-					}
-					else
-					{
+					} else {
 						qs.setCond(2, true);
 						htmltext = "34005-04.html";
 					}
@@ -91,10 +80,8 @@ public final class Q10733_TheTestForSurvival extends Quest
 				break;
 			}
 			case "33942-02.html":
-			case "33943-02.html":
-			{
-				if ((qs.isCond(2) || qs.isCond(3)) && hasQuestItems(player, GERETH_RECOMMENDATION))
-				{
+			case "33943-02.html": {
+				if ((qs.isCond(2) || qs.isCond(3)) && hasQuestItems(player, GERETH_RECOMMENDATION)) {
 					addExp(player, 295);
 					addSp(player, 2);
 					qs.exitQuest(false, true);
@@ -104,51 +91,38 @@ public final class Q10733_TheTestForSurvival extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
-		if (qs.isCompleted())
-		{
+		if (qs.isCompleted()) {
 			return getAlreadyCompletedMsg(player);
 		}
-		
+
 		String htmltext = getNoQuestMsg(player);
-		switch (npc.getId())
-		{
-			case GERETH:
-			{
-				if (qs.isCreated())
-				{
+		switch (npc.getId()) {
+			case GERETH: {
+				if (qs.isCreated()) {
 					htmltext = "33932-01.htm";
-				}
-				else if (qs.isStarted())
-				{
+				} else if (qs.isStarted()) {
 					htmltext = "33932-03.html";
 				}
 				break;
 			}
-			case DIA:
-			{
-				if (qs.isStarted() && qs.isCond(1))
-				{
+			case DIA: {
+				if (qs.isStarted() && qs.isCond(1)) {
 					htmltext = "34005-01.html";
 				}
 				break;
 			}
-			case KATALIN:
-			{
-				if (qs.isStarted() && qs.isCond(2))
-				{
+			case KATALIN: {
+				if (qs.isStarted() && qs.isCond(2)) {
 					htmltext = "33943-01.html";
 				}
 				break;
 			}
-			case AYANTHE:
-			{
-				if (qs.isStarted() && qs.isCond(3))
-				{
+			case AYANTHE: {
+				if (qs.isStarted() && qs.isCond(3)) {
 					htmltext = "33942-01.html";
 				}
 				break;

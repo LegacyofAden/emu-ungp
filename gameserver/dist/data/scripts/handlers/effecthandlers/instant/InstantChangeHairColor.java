@@ -28,26 +28,23 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Change Hair Color effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantChangeHairColor extends AbstractEffect
-{
+public final class InstantChangeHairColor extends AbstractEffect {
 	private final int _value;
-	
-	public InstantChangeHairColor(StatsSet params)
-	{
+
+	public InstantChangeHairColor(StatsSet params) {
 		_value = params.getInt("value", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		targetPlayer.getAppearance().setHairColor(_value);
 		targetPlayer.broadcastUserInfo();
 	}

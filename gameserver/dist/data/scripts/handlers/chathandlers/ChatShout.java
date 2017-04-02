@@ -18,7 +18,7 @@
  */
 package handlers.chathandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
@@ -33,68 +33,55 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Shout chat handler.
+ *
  * @author durgus
  */
-public final class ChatShout implements IChatHandler
-{
+public final class ChatShout implements IChatHandler {
 	private static final ChatType[] CHAT_TYPES =
-	{
-		ChatType.SHOUT,
-	};
-	
+			{
+					ChatType.SHOUT,
+			};
+
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text)
-	{
-		if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type))
-		{
+	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+		if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type)) {
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER_CHATTING_BAN_TIME_REMAINING_S1_SECONDS);
 			return;
 		}
-		
-		if ((activeChar.getLevel() < GeneralConfig.MINIMUM_CHAT_LEVEL) && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS))
-		{
+
+		if ((activeChar.getLevel() < GeneralConfig.MINIMUM_CHAT_LEVEL) && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS)) {
 			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.PLAYERS_CAN_SHOUT_AFTER_LV_S1).addInt(GeneralConfig.MINIMUM_CHAT_LEVEL));
 			return;
 		}
-		
+
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		if (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS)))
-		{
+		if (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS))) {
 			final int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
-			for (PlayerInstance player : World.getInstance().getPlayers())
-			{
-				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceWorld() == activeChar.getInstanceWorld()))
-				{
+			for (PlayerInstance player : World.getInstance().getPlayers()) {
+				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceWorld() == activeChar.getInstanceWorld())) {
 					player.sendPacket(cs);
 				}
 			}
-		}
-		else if (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("global"))
-		{
-			if (!activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS) && !activeChar.getFloodProtectors().getGlobalChat().tryPerformAction("global chat"))
-			{
+		} else if (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("global")) {
+			if (!activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS) && !activeChar.getFloodProtectors().getGlobalChat().tryPerformAction("global chat")) {
 				activeChar.sendMessage("Do not spam shout channel.");
 				return;
 			}
-			
-			for (PlayerInstance player : World.getInstance().getPlayers())
-			{
-				if (!BlockList.isBlocked(player, activeChar))
-				{
+
+			for (PlayerInstance player : World.getInstance().getPlayers()) {
+				if (!BlockList.isBlocked(player, activeChar)) {
 					player.sendPacket(cs);
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public ChatType[] getChatTypeList()
-	{
+	public ChatType[] getChatTypeList() {
 		return CHAT_TYPES;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ChatHandler.getInstance().registerHandler(new ChatShout());
 	}
 }

@@ -18,8 +18,6 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.data.xml.impl.PetDataTable;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.enums.ItemSkillType;
@@ -35,58 +33,46 @@ import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.List;
+
 /**
  * @author Kerberos, Zoey76
  */
-public class PetFood implements IItemHandler
-{
+public class PetFood implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (playable.isPet() && !((L2PetInstance) playable).canEatFoodId(item.getId()))
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (playable.isPet() && !((L2PetInstance) playable).canEatFoodId(item.getId())) {
 			playable.sendPacket(SystemMessageId.THIS_PET_CANNOT_USE_THIS_ITEM);
 			return false;
 		}
-		
+
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);
-		if (skills != null)
-		{
+		if (skills != null) {
 			skills.forEach(holder -> useFood(playable, holder.getSkillId(), holder.getSkillLevel(), item));
 		}
 		return true;
 	}
-	
-	public boolean useFood(Playable activeChar, int skillId, int skillLevel, ItemInstance item)
-	{
+
+	public boolean useFood(Playable activeChar, int skillId, int skillLevel, ItemInstance item) {
 		final Skill skill = SkillData.getInstance().getSkill(skillId, skillLevel);
-		if (skill != null)
-		{
-			if (activeChar.isPet())
-			{
+		if (skill != null) {
+			if (activeChar.isPet()) {
 				final L2PetInstance pet = (L2PetInstance) activeChar;
-				if (pet.destroyItem("Consume", item.getObjectId(), 1, null, false))
-				{
+				if (pet.destroyItem("Consume", item.getObjectId(), 1, null, false)) {
 					pet.broadcastPacket(new MagicSkillUse(pet, pet, skillId, skillLevel, 0, 0));
 					skill.applyEffects(pet, pet);
 					pet.broadcastStatusUpdate();
-					if (pet.isHungry())
-					{
+					if (pet.isHungry()) {
 						pet.sendPacket(SystemMessageId.YOUR_PET_ATE_A_LITTLE_BUT_IS_STILL_HUNGRY);
 					}
 					return true;
 				}
-			}
-			else if (activeChar.isPlayer())
-			{
+			} else if (activeChar.isPlayer()) {
 				final PlayerInstance player = activeChar.getActingPlayer();
-				if (player.isMounted())
-				{
+				if (player.isMounted()) {
 					final List<Integer> foodIds = PetDataTable.getInstance().getPetData(player.getMountNpcId()).getPetLevelData(player.getLevel()).getFood();
-					if (foodIds.contains(Integer.valueOf(item.getId())))
-					{
-						if (player.destroyItem("Consume", item.getObjectId(), 1, null, false))
-						{
+					if (foodIds.contains(Integer.valueOf(item.getId()))) {
+						if (player.destroyItem("Consume", item.getObjectId(), 1, null, false)) {
 							player.broadcastPacket(new MagicSkillUse(player, player, skillId, skillLevel, 0, 0));
 							skill.applyEffects(player, player);
 							return true;
@@ -100,9 +86,8 @@ public class PetFood implements IItemHandler
 		}
 		return false;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new PetFood());
 	}
 }

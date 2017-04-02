@@ -29,10 +29,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Traces of Evil (10359)
+ *
  * @author St3eT
  */
-public final class Q10359_TracesOfEvil extends Quest
-{
+public final class Q10359_TracesOfEvil extends Quest {
 	// NPCs
 	private static final int ADVENTURER_GUIDE = 31795;
 	private static final int FRED = 33179;
@@ -45,23 +45,22 @@ public final class Q10359_TracesOfEvil extends Quest
 	private static final int ESRANDELL = 30158;
 	private static final int ELLENIA = 30155;
 	private static final int[] MONSTERS =
-	{
-		20067, // Monster Eye Watcher
-		20070, // Lesser Basilisk
-		20072, // Basilisk
-		23097, // Skeleton Marauder
-		23098, // Granite Golem
-		23026, // Sahara
-		20192, // Tyrant
-	};
+			{
+					20067, // Monster Eye Watcher
+					20070, // Lesser Basilisk
+					20072, // Basilisk
+					23097, // Skeleton Marauder
+					23098, // Granite Golem
+					23026, // Sahara
+					20192, // Tyrant
+			};
 	// Items
 	private static final int FRAGMENT = 17586; // Suspicious Fragment
 	// Misc
 	private static final int MIN_LEVEL = 34;
 	private static final int MAX_LEVEL = 40;
-	
-	public Q10359_TracesOfEvil()
-	{
+
+	public Q10359_TracesOfEvil() {
 		super(10359);
 		addStartNpc(ADVENTURER_GUIDE);
 		addTalkId(ADVENTURER_GUIDE, FRED, RAYMOND, RAINS, TOBIAS, DRIKUS, MENDIO, GERSHWIN, ESRANDELL, ELLENIA);
@@ -70,19 +69,16 @@ public final class Q10359_TracesOfEvil extends Quest
 		addCondNotRace(Race.ERTHEIA, "31795-09.htm");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "31795-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31795-02.htm":
 			case "31795-03.htm":
 			case "33179-02.htm":
@@ -93,21 +89,17 @@ public final class Q10359_TracesOfEvil extends Quest
 			case "30504-09.html":
 			case "30158-09.html":
 			case "32196-09.html":
-			case "30155-09.html":
-			{
+			case "30155-09.html": {
 				htmltext = event;
 				break;
 			}
-			case "31795-04.htm":
-			{
+			case "31795-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33179-03.htm":
-			{
-				if (st.isCond(1))
-				{
+			case "33179-03.htm": {
+				if (st.isCond(1)) {
 					st.setCond(2);
 					playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 					htmltext = event;
@@ -121,19 +113,14 @@ public final class Q10359_TracesOfEvil extends Quest
 			case "30504-10.html":
 			case "30158-10.html":
 			case "32196-10.html":
-			case "30155-10.html":
-			{
-				if ((st.getCond() >= 4) && (st.getCond() <= 11))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30155-10.html": {
+				if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 1_800_000);
 						addSp(player, 216);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -142,96 +129,76 @@ public final class Q10359_TracesOfEvil extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER_GUIDE)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER_GUIDE) {
 					htmltext = "31795-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case ADVENTURER_GUIDE:
-					{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case ADVENTURER_GUIDE: {
 						htmltext = "31795-06.htm";
 						break;
 					}
-					case FRED:
-					{
-						switch (st.getCond())
-						{
-							case 1:
-							{
+					case FRED: {
+						switch (st.getCond()) {
+							case 1: {
 								htmltext = "33179-01.htm";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "33179-04.htm";
 								break;
 							}
-							case 3:
-							{
-								switch (player.getRace())
-								{
+							case 3: {
+								switch (player.getRace()) {
 									case HUMAN:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(player.isInCategory(CategoryType.MAGE_GROUP) ? 4 : 5);
 										}
 										htmltext = player.isInCategory(CategoryType.MAGE_GROUP) ? "33179-06.htm" : "33179-11.htm";
 										break;
 									case DARK_ELF:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(6);
 										}
 										htmltext = "33179-05.htm";
 										break;
 									case ORC:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(7);
 										}
 										htmltext = "33179-07.htm";
 										break;
 									case DWARF:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(8);
 										}
 										htmltext = "33179-08.htm";
 										break;
 									case KAMAEL:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(9);
 										}
 										htmltext = "33179-09.htm";
 										break;
 									case ELF:
-										if (!isSimulated)
-										{
+										if (!isSimulated) {
 											st.setCond(player.isInCategory(CategoryType.MAGE_GROUP) ? 11 : 10);
 										}
 										htmltext = player.isInCategory(CategoryType.MAGE_GROUP) ? "33179-12.htm" : "33179-10.htm";
 										break;
 								}
-								
-								if (!isSimulated)
-								{
+
+								if (!isSimulated) {
 									takeItems(player, FRAGMENT, 20);
 									playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 								}
@@ -240,12 +207,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case RAYMOND:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case RAYMOND: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30289-01.html";
 									break;
@@ -268,12 +232,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case RAINS:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case RAINS: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30288-01.html";
 									break;
@@ -296,12 +257,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case TOBIAS:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case TOBIAS: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30297-08.html";
 									break;
@@ -324,12 +282,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case DRIKUS:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case DRIKUS: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30505-01.html";
 									break;
@@ -352,12 +307,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case MENDIO:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case MENDIO: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30504-01.html";
 									break;
@@ -380,12 +332,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case GERSHWIN:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case GERSHWIN: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "32196-01.html";
 									break;
@@ -408,12 +357,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case ESRANDELL:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case ESRANDELL: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30158-01.html";
 									break;
@@ -436,12 +382,9 @@ public final class Q10359_TracesOfEvil extends Quest
 						}
 						break;
 					}
-					case ELLENIA:
-					{
-						if ((st.getCond() >= 4) && (st.getCond() <= 11))
-						{
-							switch (player.getRace())
-							{
+					case ELLENIA: {
+						if ((st.getCond() >= 4) && (st.getCond() <= 11)) {
+							switch (player.getRace()) {
 								case DARK_ELF:
 									htmltext = "30155-01.html";
 									break;
@@ -467,17 +410,13 @@ public final class Q10359_TracesOfEvil extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
-					case ADVENTURER_GUIDE:
-					{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
+					case ADVENTURER_GUIDE: {
 						htmltext = "31795-07.html";
 						break;
 					}
-					case FRED:
-					{
+					case FRED: {
 						htmltext = "33179-13.html";
 						break;
 					}
@@ -488,8 +427,7 @@ public final class Q10359_TracesOfEvil extends Quest
 					case MENDIO:
 					case GERSHWIN:
 					case ESRANDELL:
-					case ELLENIA:
-					{
+					case ELLENIA: {
 						htmltext = npc.getId() + "-11.html";
 						break;
 					}
@@ -499,22 +437,18 @@ public final class Q10359_TracesOfEvil extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(2))
-		{
-			if (getRandom(100) < 40)
-			{
+
+		if ((st != null) && st.isStarted() && st.isCond(2)) {
+			if (getRandom(100) < 40) {
 				giveItems(killer, FRAGMENT, 1);
 				playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
-			
-			if (getQuestItemsCount(killer, FRAGMENT) == 20)
-			{
+
+			if (getQuestItemsCount(killer, FRAGMENT) == 20) {
 				playSound(killer, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 				st.setCond(3);
 			}

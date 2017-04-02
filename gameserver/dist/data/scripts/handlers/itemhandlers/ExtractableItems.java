@@ -18,10 +18,8 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
@@ -33,80 +31,68 @@ import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.List;
+
 /**
  * Extractable Items handler.
+ *
  * @author HorridoJoho
  */
-public class ExtractableItems implements IItemHandler
-{
+public class ExtractableItems implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
 		final EtcItem etcitem = (EtcItem) item.getItem();
 		final List<ExtractableProduct> exitem = etcitem.getExtractableItems();
-		if (exitem == null)
-		{
+		if (exitem == null) {
 			_log.info("No extractable data defined for " + etcitem);
 			return false;
 		}
-		
+
 		// destroy item
-		if (!activeChar.destroyItem("Extract", item.getObjectId(), 1, activeChar, true))
-		{
+		if (!activeChar.destroyItem("Extract", item.getObjectId(), 1, activeChar, true)) {
 			return false;
 		}
-		
+
 		boolean created = false;
-		for (ExtractableProduct expi : exitem)
-		{
-			if (Rnd.get(100000) <= expi.getChance())
-			{
+		for (ExtractableProduct expi : exitem) {
+			if (Rnd.get(100000) <= expi.getChance()) {
 				final int min = (int) (expi.getMin() * RatesConfig.RATE_EXTRACTABLE);
 				final int max = (int) (expi.getMax() * RatesConfig.RATE_EXTRACTABLE);
-				
+
 				final int createItemAmount = (max == min) ? min : (Rnd.get((max - min) + 1) + min);
-				if (createItemAmount == 0)
-				{
+				if (createItemAmount == 0) {
 					continue;
 				}
-				
+
 				final L2Item itemTemplate = ItemTable.getInstance().getTemplate(expi.getId());
-				if (itemTemplate == null)
-				{
+				if (itemTemplate == null) {
 					continue;
 				}
-				
-				if (itemTemplate.isStackable() || (createItemAmount == 1))
-				{
+
+				if (itemTemplate.isStackable() || (createItemAmount == 1)) {
 					activeChar.addItem("Extract", expi.getId(), createItemAmount, activeChar, true);
-				}
-				else
-				{
-					for (int i = 0; i < createItemAmount; i++)
-					{
+				} else {
+					for (int i = 0; i < createItemAmount; i++) {
 						activeChar.addItem("Extract", expi.getId(), 1, activeChar, true);
 					}
 				}
 				created = true;
 			}
 		}
-		
-		if (!created)
-		{
+
+		if (!created) {
 			activeChar.sendPacket(SystemMessageId.THERE_WAS_NOTHING_FOUND_INSIDE);
 		}
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new ExtractableItems());
 	}
 }

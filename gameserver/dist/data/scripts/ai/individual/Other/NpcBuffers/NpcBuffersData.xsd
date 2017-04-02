@@ -1,4 +1,5 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="list">
 		<xs:complexType>
 			<xs:sequence>
@@ -7,14 +8,14 @@
 						<xs:sequence>
 							<xs:element name="skill" maxOccurs="unbounded">
 								<xs:complexType>
-									<xs:attribute type="xs:positiveInteger" name="id" use="required" />
-									<xs:attribute type="xs:positiveInteger" name="level" use="required" />
-									<xs:attribute type="xs:positiveInteger" name="scaleToLevel" use="optional" />
-									<xs:attribute type="xs:positiveInteger" name="initialDelay" use="optional" />
+									<xs:attribute type="xs:positiveInteger" name="id" use="required"/>
+									<xs:attribute type="xs:positiveInteger" name="level" use="required"/>
+									<xs:attribute type="xs:positiveInteger" name="scaleToLevel" use="optional"/>
+									<xs:attribute type="xs:positiveInteger" name="initialDelay" use="optional"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
-						<xs:attribute type="xs:positiveInteger" name="id" use="required" />
+						<xs:attribute type="xs:positiveInteger" name="id" use="required"/>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>

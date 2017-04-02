@@ -29,34 +29,29 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Target Me Probability effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantTargetMe extends AbstractEffect
-{
+public final class InstantTargetMe extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantTargetMe(StatsSet params)
-	{
+
+	public InstantTargetMe(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Playable targetPlayable = target.asPlayable();
-		if (targetPlayable == null)
-		{
+		if (targetPlayable == null) {
 			return;
 		}
 
-		if (targetPlayable.getTarget() != caster)
-		{
+		if (targetPlayable.getTarget() != caster) {
 			targetPlayable.setTarget(caster);
 		}
 	}

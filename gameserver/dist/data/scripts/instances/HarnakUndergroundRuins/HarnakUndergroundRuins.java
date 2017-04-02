@@ -18,11 +18,7 @@
  */
 package instances.HarnakUndergroundRuins;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import instances.AbstractInstance;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.ChatType;
@@ -40,16 +36,19 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import instances.AbstractInstance;
 import quests.Q10338_SeizeYourDestiny.Q10338_SeizeYourDestiny;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Harnak Underground Ruins Instance Zone.
+ *
  * @author Sdw
  */
-public final class HarnakUndergroundRuins extends AbstractInstance
-{
+public final class HarnakUndergroundRuins extends AbstractInstance {
 	// NPCs
 	private static final int HADEL = 33344;
 	private static final int KRAKIA_BATHUS = 27437;
@@ -64,11 +63,11 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 	private static final int SEAL_CONTROL_DEVICE = 33548;
 	private static final int POWER_SOURCE = 33501;
 	private static final int[] POWER_SOURCES =
-	{
-		33501,
-		33556,
-		33557
-	};
+			{
+					33501,
+					33556,
+					33557
+			};
 	// Locations
 	private static final Location NPC_ROOM1_LOC = new Location(-107930, 206328, -10872);
 	// Skills
@@ -83,9 +82,8 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 	private static final int DOOR_ONE = 16240100;
 	private static final int DOOR_TWO = 16240102;
 	private static final Map<CategoryType, Integer> MOB_CATEGORY = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOB_CATEGORY.put(CategoryType.TANKER_CATEGORY, RAKZAN);
 		MOB_CATEGORY.put(CategoryType.WARRIOR_CATEGORY, KRAKIA_BATHUS);
 		MOB_CATEGORY.put(CategoryType.ROGUE_CATEGORY, BAMONTI);
@@ -95,9 +93,8 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 		MOB_CATEGORY.put(CategoryType.SUMMONER_CATEGORY, KRAKIA_LOTUS);
 		MOB_CATEGORY.put(CategoryType.HEALER_CATEGORY, WEISS_ELE);
 	}
-	
-	public HarnakUndergroundRuins()
-	{
+
+	public HarnakUndergroundRuins() {
 		super(TEMPLATE_ID);
 		registerMobs(KRAKIA_BATHUS, KRAKIA_CARCASS, KRAKIA_LOTUS, RAKZAN, WEISS_KHAN, BAMONTI, SEKNUS, WEISS_ELE, HARNAKS_WRAITH);
 		addSeeCreatureId(POWER_SOURCES);
@@ -106,13 +103,11 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 		addTalkId(HADEL);
 		addStartNpc(HADEL);
 	}
-	
+
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter)
-	{
+	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
-		if (firstEnter)
-		{
+		if (firstEnter) {
 			startQuestTimer("fail_instance", 1260000, null, player);
 			startQuestTimer("message1", 2500, null, player);
 			startQuestTimer("message2", 5000, null, player);
@@ -120,12 +115,10 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 			startQuestTimer("spawn_npc1", 10000, null, player);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
 			case "enter_instance":
 				enterInstance(player, npc, TEMPLATE_ID);
 				break;
@@ -171,58 +164,46 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 			case "ele_say":
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DIE_TRAITOR);
 				break;
-			case "spawn_npc1":
-			{
+			case "spawn_npc1": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.setStatus(1);
 					world.spawnGroup("first_room");
 					moveNpcRoom1(RAKZAN, NpcStringId.ARE_YOU_AGAINST_THE_WILL_OF_LIGHT, "razkan_say", world);
 				}
 				break;
 			}
-			case "spawn_npc2":
-			{
+			case "spawn_npc2": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.openCloseDoor(DOOR_ONE, true);
 					world.spawnGroup("power_sources");
 				}
 				break;
 			}
-			case "spawn_npc3":
-			{
+			case "spawn_npc3": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.incStatus();
 					final List<Npc> npcs = world.spawnGroup("third_room");
 					final Npc powerSource = npcs.stream().filter(n -> n.getId() == POWER_SOURCE).findFirst().orElse(null);
-					if (powerSource != null)
-					{
+					if (powerSource != null) {
 						powerSource.setTarget(player);
 						startQuestTimer("cast_light_heal", 3000, powerSource, player);
 					}
 				}
 				break;
 			}
-			case "spawn_wave1":
-			{
+			case "spawn_wave1": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
-					for (Entry<CategoryType, Integer> entry : MOB_CATEGORY.entrySet())
-					{
-						if (player.isInCategory(entry.getKey()))
-						{
+				if (world != null) {
+					for (Entry<CategoryType, Integer> entry : MOB_CATEGORY.entrySet()) {
+						if (player.isInCategory(entry.getKey())) {
 							world.setStatus(2);
 							world.setParameter("wave", 1);
 							world.setParameter("waveNpcId", entry.getValue());
 							final List<Npc> npcs = world.spawnGroup("second_room_wave_1_" + entry.getValue());
-							for (Npc n : npcs)
-							{
+							for (Npc n : npcs) {
 								addAttackPlayerDesire(n, player);
 							}
 							break;
@@ -231,38 +212,31 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 				}
 				break;
 			}
-			case "spawn_wave2":
-			{
+			case "spawn_wave2": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					final int waveNpcId = world.getParameters().getInt("waveNpcId");
 					final List<Npc> npcs = world.spawnGroup("second_room_wave_2_" + waveNpcId);
-					for (Npc n : npcs)
-					{
+					for (Npc n : npcs) {
 						addAttackPlayerDesire(n, player);
 					}
 					world.setParameter("wave", 2);
 				}
 				break;
 			}
-			case "spawn_wave3":
-			{
+			case "spawn_wave3": {
 				showOnScreenMsg(player, NpcStringId.I_MUST_GO_HELP_SOME_MORE, ExShowScreenMessage.TOP_CENTER, 5000);
-				
+
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					final int waveNpcId = world.getParameters().getInt("waveNpcId");
 					List<Npc> npcs = world.spawnGroup("second_room_wave_3_" + waveNpcId);
-					for (Npc n : npcs)
-					{
+					for (Npc n : npcs) {
 						addAttackPlayerDesire(n, player);
 					}
-					
+
 					npcs = world.spawnGroup("power_source");
-					for (Npc n : npcs)
-					{
+					for (Npc n : npcs) {
 						n.setTarget(player);
 						startQuestTimer("cast_defense_maximum", 1, n, player);
 					}
@@ -270,42 +244,30 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 				}
 				break;
 			}
-			case "cast_defense_maximum":
-			{
+			case "cast_defense_maximum": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
-					if (npc.distance3d(player) < MAXIMUM_DEFENSE.getSkill().getCastRange())
-					{
+				if (world != null) {
+					if (npc.distance3d(player) < MAXIMUM_DEFENSE.getSkill().getCastRange()) {
 						npc.doCast(MAXIMUM_DEFENSE.getSkill());
-						
+
 						final int defenseCounter = world.getParameters().getInt("defenseCounter", 0) + 1;
 						world.setParameter("defenseCounter", defenseCounter);
-						if (defenseCounter < 3)
-						{
+						if (defenseCounter < 3) {
 							startQuestTimer("cast_defense_maximum", 60000, npc, player);
-						}
-						else
-						{
+						} else {
 							npc.deleteMe();
 						}
-					}
-					else
-					{
+					} else {
 						startQuestTimer("cast_defense_maximum", 1, npc, player);
 					}
 				}
 				break;
 			}
-			case "cast_light_heal":
-			{
-				if (npc != null)
-				{
+			case "cast_light_heal": {
+				if (npc != null) {
 					final Instance world = player.getInstanceWorld();
-					if ((world != null) && (world.isStatus(3) || world.isStatus(4)))
-					{
-						if (npc.distance3d(player) < LIGHT_HEAL.getSkill().getCastRange())
-						{
+					if ((world != null) && (world.isStatus(3) || world.isStatus(4))) {
+						if (npc.distance3d(player) < LIGHT_HEAL.getSkill().getCastRange()) {
 							npc.doCast(LIGHT_HEAL.getSkill());
 						}
 						startQuestTimer("cast_light_heal", 3000, npc, player);
@@ -313,11 +275,9 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 				}
 				break;
 			}
-			case "fail_instance":
-			{
+			case "fail_instance": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.removeNpcs();
 					playMovie(player, Movie.SC_AWAKENING_BOSS_ENDING_B);
 					startQuestTimer("exit", 13500, npc, player);
@@ -327,42 +287,34 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 			case "exit":
 				finishInstance(player, 0);
 				break;
-			case "spawn_npc4":
-			{
+			case "spawn_npc4": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					final int waveNpcId = world.getParameters().getInt("waveNpcId");
 					List<Npc> npcs = world.spawnGroup("third_room_" + waveNpcId);
-					for (Npc n : npcs)
-					{
+					for (Npc n : npcs) {
 						addAttackPlayerDesire(n, player);
 					}
-					
+
 					npcs = world.spawnGroup("seal");
-					for (Npc n : npcs)
-					{
+					for (Npc n : npcs) {
 						n.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DISABLE_DEVICE_WILL_GO_OUT_OF_CONTROL_IN_1_MINUTE);
 						startQuestTimer("seal_say", 10000, n, player);
 					}
 				}
 				break;
 			}
-			case "activate_seal":
-			{
+			case "activate_seal": {
 				final Instance world = player.getInstanceWorld();
-				if ((world != null) && npc.isScriptValue(0))
-				{
+				if ((world != null) && npc.isScriptValue(0)) {
 					npc.setScriptValue(1);
-					
+
 					final int enabledSeal = world.getParameters().getInt("enabledSeal", 0) + 1;
 					world.setParameter("enabledSeal", enabledSeal);
-					if (enabledSeal == 2)
-					{
+					if (enabledSeal == 2) {
 						final QuestState qs = player.getQuestState(Q10338_SeizeYourDestiny.class.getSimpleName());
-						
-						if ((qs != null) && qs.isCond(2))
-						{
+
+						if ((qs != null) && qs.isCond(2)) {
 							qs.setCond(3, true);
 						}
 						cancelQuestTimer("fail_instance", null, player);
@@ -373,14 +325,11 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 				}
 				break;
 			}
-			case "seal_say":
-			{
+			case "seal_say": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					final int timerCount = world.getParameters().getInt("timerCount", 0);
-					switch (timerCount)
-					{
+					switch (timerCount) {
 						case 0:
 							npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.SECONDS_ARE_REMAINING41);
 							break;
@@ -412,67 +361,53 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 							npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.SECOND);
 							break;
 					}
-					if (timerCount <= 4)
-					{
+					if (timerCount <= 4) {
 						startQuestTimer("seal_say", 10000, npc, player);
-					}
-					else if ((timerCount > 4) && (timerCount <= 9))
-					{
+					} else if ((timerCount > 4) && (timerCount <= 9)) {
 						startQuestTimer("seal_say", 1000, npc, player);
 					}
 					world.setParameter("timerCount", timerCount);
 				}
 				break;
 			}
-			case "spawn_hermuncus":
-			{
+			case "spawn_hermuncus": {
 				final Instance inst = player.getInstanceWorld();
-				if (inst != null)
-				{
+				if (inst != null) {
 					inst.spawnGroup("hermuncus");
 				}
 				break;
 			}
-			case "cast_release_power":
-			{
+			case "cast_release_power": {
 				npc.setTarget(player);
 				npc.doCast(RELEASE_OF_POWER.getSkill());
 				break;
 			}
-			case "whisper_to_player":
-			{
+			case "whisper_to_player": {
 				showOnScreenMsg(player, NpcStringId.I_HERMUNCUS_GIVE_MY_POWER_TO_THOSE_WHO_FIGHT_FOR_ME, ExShowScreenMessage.TOP_CENTER, 5000);
-				
+
 				npc.broadcastSay(ChatType.WHISPER, NpcStringId.RECEIVE_THIS_POWER_FORM_THE_ANCIENT_GIANT);
 				npc.broadcastSay(ChatType.WHISPER, NpcStringId.USE_THIS_NEW_POWER_WHEN_THE_TIME_IS_RIGHT);
-				
+
 				startQuestTimer("message4", 3000, npc, player);
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance world = killer.getInstanceWorld();
-		if (world != null)
-		{
-			switch (world.getStatus())
-			{
-				case 0:
-				{
-					if (world.getAliveNpcs().isEmpty())
-					{
+		if (world != null) {
+			switch (world.getStatus()) {
+				case 0: {
+					if (world.getAliveNpcs().isEmpty()) {
 						startQuestTimer("spawn_npc2", 100, npc, killer);
 						world.setStatus(1);
 					}
 					break;
 				}
-				case 1:
-				{
-					switch (npc.getId())
-					{
+				case 1: {
+					switch (npc.getId()) {
 						case RAKZAN:
 							moveNpcRoom1(KRAKIA_BATHUS, NpcStringId.ARE_YOU_PLANNING_TO_BETRAY_THE_GODS_AND_FOLLOW_A_GIANT, "bathus_say", world);
 							break;
@@ -500,14 +435,11 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 					}
 					break;
 				}
-				case 2:
-				{
+				case 2: {
 					final StatsSet params = world.getParameters();
 					final int waveNpc = params.getInt("waveNpcId");
-					if (world.getAliveNpcs(waveNpc).isEmpty())
-					{
-						switch (params.getInt("wave"))
-						{
+					if (world.getAliveNpcs(waveNpc).isEmpty()) {
+						switch (params.getInt("wave")) {
 							case 1:
 								startQuestTimer("spawn_wave2", 100, npc, killer);
 								break;
@@ -521,10 +453,8 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 					}
 					break;
 				}
-				default:
-				{
-					if (npc.getId() == HARNAKS_WRAITH)
-					{
+				default: {
+					if (npc.getId() == HARNAKS_WRAITH) {
 						cancelQuestTimer("fail_instance", null, killer);
 						world.removeNpcs();
 						playMovie(killer, Movie.SC_AWAKENING_BOSS_ENDING_A);
@@ -535,64 +465,45 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	private void moveNpcRoom1(int npcId, NpcStringId message, String timer, Instance world)
-	{
+
+	private void moveNpcRoom1(int npcId, NpcStringId message, String timer, Instance world) {
 		final Npc npc = world.getNpc(npcId);
-		if (npc != null)
-		{
+		if (npc != null) {
 			npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, NPC_ROOM1_LOC);
 			npc.broadcastSay(ChatType.NPC_GENERAL, message);
 			startQuestTimer("timer", 2600, npc, null);
 			world.setParameter("currentNpc", npcId);
 		}
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon)
-	{
+	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
 		final Instance world = player.getInstanceWorld();
-		if (world != null)
-		{
-			if (world.isStatus(1))
-			{
+		if (world != null) {
+			if (world.isStatus(1)) {
 				final int currentNpc = world.getParameters().getInt("currentNpc");
-				if (npc.getId() != currentNpc)
-				{
+				if (npc.getId() != currentNpc) {
 					world.setStatus(0);
-					for (Npc n : world.getAliveNpcs())
-					{
+					for (Npc n : world.getAliveNpcs()) {
 						addAttackPlayerDesire(n, player);
 					}
 				}
-			}
-			else if (world.isStatus(2))
-			{
-				if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 80)
-				{
+			} else if (world.isStatus(2)) {
+				if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 80) {
 					npc.doCast(ULTIMATE_BUFF.getSkill());
 				}
-			}
-			else if (world.isStatus(3) && (npc.getId() == HARNAKS_WRAITH))
-			{
+			} else if (world.isStatus(3) && (npc.getId() == HARNAKS_WRAITH)) {
 				final NpcVariables vars = npc.getVariables();
-				if (!vars.getBoolean("message1", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) > 80))
-				{
+				if (!vars.getBoolean("message1", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) > 80)) {
 					showOnScreenMsg(player, NpcStringId.FREE_ME_FROM_THIS_BINDING_OF_LIGHT, ExShowScreenMessage.TOP_CENTER, 5000);
 					vars.set("message1", true);
-				}
-				else if (!vars.getBoolean("message2", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 80))
-				{
+				} else if (!vars.getBoolean("message2", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 80)) {
 					showOnScreenMsg(player, NpcStringId.DESTROY_THE_GHOST_OF_HARNAK_THIS_CORRUPTED_CREATURE, ExShowScreenMessage.TOP_CENTER, 5000);
 					vars.set("message2", true);
-				}
-				else if (!vars.getBoolean("message3", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 60))
-				{
+				} else if (!vars.getBoolean("message3", false) && (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 60)) {
 					showOnScreenMsg(player, NpcStringId.FREE_ME_AND_I_PROMISE_YOU_THE_POWER_OF_GIANTS, ExShowScreenMessage.TOP_CENTER, 5000);
 					vars.set("message3", true);
-				}
-				else if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 50)
-				{
+				} else if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 50) {
 					world.incStatus();
 					player.sendPacket(new ExSendUIEvent(player, false, false, 60, 0, NpcStringId.REMAINING_TIME));
 					showOnScreenMsg(player, NpcStringId.NO_THE_SEAL_CONTROLS_HAVE_BEEN_EXPOSED_GUARDS_PROTECT_THE_SEAL_CONTROLS, ExShowScreenMessage.TOP_CENTER, 10000);
@@ -604,41 +515,32 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 		}
 		return super.onAttack(npc, player, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			startQuestTimer("cast_release_power", 2000, npc, creature.getActingPlayer());
-			if (npc.getId() == POWER_SOURCE)
-			{
+			if (npc.getId() == POWER_SOURCE) {
 				startQuestTimer("whisper_to_player", 2000, npc, creature.getActingPlayer());
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public String onEnterZone(Creature character, ZoneType zone)
-	{
-		if (!character.isPlayer())
-		{
+	public String onEnterZone(Creature character, ZoneType zone) {
+		if (!character.isPlayer()) {
 			return null;
 		}
-		
+
 		final PlayerInstance player = character.getActingPlayer();
 		final Instance world = player.getInstanceWorld();
-		if (world != null)
-		{
-			switch (zone.getId())
-			{
-				case ZONE_ROOM_2:
-				{
-					if (world.isStatus(1))
-					{
+		if (world != null) {
+			switch (zone.getId()) {
+				case ZONE_ROOM_2: {
+					if (world.isStatus(1)) {
 						world.incStatus();
-						
+
 						startQuestTimer("message2", 100, null, player);
 						startQuestTimer("message5", 2600, null, player);
 						startQuestTimer("message6", 5100, null, player);
@@ -646,10 +548,8 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 					}
 					break;
 				}
-				case ZONE_ROOM_3:
-				{
-					if (!world.getParameters().getBoolean("openingPlayed", false))
-					{
+				case ZONE_ROOM_3: {
+					if (!world.getParameters().getBoolean("openingPlayed", false)) {
 						world.setParameter("openingPlayed", true);
 						startQuestTimer("spawn_npc3", 29950, null, player);
 						playMovie(player, Movie.SC_AWAKENING_BOSS_OPENING);
@@ -660,9 +560,8 @@ public final class HarnakUndergroundRuins extends AbstractInstance
 		}
 		return super.onEnterZone(character, zone);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new HarnakUndergroundRuins();
 	}
 }

@@ -23,128 +23,107 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10305_UnstoppableFutileEfforts.Q10305_UnstoppableFutileEfforts;
 
 /**
  * The Corrupted Leader (10306)
+ *
  * @author Gladicek
  */
-public final class Q10306_TheCorruptedLeader extends Quest
-{
+public final class Q10306_TheCorruptedLeader extends Quest {
 	// NPCs
 	private static final int NOETI_KASHERON = 32896;
 	private static final int KIMERIAN = 25745;
 	// Items
 	private static final int ENCHANT_ARMOR_R = 17527;
 	private static final int[] REWARD_CRYSTALS =
-	{
-		9552,
-		9553,
-		9554,
-		9555,
-		9556,
-		9557,
-	};
+			{
+					9552,
+					9553,
+					9554,
+					9555,
+					9556,
+					9557,
+			};
 	// Misc
 	private static final int MIN_LEVEL = 90;
-	
-	public Q10306_TheCorruptedLeader()
-	{
+
+	public Q10306_TheCorruptedLeader() {
 		super(10306);
 		addStartNpc(NOETI_KASHERON);
 		addTalkId(NOETI_KASHERON);
 		addKillId(KIMERIAN);
-		
+
 		addCondMinLevel(MIN_LEVEL, "32896-08.htm");
 		addCondCompletedQuest(Q10305_UnstoppableFutileEfforts.class.getSimpleName(), "32896-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "32896-02.htm":
-			{
+
+		switch (event) {
+			case "32896-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32896-03.htm":
-			{
+			case "32896-03.htm": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "32896-06.html":
-			{
-				if (qs.isCond(2) && (player.getLevel() >= MIN_LEVEL))
-				{
+			case "32896-06.html": {
+				if (qs.isCond(2) && (player.getLevel() >= MIN_LEVEL)) {
 					addExp(player, 9_479_594);
 					addSp(player, 2_275);
 					giveItems(player, ENCHANT_ARMOR_R, 2);
 					giveItems(player, REWARD_CRYSTALS[getRandom(REWARD_CRYSTALS.length)], 1);
 					qs.exitQuest(false, true);
 					htmltext = "32895-09.html";
-					
-				}
-				else
-				{
+
+				} else {
 					htmltext = getNoQuestLevelRewardMsg(player);
 				}
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = "32896-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				if (qs.isCond(1))
-				{
+			case State.STARTED: {
+				if (qs.isCond(1)) {
 					htmltext = "32896-04.html";
-				}
-				else if (qs.isCond(2))
-				{
+				} else if (qs.isCond(2)) {
 					htmltext = "32896-05.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "32896-07.html";
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState qs = getQuestState(player, false);
-		
-		if ((qs != null) && (qs.isCond(1)))
-		{
+
+		if ((qs != null) && (qs.isCond(1))) {
 			qs.setCond(2, true);
 		}
 		return super.onKill(npc, player, isSummon);

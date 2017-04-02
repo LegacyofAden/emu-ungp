@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.model.skills.Skill;
-
 import quests.Q10273_GoodDayToFly.Q10273_GoodDayToFly;
 
 /**
  * Collecting in the Air (10274)
+ *
  * @author nonom
  */
-public class Q10274_CollectingInTheAir extends Quest
-{
+public class Q10274_CollectingInTheAir extends Quest {
 	// NPC
 	private static final int LEKON = 32557;
 	// Items
@@ -44,57 +43,49 @@ public class Q10274_CollectingInTheAir extends Quest
 	private static final int GREEN = 13860;
 	// Monsters
 	private static final int MOBS[] =
-	{
-		18684, // Red Star Stone
-		18685, // Red Star Stone
-		18686, // Red Star Stone
-		18687, // Blue Star Stone
-		18688, // Blue Star Stone
-		18689, // Blue Star Stone
-		18690, // Green Star Stone
-		18691, // Green Star Stone
-		18692, // Green Star Stone
-	};
-	
-	public Q10274_CollectingInTheAir()
-	{
+			{
+					18684, // Red Star Stone
+					18685, // Red Star Stone
+					18686, // Red Star Stone
+					18687, // Blue Star Stone
+					18688, // Blue Star Stone
+					18689, // Blue Star Stone
+					18690, // Green Star Stone
+					18691, // Green Star Stone
+					18692, // Green Star Stone
+			};
+
+	public Q10274_CollectingInTheAir() {
 		super(10274);
 		addStartNpc(LEKON);
 		addTalkId(LEKON);
 		addSkillSeeId(MOBS);
 		registerQuestItems(SCROLL, RED, BLUE, GREEN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equals("32557-03.html"))
-		{
+
+		if (event.equals("32557-03.html")) {
 			st.startQuest();
 			giveItems(player, SCROLL, 8);
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon)
-	{
+	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		final QuestState st = getQuestState(caster, false);
-		if ((st == null) || !st.isStarted())
-		{
+		if ((st == null) || !st.isStarted()) {
 			return null;
 		}
-		
-		if (st.isCond(1) && (skill.getId() == 2630))
-		{
-			switch (npc.getId())
-			{
+
+		if (st.isCond(1) && (skill.getId() == 2630)) {
+			switch (npc.getId()) {
 				case 18684:
 				case 18685:
 				case 18686:
@@ -116,44 +107,35 @@ public class Q10274_CollectingInTheAir extends Quest
 		}
 		return super.onSkillSee(npc, caster, skill, targets, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.COMPLETED:
 				htmltext = "32557-0a.html";
 				break;
 			case State.CREATED:
 				st = player.getQuestState(Q10273_GoodDayToFly.class.getSimpleName());
-				if (st == null)
-				{
+				if (st == null) {
 					htmltext = "32557-00.html";
-				}
-				else
-				{
+				} else {
 					htmltext = ((player.getLevel() >= 75) && st.isCompleted()) ? "32557-01.htm" : "32557-00.html";
 				}
 				break;
 			case State.STARTED:
-				if ((getQuestItemsCount(player, RED) + getQuestItemsCount(player, BLUE) + getQuestItemsCount(player, GREEN)) >= 8)
-				{
+				if ((getQuestItemsCount(player, RED) + getQuestItemsCount(player, BLUE) + getQuestItemsCount(player, GREEN)) >= 8) {
 					htmltext = "32557-05.html";
 					giveItems(player, 13728, 1);
 					addExp(player, 25160);
 					addSp(player, 2525); // TODO Incorrect SP reward.
 					st.exitQuest(false, true);
-				}
-				else
-				{
+				} else {
 					htmltext = "32557-04.html";
 				}
 				break;

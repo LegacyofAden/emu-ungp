@@ -18,7 +18,7 @@
  */
 package handlers.chathandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
@@ -28,24 +28,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Party Room Commander chat handler.
+ *
  * @author durgus
  */
-public final class ChatPartyRoomCommander implements IChatHandler
-{
+public final class ChatPartyRoomCommander implements IChatHandler {
 	private static final ChatType[] CHAT_TYPES =
-	{
-		ChatType.PARTYROOM_COMMANDER,
-	};
-	
-	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text)
-	{
-		if (activeChar.isInParty())
-		{
-			if (activeChar.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar))
 			{
-				if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type))
-				{
+					ChatType.PARTYROOM_COMMANDER,
+			};
+
+	@Override
+	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+		if (activeChar.isInParty()) {
+			if (activeChar.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar)) {
+				if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type)) {
 					activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER_CHATTING_BAN_TIME_REMAINING_S1_SECONDS);
 					return;
 				}
@@ -53,15 +49,13 @@ public final class ChatPartyRoomCommander implements IChatHandler
 			}
 		}
 	}
-	
+
 	@Override
-	public ChatType[] getChatTypeList()
-	{
+	public ChatType[] getChatTypeList() {
 		return CHAT_TYPES;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ChatHandler.getInstance().registerHandler(new ChatPartyRoomCommander());
 	}
 }

@@ -25,54 +25,45 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class Multisell implements IBypassHandler
-{
+public class Multisell implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"multisell",
-		"exc_multisell"
-	};
-	
+			{
+					"multisell",
+					"exc_multisell"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			int listId;
 			if (command.toLowerCase().startsWith(COMMANDS[0])) // multisell
 			{
 				listId = Integer.parseInt(command.substring(9).trim());
 				MultisellData.getInstance().separateAndSend(listId, activeChar, (Npc) target, false);
 				return true;
-			}
-			else if (command.toLowerCase().startsWith(COMMANDS[1])) // exc_multisell
+			} else if (command.toLowerCase().startsWith(COMMANDS[1])) // exc_multisell
 			{
 				listId = Integer.parseInt(command.substring(13).trim());
 				MultisellData.getInstance().separateAndSend(listId, activeChar, (Npc) target, true);
 				return true;
 			}
 			return false;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Multisell());
 	}
 }

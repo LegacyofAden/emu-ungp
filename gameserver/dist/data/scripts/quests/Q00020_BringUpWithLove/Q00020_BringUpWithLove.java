@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Bring Up With Love (20)
+ *
  * @author Adry_85
  */
-public class Q00020_BringUpWithLove extends Quest
-{
+public class Q00020_BringUpWithLove extends Quest {
 	// NPC
 	private static final int TUNATUN = 31537;
 	// Items
@@ -37,26 +37,22 @@ public class Q00020_BringUpWithLove extends Quest
 	private static final int INNOCENCE_JEWEL = 15533;
 	// Misc
 	private static final int MIN_LEVEL = 82;
-	
-	public Q00020_BringUpWithLove()
-	{
+
+	public Q00020_BringUpWithLove() {
 		super(20);
 		addStartNpc(TUNATUN);
 		addTalkId(TUNATUN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31537-02.htm":
 			case "31537-03.htm":
 			case "31537-04.htm":
@@ -66,32 +62,25 @@ public class Q00020_BringUpWithLove extends Quest
 			case "31537-08.htm":
 			case "31537-09.htm":
 			case "31537-10.htm":
-			case "31537-12.htm":
-			{
+			case "31537-12.htm": {
 				htmltext = event;
 				break;
 			}
-			case "31537-11.html":
-			{
+			case "31537-11.html": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31537-16.html":
-			{
-				if (st.isCond(2) && hasQuestItems(player, INNOCENCE_JEWEL))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "31537-16.html": {
+				if (st.isCond(2) && hasQuestItems(player, INNOCENCE_JEWEL)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, WATER_CRYSTAL, 1);
 						takeItems(player, INNOCENCE_JEWEL, -1);
 						addExp(player, 26_950_000);
 						addSp(player, 6_468);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -100,21 +89,17 @@ public class Q00020_BringUpWithLove extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
+
+		switch (st.getState()) {
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
@@ -122,15 +107,12 @@ public class Q00020_BringUpWithLove extends Quest
 				htmltext = player.getLevel() >= MIN_LEVEL ? "31537-01.htm" : "31537-13.html";
 				break;
 			case State.STARTED:
-				switch (st.getCond())
-				{
-					case 1:
-					{
+				switch (st.getCond()) {
+					case 1: {
 						htmltext = "31537-14.html";
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						htmltext = (!hasQuestItems(player, INNOCENCE_JEWEL)) ? "31537-14.html" : "31537-15.html";
 						break;
 					}
@@ -139,12 +121,10 @@ public class Q00020_BringUpWithLove extends Quest
 		}
 		return htmltext;
 	}
-	
-	public static void checkJewelOfInnocence(PlayerInstance player)
-	{
+
+	public static void checkJewelOfInnocence(PlayerInstance player) {
 		final QuestState st = player.getQuestState(Q00020_BringUpWithLove.class.getSimpleName());
-		if ((st != null) && st.isCond(1) && !hasQuestItems(player, INNOCENCE_JEWEL) && (getRandom(100) < 5))
-		{
+		if ((st != null) && st.isCond(1) && !hasQuestItems(player, INNOCENCE_JEWEL) && (getRandom(100) < 5)) {
 			giveItems(player, INNOCENCE_JEWEL, 1);
 			st.setCond(2, true);
 		}

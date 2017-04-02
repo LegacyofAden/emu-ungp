@@ -18,7 +18,8 @@
  */
 package ai.individual.Other.ManorManager;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import ai.AbstractNpcAI;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -30,54 +31,43 @@ import org.l2junity.gameserver.model.events.annotations.Id;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
 import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcManorBypass;
-import org.l2junity.gameserver.network.client.send.BuyListSeed;
-import org.l2junity.gameserver.network.client.send.ExShowCropInfo;
-import org.l2junity.gameserver.network.client.send.ExShowManorDefaultInfo;
-import org.l2junity.gameserver.network.client.send.ExShowProcureCropDetail;
-import org.l2junity.gameserver.network.client.send.ExShowSeedInfo;
-import org.l2junity.gameserver.network.client.send.ExShowSellCropList;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
-import ai.AbstractNpcAI;
 
 /**
  * Manor manager AI.
+ *
  * @author malyelfik
  */
-public final class ManorManager extends AbstractNpcAI
-{
+public final class ManorManager extends AbstractNpcAI {
 	private static final int[] NPC =
-	{
-		35644,
-		35645,
-		35319,
-		35366,
-		36456,
-		35512,
-		35558,
-		35229,
-		35230,
-		35231,
-		35277,
-		35103,
-		35145,
-		35187
-	};
-	
-	public ManorManager()
-	{
+			{
+					35644,
+					35645,
+					35319,
+					35366,
+					36456,
+					35512,
+					35558,
+					35229,
+					35230,
+					35231,
+					35277,
+					35103,
+					35145,
+					35187
+			};
+
+	public ManorManager() {
 		addStartNpc(NPC);
 		addFirstTalkId(NPC);
 		addTalkId(NPC);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "manager-help-01.htm":
 			case "manager-help-02.htm":
 			case "manager-help-03.htm":
@@ -86,45 +76,38 @@ public final class ManorManager extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if (GeneralConfig.ALLOW_MANOR)
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if (GeneralConfig.ALLOW_MANOR) {
 			final int castleId = npc.getParameters().getInt("manor_id", -1);
-			if (!player.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS) && player.isClanLeader() && (castleId == player.getClan().getCastleId()))
-			{
+			if (!player.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS) && player.isClanLeader() && (castleId == player.getClan().getCastleId())) {
 				return "manager-lord.htm";
 			}
 			return "manager.htm";
 		}
 		return getHtm(player.getHtmlPrefix(), "data/html/npcdefault.htm");
 	}
-	
+
 	// @formatter:off
 	@RegisterEvent(EventType.ON_NPC_MANOR_BYPASS)
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id({35644, 35645, 35319, 35366, 36456, 35512, 35558, 35229, 35230, 35231, 35277, 35103, 35145, 35187})
 	// @formatter:on
-	public final void onNpcManorBypass(OnNpcManorBypass evt)
-	{
+	public final void onNpcManorBypass(OnNpcManorBypass evt) {
 		final PlayerInstance player = evt.getActiveChar();
-		if (CastleManorManager.getInstance().isUnderMaintenance())
-		{
+		if (CastleManorManager.getInstance().isUnderMaintenance()) {
 			player.sendPacket(SystemMessageId.THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE);
 			return;
 		}
-		
+
 		final Npc npc = evt.getTarget();
 		final int templateId = npc.getParameters().getInt("manor_id", -1);
 		final int castleId = (evt.getManorId() == -1) ? templateId : evt.getManorId();
-		switch (evt.getRequest())
-		{
+		switch (evt.getRequest()) {
 			case 1: // Seed purchase
 			{
-				if (templateId != castleId)
-				{
+				if (templateId != castleId) {
 					player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.HERE_YOU_CAN_BUY_ONLY_SEEDS_OF_S1_MANOR).addCastleId(templateId));
 					return;
 				}
@@ -153,9 +136,8 @@ public final class ManorManager extends AbstractNpcAI
 				_log.warn(getClass().getSimpleName() + ": Player " + player.getName() + " (" + player.getObjectId() + ") send unknown request id " + evt.getRequest() + "!");
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ManorManager();
 	}
 }

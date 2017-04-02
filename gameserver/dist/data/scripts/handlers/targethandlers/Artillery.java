@@ -27,28 +27,24 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target siege doors and walls.
+ *
  * @author Nik
  */
-public class Artillery implements ITargetTypeHandler
-{
+public class Artillery implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		final WorldObject target = activeChar.getTarget();
-		if ((target != null) && target.isDoor())
-		{
+		if ((target != null) && target.isDoor()) {
 			final DoorInstance targetDoor = (DoorInstance) target;
-			if (!targetDoor.isDead() && targetDoor.isAutoAttackable(activeChar) && targetDoor.isEnemy())
-			{
+			if (!targetDoor.isDead() && targetDoor.isAutoAttackable(activeChar) && targetDoor.isEnemy()) {
 				return targetDoor;
 			}
 		}
-		
-		if (sendMessage)
-		{
+
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 		}
-		
+
 		return null;
 	}
 }

@@ -30,66 +30,54 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * CP change effect. It is mostly used for potions and static damage.
+ *
  * @author Nik
  */
-public final class InstantCp extends AbstractEffect
-{
+public final class InstantCp extends AbstractEffect {
 	private final int _amount;
 	private final StatModifierType _mode;
-	
-	public InstantCp(StatsSet params)
-	{
+
+	public InstantCp(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
-		
+
 		double amount = 0;
-		switch (_mode)
-		{
-			case DIFF:
-			{
+		switch (_mode) {
+			case DIFF: {
 				amount = Math.min(_amount, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp());
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				amount = Math.min((targetCreature.getCurrentCp() * _amount) / 100.0, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp());
 				break;
 			}
 		}
-		
-		if (amount != 0)
-		{
+
+		if (amount != 0) {
 			final double newCp = amount + targetCreature.getCurrentCp();
 			targetCreature.setCurrentCp(newCp, false);
 			targetCreature.broadcastStatusUpdate(caster);
 		}
-		
-		if (amount >= 0)
-		{
-			if ((caster != null) && (caster != targetCreature))
-			{
+
+		if (amount >= 0) {
+			if ((caster != null) && (caster != targetCreature)) {
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_CP_HAS_BEEN_RESTORED_BY_C1);
 				sm.addCharName(caster);
 				sm.addInt((int) amount);
 				targetCreature.sendPacket(sm);
-			}
-			else
-			{
+			} else {
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CP_HAS_BEEN_RESTORED);
 				sm.addInt((int) amount);
 				targetCreature.sendPacket(sm);

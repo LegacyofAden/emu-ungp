@@ -18,50 +18,43 @@
  */
 package handlers.voicedcommandhandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.L2JModsConfig;
+import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class Lang implements IVoicedCommandHandler
-{
+import java.util.StringTokenizer;
+
+public class Lang implements IVoicedCommandHandler {
 	private static final String[] VOICED_COMMANDS =
-	{
-		"lang"
-	};
-	
+			{
+					"lang"
+			};
+
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params)
-	{
-		if (!L2JModsConfig.L2JMOD_MULTILANG_ENABLE || !L2JModsConfig.L2JMOD_MULTILANG_VOICED_ALLOW)
-		{
+	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+		if (!L2JModsConfig.L2JMOD_MULTILANG_ENABLE || !L2JModsConfig.L2JMOD_MULTILANG_VOICED_ALLOW) {
 			return false;
 		}
-		
+
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		if (params == null)
-		{
+		if (params == null) {
 			final StringBuilder html = new StringBuilder(100);
-			for (String lang : L2JModsConfig.L2JMOD_MULTILANG_ALLOWED)
-			{
+			for (String lang : L2JModsConfig.L2JMOD_MULTILANG_ALLOWED) {
 				html.append("<button value=\"" + lang.toUpperCase() + "\" action=\"bypass -h voice .lang " + lang + "\" width=60 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><br>");
 			}
-			
+
 			msg.setFile(activeChar.getHtmlPrefix(), "data/html/mods/Lang/LanguageSelect.htm");
 			msg.replace("%list%", html.toString());
 			activeChar.sendPacket(msg);
 			return true;
 		}
-		
+
 		final StringTokenizer st = new StringTokenizer(params);
-		if (st.hasMoreTokens())
-		{
+		if (st.hasMoreTokens()) {
 			final String lang = st.nextToken().trim();
-			if (activeChar.setLang(lang))
-			{
+			if (activeChar.setLang(lang)) {
 				msg.setFile(activeChar.getHtmlPrefix(), "data/html/mods/Lang/Ok.htm");
 				activeChar.sendPacket(msg);
 				return true;
@@ -72,15 +65,13 @@ public class Lang implements IVoicedCommandHandler
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getVoicedCommandList()
-	{
+	public String[] getVoicedCommandList() {
 		return VOICED_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		VoicedCommandHandler.getInstance().registerHandler(new Lang());
 	}
 }

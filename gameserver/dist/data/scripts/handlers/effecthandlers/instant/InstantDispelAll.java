@@ -28,29 +28,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Dispel All effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantDispelAll extends AbstractEffect
-{
-	public InstantDispelAll(StatsSet params)
-	{
+public final class InstantDispelAll extends AbstractEffect {
+	public InstantDispelAll(StatsSet params) {
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DISPEL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		targetCreature.stopAllEffects();
 	}
 }

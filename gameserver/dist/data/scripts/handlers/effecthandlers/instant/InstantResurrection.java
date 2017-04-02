@@ -30,32 +30,26 @@ import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 /**
  * Resurrection effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantResurrection extends AbstractEffect
-{
+public final class InstantResurrection extends AbstractEffect {
 	private final int _power;
-	
-	public InstantResurrection(StatsSet params)
-	{
+
+	public InstantResurrection(StatsSet params) {
 		_power = params.getInt("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.RESURRECTION;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (caster.isPlayer() && target.isPlayable())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (caster.isPlayer() && target.isPlayable()) {
 			target.getActingPlayer().reviveRequest(caster.asPlayer(), skill, target.isPet(), _power);
-		}
-		else if (target.isCreature())
-		{
+		} else if (target.isCreature()) {
 			final Creature targetCreature = target.asCreature();
 			DecayTaskManager.getInstance().cancel(targetCreature);
 			targetCreature.doRevive(Formulas.calculateSkillResurrectRestorePercent(_power, caster));

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 
 /**
  * @author Sdw
  */
-public class PumpSummonPoint extends AbstractDoubleStatAddEffect
-{
-	public PumpSummonPoint(StatsSet params)
-	{
+public class PumpSummonPoint extends AbstractDoubleStatAddEffect {
+	public PumpSummonPoint(StatsSet params) {
 		super(params, DoubleStat.MAX_SUMMON_POINTS);
 	}
 }

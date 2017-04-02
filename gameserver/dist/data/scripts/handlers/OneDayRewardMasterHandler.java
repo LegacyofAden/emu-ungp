@@ -18,27 +18,18 @@
  */
 package handlers;
 
+import handlers.onedayrewardshandlers.*;
 import org.l2junity.gameserver.handler.OneDayRewardHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import handlers.onedayrewardshandlers.BossOneDayRewardHandler;
-import handlers.onedayrewardshandlers.CeremonyOfChaosOneDayRewardHandler;
-import handlers.onedayrewardshandlers.FishingOneDayRewardHandler;
-import handlers.onedayrewardshandlers.LevelOneDayRewardHandler;
-import handlers.onedayrewardshandlers.OlympiadOneDayRewardHandler;
-import handlers.onedayrewardshandlers.QuestOneDayRewardHandler;
-import handlers.onedayrewardshandlers.SiegeOneDayRewardHandler;
-
 /**
  * @author UnAfraid
  */
-public class OneDayRewardMasterHandler
-{
+public class OneDayRewardMasterHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OneDayRewardMasterHandler.class);
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		OneDayRewardHandler.getInstance().registerHandler("level", LevelOneDayRewardHandler::new);
 		// OneDayRewardHandler.getInstance().registerHandler("loginAllWeek", LoginAllWeekOneDayRewardHandler::new);
 		// OneDayRewardHandler.getInstance().registerHandler("loginAllMonth", LoginAllWeekOneDayRewardHandler::new);

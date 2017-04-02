@@ -18,6 +18,7 @@
  */
 package handlers.effecthandlers.consume;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -25,73 +26,58 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Relax effect implementation.
  */
-public final class ConsumeRest extends AbstractBooleanStatEffect
-{
+public final class ConsumeRest extends AbstractBooleanStatEffect {
 	private final double _power;
-	
-	public ConsumeRest(StatsSet params)
-	{
+
+	public ConsumeRest(StatsSet params) {
 		super(BooleanStat.RELAX);
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			target.getActingPlayer().sitDown(false);
-		}
-		else
-		{
+		} else {
 			target.getAI().setIntention(CtrlIntention.AI_INTENTION_REST);
 		}
 	}
-	
+
 	@Override
-	public boolean consume(Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public boolean consume(Creature target, Skill skill) {
+		if (target.isDead()) {
 			return false;
 		}
-		
-		if (target.isPlayer())
-		{
-			if (!target.getActingPlayer().isSitting())
-			{
+
+		if (target.isPlayer()) {
+			if (!target.getActingPlayer().isSitting()) {
 				return false;
 			}
 		}
-		
-		if ((target.getCurrentHp() + 1) > target.getMaxRecoverableHp())
-		{
+
+		if ((target.getCurrentHp() + 1) > target.getMaxRecoverableHp()) {
 			target.sendPacket(SystemMessageId.THAT_SKILL_HAS_BEEN_DE_ACTIVATED_AS_HP_WAS_FULLY_RECOVERED);
 			return false;
 		}
-		
+
 		final double consume = _power * getTicksMultiplier();
 		double mp = target.getCurrentMp();
 		final double maxMp = target.getMaxRecoverableMp();
-		if ((consume > 0) && (mp > maxMp))
-		{
+		if ((consume > 0) && (mp > maxMp)) {
 			return false;
 		}
-		
-		if ((consume < 0) && ((mp + consume) <= 0))
-		{
+
+		if ((consume < 0) && ((mp + consume) <= 0)) {
 			target.sendPacket(SystemMessageId.YOUR_SKILL_WAS_DEACTIVATED_DUE_TO_LACK_OF_MP);
 			return false;
 		}
-		
+
 		target.setCurrentMp(Math.min(target.getCurrentMp() + consume, maxMp));
-		
+
 		return true;
 	}
 }

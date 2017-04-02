@@ -18,27 +18,23 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
-import handlers.effecthandlers.AbstractDoubleStatEffect;
-
 /**
  * @author Sdw
  */
-public class PumpHitAtNight extends AbstractDoubleStatEffect
-{
-	public PumpHitAtNight(StatsSet params)
-	{
+public class PumpHitAtNight extends AbstractDoubleStatEffect {
+	public PumpHitAtNight(StatsSet params) {
 		super(params, DoubleStat.ACCURACY_COMBAT);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return GameTimeManager.getInstance().isNight();
 	}
 }

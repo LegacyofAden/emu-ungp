@@ -28,11 +28,11 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * To The Seed of Hellfire (10381)
+ *
  * @author Gladicek
  */
 
-public final class Q10381_ToTheSeedOfHellfire extends Quest
-{
+public final class Q10381_ToTheSeedOfHellfire extends Quest {
 	// NPCs
 	private static final int KEUCEREUS = 32548;
 	private static final int KBALDIR = 32733;
@@ -41,65 +41,52 @@ public final class Q10381_ToTheSeedOfHellfire extends Quest
 	private static final int KBALDIR_LETTER = 34957;
 	// Misc
 	private static final int MIN_LEVEL = 97;
-	
-	public Q10381_ToTheSeedOfHellfire()
-	{
+
+	public Q10381_ToTheSeedOfHellfire() {
 		super(10381);
 		addStartNpc(KEUCEREUS);
 		addTalkId(KEUCEREUS, KBALDIR, SIZRAK);
 		addCondMinLevel(MIN_LEVEL, "32548-06.htm");
 		registerQuestItems(KBALDIR_LETTER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		
-		switch (event)
-		{
-			case "32548-02.htm":
-			{
+
+		switch (event) {
+			case "32548-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32548-03.html":
-			{
+			case "32548-03.html": {
 				qs.startQuest();
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.HURRY_AND_GO_FIND_COMMANDER_KBALDIR);
 				break;
 			}
-			case "32733-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "32733-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, KBALDIR_LETTER, 1);
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_CAN_REACH_THE_SEED_OF_HELLFIRE_THROUGH_THE_SEED_TELEPORT_DEVICE);
 				}
 				break;
 			}
-			case "33669-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33669-03.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.I_WILL_LOOK_FORWARD_TO_YOUR_ACTIVITY);
 						giveAdena(player, 3_256_740, true);
 						addExp(player, 951_127_800);
 						addSp(player, 228_270);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
@@ -109,56 +96,41 @@ public final class Q10381_ToTheSeedOfHellfire extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == KEUCEREUS)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == KEUCEREUS) {
 					htmltext = "32548-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case KEUCEREUS:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case KEUCEREUS: {
+						if (qs.isCond(1)) {
 							htmltext = "32548-04.html";
 						}
 						break;
 					}
-					case KBALDIR:
-					{
-						if (qs.isCond(1))
-						{
+					case KBALDIR: {
+						if (qs.isCond(1)) {
 							htmltext = "32733-01.html";
-						}
-						else if (qs.isCond(2))
-						{
+						} else if (qs.isCond(2)) {
 							htmltext = "32733-04.html";
 						}
 						break;
 					}
-					case SIZRAK:
-					{
-						if (qs.isCond(2))
-						{
+					case SIZRAK: {
+						if (qs.isCond(2)) {
 							htmltext = "33669-01.html";
 						}
 						break;
@@ -166,10 +138,8 @@ public final class Q10381_ToTheSeedOfHellfire extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == KEUCEREUS)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == KEUCEREUS) {
 					htmltext = "32548-05.html";
 				}
 				break;

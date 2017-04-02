@@ -18,6 +18,7 @@
  */
 package instances.BalokWarzone;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -35,14 +36,12 @@ import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import instances.AbstractInstance;
-
 /**
  * Balok Warzone instance zone.
+ *
  * @author St3eT
  */
-public final class BalokWarzone extends AbstractInstance
-{
+public final class BalokWarzone extends AbstractInstance {
 	// NPCs
 	private static final int BALOK = 29218;
 	private static final int ROOM_WARDER = 23123;
@@ -64,22 +63,21 @@ public final class BalokWarzone extends AbstractInstance
 	// Locations
 	private static final Location BATTLE_PORT = new Location(153567, 143319, -12736);
 	private static final Location[] PRISON_LOCS =
-	{
-		new Location(153587, 140369, -12707),
-		new Location(154432, 140594, -12707),
-		new Location(155039, 141224, -12707),
-		new Location(155282, 142075, -12707),
-		new Location(154410, 143531, -12707),
-		new Location(152741, 143524, -12707),
-		new Location(151886, 142077, -12707),
-		new Location(152127, 141226, -12707),
-	};
+			{
+					new Location(153587, 140369, -12707),
+					new Location(154432, 140594, -12707),
+					new Location(155039, 141224, -12707),
+					new Location(155282, 142075, -12707),
+					new Location(154410, 143531, -12707),
+					new Location(152741, 143524, -12707),
+					new Location(151886, 142077, -12707),
+					new Location(152127, 141226, -12707),
+			};
 	// Misc
 	private static final int TEMPLATE_ID = 167;
 	private static final int MAXIMAL_MINION_COUNT = 15;
-	
-	public BalokWarzone()
-	{
+
+	public BalokWarzone() {
 		super(TEMPLATE_ID);
 		addStartNpc(ENTRANCE_PORTAL);
 		addTalkId(ENTRANCE_PORTAL);
@@ -90,66 +88,55 @@ public final class BalokWarzone extends AbstractInstance
 		addKillId(BALOK, HELL_GATE_MINION, ROOM_WARDER);
 		setCreatureSeeId(this::onCreatureSee, HELL_GATE_MINION);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("enterInstance"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (event)
-			{
-				case "GATE_LOOP_TIMER":
-				{
+		if (isInInstance(instance)) {
+			switch (event) {
+				case "GATE_LOOP_TIMER": {
 					int minionCount = instance.getAliveNpcs(HELL_GATE_MINION).size();
-					
-					if (minionCount < MAXIMAL_MINION_COUNT)
-					{
+
+					if (minionCount < MAXIMAL_MINION_COUNT) {
 						addSpawn(HELL_GATE_MINION, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId()).initSeenCreatures();
 						minionCount++;
 					}
-					
+
 					getTimers().addTimer("GATE_LOOP_TIMER", 3000 + ((minionCount * minionCount) * 500), npc, null);
 					break;
 				}
-				case "GATE_TIME_TIMER":
-				{
+				case "GATE_TIME_TIMER": {
 					npc.deleteMe();
 					instance.getAliveNpcs(HELL_GATE_MINION).forEach(Npc::deleteMe);
 					break;
 				}
-				case "BALOK_UNBEATABLE":
-				{
+				case "BALOK_UNBEATABLE": {
 					addSkillCastDesire(npc, npc, INVUL, 23);
 					break;
 				}
-				case "TELEPORT_PLAYER":
-				{
+				case "TELEPORT_PLAYER": {
 					player.teleToLocation(BATTLE_PORT);
 					break;
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player)
-	{
+	public void onInstanceCreated(Instance instance, PlayerInstance player) {
 		getTimers().addTimer("BATTLE_PORT", 3000, e ->
 		{
 			instance.getPlayers().forEach(p -> p.teleToLocation(BATTLE_PORT));
 			instance.getDoors().forEach(DoorInstance::closeMe);
-			
+
 			getTimers().addTimer("START_SCENE", 20000, e2 ->
 			{
 				playMovie(instance, Movie.SI_BARLOG_OPENING);
@@ -160,39 +147,29 @@ public final class BalokWarzone extends AbstractInstance
 			});
 		});
 	}
-	
+
 	@Override
-	public void onInstanceEnter(PlayerInstance player, Instance instance)
-	{
-		if (!instance.getAliveNpcs(BALOK).isEmpty())
-		{
+	public void onInstanceEnter(PlayerInstance player, Instance instance) {
+		if (!instance.getAliveNpcs(BALOK).isEmpty()) {
 			getTimers().addTimer("TELEPORT_PLAYER", 2000, null, player);
 		}
 		super.onInstanceEnter(player, instance);
 	}
-	
-	private void onCreatureSee(OnCreatureSee event)
-	{
+
+	private void onCreatureSee(OnCreatureSee event) {
 		final Creature creature = event.getSeen();
 		final Npc npc = (Npc) event.getSeer();
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance) && creature.isPlayer())
-		{
-			switch (npc.getId())
-			{
-				case HELL_GATE_MINION:
-				{
-					if (getRandomBoolean())
-					{
+
+		if (isInInstance(instance) && creature.isPlayer()) {
+			switch (npc.getId()) {
+				case HELL_GATE_MINION: {
+					if (getRandomBoolean()) {
 						final double distance = npc.distance3d(creature);
-						
-						if (distance < 200)
-						{
+
+						if (distance < 200) {
 							addSkillCastDesire(npc, creature, DEATH_RAP, 23);
-						}
-						else if (distance < 600)
-						{
+						} else if (distance < 600) {
 							addSkillCastDesire(npc, creature, TOUCH_OF_DEATH, 23);
 						}
 					}
@@ -202,281 +179,205 @@ public final class BalokWarzone extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
-			
-			if (npc.getId() == BALOK)
-			{
-				if ((npcVars.getInt("BALOK_GUARDS_STATUS", 0) == 0) && (npc.getCurrentHpPercent() < 85))
-				{
+
+			if (npc.getId() == BALOK) {
+				if ((npcVars.getInt("BALOK_GUARDS_STATUS", 0) == 0) && (npc.getCurrentHpPercent() < 85)) {
 					for (Npc warder : instance.spawnGroup("balrog_boss_guardm1")) // spawn Room Warder's
 					{
 						addSkillCastDesire(warder, warder, INVUL, 23);
 						warder.getVariables().set("INVUL_ACTIVE", true);
 					}
-					
+
 					npcVars.set("BALOK_STATUS", 2);
 					npcVars.set("BALOK_GUARDS_STATUS", 1);
 				}
-				
-				if (npcVars.getInt("BALOK_INVUL_STATUS", 0) == 0)
-				{
-					if (npc.getCurrentHpPercent() < 40)
-					{
+
+				if (npcVars.getInt("BALOK_INVUL_STATUS", 0) == 0) {
+					if (npc.getCurrentHpPercent() < 40) {
 						// TODO: timers AttackTimer_3rd, AttackTimer_death_order
 						getTimers().addTimer("BALOK_UNBEATABLE", 3000, npc, null);
 						npcVars.set("BALOK_STATUS", 3);
 						npcVars.set("BALOK_INVUL_STATUS", 1);
 					}
-				}
-				else if (npc.isAffectedBySkill(INVUL.getSkillId()))
-				{
+				} else if (npc.isAffectedBySkill(INVUL.getSkillId())) {
 					final double direction = npc.calculateDirectionTo(attacker);
-					
-					if ((getRandom(10) < 2) && (direction < 220) && (direction > 140))
-					{
+
+					if ((getRandom(10) < 2) && (direction < 220) && (direction > 140)) {
 						addSkillCastDesire(npc, attacker, REAR_DESTROY.getSkill(), 23);
 					}
-					
-					if (((damage > (300 + getRandom(1000))) && (npc.distance3d(attacker) < 300) && (direction < 210) && (direction > 150)))
-					{
+
+					if (((damage > (300 + getRandom(1000))) && (npc.distance3d(attacker) < 300) && (direction < 210) && (direction > 150))) {
 						npc.stopSkillEffects(INVUL.getSkill());
 					}
-					
+
 				}
-				
+
 				final int random = getRandom(1000);
-				switch (npcVars.getInt("BALOK_STATUS", 1))
-				{
-					case 1:
-					{
-						if (random < 40)
-						{
+				switch (npcVars.getInt("BALOK_STATUS", 1)) {
+					case 1: {
+						if (random < 40) {
 							addSkillCastDesire(npc, attacker, BLACK_VORTEX.getSkill(), 23);
-						}
-						else if (random < 60)
-						{
+						} else if (random < 60) {
 							addSkillCastDesire(npc, attacker, BLACK_VORTEX_SWAMP.getSkill(), 23);
-						}
-						else if (random < 80)
-						{
+						} else if (random < 80) {
 							addSkillCastDesire(npc, attacker, LEAP_ATTACK.getSkill(), 23);
 						}
 						break;
 					}
 					case 2:
-					case 3:
-					{
-						if (random < 20)
-						{
+					case 3: {
+						if (random < 20) {
 							addSkillCastDesire(npc, attacker, BLACK_VORTEX.getSkill(), 23);
-						}
-						else if (random < 50)
-						{
+						} else if (random < 50) {
 							addSkillCastDesire(npc, attacker, BLACK_VORTEX_SWAMP.getSkill(), 23);
-						}
-						else if (random < 60)
-						{
+						} else if (random < 60) {
 							addSkillCastDesire(npc, attacker, LEAP_ATTACK.getSkill(), 23);
-						}
-						else if (random < 70) // Retail value is 100 but seems like they changed it since GD
+						} else if (random < 70) // Retail value is 100 but seems like they changed it since GD
 						{
-							if (instance.getAliveNpcs(HELL_GATE).stream().findFirst().orElse(null) == null)
-							{
+							if (instance.getAliveNpcs(HELL_GATE).stream().findFirst().orElse(null) == null) {
 								addSkillCastDesire(npc, attacker, EARTH_DEMOLITION.getSkill(), 23);
 							}
-						}
-						else if (random < 80) // Retail value is 120 but seems like they changed it since GD
+						} else if (random < 80) // Retail value is 120 but seems like they changed it since GD
 						{
-							if (npc.distance3d(attacker) < 600)
-							{
+							if (npc.distance3d(attacker) < 600) {
 								addSkillCastDesire(npc, attacker, INPRISON.getSkill(), 23);
 							}
-						}
-						else if (random < 140)
-						{
+						} else if (random < 140) {
 							instance.getAliveNpcs(HELL_GATE_MINION).forEach(minion ->
 							{
 								final PlayerInstance target = instance.getPlayersInsideRadius(minion, 500).stream().findAny().orElse(null);
-								
-								if ((target != null) && getRandomBoolean())
-								{
+
+								if ((target != null) && getRandomBoolean()) {
 									final double distance = npc.distance3d(target);
-									
-									if (distance < 200)
-									{
+
+									if (distance < 200) {
 										addSkillCastDesire(minion, target, DEATH_RAP, 23);
-									}
-									else if (distance < 600)
-									{
+									} else if (distance < 600) {
 										addSkillCastDesire(minion, target, TOUCH_OF_DEATH, 23);
 									}
 								}
 								addAttackPlayerDesire(minion, target, 23);
 							});
-						}
-						else if (random < 150)
-						{
+						} else if (random < 150) {
 							addSkillCastDesire(npc, attacker, BLACK_VORTEX_SWAMP.getSkill(), 23);
 						}
 						break;
 					}
 				}
-				
+
 			}
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			if (npc.getId() == BALOK)
-			{
-				if ((skill.getId() == EARTH_DEMOLITION.getSkillId()) && instance.getAliveNpcs(HELL_GATE).isEmpty())
-				{
+		if (isInInstance(instance)) {
+			if (npc.getId() == BALOK) {
+				if ((skill.getId() == EARTH_DEMOLITION.getSkillId()) && instance.getAliveNpcs(HELL_GATE).isEmpty()) {
 					final double direction = npc.calculateDirectionTo(player);
 					double addToX = 0;
 					double addToY = 0;
-					
-					if (direction < 30)
-					{
+
+					if (direction < 30) {
 						addToX = 0.5;
 						addToY = 0.866;
-					}
-					else if (direction < 60)
-					{
+					} else if (direction < 60) {
 						addToX = 0.866;
 						addToY = 0.5;
-					}
-					else if (direction < 90)
-					{
+					} else if (direction < 90) {
 						addToX = 1;
 						addToY = 0;
-					}
-					else if (direction < 120)
-					{
+					} else if (direction < 120) {
 						addToX = 0.866;
 						addToY = -0.5;
-					}
-					else if (direction < 150)
-					{
+					} else if (direction < 150) {
 						addToX = 0.5;
 						addToY = -0.866;
-					}
-					else if (direction < 180)
-					{
+					} else if (direction < 180) {
 						addToX = 0;
 						addToY = -1;
-					}
-					else if (direction < 210)
-					{
+					} else if (direction < 210) {
 						addToX = -0.5;
 						addToY = -0.866;
-					}
-					else if (direction < 240)
-					{
+					} else if (direction < 240) {
 						addToX = -0.866;
 						addToY = -0.5;
-					}
-					else if (direction < 270)
-					{
+					} else if (direction < 270) {
 						addToX = -1;
 						addToY = 0;
-					}
-					else if (direction < 300)
-					{
+					} else if (direction < 300) {
 						addToX = -0.866;
 						addToY = 0.5;
-					}
-					else if (direction < 330)
-					{
+					} else if (direction < 330) {
 						addToX = -0.5;
 						addToY = 0.866;
-					}
-					else if (direction < 360)
-					{
+					} else if (direction < 360) {
 						addToX = 0;
 						addToY = 1;
 					}
-					
+
 					addToX = 200 * addToX;
 					addToY = 200 * addToY;
 					final Npc gate = addSpawn(HELL_GATE, (int) (npc.getX() + addToX), (int) (npc.getY() + addToY), npc.getZ(), npc.getHeading() + 8192, false, 0, false, instance.getId());
 					instance.broadcastPacket(new Earthquake(gate, 20, 10));
-					
-					for (int i = 0; i < 4; i++)
-					{
+
+					for (int i = 0; i < 4; i++) {
 						addSpawn(HELL_GATE_MINION, gate.getX(), gate.getY(), gate.getZ(), 0, false, 0, false, instance.getId()).initSeenCreatures();
 					}
 					getTimers().addTimer("GATE_LOOP_TIMER", 3000, gate, null);
 					getTimers().addTimer("GATE_TIME_TIMER", 300000, gate, null);
-				}
-				else if ((skill.getId() == INPRISON.getSkillId()) && (player != null))
-				{
+				} else if ((skill.getId() == INPRISON.getSkillId()) && (player != null)) {
 					prisonPlayer(instance, player, getRandom(8));
 				}
 			}
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
-	private void prisonPlayer(Instance instance, PlayerInstance player, int jailId)
-	{
+
+	private void prisonPlayer(Instance instance, PlayerInstance player, int jailId) {
 		showOnScreenMsg(instance, NpcStringId.S1_LOCKED_AWAY_IN_THE_PRISON, ExShowScreenMessage.TOP_CENTER, 4000, player.getName());
 		player.teleToLocation(PRISON_LOCS[jailId]);
-		
+
 		final Npc doorWarder = World.getInstance().getVisibleObjects(player, Npc.class, 1000).stream().findFirst().orElse(null);
-		if (doorWarder != null)
-		{
+		if (doorWarder != null) {
 			doorWarder.stopSkillEffects(INVUL.getSkill());
 		}
-		
+
 		instance.getDoors().forEach(door ->
 		{
-			if (player.distance3d(door) < 1000)
-			{
+			if (player.distance3d(door) < 1000) {
 				door.closeMe();
 			}
 		});
-		
+
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case BALOK:
-				{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case BALOK: {
 					instance.finishInstance();
 					instance.getAliveNpcs(ROOM_WARDER, HELL_GATE, HELL_GATE_MINION).forEach(Npc::deleteMe);
 					break;
 				}
-				case HELL_GATE_MINION:
-				{
-					if (instance.getAliveNpcs(HELL_GATE_MINION).size() <= 0)
-					{
+				case HELL_GATE_MINION: {
+					if (instance.getAliveNpcs(HELL_GATE_MINION).size() <= 0) {
 						instance.getAliveNpcs(HELL_GATE).forEach(Npc::deleteMe);
 					}
 					break;
 				}
-				case ROOM_WARDER:
-				{
-					if (!hasQuestItems(killer, PRISON_KEY) && (getRandom(100) < 80))
-					{
+				case ROOM_WARDER: {
+					if (!hasQuestItems(killer, PRISON_KEY) && (getRandom(100) < 80)) {
 						giveItems(killer, PRISON_KEY, 1);
 					}
 					break;
@@ -485,9 +386,8 @@ public final class BalokWarzone extends AbstractInstance
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BalokWarzone();
 	}
 }

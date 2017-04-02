@@ -28,28 +28,24 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Consume Body effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantConsumeBody extends AbstractEffect
-{
-	public InstantConsumeBody(StatsSet params)
-	{
+public final class InstantConsumeBody extends AbstractEffect {
+	public InstantConsumeBody(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Npc targetNpc = target.asNpc();
-		if (targetNpc == null)
-		{
+		if (targetNpc == null) {
 			return;
 		}
-		
-		if (!targetNpc.isDead())
-		{
+
+		if (!targetNpc.isDead()) {
 			return;
 		}
-		
+
 		targetNpc.endDecayTask();
 	}
 }

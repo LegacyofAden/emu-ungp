@@ -24,10 +24,8 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 /**
  * Silent Move effect implementation.
  */
-public final class SilentMove extends AbstractBooleanStatEffect
-{
-	public SilentMove(StatsSet params)
-	{
+public final class SilentMove extends AbstractBooleanStatEffect {
+	public SilentMove(StatsSet params) {
 		super(BooleanStat.SILENT_MOVE);
 	}
 }

@@ -25,63 +25,51 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author poltomb
  */
-public final class AdminSummon implements IAdminCommandHandler
-{
+public final class AdminSummon implements IAdminCommandHandler {
 	public static final String[] ADMIN_COMMANDS =
-	{
-		"admin_summon"
-	};
-	
+			{
+					"admin_summon"
+			};
+
 	@Override
-	public String[] getAdminCommandList()
-	{
-		
+	public String[] getAdminCommandList() {
+
 		return ADMIN_COMMANDS;
 	}
-	
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		int id;
 		int count = 1;
 		String[] data = command.split(" ");
-		try
-		{
+		try {
 			id = Integer.parseInt(data[1]);
-			if (data.length > 2)
-			{
+			if (data.length > 2) {
 				count = Integer.parseInt(data[2]);
 			}
-		}
-		catch (NumberFormatException nfe)
-		{
+		} catch (NumberFormatException nfe) {
 			activeChar.sendMessage("Incorrect format for command 'summon'");
 			return false;
 		}
-		
+
 		final String subCommand;
-		if (id < 1000000)
-		{
+		if (id < 1000000) {
 			subCommand = "admin_create_item";
-		}
-		else
-		{
+		} else {
 			subCommand = "admin_spawn_once";
-			
+
 			activeChar.sendMessage("This is only a temporary spawn.  The mob(s) will NOT respawn.");
 			id -= 1000000;
 		}
-		
-		if ((id > 0) && (count > 0))
-		{
+
+		if ((id > 0) && (count > 0)) {
 			AdminCommandHandler.getInstance().useAdminCommand(activeChar, subCommand + " " + id + " " + count, true);
 		}
-		
+
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminSummon());
 	}
 }

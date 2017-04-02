@@ -18,9 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.awt.Color;
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
@@ -33,15 +30,17 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.gameserver.util.Util;
 
+import java.awt.*;
+import java.util.function.Consumer;
+
 /**
  * Fan affect scope implementation. Gathers objects in a certain angle of circular area around yourself (including origin itself).
+ *
  * @author Nik
  */
-public class Fan implements IAffectScopeHandler
-{
+public class Fan implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final double headingAngle = Util.convertHeadingToDegree(activeChar.getHeading());
 		final int fanStartAngle = skill.getFanRange()[1];
 		final int fanRadius = skill.getFanRange()[2];
@@ -50,78 +49,69 @@ public class Fan implements IAffectScopeHandler
 		final int affectLimit = skill.getAffectLimit();
 		// Target checks.
 		final MutableInt affected = new MutableInt(0);
-		
+
 		// Always accept main target.
 		action.accept(target);
-		
+
 		// Check and add targets.
 		World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, fanRadius, c ->
 		{
-			if (c == target)
-			{
+			if (c == target) {
 				return;
 			}
-			if ((affectLimit > 0) && (affected.intValue() >= affectLimit))
-			{
+			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;
 			}
-			if (c.isDead())
-			{
+			if (c.isDead()) {
 				return;
 			}
-			if (Math.abs(Util.calculateAngleFrom(activeChar, c) - (headingAngle + fanStartAngle)) > fanHalfAngle)
-			{
+			if (Math.abs(Util.calculateAngleFrom(activeChar, c) - (headingAngle + fanStartAngle)) > fanHalfAngle) {
 				return;
 			}
-			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
-			{
+			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c)) {
 				return;
 			}
-			if (!GeoData.getInstance().canSeeTarget(activeChar, c))
-			{
+			if (!GeoData.getInstance().canSeeTarget(activeChar, c)) {
 				return;
 			}
-			
+
 			affected.increment();
 			action.accept(c);
 		});
 	}
-	
+
 	@Override
-	public void drawEffected(Creature activeChar, WorldObject target, Skill skill)
-	{
+	public void drawEffected(Creature activeChar, WorldObject target, Skill skill) {
 		final ExServerPrimitive packet = new ExServerPrimitive(getClass().getSimpleName() + "-" + activeChar.getObjectId(), activeChar);
-		
+
 		final double headingAngle = Util.convertHeadingToDegree(activeChar.getHeading());
 		final int fanRadius = skill.getFanRange()[2];
 		final int fanAngle = skill.getFanRange()[3];
 		final double halfAngle = fanAngle / 2;
-		
+
 		final double x = activeChar.getX();
 		final double y = activeChar.getY();
 		final double z = activeChar.getZ();
-		
+
 		final int maxPoints = 10;
 		final ILocational[] locs = new ILocational[maxPoints];
 		final double anglePoint = fanAngle / maxPoints;
-		for (int i = 0; i < locs.length; i++)
-		{
+		for (int i = 0; i < locs.length; i++) {
 			double angle = -halfAngle + (anglePoint * i);
-			
+
 			final double tx = x + (fanRadius * Math.cos(Math.toRadians(headingAngle + angle)));
 			final double ty = y + (fanRadius * Math.sin(Math.toRadians(headingAngle + angle)));
 			final double tz = GeoData.getInstance().getHeight(tx, ty, z);
 			locs[i] = new Location(tx, ty, tz);
 		}
-		
+
 		packet.addLine("X -> 1", Color.GREEN, true, activeChar, locs[0]);
-		for (int i = 1; i < locs.length; i++)
-		{
+		for (int i = 1; i < locs.length; i++) {
 			packet.addLine(i + " -> " + (i + 1), Color.GREEN, true, locs[i - 1], locs[i]);
 		}
 		packet.addLine(locs.length + " -> X", Color.GREEN, true, locs[locs.length - 1], activeChar);
 		packet.addLine("1 -> " + locs.length, Color.GREEN, true, locs[0], locs[locs.length - 1]);
-		
+
 		activeChar.sendDebugPacket(packet);
 	}
 }

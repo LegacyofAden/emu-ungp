@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Suspicious Helper (10391)
+ *
  * @author St3eT
  */
-public final class Q10391_ASuspiciousHelper extends Quest
-{
+public final class Q10391_ASuspiciousHelper extends Quest {
 	// NPCs
 	private static final int ELI = 33858;
 	private static final int CHEL = 33861;
@@ -42,9 +42,8 @@ public final class Q10391_ASuspiciousHelper extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 40;
 	private static final int MAX_LEVEL = 46;
-	
-	public Q10391_ASuspiciousHelper()
-	{
+
+	public Q10391_ASuspiciousHelper() {
 		super(10391);
 		addStartNpc(ELI);
 		addTalkId(ELI, CHEL, IASON);
@@ -52,39 +51,32 @@ public final class Q10391_ASuspiciousHelper extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33858-06.htm");
 		addCondNotRace(Race.ERTHEIA, "33858-07.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33858-02.htm":
 			case "33858-03.htm":
 			case "33861-02.html":
 			case "33859-02.html":
-			case "33859-03.html":
-			{
+			case "33859-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "33858-04.htm":
-			{
+			case "33858-04.htm": {
 				giveItems(player, CARD, 1);
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33861-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "33861-03.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					takeItems(player, CARD, -1);
 					giveItems(player, EXP_MATERTIAL, 1);
@@ -92,10 +84,8 @@ public final class Q10391_ASuspiciousHelper extends Quest
 				}
 				break;
 			}
-			case "33859-04.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33859-04.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveStoryQuestReward(npc, player);
 					giveItems(player, EAC, 1);
@@ -107,51 +97,37 @@ public final class Q10391_ASuspiciousHelper extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ELI)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ELI) {
 					htmltext = "33858-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case ELI:
-					{
-						if (st.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case ELI: {
+						if (st.isCond(1)) {
 							htmltext = "33858-05.html";
 						}
 						break;
 					}
-					case CHEL:
-					{
-						if (st.isCond(1))
-						{
+					case CHEL: {
+						if (st.isCond(1)) {
 							htmltext = "33861-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "33861-04.html";
 						}
 						break;
 					}
-					case IASON:
-					{
-						if (st.isCond(2))
-						{
+					case IASON: {
+						if (st.isCond(2)) {
 							htmltext = "33859-01.html";
 						}
 						break;
@@ -159,10 +135,8 @@ public final class Q10391_ASuspiciousHelper extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == ELI)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == ELI) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

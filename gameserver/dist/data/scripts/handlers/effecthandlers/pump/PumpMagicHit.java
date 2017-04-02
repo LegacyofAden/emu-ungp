@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpMagicHit extends AbstractDoubleStatEffect
-{
-	public PumpMagicHit(StatsSet params)
-	{
+public class PumpMagicHit extends AbstractDoubleStatEffect {
+	public PumpMagicHit(StatsSet params) {
 		super(params, DoubleStat.ACCURACY_MAGIC);
 	}
 }

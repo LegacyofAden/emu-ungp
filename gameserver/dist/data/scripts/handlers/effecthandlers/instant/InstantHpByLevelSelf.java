@@ -30,35 +30,31 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Hp By Level Self effect implementation.
+ *
  * @author Sdw
  */
-public final class InstantHpByLevelSelf extends AbstractEffect
-{
+public final class InstantHpByLevelSelf extends AbstractEffect {
 	private final double _power;
-	
-	public InstantHpByLevelSelf(StatsSet params)
-	{
+
+	public InstantHpByLevelSelf(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (caster.isDead() || caster.isHpBlocked())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (caster.isDead() || caster.isHpBlocked()) {
 			return;
 		}
-		
+
 		double power = 0;
 		final int levelDiff = caster.getLevel() - skill.getMagicLevel();
-		if (levelDiff <= 9)
-		{
+		if (levelDiff <= 9) {
 			power = _power * ((10 * (10 - CommonUtil.constrain(levelDiff, 0, 9))) / 100);
 		}
-		
+
 		final double healedAmount = CommonUtil.constrain(power, 0, caster.getMaxRecoverableHp() - caster.getCurrentHp());
 		caster.setCurrentHp(caster.getCurrentHp() + healedAmount);
-		
+
 		// System message
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 		sm.addInt((int) healedAmount);

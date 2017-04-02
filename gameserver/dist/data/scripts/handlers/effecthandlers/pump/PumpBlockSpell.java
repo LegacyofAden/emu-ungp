@@ -18,6 +18,7 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -25,27 +26,21 @@ import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Mute effect implementation.
  */
-public final class PumpBlockSpell extends AbstractBooleanStatEffect
-{
-	public PumpBlockSpell(StatsSet params)
-	{
+public final class PumpBlockSpell extends AbstractBooleanStatEffect {
+	public PumpBlockSpell(StatsSet params) {
 		super(BooleanStat.BLOCK_SPELL);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MUTE;
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.abortCast();
 		target.getAI().notifyEvent(CtrlEvent.EVT_MUTED);
 	}

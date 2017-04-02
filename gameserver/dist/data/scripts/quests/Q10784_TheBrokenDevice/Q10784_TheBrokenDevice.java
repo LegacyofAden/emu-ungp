@@ -25,25 +25,24 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10783_TracesOfAnAmbush.Q10783_TracesOfAnAmbush;
 
 /**
  * The Broken Device (10784)
+ *
  * @author malyelfik
  */
-public final class Q10784_TheBrokenDevice extends Quest
-{
+public final class Q10784_TheBrokenDevice extends Quest {
 	// NPC
 	private static final int NOVAIN = 33866;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20647, // Yintzu
-		20648, // Paliote
-		20649, // Hamrut
-		20650, // Kranrot
-	};
+			{
+					20647, // Yintzu
+					20648, // Paliote
+					20649, // Hamrut
+					20650, // Kranrot
+			};
 	// Items
 	private static final int BROKE_MAGIC_DEVICE_FRAGMENT = 39723;
 	private static final int SOULSHOT_A = 1466;
@@ -53,9 +52,8 @@ public final class Q10784_TheBrokenDevice extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 58;
 	private static final int MAX_LEVEL = 61;
-	
-	public Q10784_TheBrokenDevice()
-	{
+
+	public Q10784_TheBrokenDevice() {
 		super(10784);
 		addStartNpc(NOVAIN);
 		addTalkId(NOVAIN);
@@ -65,31 +63,25 @@ public final class Q10784_TheBrokenDevice extends Quest
 		addCondCompletedQuest(Q10783_TracesOfAnAmbush.class.getSimpleName(), "33866-01.htm");
 		registerQuestItems(BROKE_MAGIC_DEVICE_FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33866-03.htm":
 			case "33866-04.htm":
 				break;
 			case "33866-05.htm":
 				qs.startQuest();
 				break;
-			case "33866-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33866-08.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						giveAdena(player, 990_000, true);
 						giveItems(player, SOULSHOT_A, 6000);
@@ -99,9 +91,7 @@ public final class Q10784_TheBrokenDevice extends Quest
 						addExp(player, 14_369_328);
 						addSp(player, 1_578);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -112,15 +102,13 @@ public final class Q10784_TheBrokenDevice extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33866-02.htm";
 				break;
@@ -133,20 +121,15 @@ public final class Q10784_TheBrokenDevice extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			giveItems(killer, BROKE_MAGIC_DEVICE_FRAGMENT, 1);
-			if (getQuestItemsCount(killer, BROKE_MAGIC_DEVICE_FRAGMENT) >= 100)
-			{
+			if (getQuestItemsCount(killer, BROKE_MAGIC_DEVICE_FRAGMENT) >= 100) {
 				qs.setCond(2, true);
-			}
-			else
-			{
+			} else {
 				playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}

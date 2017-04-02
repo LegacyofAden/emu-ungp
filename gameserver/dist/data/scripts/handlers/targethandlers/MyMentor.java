@@ -27,22 +27,19 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Target my mentor.
+ *
  * @author Nik
  */
-public class MyMentor implements ITargetTypeHandler
-{
+public class MyMentor implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (activeChar.isPlayer())
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (activeChar.isPlayer()) {
 			Mentee mentor = MentorManager.getInstance().getMentor(activeChar.getObjectId());
-			if (mentor != null)
-			{
+			if (mentor != null) {
 				return mentor.getPlayerInstance();
 			}
 		}
-		
+
 		return null;
 	}
 }

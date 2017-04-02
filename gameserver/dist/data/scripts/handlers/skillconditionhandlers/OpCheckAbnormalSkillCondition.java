@@ -29,34 +29,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpCheckAbnormalSkillCondition implements ISkillCondition
-{
+public class OpCheckAbnormalSkillCondition implements ISkillCondition {
 	private final AbnormalType _type;
 	private final int _level;
 	private final boolean _hasAbnormal;
 	private final SkillConditionAffectType _affectType;
-	
-	public OpCheckAbnormalSkillCondition(StatsSet params)
-	{
+
+	public OpCheckAbnormalSkillCondition(StatsSet params) {
 		_type = params.getEnum("type", AbnormalType.class);
 		_level = params.getInt("level");
 		_hasAbnormal = params.getBoolean("hasAbnormal");
 		_affectType = params.getEnum("affectType", SkillConditionAffectType.class, SkillConditionAffectType.TARGET);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_affectType)
-		{
-			case CASTER:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_affectType) {
+			case CASTER: {
 				return caster.getEffectList().hasAbnormalType(_type, info -> (info.getSkill().getAbnormalLvl() >= _level)) == _hasAbnormal;
 			}
-			case TARGET:
-			{
-				if (target.isCreature())
-				{
+			case TARGET: {
+				if (target.isCreature()) {
 					return ((Creature) target).getEffectList().hasAbnormalType(_type, info -> (info.getSkill().getAbnormalLvl() >= _level)) == _hasAbnormal;
 				}
 			}

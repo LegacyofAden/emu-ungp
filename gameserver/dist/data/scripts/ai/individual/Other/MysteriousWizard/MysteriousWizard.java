@@ -18,49 +18,41 @@
  */
 package ai.individual.Other.MysteriousWizard;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import ai.AbstractNpcAI;
 import quests.Q10751_WindsOfFateEncounters.Q10751_WindsOfFateEncounters;
 
 /**
  * Mysterious Wizard AI.
+ *
  * @author Gladicek
  */
-public final class MysteriousWizard extends AbstractNpcAI
-{
+public final class MysteriousWizard extends AbstractNpcAI {
 	// Npc
 	private static final int MYSTERIOUS_WIZARD = 33980;
 	// Items
 	private static final int WIND_SPIRIT_REALMS_RELIC = 39535;
 	// Misc
 	private static final int FORTRESS_OF_THE_DEAD = 254;
-	
-	private MysteriousWizard()
-	{
+
+	private MysteriousWizard() {
 		addFirstTalkId(MYSTERIOUS_WIZARD);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (npc != null)
-		{
-			if (event.equals("33980-01.html") && isFotDInstance(npc.getInstanceWorld()))
-			{
+		if (npc != null) {
+			if (event.equals("33980-01.html") && isFotDInstance(npc.getInstanceWorld())) {
 				htmltext = event;
-			}
-			else if (event.equals("33980-03.html"))
-			{
+			} else if (event.equals("33980-03.html")) {
 				final QuestState qs = player.getQuestState(Q10751_WindsOfFateEncounters.class.getSimpleName());
-				if ((qs != null) && qs.isCond(6))
-				{
+				if ((qs != null) && qs.isCond(6)) {
 					giveItems(player, WIND_SPIRIT_REALMS_RELIC, 1);
 					qs.setCond(7, true);
 					showOnScreenMsg(player, NpcStringId.RETURN_TO_RAYMOND_OF_THE_TOWN_OF_GLUDIO, ExShowScreenMessage.TOP_CENTER, 8000);
@@ -70,39 +62,30 @@ public final class MysteriousWizard extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState qs = player.getQuestState(Q10751_WindsOfFateEncounters.class.getSimpleName());
 		final Instance world = npc.getInstanceWorld();
-		
-		if (isFotDInstance(world))
-		{
+
+		if (isFotDInstance(world)) {
 			htmltext = "33980.html";
-		}
-		else if (qs != null)
-		{
-			if (qs.isCond(6))
-			{
+		} else if (qs != null) {
+			if (qs.isCond(6)) {
 				htmltext = "33980-02.html";
-			}
-			else if (qs.isCond(7))
-			{
+			} else if (qs.isCond(7)) {
 				htmltext = "33980-04.html";
 			}
 		}
 		return htmltext;
 	}
-	
-	private boolean isFotDInstance(Instance instance)
-	{
+
+	private boolean isFotDInstance(Instance instance) {
 		return (instance != null) && (instance.getTemplateId() == FORTRESS_OF_THE_DEAD);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new MysteriousWizard();
 	}
 }

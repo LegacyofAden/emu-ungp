@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.debugger.DebugType;
@@ -29,40 +25,38 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Resist Skill effect implementaion.
+ *
  * @author UnAfraid
  */
-public final class PumpIgnoreSkill extends AbstractEffect
-{
+public final class PumpIgnoreSkill extends AbstractEffect {
 	private final Set<SkillHolder> _skills;
-	
-	public PumpIgnoreSkill(StatsSet params)
-	{
+
+	public PumpIgnoreSkill(StatsSet params) {
 		final String[] skills = params.getString("skills", "").split(";");
 		_skills = Arrays.stream(skills).filter(s -> !s.isEmpty()).map(s -> s.split(",")).map(s -> new SkillHolder(Integer.parseInt(s[0]), s.length > 1 ? Integer.parseInt(s[1]) : 0)).collect(Collectors.toSet());
-		
-		if (_skills.isEmpty())
-		{
+
+		if (_skills.isEmpty()) {
 			throw new IllegalArgumentException(getClass().getSimpleName() + ": Without parameters!");
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		for (SkillHolder holder : _skills)
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		for (SkillHolder holder : _skills) {
 			target.addIgnoreSkillEffects(holder);
 			target.sendDebugMessage("Applying invul against " + holder.getSkill(), DebugType.SKILLS);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		for (SkillHolder holder : _skills)
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		for (SkillHolder holder : _skills) {
 			target.removeIgnoreSkillEffects(holder);
 			target.sendDebugMessage("Removing invul against " + holder.getSkill(), DebugType.SKILLS);
 		}

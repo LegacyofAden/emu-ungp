@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 
 /**
  * @author Sdw
  */
-public class PumpMpVampiricAttack extends AbstractDoubleStatAddEffect
-{
-	public PumpMpVampiricAttack(StatsSet params)
-	{
+public class PumpMpVampiricAttack extends AbstractDoubleStatAddEffect {
+	public PumpMpVampiricAttack(StatsSet params) {
 		super(params, DoubleStat.ABSORB_MANA_DAMAGE_PERCENT);
 	}
 }

@@ -29,45 +29,40 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Cp Heal Percent effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantCpPerMax extends AbstractEffect
-{
+public final class InstantCpPerMax extends AbstractEffect {
 	private final double _power;
-	
-	public InstantCpPerMax(StatsSet params)
-	{
+
+	public InstantCpPerMax(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
-		
+
 		double amount = 0;
 		double power = _power;
 		boolean full = (power == 100.0);
-		
+
 		amount = full ? targetCreature.getMaxCp() : (targetCreature.getMaxCp() * power) / 100.0;
 		// Prevents overheal and negative amount
 		amount = Math.max(Math.min(amount, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp()), 0);
-		if (amount != 0)
-		{
+		if (amount != 0) {
 			final double newCp = amount + targetCreature.getCurrentCp();
 			targetCreature.setCurrentCp(newCp, false);
 			targetCreature.broadcastStatusUpdate(caster);
 		}
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CP_HAS_BEEN_RESTORED);
 		sm.addInt((int) amount);
 		targetCreature.sendPacket(sm);

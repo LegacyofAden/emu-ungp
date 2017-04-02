@@ -25,32 +25,28 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Talisman Slot effect implementation.
+ *
  * @author Adry_85
  */
-public final class PumpExpandDecoSlot extends AbstractEffect
-{
+public final class PumpExpandDecoSlot extends AbstractEffect {
 	private final int _slots;
-	
-	public PumpExpandDecoSlot(StatsSet params)
-	{
+
+	public PumpExpandDecoSlot(StatsSet params) {
 		_slots = params.getInt("slots", 0);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().getStat().addTalismanSlots(_slots);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().getStat().addTalismanSlots(-_slots);
 	}
 }

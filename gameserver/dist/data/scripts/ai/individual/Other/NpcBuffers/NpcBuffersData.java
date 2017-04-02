@@ -18,48 +18,41 @@
  */
 package ai.individual.Other.NpcBuffers;
 
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.StatsSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author UnAfraid
  */
-public class NpcBuffersData implements IGameXmlReader
-{
+public class NpcBuffersData implements IGameXmlReader {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NpcBuffersData.class);
-	
+
 	private final Map<Integer, NpcBufferData> _npcBuffers = new HashMap<>();
-	
-	protected NpcBuffersData()
-	{
+
+	protected NpcBuffersData() {
 		load();
 	}
-	
-	private void load()
-	{
-		try
-		{
+
+	private void load() {
+		try {
 			parseDatapackFile("data/scripts/ai/individual/Other/NpcBuffers/NpcBuffersData.xml");
 			LOGGER.info("Loaded: {} buffers data.", _npcBuffers.size());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Failed to load buffers data: ", e);
 		}
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "npc", npcNode ->
 		{
 			final int npcId = parseInteger(npcNode.getAttributes(), "id");
@@ -68,29 +61,24 @@ public class NpcBuffersData implements IGameXmlReader
 			_npcBuffers.put(npcId, npc);
 		}));
 	}
-	
-	public NpcBufferData getNpcBuffer(int npcId)
-	{
+
+	public NpcBufferData getNpcBuffer(int npcId) {
 		return _npcBuffers.get(npcId);
 	}
-	
-	public Collection<NpcBufferData> getNpcBuffers()
-	{
+
+	public Collection<NpcBufferData> getNpcBuffers() {
 		return _npcBuffers.values();
 	}
-	
-	public Set<Integer> getNpcBufferIds()
-	{
+
+	public Set<Integer> getNpcBufferIds() {
 		return _npcBuffers.keySet();
 	}
-	
-	private static final class SingletonHolder
-	{
+
+	private static final class SingletonHolder {
 		protected static final NpcBuffersData INSTANCE = new NpcBuffersData();
 	}
-	
-	public static NpcBuffersData getInstance()
-	{
+
+	public static NpcBuffersData getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 }

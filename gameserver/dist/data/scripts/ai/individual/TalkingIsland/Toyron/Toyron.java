@@ -18,74 +18,62 @@
  */
 package ai.individual.TalkingIsland.Toyron;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import ai.AbstractNpcAI;
 import quests.Q10542_SearchingForNewPower.Q10542_SearchingForNewPower;
 
 /**
  * Toyron AI.
+ *
  * @author Gladicek
  */
-public final class Toyron extends AbstractNpcAI
-{
+public final class Toyron extends AbstractNpcAI {
 	// NPC
 	private static final int TOYRON = 33004;
 	// Misc
 	private static final int TEMPLATE_ID = 182;
 	// Location
 	private static final Location MUSEUM_OUT = new Location(-114359, 260120, -1192);
-	
-	private Toyron()
-	{
+
+	private Toyron() {
 		addStartNpc(TOYRON);
 		addFirstTalkId(TOYRON);
 		addTalkId(TOYRON);
 		addSpawnId(TOYRON);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final Instance world = InstanceManager.getInstance().getPlayerInstance(player, true);
-		if (event.equals("museum_teleport"))
-		{
-			if ((world != null) && (world.getTemplateId() == TEMPLATE_ID))
-			{
+		if (event.equals("museum_teleport")) {
+			if ((world != null) && (world.getTemplateId() == TEMPLATE_ID)) {
 				world.finishInstance(0);
-			}
-			else
-			{
+			} else {
 				player.teleToLocation(MUSEUM_OUT);
 			}
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setIsInvul(true);
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = "33004.html";
 		final Instance world = npc.getInstanceWorld();
-		if ((world != null) && (world.getTemplateId() == TEMPLATE_ID))
-		{
+		if ((world != null) && (world.getTemplateId() == TEMPLATE_ID)) {
 			final QuestState qs = player.getQuestState(Q10542_SearchingForNewPower.class.getSimpleName());
-			if (qs != null)
-			{
-				switch (qs.getCond())
-				{
+			if (qs != null) {
+				switch (qs.getCond()) {
 					case 3:
 						htmltext = "33004-01.html";
 						break;
@@ -97,9 +85,8 @@ public final class Toyron extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Toyron();
 	}
 }

@@ -18,66 +18,56 @@
  */
 package ai.individual.Other.BlackMarketeerOfMammon;
 
-import java.util.StringTokenizer;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
+import java.util.StringTokenizer;
 
 /**
  * Black Marketeer of Mammon AI.
+ *
  * @author St3eT
  */
-public final class BlackMarketeerOfMammon extends AbstractNpcAI
-{
+public final class BlackMarketeerOfMammon extends AbstractNpcAI {
 	// NPC
 	private static final int BLACK_MARKETEER = 31092;
-	
-	private BlackMarketeerOfMammon()
-	{
+
+	private BlackMarketeerOfMammon() {
 		addStartNpc(BLACK_MARKETEER);
 		addTalkId(BLACK_MARKETEER);
 		addFirstTalkId(BLACK_MARKETEER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("31092-01.html"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("31092-01.html")) {
 			return event;
-		}
-		else if (event.startsWith("exchange"))
-		{
+		} else if (event.startsWith("exchange")) {
 			final StringTokenizer st = new StringTokenizer(event, " ");
 			event = st.nextToken();
-			
-			if (!st.hasMoreElements())
-			{
+
+			if (!st.hasMoreElements()) {
 				return "31092-02.html";
 			}
-			
+
 			final String value = st.nextToken();
-			if (!Util.isDigit(value))
-			{
+			if (!Util.isDigit(value)) {
 				return "31092-02.html";
 			}
-			
+
 			final long count = Integer.parseInt(value);
 			final long AAcount = player.getAncientAdena();
-			
-			if (count < 1)
-			{
+
+			if (count < 1) {
 				return "31092-02.html";
 			}
-			
-			if (count > AAcount)
-			{
+
+			if (count > AAcount) {
 				return "31092-03.html";
-				
+
 			}
 			takeItems(player, Inventory.ANCIENT_ADENA_ID, count);
 			giveAdena(player, count, false);
@@ -85,9 +75,8 @@ public final class BlackMarketeerOfMammon extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BlackMarketeerOfMammon();
 	}
 }

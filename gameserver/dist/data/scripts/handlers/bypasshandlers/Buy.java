@@ -18,57 +18,48 @@
  */
 package handlers.bypasshandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class Buy implements IBypassHandler
-{
+import java.util.StringTokenizer;
+
+public class Buy implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"Buy"
-	};
-	
+			{
+					"Buy"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!(target instanceof L2MerchantInstance))
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!(target instanceof L2MerchantInstance)) {
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			st.nextToken();
-			
-			if (st.countTokens() < 1)
-			{
+
+			if (st.countTokens() < 1) {
 				return false;
 			}
-			
+
 			((L2MerchantInstance) target).showBuyWindow(activeChar, Integer.parseInt(st.nextToken()));
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Buy());
 	}
 }

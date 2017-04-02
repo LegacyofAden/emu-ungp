@@ -18,6 +18,7 @@
  */
 package handlers.effecthandlers.consume;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -26,65 +27,55 @@ import org.l2junity.gameserver.network.client.send.ChangeWaitType;
 import org.l2junity.gameserver.network.client.send.Revive;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Fake Death effect implementation.
+ *
  * @author mkizub
  */
-public final class ConsumeFakeDeath extends AbstractBooleanStatEffect
-{
+public final class ConsumeFakeDeath extends AbstractBooleanStatEffect {
 	private final double _power;
-	
-	public ConsumeFakeDeath(StatsSet params)
-	{
+
+	public ConsumeFakeDeath(StatsSet params) {
 		super(BooleanStat.FAKE_DEATH);
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public boolean consume(Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public boolean consume(Creature target, Skill skill) {
+		if (target.isDead()) {
 			return false;
 		}
-		
+
 		double mp = target.getCurrentMp();
 		final double maxMp = target.getMaxRecoverableMp();
 		final double consume = _power * getTicksMultiplier();
-		if ((consume > 0) && (mp > maxMp))
-		{
+		if ((consume > 0) && (mp > maxMp)) {
 			return false;
 		}
-		
-		if ((consume < 0) && ((mp + consume) <= 0))
-		{
+
+		if ((consume < 0) && ((mp + consume) <= 0)) {
 			target.sendPacket(SystemMessageId.YOUR_SKILL_WAS_DEACTIVATED_DUE_TO_LACK_OF_MP);
 			return false;
 		}
-		
+
 		target.setCurrentMp(Math.min(target.getCurrentMp() + consume, maxMp));
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			target.getActingPlayer().setRecentFakeDeath(true);
 		}
-		
+
 		target.broadcastPacket(new ChangeWaitType(target, ChangeWaitType.WT_STOP_FAKEDEATH));
 		target.broadcastPacket(new Revive(target));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.startFakeDeath();
 	}
 }

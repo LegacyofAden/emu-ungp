@@ -18,128 +18,112 @@
  */
 package ai.individual.Other.AdventurersGuide;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
-import ai.AbstractNpcAI;
-
 /**
  * Adventurers Guide AI.
+ *
  * @author St3eT
  */
-public final class AdventurersGuide extends AbstractNpcAI
-{
+public final class AdventurersGuide extends AbstractNpcAI {
 	// NPC
 	private static final int[] ADVENTURERS_GUIDE =
-	{
-		32327,
-		33950,
-	};
+			{
+					32327,
+					33950,
+			};
 	// Skills
 	private static final SkillHolder BLESS_PROTECTION = new SkillHolder(5182, 1); // Blessing of Protection
 	private static final SkillHolder KNIGHT = new SkillHolder(15648, 1); // Knight's Harmony (Adventurer)
 	private static final SkillHolder WARRIOR = new SkillHolder(15649, 1); // Warrior's Harmony (Adventurer)
 	private static final SkillHolder WIZARD = new SkillHolder(15650, 1); // Wizard's Harmony (Adventurer)
 	private static final SkillHolder[] GROUP_BUFFS =
-	{
-		new SkillHolder(15642, 1), // Horn Melody (Adventurer)
-		new SkillHolder(15643, 1), // Drum Melody (Adventurer)
-		new SkillHolder(15644, 1), // Pipe Organ Melody (Adventurer)
-		new SkillHolder(15645, 1), // Guitar Melody (Adventurer)
-		new SkillHolder(15646, 1), // Harp Melody (Adventurer)
-		new SkillHolder(15647, 1), // Lute Melody (Adventurer)
-		new SkillHolder(15651, 1), // Prevailing Sonata (Adventurer)
-		new SkillHolder(15652, 1), // Daring Sonata (Adventurer)
-		new SkillHolder(15653, 1), // Refreshing Sonata (Adventurer)
-	};
+			{
+					new SkillHolder(15642, 1), // Horn Melody (Adventurer)
+					new SkillHolder(15643, 1), // Drum Melody (Adventurer)
+					new SkillHolder(15644, 1), // Pipe Organ Melody (Adventurer)
+					new SkillHolder(15645, 1), // Guitar Melody (Adventurer)
+					new SkillHolder(15646, 1), // Harp Melody (Adventurer)
+					new SkillHolder(15647, 1), // Lute Melody (Adventurer)
+					new SkillHolder(15651, 1), // Prevailing Sonata (Adventurer)
+					new SkillHolder(15652, 1), // Daring Sonata (Adventurer)
+					new SkillHolder(15653, 1), // Refreshing Sonata (Adventurer)
+			};
 	// Misc
 	private static int MAX_LEVEL_BUFFS = 94;
 	private static int MIN_LEVEL_PROTECTION = 40;
-	
-	private AdventurersGuide()
-	{
+
+	private AdventurersGuide() {
 		addStartNpc(ADVENTURERS_GUIDE);
 		addTalkId(ADVENTURERS_GUIDE);
 		addFirstTalkId(ADVENTURERS_GUIDE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "guide-01.html":
 			case "guide-02.html":
 			case "guide-03.html":
 			case "guide-04.html":
-			case "guide-05.html":
-			{
+			case "guide-05.html": {
 				htmltext = event;
 				break;
 			}
-			case "index":
-			{
+			case "index": {
 				htmltext = npc.getId() + ".html";
 				break;
 			}
-			case "weakenBreath":
-			{
-				if (player.getShilensBreathDebuffLevel() < 3)
-				{
+			case "weakenBreath": {
+				if (player.getShilensBreathDebuffLevel() < 3) {
 					htmltext = "guide-noBreath.html";
 					break;
 				}
-				
+
 				player.setShilensBreathDebuffLevel(2);
 				htmltext = "guide-cleanedBreath.html";
 				break;
 			}
-			case "knight":
-			{
+			case "knight": {
 				htmltext = applyBuffs(npc, player, KNIGHT);
 				break;
 			}
-			case "warrior":
-			{
+			case "warrior": {
 				htmltext = applyBuffs(npc, player, WARRIOR);
 				break;
 			}
-			case "wizard":
-			{
+			case "wizard": {
 				htmltext = applyBuffs(npc, player, WIZARD);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	private String applyBuffs(Npc npc, PlayerInstance player, SkillHolder skill)
-	{
-		if (player.getLevel() > MAX_LEVEL_BUFFS)
-		{
+
+	private String applyBuffs(Npc npc, PlayerInstance player, SkillHolder skill) {
+		if (player.getLevel() > MAX_LEVEL_BUFFS) {
 			return "guide-noBuffs.html";
 		}
-		
-		for (SkillHolder holder : GROUP_BUFFS)
-		{
+
+		for (SkillHolder holder : GROUP_BUFFS) {
 			npc.doInstantCast(player, holder);
 		}
-		
+
 		npc.doInstantCast(player, skill);
-		
-		if ((player.getLevel() < MIN_LEVEL_PROTECTION) && player.isInOneOfCategory(CategoryType.FIRST_CLASS_GROUP, CategoryType.SECOND_CLASS_GROUP))
-		{
+
+		if ((player.getLevel() < MIN_LEVEL_PROTECTION) && player.isInOneOfCategory(CategoryType.FIRST_CLASS_GROUP, CategoryType.SECOND_CLASS_GROUP)) {
 			npc.doInstantCast(player, BLESS_PROTECTION);
 		}
 		return null;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new AdventurersGuide();
 	}
 }

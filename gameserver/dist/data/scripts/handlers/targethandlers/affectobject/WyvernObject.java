@@ -26,11 +26,9 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Nik
  */
-public class WyvernObject implements IAffectObjectHandler
-{
+public class WyvernObject implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
 		// TODO Check if this is proper. Not sure if this is the object we are looking for.
 		return CategoryData.getInstance().isInCategory(CategoryType.WYVERN_GROUP, target.getId());
 	}

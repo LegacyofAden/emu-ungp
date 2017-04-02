@@ -28,17 +28,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpTargetMyPledgeAcademySkillCondition implements ISkillCondition
-{
-	public OpTargetMyPledgeAcademySkillCondition(StatsSet params)
-	{
+public class OpTargetMyPledgeAcademySkillCondition implements ISkillCondition {
+	public OpTargetMyPledgeAcademySkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((caster.getClan() == null) || (target == null) || !target.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((caster.getClan() == null) || (target == null) || !target.isPlayer()) {
 			return false;
 		}
 		final PlayerInstance targetPlayer = target.getActingPlayer();

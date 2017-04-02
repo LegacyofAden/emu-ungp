@@ -29,100 +29,79 @@ import org.l2junity.gameserver.model.stats.Formulas;
 /**
  * Dam Over Time effect implementation.
  */
-public final class TickHp extends AbstractEffect
-{
+public final class TickHp extends AbstractEffect {
 	private final double _power;
 	private final StatModifierType _mode;
-	
-	public TickHp(StatsSet params)
-	{
+
+	public TickHp(StatsSet params) {
 		_power = params.getDouble("power");
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (skill.isMagic())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (skill.isMagic()) {
 			// TODO: M.Crit can occur even if this skill is resisted. Only then m.crit damage is applied and not debuff
 			final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, target, skill);
-			if (mcrit)
-			{
+			if (mcrit) {
 				double damage = _power * getTicksMultiplier() * 10; // Tests show that 10 times HP DOT is taken during magic critical.
-				if (damage < 0)
-				{
+				if (damage < 0) {
 					damage = Math.abs(damage);
-					if (damage >= (target.getCurrentHp() - 1))
-					{
+					if (damage >= (target.getCurrentHp() - 1)) {
 						damage = target.getCurrentHp() - 1;
 					}
-					
+
 					caster.doAttack(damage, target, skill, true, false, false, false);
-				}
-				else
-				{
+				} else {
 					final double maxHp = target.getMaxRecoverableHp();
-					if (target.getCurrentHp() > maxHp)
-					{
+					if (target.getCurrentHp() > maxHp) {
 						return;
 					}
-					
+
 					target.setCurrentHp(Math.min(target.getCurrentHp() + damage, maxHp));
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DMG_OVER_TIME;
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double damage = 0;
 		double hp = target.getCurrentHp();
-		switch (_mode)
-		{
-			case DIFF:
-			{
+		switch (_mode) {
+			case DIFF: {
 				damage = _power * getTicksMultiplier();
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				damage = hp * _power * getTicksMultiplier();
 				break;
 			}
 		}
-		
-		if (damage < 0)
-		{
+
+		if (damage < 0) {
 			damage = Math.abs(damage);
-			if (damage >= (target.getCurrentHp() - 1))
-			{
+			if (damage >= (target.getCurrentHp() - 1)) {
 				damage = target.getCurrentHp() - 1;
 			}
-			
+
 			caster.doAttack(damage, target, skill, true, false, false, false);
-		}
-		else
-		{
+		} else {
 			final double maxHp = target.getMaxRecoverableHp();
-			if (target.getCurrentHp() > maxHp)
-			{
+			if (target.getCurrentHp() > maxHp) {
 				return;
 			}
-			
+
 			target.setCurrentHp(Math.min(target.getCurrentHp() + damage, maxHp));
 		}
 	}

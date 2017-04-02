@@ -26,34 +26,28 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Airship Action player action handler.
+ *
  * @author Nik
  */
-public final class AirshipAction implements IPlayerActionHandler
-{
+public final class AirshipAction implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (!activeChar.isInAirShip())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (!activeChar.isInAirShip()) {
 			return;
 		}
-		
-		switch (data.getOptionId())
-		{
+
+		switch (data.getOptionId()) {
 			case 1: // Steer
 			{
-				if (activeChar.getAirShip().setCaptain(activeChar))
-				{
+				if (activeChar.getAirShip().setCaptain(activeChar)) {
 					activeChar.broadcastUserInfo();
 				}
 				break;
 			}
 			case 2: // Cancel Control
 			{
-				if (activeChar.getAirShip().isCaptain(activeChar))
-				{
-					if (activeChar.getAirShip().setCaptain(null))
-					{
+				if (activeChar.getAirShip().isCaptain(activeChar)) {
+					if (activeChar.getAirShip().setCaptain(null)) {
 						activeChar.broadcastUserInfo();
 					}
 				}
@@ -66,23 +60,18 @@ public final class AirshipAction implements IPlayerActionHandler
 			}
 			case 4: // Exit Airship
 			{
-				if (activeChar.getAirShip().isCaptain(activeChar))
-				{
-					if (activeChar.getAirShip().setCaptain(null))
-					{
+				if (activeChar.getAirShip().isCaptain(activeChar)) {
+					if (activeChar.getAirShip().setCaptain(null)) {
 						activeChar.broadcastUserInfo();
 					}
-				}
-				else if (activeChar.getAirShip().isInDock())
-				{
+				} else if (activeChar.getAirShip().isInDock()) {
 					activeChar.getAirShip().oustPlayer(activeChar);
 				}
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new AirshipAction());
 	}
 }

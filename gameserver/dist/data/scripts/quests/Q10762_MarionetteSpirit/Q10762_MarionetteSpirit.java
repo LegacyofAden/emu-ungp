@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10761_AnOrcInLove.Q10761_AnOrcInLove;
 
 /**
  * Marionette Spirit (10762)
+ *
  * @author malyelfik
  */
-public final class Q10762_MarionetteSpirit extends Quest
-{
+public final class Q10762_MarionetteSpirit extends Quest {
 	// NPC
 	private static final int VORBOS = 33966;
 	// Monster
@@ -42,9 +41,8 @@ public final class Q10762_MarionetteSpirit extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 34;
 	private static final int DROP_RATE = 70;
-	
-	public Q10762_MarionetteSpirit()
-	{
+
+	public Q10762_MarionetteSpirit() {
 		super(10762);
 		addStartNpc(VORBOS);
 		addTalkId(VORBOS);
@@ -54,39 +52,30 @@ public final class Q10762_MarionetteSpirit extends Quest
 		addCondCompletedQuest(Q10761_AnOrcInLove.class.getSimpleName(), "33966-00.htm");
 		registerQuestItems(MAGIC_CHAIN_KEY);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33966-02.htm":
 				break;
-			case "33966-03.htm":
-			{
+			case "33966-03.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33966-06.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33966-06.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 896_996);
 						addSp(player, 215);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -97,15 +86,13 @@ public final class Q10762_MarionetteSpirit extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33966-01.htm";
 				break;
@@ -118,13 +105,11 @@ public final class Q10762_MarionetteSpirit extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1) && (DROP_RATE > getRandom(100)))
-		{
+		if ((qs != null) && qs.isCond(1) && (DROP_RATE > getRandom(100))) {
 			giveItems(killer, MAGIC_CHAIN_KEY, 1);
 			qs.setCond(2, true);
 		}

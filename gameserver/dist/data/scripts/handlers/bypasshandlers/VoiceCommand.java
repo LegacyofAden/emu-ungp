@@ -28,53 +28,43 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author DS
  */
-public class VoiceCommand implements IBypassHandler
-{
+public class VoiceCommand implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"voice"
-	};
-	
+			{
+					"voice"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
 		// only voice commands allowed
-		if ((command.length() > 7) && (command.charAt(6) == '.'))
-		{
+		if ((command.length() > 7) && (command.charAt(6) == '.')) {
 			final String vc, vparams;
 			int endOfCommand = command.indexOf(" ", 7);
-			if (endOfCommand > 0)
-			{
+			if (endOfCommand > 0) {
 				vc = command.substring(7, endOfCommand).trim();
 				vparams = command.substring(endOfCommand).trim();
-			}
-			else
-			{
+			} else {
 				vc = command.substring(7).trim();
 				vparams = null;
 			}
-			
-			if (vc.length() > 0)
-			{
+
+			if (vc.length() > 0) {
 				IVoicedCommandHandler vch = VoicedCommandHandler.getInstance().getHandler(vc);
-				if (vch != null)
-				{
+				if (vch != null) {
 					return vch.useVoicedCommand(vc, activeChar, vparams);
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new VoiceCommand());
 	}
 }

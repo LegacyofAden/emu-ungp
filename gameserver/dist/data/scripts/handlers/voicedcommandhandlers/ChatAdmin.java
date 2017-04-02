@@ -18,8 +18,6 @@
  */
 package handlers.voicedcommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
@@ -32,126 +30,102 @@ import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.util.Util;
 
-public class ChatAdmin implements IVoicedCommandHandler
-{
+import java.util.StringTokenizer;
+
+public class ChatAdmin implements IVoicedCommandHandler {
 	private static final String[] VOICED_COMMANDS =
-	{
-		"banchat",
-		"unbanchat"
-	};
-	
+			{
+					"banchat",
+					"unbanchat"
+			};
+
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params)
-	{
-		if (!AdminData.getInstance().hasAccess(command, activeChar.getAccessLevel()))
-		{
+	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+		if (!AdminData.getInstance().hasAccess(command, activeChar.getAccessLevel())) {
 			return false;
 		}
-		
+
 		if (command.equals(VOICED_COMMANDS[0])) // banchat
 		{
-			if (params == null)
-			{
+			if (params == null) {
 				activeChar.sendMessage("Usage: .banchat name [minutes]");
 				return true;
 			}
 			StringTokenizer st = new StringTokenizer(params);
-			if (st.hasMoreTokens())
-			{
+			if (st.hasMoreTokens()) {
 				String name = st.nextToken();
 				long expirationTime = 0;
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					String token = st.nextToken();
-					if (Util.isDigit(token))
-					{
+					if (Util.isDigit(token)) {
 						expirationTime = System.currentTimeMillis() + (Integer.parseInt(st.nextToken()) * 60 * 1000);
 					}
 				}
-				
+
 				int objId = CharNameTable.getInstance().getIdByName(name);
-				if (objId > 0)
-				{
+				if (objId > 0) {
 					PlayerInstance player = World.getInstance().getPlayer(objId);
-					if ((player == null) || !player.isOnline())
-					{
+					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;
 					}
-					if (player.isChatBanned())
-					{
+					if (player.isChatBanned()) {
 						activeChar.sendMessage("Player is already punished !");
 						return false;
 					}
-					if (player == activeChar)
-					{
+					if (player == activeChar) {
 						activeChar.sendMessage("You can't ban yourself !");
 						return false;
 					}
-					if (player.isGM())
-					{
+					if (player.isGM()) {
 						activeChar.sendMessage("You can't ban GM !");
 						return false;
 					}
-					if (AdminData.getInstance().hasAccess(command, player.getAccessLevel()))
-					{
+					if (AdminData.getInstance().hasAccess(command, player.getAccessLevel())) {
 						activeChar.sendMessage("You can't ban moderator !");
 						return false;
 					}
-					
+
 					PunishmentManager.getInstance().startPunishment(new PunishmentTask(objId, PunishmentAffect.CHARACTER, PunishmentType.CHAT_BAN, expirationTime, "Chat banned by moderator", activeChar.getName()));
 					player.sendMessage("Chat banned by moderator " + activeChar.getName());
-					
-					if (expirationTime > 0)
-					{
+
+					if (expirationTime > 0) {
 						activeChar.sendMessage("Player " + player.getName() + " chat banned for " + expirationTime + " minutes.");
-					}
-					else
-					{
+					} else {
 						activeChar.sendMessage("Player " + player.getName() + " chat banned forever.");
 					}
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("Player not found !");
 					return false;
 				}
 			}
-		}
-		else if (command.equals(VOICED_COMMANDS[1])) // unbanchat
+		} else if (command.equals(VOICED_COMMANDS[1])) // unbanchat
 		{
-			if (params == null)
-			{
+			if (params == null) {
 				activeChar.sendMessage("Usage: .unbanchat name");
 				return true;
 			}
 			StringTokenizer st = new StringTokenizer(params);
-			if (st.hasMoreTokens())
-			{
+			if (st.hasMoreTokens()) {
 				String name = st.nextToken();
-				
+
 				int objId = CharNameTable.getInstance().getIdByName(name);
-				if (objId > 0)
-				{
+				if (objId > 0) {
 					PlayerInstance player = World.getInstance().getPlayer(objId);
-					if ((player == null) || !player.isOnline())
-					{
+					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;
 					}
-					if (!player.isChatBanned())
-					{
+					if (!player.isChatBanned()) {
 						activeChar.sendMessage("Player is not chat banned !");
 						return false;
 					}
-					
+
 					PunishmentManager.getInstance().stopPunishment(objId, PunishmentAffect.CHARACTER, PunishmentType.CHAT_BAN);
-					
+
 					activeChar.sendMessage("Player " + player.getName() + " chat unbanned.");
 					player.sendMessage("Chat unbanned by moderator " + activeChar.getName());
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("Player not found !");
 					return false;
 				}
@@ -159,15 +133,13 @@ public class ChatAdmin implements IVoicedCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getVoicedCommandList()
-	{
+	public String[] getVoicedCommandList() {
 		return VOICED_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		VoicedCommandHandler.getInstance().registerHandler(new ChatAdmin());
 	}
 }

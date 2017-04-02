@@ -28,29 +28,25 @@ import org.l2junity.gameserver.network.client.send.TutorialCloseHtml;
 /**
  * @author UnAfraid
  */
-public class TutorialClose implements IBypassHandler
-{
+public class TutorialClose implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"tutorial_close",
-	};
-	
+			{
+					"tutorial_close",
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
 		activeChar.sendPacket(TutorialCloseHtml.STATIC_PACKET);
 		activeChar.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new TutorialClose());
 	}
 }

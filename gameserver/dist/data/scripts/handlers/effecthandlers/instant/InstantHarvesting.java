@@ -34,76 +34,59 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Harvesting effect implementation.
+ *
  * @author l3x, Zoey76
  */
-public final class InstantHarvesting extends AbstractEffect
-{
-	public InstantHarvesting(StatsSet params)
-	{
+public final class InstantHarvesting extends AbstractEffect {
+	public InstantHarvesting(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
 		final L2MonsterInstance targetMonster = target.asMonster();
-		if (targetMonster == null)
-		{
+		if (targetMonster == null) {
 			casterPlayer.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
 
-		if (!targetMonster.isDead())
-		{
+		if (!targetMonster.isDead()) {
 			return;
 		}
 
-		if (casterPlayer.getObjectId() != targetMonster.getSeederId())
-		{
+		if (casterPlayer.getObjectId() != targetMonster.getSeederId()) {
 			casterPlayer.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_HARVEST);
-		}
-		else if (targetMonster.isSeeded())
-		{
-			if (calcSuccess(casterPlayer, targetMonster))
-			{
+		} else if (targetMonster.isSeeded()) {
+			if (calcSuccess(casterPlayer, targetMonster)) {
 				final ItemHolder harvestedItem = targetMonster.takeHarvest();
-				if (harvestedItem != null)
-				{
+				if (harvestedItem != null) {
 					// Add item
 					casterPlayer.getInventory().addItem("Harvesting", harvestedItem.getId(), harvestedItem.getCount(), casterPlayer, targetMonster);
-					
+
 					// Send system msg
 					SystemMessage sm = null;
-					if (item.getCount() == 1)
-					{
+					if (item.getCount() == 1) {
 						sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_OBTAINED_S1);
 						sm.addItemName(harvestedItem.getId());
-					}
-					else
-					{
+					} else {
 						sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_OBTAINED_S2_S1);
 						sm.addItemName(item.getId());
 						sm.addLong(harvestedItem.getCount());
 					}
 					casterPlayer.sendPacket(sm);
-					
+
 					// Send msg to party
 					final Party party = casterPlayer.getParty();
-					if (party != null)
-					{
-						if (item.getCount() == 1)
-						{
+					if (party != null) {
+						if (item.getCount() == 1) {
 							sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HARVESTED_S2);
 							sm.addString(casterPlayer.getName());
 							sm.addItemName(harvestedItem.getId());
-						}
-						else
-						{
+						} else {
 							sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HARVESTED_S3_S2_S);
 							sm.addString(casterPlayer.getName());
 							sm.addLong(harvestedItem.getCount());
@@ -112,40 +95,32 @@ public final class InstantHarvesting extends AbstractEffect
 						party.broadcastToPartyMembers(casterPlayer, sm);
 					}
 				}
-			}
-			else
-			{
+			} else {
 				casterPlayer.sendPacket(SystemMessageId.THE_HARVEST_HAS_FAILED);
 			}
-		}
-		else
-		{
+		} else {
 			casterPlayer.sendPacket(SystemMessageId.THE_HARVEST_FAILED_BECAUSE_THE_SEED_WAS_NOT_SOWN);
 		}
 	}
-	
-	private static boolean calcSuccess(PlayerInstance activeChar, L2MonsterInstance target)
-	{
+
+	private static boolean calcSuccess(PlayerInstance activeChar, L2MonsterInstance target) {
 		final int levelPlayer = activeChar.getLevel();
 		final int levelTarget = target.getLevel();
-		
+
 		int diff = (levelPlayer - levelTarget);
-		if (diff < 0)
-		{
+		if (diff < 0) {
 			diff = -diff;
 		}
-		
+
 		// apply penalty, target <=> player levels
 		// 5% penalty for each level
 		int basicSuccess = 100;
-		if (diff > 5)
-		{
+		if (diff > 5) {
 			basicSuccess -= (diff - 5) * 5;
 		}
-		
+
 		// success rate can't be less than 1%
-		if (basicSuccess < 1)
-		{
+		if (basicSuccess < 1) {
 			basicSuccess = 1;
 		}
 		return Rnd.nextInt(99) < basicSuccess;

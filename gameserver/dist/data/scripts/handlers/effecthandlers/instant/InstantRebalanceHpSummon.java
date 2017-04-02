@@ -29,70 +29,57 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Rebalance HP effect implementation.
+ *
  * @author Adry_85, earendil
  */
-public final class InstantRebalanceHpSummon extends AbstractEffect
-{
-	public InstantRebalanceHpSummon(StatsSet params)
-	{
+public final class InstantRebalanceHpSummon extends AbstractEffect {
+	public InstantRebalanceHpSummon(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (!caster.isPlayer())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (!caster.isPlayer()) {
 			return;
 		}
-		
+
 		double fullHP = 0;
 		double currentHPs = 0;
-		
-		for (Summon summon : caster.getServitors().values())
-		{
-			if (!summon.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, summon, true))
-			{
+
+		for (Summon summon : caster.getServitors().values()) {
+			if (!summon.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, summon, true)) {
 				fullHP += summon.getMaxHp();
 				currentHPs += summon.getCurrentHp();
 			}
 		}
-		
+
 		fullHP += caster.getMaxHp();
 		currentHPs += caster.getCurrentHp();
-		
+
 		double percentHP = currentHPs / fullHP;
-		for (Summon summon : caster.getServitors().values())
-		{
-			if (!summon.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, summon, true))
-			{
+		for (Summon summon : caster.getServitors().values()) {
+			if (!summon.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, summon, true)) {
 				double newHP = summon.getMaxHp() * percentHP;
 				if (newHP > summon.getCurrentHp()) // The target gets healed
 				{
 					// The heal will be blocked if the current hp passes the limit
-					if (summon.getCurrentHp() > summon.getMaxRecoverableHp())
-					{
+					if (summon.getCurrentHp() > summon.getMaxRecoverableHp()) {
 						newHP = summon.getCurrentHp();
-					}
-					else if (newHP > summon.getMaxRecoverableHp())
-					{
+					} else if (newHP > summon.getMaxRecoverableHp()) {
 						newHP = summon.getMaxRecoverableHp();
 					}
 				}
-				
+
 				summon.setCurrentHp(newHP);
 			}
 		}
-		
+
 		double newHP = caster.getMaxHp() * percentHP;
 		if (newHP > caster.getCurrentHp()) // The target gets healed
 		{
 			// The heal will be blocked if the current hp passes the limit
-			if (caster.getCurrentHp() > caster.getMaxRecoverableHp())
-			{
+			if (caster.getCurrentHp() > caster.getMaxRecoverableHp()) {
 				newHP = caster.getCurrentHp();
-			}
-			else if (newHP > caster.getMaxRecoverableHp())
-			{
+			} else if (newHP > caster.getMaxRecoverableHp()) {
 				newHP = caster.getMaxRecoverableHp();
 			}
 		}

@@ -18,6 +18,7 @@
  */
 package instances.BaylorWarzone;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -30,14 +31,12 @@ import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.instancezone.Instance;
 
-import instances.AbstractInstance;
-
 /**
  * Baylor Warzone instance zone.
+ *
  * @author St3eT
  */
-public final class BaylorWarzone extends AbstractInstance
-{
+public final class BaylorWarzone extends AbstractInstance {
 	// NPCs
 	private static final int BAYLOR = 29213;
 	private static final int ENTRANCE_PORTAL = 33523;
@@ -46,9 +45,8 @@ public final class BaylorWarzone extends AbstractInstance
 	private static final Location BATTLE_PORT = new Location(153567, 143319, -12736);
 	// Misc
 	private static final int TEMPLATE_ID = 166;
-	
-	public BaylorWarzone()
-	{
+
+	public BaylorWarzone() {
 		super(TEMPLATE_ID);
 		addStartNpc(ENTRANCE_PORTAL);
 		addTalkId(ENTRANCE_PORTAL);
@@ -57,35 +55,27 @@ public final class BaylorWarzone extends AbstractInstance
 		setCreatureSeeId(this::onCreatureSee, INVISIBLE_NPC);
 		setCreatureKillId(this::onBossKill, BAYLOR);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("enterInstance"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (event)
-			{
-				case "START_SCENE":
-				{
+		if (isInInstance(instance)) {
+			switch (event) {
+				case "START_SCENE": {
 					playMovie(instance, Movie.BARLER_SCENE);
 					getTimers().addTimer("SPAWN_BAYLOR", 17200, npc, null);
 					break;
 				}
-				case "SPAWN_BAYLOR":
-				{
-					for (Npc baylor : instance.spawnGroup("BAYLOR"))
-					{
+				case "SPAWN_BAYLOR": {
+					for (Npc baylor : instance.spawnGroup("BAYLOR")) {
 						baylor.setRandomAnimation(false);
 						baylor.setRandomWalking(false);
 						((Attackable) baylor).setCanReturnToSpawnPoint(false);
@@ -96,60 +86,49 @@ public final class BaylorWarzone extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player)
-	{
+	public void onInstanceCreated(Instance instance, PlayerInstance player) {
 		getTimers().addTimer("BATTLE_PORT", 3000, e ->
 		{
 			instance.getPlayers().forEach(p -> p.teleToLocation(BATTLE_PORT));
 			instance.getDoors().forEach(DoorInstance::closeMe);
 		});
 	}
-	
-	private void onBossKill(OnCreatureDeath event)
-	{
+
+	private void onBossKill(OnCreatureDeath event) {
 		final Npc npc = (Npc) event.getTarget();
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance))
-		{
-			if (instance.getAliveNpcs(BAYLOR).isEmpty())
-			{
+
+		if (isInInstance(instance)) {
+			if (instance.getAliveNpcs(BAYLOR).isEmpty()) {
 				instance.finishInstance();
-			}
-			else
-			{
+			} else {
 				instance.setReenterTime();
 			}
 		}
 	}
-	
-	private void onCreatureSee(OnCreatureSee event)
-	{
+
+	private void onCreatureSee(OnCreatureSee event) {
 		final Creature creature = event.getSeen();
 		final Npc npc = (Npc) event.getSeer();
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance) && creature.isPlayer() && npc.isScriptValue(0))
-		{
+
+		if (isInInstance(instance) && creature.isPlayer() && npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			getTimers().addTimer("START_SCENE", 5000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == INVISIBLE_NPC)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == INVISIBLE_NPC) {
 			npc.initSeenCreatures();
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BaylorWarzone();
 	}
 }

@@ -18,16 +18,9 @@
  */
 package instances.FortressDungeon;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import instances.AbstractInstance;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
-import org.l2junity.commons.util.concurrent.ThreadPool;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -36,21 +29,26 @@ import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import instances.AbstractInstance;
 import quests.Q00511_AwlUnderFoot.Q00511_AwlUnderFoot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <b>Fortress dungeon</b> instance for quest <b>Awl Under Foot (511)</b>
+ *
  * @author malyelfik
  */
-public final class FortressDungeon extends AbstractInstance
-{
+public final class FortressDungeon extends AbstractInstance {
 	// NPCs
 	private static final Map<Integer, Integer> NPCS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		NPCS.put(35666, 22); // Shanty
 		NPCS.put(35698, 23); // Southern
 		NPCS.put(35735, 24); // Hive
@@ -72,27 +70,27 @@ public final class FortressDungeon extends AbstractInstance
 		NPCS.put(36326, 41); // Demon
 		NPCS.put(36364, 42); // Monastic
 	}
-	
+
 	// Monsters
 	private static final int[] RAIDS1 =
-	{
-		25572,
-		25575,
-		25578
-	};
+			{
+					25572,
+					25575,
+					25578
+			};
 	private static final int[] RAIDS2 =
-	{
-		25579,
-		25582,
-		25585,
-		25588
-	};
+			{
+					25579,
+					25582,
+					25585,
+					25588
+			};
 	private static final int[] RAIDS3 =
-	{
-		25589,
-		25592,
-		25593
-	};
+			{
+					25589,
+					25592,
+					25593
+			};
 	// Item
 	private static final int MARK = 9797;
 	// Locations
@@ -101,9 +99,8 @@ public final class FortressDungeon extends AbstractInstance
 	private static final int MARK_COUNT = 2520;
 	private static final long REENTER = 24 * 3600000; // 24 hours
 	private static final Map<Integer, Long> REENETER_HOLDER = new ConcurrentHashMap<>();
-	
-	public FortressDungeon()
-	{
+
+	public FortressDungeon() {
 		super(NPCS.values().stream().mapToInt(Integer::valueOf).toArray());
 		// NPCs
 		addStartNpc(NPCS.keySet());
@@ -116,92 +113,71 @@ public final class FortressDungeon extends AbstractInstance
 		addInstanceCreatedId(NPCS.values());
 		addInstanceDestroyId(NPCS.values());
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final int npcId = npc.getId();
-		if (NPCS.containsKey(npcId))
-		{
+		if (NPCS.containsKey(npcId)) {
 			enterInstance(player, npc, NPCS.get(npcId));
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
-		if (world != null)
-		{
-			if (ArrayUtil.contains(RAIDS3, npc.getId()))
-			{
+		if (world != null) {
+			if (ArrayUtil.contains(RAIDS3, npc.getId())) {
 				// Get players with active quest
 				final List<PlayerInstance> members = new ArrayList<>();
-				for (PlayerInstance member : world.getPlayers())
-				{
+				for (PlayerInstance member : world.getPlayers()) {
 					final QuestState qs = member.getQuestState(Q00511_AwlUnderFoot.class.getSimpleName());
-					if ((qs != null) && qs.isCond(1))
-					{
+					if ((qs != null) && qs.isCond(1)) {
 						members.add(member);
 					}
 				}
-				
+
 				// Distribute marks between them
-				if (!members.isEmpty())
-				{
+				if (!members.isEmpty()) {
 					final long itemCount = MARK_COUNT / members.size();
-					for (PlayerInstance member : members)
-					{
+					for (PlayerInstance member : members) {
 						giveItems(member, MARK, itemCount);
 						playSound(member, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 				}
 				world.finishInstance();
-			}
-			else
-			{
+			} else {
 				world.incStatus();
 				spawnRaid(world);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player)
-	{
+	public void onInstanceCreated(Instance instance, PlayerInstance player) {
 		// Put re-enter for instance
 		REENETER_HOLDER.put(instance.getTemplateId(), System.currentTimeMillis() + REENTER);
 		// Schedule spawn of first raid
 		spawnRaid(instance);
 	}
-	
+
 	@Override
-	protected boolean validateConditions(List<PlayerInstance> group, Npc npc, InstanceTemplate template)
-	{
+	protected boolean validateConditions(List<PlayerInstance> group, Npc npc, InstanceTemplate template) {
 		final PlayerInstance groupLeader = group.get(0);
 		final Fort fort = npc.getFort();
-		if (fort == null)
-		{
+		if (fort == null) {
 			showHtmlFile(groupLeader, "noProperPledge.html");
 			return false;
-		}
-		else if (fort.getFortState() == 0)
-		{
+		} else if (fort.getFortState() == 0) {
 			showHtmlFile(groupLeader, "noContractYet.html");
 			return false;
-		}
-		else if (fort.getFortState() == 2)
-		{
+		} else if (fort.getFortState() == 2) {
 			showHtmlFile(groupLeader, "noCastleContract.html");
 			return false;
-		}
-		else if (REENETER_HOLDER.containsKey(template.getId()))
-		{
+		} else if (REENETER_HOLDER.containsKey(template.getId())) {
 			final long time = REENETER_HOLDER.get(template.getId());
-			if (time > System.currentTimeMillis())
-			{
+			if (time > System.currentTimeMillis()) {
 				showHtmlFile(groupLeader, "enterRestricted.html");
 				return false;
 			}
@@ -209,31 +185,28 @@ public final class FortressDungeon extends AbstractInstance
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void onInstanceDestroy(Instance instance)
-	{
+	public void onInstanceDestroy(Instance instance) {
 		// Stop running spawn task
 		final ScheduledFuture<?> task = instance.getParameters().getObject("spawnTask", ScheduledFuture.class);
-		if ((task != null) && !task.isDone())
-		{
+		if ((task != null) && !task.isDone()) {
 			task.cancel(true);
 		}
 		instance.setParameter("spawnTask", null);
 	}
-	
+
 	/**
 	 * Spawn raid boss according to instance status.
+	 *
 	 * @param instance instance world where instance should be spawned
 	 */
-	private void spawnRaid(Instance instance)
-	{
-		final ScheduledFuture<?> spawnTask = ThreadPool.schedule(() ->
+	private void spawnRaid(Instance instance) {
+		final ScheduledFuture<?> spawnTask = ThreadPool.getInstance().scheduleGeneral(() ->
 		{
 			// Get template id of raid
 			final int npcId;
-			switch (instance.getStatus())
-			{
+			switch (instance.getStatus()) {
 				case 0:
 					npcId = RAIDS1[getRandom(RAIDS1.length)];
 					break;
@@ -243,20 +216,19 @@ public final class FortressDungeon extends AbstractInstance
 				default:
 					npcId = RAIDS3[getRandom(RAIDS3.length)];
 			}
-			
+
 			// Spawn raid
 			addSpawn(npcId, SPAWN_LOC, false, 0, false, instance.getId());
-			
+
 			// Unset spawn task reference
 			instance.setParameter("spawnTask", null);
 		}, 2, TimeUnit.MINUTES);
-		
+
 		// Save timer to instance world
 		instance.setParameter("spawnTask", spawnTask);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FortressDungeon();
 	}
 }

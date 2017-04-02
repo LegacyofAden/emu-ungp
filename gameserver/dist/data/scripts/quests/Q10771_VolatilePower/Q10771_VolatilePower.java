@@ -28,15 +28,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10770_InSearchOfTheGrail.Q10770_InSearchOfTheGrail;
 
 /**
  * Volatile Power (10771)
+ *
  * @author malyelfik
  */
-public final class Q10771_VolatilePower extends Quest
-{
+public final class Q10771_VolatilePower extends Quest {
 	// NPCs
 	private static final int JANSSEN = 30484;
 	private static final int HIDDEN_CRUSHER = 33990;
@@ -47,9 +46,8 @@ public final class Q10771_VolatilePower extends Quest
 	private static final int NORMAL_FRAGMENT_DUST = 39714;
 	// Misc
 	private static final int MIN_LEVEL = 44;
-	
-	public Q10771_VolatilePower()
-	{
+
+	public Q10771_VolatilePower() {
 		super(10771);
 		addStartNpc(JANSSEN);
 		addFirstTalkId(HIDDEN_CRUSHER);
@@ -59,42 +57,33 @@ public final class Q10771_VolatilePower extends Quest
 		addCondCompletedQuest(Q10770_InSearchOfTheGrail.class.getSimpleName(), "30484-00.htm");
 		registerQuestItems(SHINING_MYSTERIOUS_FRAGMENT, NORMAL_FRAGMENT_DUST);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30484-02.htm":
 			case "30484-03.htm":
 			case "30484-04.htm":
 				break;
-			case "30484-05.htm":
-			{
+			case "30484-05.htm": {
 				qs.startQuest();
 				giveItems(player, SHINING_MYSTERIOUS_FRAGMENT, 20);
 				break;
 			}
-			case "30484-08.html":
-			{
-				if (qs.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30484-08.html": {
+				if (qs.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 4_150_144);
 						addSp(player, 650);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -105,23 +94,19 @@ public final class Q10771_VolatilePower extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return "33990.html";
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == JANSSEN)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == JANSSEN) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "30484-01.htm";
 					break;
@@ -132,25 +117,19 @@ public final class Q10771_VolatilePower extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else
-		{
-			if (qs.isStarted())
-			{
-				if (qs.isCond(1))
-				{
+		} else {
+			if (qs.isStarted()) {
+				if (qs.isCond(1)) {
 					final int itemCount = (int) getQuestItemsCount(player, SHINING_MYSTERIOUS_FRAGMENT);
 					int reduceCount = getRandom(1, 3);
-					if (reduceCount > itemCount)
-					{
+					if (reduceCount > itemCount) {
 						reduceCount = itemCount;
 					}
-					
+
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THE_CRUSHER_IS_ACTIVATED);
 					npc.setScriptValue(reduceCount);
-					
-					for (int i = 0; i < 3; i++)
-					{
+
+					for (int i = 0; i < 3; i++) {
 						final Npc mob = addSpawn(FRAGMENT_EATER, player, true, 70000);
 						mob.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.KILL_THEM_DON_T_LET_THEM_GET_AWAY_WITH_THE_FRAGMENT);
 						addAttackPlayerDesire(mob, player);
@@ -158,57 +137,43 @@ public final class Q10771_VolatilePower extends Quest
 					takeItems(player, SHINING_MYSTERIOUS_FRAGMENT, reduceCount);
 					giveItems(player, NORMAL_FRAGMENT_DUST, reduceCount);
 					getTimers().addTimer("DESTROY_COUNT", 2000, npc, player);
-					
-					if (getQuestItemsCount(player, NORMAL_FRAGMENT_DUST) >= 20)
-					{
+
+					if (getQuestItemsCount(player, NORMAL_FRAGMENT_DUST) >= 20) {
 						qs.setCond(3, true); // Looks like cond 2 is skipped.
 					}
 					htmltext = null;
-				}
-				else
-				{
+				} else {
 					htmltext = "33990-02.html";
 				}
-			}
-			else
-			{
+			} else {
 				htmltext = "33990-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "DESTROY_COUNT":
-			{
-				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER))
-				{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "DESTROY_COUNT": {
+				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER)) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.S1_OBJECT_S_DESTROYED, String.valueOf(npc.getScriptValue()));
 					getTimers().addTimer("DESPAWN_MSG", 2000, npc, player);
 				}
 				break;
 			}
-			case "DESPAWN_MSG":
-			{
-				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER))
-				{
+			case "DESPAWN_MSG": {
+				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER)) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THE_DEVICE_RAN_OUT_OF_MAGIC);
 					showOnScreenMsg(player, NpcStringId.THE_DEVICE_RAN_OUT_OF_MAGIC_TRY_LOOKING_FOR_ANOTHER, ExShowScreenMessage.TOP_CENTER, 5000);
-					if (!getTimers().hasTimer("DESPAWN", npc, null))
-					{
+					if (!getTimers().hasTimer("DESPAWN", npc, null)) {
 						getTimers().addTimer("DESPAWN", 1000, npc, null);
 					}
 				}
 				break;
 			}
-			case "DESPAWN":
-			{
-				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER))
-				{
+			case "DESPAWN": {
+				if ((npc != null) && (npc.getId() == HIDDEN_CRUSHER)) {
 					npc.deleteMe();
 				}
 				break;

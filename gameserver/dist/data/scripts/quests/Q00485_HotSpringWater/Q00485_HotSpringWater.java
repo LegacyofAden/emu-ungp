@@ -27,34 +27,33 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Hot Spring Water (485)
+ *
  * @author St3eT
  */
-public final class Q00485_HotSpringWater extends Quest
-{
+public final class Q00485_HotSpringWater extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int WALDERAL = 30844;
 	private static final int[] MONSTERS =
-	{
-		21314, // Hot Springs Bandersnatchling
-		21315, // Hot Springs Buffalo
-		21316, // Hot Springs Flava
-		21317, // Hot Springs Atroxspawn
-		21318, // Hot Springs Antelope
-		21319, // Hot Springs Nepenthes
-		21320, // Hot Springs Yeti
-		21321, // Hot Springs Atrox
-		21322, // Hot Springs Bandersnatch
-		21323, // Hot Springs Grendel
-	};
+			{
+					21314, // Hot Springs Bandersnatchling
+					21315, // Hot Springs Buffalo
+					21316, // Hot Springs Flava
+					21317, // Hot Springs Atroxspawn
+					21318, // Hot Springs Antelope
+					21319, // Hot Springs Nepenthes
+					21320, // Hot Springs Yeti
+					21321, // Hot Springs Atrox
+					21322, // Hot Springs Bandersnatch
+					21323, // Hot Springs Grendel
+			};
 	// Items
 	private static final int WATER = 19497; // Hot Springs Water Sample
 	// Misc
 	private static final int MIN_LEVEL = 70;
 	private static final int MAX_LEVEL = 74;
-	
-	public Q00485_HotSpringWater()
-	{
+
+	public Q00485_HotSpringWater() {
 		super(485);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, WALDERAL);
@@ -62,28 +61,23 @@ public final class Q00485_HotSpringWater extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 		registerQuestItems(WATER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
-			case "32327-03.htm":
-			{
+			case "32327-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32327-04.htm":
-			{
+			case "32327-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
@@ -91,43 +85,30 @@ public final class Q00485_HotSpringWater extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER) {
 					htmltext = "32327-01.html";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ADVENTURER ? "32327-05.html" : "30844-01.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (npc.getId() == ADVENTURER)
-					{
+				} else if (st.isCond(2)) {
+					if (npc.getId() == ADVENTURER) {
 						htmltext = "32327-06.html";
-					}
-					else if (npc.getId() == WALDERAL)
-					{
-						if (!isSimulated)
-						{
+					} else if (npc.getId() == WALDERAL) {
+						if (!isSimulated) {
 							st.exitQuest(QuestType.DAILY, true);
 							giveAdena(player, 371_745, true);
-							if (player.getLevel() >= MIN_LEVEL)
-							{
+							if (player.getLevel() >= MIN_LEVEL) {
 								addExp(player, 9_483_000);
 								addSp(player, 2_275);
 							}
@@ -137,18 +118,13 @@ public final class Q00485_HotSpringWater extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if ((npc.getId() == ADVENTURER) && st.isNowAvailable())
-				{
-					if (!isSimulated)
-					{
+			case State.COMPLETED: {
+				if ((npc.getId() == ADVENTURER) && st.isNowAvailable()) {
+					if (!isSimulated) {
 						st.setState(State.CREATED);
 					}
 					htmltext = "32327-01.html";
-				}
-				else if ((npc.getId() == WALDERAL) && st.isCompleted() && !st.isNowAvailable())
-				{
+				} else if ((npc.getId() == WALDERAL) && st.isCompleted() && !st.isNowAvailable()) {
 					htmltext = "30844-03.html";
 				}
 				break;
@@ -156,16 +132,13 @@ public final class Q00485_HotSpringWater extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, WATER, 1, 40, 0.4, true))
-			{
+
+		if ((st != null) && st.isCond(1)) {
+			if (giveItemRandomly(killer, WATER, 1, 40, 0.4, true)) {
 				st.setCond(2, true);
 			}
 		}

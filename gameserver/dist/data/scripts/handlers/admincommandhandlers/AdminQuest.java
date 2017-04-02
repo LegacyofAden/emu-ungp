@@ -18,17 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
-
-import javax.tools.JavaFileObject.Kind;
-
-import org.l2junity.commons.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
@@ -41,152 +30,124 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestTimer;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;
+import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AdminQuest implements IAdminCommandHandler
-{
+import javax.tools.JavaFileObject.Kind;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.*;
+
+public class AdminQuest implements IAdminCommandHandler {
 	public static final Logger LOGGER = LoggerFactory.getLogger(AdminQuest.class);
-	
+
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_quest_reload",
-		"admin_script_load",
-		"admin_script_unload",
-		"admin_script_dir",
-		"admin_show_quests",
-		"admin_quest_info"
-	};
-	
-	private static Quest findScript(String script)
-	{
-		if (Util.isDigit(script))
-		{
+			{
+					"admin_quest_reload",
+					"admin_script_load",
+					"admin_script_unload",
+					"admin_script_dir",
+					"admin_show_quests",
+					"admin_quest_info"
+			};
+
+	private static Quest findScript(String script) {
+		if (Util.isDigit(script)) {
 			return QuestManager.getInstance().getQuest(Integer.parseInt(script));
 		}
 		return QuestManager.getInstance().getQuest(script);
 	}
-	
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_quest_reload"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_quest_reload")) {
 			StringTokenizer st = new StringTokenizer(command);
 			st.nextToken(); // skip command token
-			
-			if (!st.hasMoreTokens())
-			{
+
+			if (!st.hasMoreTokens()) {
 				activeChar.sendMessage("Usage: //quest_reload <questName> or <questId>");
 				return false;
 			}
-			
+
 			String script = st.nextToken();
 			Quest quest = findScript(script);
-			if (quest == null)
-			{
+			if (quest == null) {
 				activeChar.sendMessage("The script " + script + " couldn't be found!");
 				return false;
 			}
-			
-			if (!quest.reload())
-			{
+
+			if (!quest.reload()) {
 				activeChar.sendMessage("Failed to reload " + script + "!");
 				return false;
 			}
-			
+
 			activeChar.sendMessage("Script successful reloaded.");
-		}
-		else if (command.startsWith("admin_script_load"))
-		{
+		} else if (command.startsWith("admin_script_load")) {
 			StringTokenizer st = new StringTokenizer(command);
 			st.nextToken(); // skip command token
-			
-			if (!st.hasMoreTokens())
-			{
+
+			if (!st.hasMoreTokens()) {
 				activeChar.sendMessage("Usage: //script_load path/to/script.java");
 				return false;
 			}
-			
+
 			String script = st.nextToken();
-			try
-			{
+			try {
 				ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, Paths.get(script));
-				activeChar.sendMessage("Script loaded seccessful!");
-			}
-			catch (Exception e)
-			{
+				activeChar.sendMessage("Script loaded seccessfully!");
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed to load script!");
 				LOGGER.warn("Failed to load script " + script + "!", e);
 			}
-		}
-		else if (command.startsWith("admin_script_unload"))
-		{
+		} else if (command.startsWith("admin_script_unload")) {
 			StringTokenizer st = new StringTokenizer(command);
 			st.nextToken(); // skip command token
-			
-			if (!st.hasMoreTokens())
-			{
+
+			if (!st.hasMoreTokens()) {
 				activeChar.sendMessage("Usage: //script_load path/to/script.java");
 				return false;
 			}
-			
+
 			String script = st.nextToken();
 			Quest quest = findScript(script);
-			if (quest == null)
-			{
+			if (quest == null) {
 				activeChar.sendMessage("The script " + script + " couldn't be found!");
 				return false;
 			}
-			
+
 			quest.unload();
 			activeChar.sendMessage("Script successful unloaded!");
-		}
-		else if (command.startsWith("admin_script_dir"))
-		{
+		} else if (command.startsWith("admin_script_dir")) {
 			String[] parts = command.split(" ");
-			if (parts.length == 1)
-			{
+			if (parts.length == 1) {
 				showDir(null, activeChar);
-			}
-			else
-			{
+			} else {
 				showDir(parts[1], activeChar);
 			}
-			
-		}
-		else if (command.startsWith("admin_show_quests"))
-		{
-			if (activeChar.getTarget() == null)
-			{
+
+		} else if (command.startsWith("admin_show_quests")) {
+			if (activeChar.getTarget() == null) {
 				activeChar.sendMessage("Get a target first.");
-			}
-			else if (!activeChar.getTarget().isCreature())
-			{
+			} else if (!activeChar.getTarget().isCreature()) {
 				activeChar.sendMessage("Invalid Target.");
-			}
-			else
-			{
+			} else {
 				final Creature character = (Creature) activeChar.getTarget();
 				final StringBuilder sb = new StringBuilder();
 				final Set<String> questNames = new TreeSet<>();
-				for (EventType type : EventType.values())
-				{
-					for (AbstractEventListener listener : character.getListeners(type))
-					{
-						if (listener.getOwner() instanceof Quest)
-						{
+				for (EventType type : EventType.values()) {
+					for (AbstractEventListener listener : character.getListeners(type)) {
+						if (listener.getOwner() instanceof Quest) {
 							final Quest quest = (Quest) listener.getOwner();
-							if (!questNames.add(quest.getName()))
-							{
+							if (!questNames.add(quest.getName())) {
 								continue;
 							}
 							sb.append("<tr><td colspan=\"4\"><font color=\"LEVEL\"><a action=\"bypass -h admin_quest_info " + quest.getName() + "\">" + quest.getName() + "</a></font></td></tr>");
 						}
 					}
 				}
-				
+
 				final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
 				msg.setFile(activeChar.getHtmlPrefix(), "data/html/admin/npc-quests.htm");
 				msg.replace("%quests%", sb.toString());
@@ -194,103 +155,84 @@ public class AdminQuest implements IAdminCommandHandler
 				msg.replace("%questName%", "");
 				activeChar.sendPacket(msg);
 			}
-		}
-		else if (command.startsWith("admin_quest_info "))
-		{
+		} else if (command.startsWith("admin_quest_info ")) {
 			final String questName = command.substring("admin_quest_info ".length());
 			final Quest quest = QuestManager.getInstance().getQuest(questName);
 			String events = "", npcs = "", items = "", timers = "";
 			int counter = 0;
-			if (quest == null)
-			{
+			if (quest == null) {
 				activeChar.sendMessage("Couldn't find quest or script with name " + questName + " !");
 				return false;
 			}
-			
+
 			final Set<EventType> listenerTypes = new TreeSet<>();
-			for (AbstractEventListener listener : quest.getListeners())
-			{
-				if (listenerTypes.add(listener.getType()))
-				{
+			for (AbstractEventListener listener : quest.getListeners()) {
+				if (listenerTypes.add(listener.getType())) {
 					events += ", " + listener.getType().name();
 					counter++;
 				}
-				if (counter > 10)
-				{
+				if (counter > 10) {
 					counter = 0;
 					break;
 				}
 			}
-			
+
 			final Set<Integer> npcIds = new TreeSet<>(quest.getRegisteredIds(ListenerRegisterType.NPC));
-			for (int npcId : npcIds)
-			{
+			for (int npcId : npcIds) {
 				npcs += ", " + npcId;
 				counter++;
-				if (counter > 50)
-				{
+				if (counter > 50) {
 					counter = 0;
 					break;
 				}
 			}
-			
-			if (!events.isEmpty())
-			{
+
+			if (!events.isEmpty()) {
 				events = listenerTypes.size() + ": " + events.substring(2);
 			}
-			
-			if (!npcs.isEmpty())
-			{
+
+			if (!npcs.isEmpty()) {
 				npcs = npcIds.size() + ": " + npcs.substring(2);
 			}
-			
-			if (quest.getRegisteredItemIds() != null)
-			{
-				for (int itemId : quest.getRegisteredItemIds())
-				{
+
+			if (quest.getRegisteredItemIds() != null) {
+				for (int itemId : quest.getRegisteredItemIds()) {
 					items += ", " + itemId;
 					counter++;
-					if (counter > 20)
-					{
+					if (counter > 20) {
 						counter = 0;
 						break;
 					}
 				}
 				items = quest.getRegisteredItemIds().length + ":" + items.substring(2);
 			}
-			
-			for (List<QuestTimer> list : quest.getQuestTimers().values())
-			{
-				for (QuestTimer timer : list)
-				{
+
+			for (List<QuestTimer> list : quest.getQuestTimers().values()) {
+				for (QuestTimer timer : list) {
 					timers += "<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">" + timer.getName() + ":</font> <font color=00FF00>Active: " + timer.getIsActive() + " Repeatable: " + timer.getIsRepeating() + " Player: " + timer.getPlayer() + " Npc: " + timer.getNpc() + "</font></td></tr></table></td></tr>";
 					counter++;
-					if (counter > 10)
-					{
+					if (counter > 10) {
 						break;
 					}
 				}
 			}
-			
+
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">ID:</font> <font color=00FF00>" + quest.getId() + "</font></td></tr></table></td></tr>");
 			sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">Name:</font> <font color=00FF00>" + quest.getName() + "</font></td></tr></table></td></tr>");
 			sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">Path:</font> <font color=00FF00>" + quest.getPath() + "</font></td></tr></table></td></tr>");
 			sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">Events:</font> <font color=00FF00>" + events + "</font></td></tr></table></td></tr>");
-			if (!npcs.isEmpty())
-			{
+			if (!npcs.isEmpty()) {
 				sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">NPCs:</font> <font color=00FF00>" + npcs + "</font></td></tr></table></td></tr>");
 			}
-			if (!items.isEmpty())
-			{
+			if (!items.isEmpty()) {
 				sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">Items:</font> <font color=00FF00>" + items + "</font></td></tr></table></td></tr>");
 			}
-			if (!timers.isEmpty())
-			{
+			if (!timers.isEmpty()) {
 				sb.append("<tr><td colspan=\"4\"><table width=270 border=0 bgcolor=131210><tr><td width=270><font color=\"LEVEL\">Timers:</font> <font color=00FF00></font></td></tr></table></td></tr>");
 				sb.append(timers);
 			}
-			
+
 			final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
 			msg.setFile(activeChar.getHtmlPrefix(), "data/html/admin/npc-quests.htm");
 			msg.replace("%quests%", sb.toString());
@@ -300,41 +242,30 @@ public class AdminQuest implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
-	private void showDir(String dir, PlayerInstance activeChar)
-	{
+
+	private void showDir(String dir, PlayerInstance activeChar) {
 		String replace = null;
 		File path;
 		String currentPath = "/";
-		if ((dir == null) || dir.trim().isEmpty() || dir.contains(".."))
-		{
+		if ((dir == null) || dir.trim().isEmpty() || dir.contains("..")) {
 			StringBuilder sb = new StringBuilder(200);
 			path = GameScriptsLoader.SCRIPT_FOLDER.toFile();
 			String[] children = path.list();
 			Arrays.sort(children);
-			for (String c : children)
-			{
+			for (String c : children) {
 				File n = new File(path, c);
-				if (n.isHidden() || n.getName().startsWith("."))
-				{
+				if (n.isHidden() || n.getName().startsWith(".")) {
 					continue;
-				}
-				else if (n.isDirectory())
-				{
+				} else if (n.isDirectory()) {
 					sb.append("<a action=\"bypass -h admin_script_dir " + c + "\">" + c + "</a><br1>");
-				}
-				else if (c.endsWith(".java") || c.endsWith(".py"))
-				{
+				} else if (c.endsWith(".java") || c.endsWith(".py")) {
 					sb.append("<a action=\"bypass -h admin_script_load " + c + "\"><font color=\"LEVEL\">" + c + "</font></a><br1>");
 				}
 			}
 			replace = sb.toString();
-		}
-		else
-		{
+		} else {
 			path = new File(GameScriptsLoader.SCRIPT_FOLDER.toFile(), dir);
-			if (!path.isDirectory())
-			{
+			if (!path.isDirectory()) {
 				activeChar.sendMessage("Wrong path.");
 				return;
 			}
@@ -344,31 +275,23 @@ public class AdminQuest implements IAdminCommandHandler
 			sb.append("<a action=\"bypass -h admin_script_dir " + getUpPath(currentPath) + "\">..</a><br1>");
 			String[] children = path.list();
 			Arrays.sort(children);
-			for (String c : children)
-			{
+			for (String c : children) {
 				File n = new File(path, c);
-				if (n.isHidden() || n.getName().startsWith("."))
-				{
+				if (n.isHidden() || n.getName().startsWith(".")) {
 					continue;
-				}
-				else if (n.isDirectory())
-				{
+				} else if (n.isDirectory()) {
 					sb.append("<a action=\"bypass -h admin_script_dir " + currentPath + "/" + c + "\">" + (questReducedNames ? getQuestName(c) : c) + "</a><br1>");
-				}
-				else if (c.endsWith(".java") || c.endsWith(".py"))
-				{
+				} else if (c.endsWith(".java") || c.endsWith(".py")) {
 					sb.append("<a action=\"bypass -h admin_script_load " + currentPath + "/" + c + "\"><font color=\"LEVEL\">" + c + "</font></a><br1>");
 				}
 			}
 			replace = sb.toString();
-			if (questReducedNames)
-			{
+			if (questReducedNames) {
 				currentPath += " (limited list - HTML too long)";
 			}
 		}
-		
-		if (replace.length() > 17200)
-		{
+
+		if (replace.length() > 17200) {
 			replace = replace.substring(0, 17200); // packetlimit
 		}
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
@@ -377,30 +300,25 @@ public class AdminQuest implements IAdminCommandHandler
 		html.replace("%list%", replace);
 		activeChar.sendPacket(html);
 	}
-	
-	private String getUpPath(String full)
-	{
+
+	private String getUpPath(String full) {
 		int index = full.lastIndexOf("/");
-		if (index == -1)
-		{
+		if (index == -1) {
 			return "";
 		}
 		return full.substring(0, index);
 	}
-	
-	private String getQuestName(String full)
-	{
+
+	private String getQuestName(String full) {
 		return full.split("_")[0];
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminQuest());
 	}
 }

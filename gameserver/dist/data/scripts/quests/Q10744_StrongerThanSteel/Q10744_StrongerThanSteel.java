@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.QuestState;
 
 /**
  * Stronger Than Steel (10744)
+ *
  * @author Sdw
  */
-public final class Q10744_StrongerThanSteel extends Quest
-{
+public final class Q10744_StrongerThanSteel extends Quest {
 	// NPCs
 	private static final int MILONE = 33953;
 	private static final int DOLKIN = 33954;
@@ -42,9 +42,8 @@ public final class Q10744_StrongerThanSteel extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 15;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10744_StrongerThanSteel()
-	{
+
+	public Q10744_StrongerThanSteel() {
 		super(10744);
 		addStartNpc(MILONE);
 		addTalkId(MILONE, DOLKIN);
@@ -53,31 +52,25 @@ public final class Q10744_StrongerThanSteel extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33953-00.htm");
 		registerQuestItems(TREANT_LEAF, LEAFIE_LEAF);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33953-02.htm":
 			case "33954-02.html":
 				break;
-			case "33953-03.htm":
-			{
+			case "33953-03.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33954-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "33954-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 				}
 				break;
@@ -87,56 +80,38 @@ public final class Q10744_StrongerThanSteel extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs.isCompleted())
-		{
+
+		if (qs.isCompleted()) {
 			htmltext = getAlreadyCompletedMsg(player);
 		}
-		
-		switch (npc.getId())
-		{
-			case MILONE:
-			{
-				if (qs.isCreated())
-				{
+
+		switch (npc.getId()) {
+			case MILONE: {
+				if (qs.isCreated()) {
 					htmltext = "33953-01.htm";
-				}
-				else if (qs.isStarted() && qs.isCond(1))
-				{
+				} else if (qs.isStarted() && qs.isCond(1)) {
 					htmltext = "33953-04.html";
 				}
 				break;
 			}
-			case DOLKIN:
-			{
-				if (qs.isStarted())
-				{
-					if (qs.isCond(1))
-					{
+			case DOLKIN: {
+				if (qs.isStarted()) {
+					if (qs.isCond(1)) {
 						htmltext = "33954-01.html";
-					}
-					else if (qs.isCond(2))
-					{
+					} else if (qs.isCond(2)) {
 						htmltext = "33954-04.html";
-					}
-					else if (qs.isCond(3))
-					{
-						if (!isSimulated)
-						{
-							if ((player.getLevel() >= MIN_LEVEL))
-							{
+					} else if (qs.isCond(3)) {
+						if (!isSimulated) {
+							if ((player.getLevel() >= MIN_LEVEL)) {
 								addExp(player, 153_994);
 								addSp(player, 5);
 								qs.exitQuest(false, true);
-							}
-							else
-							{
+							} else {
 								htmltext = getNoQuestLevelRewardMsg(player);
 							}
 							break;
@@ -150,25 +125,19 @@ public final class Q10744_StrongerThanSteel extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		
-		if ((qs != null) && qs.isCond(2))
-		{
-			if (npc.getId() == TREANT)
-			{
+
+		if ((qs != null) && qs.isCond(2)) {
+			if (npc.getId() == TREANT) {
 				giveItemRandomly(killer, npc, TREANT_LEAF, 1, 20, 1.0, true);
-			}
-			else if (npc.getId() == LEAFIE)
-			{
+			} else if (npc.getId() == LEAFIE) {
 				giveItemRandomly(killer, npc, LEAFIE_LEAF, 1, 15, 1.0, true);
 			}
-			
-			if ((getQuestItemsCount(killer, TREANT_LEAF) >= 20) && (getQuestItemsCount(killer, LEAFIE_LEAF) >= 15))
-			{
+
+			if ((getQuestItemsCount(killer, TREANT_LEAF) >= 20) && (getQuestItemsCount(killer, LEAFIE_LEAF) >= 15)) {
 				qs.setCond(3, true);
 			}
 		}

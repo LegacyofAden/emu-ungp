@@ -18,19 +18,18 @@
  */
 package instances.KaraphonHabitat;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
-
-import instances.AbstractInstance;
 import quests.Q10745_TheSecretIngredients.Q10745_TheSecretIngredients;
 
 /**
  * Karaphon Habitat instance.
+ *
  * @author Sdw
  */
-public final class KaraphonHabitat extends AbstractInstance
-{
+public final class KaraphonHabitat extends AbstractInstance {
 	// NPCs
 	private static final int DOLKIN = 33954;
 	private static final int DOLKIN_INSTANCE = 34002;
@@ -38,23 +37,19 @@ public final class KaraphonHabitat extends AbstractInstance
 	private static final int KARAPHON = 23459;
 	// Instance
 	private static final int TEMPLATE_ID = 253;
-	
-	public KaraphonHabitat()
-	{
+
+	public KaraphonHabitat() {
 		super(TEMPLATE_ID);
 		addStartNpc(DOLKIN);
 		addFirstTalkId(DOLKIN_INSTANCE);
 		addTalkId(DOLKIN);
 		addKillId(KARAPHON);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (player.hasQuestState(Q10745_TheSecretIngredients.class.getSimpleName()))
-		{
-			switch (event)
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (player.hasQuestState(Q10745_TheSecretIngredients.class.getSimpleName())) {
+			switch (event) {
 				case "enter_instance":
 					enterInstance(player, npc, TEMPLATE_ID);
 					break;
@@ -65,20 +60,17 @@ public final class KaraphonHabitat extends AbstractInstance
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance world = killer.getInstanceWorld();
-		if (world != null)
-		{
+		if (world != null) {
 			world.setReenterTime();
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new KaraphonHabitat();
 	}
 }

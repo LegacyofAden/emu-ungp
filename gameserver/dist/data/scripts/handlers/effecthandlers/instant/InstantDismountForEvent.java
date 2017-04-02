@@ -29,26 +29,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantDismountForEvent extends AbstractEffect
-{
+public class InstantDismountForEvent extends AbstractEffect {
 	private final int _npcId;
-	
-	public InstantDismountForEvent(StatsSet params)
-	{
+
+	public InstantDismountForEvent(StatsSet params) {
 		_npcId = params.getInt("npcId");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		if (targetPlayer.getMountNpcId() == _npcId)
-		{
+
+		if (targetPlayer.getMountNpcId() == _npcId) {
 			targetPlayer.dismount();
 		}
 	}

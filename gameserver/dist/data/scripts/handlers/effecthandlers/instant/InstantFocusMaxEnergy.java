@@ -32,26 +32,23 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Focus Max Energy effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantFocusMaxEnergy extends AbstractEffect
-{
-	public InstantFocusMaxEnergy(StatsSet params)
-	{
+public final class InstantFocusMaxEnergy extends AbstractEffect {
+	public InstantFocusMaxEnergy(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 
 		final int count = (int) targetPlayer.getStat().getValue(DoubleStat.MAX_MOMENTUM, 0);
 		targetPlayer.setCharges(count);
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_FORCE_HAS_INCREASED_TO_LEVEL_S1);
 		sm.addInt(count);
 		targetPlayer.sendPacket(sm, new EtcStatusUpdate(targetPlayer));

@@ -18,60 +18,54 @@
  */
 package ai.individual.Other.CastleBlacksmith;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Castle Blacksmith AI.
+ *
  * @author malyelfik
  */
-public final class CastleBlacksmith extends AbstractNpcAI
-{
+public final class CastleBlacksmith extends AbstractNpcAI {
 	// Blacksmith IDs
 	private static final int[] NPCS =
-	{
-		35098, // Blacksmith (Gludio)
-		35140, // Blacksmith (Dion)
-		35182, // Blacksmith (Giran)
-		35224, // Blacksmith (Oren)
-		35272, // Blacksmith (Aden)
-		35314, // Blacksmith (Innadril)
-		35361, // Blacksmith (Goddard)
-		35507, // Blacksmith (Rune)
-		35553, // Blacksmith (Schuttgart)
-	};
-	
-	private CastleBlacksmith()
-	{
+			{
+					35098, // Blacksmith (Gludio)
+					35140, // Blacksmith (Dion)
+					35182, // Blacksmith (Giran)
+					35224, // Blacksmith (Oren)
+					35272, // Blacksmith (Aden)
+					35314, // Blacksmith (Innadril)
+					35361, // Blacksmith (Goddard)
+					35507, // Blacksmith (Rune)
+					35553, // Blacksmith (Schuttgart)
+			};
+
+	private CastleBlacksmith() {
 		addStartNpc(NPCS);
 		addTalkId(NPCS);
 		addFirstTalkId(NPCS);
 	}
-	
-	private boolean hasRights(PlayerInstance player, Npc npc)
-	{
+
+	private boolean hasRights(PlayerInstance player, Npc npc) {
 		boolean isMyLord = player.isClanLeader() ? (player.getClan().getCastleId() == (npc.getCastle() != null ? npc.getCastle().getResidenceId() : -1)) : false;
 		return player.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS) || isMyLord || ((player.getClanId() == npc.getCastle().getOwnerId()) && player.hasClanPrivilege(ClanPrivilege.CS_MANOR_ADMIN));
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		return (event.equalsIgnoreCase(npc.getId() + "-02.html") && hasRights(player, npc)) ? event : null;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return (hasRights(player, npc)) ? npc.getId() + "-01.html" : "no.html";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new CastleBlacksmith();
 	}
 }

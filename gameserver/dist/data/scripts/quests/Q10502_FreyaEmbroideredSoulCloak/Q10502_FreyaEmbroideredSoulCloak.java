@@ -28,10 +28,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Freya Embroidered Soul Cloak (10502)
+ *
  * @author Zoey76
  */
-public class Q10502_FreyaEmbroideredSoulCloak extends Quest
-{
+public class Q10502_FreyaEmbroideredSoulCloak extends Quest {
 	// NPC
 	private static final int OLF_ADAMS = 32612;
 	// Monster
@@ -42,86 +42,68 @@ public class Q10502_FreyaEmbroideredSoulCloak extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 82;
 	private static final int FRAGMENT_COUNT = 20;
-	
-	public Q10502_FreyaEmbroideredSoulCloak()
-	{
+
+	public Q10502_FreyaEmbroideredSoulCloak() {
 		super(10502);
 		addStartNpc(OLF_ADAMS);
 		addTalkId(OLF_ADAMS);
 		addKillId(FREYA);
 		registerQuestItems(FREYAS_SOUL_FRAGMENT);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false))
-		{
+		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false)) {
 			final long currentCount = getQuestItemsCount(player, FREYAS_SOUL_FRAGMENT);
 			final long count = getRandom(1, 3);
-			if (count >= (FRAGMENT_COUNT - currentCount))
-			{
+			if (count >= (FRAGMENT_COUNT - currentCount)) {
 				giveItems(player, FREYAS_SOUL_FRAGMENT, FRAGMENT_COUNT - currentCount);
 				st.setCond(2, true);
-			}
-			else
-			{
+			} else {
 				giveItems(player, FREYAS_SOUL_FRAGMENT, count);
 				playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && (player.getLevel() >= MIN_LEVEL) && event.equals("32612-04.html"))
-		{
+		if ((st != null) && (player.getLevel() >= MIN_LEVEL) && event.equals("32612-04.html")) {
 			st.startQuest();
 			return event;
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, true);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = (player.getLevel() < MIN_LEVEL) ? "32612-02.html" : "32612-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
 						htmltext = "32612-05.html";
 						break;
 					}
-					case 2:
-					{
-						if (getQuestItemsCount(player, FREYAS_SOUL_FRAGMENT) >= FRAGMENT_COUNT)
-						{
+					case 2: {
+						if (getQuestItemsCount(player, FREYAS_SOUL_FRAGMENT) >= FRAGMENT_COUNT) {
 							giveItems(player, SOUL_CLOAK_OF_FREYA, 1);
 							playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 							st.exitQuest(false, true);
@@ -132,8 +114,7 @@ public class Q10502_FreyaEmbroideredSoulCloak extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "32612-03.html";
 				break;
 			}

@@ -29,26 +29,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author UnAfraid
  */
-public class ConsumeBodySkillCondition implements ISkillCondition
-{
-	public ConsumeBodySkillCondition(StatsSet params)
-	{
+public class ConsumeBodySkillCondition implements ISkillCondition {
+	public ConsumeBodySkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target != null) && target.isMonster())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target != null) && target.isMonster()) {
 			final L2MonsterInstance monster = (L2MonsterInstance) target;
-			if (monster.isDead() && monster.isSpawned())
-			{
+			if (monster.isDead() && monster.isSpawned()) {
 				return true;
 			}
 		}
-		
-		if (caster.isPlayer())
-		{
+
+		if (caster.isPlayer()) {
 			caster.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
 		return false;

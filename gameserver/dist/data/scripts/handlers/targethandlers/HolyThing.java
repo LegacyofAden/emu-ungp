@@ -27,20 +27,17 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target siege artefact.
+ *
  * @author Nik
  */
-public class HolyThing implements ITargetTypeHandler
-{
+public class HolyThing implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (activeChar.getTarget() instanceof L2ArtefactInstance)
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (activeChar.getTarget() instanceof L2ArtefactInstance) {
 			return activeChar.getTarget();
 		}
-		
-		if (sendMessage)
-		{
+
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 		}
 		return null;

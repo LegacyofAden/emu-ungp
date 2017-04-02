@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 
 /**
  * @author Sdw
  */
-public class PumpTransferDamageSummon extends AbstractDoubleStatAddEffect
-{
-	public PumpTransferDamageSummon(StatsSet params)
-	{
+public class PumpTransferDamageSummon extends AbstractDoubleStatAddEffect {
+	public PumpTransferDamageSummon(StatsSet params) {
 		super(params, DoubleStat.TRANSFER_DAMAGE_SUMMON_PERCENT);
 	}
 }

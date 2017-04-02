@@ -29,29 +29,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Block Party effect implementation.
+ *
  * @author BiggBoss
  */
-public final class PumpBlockParty extends AbstractEffect
-{
-	public PumpBlockParty(StatsSet params)
-	{
+public final class PumpBlockParty extends AbstractEffect {
+	public PumpBlockParty(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		PunishmentManager.getInstance().startPunishment(new PunishmentTask(0, target.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.PARTY_BAN, 0, "Party banned by bot report", "system", true));
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		PunishmentManager.getInstance().stopPunishment(target.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.PARTY_BAN);
 	}
 }

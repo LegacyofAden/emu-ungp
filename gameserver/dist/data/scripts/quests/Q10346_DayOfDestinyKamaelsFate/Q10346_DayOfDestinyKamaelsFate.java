@@ -24,23 +24,21 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.ThirdClassTransferQuest;
 
 /**
  * Day of Destiny: Kamael's Fate (10346)
+ *
  * @author St3eT
  */
-public final class Q10346_DayOfDestinyKamaelsFate extends ThirdClassTransferQuest
-{
+public final class Q10346_DayOfDestinyKamaelsFate extends ThirdClassTransferQuest {
 	// NPC
 	private static final int BROME = 32221;
 	// Misc
 	private static final int MIN_LEVEL = 76;
 	private static final Race START_RACE = Race.KAMAEL;
-	
-	public Q10346_DayOfDestinyKamaelsFate()
-	{
+
+	public Q10346_DayOfDestinyKamaelsFate() {
 		super(10346, MIN_LEVEL, START_RACE);
 		addStartNpc(BROME);
 		addTalkId(BROME);
@@ -48,62 +46,48 @@ public final class Q10346_DayOfDestinyKamaelsFate extends ThirdClassTransferQues
 		addCondRace(START_RACE, "32221-11.html");
 		addCondInCategory(CategoryType.THIRD_CLASS_GROUP, "32221-12.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32221-02.htm":
 			case "32221-03.htm":
 			case "32221-04.htm":
-			case "32221-08.html":
-			{
+			case "32221-08.html": {
 				htmltext = event;
 				break;
 			}
-			case "32221-05.htm":
-			{
+			case "32221-05.htm": {
 				st.startQuest();
 				st.set("STARTED_CLASS", player.getClassId().getId());
 				htmltext = event;
 				break;
 			}
-			default:
-			{
+			default: {
 				htmltext = super.onAdvEvent(event, npc, player);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (npc.getId() == BROME)
-		{
-			if (st.getState() == State.CREATED)
-			{
+
+		if (npc.getId() == BROME) {
+			if (st.getState() == State.CREATED) {
 				htmltext = "32221-01.htm";
-			}
-			else if (st.getState() == State.STARTED)
-			{
-				if (st.isCond(1))
-				{
+			} else if (st.getState() == State.STARTED) {
+				if (st.isCond(1)) {
 					htmltext = "32221-06.html";
-				}
-				else if (st.isCond(13))
-				{
+				} else if (st.isCond(13)) {
 					htmltext = "32221-07.html";
 				}
 			}

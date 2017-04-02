@@ -18,50 +18,43 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Block Buff Slot effect implementation.
+ *
  * @author Zoey76
  */
-public final class PumpBlockBuffSlot extends AbstractEffect
-{
+public final class PumpBlockBuffSlot extends AbstractEffect {
 	private final Set<AbnormalType> _blockAbnormalSlots;
-	
-	public PumpBlockBuffSlot(StatsSet params)
-	{
+
+	public PumpBlockBuffSlot(StatsSet params) {
 		String blockAbnormalSlots = params.getString("slot");
-		if ((blockAbnormalSlots != null) && !blockAbnormalSlots.isEmpty())
-		{
+		if ((blockAbnormalSlots != null) && !blockAbnormalSlots.isEmpty()) {
 			_blockAbnormalSlots = new HashSet<>();
-			for (String slot : blockAbnormalSlots.split(";"))
-			{
+			for (String slot : blockAbnormalSlots.split(";")) {
 				_blockAbnormalSlots.add(AbnormalType.getAbnormalType(slot));
 			}
-		}
-		else
-		{
-			_blockAbnormalSlots = Collections.<AbnormalType> emptySet();
+		} else {
+			_blockAbnormalSlots = Collections.<AbnormalType>emptySet();
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getEffectList().addBlockedAbnormalTypes(_blockAbnormalSlots);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getEffectList().removeBlockedAbnormalTypes(_blockAbnormalSlots);
 	}
 }

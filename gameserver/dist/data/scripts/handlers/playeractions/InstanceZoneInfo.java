@@ -26,18 +26,16 @@ import org.l2junity.gameserver.network.client.send.ExInzoneWaiting;
 
 /**
  * Instance Zone Info player action handler.
+ *
  * @author St3eT
  */
-public final class InstanceZoneInfo implements IPlayerActionHandler
-{
+public final class InstanceZoneInfo implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		activeChar.sendPacket(new ExInzoneWaiting(activeChar));
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new InstanceZoneInfo());
 	}
 }

@@ -31,41 +31,35 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Spoil effect implementation.
+ *
  * @author _drunk_, Ahmed, Zoey76
  */
-public final class InstantSpoil extends AbstractEffect
-{
-	public InstantSpoil(StatsSet params)
-	{
+public final class InstantSpoil extends AbstractEffect {
+	public InstantSpoil(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isMonster() && Formulas.calcMagicSuccess(caster, target.asMonster(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final L2MonsterInstance targetMonster = target.asMonster();
-		if (targetMonster == null)
-		{
+		if (targetMonster == null) {
 			return;
 		}
 
-		if (targetMonster.isDead())
-		{
+		if (targetMonster.isDead()) {
 			caster.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
 
-		if (targetMonster.isSpoiled())
-		{
+		if (targetMonster.isSpoiled()) {
 			caster.sendPacket(SystemMessageId.IT_HAS_ALREADY_BEEN_SPOILED);
 			return;
 		}
-		
+
 		targetMonster.setSpoilerObjectId(caster.getObjectId());
 		caster.sendPacket(SystemMessageId.THE_SPOIL_CONDITION_HAS_BEEN_ACTIVATED);
 		targetMonster.getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, caster);

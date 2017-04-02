@@ -29,70 +29,54 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Nik
  */
-public class PumpPvePhysicalSkillDefenceBonus extends AbstractEffect
-{
+public class PumpPvePhysicalSkillDefenceBonus extends AbstractEffect {
 	private final double _amount;
 	private final DamageByAttackType _type;
 	private final StatModifierType _mode;
-	
-	public PumpPvePhysicalSkillDefenceBonus(StatsSet params)
-	{
+
+	public PumpPvePhysicalSkillDefenceBonus(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_type = params.getEnum("type", DamageByAttackType.class, DamageByAttackType.NONE);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_type)
-		{
-			case MOB:
-			{
-				switch (_mode)
-				{
-					case DIFF:
-					{
+	public void pump(Creature target, Skill skill) {
+		switch (_type) {
+			case MOB: {
+				switch (_mode) {
+					case DIFF: {
 						target.getStat().mergeAdd(DoubleStat.PVE_PHYSICAL_SKILL_DEFENCE, _amount);
 						break;
 					}
-					case PER:
-					{
+					case PER: {
 						target.getStat().mergeMul(DoubleStat.PVE_PHYSICAL_SKILL_DEFENCE, (_amount / 100) + 1);
 						break;
 					}
 				}
 				break;
 			}
-			case BOSS:
-			{
-				switch (_mode)
-				{
-					case DIFF:
-					{
+			case BOSS: {
+				switch (_mode) {
+					case DIFF: {
 						target.getStat().mergeAdd(DoubleStat.PVE_RAID_PHYSICAL_SKILL_DEFENCE, _amount);
 						break;
 					}
-					case PER:
-					{
+					case PER: {
 						target.getStat().mergeMul(DoubleStat.PVE_RAID_PHYSICAL_SKILL_DEFENCE, (_amount / 100) + 1);
 						break;
 					}
 				}
 				break;
 			}
-			case ENEMY_ALL:
-			{
-				switch (_mode)
-				{
-					case DIFF:
-					{
+			case ENEMY_ALL: {
+				switch (_mode) {
+					case DIFF: {
 						target.getStat().mergeAdd(DoubleStat.PVE_PHYSICAL_SKILL_DEFENCE, _amount);
 						target.getStat().mergeAdd(DoubleStat.PVE_RAID_PHYSICAL_SKILL_DEFENCE, _amount);
 						break;
 					}
-					case PER:
-					{
+					case PER: {
 						target.getStat().mergeMul(DoubleStat.PVE_PHYSICAL_SKILL_DEFENCE, (_amount / 100) + 1);
 						target.getStat().mergeMul(DoubleStat.PVE_RAID_PHYSICAL_SKILL_DEFENCE, (_amount / 100) + 1);
 						break;

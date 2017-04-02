@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpMagicAvoid extends AbstractDoubleStatEffect
-{
-	public PumpMagicAvoid(StatsSet params)
-	{
+public class PumpMagicAvoid extends AbstractDoubleStatEffect {
+	public PumpMagicAvoid(StatsSet params) {
 		super(params, DoubleStat.MAGIC_EVASION_RATE);
 	}
 }

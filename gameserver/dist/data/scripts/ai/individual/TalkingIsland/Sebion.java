@@ -18,46 +18,40 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Sebion AI.
+ *
  * @author Gladicek
  */
-public final class Sebion extends AbstractNpcAI
-{
+public final class Sebion extends AbstractNpcAI {
 	// NPCs
 	private static final int SEBION = 32978;
-	
-	private Sebion()
-	{
+
+	private Sebion() {
 		addSpawnId(SEBION);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("SPAM_TEXT") && (npc != null))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("SPAM_TEXT") && (npc != null)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.TIS_A_SCRATCH, 1000);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		startQuestTimer("SPAM_TEXT", 10000, npc, null, true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Sebion();
 	}
 }

@@ -18,60 +18,49 @@
  */
 package ai.individual.RuinsOfDespair;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Guard AI.
+ *
  * @author St3eT, Gladicek
  */
-public final class RoDGuard extends AbstractNpcAI
-{
+public final class RoDGuard extends AbstractNpcAI {
 	// NPCs
 	private static final int GUARD_1 = 33432;
 	private static final int GUARD_2 = 33429;
-	
-	private RoDGuard()
-	{
+
+	private RoDGuard() {
 		addSpawnId(GUARD_1, GUARD_2);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT1"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT1")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THIS_IS_THE_RUINS_OF_AGONY_WHERE_POSLOF_IS);
 			getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_SHOUT2"))
-		{
+		} else if (event.equals("NPC_SHOUT2")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IT_S_DANGEROUS_SO_BE_CAREFUL);
 			getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == GUARD_1)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == GUARD_1) {
 			getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (npc.getId() == GUARD_2)
-		{
+		} else if (npc.getId() == GUARD_2) {
 			getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new RoDGuard();
 	}
 }

@@ -28,119 +28,98 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target only enemy no matter if force attacking or not.
+ *
  * @author Nik
  */
-public class EnemyOnly implements ITargetTypeHandler
-{
+public class EnemyOnly implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (selectedTarget == null)
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (selectedTarget == null) {
 			return null;
 		}
-		
-		if (!selectedTarget.isCreature())
-		{
+
+		if (!selectedTarget.isCreature()) {
 			return null;
 		}
-		
+
 		final Creature target = (Creature) selectedTarget;
-		
+
 		// You cannot attack yourself even with force.
-		if (activeChar == target)
-		{
-			if (sendMessage)
-			{
+		if (activeChar == target) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
-			
+
 			return null;
 		}
-		
+
 		// You cannot attack dead targets.
-		if (target.isDead())
-		{
-			if (sendMessage)
-			{
+		if (target.isDead()) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
-			
+
 			return null;
 		}
-		
+
 		// Doors do not care about force attack.
-		if (target.isDoor() && !target.isAutoAttackable(activeChar))
-		{
-			if (sendMessage)
-			{
+		if (target.isDoor() && !target.isAutoAttackable(activeChar)) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
-			
+
 			return null;
 		}
-		
+
 		// Monsters can attack/be attacked anywhere. Players can attack creatures that aren't autoattackable with force attack.
-		if (target.isAutoAttackable(activeChar))
-		{
+		if (target.isAutoAttackable(activeChar)) {
 			// Check for cast range if character cannot move. TODO: char will start follow until within castrange, but if his moving is blocked by geodata, this msg will be sent.
-			if (dontMove)
-			{
-				if (activeChar.distance3d(target) > skill.getCastRange())
-				{
-					if (sendMessage)
-					{
+			if (dontMove) {
+				if (activeChar.distance3d(target) > skill.getCastRange()) {
+					if (sendMessage) {
 						activeChar.sendPacket(SystemMessageId.THE_DISTANCE_IS_TOO_FAR_AND_SO_THE_CASTING_HAS_BEEN_STOPPED);
 					}
-					
+
 					return null;
 				}
 			}
-			
+
 			// Geodata check when character is within range.
-			if (!GeoData.getInstance().canSeeTarget(activeChar, target))
-			{
-				if (sendMessage)
-				{
+			if (!GeoData.getInstance().canSeeTarget(activeChar, target)) {
+				if (sendMessage) {
 					activeChar.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 				}
-				
+
 				return null;
 			}
-			
+
 			// Skills with this target type cannot be used by playables on playables in peace zone, but can be used by and on NPCs.
-			if (target.isInsidePeaceZone(activeChar))
-			{
-				if (sendMessage)
-				{
+			if (target.isInsidePeaceZone(activeChar)) {
+				if (sendMessage) {
 					activeChar.sendPacket(SystemMessageId.A_MALICIOUS_SKILL_CANNOT_BE_USED_IN_A_PEACE_ZONE);
 				}
-				
+
 				return null;
 			}
-			
+
 			// Is this check still actual?
-			if ((target.getActingPlayer() != null) && (activeChar.getActingPlayer() != null))
-			{
-				if ((activeChar.getActingPlayer().getSiegeState() > 0) && activeChar.isInsideZone(ZoneId.SIEGE) && (target.getActingPlayer().getSiegeState() == activeChar.getActingPlayer().getSiegeState()) && (target.getActingPlayer() != activeChar.getActingPlayer()) && (target.getActingPlayer().getSiegeSide() == activeChar.getActingPlayer().getSiegeSide()))
-				{
-					if (sendMessage)
-					{
+			if ((target.getActingPlayer() != null) && (activeChar.getActingPlayer() != null)) {
+				if ((activeChar.getActingPlayer().getSiegeState() > 0) && activeChar.isInsideZone(ZoneId.SIEGE) && (target.getActingPlayer().getSiegeState() == activeChar.getActingPlayer().getSiegeState()) && (target.getActingPlayer() != activeChar.getActingPlayer()) && (target.getActingPlayer().getSiegeSide() == activeChar.getActingPlayer().getSiegeSide())) {
+					if (sendMessage) {
 						activeChar.sendPacket(SystemMessageId.FORCE_ATTACK_IS_IMPOSSIBLE_AGAINST_A_TEMPORARY_ALLIED_MEMBER_DURING_A_SIEGE);
 					}
-					
+
 					return null;
 				}
 			}
-			
+
 			return target;
 		}
-		
-		if (sendMessage)
-		{
+
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
-		
+
 		return null;
 	}
 }

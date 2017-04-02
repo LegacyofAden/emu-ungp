@@ -27,15 +27,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10362_CertificationOfTheSeeker.Q10362_CertificationOfTheSeeker;
 
 /**
  * Request of the Seeker (10363)
+ *
  * @author Gladicek
  */
-public final class Q10363_RequestOfTheSeeker extends Quest
-{
+public final class Q10363_RequestOfTheSeeker extends Quest {
 	// NPCs
 	private static final int NAGEL = 33450;
 	private static final int CELIN = 33451;
@@ -47,9 +46,8 @@ public final class Q10363_RequestOfTheSeeker extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 11;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10363_RequestOfTheSeeker()
-	{
+
+	public Q10363_RequestOfTheSeeker() {
 		super(10363);
 		addStartNpc(NAGEL);
 		addTalkId(NAGEL, CELIN);
@@ -59,47 +57,37 @@ public final class Q10363_RequestOfTheSeeker extends Quest
 		addCondCompletedQuest(Q10362_CertificationOfTheSeeker.class.getSimpleName(), "33450-02.htm");
 		registerQuestItems(HUSK_DISTRIBUTION_REPORT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33450-02.htm":
 			case "33450-04.htm":
-			case "33450-05.htm":
-			{
+			case "33450-05.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33450-06.html":
-			{
+			case "33450-06.html": {
 				qs.startQuest();
 				showOnScreenMsg(player, NpcStringId.USE_THE_YE_SAGIRA_TELEPORT_DEVICE_SHINING_WITH_A_RED_SHIMMER_TO_GO_TO_EXPLORATION_AREA_2, ExShowScreenMessage.TOP_CENTER, 4500);
 				htmltext = event;
 				break;
 			}
-			case "33451-02.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33451-02.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, WOODEN_HELMET, 1);
 						addExp(player, 70000);
 						addSp(player, 13);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
@@ -109,53 +97,39 @@ public final class Q10363_RequestOfTheSeeker extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == NAGEL)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == NAGEL) {
 					htmltext = "33450-01.htm";
 					break;
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == NAGEL)
-				{
-					if (qs.isCond(1))
-					{
+			case State.STARTED: {
+				if (npc.getId() == NAGEL) {
+					if (qs.isCond(1)) {
 						htmltext = "33450-06.html";
 						break;
 					}
-				}
-				else if (npc.getId() == CELIN)
-				{
-					if (qs.isCond(1))
-					{
+				} else if (npc.getId() == CELIN) {
+					if (qs.isCond(1)) {
 						htmltext = "33451-04.html";
 						break;
-					}
-					else if (qs.isCond(2))
-					{
+					} else if (qs.isCond(2)) {
 						htmltext = "33451-01.html";
 						break;
 					}
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == CELIN)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == CELIN) {
 					htmltext = "33451-03.html";
 				}
 				break;
@@ -163,19 +137,16 @@ public final class Q10363_RequestOfTheSeeker extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		
-		if ((qs != null) && qs.isCond(1))
-		{
+
+		if ((qs != null) && qs.isCond(1)) {
 			giveItems(killer, HUSK_DISTRIBUTION_REPORT, 1);
 			playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
-			
-			if (getQuestItemsCount(killer, HUSK_DISTRIBUTION_REPORT) >= 15)
-			{
+
+			if (getQuestItemsCount(killer, HUSK_DISTRIBUTION_REPORT) >= 15) {
 				qs.setCond(2, true);
 			}
 		}

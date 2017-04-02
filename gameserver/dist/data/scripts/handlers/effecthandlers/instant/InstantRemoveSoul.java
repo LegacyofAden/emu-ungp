@@ -28,20 +28,16 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantRemoveSoul extends AbstractEffect
-{
+public class InstantRemoveSoul extends AbstractEffect {
 	final private int _amount;
-	
-	public InstantRemoveSoul(StatsSet params)
-	{
+
+	public InstantRemoveSoul(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (target.isPlayer())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (target.isPlayer()) {
 			target.asPlayer().decreaseSouls(_amount);
 		}
 	}

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpPvpPhysicalSkillDmgBonus extends AbstractDoubleStatEffect
-{
-	public PumpPvpPhysicalSkillDmgBonus(StatsSet params)
-	{
+public class PumpPvpPhysicalSkillDmgBonus extends AbstractDoubleStatEffect {
+	public PumpPvpPhysicalSkillDmgBonus(StatsSet params) {
 		super(params, DoubleStat.PVP_PHYSICAL_SKILL_DAMAGE);
 	}
 }

@@ -44,42 +44,36 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
  * weapon_mAtk - M.Atk of the weapon. Enchants are taken into account as well. <br>
  * <br>
  * heal_effect increasing buffs appear to be increasing healer's power if diff(static amount), and healed's received heal in per (percent amount). <br>
+ *
  * @author UnAfraid
  */
-public final class InstantHeal extends AbstractEffect
-{
+public final class InstantHeal extends AbstractEffect {
 	private final double _power;
-	
-	public InstantHeal(StatsSet params)
-	{
+
+	public InstantHeal(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.HEAL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
-		
-		if (caster.equals(targetCreature) && targetCreature.getStat().has(BooleanStat.FACE_OFF))
-		{
+
+		if (caster.equals(targetCreature) && targetCreature.getStat().has(BooleanStat.FACE_OFF)) {
 			return;
 		}
-		
+
 		// TODO: Shots bonus needs more propper formula.
 		final double shotsBonus = skill.isMagic() ? caster.getStat().getValue(DoubleStat.SPIRITSHOTS_BONUS) * (caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS) ? 36 : (caster.isChargedShot(ShotType.SPIRITSHOTS) ? 18 : 1)) : 1;
 		final double mAtkBonus = Math.sqrt(caster.getMAtk() * shotsBonus);
@@ -87,45 +81,35 @@ public final class InstantHeal extends AbstractEffect
 		final double levelMod = (((caster.getLevel() + 89) + (5.5 * Math.max(caster.getLevel() - 99, 0))) / 100);
 		final double weaponBonus = Math.min(levelMod * DoubleStat.weaponBaseValue(caster, DoubleStat.MAGIC_ATTACK) * BaseStats.MEN.calcBonus(caster), baseAmount);
 		double amount = baseAmount + weaponBonus;
-		
+
 		// Heal critic, since CT2.3 Gracia Final
-		if (skill.isMagic() && Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill))
-		{
+		if (skill.isMagic() && Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill)) {
 			amount *= 3;
 			caster.sendPacket(SystemMessageId.M_CRITICAL);
 			caster.sendPacket(new ExMagicAttackInfo(caster.getObjectId(), targetCreature.getObjectId(), ExMagicAttackInfo.CRITICAL_HEAL));
-			if (targetCreature.isPlayer() && (targetCreature != caster))
-			{
+			if (targetCreature.isPlayer() && (targetCreature != caster)) {
 				targetCreature.sendPacket(new ExMagicAttackInfo(caster.getObjectId(), targetCreature.getObjectId(), ExMagicAttackInfo.CRITICAL_HEAL));
 			}
 		}
-		
+
 		// Prevents overheal
 		amount = Math.min(amount, targetCreature.getMaxRecoverableHp() - targetCreature.getCurrentHp());
-		if (amount != 0)
-		{
+		if (amount != 0) {
 			final double newHp = amount + targetCreature.getCurrentHp();
 			targetCreature.setCurrentHp(newHp, false);
 			targetCreature.broadcastStatusUpdate(caster);
 		}
-		
-		if (targetCreature.isPlayer())
-		{
-			if (skill.getId() == 4051)
-			{
+
+		if (targetCreature.isPlayer()) {
+			if (skill.getId() == 4051) {
 				targetCreature.sendPacket(SystemMessageId.REJUVENATING_HP);
-			}
-			else
-			{
-				if (caster.isPlayer() && (caster != targetCreature))
-				{
+			} else {
+				if (caster.isPlayer() && (caster != targetCreature)) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_HP_HAS_BEEN_RESTORED_BY_C1);
 					sm.addString(caster.getName());
 					sm.addInt((int) amount);
 					targetCreature.sendPacket(sm);
-				}
-				else
-				{
+				} else {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 					sm.addInt((int) amount);
 					targetCreature.sendPacket(sm);

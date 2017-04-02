@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Letters from the Queen: Windy Hill (10755)
+ *
  * @author malyelfik
  */
-public final class Q10755_LettersFromTheQueenWindyHill extends LetterQuest
-{
+public final class Q10755_LettersFromTheQueenWindyHill extends LetterQuest {
 	// NPCs
 	private static final int LEVIAN = 30037;
 	private static final int PIO = 33963;
@@ -44,58 +43,47 @@ public final class Q10755_LettersFromTheQueenWindyHill extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 20;
 	private static final int MAX_LEVEL = 29;
-	
-	public Q10755_LettersFromTheQueenWindyHill()
-	{
+
+	public Q10755_LettersFromTheQueenWindyHill() {
 		super(10755);
 		addTalkId(LEVIAN, PIO);
-		
+
 		setIsErtheiaQuest(true);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartLocation(SOE_GLUDIN_VILLAGE, TELEPORT_LOC);
 		setStartQuestSound("Npcdialog1.serenia_quest_1");
 		registerQuestItems(SOE_GLUDIN_VILLAGE, SOE_WINDY_HILL);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30037-02.html":
 			case "33963-02.html":
 				break;
-			case "30037-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30037-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, SOE_WINDY_HILL, 1);
 					showOnScreenMsg(player, NpcStringId.TRY_USING_THE_TELEPORT_SCROLL_LEVIAN_GAVE_YOU, ExShowScreenMessage.TOP_CENTER, 5000);
 				}
 				break;
 			}
-			case "33963-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33963-03.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 120_960);
 						addSp(player, 29);
 						showOnScreenMsg(player, NpcStringId.GROW_STRONGER_HERE_UNTIL_YOU_RECEIVE_THE_NEXT_LETTER_FROM_QUEEN_NAVARI_AT_LV_30, ExShowScreenMessage.TOP_CENTER, 8000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -106,26 +94,20 @@ public final class Q10755_LettersFromTheQueenWindyHill extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if (qs.isStarted())
-		{
-			if ((npc.getId() == LEVIAN))
-			{
+
+		if (qs.isStarted()) {
+			if ((npc.getId() == LEVIAN)) {
 				htmltext = (qs.isCond(1)) ? "30037-01.html" : "30037-04.html";
-			}
-			else if (qs.isCond(2))
-			{
+			} else if (qs.isCond(2)) {
 				htmltext = "33963-01.html";
 			}
 		}

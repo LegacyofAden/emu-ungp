@@ -18,47 +18,39 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.Disconnection;
 
-public class AdminKick implements IAdminCommandHandler
-{
+import java.util.StringTokenizer;
+
+public class AdminKick implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_kick",
-		"admin_kick_non_gm"
-	};
-	
-	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_kick"))
-		{
-			StringTokenizer st = new StringTokenizer(command);
-			if (st.countTokens() > 1)
 			{
+					"admin_kick",
+					"admin_kick_non_gm"
+			};
+
+	@Override
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_kick")) {
+			StringTokenizer st = new StringTokenizer(command);
+			if (st.countTokens() > 1) {
 				st.nextToken();
 				String player = st.nextToken();
 				PlayerInstance plyr = World.getInstance().getPlayer(player);
-				if (plyr != null)
-				{
+				if (plyr != null) {
 					Disconnection.of(plyr).defaultSequence(false);
 					activeChar.sendMessage("You kicked " + plyr.getName() + " from the game.");
 				}
 			}
 		}
-		if (command.startsWith("admin_kick_non_gm"))
-		{
+		if (command.startsWith("admin_kick_non_gm")) {
 			int counter = 0;
-			for (PlayerInstance player : World.getInstance().getPlayers())
-			{
-				if (!player.isGM())
-				{
+			for (PlayerInstance player : World.getInstance().getPlayers()) {
+				if (!player.isGM()) {
 					counter++;
 					Disconnection.of(player).defaultSequence(false);
 				}
@@ -67,15 +59,13 @@ public class AdminKick implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminKick());
 	}
 }

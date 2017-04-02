@@ -23,15 +23,14 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-
 import quests.Q10737_GrakonsWarehouse.Q10737_GrakonsWarehouse;
 
 /**
  * An Inner Beauty (10738)
+ *
  * @author Sdw
  */
-public final class Q10738_AnInnerBeauty extends Quest
-{
+public final class Q10738_AnInnerBeauty extends Quest {
 	// NPC's
 	private static final int GRAKON = 33947;
 	private static final int EVNA = 33935;
@@ -40,9 +39,8 @@ public final class Q10738_AnInnerBeauty extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 5;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10738_AnInnerBeauty()
-	{
+
+	public Q10738_AnInnerBeauty() {
 		super(10738);
 		addStartNpc(GRAKON);
 		addTalkId(GRAKON, EVNA);
@@ -51,41 +49,32 @@ public final class Q10738_AnInnerBeauty extends Quest
 		addCondCompletedQuest(Q10737_GrakonsWarehouse.class.getSimpleName(), "33947-00.htm");
 		registerQuestItems(GRAKON_S_NOTE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33947-02.htm":
 			case "33947-03.htm":
 			case "33935-02.html":
 				break;
-			case "33947-04.htm":
-			{
+			case "33947-04.htm": {
 				qs.startQuest();
 				giveItems(player, GRAKON_S_NOTE, 1);
 				break;
 			}
-			case "33935-03.html":
-			{
-				if (qs.isStarted())
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33935-03.html": {
+				if (qs.isStarted()) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 2625);
 						addSp(player, 1);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -96,33 +85,24 @@ public final class Q10738_AnInnerBeauty extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs.isCompleted())
-		{
+
+		if (qs.isCompleted()) {
 			htmltext = getAlreadyCompletedMsg(player);
 		}
-		
-		if (npc.getId() == GRAKON)
-		{
-			if (qs.isCreated())
-			{
+
+		if (npc.getId() == GRAKON) {
+			if (qs.isCreated()) {
 				htmltext = "33947-01.htm";
-			}
-			else if (qs.isStarted())
-			{
+			} else if (qs.isStarted()) {
 				htmltext = "33947-05.html";
 			}
-		}
-		else if (npc.getId() == EVNA)
-		{
-			if (qs.isStarted())
-			{
+		} else if (npc.getId() == EVNA) {
+			if (qs.isStarted()) {
 				htmltext = "33935-01.html";
 			}
 		}

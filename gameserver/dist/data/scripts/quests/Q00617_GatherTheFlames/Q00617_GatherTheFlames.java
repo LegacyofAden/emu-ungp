@@ -18,21 +18,21 @@
  */
 package quests.Q00617_GatherTheFlames;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Gather the Flames (617)
+ *
  * @author malyelfik
  */
-public class Q00617_GatherTheFlames extends Quest
-{
+public class Q00617_GatherTheFlames extends Quest {
 	// NPCs
 	private static final int HILDA = 31271;
 	private static final int VULCAN = 31539;
@@ -41,24 +41,23 @@ public class Q00617_GatherTheFlames extends Quest
 	private static final int TORCH = 7264;
 	// Reward
 	private static final int[] REWARD =
-	{
-		6881,
-		6883,
-		6885,
-		6887,
-		6891,
-		6893,
-		6895,
-		6897,
-		6899,
-		7580
-	};
-	
+			{
+					6881,
+					6883,
+					6885,
+					6887,
+					6891,
+					6893,
+					6895,
+					6897,
+					6899,
+					7580
+			};
+
 	// Monsters
 	private static final Map<Integer, Integer> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(22634, 639);
 		MOBS.put(22635, 611);
 		MOBS.put(22636, 649);
@@ -76,28 +75,24 @@ public class Q00617_GatherTheFlames extends Quest
 		MOBS.put(22648, 632);
 		MOBS.put(22649, 685);
 	}
-	
-	public Q00617_GatherTheFlames()
-	{
+
+	public Q00617_GatherTheFlames() {
 		super(617);
 		addStartNpc(HILDA, VULCAN);
 		addTalkId(ROONEY, HILDA, VULCAN);
 		addKillId(MOBS.keySet());
 		registerQuestItems(TORCH);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "31539-03.htm":
 			case "31271-03.htm":
 				st.startQuest();
@@ -107,8 +102,7 @@ public class Q00617_GatherTheFlames extends Quest
 			case "31539-06.html":
 				break;
 			case "31539-07.html":
-				if ((getQuestItemsCount(player, TORCH) < 1000) || !st.isStarted())
-				{
+				if ((getQuestItemsCount(player, TORCH) < 1000) || !st.isStarted()) {
 					return getNoQuestMsg(player);
 				}
 				giveItems(player, REWARD[getRandom(REWARD.length)], 1);
@@ -125,8 +119,7 @@ public class Q00617_GatherTheFlames extends Quest
 			case "6895":
 			case "6897":
 			case "6899":
-				if ((getQuestItemsCount(player, TORCH) < 1200) || !st.isStarted())
-				{
+				if ((getQuestItemsCount(player, TORCH) < 1200) || !st.isStarted()) {
 					return getNoQuestMsg(player);
 				}
 				giveItems(player, Integer.valueOf(event), 1);
@@ -135,8 +128,7 @@ public class Q00617_GatherTheFlames extends Quest
 				break;
 			case "6887":
 			case "6881":
-				if ((getQuestItemsCount(player, TORCH) < 1200) || !st.isStarted())
-				{
+				if ((getQuestItemsCount(player, TORCH) < 1200) || !st.isStarted()) {
 					return getNoQuestMsg(player);
 				}
 				giveItems(player, Integer.valueOf(event), 1);
@@ -149,63 +141,48 @@ public class Q00617_GatherTheFlames extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
-		if (partyMember == null)
-		{
+		if (partyMember == null) {
 			return super.onKill(npc, player, isSummon);
 		}
-		
-		if (getRandom(1000) < MOBS.get(npc.getId()))
-		{
+
+		if (getRandom(1000) < MOBS.get(npc.getId())) {
 			giveItems(partyMember, TORCH, 2);
-		}
-		else
-		{
+		} else {
 			giveItems(partyMember, TORCH, 1);
 		}
 		playSound(partyMember, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
+
+		switch (npc.getId()) {
 			case ROONEY:
-				if (st.isStarted())
-				{
+				if (st.isStarted()) {
 					htmltext = (getQuestItemsCount(player, TORCH) >= 1200) ? "32049-02.html" : "32049-01.html";
 				}
 				break;
 			case VULCAN:
-				if (st.isCreated())
-				{
+				if (st.isCreated()) {
 					htmltext = (player.getLevel() >= 74) ? "31539-01.htm" : "31539-02.htm";
-				}
-				else
-				{
+				} else {
 					htmltext = (getQuestItemsCount(player, TORCH) >= 1000) ? "31539-04.html" : "31539-05.html";
 				}
 				break;
 			case HILDA:
-				if (st.isCreated())
-				{
+				if (st.isCreated()) {
 					htmltext = (player.getLevel() >= 74) ? "31271-01.htm" : "31271-02.htm";
-				}
-				else
-				{
+				} else {
 					htmltext = "31271-04.html";
 				}
 				break;

@@ -30,63 +30,54 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Magical Attack effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantMAttackRange extends AbstractEffect
-{
+public final class InstantMAttackRange extends AbstractEffect {
 	private final double _power;
 	private final double _shieldDefPercent;
-	
-	public InstantMAttackRange(StatsSet params)
-	{
+
+	public InstantMAttackRange(StatsSet params) {
 		_power = params.getDouble("power");
 		_shieldDefPercent = params.getDouble("shieldDefPercent", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.asPlayer().stopFakeDeath(true);
 		}
 
 		double mDef = targetCreature.getMDef();
-		switch (Formulas.calcShldUse(caster, targetCreature))
-		{
-			case Formulas.SHIELD_DEFENSE_SUCCEED:
-			{
+		switch (Formulas.calcShldUse(caster, targetCreature)) {
+			case Formulas.SHIELD_DEFENSE_SUCCEED: {
 				mDef += ((targetCreature.getShldDef() * _shieldDefPercent) / 100);
 				break;
 			}
-			case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK:
-			{
+			case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK: {
 				mDef = -1;
 				break;
 			}
 		}
-		
+
 		double damage = 1;
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
-		if (mDef != -1)
-		{
+		if (mDef != -1) {
 			boolean sps = skill.useSpiritShot() && caster.isChargedShot(ShotType.SPIRITSHOTS);
 			boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 			damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power, mDef, sps, bss, mcrit);
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

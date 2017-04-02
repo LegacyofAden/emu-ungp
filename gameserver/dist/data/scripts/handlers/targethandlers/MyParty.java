@@ -26,23 +26,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Something like target self, but party. Used in aura skills.
+ *
  * @author Nik
  */
-public class MyParty implements ITargetTypeHandler
-{
+public class MyParty implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if ((selectedTarget != null) && selectedTarget.isPlayer() && (selectedTarget != activeChar))
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if ((selectedTarget != null) && selectedTarget.isPlayer() && (selectedTarget != activeChar)) {
 			final Party party = activeChar.getParty();
 			final Party targetParty = selectedTarget.getActingPlayer().getParty();
-			if ((party != null) && (targetParty != null) && (party.getLeaderObjectId() == targetParty.getLeaderObjectId()))
-			{
+			if ((party != null) && (targetParty != null) && (party.getLeaderObjectId() == targetParty.getLeaderObjectId())) {
 				return selectedTarget;
 			}
 		}
-		
+
 		return activeChar;
 	}
 }

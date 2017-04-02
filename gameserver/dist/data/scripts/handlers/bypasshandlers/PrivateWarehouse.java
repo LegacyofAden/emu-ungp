@@ -18,7 +18,7 @@
  */
 package handlers.bypasshandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -28,35 +28,29 @@ import org.l2junity.gameserver.network.client.send.WareHouseDepositList;
 import org.l2junity.gameserver.network.client.send.WareHouseWithdrawalList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class PrivateWarehouse implements IBypassHandler
-{
+public class PrivateWarehouse implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"withdrawp",
-		"depositp"
-	};
-	
+			{
+					"withdrawp",
+					"depositp"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		if (activeChar.hasItemRequest())
-		{
+
+		if (activeChar.hasItemRequest()) {
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			if (command.toLowerCase().startsWith(COMMANDS[0])) // WithdrawP
 			{
 				showWithdrawWindow(activeChar);
 				return true;
-			}
-			else if (command.toLowerCase().startsWith(COMMANDS[1])) // DepositP
+			} else if (command.toLowerCase().startsWith(COMMANDS[1])) // DepositP
 			{
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				activeChar.setActiveWarehouse(activeChar.getWarehouse());
@@ -64,43 +58,36 @@ public class PrivateWarehouse implements IBypassHandler
 				activeChar.sendPacket(new WareHouseDepositList(activeChar, WareHouseDepositList.PRIVATE));
 				return true;
 			}
-			
+
 			return false;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
-	private static final void showWithdrawWindow(PlayerInstance player)
-	{
+
+	private static final void showWithdrawWindow(PlayerInstance player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		player.setActiveWarehouse(player.getWarehouse());
-		
-		if (player.getActiveWarehouse().getSize() == 0)
-		{
+
+		if (player.getActiveWarehouse().getSize() == 0) {
 			player.sendPacket(SystemMessageId.YOU_HAVE_NOT_DEPOSITED_ANY_ITEMS_IN_YOUR_WAREHOUSE);
 			return;
 		}
-		
+
 		player.sendPacket(new WareHouseWithdrawalList(player, WareHouseWithdrawalList.PRIVATE));
-		
-		if (GeneralConfig.DEBUG)
-		{
+
+		if (GeneralConfig.DEBUG) {
 			_log.debug("Source: L2WarehouseInstance.java; Player: " + player.getName() + "; Command: showRetrieveWindow; Message: Showing stored items.");
 		}
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new PrivateWarehouse());
 	}
 }

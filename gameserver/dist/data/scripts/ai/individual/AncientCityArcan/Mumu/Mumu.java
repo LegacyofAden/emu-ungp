@@ -18,50 +18,43 @@
  */
 package ai.individual.AncientCityArcan.Mumu;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Mumu AI.
+ *
  * @author St3eT
  */
-public final class Mumu extends AbstractNpcAI
-{
+public final class Mumu extends AbstractNpcAI {
 	// NPC
 	private static final int MUMU = 32900; // Mumu
-	
-	public Mumu()
-	{
+
+	public Mumu() {
 		addStartNpc(MUMU);
 		addFirstTalkId(MUMU);
 		addTalkId(MUMU);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
-			case "32900-1.html":
-			{
+		switch (event) {
+			case "32900-1.html": {
 				htmltext = event;
 				break;
 			}
-			case "playMovie":
-			{
+			case "playMovie": {
 				playMovie(player, Movie.SI_ARKAN_ENTER);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Mumu();
 	}
 }

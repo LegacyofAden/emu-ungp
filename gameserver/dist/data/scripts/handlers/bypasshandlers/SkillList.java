@@ -25,33 +25,28 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class SkillList implements IBypassHandler
-{
+public class SkillList implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"SkillList"
-	};
-	
+			{
+					"SkillList"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!(target instanceof L2NpcInstance))
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!(target instanceof L2NpcInstance)) {
 			return false;
 		}
-		
+
 		L2NpcInstance.showSkillList(activeChar, (Npc) target, activeChar.getClassId());
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new SkillList());
 	}
 }

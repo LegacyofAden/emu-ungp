@@ -29,26 +29,22 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpCriticalRatePositionBonus extends AbstractEffect
-{
+public class PumpCriticalRatePositionBonus extends AbstractEffect {
 	protected final double _amount;
 	protected final Position _position;
-	
-	public PumpCriticalRatePositionBonus(StatsSet params)
-	{
+
+	public PumpCriticalRatePositionBonus(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_position = params.getEnum("position", Position.class, Position.FRONT);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergePositionTypeValue(DoubleStat.CRITICAL_RATE, _position, (_amount / 100) + 1, MathUtil::mul);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergePositionTypeValue(DoubleStat.CRITICAL_RATE, _position, (-_amount / 100) - 1, MathUtil::div);
 	}
 }

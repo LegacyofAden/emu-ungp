@@ -32,53 +32,45 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Trap Remove effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantDefuseTrap extends AbstractEffect
-{
+public final class InstantDefuseTrap extends AbstractEffect {
 	private final int _power;
-	
-	public InstantDefuseTrap(StatsSet params)
-	{
-		if (params.isEmpty())
-		{
+
+	public InstantDefuseTrap(StatsSet params) {
+		if (params.isEmpty()) {
 			throw new IllegalArgumentException(getClass().getSimpleName() + ": effect without power!");
 		}
-		
+
 		_power = params.getInt("power");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final L2TrapInstance targetTrap = target.asTrap();
-		if (targetTrap == null)
-		{
+		if (targetTrap == null) {
 			return;
 		}
-		
-		if (targetTrap.isAlikeDead())
-		{
+
+		if (targetTrap.isAlikeDead()) {
 			return;
 		}
-		
-		if (!targetTrap.canBeSeen(caster))
-		{
-			if (caster.isPlayer())
-			{
+
+		if (!targetTrap.canBeSeen(caster)) {
+			if (caster.isPlayer()) {
 				caster.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
 			return;
 		}
-		
-		if (targetTrap.getLevel() > _power)
-		{
+
+		if (targetTrap.getLevel() > _power) {
 			return;
 		}
-		
+
 		// Notify to scripts
 		EventDispatcher.getInstance().notifyEventAsync(new OnTrapAction(targetTrap, caster, TrapAction.TRAP_DISARMED), targetTrap);
-		
+
 		targetTrap.unSummon();
 		caster.sendPacket(SystemMessageId.THE_TRAP_DEVICE_HAS_BEEN_STOPPED);
 	}

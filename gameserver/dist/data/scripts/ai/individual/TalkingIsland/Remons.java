@@ -18,62 +18,54 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Remons AI.
+ *
  * @author Gladicek
  */
-public final class Remons extends AbstractNpcAI
-{
+public final class Remons extends AbstractNpcAI {
 	// NPC
 	private static final int REMONS = 33570;
 	private static final int SOROS = 33218;
 	// Distances
 	private static final int MIN_DISTANCE = 70;
 	private static final int MAX_DISTANCE = 200;
-	
-	private Remons()
-	{
+
+	private Remons() {
 		addSpawnId(REMONS);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "NPC_SHOUT":
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "NPC_SHOUT": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.PERHAPS_EVEN_THE_VILLAGE_BECOMES_DANGEROUS);
 				getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "WALK_AROUND_SOROS":
-			{
+			case "WALK_AROUND_SOROS": {
 				followNpc(npc, SOROS, 240, MIN_DISTANCE, MAX_DISTANCE);
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		followNpc(npc, SOROS, 240, MIN_DISTANCE, MAX_DISTANCE);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addRepeatingTimer("WALK_AROUND_SOROS", 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Remons();
 	}
 }

@@ -29,23 +29,20 @@ import org.l2junity.gameserver.network.client.send.UserInfo;
 
 /**
  * Item Effect: Increase/decrease PK count permanently.
+ *
  * @author Nik
  */
-public class InstantPkCount extends AbstractEffect
-{
+public class InstantPkCount extends AbstractEffect {
 	private final int _amount;
-	
-	public InstantPkCount(StatsSet params)
-	{
+
+	public InstantPkCount(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 

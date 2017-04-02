@@ -27,36 +27,30 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ChooseInventoryItem;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class EnchantScrolls implements IItemHandler
-{
+public class EnchantScrolls implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
-		if (activeChar.isCastingNow())
-		{
+		if (activeChar.isCastingNow()) {
 			return false;
 		}
-		
-		if (activeChar.hasItemRequest())
-		{
+
+		if (activeChar.hasItemRequest()) {
 			activeChar.sendPacket(SystemMessageId.ANOTHER_ENCHANTMENT_IS_IN_PROGRESS_PLEASE_COMPLETE_THE_PREVIOUS_TASK_THEN_TRY_AGAIN);
 			return false;
 		}
-		
+
 		activeChar.addRequest(new EnchantItemRequest(activeChar, item.getObjectId()));
 		activeChar.sendPacket(new ChooseInventoryItem(item.getId()));
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new EnchantScrolls());
 	}
 }

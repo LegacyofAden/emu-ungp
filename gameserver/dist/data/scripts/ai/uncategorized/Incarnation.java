@@ -18,6 +18,7 @@
  */
 package ai.uncategorized;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -32,17 +33,13 @@ import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillFinish
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSpawn;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 
-import ai.AbstractNpcAI;
-
 /**
  * @author Nik
  */
-public final class Incarnation extends AbstractNpcAI
-{
-	public Incarnation()
-	{
+public final class Incarnation extends AbstractNpcAI {
+	public Incarnation() {
 	}
-	
+
 	@RegisterEvent(EventType.ON_NPC_SPAWN)
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(13302)
@@ -52,30 +49,25 @@ public final class Incarnation extends AbstractNpcAI
 	@Id(13455)
 	@Id(13456)
 	@Id(13457)
-	public void onNpcSpawn(OnNpcSpawn event)
-	{
+	public void onNpcSpawn(OnNpcSpawn event) {
 		Npc npc = event.getNpc();
-		if (npc.getSummoner() != null)
-		{
+		if (npc.getSummoner() != null) {
 			npc.getSummoner().addListener(new ConsumerEventListener(npc, EventType.ON_CREATURE_ATTACK, (OnCreatureAttack e) -> onOffense(npc, e.getAttacker(), e.getTarget()), this));
 			npc.getSummoner().addListener(new ConsumerEventListener(npc, EventType.ON_CREATURE_SKILL_FINISH_CAST, (OnCreatureSkillFinishCast e) -> onOffense(npc, e.getCaster(), e.getTarget()), this));
 		}
 	}
-	
-	public void onOffense(Npc npc, Creature attacker, WorldObject target)
-	{
-		if ((attacker == target) || (npc.getSummoner() == null))
-		{
+
+	public void onOffense(Npc npc, Creature attacker, WorldObject target) {
+		if ((attacker == target) || (npc.getSummoner() == null)) {
 			return;
 		}
-		
+
 		// Attack target of summoner
 		npc.setRunning();
 		npc.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Incarnation();
 	}
 }

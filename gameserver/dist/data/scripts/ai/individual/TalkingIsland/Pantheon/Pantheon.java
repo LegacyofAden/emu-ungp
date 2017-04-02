@@ -18,88 +18,74 @@
  */
 package ai.individual.TalkingIsland.Pantheon;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import ai.AbstractNpcAI;
 import quests.Q10320_LetsGoToTheCentralSquare.Q10320_LetsGoToTheCentralSquare;
 
 /**
  * Pantheon AI.
+ *
  * @author Gladicek
  */
-public final class Pantheon extends AbstractNpcAI
-{
+public final class Pantheon extends AbstractNpcAI {
 	// NPC
 	private static final int PANTHEON = 32972;
 	// Location
 	private static final Location MUSEUM = new Location(-114711, 243911, -7968);
 	// Misc
 	private static final int MIN_LEVEL = 6;
-	
-	private Pantheon()
-	{
+
+	private Pantheon() {
 		addSpawnId(PANTHEON);
 		addStartNpc(PANTHEON);
 		addFirstTalkId(PANTHEON);
 		addTalkId(PANTHEON);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
-			case "32972-1.html":
-			{
+		switch (event) {
+			case "32972-1.html": {
 				htmltext = event;
 				break;
 			}
-			case "teleport_museum":
-			{
-				if (player.getLevel() < MIN_LEVEL)
-				{
+			case "teleport_museum": {
+				if (player.getLevel() < MIN_LEVEL) {
 					htmltext = "32972-noteleport.html";
-				}
-				else
-				{
+				} else {
 					player.teleToLocation(MUSEUM);
 				}
 				break;
 			}
-			case "TEXT_SPAM":
-			{
+			case "TEXT_SPAM": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IS_IT_BETTER_TO_END_DESTINY_OR_START_DESTINY);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if (!player.hasQuestState(Q10320_LetsGoToTheCentralSquare.class.getSimpleName()))
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if (!player.hasQuestState(Q10320_LetsGoToTheCentralSquare.class.getSimpleName())) {
 			showOnScreenMsg(player, NpcStringId.BEGIN_TUTORIAL_QUESTS, ExShowScreenMessage.TOP_CENTER, 4500);
 		}
 		return super.onFirstTalk(npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		startQuestTimer("TEXT_SPAM", 10000, npc, null, true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Pantheon();
 	}
 }

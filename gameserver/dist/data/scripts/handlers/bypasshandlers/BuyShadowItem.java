@@ -25,52 +25,40 @@ import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class BuyShadowItem implements IBypassHandler
-{
+public class BuyShadowItem implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"BuyShadowItem"
-	};
-	
+			{
+					"BuyShadowItem"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!(target instanceof L2MerchantInstance))
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!(target instanceof L2MerchantInstance)) {
 			return false;
 		}
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(target.getObjectId());
-		if (activeChar.getLevel() < 40)
-		{
+		if (activeChar.getLevel() < 40) {
 			html.setFile(activeChar.getHtmlPrefix(), "data/html/common/shadow_item-lowlevel.htm");
-		}
-		else if ((activeChar.getLevel() >= 40) && (activeChar.getLevel() < 46))
-		{
+		} else if ((activeChar.getLevel() >= 40) && (activeChar.getLevel() < 46)) {
 			html.setFile(activeChar.getHtmlPrefix(), "data/html/common/shadow_item_d.htm");
-		}
-		else if ((activeChar.getLevel() >= 46) && (activeChar.getLevel() < 52))
-		{
+		} else if ((activeChar.getLevel() >= 46) && (activeChar.getLevel() < 52)) {
 			html.setFile(activeChar.getHtmlPrefix(), "data/html/common/shadow_item_c.htm");
-		}
-		else if (activeChar.getLevel() >= 52)
-		{
+		} else if (activeChar.getLevel() >= 52) {
 			html.setFile(activeChar.getHtmlPrefix(), "data/html/common/shadow_item_b.htm");
 		}
 		html.replace("%objectId%", String.valueOf(target.getObjectId()));
 		activeChar.sendPacket(html);
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new BuyShadowItem());
 	}
 }

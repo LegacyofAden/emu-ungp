@@ -28,17 +28,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class TargetMyMenteeSkillCondition implements ISkillCondition
-{
-	public TargetMyMenteeSkillCondition(StatsSet params)
-	{
+public class TargetMyMenteeSkillCondition implements ISkillCondition {
+	public TargetMyMenteeSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target == null) || !target.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target == null) || !target.isPlayer()) {
 			return false;
 		}
 		return MentorManager.getInstance().getMentee(caster.getObjectId(), target.getObjectId()) != null;

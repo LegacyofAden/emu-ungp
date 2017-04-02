@@ -18,46 +18,40 @@
  */
 package ai.individual.CrumaTower;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Carsus AI.
+ *
  * @author Gladicek
  */
-public final class Carsus extends AbstractNpcAI
-{
+public final class Carsus extends AbstractNpcAI {
 	// NPCs
 	private static final int CARSUS = 30483;
-	
-	private Carsus()
-	{
+
+	private Carsus() {
 		addSpawnId(CARSUS);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("SPAM_TEXT"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("SPAM_TEXT")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_CAN_GO_TO_UNDERGROUND_LV_3_USING_THE_ELEVATOR_IN_THE_BACK, 1000);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addRepeatingTimer("SPAM_TEXT", 12000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Carsus();
 	}
 }

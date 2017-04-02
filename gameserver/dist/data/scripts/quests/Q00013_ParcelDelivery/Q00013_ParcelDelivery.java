@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Parcel Delivery (13)
+ *
  * @author nonom
  */
-public class Q00013_ParcelDelivery extends Quest
-{
+public class Q00013_ParcelDelivery extends Quest {
 	// NPCs
 	private static final int FUNDIN = 31274;
 	private static final int VULCAN = 31539;
@@ -37,52 +37,40 @@ public class Q00013_ParcelDelivery extends Quest
 	private static final int PACKAGE = 7263;
 	// Misc
 	private static final int MIN_LEVEL = 74;
-	
-	public Q00013_ParcelDelivery()
-	{
+
+	public Q00013_ParcelDelivery() {
 		super(13);
 		addStartNpc(FUNDIN);
 		addTalkId(FUNDIN, VULCAN);
 		registerQuestItems(PACKAGE);
 		addCondMinLevel(MIN_LEVEL, "31274-01.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "31274-02.html":
-			{
+
+		switch (event) {
+			case "31274-02.html": {
 				st.startQuest();
 				giveItems(player, PACKAGE, 1);
 				break;
 			}
-			case "31539-01.html":
-			{
-				if (st.isCond(1) && hasQuestItems(player, PACKAGE))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "31539-01.html": {
+				if (st.isCond(1) && hasQuestItems(player, PACKAGE)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveAdena(player, 271_980, true);
 						addExp(player, 1_279_632);
 						addSp(player, 307);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "31539-02.html";
 				}
 				break;
@@ -90,31 +78,25 @@ public class Q00013_ParcelDelivery extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final int npcId = npc.getId();
-		switch (st.getState())
-		{
+		switch (st.getState()) {
 			case State.CREATED:
-				if (npcId == FUNDIN)
-				{
+				if (npcId == FUNDIN) {
 					htmltext = "31274-00.htm";
 				}
 				break;
 			case State.STARTED:
-				if (st.isCond(1))
-				{
-					switch (npcId)
-					{
+				if (st.isCond(1)) {
+					switch (npcId) {
 						case FUNDIN:
 							htmltext = "31274-02.html";
 							break;

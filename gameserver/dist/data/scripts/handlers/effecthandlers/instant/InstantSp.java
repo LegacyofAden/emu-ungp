@@ -27,25 +27,22 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Give SP effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantSp extends AbstractEffect
-{
+public final class InstantSp extends AbstractEffect {
 	private final int _sp;
-	
-	public InstantSp(StatsSet params)
-	{
+
+	public InstantSp(StatsSet params) {
 		_sp = params.getInt("sp");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (!caster.isPlayer() || caster.isAlikeDead())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (!caster.isPlayer() || caster.isAlikeDead()) {
 			return;
 		}
-		
+
 		caster.addExpAndSp(0, _sp);
 	}
 }

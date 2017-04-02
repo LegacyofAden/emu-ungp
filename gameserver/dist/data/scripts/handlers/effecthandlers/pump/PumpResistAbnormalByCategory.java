@@ -28,25 +28,20 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpResistAbnormalByCategory extends AbstractEffect
-{
+public class PumpResistAbnormalByCategory extends AbstractEffect {
 	private final DispelSlotType _slot;
 	private final double _amount;
-	
-	public PumpResistAbnormalByCategory(StatsSet params)
-	{
+
+	public PumpResistAbnormalByCategory(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_slot = params.getEnum("slot", DispelSlotType.class, DispelSlotType.DEBUFF);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_slot)
-		{
+	public void pump(Creature target, Skill skill) {
+		switch (_slot) {
 			// Only this one is in use it seems
-			case DEBUFF:
-			{
+			case DEBUFF: {
 				target.getStat().mergeMul(DoubleStat.RESIST_ABNORMAL_DEBUFF, 1 + (_amount / 100));
 				break;
 			}

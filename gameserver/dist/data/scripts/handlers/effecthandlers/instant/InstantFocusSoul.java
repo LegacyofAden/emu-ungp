@@ -30,42 +30,34 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Focus Souls effect implementation.
+ *
  * @author nBd, Adry_85
  */
-public final class InstantFocusSoul extends AbstractEffect
-{
+public final class InstantFocusSoul extends AbstractEffect {
 	private final int _charge;
-	
-	public InstantFocusSoul(StatsSet params)
-	{
+
+	public InstantFocusSoul(StatsSet params) {
 		_charge = params.getInt("charge", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 
-		if (targetPlayer.isAlikeDead())
-		{
+		if (targetPlayer.isAlikeDead()) {
 			return;
 		}
 
 		final int maxSouls = (int) targetPlayer.getStat().getValue(DoubleStat.MAX_SOULS, 0);
-		if (maxSouls > 0)
-		{
+		if (maxSouls > 0) {
 			int amount = _charge;
-			if ((targetPlayer.getChargedSouls() < maxSouls))
-			{
+			if ((targetPlayer.getChargedSouls() < maxSouls)) {
 				int count = ((targetPlayer.getChargedSouls() + amount) <= maxSouls) ? amount : (maxSouls - targetPlayer.getChargedSouls());
 				targetPlayer.increaseSouls(count);
-			}
-			else
-			{
+			} else {
 				targetPlayer.sendPacket(SystemMessageId.SOUL_CANNOT_BE_INCREASED_ANYMORE);
 			}
 		}

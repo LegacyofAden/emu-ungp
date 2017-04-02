@@ -18,11 +18,8 @@
  */
 package ai.individual.FantasyIsle;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import ai.AbstractNpcAI;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
@@ -31,142 +28,133 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * MC Show AI.
+ *
  * @author Kerberos
  */
-public class MC_Show extends AbstractNpcAI
-{
+public class MC_Show extends AbstractNpcAI {
 	private static int MC = 32433;
 	// @formatter:off
 	private static int[] SINGERS =
-	{
-		32431, 32432
-	};
+			{
+					32431, 32432
+			};
 	private static int[] CIRCUS =
-	{
-		32442, 32443, 32444, 32445, 32446
-	};
+			{
+					32442, 32443, 32444, 32445, 32446
+			};
 	private static int[] INDIVIDUALS =
-	{
-		32439, 32440, 32441
-	};
+			{
+					32439, 32440, 32441
+			};
 	private static int[] SHOWSTUFF =
-	{
-		32424, 32425, 32426, 32427, 32428
-	};
+			{
+					32424, 32425, 32426, 32427, 32428
+			};
 	// @formatter:on
 	private static boolean IS_STARTED = false;
 	private static NpcStringId[] MESSAGES =
-	{
-		NpcStringId.LADIES_AND_GENTLEMEN_THE_SHOW_IS_ABOUT_TO_BEGIN,
-		NpcStringId.MAY_I_HAVE_YOUR_ATTENTION_PLEASE,
-		NpcStringId.THANK_YOU_ALL_FOR_COMING_HERE_TONIGHT,
-		NpcStringId.IT_IS_AN_HONOR_TO_HAVE_YOU_ALL_IN_ATTENDANCE_THIS_EVENING,
-		NpcStringId.FANTASY_ISLE_TAKES_GREAT_PRIDE_IN_PROVIDING_THE_VERY_BEST_IN_ENTERTAINMENT,
-		NpcStringId.NOW_I_D_LIKE_TO_INTRODUCE_THE_MOST_BEAUTIFUL_SINGER_IN_ADEN_PLEASE_WELCOME_LEYLA_MIRA,
-		NpcStringId.PERFORMING_HER_LATEST_HIT,
-		NpcStringId.THANK_YOU_VERY_MUCH_LEYLA,
-		NpcStringId.NOW_WE_RE_IN_FOR_A_REAL_TREAT,
-		NpcStringId.JUST_BACK_FROM_THEIR_WORLD_TOUR_PUT_YOUR_HANDS_TOGETHER_FOR_THE_FANTASY_ISLE_CIRCUS,
-		NpcStringId.EVERYONE_GIVE_THEM_A_HAND,
-		NpcStringId.IMPRESSIVE_NO_A_VERY_TALENTED_GROUP,
-		NpcStringId.NOW_WE_HAVE_A_SPECIAL_REQUEST_FROM_SOME_FOLKS_WHO_WISH_TO_PERFORM,
-		NpcStringId.LET_S_WELCOME_OUR_FIRST_VOLUNTEER,
-		NpcStringId.AH,
-		NpcStringId.MOVING_ON_LET_S_WELCOME_OUR_NEXT_VOLUNTEER,
-		NpcStringId.I_M_SURE_THEY_HAVE_SOMETHING_MUCH_MORE_EXCITING,
-		NpcStringId.REALLY,
-		NpcStringId.THAT_WAS_JUST_SUPER_AND_NOW_FOR_OUR_LAST_VOLUNTEER,
-		NpcStringId.SIGH_AND_THAT_S_OUR_SHOW_FOLKS,
-		NpcStringId.I_HOPE_EVERYONE_ENJOYED_THE_SHOW,
-		NpcStringId.PLEASE_REMEMBER_THAT_FANTASY_ISLE_IS_ALWAYS_PLANNING_A_LOT_OF_GREAT_SHOWS_FOR_YOU,
-		NpcStringId.WELL_WE_WISH_WE_COULD_KEEP_THIS_PARTY_GOING_BUT_WE_MUST_TAKE_A_BREAK_THANK_YOU,
-		NpcStringId.WE_LOVE_YOU_ALL
-	};
-	
-	private static class ShoutInfo
-	{
+			{
+					NpcStringId.LADIES_AND_GENTLEMEN_THE_SHOW_IS_ABOUT_TO_BEGIN,
+					NpcStringId.MAY_I_HAVE_YOUR_ATTENTION_PLEASE,
+					NpcStringId.THANK_YOU_ALL_FOR_COMING_HERE_TONIGHT,
+					NpcStringId.IT_IS_AN_HONOR_TO_HAVE_YOU_ALL_IN_ATTENDANCE_THIS_EVENING,
+					NpcStringId.FANTASY_ISLE_TAKES_GREAT_PRIDE_IN_PROVIDING_THE_VERY_BEST_IN_ENTERTAINMENT,
+					NpcStringId.NOW_I_D_LIKE_TO_INTRODUCE_THE_MOST_BEAUTIFUL_SINGER_IN_ADEN_PLEASE_WELCOME_LEYLA_MIRA,
+					NpcStringId.PERFORMING_HER_LATEST_HIT,
+					NpcStringId.THANK_YOU_VERY_MUCH_LEYLA,
+					NpcStringId.NOW_WE_RE_IN_FOR_A_REAL_TREAT,
+					NpcStringId.JUST_BACK_FROM_THEIR_WORLD_TOUR_PUT_YOUR_HANDS_TOGETHER_FOR_THE_FANTASY_ISLE_CIRCUS,
+					NpcStringId.EVERYONE_GIVE_THEM_A_HAND,
+					NpcStringId.IMPRESSIVE_NO_A_VERY_TALENTED_GROUP,
+					NpcStringId.NOW_WE_HAVE_A_SPECIAL_REQUEST_FROM_SOME_FOLKS_WHO_WISH_TO_PERFORM,
+					NpcStringId.LET_S_WELCOME_OUR_FIRST_VOLUNTEER,
+					NpcStringId.AH,
+					NpcStringId.MOVING_ON_LET_S_WELCOME_OUR_NEXT_VOLUNTEER,
+					NpcStringId.I_M_SURE_THEY_HAVE_SOMETHING_MUCH_MORE_EXCITING,
+					NpcStringId.REALLY,
+					NpcStringId.THAT_WAS_JUST_SUPER_AND_NOW_FOR_OUR_LAST_VOLUNTEER,
+					NpcStringId.SIGH_AND_THAT_S_OUR_SHOW_FOLKS,
+					NpcStringId.I_HOPE_EVERYONE_ENJOYED_THE_SHOW,
+					NpcStringId.PLEASE_REMEMBER_THAT_FANTASY_ISLE_IS_ALWAYS_PLANNING_A_LOT_OF_GREAT_SHOWS_FOR_YOU,
+					NpcStringId.WELL_WE_WISH_WE_COULD_KEEP_THIS_PARTY_GOING_BUT_WE_MUST_TAKE_A_BREAK_THANK_YOU,
+					NpcStringId.WE_LOVE_YOU_ALL
+			};
+
+	private static class ShoutInfo {
 		private final NpcStringId _npcStringId;
 		private final String _nextEvent;
 		private final int _time;
-		
-		public ShoutInfo(NpcStringId npcStringId, String nextEvent, int time)
-		{
+
+		public ShoutInfo(NpcStringId npcStringId, String nextEvent, int time) {
 			_npcStringId = npcStringId;
 			_nextEvent = nextEvent;
 			_time = time;
 		}
-		
+
 		/**
 		 * @return the _npcStringId
 		 */
-		public NpcStringId getNpcStringId()
-		{
+		public NpcStringId getNpcStringId() {
 			return _npcStringId;
 		}
-		
+
 		/**
 		 * @return the _nextEvent
 		 */
-		public String getNextEvent()
-		{
+		public String getNextEvent() {
 			return _nextEvent;
 		}
-		
+
 		/**
 		 * @return the _time
 		 */
-		public int getTime()
-		{
+		public int getTime() {
 			return _time;
 		}
 	}
-	
-	private static class WalkInfo
-	{
+
+	private static class WalkInfo {
 		private final Location _charPos;
 		private final String _nextEvent;
 		private final int _time;
-		
-		public WalkInfo(Location charPos, String nextEvent, int time)
-		{
+
+		public WalkInfo(Location charPos, String nextEvent, int time) {
 			_charPos = charPos;
 			_nextEvent = nextEvent;
 			_time = time;
 		}
-		
+
 		/**
 		 * @return the _charPos
 		 */
-		public Location getCharPos()
-		{
+		public Location getCharPos() {
 			return _charPos;
 		}
-		
+
 		/**
 		 * @return the _nextEvent
 		 */
-		public String getNextEvent()
-		{
+		public String getNextEvent() {
 			return _nextEvent;
 		}
-		
+
 		/**
 		 * @return the _time
 		 */
-		public int getTime()
-		{
+		public int getTime() {
 			return _time;
 		}
 	}
-	
+
 	private static Map<String, ShoutInfo> TALKS = new HashMap<>(26);
-	
-	static
-	{
+
+	static {
 		TALKS.put("1", new ShoutInfo(MESSAGES[1], "2", 1000));
 		TALKS.put("2", new ShoutInfo(MESSAGES[2], "3", 6000));
 		TALKS.put("3", new ShoutInfo(MESSAGES[3], "4", 4000));
@@ -185,11 +173,10 @@ public class MC_Show extends AbstractNpcAI
 		TALKS.put("25", new ShoutInfo(MESSAGES[21], "26", 5000));
 		TALKS.put("26", new ShoutInfo(MESSAGES[22], "27", 5400));
 	}
-	
+
 	private static Map<String, WalkInfo> WALKS = new HashMap<>(88);
-	
-	static
-	{
+
+	static {
 		WALKS.put("npc1_1", new WalkInfo(new Location(-56546, -56384, -2008, 0), "npc1_2", 1200));
 		WALKS.put("npc1_2", new WalkInfo(new Location(-56597, -56384, -2008, 0), "npc1_3", 1200));
 		WALKS.put("npc1_3", new WalkInfo(new Location(-56596, -56428, -2008, 0), "npc1_4", 1200));
@@ -279,27 +266,22 @@ public class MC_Show extends AbstractNpcAI
 		WALKS.put("24", new WalkInfo(new Location(-56730, -56340, -2008, 0), "25", 1800));
 		WALKS.put("27", new WalkInfo(new Location(-56702, -56340, -2008, 0), "29", 1800));
 	}
-	
-	private MC_Show()
-	{
+
+	private MC_Show() {
 		addSpawnId(32433, 32431, 32432, 32442, 32443, 32444, 32445, 32446, 32424, 32425, 32426, 32427, 32428);
 		scheduleTimer();
 	}
-	
-	private void scheduleTimer()
-	{
+
+	private void scheduleTimer() {
 		// TODO startRepeatingQuestTimer("Start", diff, 14400000, null, null);
 		// missing option to provide different initial delay
-		ThreadPool.scheduleAtFixedRate(new StartMCShow(), 4, 4, TimeUnit.HOURS);
+		ThreadPool.getInstance().scheduleAiAtFixedRate(new StartMCShow(), 4, 4, TimeUnit.HOURS);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (IS_STARTED)
-		{
-			switch (npc.getId())
-			{
+	public String onSpawn(Npc npc) {
+		if (IS_STARTED) {
+			switch (npc.getId()) {
 				case 32433:
 					npc.broadcastSay(ChatType.NPC_SHOUT, MESSAGES[0]);
 					startQuestTimer("1", 30000, npc, null);
@@ -333,26 +315,20 @@ public class MC_Show extends AbstractNpcAI
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if ((event == null) || event.isEmpty())
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if ((event == null) || event.isEmpty()) {
 			_log.warn("MC_Show: Null/Empty event for npc " + npc + " and player " + player + "!");
 			return null;
 		}
-		
-		if (event.equalsIgnoreCase("Start"))
-		{
+
+		if (event.equalsIgnoreCase("Start")) {
 			IS_STARTED = true;
 			addSpawn(MC, -56698, -56430, -2008, 32768, false, 0);
-		}
-		else if ((npc != null) && IS_STARTED)
-		{
+		} else if ((npc != null) && IS_STARTED) {
 			// TODO switch on event
-			if (event.equalsIgnoreCase("6"))
-			{
+			if (event.equalsIgnoreCase("6")) {
 				npc.broadcastSay(ChatType.NPC_SHOUT, MESSAGES[6]);
 				npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56511, -56647, -2008, 36863));
 				npc.broadcastPacket(new PlaySound(1, "NS22_F", 0, 0, 0, 0, 0));
@@ -364,11 +340,8 @@ public class MC_Show extends AbstractNpcAI
 				addSpawn(SINGERS[1], -56580, -56203, -2008, 36863, false, 224000);
 				addSpawn(SINGERS[1], -56606, -56157, -2008, 36863, false, 224000);
 				startQuestTimer("7", 215000, npc, null);
-			}
-			else if (event.equalsIgnoreCase("7"))
-			{
-				switch (npc.getId())
-				{
+			} else if (event.equalsIgnoreCase("7")) {
+				switch (npc.getId()) {
 					case 32433:
 						npc.broadcastSay(ChatType.NPC_SHOUT, MESSAGES[7]);
 						npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56698, -56430, -2008, 32768));
@@ -379,9 +352,7 @@ public class MC_Show extends AbstractNpcAI
 						npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56594, -56064, -2008, 32768));
 						break;
 				}
-			}
-			else if (event.equalsIgnoreCase("10"))
-			{
+			} else if (event.equalsIgnoreCase("10")) {
 				npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56483, -56665, -2034, 32768));
 				npc.broadcastPacket(new PlaySound(1, "TP05_F", 0, 0, 0, 0, 0));
 				startQuestTimer("npc1_1", 3000, addSpawn(CIRCUS[0], -56495, -56375, -2008, 32768, false, 101000), null);
@@ -394,11 +365,8 @@ public class MC_Show extends AbstractNpcAI
 				startQuestTimer("npc8_1", 3000, addSpawn(CIRCUS[4], -56493, -56473, -2008, 32768, false, 101000), null);
 				startQuestTimer("npc9_1", 3000, addSpawn(CIRCUS[4], -56504, -56201, -2008, 32768, false, 101000), null);
 				startQuestTimer("11", 100000, npc, null);
-			}
-			else if (event.equalsIgnoreCase("11"))
-			{
-				switch (npc.getId())
-				{
+			} else if (event.equalsIgnoreCase("11")) {
+				switch (npc.getId()) {
 					case 32433:
 						npc.broadcastSay(ChatType.NPC_SHOUT, MESSAGES[11]);
 						npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56698, -56430, -2008, 32768));
@@ -408,25 +376,17 @@ public class MC_Show extends AbstractNpcAI
 						npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56343, -56330, -2008, 32768));
 						break;
 				}
-			}
-			else if (event.equalsIgnoreCase("14"))
-			{
+			} else if (event.equalsIgnoreCase("14")) {
 				startQuestTimer("social1", 2000, addSpawn(INDIVIDUALS[0], -56700, -56385, -2008, 32768, false, 49000), null);
 				startQuestTimer("15", 7000, npc, null);
-			}
-			else if (event.equalsIgnoreCase("17"))
-			{
+			} else if (event.equalsIgnoreCase("17")) {
 				npc.broadcastSay(ChatType.NPC_SHOUT, MESSAGES[16]);
 				startQuestTimer("social1", 2000, addSpawn(INDIVIDUALS[1], -56700, -56340, -2008, 32768, false, 32000), null);
 				startQuestTimer("18", 9000, npc, null);
-			}
-			else if (event.equalsIgnoreCase("20"))
-			{
+			} else if (event.equalsIgnoreCase("20")) {
 				startQuestTimer("social1", 2000, addSpawn(INDIVIDUALS[2], -56703, -56296, -2008, 32768, false, 13000), null);
 				startQuestTimer("21", 8000, npc, null);
-			}
-			else if (event.equalsIgnoreCase("23"))
-			{
+			} else if (event.equalsIgnoreCase("23")) {
 				npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56702, -56340, -2008, 32768));
 				startQuestTimer("24", 2800, npc, null);
 				addSpawn(SHOWSTUFF[0], -56672, -56406, -2000, 32768, false, 20900);
@@ -434,43 +394,28 @@ public class MC_Show extends AbstractNpcAI
 				addSpawn(SHOWSTUFF[2], -56608, -56338, -2000, 32768, false, 20900);
 				addSpawn(SHOWSTUFF[3], -56652, -56307, -2000, 32768, false, 20900);
 				addSpawn(SHOWSTUFF[4], -56672, -56272, -2000, 32768, false, 20900);
-			}
-			else if (event.equalsIgnoreCase("28"))
-			{
+			} else if (event.equalsIgnoreCase("28")) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, MESSAGES[23]);
 				startQuestTimer("social1", 1, npc, null);
-			}
-			else if (event.equalsIgnoreCase("29"))
-			{
+			} else if (event.equalsIgnoreCase("29")) {
 				npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(-56730, -56340, -2008, 32768));
 				startQuestTimer("clean_npc", 4100, npc, null);
 				startQuestTimer("timer_check", 60000, null, null, true);
-			}
-			else if (event.equalsIgnoreCase("social1"))
-			{
+			} else if (event.equalsIgnoreCase("social1")) {
 				npc.broadcastSocialAction(1);
-			}
-			else if (event.equalsIgnoreCase("clean_npc"))
-			{
+			} else if (event.equalsIgnoreCase("clean_npc")) {
 				IS_STARTED = false;
 				npc.deleteMe();
-			}
-			else
-			{
-				if (TALKS.containsKey(event))
-				{
+			} else {
+				if (TALKS.containsKey(event)) {
 					final ShoutInfo si = TALKS.get(event);
-					if (si != null)
-					{
+					if (si != null) {
 						npc.broadcastSay(ChatType.NPC_SHOUT, si.getNpcStringId());
 						startQuestTimer(si.getNextEvent(), si.getTime(), npc, null);
 					}
-				}
-				else if (WALKS.containsKey(event))
-				{
+				} else if (WALKS.containsKey(event)) {
 					final WalkInfo wi = WALKS.get(event);
-					if (wi != null)
-					{
+					if (wi != null) {
 						npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, wi.getCharPos());
 						startQuestTimer(wi.getNextEvent(), wi.getTime(), npc, null);
 					}
@@ -479,9 +424,8 @@ public class MC_Show extends AbstractNpcAI
 		}
 		return null;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new MC_Show();
 	}
 }

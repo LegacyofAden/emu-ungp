@@ -32,26 +32,22 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Take Fort Start effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantCaptureFlagStart extends AbstractEffect
-{
-	public InstantCaptureFlagStart(StatsSet params)
-	{
+public final class InstantCaptureFlagStart extends AbstractEffect {
+	public InstantCaptureFlagStart(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (!caster.isPlayer())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (!caster.isPlayer()) {
 			return;
 		}
-		
+
 		final Fort fort = FortManager.getInstance().getFort(caster);
 		final L2Clan clan = caster.getClan();
-		if ((fort != null) && (clan != null))
-		{
+		if ((fort != null) && (clan != null)) {
 			fort.getSiege().announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_TRYING_TO_DISPLAY_A_FLAG), clan.getName());
 		}
 	}

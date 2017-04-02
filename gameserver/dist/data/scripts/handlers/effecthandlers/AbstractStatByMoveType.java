@@ -27,30 +27,27 @@ import org.l2junity.gameserver.model.stats.MoveType;
 
 /**
  * StatByMoveType effect implementation.
+ *
  * @author UnAfraid
  */
-public abstract class AbstractStatByMoveType extends AbstractEffect
-{
+public abstract class AbstractStatByMoveType extends AbstractEffect {
 	private final DoubleStat _stat;
 	private final MoveType _type;
 	private final double _value;
-	
-	public AbstractStatByMoveType(StatsSet params, DoubleStat stat)
-	{
+
+	public AbstractStatByMoveType(StatsSet params, DoubleStat stat) {
 		_stat = stat;
 		_type = params.getEnum("type", MoveType.class);
 		_value = params.getDouble("value");
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergeMoveTypeValue(_stat, _type, _value);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergeMoveTypeValue(_stat, _type, -_value);
 	}
 }

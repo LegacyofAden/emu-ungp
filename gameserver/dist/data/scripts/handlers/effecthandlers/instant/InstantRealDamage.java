@@ -28,21 +28,17 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantRealDamage extends AbstractEffect
-{
+public class InstantRealDamage extends AbstractEffect {
 	private final double _power;
-	
-	public InstantRealDamage(StatsSet params)
-	{
+
+	public InstantRealDamage(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 

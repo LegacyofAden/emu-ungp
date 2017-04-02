@@ -27,42 +27,37 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * TODO: Verify me, also should Quest items be counted?
+ *
  * @author UnAfraid
  */
-public class OpEncumberedSkillCondition implements ISkillCondition
-{
+public class OpEncumberedSkillCondition implements ISkillCondition {
 	private final int _slotsPercent;
 	private final int _weightPercent;
-	
-	public OpEncumberedSkillCondition(StatsSet params)
-	{
+
+	public OpEncumberedSkillCondition(StatsSet params) {
 		_slotsPercent = params.getInt("slotsPercent");
 		_weightPercent = params.getInt("weightPercent");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (!caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (!caster.isPlayer()) {
 			return false;
 		}
-		
+
 		final PlayerInstance player = caster.getActingPlayer();
-		
+
 		// GMs in diet mode should skip this check.
-		if (player.getDietMode())
-		{
+		if (player.getDietMode()) {
 			return true;
 		}
-		
+
 		final int currentSlotsPercent = calcPercent(player.getInventoryLimit(), player.getInventory().getSize(item -> !item.isQuestItem()));
 		final int currentWeightPercent = calcPercent(player.getMaxLoad(), player.getCurrentLoad());
 		return (currentSlotsPercent >= _slotsPercent) && (currentWeightPercent >= _weightPercent);
 	}
-	
-	private int calcPercent(int max, int current)
-	{
+
+	private int calcPercent(int max, int current) {
 		return 100 - ((current * 100) / max);
 	}
 }

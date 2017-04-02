@@ -18,7 +18,8 @@
  */
 package ai.individual.FantasyIsle;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import ai.AbstractNpcAI;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -30,63 +31,54 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.AbstractNpcAI;
-
 /**
  * Handys Block Checker Event AI.
+ *
  * @authors BiggBoss, Gigiikun
  */
-public class HandysBlockCheckerEvent extends AbstractNpcAI
-{
+public class HandysBlockCheckerEvent extends AbstractNpcAI {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HandysBlockCheckerEvent.class);
-	
+
 	// Arena Managers
 	private static final int A_MANAGER_1 = 32521;
 	private static final int A_MANAGER_2 = 32522;
 	private static final int A_MANAGER_3 = 32523;
 	private static final int A_MANAGER_4 = 32524;
-	
-	public HandysBlockCheckerEvent()
-	{
+
+	public HandysBlockCheckerEvent() {
 		addFirstTalkId(A_MANAGER_1, A_MANAGER_2, A_MANAGER_3, A_MANAGER_4);
 		HandysBlockCheckerManager.getInstance().startUpParticipantsQueue();
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if ((npc == null) || (player == null))
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if ((npc == null) || (player == null)) {
 			return null;
 		}
-		
+
 		final int arena = npc.getId() - A_MANAGER_1;
-		if (eventIsFull(arena))
-		{
+		if (eventIsFull(arena)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_REGISTER_BECAUSE_CAPACITY_HAS_BEEN_EXCEEDED);
 			return null;
 		}
-		
-		if (HandysBlockCheckerManager.getInstance().arenaIsBeingUsed(arena))
-		{
+
+		if (HandysBlockCheckerManager.getInstance().arenaIsBeingUsed(arena)) {
 			player.sendPacket(SystemMessageId.THE_MATCH_IS_BEING_PREPARED_PLEASE_TRY_AGAIN_LATER);
 			return null;
 		}
-		
-		if (HandysBlockCheckerManager.getInstance().addPlayerToArena(player, arena))
-		{
+
+		if (HandysBlockCheckerManager.getInstance().addPlayerToArena(player, arena)) {
 			ArenaParticipantsHolder holder = HandysBlockCheckerManager.getInstance().getHolder(arena);
-			
+
 			final ExCubeGameTeamList tl = new ExCubeGameTeamList(holder.getRedPlayers(), holder.getBluePlayers(), arena);
-			
+
 			player.sendPacket(tl);
-			
+
 			int countBlue = holder.getBlueTeamSize();
 			int countRed = holder.getRedTeamSize();
 			int minMembers = GeneralConfig.MIN_BLOCK_CHECKER_TEAM_MEMBERS;
-			
-			if ((countBlue >= minMembers) && (countRed >= minMembers))
-			{
+
+			if ((countBlue >= minMembers) && (countRed >= minMembers)) {
 				holder.updateEvent();
 				holder.broadCastPacketToTeam(ExCubeGameRequestReady.STATIC_PACKET);
 				holder.broadCastPacketToTeam(new ExCubeGameChangeTimeToStart(10));
@@ -94,21 +86,16 @@ public class HandysBlockCheckerEvent extends AbstractNpcAI
 		}
 		return null;
 	}
-	
-	private boolean eventIsFull(int arena)
-	{
+
+	private boolean eventIsFull(int arena) {
 		return HandysBlockCheckerManager.getInstance().getHolder(arena).getAllPlayers().size() == 12;
 	}
-	
-	public static void main(String[] args)
-	{
-		if (GeneralConfig.ENABLE_BLOCK_CHECKER_EVENT)
-		{
+
+	public static void main(String[] args) {
+		if (GeneralConfig.ENABLE_BLOCK_CHECKER_EVENT) {
 			new HandysBlockCheckerEvent();
 			LOGGER.info("Handy's Block Checker Event is enabled");
-		}
-		else
-		{
+		} else {
 			LOGGER.info("Handy's Block Checker Event is disabled");
 		}
 	}

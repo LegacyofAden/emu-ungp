@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * To the Primeval Isle (110)
+ *
  * @author Adry_85, Gladicek
  */
-public class Q00110_ToThePrimevalIsle extends Quest
-{
+public class Q00110_ToThePrimevalIsle extends Quest {
 	// NPCs
 	private static final int ANTON = 31338;
 	private static final int MARQUEZ = 32113;
@@ -37,57 +37,46 @@ public class Q00110_ToThePrimevalIsle extends Quest
 	private static final int ANCIENT_BOOK = 8777;
 	// Misc
 	private static final int MIN_LEVEL = 75;
-	
-	public Q00110_ToThePrimevalIsle()
-	{
+
+	public Q00110_ToThePrimevalIsle() {
 		super(110);
 		addStartNpc(ANTON);
 		addTalkId(ANTON, MARQUEZ);
 		addCondMinLevel(MIN_LEVEL, "");
 		registerQuestItems(ANCIENT_BOOK);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "31338-03.htm":
 			case "31338-04.htm":
 			case "32113-02.html":
-			case "32113-03.html":
-			{
+			case "32113-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "31338-05.html":
-			{
+			case "31338-05.html": {
 				giveItems(player, ANCIENT_BOOK, 1);
 				st.startQuest();
 				break;
 			}
 			case "32113-04.html":
-			case "32113-05.html":
-			{
-				if (st.isCond(1))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "32113-05.html": {
+				if (st.isCond(1)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveAdena(player, 189_208, true);
 						addExp(player, 887_732);
 						addSp(player, 213);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
@@ -97,49 +86,37 @@ public class Q00110_ToThePrimevalIsle extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ANTON)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ANTON) {
 					htmltext = "31338-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == ANTON)
-				{
-					if (st.isCond(1))
-					{
+			case State.STARTED: {
+				if (npc.getId() == ANTON) {
+					if (st.isCond(1)) {
 						htmltext = "32113-06.html";
 					}
 					break;
-				}
-				else if (npc.getId() == MARQUEZ)
-				{
-					if (st.isCond(1))
-					{
+				} else if (npc.getId() == MARQUEZ) {
+					if (st.isCond(1)) {
 						htmltext = "32113-01.html";
 					}
 					break;
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

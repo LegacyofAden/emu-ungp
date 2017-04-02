@@ -18,28 +18,25 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Physical Mute effect implementation.
+ *
  * @author -Nemesiss-
  */
-public final class PumpBlockSkillPhysical extends AbstractBooleanStatEffect
-{
-	public PumpBlockSkillPhysical(StatsSet params)
-	{
+public final class PumpBlockSkillPhysical extends AbstractBooleanStatEffect {
+	public PumpBlockSkillPhysical(StatsSet params) {
 		super(BooleanStat.PHYSICAL_SKILL_MUTED);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getAI().notifyEvent(CtrlEvent.EVT_MUTED);
 	}
 }

@@ -18,7 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
@@ -29,109 +29,84 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class handles following admin commands: - invul = turns invulnerability on/off
+ *
  * @version $Revision: 1.2.4.4 $ $Date: 2007/07/31 10:06:02 $
  */
-public class AdminInvul implements IAdminCommandHandler
-{
+public class AdminInvul implements IAdminCommandHandler {
 	private static Logger _log = LoggerFactory.getLogger(AdminInvul.class);
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_invul",
-		"admin_setinvul",
-		"admin_undying",
-		"admin_setundying"
-	};
-	
+			{
+					"admin_invul",
+					"admin_setinvul",
+					"admin_undying",
+					"admin_setundying"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		
-		if (command.equals("admin_invul"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+
+		if (command.equals("admin_invul")) {
 			handleInvul(activeChar);
 			AdminHtml.showAdminHtml(activeChar, "gm_menu.htm");
-		}
-		else if (command.equals("admin_undying"))
-		{
+		} else if (command.equals("admin_undying")) {
 			handleUndying(activeChar);
 			AdminHtml.showAdminHtml(activeChar, "gm_menu.htm");
-		}
-		
-		else if (command.equals("admin_setinvul"))
-		{
+		} else if (command.equals("admin_setinvul")) {
 			final WorldObject target = activeChar.getTarget();
-			if (target instanceof PlayerInstance)
-			{
+			if (target instanceof PlayerInstance) {
 				handleInvul((PlayerInstance) target);
 			}
-		}
-		else if (command.equals("admin_setundying"))
-		{
+		} else if (command.equals("admin_setundying")) {
 			final WorldObject target = activeChar.getTarget();
-			if (target instanceof Creature)
-			{
+			if (target instanceof Creature) {
 				handleUndying((Creature) target);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void handleInvul(PlayerInstance activeChar)
-	{
+
+	private void handleInvul(PlayerInstance activeChar) {
 		String text;
-		if (activeChar.isInvul())
-		{
+		if (activeChar.isInvul()) {
 			activeChar.setIsInvul(false);
 			text = activeChar.getName() + " is now mortal";
-			if (GeneralConfig.DEBUG)
-			{
+			if (GeneralConfig.DEBUG) {
 				_log.debug("GM: Gm removed invul mode from character " + activeChar.getName() + "(" + activeChar.getObjectId() + ")");
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.setIsInvul(true);
 			text = activeChar.getName() + " is now invulnerable";
-			if (GeneralConfig.DEBUG)
-			{
+			if (GeneralConfig.DEBUG) {
 				_log.debug("GM: Gm activated invul mode for character " + activeChar.getName() + "(" + activeChar.getObjectId() + ")");
 			}
 		}
 		activeChar.sendMessage(text);
 	}
-	
-	private void handleUndying(Creature activeChar)
-	{
+
+	private void handleUndying(Creature activeChar) {
 		String text;
-		if (activeChar.isUndying())
-		{
+		if (activeChar.isUndying()) {
 			activeChar.setUndying(false);
 			text = activeChar.getName() + " is now mortal";
-			if (GeneralConfig.DEBUG)
-			{
+			if (GeneralConfig.DEBUG) {
 				_log.debug("GM: Gm removed undying mode from character " + activeChar.getName() + "(" + activeChar.getObjectId() + ")");
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.setUndying(true);
 			text = activeChar.getName() + " is now undying";
-			if (GeneralConfig.DEBUG)
-			{
+			if (GeneralConfig.DEBUG) {
 				_log.debug("GM: Gm activated undying mode for character " + activeChar.getName() + "(" + activeChar.getObjectId() + ")");
 			}
 		}
 		activeChar.sendMessage(text);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminInvul());
 	}
 }

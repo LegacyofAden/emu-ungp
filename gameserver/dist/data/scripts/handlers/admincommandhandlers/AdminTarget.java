@@ -25,54 +25,43 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * This class handles following admin commands: - target name = sets player with respective name as target
+ *
  * @version $Revision: 1.2.4.3 $ $Date: 2005/04/11 10:05:56 $
  */
-public class AdminTarget implements IAdminCommandHandler
-{
+public class AdminTarget implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_target"
-	};
-	
+			{
+					"admin_target"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_target"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_target")) {
 			handleTarget(command, activeChar);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void handleTarget(String command, PlayerInstance activeChar)
-	{
-		try
-		{
+
+	private void handleTarget(String command, PlayerInstance activeChar) {
+		try {
 			String targetName = command.substring(13);
 			PlayerInstance player = World.getInstance().getPlayer(targetName);
-			if (player != null)
-			{
+			if (player != null) {
 				player.onAction(activeChar);
-			}
-			else
-			{
+			} else {
 				activeChar.sendMessage("Player " + targetName + " not found");
 			}
-		}
-		catch (IndexOutOfBoundsException e)
-		{
+		} catch (IndexOutOfBoundsException e) {
 			activeChar.sendMessage("Please specify correct name.");
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminTarget());
 	}
 }

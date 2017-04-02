@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Special Order (40)
+ *
  * @author St3eT
  */
-public final class Q00040_ASpecialOrder extends Quest
-{
+public final class Q00040_ASpecialOrder extends Quest {
 	// NPCs
 	private static final int HELVETIA = 30081;
 	private static final int O_FULLE = 31572;
@@ -41,63 +41,51 @@ public final class Q00040_ASpecialOrder extends Quest
 	private static final int WONDEROUS_CUBIC = 10632;
 	// Misc
 	private static final int MIN_LEVEL = 40;
-	
-	public Q00040_ASpecialOrder()
-	{
+
+	public Q00040_ASpecialOrder() {
 		super(40);
 		addStartNpc(HELVETIA);
 		addTalkId(HELVETIA, O_FULLE, GESTO);
 		registerQuestItems(FISH_CHEST, SEED_JAR);
 		addCondMinLevel(MIN_LEVEL, "30081-10.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30081-05.html":
-			{
+		switch (event) {
+			case "30081-05.html": {
 				htmltext = event;
 				break;
 			}
-			case "30081-02.htm":
-			{
+			case "30081-02.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31572-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31572-02.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					giveItems(player, FISH_CHEST, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30511-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "30511-02.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					giveItems(player, SEED_JAR, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30081-06.html":
-			{
-				if (st.isCond(3))
-				{
+			case "30081-06.html": {
+				if (st.isCond(3)) {
 					st.setCond(4, true);
 					takeItems(player, -1, FISH_CHEST, SEED_JAR);
 					htmltext = event;
@@ -107,43 +95,31 @@ public final class Q00040_ASpecialOrder extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == HELVETIA)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == HELVETIA) {
 					htmltext = "30081-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
-						if (npc.getId() == HELVETIA)
-						{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
+						if (npc.getId() == HELVETIA) {
 							htmltext = "30081-03.html";
-						}
-						else if (npc.getId() == O_FULLE)
-						{
+						} else if (npc.getId() == O_FULLE) {
 							htmltext = "31572-01.html";
 						}
 						break;
 					}
-					case 2:
-					{
-						switch (npc.getId())
-						{
+					case 2: {
+						switch (npc.getId()) {
 							case HELVETIA:
 								htmltext = "30081-03.html";
 								break;
@@ -156,42 +132,29 @@ public final class Q00040_ASpecialOrder extends Quest
 						}
 						break;
 					}
-					case 3:
-					{
-						if (npc.getId() == HELVETIA)
-						{
+					case 3: {
+						if (npc.getId() == HELVETIA) {
 							htmltext = "30081-04.html";
-						}
-						else if (npc.getId() == GESTO)
-						{
+						} else if (npc.getId() == GESTO) {
 							htmltext = "30511-03.html";
 						}
 						break;
 					}
-					case 4:
-					{
-						if (npc.getId() == HELVETIA)
-						{
-							if (hasQuestItems(player, ELCYUM_CRYSTAL))
-							{
-								if (!isSimulated)
-								{
-									if ((player.getLevel() >= MIN_LEVEL))
-									{
+					case 4: {
+						if (npc.getId() == HELVETIA) {
+							if (hasQuestItems(player, ELCYUM_CRYSTAL)) {
+								if (!isSimulated) {
+									if ((player.getLevel() >= MIN_LEVEL)) {
 										takeItems(player, ELCYUM_CRYSTAL, 1);
 										giveItems(player, WONDEROUS_CUBIC, 1);
 										st.exitQuest(false, true);
-									}
-									else
-									{
+									} else {
 										htmltext = getNoQuestLevelRewardMsg(player);
 										break;
 									}
 								}
 								htmltext = "30081-08.html";
-							}
-							else
-							{
+							} else {
 								htmltext = "30081-07.html";
 							}
 						}
@@ -200,10 +163,8 @@ public final class Q00040_ASpecialOrder extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == HELVETIA)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == HELVETIA) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

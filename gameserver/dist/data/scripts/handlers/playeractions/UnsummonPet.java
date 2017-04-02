@@ -28,47 +28,32 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Unsummon Pet player action handler.
+ *
  * @author St3eT
  */
-public final class UnsummonPet implements IPlayerActionHandler
-{
+public final class UnsummonPet implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		final Summon pet = activeChar.getPet();
-		
-		if (pet == null)
-		{
+
+		if (pet == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_PET);
-		}
-		else if (((L2PetInstance) pet).isUncontrollable())
-		{
+		} else if (((L2PetInstance) pet).isUncontrollable()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
-		}
-		else if (pet.isBetrayed())
-		{
+		} else if (pet.isBetrayed()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
-		}
-		else if (pet.isDead())
-		{
+		} else if (pet.isDead()) {
 			activeChar.sendPacket(SystemMessageId.DEAD_PETS_CANNOT_BE_RETURNED_TO_THEIR_SUMMONING_ITEM);
-		}
-		else if (pet.isAttackingNow() || pet.isInCombat() || pet.isMovementDisabled())
-		{
+		} else if (pet.isAttackingNow() || pet.isInCombat() || pet.isMovementDisabled()) {
 			activeChar.sendPacket(SystemMessageId.A_PET_CANNOT_BE_UNSUMMONED_DURING_BATTLE);
-		}
-		else if (pet.isHungry())
-		{
+		} else if (pet.isHungry()) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_RESTORE_A_HUNGRY_PET);
-		}
-		else
-		{
+		} else {
 			pet.unSummon(activeChar);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new UnsummonPet());
 	}
 }

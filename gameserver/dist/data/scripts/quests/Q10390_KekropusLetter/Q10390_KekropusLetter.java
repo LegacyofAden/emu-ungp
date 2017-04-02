@@ -29,15 +29,14 @@ import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10360_CertificationOfFate.Q10360_CertificationOfFate;
 
 /**
  * Kekropus' Letter (10390)
+ *
  * @author St3eT
  */
-public final class Q10390_KekropusLetter extends Quest
-{
+public final class Q10390_KekropusLetter extends Quest {
 	// NPCs
 	private static final int RAYMOND = 30289;
 	private static final int RAINS = 30288;
@@ -59,9 +58,8 @@ public final class Q10390_KekropusLetter extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 40;
 	private static final int MAX_LEVEL = 45;
-	
-	public Q10390_KekropusLetter()
-	{
+
+	public Q10390_KekropusLetter() {
 		super(10390);
 		addStartNpc(RAYMOND, RAINS, TOBIAS, DRIKUS, MENDIO, GERSHWIN, ESRANDELL, ELLENIA);
 		addTalkId(RAYMOND, RAINS, TOBIAS, DRIKUS, MENDIO, GERSHWIN, ESRANDELL, ELLENIA, BATHIS, GOSTA, ELI);
@@ -69,19 +67,16 @@ public final class Q10390_KekropusLetter extends Quest
 		registerQuestItems(KEKROPUS_LETTER, HAINE_SOE, ALLIGATOR_ISLAND_SOE);
 		addCondCompletedQuest(Q10360_CertificationOfFate.class.getSimpleName(), "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "30289-03.htm":
 			case "30288-03.htm":
 			case "30297-03.htm":
@@ -90,8 +85,7 @@ public final class Q10390_KekropusLetter extends Quest
 			case "32196-03.htm":
 			case "30158-03.htm":
 			case "30155-03.htm":
-			case "30916-02.html":
-			{
+			case "30916-02.html": {
 				htmltext = event;
 				break;
 			}
@@ -102,35 +96,28 @@ public final class Q10390_KekropusLetter extends Quest
 			case "30504-04.htm":
 			case "32196-04.htm":
 			case "30158-04.htm":
-			case "30155-04.htm":
-			{
+			case "30155-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "30332-09.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30332-09.html": {
+				if (st.isCond(1)) {
 					giveItems(player, KEKROPUS_LETTER, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "popup-letter.html":
-			{
-				if (st.isCond(1))
-				{
+			case "popup-letter.html": {
+				if (st.isCond(1)) {
 					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), event)));
 					player.sendPacket(new PlaySound(3, "Npcdialog1.kekrops_quest_1", 0, 0, 0, 0, 0));
 					st.setCond(2);
 				}
 				break;
 			}
-			case "30332-11.html":
-			{
-				if (st.isCond(2))
-				{
+			case "30332-11.html": {
+				if (st.isCond(2)) {
 					takeItems(player, KEKROPUS_LETTER, -1);
 					giveItems(player, HAINE_SOE, 1);
 					st.setCond(3);
@@ -138,20 +125,16 @@ public final class Q10390_KekropusLetter extends Quest
 				}
 				break;
 			}
-			case "30916-03.html":
-			{
-				if (st.isCond(3))
-				{
+			case "30916-03.html": {
+				if (st.isCond(3)) {
 					giveItems(player, ALLIGATOR_ISLAND_SOE, 1);
 					st.setCond(4);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33858-02.html":
-			{
-				if (st.isCond(4))
-				{
+			case "33858-02.html": {
+				if (st.isCond(4)) {
 					giveItems(player, EWC, 3);
 					giveStoryQuestReward(npc, player);
 					addExp(player, 370440);
@@ -165,19 +148,15 @@ public final class Q10390_KekropusLetter extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				switch (npc.getId())
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				switch (npc.getId()) {
 					case RAYMOND:
 					case ESRANDELL:
 					case RAINS:
@@ -185,14 +164,10 @@ public final class Q10390_KekropusLetter extends Quest
 					case TOBIAS:
 					case DRIKUS:
 					case MENDIO:
-					case GERSHWIN:
-					{
-						if ((player.getLevel() < MIN_LEVEL) || (player.getLevel() > MAX_LEVEL))
-						{
+					case GERSHWIN: {
+						if ((player.getLevel() < MIN_LEVEL) || (player.getLevel() > MAX_LEVEL)) {
 							htmltext = npc.getId() + "-06.html";
-						}
-						else
-						{
+						} else {
 							htmltext = isRightMaster(npc, player) ? npc.getId() + "-02.htm" : npc.getId() + "-01.htm";
 						}
 						break;
@@ -200,10 +175,8 @@ public final class Q10390_KekropusLetter extends Quest
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
+			case State.STARTED: {
+				switch (npc.getId()) {
 					case RAYMOND:
 					case ESRANDELL:
 					case RAINS:
@@ -211,22 +184,16 @@ public final class Q10390_KekropusLetter extends Quest
 					case TOBIAS:
 					case DRIKUS:
 					case MENDIO:
-					case GERSHWIN:
-					{
-						if (st.isCond(1))
-						{
+					case GERSHWIN: {
+						if (st.isCond(1)) {
 							htmltext = npc.getId() + "-05.html";
 						}
 						break;
 					}
-					case BATHIS:
-					{
-						switch (st.getCond())
-						{
-							case 1:
-							{
-								switch (player.getRace())
-								{
+					case BATHIS: {
+						switch (st.getCond()) {
+							case 1: {
+								switch (player.getRace()) {
 									case HUMAN:
 										htmltext = player.isInCategory(CategoryType.MAGE_GROUP) ? "30332-01.html" : "30332-02.html";
 										break;
@@ -248,35 +215,27 @@ public final class Q10390_KekropusLetter extends Quest
 								}
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "30332-10.html";
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								htmltext = "30332-11.html";
 								break;
 							}
 						}
 						break;
 					}
-					case GOSTA:
-					{
-						if (st.isCond(3))
-						{
+					case GOSTA: {
+						if (st.isCond(3)) {
 							htmltext = "30916-01.html";
-						}
-						else if (st.isCond(4))
-						{
+						} else if (st.isCond(4)) {
 							htmltext = "30916-04.html";
 						}
 						break;
 					}
-					case ELI:
-					{
-						if (st.isCond(4))
-						{
+					case ELI: {
+						if (st.isCond(4)) {
 							htmltext = "33858-01.html";
 						}
 						break;
@@ -287,41 +246,32 @@ public final class Q10390_KekropusLetter extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(4))
-			{
+
+			if ((st != null) && st.isCond(4)) {
 				showOnScreenMsg(player, NpcStringId.ALLIGATOR_ISLAND_IS_A_GOOD_HUNTING_ZONE_FOR_LV_40_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
-	private boolean isRightMaster(Npc npc, PlayerInstance player)
-	{
-		switch (npc.getId())
-		{
+
+	private boolean isRightMaster(Npc npc, PlayerInstance player) {
+		switch (npc.getId()) {
 			case RAYMOND:
-			case ESRANDELL:
-			{
-				if ((npc.getRace() == player.getRace()) && player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+			case ESRANDELL: {
+				if ((npc.getRace() == player.getRace()) && player.isInCategory(CategoryType.MAGE_GROUP)) {
 					return true;
 				}
 				break;
 			}
 			case RAINS:
-			case ELLENIA:
-			{
-				if ((npc.getRace() == player.getRace()) && !player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+			case ELLENIA: {
+				if ((npc.getRace() == player.getRace()) && !player.isInCategory(CategoryType.MAGE_GROUP)) {
 					return true;
 				}
 				break;
@@ -329,10 +279,8 @@ public final class Q10390_KekropusLetter extends Quest
 			case TOBIAS:
 			case DRIKUS:
 			case MENDIO:
-			case GERSHWIN:
-			{
-				if (npc.getRace() == player.getRace())
-				{
+			case GERSHWIN: {
+				if (npc.getRace() == player.getRace()) {
 					return true;
 				}
 				break;

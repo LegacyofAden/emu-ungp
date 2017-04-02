@@ -18,10 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -36,20 +33,13 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExRedSky;
-import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.SunRise;
-import org.l2junity.gameserver.network.client.send.SunSet;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
+
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands:
@@ -68,721 +58,514 @@ import org.l2junity.gameserver.util.Util;
  * <li>play_sound/play_sounds = Music broadcasting related commands
  * <li>atmosphere = sky change related commands.
  */
-public class AdminEffects implements IAdminCommandHandler
-{
+public class AdminEffects implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_invis",
-		"admin_invisible",
-		"admin_setinvis",
-		"admin_vis",
-		"admin_visible",
-		"admin_invis_menu",
-		"admin_earthquake",
-		"admin_earthquake_menu",
-		"admin_bighead",
-		"admin_shrinkhead",
-		"admin_unpara_all",
-		"admin_para_all",
-		"admin_unpara",
-		"admin_para",
-		"admin_unpara_all_menu",
-		"admin_para_all_menu",
-		"admin_unpara_menu",
-		"admin_para_menu",
-		"admin_polyself",
-		"admin_unpolyself",
-		"admin_polyself_menu",
-		"admin_unpolyself_menu",
-		"admin_clearteams",
-		"admin_setteam_close",
-		"admin_setteam",
-		"admin_social",
-		"admin_effect",
-		"admin_npc_use_skill",
-		"admin_effect_menu",
-		"admin_ave_abnormal",
-		"admin_social_menu",
-		"admin_play_sounds",
-		"admin_play_sound",
-		"admin_atmosphere",
-		"admin_atmosphere_menu",
-		"admin_set_displayeffect",
-		"admin_set_displayeffect_menu",
-		"admin_event_trigger",
-		"admin_settargetable",
-		"admin_playmovie",
-	};
-	
+			{
+					"admin_invis",
+					"admin_invisible",
+					"admin_setinvis",
+					"admin_vis",
+					"admin_visible",
+					"admin_invis_menu",
+					"admin_earthquake",
+					"admin_earthquake_menu",
+					"admin_bighead",
+					"admin_shrinkhead",
+					"admin_unpara_all",
+					"admin_para_all",
+					"admin_unpara",
+					"admin_para",
+					"admin_unpara_all_menu",
+					"admin_para_all_menu",
+					"admin_unpara_menu",
+					"admin_para_menu",
+					"admin_polyself",
+					"admin_unpolyself",
+					"admin_polyself_menu",
+					"admin_unpolyself_menu",
+					"admin_clearteams",
+					"admin_setteam_close",
+					"admin_setteam",
+					"admin_social",
+					"admin_effect",
+					"admin_npc_use_skill",
+					"admin_effect_menu",
+					"admin_ave_abnormal",
+					"admin_social_menu",
+					"admin_play_sounds",
+					"admin_play_sound",
+					"admin_atmosphere",
+					"admin_atmosphere_menu",
+					"admin_set_displayeffect",
+					"admin_set_displayeffect_menu",
+					"admin_event_trigger",
+					"admin_settargetable",
+					"admin_playmovie",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
-		
-		if (command.equals("admin_invis_menu"))
-		{
-			if (!activeChar.isInvisible())
-			{
+
+		if (command.equals("admin_invis_menu")) {
+			if (!activeChar.isInvisible()) {
 				activeChar.setInvisible(true);
 				activeChar.broadcastUserInfo();
 				activeChar.sendPacket(new ExUserInfoAbnormalVisualEffect(activeChar));
 				activeChar.sendMessage("You are now invisible.");
-			}
-			else
-			{
+			} else {
 				activeChar.setInvisible(false);
 				activeChar.broadcastUserInfo();
 				activeChar.sendPacket(new ExUserInfoAbnormalVisualEffect(activeChar));
 				activeChar.sendMessage("You are now visible.");
 			}
-			
+
 			command = "";
 			AdminHtml.showAdminHtml(activeChar, "gm_menu.htm");
-		}
-		else if (command.startsWith("admin_invis"))
-		{
+		} else if (command.startsWith("admin_invis")) {
 			activeChar.setInvisible(true);
 			activeChar.broadcastUserInfo();
 			activeChar.sendPacket(new ExUserInfoAbnormalVisualEffect(activeChar));
 			activeChar.sendMessage("You are now invisible.");
-		}
-		else if (command.startsWith("admin_vis"))
-		{
+		} else if (command.startsWith("admin_vis")) {
 			activeChar.setInvisible(false);
 			activeChar.broadcastUserInfo();
 			activeChar.sendPacket(new ExUserInfoAbnormalVisualEffect(activeChar));
 			activeChar.sendMessage("You are now visible.");
-		}
-		else if (command.startsWith("admin_setinvis"))
-		{
-			if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature())
-			{
+		} else if (command.startsWith("admin_setinvis")) {
+			if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature()) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				return false;
 			}
 			final Creature target = (Creature) activeChar.getTarget();
 			target.setInvisible(!target.isInvisible());
 			activeChar.sendMessage("You've made " + target.getName() + " " + (target.isInvisible() ? "invisible" : "visible") + ".");
-			
-			if (target.isPlayer())
-			{
+
+			if (target.isPlayer()) {
 				((PlayerInstance) target).broadcastUserInfo();
 			}
-		}
-		else if (command.startsWith("admin_earthquake"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_earthquake")) {
+			try {
 				String val1 = st.nextToken();
 				int intensity = Integer.parseInt(val1);
 				String val2 = st.nextToken();
 				int duration = Integer.parseInt(val2);
 				Earthquake eq = new Earthquake(activeChar.getX(), activeChar.getY(), activeChar.getZ(), intensity, duration);
 				activeChar.broadcastPacket(eq);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //earthquake <intensity> <duration>");
 			}
-		}
-		else if (command.startsWith("admin_atmosphere"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_atmosphere")) {
+			try {
 				String type = st.nextToken();
 				String state = st.nextToken();
 				int duration = Integer.parseInt(st.nextToken());
 				adminAtmosphere(type, state, duration, activeChar);
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				activeChar.sendMessage("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>");
 			}
-		}
-		else if (command.equals("admin_play_sounds"))
-		{
+		} else if (command.equals("admin_play_sounds")) {
 			AdminHtml.showAdminHtml(activeChar, "songs/songs.htm");
-		}
-		else if (command.startsWith("admin_play_sounds"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_play_sounds")) {
+			try {
 				AdminHtml.showAdminHtml(activeChar, "songs/songs" + command.substring(18) + ".htm");
-			}
-			catch (StringIndexOutOfBoundsException e)
-			{
+			} catch (StringIndexOutOfBoundsException e) {
 				activeChar.sendMessage("Usage: //play_sounds <pagenumber>");
 			}
-		}
-		else if (command.startsWith("admin_play_sound"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_play_sound")) {
+			try {
 				playAdminSound(activeChar, command.substring(17));
-			}
-			catch (StringIndexOutOfBoundsException e)
-			{
+			} catch (StringIndexOutOfBoundsException e) {
 				activeChar.sendMessage("Usage: //play_sound <soundname>");
 			}
-		}
-		else if (command.equals("admin_para_all"))
-		{
+		} else if (command.equals("admin_para_all")) {
 			World.getInstance().forEachVisibleObject(activeChar, PlayerInstance.class, player ->
 			{
-				if (!player.isGM())
-				{
+				if (!player.isGM()) {
 					player.getEffectList().startAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
 					player.setBlockActions(true);
 					player.startParalyze();
 					player.broadcastInfo();
 				}
 			});
-		}
-		else if (command.equals("admin_unpara_all"))
-		{
+		} else if (command.equals("admin_unpara_all")) {
 			World.getInstance().forEachVisibleObject(activeChar, PlayerInstance.class, player ->
 			{
 				player.getEffectList().stopAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
 				player.setBlockActions(false);
 				player.broadcastInfo();
-				
+
 			});
-		}
-		else if (command.startsWith("admin_para")) // || command.startsWith("admin_para_menu"))
+		} else if (command.startsWith("admin_para")) // || command.startsWith("admin_para_menu"))
 		{
 			String type = "1";
-			try
-			{
+			try {
 				type = st.nextToken();
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-			try
-			{
+			try {
 				WorldObject target = activeChar.getTarget();
 				Creature player = null;
-				if (target instanceof Creature)
-				{
+				if (target instanceof Creature) {
 					player = (Creature) target;
-					if (type.equals("1"))
-					{
+					if (type.equals("1")) {
 						player.getEffectList().startAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
-					}
-					else
-					{
+					} else {
 						player.getEffectList().startAbnormalVisualEffect(AbnormalVisualEffect.FLESH_STONE);
 					}
 					player.setBlockActions(true);
 					player.startParalyze();
 					player.broadcastInfo();
 				}
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-		}
-		else if (command.startsWith("admin_unpara")) // || command.startsWith("admin_unpara_menu"))
+		} else if (command.startsWith("admin_unpara")) // || command.startsWith("admin_unpara_menu"))
 		{
 			String type = "1";
-			try
-			{
+			try {
 				type = st.nextToken();
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-			try
-			{
+			try {
 				WorldObject target = activeChar.getTarget();
 				Creature player = null;
-				if (target instanceof Creature)
-				{
+				if (target instanceof Creature) {
 					player = (Creature) target;
-					if (type.equals("1"))
-					{
+					if (type.equals("1")) {
 						player.getEffectList().stopAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
-					}
-					else
-					{
+					} else {
 						player.getEffectList().stopAbnormalVisualEffect(AbnormalVisualEffect.FLESH_STONE);
 					}
 					player.setBlockActions(false);
 					player.broadcastInfo();
 				}
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-		}
-		else if (command.startsWith("admin_bighead"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_bighead")) {
+			try {
 				WorldObject target = activeChar.getTarget();
 				Creature player = null;
-				if (target instanceof Creature)
-				{
+				if (target instanceof Creature) {
 					player = (Creature) target;
 					player.getEffectList().startAbnormalVisualEffect(AbnormalVisualEffect.BIG_HEAD);
 				}
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-		}
-		else if (command.startsWith("admin_shrinkhead"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_shrinkhead")) {
+			try {
 				WorldObject target = activeChar.getTarget();
 				Creature player = null;
-				if (target instanceof Creature)
-				{
+				if (target instanceof Creature) {
 					player = (Creature) target;
 					player.getEffectList().stopAbnormalVisualEffect(AbnormalVisualEffect.BIG_HEAD);
 				}
+			} catch (Exception e) {
 			}
-			catch (Exception e)
-			{
-			}
-		}
-		else if (command.startsWith("admin_polyself"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_polyself")) {
+			try {
 				String id = st.nextToken();
 				activeChar.getPoly().setPolyInfo("npc", id);
 				activeChar.teleToLocation(activeChar.getLocation());
 				activeChar.broadcastUserInfo();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //polyself <npcId>");
 			}
-		}
-		else if (command.startsWith("admin_unpolyself"))
-		{
+		} else if (command.startsWith("admin_unpolyself")) {
 			activeChar.getPoly().setPolyInfo(null, "1");
 			activeChar.broadcastUserInfo();
-		}
-		else if (command.equals("admin_clearteams"))
-		{
+		} else if (command.equals("admin_clearteams")) {
 			World.getInstance().forEachVisibleObject(activeChar, PlayerInstance.class, player ->
 			{
 				player.setTeam(Team.NONE);
 				player.broadcastUserInfo();
 			});
-		}
-		else if (command.startsWith("admin_setteam_close"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_setteam_close")) {
+			try {
 				String val = st.nextToken();
 				int radius = 400;
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					radius = Integer.parseInt(st.nextToken());
 				}
 				Team team = Team.valueOf(val.toUpperCase());
-				
+
 				World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, radius, player -> player.setTeam(team));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //setteam_close <none|blue|red> [radius]");
 			}
-		}
-		else if (command.startsWith("admin_setteam"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_setteam")) {
+			try {
 				Team team = Team.valueOf(st.nextToken().toUpperCase());
 				Creature target = null;
-				if (activeChar.getTarget() instanceof Creature)
-				{
+				if (activeChar.getTarget() instanceof Creature) {
 					target = (Creature) activeChar.getTarget();
-				}
-				else
-				{
+				} else {
 					return false;
 				}
 				target.setTeam(team);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //setteam <none|blue|red>");
 			}
-		}
-		else if (command.startsWith("admin_social"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_social")) {
+			try {
 				String target = null;
 				WorldObject obj = activeChar.getTarget();
-				if (st.countTokens() == 2)
-				{
+				if (st.countTokens() == 2) {
 					int social = Integer.parseInt(st.nextToken());
 					target = st.nextToken();
-					if (target != null)
-					{
+					if (target != null) {
 						PlayerInstance player = World.getInstance().getPlayer(target);
-						if (player != null)
-						{
-							if (performSocial(social, player, activeChar))
-							{
+						if (player != null) {
+							if (performSocial(social, player, activeChar)) {
 								activeChar.sendMessage(player.getName() + " was affected by your request.");
 							}
-						}
-						else
-						{
-							try
-							{
+						} else {
+							try {
 								int radius = Integer.parseInt(target);
 								World.getInstance().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performSocial(social, object, activeChar));
 								activeChar.sendMessage(radius + " units radius affected by your request.");
-							}
-							catch (NumberFormatException nbe)
-							{
+							} catch (NumberFormatException nbe) {
 								activeChar.sendMessage("Incorrect parameter");
 							}
 						}
 					}
-				}
-				else if (st.countTokens() == 1)
-				{
+				} else if (st.countTokens() == 1) {
 					int social = Integer.parseInt(st.nextToken());
-					if (obj == null)
-					{
+					if (obj == null) {
 						obj = activeChar;
 					}
-					
-					if (performSocial(social, obj, activeChar))
-					{
+
+					if (performSocial(social, obj, activeChar)) {
 						activeChar.sendMessage(obj.getName() + " was affected by your request.");
-					}
-					else
-					{
+					} else {
 						activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 					}
-				}
-				else if (!command.contains("menu"))
-				{
+				} else if (!command.contains("menu")) {
 					activeChar.sendMessage("Usage: //social <social_id> [player_name|radius]");
 				}
-			}
-			catch (Exception e)
-			{
-				if (GeneralConfig.DEBUG)
-				{
+			} catch (Exception e) {
+				if (GeneralConfig.DEBUG) {
 					e.printStackTrace();
 				}
 			}
-		}
-		else if (command.startsWith("admin_ave_abnormal"))
-		{
+		} else if (command.startsWith("admin_ave_abnormal")) {
 			String param1 = null;
-			if (st.countTokens() > 0)
-			{
+			if (st.countTokens() > 0) {
 				param1 = st.nextToken();
 			}
-			
-			if ((param1 != null) && !Util.isDigit(param1))
-			{
+
+			if ((param1 != null) && !Util.isDigit(param1)) {
 				AbnormalVisualEffect ave;
-				
-				try
-				{
+
+				try {
 					ave = AbnormalVisualEffect.valueOf(param1);
-				}
-				catch (Exception e)
-				{
-					
+				} catch (Exception e) {
+
 					return false;
 				}
-				
+
 				int radius = 0;
 				String param2 = null;
-				if (st.countTokens() == 1)
-				{
+				if (st.countTokens() == 1) {
 					param2 = st.nextToken();
-					if (Util.isDigit(param2))
-					{
+					if (Util.isDigit(param2)) {
 						radius = Integer.parseInt(param2);
 					}
 				}
-				
-				if (radius > 0)
-				{
+
+				if (radius > 0) {
 					World.getInstance().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performAbnormalVisualEffect(ave, object));
 					activeChar.sendMessage("Affected all characters in radius " + param2 + " by " + param1 + " abnormal visual effect.");
-				}
-				else
-				{
+				} else {
 					final WorldObject obj = activeChar.getTarget() != null ? activeChar.getTarget() : activeChar;
-					if (performAbnormalVisualEffect(ave, obj))
-					{
+					if (performAbnormalVisualEffect(ave, obj)) {
 						activeChar.sendMessage(obj.getName() + " affected by " + param1 + " abnormal visual effect.");
-					}
-					else
-					{
+					} else {
 						activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 					}
 				}
-			}
-			else
-			{
+			} else {
 				int page = 0;
-				if (param1 != null)
-				{
-					try
-					{
+				if (param1 != null) {
+					try {
 						page = Integer.parseInt(param1);
-					}
-					catch (NumberFormatException nfe)
-					{
+					} catch (NumberFormatException nfe) {
 						activeChar.sendMessage("Incorrect page.");
 					}
 				}
-				
+
 				final PageResult result = PageBuilder.newBuilder(AbnormalVisualEffect.values(), 100, "bypass -h admin_ave_abnormal").currentPage(page).style(ButtonsStyle.INSTANCE).bodyHandler((pages, ave, sb) ->
 				{
 					sb.append(String.format("<button action=\"bypass admin_ave_abnormal %s\" align=left icon=teleport>%s(%d)</button>", ave.name(), ave.name(), ave.getClientId()));
 				}).build();
-				
+
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 				html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/ave_abnormal.htm");
-				
-				if (result.getPages() > 0)
-				{
+
+				if (result.getPages() > 0) {
 					html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");
-				}
-				else
-				{
+				} else {
 					html.replace("%pages%", "");
 				}
-				
+
 				html.replace("%abnormals%", result.getBodyTemplate().toString());
 				activeChar.sendPacket(html);
 				activeChar.sendMessage("Usage: //" + command.replace("admin_", "") + " <AbnormalVisualEffect> [radius]");
 				return true;
 			}
-		}
-		else if (command.startsWith("admin_effect") || command.startsWith("admin_npc_use_skill"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_effect") || command.startsWith("admin_npc_use_skill")) {
+			try {
 				WorldObject obj = activeChar.getTarget();
 				int level = 1, hittime = 1;
 				int skill = Integer.parseInt(st.nextToken());
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					level = Integer.parseInt(st.nextToken());
 				}
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					hittime = Integer.parseInt(st.nextToken());
 				}
-				if (obj == null)
-				{
+				if (obj == null) {
 					obj = activeChar;
 				}
-				if (!(obj instanceof Creature))
-				{
+				if (!(obj instanceof Creature)) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
-				}
-				else
-				{
+				} else {
 					Creature target = (Creature) obj;
 					target.broadcastPacket(new MagicSkillUse(target, activeChar, skill, level, hittime, 0));
 					activeChar.sendMessage(obj.getName() + " performs MSU " + skill + "/" + level + " by your request.");
 				}
-				
-			}
-			catch (Exception e)
-			{
+
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //effect skill [level | level hittime]");
 			}
-		}
-		else if (command.startsWith("admin_set_displayeffect"))
-		{
+		} else if (command.startsWith("admin_set_displayeffect")) {
 			WorldObject target = activeChar.getTarget();
-			if (!(target instanceof Npc))
-			{
+			if (!(target instanceof Npc)) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				return false;
 			}
 			Npc npc = (Npc) target;
-			try
-			{
+			try {
 				String type = st.nextToken();
 				int diplayeffect = Integer.parseInt(type);
 				npc.setState(diplayeffect);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //set_displayeffect <id>");
 			}
-		}
-		else if (command.startsWith("admin_playmovie"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_playmovie")) {
+			try {
 				new MovieHolder(Arrays.asList(activeChar), Movie.findByClientId(Integer.parseInt(st.nextToken())));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //playmovie <id>");
 			}
-		}
-		else if (command.startsWith("admin_event_trigger"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_event_trigger")) {
+			try {
 				int triggerId = Integer.parseInt(st.nextToken());
 				boolean enable = Boolean.parseBoolean(st.nextToken());
 				World.getInstance().forEachVisibleObject(activeChar, PlayerInstance.class, player -> player.sendPacket(new OnEventTrigger(triggerId, enable)));
 				activeChar.sendPacket(new OnEventTrigger(triggerId, enable));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //event_trigger id [true | false]");
 			}
-		}
-		else if (command.startsWith("admin_settargetable"))
-		{
+		} else if (command.startsWith("admin_settargetable")) {
 			activeChar.setTargetable(!activeChar.isTargetable());
 		}
-		
-		if (command.contains("menu"))
-		{
+
+		if (command.contains("menu")) {
 			showMainPage(activeChar, command);
 		}
 		return true;
 	}
-	
+
 	/**
-	 * @param ave the abnormal visual effect
+	 * @param ave    the abnormal visual effect
 	 * @param target the target
 	 * @return {@code true} if target's abnormal state was affected, {@code false} otherwise.
 	 */
-	private boolean performAbnormalVisualEffect(AbnormalVisualEffect ave, WorldObject target)
-	{
-		if (target instanceof Creature)
-		{
+	private boolean performAbnormalVisualEffect(AbnormalVisualEffect ave, WorldObject target) {
+		if (target instanceof Creature) {
 			final Creature character = (Creature) target;
-			if (!character.getEffectList().hasAbnormalVisualEffect(ave))
-			{
+			if (!character.getEffectList().hasAbnormalVisualEffect(ave)) {
 				character.getEffectList().startAbnormalVisualEffect(ave);
-			}
-			else
-			{
+			} else {
 				character.getEffectList().stopAbnormalVisualEffect(ave);
 			}
 			return true;
 		}
 		return false;
 	}
-	
-	private boolean performSocial(int action, WorldObject target, PlayerInstance activeChar)
-	{
-		try
-		{
-			if (target.isCreature())
-			{
-				if ((target.isNpc()) && ((action < 1) || (action > 20)))
-				{
+
+	private boolean performSocial(int action, WorldObject target, PlayerInstance activeChar) {
+		try {
+			if (target.isCreature()) {
+				if ((target.isNpc()) && ((action < 1) || (action > 20))) {
 					activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 					return false;
 				}
-				if ((target.isPlayer()) && ((action < 2) || ((action > 18) && (action != SocialAction.LEVEL_UP))))
-				{
+				if ((target.isPlayer()) && ((action < 2) || ((action > 18) && (action != SocialAction.LEVEL_UP)))) {
 					activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 					return false;
 				}
 				Creature character = (Creature) target;
 				character.broadcastPacket(new SocialAction(character.getObjectId(), action));
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * @param type - atmosphere type (signssky,sky)
-	 * @param state - atmosphere state(night,day)
+	 * @param type       - atmosphere type (signssky,sky)
+	 * @param state      - atmosphere state(night,day)
 	 * @param duration
 	 * @param activeChar
 	 */
-	private void adminAtmosphere(String type, String state, int duration, PlayerInstance activeChar)
-	{
+	private void adminAtmosphere(String type, String state, int duration, PlayerInstance activeChar) {
 		IClientOutgoingPacket packet = null;
-		
-		if (type.equals("sky"))
-		{
-			if (state.equals("night"))
-			{
+
+		if (type.equals("sky")) {
+			if (state.equals("night")) {
 				packet = SunSet.STATIC_PACKET;
-			}
-			else if (state.equals("day"))
-			{
+			} else if (state.equals("day")) {
 				packet = SunRise.STATIC_PACKET;
-			}
-			else if (state.equals("red"))
-			{
-				if (duration != 0)
-				{
+			} else if (state.equals("red")) {
+				if (duration != 0) {
 					packet = new ExRedSky(duration);
-				}
-				else
-				{
+				} else {
 					packet = new ExRedSky(10);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.sendMessage("Usage: //atmosphere <signsky dawn|dusk>|<sky day|night|red> <duration>");
 		}
-		if (packet != null)
-		{
+		if (packet != null) {
 			Broadcast.toAllOnlinePlayers(packet);
 		}
 	}
-	
-	private void playAdminSound(PlayerInstance activeChar, String sound)
-	{
+
+	private void playAdminSound(PlayerInstance activeChar, String sound) {
 		PlaySound _snd = new PlaySound(1, sound, 0, 0, 0, 0, 0);
 		activeChar.sendPacket(_snd);
 		activeChar.broadcastPacket(_snd);
 		activeChar.sendMessage("Playing " + sound + ".");
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void showMainPage(PlayerInstance activeChar, String command)
-	{
+
+	private void showMainPage(PlayerInstance activeChar, String command) {
 		String filename = "effects_menu";
-		if (command.contains("social"))
-		{
+		if (command.contains("social")) {
 			filename = "social";
 		}
 		AdminHtml.showAdminHtml(activeChar, filename + ".htm");
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminEffects());
 	}
 }

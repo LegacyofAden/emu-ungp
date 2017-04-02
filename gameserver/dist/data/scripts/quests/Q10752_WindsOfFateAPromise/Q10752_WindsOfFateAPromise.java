@@ -37,23 +37,17 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressT
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.TutorialCloseHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowQuestionMark;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
-
 import quests.Q10751_WindsOfFateEncounters.Q10751_WindsOfFateEncounters;
 
 /**
  * Winds of Fate: A Promise (10752)
+ *
  * @author Gladicek
  */
-public final class Q10752_WindsOfFateAPromise extends Quest
-{
+public final class Q10752_WindsOfFateAPromise extends Quest {
 	// NPCs
 	private static final int KATALIN = 33943;
 	private static final int AYANTHE = 33942;
@@ -76,31 +70,27 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 	private static final Location GHOST_SPAWN_LOC = new Location(51483, -54407, -3160);
 	// Misc
 	private static final int MIN_LEVEL = 76;
-	
-	public Q10752_WindsOfFateAPromise()
-	{
+
+	public Q10752_WindsOfFateAPromise() {
 		super(10752);
 		addStartNpc(KATALIN, AYANTHE);
 		addTalkId(KATALIN, AYANTHE, KARLA, SIEGMUND, LOMBERT, MYSTERIOUS_WIZARD, GHOST_OF_VON_HELLMAN, TOMBSTONE, BROKEN_BOOKSHELF);
-		
+
 		addCondRace(Race.ERTHEIA, "");
 		addCondInCategory(CategoryType.THIRD_CLASS_GROUP, "");
 		registerQuestItems(NAVARI_MARK, PROPHECY_MACHINE_FRAGMENT, KAIN_PROPHECY_MACHINE_FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "33943-02.htm":
 			case "33943-03.htm":
 			case "33943-04.htm":
@@ -115,104 +105,81 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 			case "31317-03.html":
 			case "31317-04.html":
 			case "31523-02.html":
-			case "31524-02.html":
-			{
+			case "31524-02.html": {
 				htmltext = event;
 				break;
 			}
 			case "33942-05.html":
-			case "33943-05.html":
-			{
+			case "33943-05.html": {
 				qs.startQuest();
 				break;
 			}
-			case "33933-04.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "33933-04.html": {
+				if (qs.isCond(1)) {
 					giveItems(player, NAVARI_MARK, 1);
 					giveItems(player, PROPHECY_MACHINE_FRAGMENT, 1);
 					qs.setCond(2, true);
 				}
 				break;
 			}
-			case "31321-03.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "31321-03.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 				}
 				break;
 			}
-			case "31317-05.html":
-			{
-				if (qs.isCond(3))
-				{
+			case "31317-05.html": {
+				if (qs.isCond(3)) {
 					qs.setCond(4, true);
 				}
 				break;
 			}
-			case "31522-05.html":
-			{
-				if (qs.isCond(4))
-				{
+			case "31522-05.html": {
+				if (qs.isCond(4)) {
 					qs.setCond(5, true);
 				}
 				break;
 			}
-			case "31523-03.html":
-			{
-				if (qs.isCond(5))
-				{
+			case "31523-03.html": {
+				if (qs.isCond(5)) {
 					qs.setCond(6, true);
 				}
 				showOnScreenMsg(player, NpcStringId.TALK_TO_THE_GHOST_OF_VON_HELLMANN, ExShowScreenMessage.TOP_CENTER, 5000);
 				addSpawn(GHOST_OF_VON_HELLMAN, GHOST_SPAWN_LOC, true, 20000);
 				break;
 			}
-			case "31524-03.html":
-			{
-				if (qs.isCond(6))
-				{
+			case "31524-03.html": {
+				if (qs.isCond(6)) {
 					qs.setCond(7, true);
 					showOnScreenMsg(player, NpcStringId.TIME_TO_MOVE_ONTO_THE_NEXT_PLACE, ExShowScreenMessage.TOP_CENTER, 5000);
 				}
 				break;
 			}
-			case "31526-03.html":
-			{
-				if (qs.isCond(7))
-				{
+			case "31526-03.html": {
+				if (qs.isCond(7)) {
 					qs.setCond(8, true);
 				}
 				break;
 			}
-			case "checkClass":
-			{
-				if (qs.isCond(9))
-				{
+			case "checkClass": {
+				if (qs.isCond(9)) {
 					takeItems(player, NAVARI_MARK, -1);
 					takeItems(player, PROPHECY_MACHINE_FRAGMENT, -1);
 					takeItems(player, KAIN_PROPHECY_MACHINE_FRAGMENT, -1);
-					
-					if (player.isInCategory(CategoryType.MAGE_GROUP))
-					{
+
+					if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 						qs.setCond(10, true);
 						htmltext = "33933-10.html";
-					}
-					else
-					{
+					} else {
 						qs.setCond(11, true);
 						htmltext = "33933-09.html";
 					}
 				}
 				break;
 			}
-			case "33942-12.html":
-			{
+			case "33942-12.html": {
 				final ClassId newClass = ClassId.STRATOMANCER;
-				if (qs.isCond(10) && newClass.childOf(player.getClassId()))
-				{
+				if (qs.isCond(10) && newClass.childOf(player.getClassId())) {
 					player.setBaseClass(newClass);
 					player.setClassId(newClass.getId());
 					player.broadcastUserInfo();
@@ -227,11 +194,9 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 				}
 				break;
 			}
-			case "33943-10.html":
-			{
+			case "33943-10.html": {
 				final ClassId newClass = ClassId.RIPPER;
-				if (qs.isCond(11) && newClass.childOf(player.getClassId()))
-				{
+				if (qs.isCond(11) && newClass.childOf(player.getClassId())) {
 					player.setBaseClass(newClass);
 					player.setClassId(newClass.getId());
 					player.broadcastUserInfo();
@@ -249,31 +214,23 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == KATALIN)
-				{
-					if ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q10751_WindsOfFateEncounters.class.getSimpleName()))
-					{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == KATALIN) {
+					if ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q10751_WindsOfFateEncounters.class.getSimpleName())) {
 						htmltext = !player.isInCategory(CategoryType.MAGE_GROUP) ? "33943-01.htm" : "33943-12.html";
 						break;
 					}
 					htmltext = "33943-12.html";
 					break;
-				}
-				else if (npc.getId() == AYANTHE)
-				{
-					if ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q10751_WindsOfFateEncounters.class.getSimpleName()))
-					{
+				} else if (npc.getId() == AYANTHE) {
+					if ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q10751_WindsOfFateEncounters.class.getSimpleName())) {
 						htmltext = player.isInCategory(CategoryType.MAGE_GROUP) ? "33942-01.htm" : "33942-09.html";
 						break;
 					}
@@ -281,42 +238,30 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 					break;
 				}
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case KATALIN:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case KATALIN: {
+						if (qs.isCond(1)) {
 							htmltext = "33943-06.html";
 							break;
-						}
-						else if (qs.isCond(11))
-						{
+						} else if (qs.isCond(11)) {
 							htmltext = "33943-07.html";
 							break;
 						}
 						break;
 					}
-					case AYANTHE:
-					{
-						if (qs.isCond(1))
-						{
+					case AYANTHE: {
+						if (qs.isCond(1)) {
 							htmltext = "33942-06.html";
 							break;
-						}
-						else if (qs.isCond(10))
-						{
+						} else if (qs.isCond(10)) {
 							htmltext = "33942-07.html";
 							break;
 						}
 						break;
 					}
-					case KARLA:
-					{
-						switch (qs.getCond())
-						{
+					case KARLA: {
+						switch (qs.getCond()) {
 							case 1:
 								htmltext = "33933-01.html";
 								break;
@@ -335,95 +280,67 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 						}
 						break;
 					}
-					case SIEGMUND:
-					{
-						if (qs.isCond(2))
-						{
+					case SIEGMUND: {
+						if (qs.isCond(2)) {
 							htmltext = "31321-01.html";
 							break;
-						}
-						else if (qs.isCond(3))
-						{
+						} else if (qs.isCond(3)) {
 							htmltext = "31321-04.html";
 							break;
 						}
 						break;
 					}
-					case LOMBERT:
-					{
-						if (qs.isCond(3))
-						{
+					case LOMBERT: {
+						if (qs.isCond(3)) {
 							htmltext = "31317-01.html";
 							break;
-						}
-						else if (qs.isCond(4))
-						{
+						} else if (qs.isCond(4)) {
 							htmltext = "31317-06.html";
 							break;
 						}
 						break;
 					}
-					case MYSTERIOUS_WIZARD:
-					{
-						if (qs.isCond(4))
-						{
+					case MYSTERIOUS_WIZARD: {
+						if (qs.isCond(4)) {
 							htmltext = "31522-01.html";
 							break;
-						}
-						else if (qs.isCond(5))
-						{
+						} else if (qs.isCond(5)) {
 							htmltext = "31522-06.html";
 							break;
 						}
 						break;
 					}
-					case TOMBSTONE:
-					{
-						if (qs.isCond(5))
-						{
+					case TOMBSTONE: {
+						if (qs.isCond(5)) {
 							htmltext = "31523-01.html";
 							break;
-						}
-						else if (qs.isCond(6))
-						{
+						} else if (qs.isCond(6)) {
 							htmltext = "31523-01.html";
 							break;
-						}
-						else if (qs.isCond(7))
-						{
+						} else if (qs.isCond(7)) {
 							htmltext = "31523-03.html";
 							break;
 						}
 						break;
 					}
-					case GHOST_OF_VON_HELLMAN:
-					{
-						if (qs.isCond(6))
-						{
+					case GHOST_OF_VON_HELLMAN: {
+						if (qs.isCond(6)) {
 							htmltext = "31524-01.html";
 							break;
-						}
-						else if (qs.isCond(7))
-						{
+						} else if (qs.isCond(7)) {
 							htmltext = "31524-03.html";
 							break;
 						}
 						break;
 					}
-					case BROKEN_BOOKSHELF:
-					{
-						if (qs.isCond(7))
-						{
+					case BROKEN_BOOKSHELF: {
+						if (qs.isCond(7)) {
 							htmltext = "31526-01.html";
 							break;
-						}
-						else if (qs.isCond(8))
-						{
+						} else if (qs.isCond(8)) {
 							htmltext = "31526-03.html";
 							break;
-						}
-						else if (qs.isCond(9))
-						{
+						} else if (qs.isCond(9)) {
 							htmltext = "31526-04.html";
 							break;
 						}
@@ -432,130 +349,95 @@ public final class Q10752_WindsOfFateAPromise extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event)
-	{
-		if (event.getQuestId() == getId())
-		{
+	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
+		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
 			final QuestState qs = getQuestState(player, false);
-			if (qs == null)
-			{
-				if (player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+			if (qs == null) {
+				if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 					player.sendPacket(new PlaySound(3, "Npcdialog1.aris_quest_1", 0, 0, 0, 0, 0));
 					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup1.html")));
-				}
-				else
-				{
+				} else {
 					player.sendPacket(new PlaySound(3, "Npcdialog1.katrina_quest_1", 0, 0, 0, 0, 0));
 					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup2.html")));
 				}
 			}
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_BYPASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerBypass(OnPlayerBypass event)
-	{
+	public void OnPlayerBypass(OnPlayerBypass event) {
 		final String command = event.getCommand();
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
-		
-		if (qs == null)
-		{
-			if (command.equals("Q10752_teleport"))
-			{
+
+		if (qs == null) {
+			if (command.equals("Q10752_teleport")) {
 				player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
-				
-				if (CastleManager.getInstance().getCastles().stream().anyMatch(c -> c.getSiege().isInProgress()))
-				{
+
+				if (CastleManager.getInstance().getCastles().stream().anyMatch(c -> c.getSiege().isInProgress())) {
 					showOnScreenMsg(player, NpcStringId.YOU_MAY_NOT_TELEPORT_IN_MIDDLE_OF_A_SIEGE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isInParty())
-				{
+				} else if (player.isInParty()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_IN_PARTY_STATUS, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isInInstance())
-				{
+				} else if (player.isInInstance()) {
 					showOnScreenMsg(player, NpcStringId.YOU_MAY_NOT_TELEPORT_WHILE_USING_INSTANCE_ZONE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player))
-				{
+				} else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player)) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_IN_COMBAT, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isTransformed())
-				{
+				} else if (player.isTransformed()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_WHILE_IN_A_TRANSFORMED_STATE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isDead())
-				{
+				} else if (player.isDead()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_WHILE_YOU_ARE_DEAD, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else
-				{
+				} else {
 					player.teleToLocation(TELEPORT_LOC);
 				}
 				player.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
-			}
-			else if (command.equals("Q10752_close"))
-			{
+			} else if (command.equals("Q10752_close")) {
 				player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
 				player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 				player.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
 			}
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLevelChanged(OnPlayerLevelChanged event)
-	{
+	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
-		
-		if ((qs == null) && (player.getRace().equals(Race.ERTHEIA)) && (oldLevel < newLevel) && (newLevel >= MIN_LEVEL) && (player.isInCategory(CategoryType.THIRD_CLASS_GROUP)))
-		{
-			if (player.isInCategory(CategoryType.MAGE_GROUP))
-			{
+
+		if ((qs == null) && (player.getRace().equals(Race.ERTHEIA)) && (oldLevel < newLevel) && (newLevel >= MIN_LEVEL) && (player.isInCategory(CategoryType.THIRD_CLASS_GROUP))) {
+			if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 				showOnScreenMsg(player, NpcStringId.MAGISTER_AYANTHE_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
-			}
-			else
-			{
+			} else {
 				showOnScreenMsg(player, NpcStringId.MASTER_KATALIN_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
 			}
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLogin(OnPlayerLogin event)
-	{
+	public void OnPlayerLogin(OnPlayerLogin event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
-		
-		if ((qs == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.THIRD_CLASS_GROUP)))
-		{
-			if (player.isInCategory(CategoryType.MAGE_GROUP))
-			{
+
+		if ((qs == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.THIRD_CLASS_GROUP))) {
+			if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 				showOnScreenMsg(player, NpcStringId.MAGISTER_AYANTHE_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
-			}
-			else
-			{
+			} else {
 				showOnScreenMsg(player, NpcStringId.MASTER_KATALIN_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
 			}
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));

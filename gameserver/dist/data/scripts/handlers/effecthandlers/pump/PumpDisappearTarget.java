@@ -18,33 +18,29 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Untargetable effect implementation.
+ *
  * @author UnAfraid
  */
-public final class PumpDisappearTarget extends AbstractBooleanStatEffect
-{
-	public PumpDisappearTarget(StatsSet params)
-	{
+public final class PumpDisappearTarget extends AbstractBooleanStatEffect {
+	public PumpDisappearTarget(StatsSet params) {
 		super(BooleanStat.UNTARGETABLE);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		// Remove target from those that have the untargetable creature on target.
 		World.getInstance().forEachVisibleObject(target, Creature.class, c ->
 		{
-			if (c.getTarget() == target)
-			{
+			if (c.getTarget() == target) {
 				c.setTarget(null);
 			}
 		});

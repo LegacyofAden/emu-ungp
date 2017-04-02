@@ -29,26 +29,22 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Nik
  */
-public class PumpAttackDamagePosition extends AbstractEffect
-{
+public class PumpAttackDamagePosition extends AbstractEffect {
 	protected final double _amount;
 	protected final Position _position;
-	
-	public PumpAttackDamagePosition(StatsSet params)
-	{
+
+	public PumpAttackDamagePosition(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_position = params.getEnum("position", Position.class, Position.FRONT);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergePositionTypeValue(DoubleStat.ATTACK_DAMAGE, _position, (_amount / 100) + 1, MathUtil::mul);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergePositionTypeValue(DoubleStat.ATTACK_DAMAGE, _position, (_amount / 100) + 1, MathUtil::div);
 	}
 }

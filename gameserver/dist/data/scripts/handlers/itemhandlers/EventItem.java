@@ -32,24 +32,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class EventItem implements IItemHandler
-{
+public class EventItem implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		boolean used = false;
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
-		
+
 		final int itemId = item.getId();
-		switch (itemId)
-		{
+		switch (itemId) {
 			case 13787: // Handy's Block Checker Bond
 				used = useBlockCheckerItem(activeChar, item);
 				break;
@@ -61,40 +57,34 @@ public class EventItem implements IItemHandler
 		}
 		return used;
 	}
-	
-	private final boolean useBlockCheckerItem(final PlayerInstance castor, ItemInstance item)
-	{
+
+	private final boolean useBlockCheckerItem(final PlayerInstance castor, ItemInstance item) {
 		final int blockCheckerArena = castor.getBlockCheckerArena();
-		if (blockCheckerArena == -1)
-		{
+		if (blockCheckerArena == -1) {
 			SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			msg.addItemName(item);
 			castor.sendPacket(msg);
 			return false;
 		}
-		
+
 		final Skill sk = item.getEtcItem().getSkills(ItemSkillType.NORMAL).get(0).getSkill();
-		if (sk == null)
-		{
+		if (sk == null) {
 			return false;
 		}
-		
-		if (!castor.destroyItem("Consume", item, 1, castor, true))
-		{
+
+		if (!castor.destroyItem("Consume", item, 1, castor, true)) {
 			return false;
 		}
-		
+
 		final L2BlockInstance block = (L2BlockInstance) castor.getTarget();
-		
+
 		final ArenaParticipantsHolder holder = HandysBlockCheckerManager.getInstance().getHolder(blockCheckerArena);
-		if (holder != null)
-		{
+		if (holder != null) {
 			final int team = holder.getPlayerTeam(castor);
 			World.getInstance().forEachVisibleObjectInRadius(block, PlayerInstance.class, sk.getEffectRange(), pc ->
 			{
 				final int enemyTeam = holder.getPlayerTeam(pc);
-				if ((enemyTeam != -1) && (enemyTeam != team))
-				{
+				if ((enemyTeam != -1) && (enemyTeam != team)) {
 					sk.applyEffects(castor, pc);
 				}
 			});
@@ -103,9 +93,8 @@ public class EventItem implements IItemHandler
 		_log.warn("Char: " + castor.getName() + "[" + castor.getObjectId() + "] has unknown block checker arena");
 		return false;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new EventItem());
 	}
 }

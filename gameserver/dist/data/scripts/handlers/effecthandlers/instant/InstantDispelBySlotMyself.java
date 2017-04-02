@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -31,51 +27,46 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Dispel By Slot effect implementation.
+ *
  * @author Gnacik, Zoey76, Adry_85
  */
-public final class InstantDispelBySlotMyself extends AbstractEffect
-{
+public final class InstantDispelBySlotMyself extends AbstractEffect {
 	private final Set<AbnormalType> _dispelAbnormals;
-	
-	public InstantDispelBySlotMyself(StatsSet params)
-	{
+
+	public InstantDispelBySlotMyself(StatsSet params) {
 		String dispel = params.getString("dispel");
-		if ((dispel != null) && !dispel.isEmpty())
-		{
+		if ((dispel != null) && !dispel.isEmpty()) {
 			_dispelAbnormals = new HashSet<>();
-			for (String slot : dispel.split(";"))
-			{
+			for (String slot : dispel.split(";")) {
 				_dispelAbnormals.add(AbnormalType.getAbnormalType(slot));
 			}
-		}
-		else
-		{
-			_dispelAbnormals = Collections.<AbnormalType> emptySet();
+		} else {
+			_dispelAbnormals = Collections.<AbnormalType>emptySet();
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DISPEL_BY_SLOT;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (_dispelAbnormals.isEmpty())
-		{
+
+		if (_dispelAbnormals.isEmpty()) {
 			return;
 		}
-		
+
 		// The effectlist should already check if it has buff with this abnormal type or not.
 		targetCreature.getEffectList().stopEffects(info -> !info.getSkill().isIrreplacableBuff() && _dispelAbnormals.contains(info.getSkill().getAbnormalType()), true, true);
 	}

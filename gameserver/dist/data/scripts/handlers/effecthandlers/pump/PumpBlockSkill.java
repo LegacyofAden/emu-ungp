@@ -30,42 +30,36 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Block Skills by isMagic type.
+ *
  * @author Nik
  */
-public final class PumpBlockSkill extends AbstractEffect
-{
+public final class PumpBlockSkill extends AbstractEffect {
 	private final int[] _magicTypes;
-	
-	public PumpBlockSkill(StatsSet params)
-	{
+
+	public PumpBlockSkill(StatsSet params) {
 		_magicTypes = params.getIntArray("magicTypes", ";");
 	}
-	
-	public TerminateReturn onSkillUseEvent(OnCreatureSkillUse event)
-	{
-		if (ArrayUtil.contains(_magicTypes, event.getSkill().getMagicType()))
-		{
+
+	public TerminateReturn onSkillUseEvent(OnCreatureSkillUse event) {
+		if (ArrayUtil.contains(_magicTypes, event.getSkill().getMagicType())) {
 			return new TerminateReturn(true, true, true);
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if ((_magicTypes == null) || (_magicTypes.length == 0))
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if ((_magicTypes == null) || (_magicTypes.length == 0)) {
 			return;
 		}
-		
+
 		target.addListener(new FunctionEventListener(target, EventType.ON_CREATURE_SKILL_USE, (OnCreatureSkillUse event) -> onSkillUseEvent(event), this));
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_SKILL_USE, listener -> listener.getOwner() == this);
 	}
-	
+
 }

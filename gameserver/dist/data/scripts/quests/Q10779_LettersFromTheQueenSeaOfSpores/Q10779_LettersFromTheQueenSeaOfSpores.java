@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Letters from the Queen: Sea of Spores (10779)
+ *
  * @author malyelfik
  */
-public final class Q10779_LettersFromTheQueenSeaOfSpores extends LetterQuest
-{
+public final class Q10779_LettersFromTheQueenSeaOfSpores extends LetterQuest {
 	// NPCs
 	private static final int HOLINT = 30191;
 	private static final int ANDY = 33845;
@@ -44,9 +43,8 @@ public final class Q10779_LettersFromTheQueenSeaOfSpores extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 52;
 	private static final int MAX_LEVEL = 57;
-	
-	public Q10779_LettersFromTheQueenSeaOfSpores()
-	{
+
+	public Q10779_LettersFromTheQueenSeaOfSpores() {
 		super(10779);
 		addTalkId(HOLINT, ANDY);
 		setIsErtheiaQuest(true);
@@ -55,45 +53,35 @@ public final class Q10779_LettersFromTheQueenSeaOfSpores extends LetterQuest
 		setStartQuestSound("Npcdialog1.serenia_quest_5");
 		registerQuestItems(SOE_OREN, SOE_SEA_OF_SPORES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30191-02.html":
 			case "33845-02.html":
 				break;
-			case "30191-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30191-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, SOE_SEA_OF_SPORES, 1);
 				}
 				break;
 			}
-			case "33845-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33845-03.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 635_250);
 						addSp(player, 152);
 						showOnScreenMsg(player, NpcStringId.GROW_STRONGER_HERE_UNTIL_YOU_RECEIVE_THE_NEXT_LETTER_FROM_QUEEN_NAVARI_AT_LV_58, ExShowScreenMessage.TOP_CENTER, 8000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -104,25 +92,19 @@ public final class Q10779_LettersFromTheQueenSeaOfSpores extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if (qs.isStarted())
-		{
-			if (npc.getId() == HOLINT)
-			{
+
+		if (qs.isStarted()) {
+			if (npc.getId() == HOLINT) {
 				htmltext = (qs.isCond(1)) ? "30191-01.html" : "30191-04.html";
-			}
-			else if (qs.isCond(2))
-			{
+			} else if (qs.isCond(2)) {
 				htmltext = "33845-01.html";
 			}
 		}

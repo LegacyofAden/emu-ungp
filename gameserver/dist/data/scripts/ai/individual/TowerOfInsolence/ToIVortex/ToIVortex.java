@@ -18,24 +18,23 @@
  */
 package ai.individual.TowerOfInsolence.ToIVortex;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Tower of Insolence Vortex teleport AI.<br>
  * Updated to High Five by pmq.<br>
  * Reworked by xban1x.
+ *
  * @author Plim
  */
-public final class ToIVortex extends AbstractNpcAI
-{
+public final class ToIVortex extends AbstractNpcAI {
 	// NPCs
 	private static final int KEPLON = 30949;
 	private static final int EUCLIE = 30950;
@@ -52,9 +51,8 @@ public final class ToIVortex extends AbstractNpcAI
 	private static final Map<String, Location> TOI_FLOORS = new HashMap<>();
 	// Misc
 	private static final Map<String, Integer> DIMENSION_TRADE = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		TOI_FLOORS.put("1", new Location(114356, 13423, -5096));
 		TOI_FLOORS.put("2", new Location(114666, 13380, -3608));
 		TOI_FLOORS.put("3", new Location(111982, 16028, -2120));
@@ -65,7 +63,7 @@ public final class ToIVortex extends AbstractNpcAI
 		TOI_FLOORS.put("8", new Location(115571, 13723, 3960));
 		TOI_FLOORS.put("9", new Location(114649, 14144, 4976));
 		TOI_FLOORS.put("10", new Location(118507, 16605, 5984));
-		
+
 		TOI_FLOOR_ITEMS.put("1", GREEN_DIMENSION_STONE);
 		TOI_FLOOR_ITEMS.put("2", GREEN_DIMENSION_STONE);
 		TOI_FLOOR_ITEMS.put("3", GREEN_DIMENSION_STONE);
@@ -76,25 +74,22 @@ public final class ToIVortex extends AbstractNpcAI
 		TOI_FLOOR_ITEMS.put("8", RED_DIMENSION_STONE);
 		TOI_FLOOR_ITEMS.put("9", RED_DIMENSION_STONE);
 		TOI_FLOOR_ITEMS.put("10", RED_DIMENSION_STONE);
-		
+
 		DIMENSION_TRADE.put("GREEN", GREEN_DIMENSION_STONE);
 		DIMENSION_TRADE.put("BLUE", BLUE_DIMENSION_STONE);
 		DIMENSION_TRADE.put("RED", RED_DIMENSION_STONE);
 	}
-	
-	private ToIVortex()
-	{
+
+	private ToIVortex() {
 		addStartNpc(KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2, DIMENSION_VORTEX_3);
 		addTalkId(KEPLON, EUCLIE, PITHGON, DIMENSION_VORTEX_1, DIMENSION_VORTEX_2, DIMENSION_VORTEX_3);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "1":
 			case "2":
 			case "3":
@@ -104,15 +99,11 @@ public final class ToIVortex extends AbstractNpcAI
 			case "7":
 			case "8":
 			case "9":
-			case "10":
-			{
+			case "10": {
 				final int itemId = TOI_FLOOR_ITEMS.get(event);
-				if (!hasQuestItems(player, itemId))
-				{
+				if (!hasQuestItems(player, itemId)) {
 					htmltext = "no-stones.htm";
-				}
-				else
-				{
+				} else {
 					takeItems(player, itemId, 1);
 					player.teleToLocation(TOI_FLOORS.get(event), true);
 				}
@@ -120,15 +111,11 @@ public final class ToIVortex extends AbstractNpcAI
 			}
 			case "GREEN":
 			case "BLUE":
-			case "RED":
-			{
-				if (player.getAdena() >= 10000)
-				{
+			case "RED": {
+				if (player.getAdena() >= 10000) {
 					takeItems(player, Inventory.ADENA_ID, 10000);
 					giveItems(player, DIMENSION_TRADE.get(event), 1);
-				}
-				else
-				{
+				} else {
 					return npc.getId() + "no-adena.htm";
 				}
 				break;
@@ -136,9 +123,8 @@ public final class ToIVortex extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ToIVortex();
 	}
 }

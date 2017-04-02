@@ -26,24 +26,21 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target door or treasure chest.
+ *
  * @author UnAfraid
  */
-public class DoorTreasure implements ITargetTypeHandler
-{
+public class DoorTreasure implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		final WorldObject target = activeChar.getTarget();
-		if ((target != null) && (target.isDoor() || target.isTreasure()))
-		{
+		if ((target != null) && (target.isDoor() || target.isTreasure())) {
 			return target;
 		}
-		
-		if (sendMessage)
-		{
+
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 		}
-		
+
 		return null;
 	}
 }

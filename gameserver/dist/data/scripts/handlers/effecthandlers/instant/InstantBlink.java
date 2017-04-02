@@ -43,20 +43,19 @@ import org.l2junity.gameserver.util.Util;
  * </ul>
  * By the way, if flyCourse = 360 or 0, player will be moved in in front of him. <br>
  * If target is effector, put in XML self="1", this will make _actor = getEffector(). This, combined with target type, allows more complex actions like flying target's backwards or player's backwards.
+ *
  * @author DrHouse
  */
-public final class InstantBlink extends AbstractEffect
-{
+public final class InstantBlink extends AbstractEffect {
 	private final int _flyCourse;
 	private final int _flyRadius;
-	
+
 	private final FlyType _flyType;
 	private final int _flySpeed;
 	private final int _flyDelay;
 	private final int _animationSpeed;
-	
-	public InstantBlink(StatsSet params)
-	{
+
+	public InstantBlink(StatsSet params) {
 		_flyCourse = params.getInt("angle", 0);
 		_flyRadius = params.getInt("range", 0);
 		_flyType = params.getEnum("flyType", FlyType.class, FlyType.DUMMY);
@@ -64,33 +63,30 @@ public final class InstantBlink extends AbstractEffect
 		_flyDelay = params.getInt("delay", 0);
 		_animationSpeed = params.getInt("animationSpeed", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.cannotEscape())
-		{
+
+		if (targetCreature.cannotEscape()) {
 			return;
 		}
-		
+
 		final double angle = Util.convertHeadingToDegree(targetCreature.getHeading());
 		final double radian = Math.toRadians(angle);
 		final double course = Math.toRadians(_flyCourse);
 		final double x1 = Math.cos(Math.PI + radian + course) * _flyRadius;
 		final double y1 = Math.sin(Math.PI + radian + course) * _flyRadius;
-		
+
 		double x = targetCreature.getX() + x1;
 		double y = targetCreature.getY() + y1;
 		double z = targetCreature.getZ();
-		
+
 		final Location destination = GeoData.getInstance().moveCheck(targetCreature.getX(), targetCreature.getY(), targetCreature.getZ(), x, y, z, targetCreature.getInstanceWorld());
-		
+
 		targetCreature.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		targetCreature.broadcastPacket(new FlyToLocation(targetCreature, destination, _flyType, _flySpeed, _flyDelay, _animationSpeed));
 		targetCreature.setXYZ(destination);

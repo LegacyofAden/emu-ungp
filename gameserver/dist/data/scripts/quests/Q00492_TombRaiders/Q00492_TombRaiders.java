@@ -28,11 +28,11 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Tomb Raiders (492)
+ *
  * @author netvirus
  */
 
-public class Q00492_TombRaiders extends Quest
-{
+public class Q00492_TombRaiders extends Quest {
 	// NPCs
 	private static final int ZENYA = 32140;
 	// Item
@@ -44,9 +44,8 @@ public class Q00492_TombRaiders extends Quest
 	private static final int APPARITION_WIZARD = 23196;
 	// Misc
 	private static final int MIN_LVL = 80;
-	
-	public Q00492_TombRaiders()
-	{
+
+	public Q00492_TombRaiders() {
 		super(492);
 		addStartNpc(ZENYA);
 		addTalkId(ZENYA);
@@ -55,109 +54,82 @@ public class Q00492_TombRaiders extends Quest
 		addCondMinLevel(MIN_LVL, "32140-03.htm");
 		addCondInCategory(CategoryType.FOURTH_CLASS_GROUP, "32140-02.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32140-05.htm":
 				break;
-			case "32140-06.htm":
-			{
+			case "32140-06.htm": {
 				st.startQuest();
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (npc.getId() == ZENYA)
-		{
-			switch (st.getState())
-			{
-				case State.COMPLETED:
-				{
-					if (!st.isNowAvailable())
-					{
+
+		if (npc.getId() == ZENYA) {
+			switch (st.getState()) {
+				case State.COMPLETED: {
+					if (!st.isNowAvailable()) {
 						htmltext = "32140-04.htm";
 						break;
 					}
-					
-					if (isSimulated)
-					{
+
+					if (isSimulated) {
 						break;
 					}
-					
+
 					// If quest is available again, set state to created and execute the state for new quest again
 					st.setState(State.CREATED);
 				}
-				case State.CREATED:
-				{
+				case State.CREATED: {
 					htmltext = "32140-01.htm";
 					break;
 				}
-				case State.STARTED:
-				{
-					switch (st.getCond())
-					{
-						case 1:
-						{
+				case State.STARTED: {
+					switch (st.getCond()) {
+						case 1: {
 							htmltext = "32140-07.html";
 							break;
 						}
-						case 2:
-						{
-							if (player.getLevel() >= 80)
-							{
-								if (!isSimulated)
-								{
+						case 2: {
+							if (player.getLevel() >= 80) {
+								if (!isSimulated) {
 									st.exitQuest(QuestType.DAILY, true);
-									
+
 									final int chance = getRandom(100);
-									if (chance < 32)
-									{
+									if (chance < 32) {
 										addExp(player, 25000000);
 										addSp(player, 6000);
-									}
-									else if (chance < 64)
-									{
+									} else if (chance < 64) {
 										addExp(player, 20000000);
 										addSp(player, 5000);
-									}
-									else if (chance < 96)
-									{
+									} else if (chance < 96) {
 										addExp(player, 15000000);
 										addSp(player, 4000);
-									}
-									else if (chance < 100)
-									{
+									} else if (chance < 100) {
 										addExp(player, 55000000);
 										addSp(player, 12000);
 									}
 								}
-								
+
 								htmltext = "32140-08.html";
-							}
-							else
-							{
+							} else {
 								htmltext = getNoQuestLevelRewardMsg(player);
 							}
 							break;
@@ -169,15 +141,13 @@ public class Q00492_TombRaiders extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final PlayerInstance member = getRandomPartyMember(killer, 1);
 		final QuestState st = getQuestState(member, false);
-		
-		if (giveItemRandomly(member, npc, RELIC_OF_THE_EMPIRE, 1, 50, 0.5, true))
-		{
+
+		if (giveItemRandomly(member, npc, RELIC_OF_THE_EMPIRE, 1, 50, 0.5, true)) {
 			st.setCond(2, true);
 		}
 		return super.onKill(npc, member, isSummon);

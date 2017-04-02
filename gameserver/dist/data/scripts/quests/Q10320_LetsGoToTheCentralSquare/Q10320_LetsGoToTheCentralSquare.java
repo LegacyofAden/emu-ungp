@@ -39,10 +39,10 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * Let's Go To The Central Square (10320)
+ *
  * @author ivantotov, Gladicek
  */
-public final class Q10320_LetsGoToTheCentralSquare extends Quest
-{
+public final class Q10320_LetsGoToTheCentralSquare extends Quest {
 	// NPCs
 	private static final int PANTHEON = 32972;
 	private static final int THEODORE = 32975;
@@ -50,9 +50,8 @@ public final class Q10320_LetsGoToTheCentralSquare extends Quest
 	private static final int TALKING_ISLAND_PRESENTATION_MOVIE_ZONE = 200034;
 	// Misc
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10320_LetsGoToTheCentralSquare()
-	{
+
+	public Q10320_LetsGoToTheCentralSquare() {
 		super(10320);
 		addStartNpc(PANTHEON);
 		addTalkId(PANTHEON, THEODORE);
@@ -60,35 +59,28 @@ public final class Q10320_LetsGoToTheCentralSquare extends Quest
 		addCondMaxLevel(MAX_LEVEL, "32972-01a.htm");
 		addCondNotRace(Race.ERTHEIA, "32972-01b.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32972-03.htm":
-			{
+		switch (event) {
+			case "32972-03.htm": {
 				qs.startQuest();
 				player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_001_Radar_01.htm", TutorialShowHtml.LARGE_WINDOW));
 				htmltext = event;
 				break;
 			}
-			case "32972-02.htm":
-			{
+			case "32972-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32975-02.htm":
-			{
-				if (qs.isStarted())
-				{
+			case "32975-02.htm": {
+				if (qs.isStarted()) {
 					addExp(player, 70);
 					addSp(player, 5);
 					qs.exitQuest(false, true);
@@ -100,45 +92,36 @@ public final class Q10320_LetsGoToTheCentralSquare extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = npc.getId() == PANTHEON ? "32972-01.htm" : "32975-04.htm";
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = npc.getId() == PANTHEON ? "32972-04.htm" : "32975-01.htm";
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = npc.getId() == PANTHEON ? "32972-05.htm" : "32975-03.htm";
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onEnterZone(Creature character, ZoneType zone)
-	{
-		if (character.isPlayer())
-		{
+	public String onEnterZone(Creature character, ZoneType zone) {
+		if (character.isPlayer()) {
 			final PlayerInstance player = character.getActingPlayer();
-			
-			if (player.getVariables().getBoolean(PlayerVariables.TI_PRESENTATION_MOVIE, false))
-			{
-				if (player.getLevel() <= MAX_LEVEL)
-				{
+
+			if (player.getVariables().getBoolean(PlayerVariables.TI_PRESENTATION_MOVIE, false)) {
+				if (player.getLevel() <= MAX_LEVEL) {
 					final QuestState qs = getQuestState(player, false);
 					playMovie(player, ((qs != null) && qs.isStarted()) ? Movie.SI_ILLUSION_02_QUE : Movie.SI_ILLUSION_01_QUE);
 				}
@@ -147,14 +130,12 @@ public final class Q10320_LetsGoToTheCentralSquare extends Quest
 		}
 		return super.onEnterZone(character, zone);
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_CREATE)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerCreate(OnPlayerCreate event)
-	{
+	public void OnPlayerCreate(OnPlayerCreate event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (player.getRace() != Race.ERTHEIA)
-		{
+		if (player.getRace() != Race.ERTHEIA) {
 			player.getVariables().set(PlayerVariables.TI_PRESENTATION_MOVIE, true);
 		}
 	}

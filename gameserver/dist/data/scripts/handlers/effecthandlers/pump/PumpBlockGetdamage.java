@@ -27,29 +27,24 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 /**
  * Effect that blocks damage and heals to HP/MP. <BR>
  * Regeneration or DOT shouldn't be blocked, Vampiric Rage and Balance Life as well.
+ *
  * @author Nik
  */
-public final class PumpBlockGetdamage extends AbstractEffect
-{
+public final class PumpBlockGetdamage extends AbstractEffect {
 	private final boolean _blockHp;
 	private final boolean _blockMp;
-	
-	public PumpBlockGetdamage(StatsSet params)
-	{
+
+	public PumpBlockGetdamage(StatsSet params) {
 		final String type = params.getString("type", null);
 		_blockHp = type.equalsIgnoreCase("BLOCK_HP");
 		_blockMp = type.equalsIgnoreCase("BLOCK_MP");
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		if (_blockHp)
-		{
+	public void pump(Creature target, Skill skill) {
+		if (_blockHp) {
 			target.getStat().set(BooleanStat.HP_BLOCKED);
-		}
-		else if (_blockMp)
-		{
+		} else if (_blockMp) {
 			target.getStat().set(BooleanStat.MP_BLOCKED);
 		}
 	}

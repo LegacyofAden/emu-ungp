@@ -28,15 +28,12 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 /**
  * @author UnAfraid
  */
-public class OpPeacezoneSkillCondition implements ISkillCondition
-{
-	public OpPeacezoneSkillCondition(StatsSet params)
-	{
+public class OpPeacezoneSkillCondition implements ISkillCondition {
+	public OpPeacezoneSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isInsideZone(ZoneId.PEACE);
 	}
 }

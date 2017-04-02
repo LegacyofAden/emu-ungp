@@ -27,16 +27,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author
  */
-public class OpUsePraseedSkillCondition implements ISkillCondition
-{
-	public OpUsePraseedSkillCondition(StatsSet params)
-	{
-		
+public class OpUsePraseedSkillCondition implements ISkillCondition {
+	public OpUsePraseedSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return false;
 	}
 }

@@ -28,10 +28,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Jewel of Valakas (10505)
+ *
  * @author Zoey76
  */
-public class Q10505_JewelOfValakas extends Quest
-{
+public class Q10505_JewelOfValakas extends Quest {
 	// NPC
 	private static final int KLEIN = 31540;
 	// Monster
@@ -43,51 +43,42 @@ public class Q10505_JewelOfValakas extends Quest
 	private static final int VACUALITE_FLOATING_STONE = 7267;
 	// Misc
 	private static final int MIN_LEVEL = 83;
-	
-	public Q10505_JewelOfValakas()
-	{
+
+	public Q10505_JewelOfValakas() {
 		super(10505);
 		addStartNpc(KLEIN);
 		addTalkId(KLEIN);
 		addKillId(VALAKAS);
 		registerQuestItems(EMPTY_CRYSTAL, FILLED_CRYSTAL_VALAKAS_ENERGY);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false))
-		{
+		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false)) {
 			takeItems(player, EMPTY_CRYSTAL, -1);
 			giveItems(player, FILLED_CRYSTAL_VALAKAS_ENERGY, 1);
 			playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			st.setCond(2, true);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, VACUALITE_FLOATING_STONE))
-		{
-			switch (event)
-			{
+		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, VACUALITE_FLOATING_STONE)) {
+			switch (event) {
 				case "31540-05.htm":
-				case "31540-06.htm":
-				{
+				case "31540-06.htm": {
 					htmltext = event;
 					break;
 				}
-				case "31540-07.html":
-				{
+				case "31540-07.html": {
 					st.startQuest();
 					giveItems(player, EMPTY_CRYSTAL, 1);
 					htmltext = event;
@@ -97,56 +88,40 @@ public class Q10505_JewelOfValakas extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, true);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (player.getLevel() < MIN_LEVEL)
-				{
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (player.getLevel() < MIN_LEVEL) {
 					htmltext = "31540-02.html";
-				}
-				else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE))
-				{
+				} else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE)) {
 					htmltext = "31540-04.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "31540-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
-						if (hasQuestItems(player, EMPTY_CRYSTAL))
-						{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
+						if (hasQuestItems(player, EMPTY_CRYSTAL)) {
 							htmltext = "31540-08.html";
-						}
-						else
-						{
+						} else {
 							giveItems(player, EMPTY_CRYSTAL, 1);
 							htmltext = "31540-09.html";
 						}
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						giveItems(player, JEWEL_OF_VALAKAS, 1);
 						playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 						st.exitQuest(false, true);
@@ -156,8 +131,7 @@ public class Q10505_JewelOfValakas extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "31540-03.html";
 				break;
 			}

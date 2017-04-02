@@ -18,32 +18,28 @@
  */
 package ai.individual.DenOfDevil;
 
-import org.l2junity.gameserver.model.actor.Npc;
-
 import ai.AbstractNpcAI;
+import org.l2junity.gameserver.model.actor.Npc;
 
 /**
  * Ragna Orc Hero AI.
+ *
  * @author Zealar
  */
-public final class RagnaOrcHero extends AbstractNpcAI
-{
+public final class RagnaOrcHero extends AbstractNpcAI {
 	private static final int RAGNA_ORC_HERO = 22693;
-	
-	private RagnaOrcHero()
-	{
+
+	private RagnaOrcHero() {
 		addSpawnId(RAGNA_ORC_HERO);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		spawnMinions(npc, getRandom(100) < 70 ? "Privates1" : "Privates2");
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new RagnaOrcHero();
 	}
 }

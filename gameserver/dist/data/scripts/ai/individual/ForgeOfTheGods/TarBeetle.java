@@ -18,49 +18,43 @@
  */
 package ai.individual.ForgeOfTheGods;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 
-import ai.AbstractNpcAI;
-
 /**
  * Tar Beetle AI
+ *
  * @author nonom, malyelfik
  */
-public final class TarBeetle extends AbstractNpcAI
-{
+public final class TarBeetle extends AbstractNpcAI {
 	// NPC
 	private static final int TAR_BEETLE = 18804;
 	// Skills
 	private static final int TAR_SPITE = 6142;
 	private static SkillHolder[] SKILLS =
-	{
-		new SkillHolder(TAR_SPITE, 1),
-		new SkillHolder(TAR_SPITE, 2),
-		new SkillHolder(TAR_SPITE, 3)
-	};
-	
-	private TarBeetle()
-	{
+			{
+					new SkillHolder(TAR_SPITE, 1),
+					new SkillHolder(TAR_SPITE, 2),
+					new SkillHolder(TAR_SPITE, 3)
+			};
+
+	private TarBeetle() {
 		addAggroRangeEnterId(TAR_BEETLE);
 		addSpellFinishedId(TAR_BEETLE);
 	}
-	
+
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (npc.getScriptValue() > 0)
-		{
+	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (npc.getScriptValue() > 0) {
 			final BuffInfo info = player.getEffectList().getBuffInfoBySkillId(TAR_SPITE);
 			final int level = (info != null) ? info.getSkill().getAbnormalLvl() : 0;
-			if (level < 3)
-			{
+			if (level < 3) {
 				final Skill skill = SKILLS[level].getSkill();
-				if (!npc.isSkillDisabled(skill))
-				{
+				if (!npc.isSkillDisabled(skill)) {
 					npc.setTarget(player);
 					npc.doCast(skill);
 				}
@@ -68,34 +62,27 @@ public final class TarBeetle extends AbstractNpcAI
 		}
 		return super.onAggroRangeEnter(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
-		if ((skill != null) && (skill.getId() == TAR_SPITE))
-		{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+		if ((skill != null) && (skill.getId() == TAR_SPITE)) {
 			final int val = npc.getScriptValue() - 1;
-			if ((val <= 0) || (SKILLS[0].getSkill().getMpConsume() > npc.getCurrentMp()))
-			{
+			if ((val <= 0) || (SKILLS[0].getSkill().getMpConsume() > npc.getCurrentMp())) {
 				TarBeetleSpawn.getInstance().removeBeetle(npc);
-			}
-			else
-			{
+			} else {
 				npc.setScriptValue(val);
 			}
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
+
 	@Override
-	public boolean unload()
-	{
+	public boolean unload() {
 		TarBeetleSpawn.getInstance().unload();
 		return super.unload();
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new TarBeetle();
 	}
 }

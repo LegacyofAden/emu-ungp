@@ -18,156 +18,118 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.LoginServerThread;
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.gameserverpackets.ServerStatus;
 
+import java.util.StringTokenizer;
+
 /**
  * This class handles the admin commands that acts on the login
+ *
  * @version $Revision: 1.2.2.1.2.4 $ $Date: 2007/07/31 10:05:56 $
  */
-public class AdminLogin implements IAdminCommandHandler
-{
+public class AdminLogin implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_server_gm_only",
-		"admin_server_all",
-		"admin_server_max_player",
-		"admin_server_list_type",
-		"admin_server_list_age",
-		"admin_server_login"
-	};
-	
+			{
+					"admin_server_gm_only",
+					"admin_server_all",
+					"admin_server_max_player",
+					"admin_server_list_type",
+					"admin_server_list_age",
+					"admin_server_login"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("admin_server_gm_only"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("admin_server_gm_only")) {
 			gmOnly();
 			activeChar.sendMessage("Server is now GM only");
 			showMainPage(activeChar);
-		}
-		else if (command.equals("admin_server_all"))
-		{
+		} else if (command.equals("admin_server_all")) {
 			allowToAll();
 			activeChar.sendMessage("Server is not GM only anymore");
 			showMainPage(activeChar);
-		}
-		else if (command.startsWith("admin_server_max_player"))
-		{
+		} else if (command.startsWith("admin_server_max_player")) {
 			StringTokenizer st = new StringTokenizer(command);
-			if (st.countTokens() > 1)
-			{
+			if (st.countTokens() > 1) {
 				st.nextToken();
 				String number = st.nextToken();
-				try
-				{
+				try {
 					LoginServerThread.getInstance().setMaxPlayer(Integer.parseInt(number));
 					activeChar.sendMessage("maxPlayer set to " + number);
 					showMainPage(activeChar);
-				}
-				catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 					activeChar.sendMessage("Max players must be a number.");
 				}
-			}
-			else
-			{
+			} else {
 				activeChar.sendMessage("Format is server_max_player <max>");
 			}
-		}
-		else if (command.startsWith("admin_server_list_type"))
-		{
+		} else if (command.startsWith("admin_server_list_type")) {
 			StringTokenizer st = new StringTokenizer(command);
 			int tokens = st.countTokens();
-			if (tokens > 1)
-			{
+			if (tokens > 1) {
 				st.nextToken();
 				String[] modes = new String[tokens - 1];
-				
-				for (int i = 0; i < (tokens - 1); i++)
-				{
+
+				for (int i = 0; i < (tokens - 1); i++) {
 					modes[i] = st.nextToken().trim();
 				}
 				int newType = 0;
-				try
-				{
+				try {
 					newType = Integer.parseInt(modes[0]);
-				}
-				catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 					newType = GeneralConfig.getServerTypeId(modes);
 				}
-				if (GeneralConfig.SERVER_LIST_TYPE != newType)
-				{
+				if (GeneralConfig.SERVER_LIST_TYPE != newType) {
 					GeneralConfig.SERVER_LIST_TYPE = newType;
 					LoginServerThread.getInstance().sendServerType();
 					activeChar.sendMessage("Server Type changed to " + getServerTypeName(newType));
 					showMainPage(activeChar);
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("Server Type is already " + getServerTypeName(newType));
 					showMainPage(activeChar);
 				}
-			}
-			else
-			{
+			} else {
 				activeChar.sendMessage("Format is server_list_type <normal/relax/test/nolabel/restricted/event/free>");
 			}
-		}
-		else if (command.startsWith("admin_server_list_age"))
-		{
+		} else if (command.startsWith("admin_server_list_age")) {
 			StringTokenizer st = new StringTokenizer(command);
-			if (st.countTokens() > 1)
-			{
+			if (st.countTokens() > 1) {
 				st.nextToken();
 				String mode = st.nextToken();
 				int age = 0;
-				try
-				{
+				try {
 					age = Integer.parseInt(mode);
-					if (GeneralConfig.SERVER_LIST_AGE != age)
-					{
+					if (GeneralConfig.SERVER_LIST_AGE != age) {
 						GeneralConfig.SERVER_LIST_TYPE = age;
 						LoginServerThread.getInstance().sendServerStatus(ServerStatus.SERVER_AGE, age);
 						activeChar.sendMessage("Server Age changed to " + age);
 						showMainPage(activeChar);
-					}
-					else
-					{
+					} else {
 						activeChar.sendMessage("Server Age is already " + age);
 						showMainPage(activeChar);
 					}
-				}
-				catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 					activeChar.sendMessage("Age must be a number");
 				}
-			}
-			else
-			{
+			} else {
 				activeChar.sendMessage("Format is server_list_age <number>");
 			}
-		}
-		else if (command.equals("admin_server_login"))
-		{
+		} else if (command.equals("admin_server_login")) {
 			showMainPage(activeChar);
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param activeChar
 	 */
-	private void showMainPage(PlayerInstance activeChar)
-	{
+	private void showMainPage(PlayerInstance activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/login.htm");
 		html.replace("%server_name%", LoginServerThread.getInstance().getServerName());
@@ -177,23 +139,18 @@ public class AdminLogin implements IAdminCommandHandler
 		html.replace("%max_players%", String.valueOf(LoginServerThread.getInstance().getMaxPlayer()));
 		activeChar.sendPacket(html);
 	}
-	
-	private String getServerTypeName(int serverType)
-	{
+
+	private String getServerTypeName(int serverType) {
 		String nameType = "";
-		for (int i = 0; i < 7; i++)
-		{
+		for (int i = 0; i < 7; i++) {
 			int currentType = serverType & (int) Math.pow(2, i);
-			
-			if (currentType > 0)
-			{
-				if (!nameType.isEmpty())
-				{
+
+			if (currentType > 0) {
+				if (!nameType.isEmpty()) {
 					nameType += "+";
 				}
-				
-				switch (currentType)
-				{
+
+				switch (currentType) {
 					case 0x01:
 						nameType += "Normal";
 						break;
@@ -220,33 +177,29 @@ public class AdminLogin implements IAdminCommandHandler
 		}
 		return nameType;
 	}
-	
+
 	/**
 	 *
 	 */
-	private void allowToAll()
-	{
+	private void allowToAll() {
 		LoginServerThread.getInstance().setServerStatus(ServerStatus.STATUS_AUTO);
 		GeneralConfig.SERVER_GMONLY = false;
 	}
-	
+
 	/**
 	 *
 	 */
-	private void gmOnly()
-	{
+	private void gmOnly() {
 		LoginServerThread.getInstance().setServerStatus(ServerStatus.STATUS_GM_ONLY);
 		GeneralConfig.SERVER_GMONLY = true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminLogin());
 	}
 }

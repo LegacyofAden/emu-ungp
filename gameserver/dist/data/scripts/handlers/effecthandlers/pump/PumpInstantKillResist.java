@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpInstantKillResist extends AbstractEffect
-{
+public class PumpInstantKillResist extends AbstractEffect {
 	private final int _amount;
-	
-	public PumpInstantKillResist(StatsSet params)
-	{
+
+	public PumpInstantKillResist(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(DoubleStat.INSTANT_KILL_RESIST, 1 - (_amount / 100));
 	}
 }

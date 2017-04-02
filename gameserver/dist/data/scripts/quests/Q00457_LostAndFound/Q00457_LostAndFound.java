@@ -18,8 +18,6 @@
  */
 package quests.Q00457_LostAndFound;
 
-import java.util.Set;
-
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.enums.ChatType;
@@ -34,30 +32,31 @@ import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.NpcSay;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.Set;
+
 /**
  * Lost and Found (457)
+ *
  * @author nonom
  */
-public final class Q00457_LostAndFound extends Quest
-{
+public final class Q00457_LostAndFound extends Quest {
 	// NPCs
 	private static final int GUMIEL = 32759;
 	private static final int ESCORT_CHECKER = 32764;
 	private static final int[] SOLINA_CLAN =
-	{
-		22789, // Guide Solina
-		22790, // Seeker Solina
-		22791, // Savior Solina
-		22793, // Ascetic Solina
-	};
+			{
+					22789, // Guide Solina
+					22790, // Seeker Solina
+					22791, // Savior Solina
+					22793, // Ascetic Solina
+			};
 	// Misc
 	private static final int PACKAGED_BOOK = 15716;
 	private static final int CHANCE_SPAWN = 1; // 1%
 	private static final int MIN_LV = 82;
 	private static Set<L2Spawn> _escortCheckers;
-	
-	public Q00457_LostAndFound()
-	{
+
+	public Q00457_LostAndFound() {
 		super(457);
 		addStartNpc(GUMIEL);
 		addSpawnId(ESCORT_CHECKER);
@@ -65,21 +64,17 @@ public final class Q00457_LostAndFound extends Quest
 		addTalkId(GUMIEL);
 		addKillId(SOLINA_CLAN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32759-06.html":
-			{
+		switch (event) {
+			case "32759-06.html": {
 				npc.setScriptValue(0);
 				st.startQuest();
 				npc.setTarget(player);
@@ -91,59 +86,44 @@ public final class Q00457_LostAndFound extends Quest
 				startQuestTimer("TALK_TIME2", 30000, npc, player);
 				break;
 			}
-			case "TALK_TIME":
-			{
+			case "TALK_TIME": {
 				broadcastNpcSay(npc, player, NpcStringId.AH_I_THINK_I_REMEMBER_THIS_PLACE, false);
 				break;
 			}
-			case "TALK_TIME2":
-			{
+			case "TALK_TIME2": {
 				broadcastNpcSay(npc, player, NpcStringId.WHAT_WERE_YOU_DOING_HERE, false);
 				startQuestTimer("TALK_TIME3", 10 * 1000, npc, player);
 				break;
 			}
-			case "TALK_TIME3":
-			{
+			case "TALK_TIME3": {
 				broadcastNpcSay(npc, player, NpcStringId.I_GUESS_YOU_RE_THE_SILENT_TYPE_THEN_ARE_YOU_LOOKING_FOR_TREASURE_LIKE_ME, false);
 				break;
 			}
-			case "TIME_LIMIT":
-			{
+			case "TIME_LIMIT": {
 				startQuestTimer("STOP", 2000, npc, player);
 				st.exitQuest(QuestType.DAILY);
 				break;
 			}
-			case "CHECK":
-			{
+			case "CHECK": {
 				final double distance = npc.distance3d(player);
-				if (distance > 1000)
-				{
-					if (distance > 5000)
-					{
+				if (distance > 1000) {
+					if (distance > 5000) {
 						startQuestTimer("STOP", 2000, npc, player);
 						st.exitQuest(QuestType.DAILY);
-					}
-					else if (npc.isScriptValue(0))
-					{
+					} else if (npc.isScriptValue(0)) {
 						broadcastNpcSay(npc, player, NpcStringId.HEY_DON_T_GO_SO_FAST, true);
 						npc.setScriptValue(1);
-					}
-					else if (npc.isScriptValue(1))
-					{
+					} else if (npc.isScriptValue(1)) {
 						broadcastNpcSay(npc, player, NpcStringId.IT_S_HARD_TO_FOLLOW, true);
 						npc.setScriptValue(2);
-					}
-					else if (npc.isScriptValue(2))
-					{
+					} else if (npc.isScriptValue(2)) {
 						startQuestTimer("STOP", 2000, npc, player);
 						st.exitQuest(QuestType.DAILY);
 					}
 				}
-				for (L2Spawn escortSpawn : _escortCheckers)
-				{
+				for (L2Spawn escortSpawn : _escortCheckers) {
 					final Npc escort = escortSpawn.getLastSpawn();
-					if ((escort != null) && npc.isInRadius2d(escort, 1000))
-					{
+					if ((escort != null) && npc.isInRadius2d(escort, 1000)) {
 						startQuestTimer("STOP", 1000, npc, player);
 						startQuestTimer("BYE", 3000, npc, player);
 						cancelQuestTimer("CHECK", npc, player);
@@ -156,8 +136,7 @@ public final class Q00457_LostAndFound extends Quest
 				}
 				break;
 			}
-			case "STOP":
-			{
+			case "STOP": {
 				npc.setTarget(null);
 				npc.getAI().stopFollow();
 				npc.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
@@ -167,63 +146,50 @@ public final class Q00457_LostAndFound extends Quest
 				cancelQuestTimer("TALK_TIME2", npc, player);
 				break;
 			}
-			case "BYE":
-			{
+			case "BYE": {
 				npc.deleteMe();
 				break;
 			}
-			default:
-			{
+			default: {
 				htmltext = event;
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if (npc.getTarget() != null)
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if (npc.getTarget() != null) {
 			return npc.getTarget().equals(player) ? "32759-08.html" : "32759-01a.html";
 		}
 		return "32759.html";
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, true);
-		
-		if ((getRandom(100) < CHANCE_SPAWN) && st.isNowAvailable() && (player.getLevel() >= MIN_LV))
-		{
+
+		if ((getRandom(100) < CHANCE_SPAWN) && st.isNowAvailable() && (player.getLevel() >= MIN_LV)) {
 			addSpawn(GUMIEL, npc);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = (player.getLevel() >= MIN_LV) ? "32759-01.htm" : "32759-03.html";
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (st.isNowAvailable())
-				{
+			case State.COMPLETED: {
+				if (st.isNowAvailable()) {
 					st.setState(State.CREATED);
 					htmltext = (player.getLevel() >= MIN_LV) ? "32759-01.htm" : "32759-03.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "32759-02.html";
 				}
 				break;
@@ -231,16 +197,14 @@ public final class Q00457_LostAndFound extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		_escortCheckers = SpawnTable.getInstance().getSpawns(ESCORT_CHECKER);
 		return super.onSpawn(npc);
 	}
-	
-	public void broadcastNpcSay(Npc npc, PlayerInstance player, NpcStringId stringId, boolean whisper)
-	{
+
+	public void broadcastNpcSay(Npc npc, PlayerInstance player, NpcStringId stringId, boolean whisper) {
 		((whisper) ? player : npc).sendPacket(new NpcSay(npc.getObjectId(), ((whisper) ? ChatType.NPC_WHISPER : ChatType.NPC_GENERAL), npc.getId(), stringId));
 	}
 }

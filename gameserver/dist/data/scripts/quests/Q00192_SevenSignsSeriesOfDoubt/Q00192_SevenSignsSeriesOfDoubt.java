@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Seven Signs, Series of Doubt (192)
+ *
  * @author Adry_85
  */
-public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
-{
+public final class Q00192_SevenSignsSeriesOfDoubt extends Quest {
 	// NPCs
 	private static final int HOLLINT = 30191;
 	private static final int HECTOR = 30197;
@@ -43,42 +43,34 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 	private static final int CROOPS_LETTER = 13815;
 	// Misc
 	private static final int MIN_LEVEL = 79;
-	
-	public Q00192_SevenSignsSeriesOfDoubt()
-	{
+
+	public Q00192_SevenSignsSeriesOfDoubt() {
 		super(192);
 		addStartNpc(CROOP, UNIDENTIFIED_BODY);
 		addTalkId(CROOP, STAN, UNIDENTIFIED_BODY, HECTOR, HOLLINT);
 		registerQuestItems(CROOPS_INTRODUCTION, JACOBS_NECKLACE, CROOPS_LETTER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30676-02.htm":
-			{
+		switch (event) {
+			case "30676-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "30676-03.html":
-			{
+			case "30676-03.html": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "video":
-			{
-				if (st.isCond(1))
-				{
+			case "video": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					playMovie(player, Movie.SSQ_SUSPICIOUS_DEATHS);
 					startQuestTimer("back", 32000, npc, player);
@@ -86,26 +78,21 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 				}
 				break;
 			}
-			case "back":
-			{
+			case "back": {
 				player.teleToLocation(81654, 54851, -1513);
 				return "";
 			}
 			case "30676-10.html":
 			case "30676-11.html":
 			case "30676-12.html":
-			case "30676-13.html":
-			{
-				if (st.isCond(6) && hasQuestItems(player, JACOBS_NECKLACE))
-				{
+			case "30676-13.html": {
+				if (st.isCond(6) && hasQuestItems(player, JACOBS_NECKLACE)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30676-14.html":
-			{
-				if (st.isCond(6) && hasQuestItems(player, JACOBS_NECKLACE))
-				{
+			case "30676-14.html": {
+				if (st.isCond(6) && hasQuestItems(player, JACOBS_NECKLACE)) {
 					giveItems(player, CROOPS_LETTER, 1);
 					takeItems(player, JACOBS_NECKLACE, -1);
 					st.setCond(7, true);
@@ -114,72 +101,55 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 				break;
 			}
 			case "30200-02.html":
-			case "30200-03.html":
-			{
-				if (st.isCond(4))
-				{
+			case "30200-03.html": {
+				if (st.isCond(4)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30200-04.html":
-			{
-				if (st.isCond(4))
-				{
+			case "30200-04.html": {
+				if (st.isCond(4)) {
 					st.setCond(5, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32568-02.html":
-			{
-				if (st.isCond(5))
-				{
+			case "32568-02.html": {
+				if (st.isCond(5)) {
 					giveItems(player, JACOBS_NECKLACE, 1);
 					st.setCond(6, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30197-02.html":
-			{
-				if (st.isCond(3) && hasQuestItems(player, CROOPS_INTRODUCTION))
-				{
+			case "30197-02.html": {
+				if (st.isCond(3) && hasQuestItems(player, CROOPS_INTRODUCTION)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30197-03.html":
-			{
-				if (st.isCond(3) && hasQuestItems(player, CROOPS_INTRODUCTION))
-				{
+			case "30197-03.html": {
+				if (st.isCond(3) && hasQuestItems(player, CROOPS_INTRODUCTION)) {
 					takeItems(player, CROOPS_INTRODUCTION, -1);
 					st.setCond(4, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30191-02.html":
-			{
-				if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER))
-				{
+			case "30191-02.html": {
+				if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "reward":
-			{
-				if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "reward": {
+				if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 10000000);
 						addSp(player, 2400);
 						st.exitQuest(false, true);
 						htmltext = "30191-03.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "level_check.html";
 					}
 				}
@@ -188,53 +158,37 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
-				if (npc.getId() == CROOP)
-				{
+		switch (st.getState()) {
+			case State.COMPLETED: {
+				if (npc.getId() == CROOP) {
 					htmltext = "30676-05.html";
-				}
-				else if (npc.getId() == UNIDENTIFIED_BODY)
-				{
+				} else if (npc.getId() == UNIDENTIFIED_BODY) {
 					htmltext = "32568-04.html";
 				}
 				break;
 			}
-			case State.CREATED:
-			{
-				if (npc.getId() == CROOP)
-				{
+			case State.CREATED: {
+				if (npc.getId() == CROOP) {
 					htmltext = (player.getLevel() >= MIN_LEVEL) ? "30676-01.htm" : "30676-04.html";
-				}
-				else if (npc.getId() == UNIDENTIFIED_BODY)
-				{
+				} else if (npc.getId() == UNIDENTIFIED_BODY) {
 					htmltext = "32568-04.html";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case CROOP:
-					{
-						switch (st.getCond())
-						{
-							case 1:
-							{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case CROOP: {
+						switch (st.getCond()) {
+							case 1: {
 								htmltext = "30676-06.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								giveItems(player, CROOPS_INTRODUCTION, 1);
 								st.setCond(3, true);
 								htmltext = "30676-07.html";
@@ -242,15 +196,12 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 							}
 							case 3:
 							case 4:
-							case 5:
-							{
+							case 5: {
 								htmltext = "30676-08.html";
 								break;
 							}
-							case 6:
-							{
-								if (hasQuestItems(player, JACOBS_NECKLACE))
-								{
+							case 6: {
+								if (hasQuestItems(player, JACOBS_NECKLACE)) {
 									htmltext = "30676-09.html";
 								}
 								break;
@@ -258,49 +209,34 @@ public final class Q00192_SevenSignsSeriesOfDoubt extends Quest
 						}
 						break;
 					}
-					case HECTOR:
-					{
-						if (st.isCond(3))
-						{
-							if (hasQuestItems(player, CROOPS_INTRODUCTION))
-							{
+					case HECTOR: {
+						if (st.isCond(3)) {
+							if (hasQuestItems(player, CROOPS_INTRODUCTION)) {
 								htmltext = "30197-01.html";
 							}
-						}
-						else if (st.getCond() > 3)
-						{
+						} else if (st.getCond() > 3) {
 							htmltext = "30197-04.html";
 						}
 						break;
 					}
-					case STAN:
-					{
-						if (st.isCond(4))
-						{
+					case STAN: {
+						if (st.isCond(4)) {
 							htmltext = "30200-01.html";
-						}
-						else if (st.getCond() > 4)
-						{
+						} else if (st.getCond() > 4) {
 							htmltext = "30200-05.html";
 						}
 						break;
 					}
-					case UNIDENTIFIED_BODY:
-					{
-						if (st.isCond(5))
-						{
+					case UNIDENTIFIED_BODY: {
+						if (st.isCond(5)) {
 							htmltext = "32568-01.html";
-						}
-						else if (st.getCond() < 5)
-						{
+						} else if (st.getCond() < 5) {
 							htmltext = "32568-03.html";
 						}
 						break;
 					}
-					case HOLLINT:
-					{
-						if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER))
-						{
+					case HOLLINT: {
+						if (st.isCond(7) && hasQuestItems(player, CROOPS_LETTER)) {
 							htmltext = "30191-01.html";
 						}
 						break;

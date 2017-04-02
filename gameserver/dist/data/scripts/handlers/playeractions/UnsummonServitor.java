@@ -27,46 +27,36 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Unsummon Servitor player action handler.
+ *
  * @author St3eT
  */
-public final class UnsummonServitor implements IPlayerActionHandler
-{
+public final class UnsummonServitor implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		boolean canUnsummon = true;
-		
-		if (activeChar.hasServitors())
-		{
-			for (Summon s : activeChar.getServitors().values())
-			{
-				if (s.isBetrayed())
-				{
+
+		if (activeChar.hasServitors()) {
+			for (Summon s : activeChar.getServitors().values()) {
+				if (s.isBetrayed()) {
 					activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 					canUnsummon = false;
 					break;
-				}
-				else if (s.isAttackingNow() || s.isInCombat() || s.isMovementDisabled())
-				{
+				} else if (s.isAttackingNow() || s.isInCombat() || s.isMovementDisabled()) {
 					activeChar.sendPacket(SystemMessageId.A_SERVITOR_WHOM_IS_ENGAGED_IN_BATTLE_CANNOT_BE_DE_ACTIVATED);
 					canUnsummon = false;
 					break;
 				}
 			}
-			
-			if (canUnsummon)
-			{
+
+			if (canUnsummon) {
 				activeChar.getServitors().values().forEach(s -> s.unSummon(activeChar));
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new UnsummonServitor());
 	}
 }

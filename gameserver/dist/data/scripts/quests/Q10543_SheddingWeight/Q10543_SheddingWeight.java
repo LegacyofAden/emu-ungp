@@ -27,15 +27,14 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10542_SearchingForNewPower.Q10542_SearchingForNewPower;
 
 /**
  * Shedding Weight (10543)
+ *
  * @author Gladicek
  */
-public final class Q10543_SheddingWeight extends Quest
-{
+public final class Q10543_SheddingWeight extends Quest {
 	// NPCs
 	private static final int SHANNON = 32974;
 	private static final int WILFORD = 30005;
@@ -46,9 +45,8 @@ public final class Q10543_SheddingWeight extends Quest
 	private static final int APPRENTICE_ADVENTURERS_STAFF = 7816;
 	// Misc
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10543_SheddingWeight()
-	{
+
+	public Q10543_SheddingWeight() {
 		super(10543);
 		addStartNpc(SHANNON);
 		addTalkId(SHANNON, WILFORD);
@@ -56,45 +54,35 @@ public final class Q10543_SheddingWeight extends Quest
 		addCondCompletedQuest(Q10542_SearchingForNewPower.class.getSimpleName(), "");
 		registerQuestItems(NOVICE_TRAINING_LOG);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32974-02.htm":
-			case "30005-02.html":
-			{
+			case "30005-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "32974-03.htm":
-			{
+			case "32974-03.htm": {
 				qs.startQuest();
 				giveItems(player, NOVICE_TRAINING_LOG, 1);
 				htmltext = event;
 				break;
 			}
-			case "30005-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30005-03.html": {
+				if (qs.isCond(1)) {
 					showOnScreenMsg(player, NpcStringId.WEAPONS_HAVE_BEEN_ADDED_TO_YOUR_INVENTORY, ExShowScreenMessage.TOP_CENTER, 4500);
 					player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_007_post_01.htm", TutorialShowHtml.LARGE_WINDOW));
-					if (player.isInCategory(CategoryType.MAGE_GROUP))
-					{
+					if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 						giveItems(player, APPRENTICE_ADVENTURERS_STAFF, 1);
-					}
-					else
-					{
+					} else {
 						giveItems(player, APPRENTICE_ADVENTURERS_KNIFE, 1);
 						giveItems(player, APPRENTICE_ADVENTURERS_LONG_SWORD, 1);
 					}
@@ -108,44 +96,33 @@ public final class Q10543_SheddingWeight extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState qs = getQuestState(player, true);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == SHANNON)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == SHANNON) {
 					htmltext = "32974-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == SHANNON)
-				{
-					if (qs.isCond(1))
-					{
+			case State.STARTED: {
+				if (npc.getId() == SHANNON) {
+					if (qs.isCond(1)) {
 						htmltext = "32974-04.html";
 					}
 					break;
-				}
-				else if (npc.getId() == WILFORD)
-				{
-					if (qs.isCond(1))
-					{
+				} else if (npc.getId() == WILFORD) {
+					if (qs.isCond(1)) {
 						htmltext = "30005-01.html";
 					}
 					break;
 				}
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-
-import handlers.effecthandlers.AbstractBooleanStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpPhysicalShieldDefenceAngleAll extends AbstractBooleanStatEffect
-{
-	public PumpPhysicalShieldDefenceAngleAll(StatsSet params)
-	{
+public class PumpPhysicalShieldDefenceAngleAll extends AbstractBooleanStatEffect {
+	public PumpPhysicalShieldDefenceAngleAll(StatsSet params) {
 		super(BooleanStat.PHYSICAL_SHIELD_DEFENCE_ANGLE_ALL);
 	}
 }

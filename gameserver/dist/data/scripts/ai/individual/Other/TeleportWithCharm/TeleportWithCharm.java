@@ -18,18 +18,17 @@
  */
 package ai.individual.Other.TeleportWithCharm;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Charm teleport AI.<br>
+ *
  * @author Plim
  */
-public final class TeleportWithCharm extends AbstractNpcAI
-{
+public final class TeleportWithCharm extends AbstractNpcAI {
 	// NPCs
 	private final static int WHIRPY = 30540;
 	private final static int TAMIL = 30576;
@@ -39,40 +38,29 @@ public final class TeleportWithCharm extends AbstractNpcAI
 	// Locations
 	private final static Location ORC_TELEPORT = new Location(-80826, 149775, -3043);
 	private final static Location DWARF_TELEPORT = new Location(-80826, 149775, -3043);
-	
-	private TeleportWithCharm()
-	{
+
+	private TeleportWithCharm() {
 		addStartNpc(WHIRPY, TAMIL);
 		addTalkId(WHIRPY, TAMIL);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
-		switch (npc.getId())
-		{
-			case WHIRPY:
-			{
-				if (hasQuestItems(player, DWARF_GATEKEEPER_TOKEN))
-				{
+	public String onTalk(Npc npc, PlayerInstance player) {
+		switch (npc.getId()) {
+			case WHIRPY: {
+				if (hasQuestItems(player, DWARF_GATEKEEPER_TOKEN)) {
 					takeItems(player, DWARF_GATEKEEPER_TOKEN, 1);
 					player.teleToLocation(DWARF_TELEPORT);
-				}
-				else
-				{
+				} else {
 					return "30540-01.htm";
 				}
 				break;
 			}
-			case TAMIL:
-			{
-				if (hasQuestItems(player, ORC_GATEKEEPER_CHARM))
-				{
+			case TAMIL: {
+				if (hasQuestItems(player, ORC_GATEKEEPER_CHARM)) {
 					takeItems(player, ORC_GATEKEEPER_CHARM, 1);
 					player.teleToLocation(ORC_TELEPORT);
-				}
-				else
-				{
+				} else {
 					return "30576-01.htm";
 				}
 				break;
@@ -80,9 +68,8 @@ public final class TeleportWithCharm extends AbstractNpcAI
 		}
 		return super.onTalk(npc, player);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new TeleportWithCharm();
 	}
 }

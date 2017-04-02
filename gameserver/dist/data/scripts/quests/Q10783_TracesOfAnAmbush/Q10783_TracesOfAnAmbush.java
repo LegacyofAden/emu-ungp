@@ -30,44 +30,43 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * Traces of an Ambush (10783)
+ *
  * @author malyelfik
  */
-public final class Q10783_TracesOfAnAmbush extends Quest
-{
+public final class Q10783_TracesOfAnAmbush extends Quest {
 	// NPC
 	private static final int NOVAIN = 33866;
 	// Monsters
 	private static final int EMBRYO_PREDATOR = 27539;
 	private static final int[] MONSTERS =
-	{
-		20679, // Marsh Stalker
-		20680, // Marsh Drake
-		21017, // Fallen Orc
-		21018, // Ancient Gargoyle
-		21019, // Fallen Orc Archer
-		21020, // Fallen Orc Shaman
-		21021, // Sharp Talon Tiger
-		21022, // Fallen Orc Captain
-		21258, // Fallen Orc Shaman
-		21259, // Fallen Orc Shaman
-	};
+			{
+					20679, // Marsh Stalker
+					20680, // Marsh Drake
+					21017, // Fallen Orc
+					21018, // Ancient Gargoyle
+					21019, // Fallen Orc Archer
+					21020, // Fallen Orc Shaman
+					21021, // Sharp Talon Tiger
+					21022, // Fallen Orc Captain
+					21258, // Fallen Orc Shaman
+					21259, // Fallen Orc Shaman
+			};
 	// Items
 	private static final int MISSIVE_SCRAPS = 39722;
 	// Messages
 	private static final NpcStringId[] MESSAGES =
-	{
-		NpcStringId.I_WILL_GIVE_YOU_DEATH,
-		NpcStringId.BACK_FOR_MORE_HUH,
-		NpcStringId.YOU_LITTLE_PUNK_TAKE_THAT
-	};
+			{
+					NpcStringId.I_WILL_GIVE_YOU_DEATH,
+					NpcStringId.BACK_FOR_MORE_HUH,
+					NpcStringId.YOU_LITTLE_PUNK_TAKE_THAT
+			};
 	// Misc
 	private static final int MIN_LEVEL = 58;
 	private static final int MAX_LEVEL = 61;
 	private static final int SPAWN_RATE = 70;
 	private static final int DROP_RATE = 80;
-	
-	public Q10783_TracesOfAnAmbush()
-	{
+
+	public Q10783_TracesOfAnAmbush() {
 		super(10783);
 		addStartNpc(NOVAIN);
 		addTalkId(NOVAIN);
@@ -77,38 +76,30 @@ public final class Q10783_TracesOfAnAmbush extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33866-01.htm");
 		registerQuestItems(MISSIVE_SCRAPS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33866-03.htm":
 			case "33866-04.htm":
 				break;
-			case "33866-05.htm":
-			{
+			case "33866-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33866-08.html":
-			{
-				if ((player.getLevel() >= MIN_LEVEL))
-				{
+			case "33866-08.html": {
+				if ((player.getLevel() >= MIN_LEVEL)) {
 					giveStoryQuestReward(npc, player);
 					addExp(player, 12_146_608);
 					addSp(player, 1_315);
 					qs.exitQuest(false, true);
-				}
-				else
-				{
+				} else {
 					htmltext = getNoQuestLevelRewardMsg(player);
 				}
 				break;
@@ -118,15 +109,13 @@ public final class Q10783_TracesOfAnAmbush extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33866-02.htm";
 				break;
@@ -139,30 +128,21 @@ public final class Q10783_TracesOfAnAmbush extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
-			if (npc.getId() == EMBRYO_PREDATOR)
-			{
-				if (getRandom(100) < DROP_RATE)
-				{
+		if ((qs != null) && qs.isCond(1)) {
+			if (npc.getId() == EMBRYO_PREDATOR) {
+				if (getRandom(100) < DROP_RATE) {
 					giveItems(killer, MISSIVE_SCRAPS, 1);
-					if (getQuestItemsCount(killer, MISSIVE_SCRAPS) >= 50)
-					{
+					if (getQuestItemsCount(killer, MISSIVE_SCRAPS) >= 50) {
 						qs.setCond(2, true);
-					}
-					else
-					{
+					} else {
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 				}
-			}
-			else if (getRandom(100) < SPAWN_RATE)
-			{
+			} else if (getRandom(100) < SPAWN_RATE) {
 				final Npc mob = addSpawn(EMBRYO_PREDATOR, npc, false, 120000);
 				addAttackPlayerDesire(mob, killer);
 				mob.broadcastSay(ChatType.NPC_GENERAL, MESSAGES[getRandom(MESSAGES.length)]);

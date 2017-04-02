@@ -27,22 +27,19 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpSkillSkillCondition implements ISkillCondition
-{
+public class OpSkillSkillCondition implements ISkillCondition {
 	private final int _skillId;
 	private final int _skillLevel;
 	private final boolean _hasLearned;
-	
-	public OpSkillSkillCondition(StatsSet params)
-	{
+
+	public OpSkillSkillCondition(StatsSet params) {
 		_skillId = params.getInt("skillId");
 		_skillLevel = params.getInt("skillLevel");
 		_hasLearned = params.getBoolean("hasLearned");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final Skill requestedSkill = caster.getKnownSkill(_skillId);
 		return (requestedSkill != null) && (_hasLearned ? (requestedSkill.getLevel() == _skillLevel) : (requestedSkill.getLevel() != _skillLevel));
 	}

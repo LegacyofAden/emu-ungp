@@ -29,10 +29,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Olympiad Undefeated (553)
+ *
  * @author lion
  */
-public class Q00553_OlympiadUndefeated extends Quest
-{
+public class Q00553_OlympiadUndefeated extends Quest {
 	// NPC
 	private static final int MANAGER = 31688;
 	// Items
@@ -41,84 +41,66 @@ public class Q00553_OlympiadUndefeated extends Quest
 	private static final int WIN_CONF_10 = 17246;
 	private static final int OLY_CHEST = 17169;
 	private static final int MEDAL_OF_GLORY = 21874;
-	
-	public Q00553_OlympiadUndefeated()
-	{
+
+	public Q00553_OlympiadUndefeated() {
 		super(553);
 		addStartNpc(MANAGER);
 		addTalkId(MANAGER);
 		registerQuestItems(WIN_CONF_2, WIN_CONF_5, WIN_CONF_10);
 		addOlympiadMatchFinishId();
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
 		String htmltext = event;
-		
-		if (event.equalsIgnoreCase("31688-03.html"))
-		{
+
+		if (event.equalsIgnoreCase("31688-03.html")) {
 			st.startQuest();
-		}
-		else if (event.equalsIgnoreCase("31688-04.html"))
-		{
+		} else if (event.equalsIgnoreCase("31688-04.html")) {
 			final long count = getQuestItemsCount(player, WIN_CONF_2) + getQuestItemsCount(player, WIN_CONF_5);
-			
-			if (count > 0)
-			{
+
+			if (count > 0) {
 				giveItems(player, OLY_CHEST, count);
-				if (count == 2)
-				{
+				if (count == 2) {
 					giveItems(player, MEDAL_OF_GLORY, 3);
 				}
 				st.exitQuest(QuestType.DAILY, true);
-			}
-			else
-			{
+			} else {
 				htmltext = getNoQuestMsg(player); // missing items
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onOlympiadMatchFinish(Participant winner, Participant looser, CompetitionType type)
-	{
-		if (winner != null)
-		{
+	public void onOlympiadMatchFinish(Participant winner, Participant looser, CompetitionType type) {
+		if (winner != null) {
 			final PlayerInstance player = winner.getPlayer();
-			if (player == null)
-			{
+			if (player == null) {
 				return;
 			}
-			
+
 			final QuestState st = getQuestState(player, false);
-			if ((st != null) && st.isStarted() && (st.isCond(1)))
-			{
+			if ((st != null) && st.isStarted() && (st.isCond(1))) {
 				final int matches = st.getInt("undefeatable") + 1;
 				st.set("undefeatable", String.valueOf(matches));
-				switch (matches)
-				{
+				switch (matches) {
 					case 2:
-						if (!hasQuestItems(player, WIN_CONF_2))
-						{
+						if (!hasQuestItems(player, WIN_CONF_2)) {
 							giveItems(player, WIN_CONF_2, 1);
 						}
 						break;
 					case 5:
-						if (!hasQuestItems(player, WIN_CONF_5))
-						{
+						if (!hasQuestItems(player, WIN_CONF_5)) {
 							giveItems(player, WIN_CONF_5, 1);
 						}
 						break;
 					case 10:
-						if (!hasQuestItems(player, WIN_CONF_10))
-						{
+						if (!hasQuestItems(player, WIN_CONF_10)) {
 							giveItems(player, WIN_CONF_10, 1);
 							st.setCond(2);
 						}
@@ -126,18 +108,15 @@ public class Q00553_OlympiadUndefeated extends Quest
 				}
 			}
 		}
-		
-		if (looser != null)
-		{
+
+		if (looser != null) {
 			final PlayerInstance player = looser.getPlayer();
-			if (player == null)
-			{
+			if (player == null) {
 				return;
 			}
-			
+
 			final QuestState st = getQuestState(player, false);
-			if ((st != null) && st.isStarted() && (st.isCond(1)))
-			{
+			if ((st != null) && st.isStarted() && (st.isCond(1))) {
 				st.unset("undefeatable");
 				takeItems(player, WIN_CONF_2, -1);
 				takeItems(player, WIN_CONF_5, -1);
@@ -145,49 +124,34 @@ public class Q00553_OlympiadUndefeated extends Quest
 			}
 		}
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if ((player.getLevel() < 75) || !player.isNoble())
-		{
+
+		if ((player.getLevel() < 75) || !player.isNoble()) {
 			htmltext = "31688-00.htm";
-		}
-		else if (st.isCreated())
-		{
+		} else if (st.isCreated()) {
 			htmltext = "31688-01.htm";
-		}
-		else if (st.isCompleted())
-		{
-			if (st.isNowAvailable())
-			{
+		} else if (st.isCompleted()) {
+			if (st.isNowAvailable()) {
 				st.setState(State.CREATED);
 				htmltext = (player.getLevel() < 75) || !player.isNoble() ? "31688-00.htm" : "31688-01.htm";
-			}
-			else
-			{
+			} else {
 				htmltext = "31688-05.html";
 			}
-		}
-		else
-		{
+		} else {
 			final long count = getQuestItemsCount(player, WIN_CONF_2) + getQuestItemsCount(player, WIN_CONF_5) + getQuestItemsCount(player, WIN_CONF_10);
-			if ((count == 3) && st.isCond(2))
-			{
+			if ((count == 3) && st.isCond(2)) {
 				giveItems(player, OLY_CHEST, 4);
 				giveItems(player, MEDAL_OF_GLORY, 5);
 				st.exitQuest(QuestType.DAILY, true);
 				htmltext = "31688-04.html";
-			}
-			else
-			{
+			} else {
 				htmltext = "31688-w" + count + ".html";
 			}
 		}

@@ -18,78 +18,62 @@
  */
 package instances.EvasHiddenSpace;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import instances.AbstractInstance;
 import quests.Q10369_NoblesseSoulTesting.Q10369_NoblesseSoulTesting;
 
 /**
  * Eva's Hidden Space instance zone.
+ *
  * @author Gladicek, St3eT
  */
-public final class EvasHiddenSpace extends AbstractInstance
-{
+public final class EvasHiddenSpace extends AbstractInstance {
 	// NPCs
 	private static final int CERENAS = 31281;
 	private static final int EVAS_AVATAR = 33686;
 	// Misc
 	private static final int TEMPLATE_ID = 217;
-	
-	public EvasHiddenSpace()
-	{
+
+	public EvasHiddenSpace() {
 		super(TEMPLATE_ID);
 		addStartNpc(CERENAS);
 		addTalkId(CERENAS, EVAS_AVATAR);
 		addFirstTalkId(EVAS_AVATAR);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
+
 		final QuestState qs = player.getQuestState(Q10369_NoblesseSoulTesting.class.getSimpleName());
-		
-		if (event.equals("enterInstance"))
-		{
-			if ((qs != null) && qs.isStarted())
-			{
+
+		if (event.equals("enterInstance")) {
+			if ((qs != null) && qs.isStarted()) {
 				enterInstance(player, npc, TEMPLATE_ID);
-				
-				if (qs.isCond(14))
-				{
+
+				if (qs.isCond(14)) {
 					qs.setCond(15);
-				}
-				else if (qs.isCond(17))
-				{
+				} else if (qs.isCond(17)) {
 					qs.setCond(18);
 				}
-			}
-			else if ((qs != null) && qs.isCompleted())
-			{
+			} else if ((qs != null) && qs.isCompleted()) {
 				htmltext = "31281-01.html";
-			}
-			else
-			{
+			} else {
 				htmltext = "31281.html";
 			}
-		}
-		else if (event.equals("exitInstance"))
-		{
+		} else if (event.equals("exitInstance")) {
 			final Instance world = getPlayerInstance(player);
-			if (world != null)
-			{
+			if (world != null) {
 				teleportPlayerOut(player, world);
 			}
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new EvasHiddenSpace();
 	}
 }

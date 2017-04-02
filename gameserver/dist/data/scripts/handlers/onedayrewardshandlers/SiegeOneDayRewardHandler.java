@@ -34,47 +34,37 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 /**
  * @author UnAfraid
  */
-public class SiegeOneDayRewardHandler extends AbstractOneDayRewardHandler
-{
-	public SiegeOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+public class SiegeOneDayRewardHandler extends AbstractOneDayRewardHandler {
+	public SiegeOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 	}
-	
+
 	@Override
-	public void init()
-	{
+	public void init() {
 		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_CASTLE_SIEGE_START, (OnCastleSiegeStart event) -> onSiegeStart(event), this));
 	}
-	
+
 	@Override
-	public boolean isAvailable(PlayerInstance player)
-	{
+	public boolean isAvailable(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
-		if (entry != null)
-		{
-			switch (entry.getStatus())
-			{
-				case AVAILABLE:
-				{
+		if (entry != null) {
+			switch (entry.getStatus()) {
+				case AVAILABLE: {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	private void onSiegeStart(OnCastleSiegeStart event)
-	{
+
+	private void onSiegeStart(OnCastleSiegeStart event) {
 		event.getSiege().getAttackerClans().forEach(this::processSiegeClan);
 		event.getSiege().getDefenderClans().forEach(this::processSiegeClan);
 	}
-	
-	private void processSiegeClan(SiegeClan siegeClan)
-	{
+
+	private void processSiegeClan(SiegeClan siegeClan) {
 		final L2Clan clan = ClanTable.getInstance().getClan(siegeClan.getClanId());
-		if (clan != null)
-		{
+		if (clan != null) {
 			clan.getOnlineMembers(0).forEach(player ->
 			{
 				final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);

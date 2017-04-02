@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Waiting for the Summer (474)
+ *
  * @author malyelfik
  */
-public final class Q00474_WaitingForTheSummer extends Quest
-{
+public final class Q00474_WaitingForTheSummer extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int VISHOTSKY = 31981;
@@ -49,30 +49,26 @@ public final class Q00474_WaitingForTheSummer extends Quest
 	private static final int MIN_LEVEL = 60;
 	private static final int MAX_LEVEL = 64;
 	private static final double DROP_CHANCE = 0.16d;
-	
-	public Q00474_WaitingForTheSummer()
-	{
+
+	public Q00474_WaitingForTheSummer() {
 		super(474);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, VISHOTSKY);
 		addKillId(LOST_BUFFALO, FROST_BUFFALO, URSUS_CUB, URSUS, LOST_YETI, FROST_YETI);
-		
+
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 		registerQuestItems(BUFFALO_MEAT, URSUS_MEAT, YETI_MEAT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
 			case "32327-03.htm":
 				break;
@@ -84,21 +80,16 @@ public final class Q00474_WaitingForTheSummer extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == ADVENTURER)
-		{
-			switch (qs.getState())
-			{
-				case State.COMPLETED:
-				{
-					if (!qs.isNowAvailable())
-					{
+
+		if (npc.getId() == ADVENTURER) {
+			switch (qs.getState()) {
+				case State.COMPLETED: {
+					if (!qs.isNowAvailable()) {
 						break;
 					}
 					qs.setState(State.CREATED);
@@ -110,41 +101,31 @@ public final class Q00474_WaitingForTheSummer extends Quest
 					htmltext = (qs.isCond(1)) ? "32327-05.html" : "32327-06.html";
 					break;
 			}
-		}
-		else
-		{
-			if (qs.isStarted() && qs.isCond(2))
-			{
-				if (!isSimulated)
-				{
+		} else {
+			if (qs.isStarted() && qs.isCond(2)) {
+				if (!isSimulated) {
 					giveAdena(player, 194000, true);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 1_879_400);
 						addSp(player, 451);
 					}
 					qs.exitQuest(QuestType.DAILY, true);
 				}
 				htmltext = "31981-01.html";
-			}
-			else if (qs.isCompleted() && !qs.isNowAvailable())
-			{
+			} else if (qs.isCompleted() && !qs.isNowAvailable()) {
 				htmltext = "31981-02.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			// Get item id by mob id
 			final int itemId;
-			switch (npc.getId())
-			{
+			switch (npc.getId()) {
 				case LOST_BUFFALO:
 				case FROST_BUFFALO:
 					itemId = BUFFALO_MEAT;
@@ -160,13 +141,11 @@ public final class Q00474_WaitingForTheSummer extends Quest
 				default:
 					itemId = -1;
 			}
-			
+
 			// Give item
-			if (itemId != -1)
-			{
+			if (itemId != -1) {
 				giveItemRandomly(killer, npc, itemId, 1, 30, DROP_CHANCE, true);
-				if ((getQuestItemsCount(killer, BUFFALO_MEAT) >= 30) && (getQuestItemsCount(killer, URSUS_MEAT) >= 30) && (getQuestItemsCount(killer, YETI_MEAT) >= 30))
-				{
+				if ((getQuestItemsCount(killer, BUFFALO_MEAT) >= 30) && (getQuestItemsCount(killer, URSUS_MEAT) >= 30) && (getQuestItemsCount(killer, YETI_MEAT) >= 30)) {
 					qs.setCond(2);
 				}
 			}

@@ -18,53 +18,44 @@
  */
 package ai.individual.DragonValley.SeparatedSoul;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Separated Soul AI.
+ *
  * @author UnAfraid, Adry_85, Gladicek
  */
-public final class SeparatedSoul extends AbstractNpcAI
-{
+public final class SeparatedSoul extends AbstractNpcAI {
 	// Npc
 	private static final int SEPARATED_SOULS = 32864;
 	// Items
 	private static final int WILL_OF_ANTHARAS = 17266;
 	private static final int SEALED_BLOOD_CRYSTAL = 17267;
 	private static final int ANTHARAS_BLOOD_CRYSTAL = 17268;
-	
-	private SeparatedSoul()
-	{
+
+	private SeparatedSoul() {
 		addFirstTalkId(SEPARATED_SOULS);
 		addStartNpc(SEPARATED_SOULS);
 		addTalkId(SEPARATED_SOULS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
-			case "32864-1.html":
-			{
+
+		switch (event) {
+			case "32864-1.html": {
 				htmltext = event;
 				break;
 			}
-			case "synthesis":
-			{
-				if (hasQuestItems(player, WILL_OF_ANTHARAS, SEALED_BLOOD_CRYSTAL))
-				{
+			case "synthesis": {
+				if (hasQuestItems(player, WILL_OF_ANTHARAS, SEALED_BLOOD_CRYSTAL)) {
 					takeItems(player, WILL_OF_ANTHARAS, 1);
 					takeItems(player, SEALED_BLOOD_CRYSTAL, 1);
 					giveItems(player, ANTHARAS_BLOOD_CRYSTAL, 1);
-				}
-				else
-				{
+				} else {
 					htmltext = "no-items.html";
 				}
 				break;
@@ -72,9 +63,8 @@ public final class SeparatedSoul extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new SeparatedSoul();
 	}
 }

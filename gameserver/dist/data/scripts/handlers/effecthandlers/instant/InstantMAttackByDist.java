@@ -31,49 +31,42 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Magical Attack By Distance effect implementation.
+ *
  * @author Sdw
  */
-public final class InstantMAttackByDist extends AbstractEffect
-{
+public final class InstantMAttackByDist extends AbstractEffect {
 	private final double _power;
 	private final boolean _overHit;
 	private final double _debuffModifier;
-	
-	public InstantMAttackByDist(StatsSet params)
-	{
+
+	public InstantMAttackByDist(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_overHit = params.getBoolean("overHit", false);
 		_debuffModifier = params.getDouble("debuffModifier", 1);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
 		// TODO: Unhardcode Cubic Skill to avoid double damage
-		if (caster.isAlikeDead() || (skill.getId() == 4049))
-		{
+		if (caster.isAlikeDead() || (skill.getId() == 4049)) {
 			return;
 		}
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.asPlayer().stopFakeDeath(true);
 		}
-		
-		if (_overHit && targetCreature.isAttackable())
-		{
+
+		if (_overHit && targetCreature.isAttackable()) {
 			targetCreature.asAttackable().overhitEnabled(true);
 		}
 
@@ -81,17 +74,16 @@ public final class InstantMAttackByDist extends AbstractEffect
 		boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
 		double damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power, targetCreature.getMDef(), sps, bss, mcrit);
-		
+
 		final double distance = CommonUtil.constrain((caster.distance3d(targetCreature) / skill.getCastRange()) + 0.1, 0.0, 1.0);
-		
+
 		damage *= (1.0 - (distance * 0.7));
-		
+
 		// Apply debuff mod
-		if (targetCreature.getEffectList().getDebuffCount() > 0)
-		{
+		if (targetCreature.getEffectList().getDebuffCount() > 0) {
 			damage *= _debuffModifier;
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

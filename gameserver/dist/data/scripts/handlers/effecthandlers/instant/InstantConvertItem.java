@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.data.xml.impl.ConvertData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VariationInstance;
@@ -36,54 +34,48 @@ import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Collection;
+
 /**
  * Convert Item effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantConvertItem extends AbstractEffect
-{
-	public InstantConvertItem(StatsSet params)
-	{
+public final class InstantConvertItem extends AbstractEffect {
+	public InstantConvertItem(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
-			return;
-		}
-		
-		if (targetPlayer.isAlikeDead())
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 
-		if (targetPlayer.hasItemRequest())
-		{
+		if (targetPlayer.isAlikeDead()) {
 			return;
 		}
-		
+
+		if (targetPlayer.hasItemRequest()) {
+			return;
+		}
+
 		final Weapon weaponItem = targetPlayer.getActiveWeaponItem();
-		if (weaponItem == null)
-		{
+		if (weaponItem == null) {
 			return;
 		}
-		
+
 		final ItemInstance wpn = targetPlayer.getActiveWeaponInstance();
-		
-		if (wpn == null)
-		{
+
+		if (wpn == null) {
 			return;
 		}
-		
+
 		final int newItemId = ConvertData.getInstance().getConversionId(wpn.getId());
-		if (newItemId == 0)
-		{
+		if (newItemId == 0) {
 			return;
 		}
-		
+
 		final int enchantLevel = wpn.getEnchantLevel();
 		final AttributeHolder elementals = wpn.getAttributes() == null ? null : wpn.getAttackAttribute();
 		final VariationInstance augmentation = wpn.getAugmentation();
@@ -91,97 +83,80 @@ public final class InstantConvertItem extends AbstractEffect
 		final Collection<EnsoulOption> specialAbilitiesAdditional = wpn.getAdditionalSpecialAbilities();
 		final ItemInstance[] unequiped = targetPlayer.getInventory().unEquipItemInBodySlotAndRecord(wpn.getItem().getBodyPart());
 		final InventoryUpdate iu = new InventoryUpdate();
-		for (ItemInstance unequippedItem : unequiped)
-		{
+		for (ItemInstance unequippedItem : unequiped) {
 			iu.addModifiedItem(unequippedItem);
 		}
 		targetPlayer.sendInventoryUpdate(iu);
-		
-		if (unequiped.length <= 0)
-		{
+
+		if (unequiped.length <= 0) {
 			return;
 		}
 		byte count = 0;
-		for (ItemInstance unequippedItem : unequiped)
-		{
-			if (!(unequippedItem.getItem() instanceof Weapon))
-			{
+		for (ItemInstance unequippedItem : unequiped) {
+			if (!(unequippedItem.getItem() instanceof Weapon)) {
 				count++;
 				continue;
 			}
-			
+
 			final SystemMessage sm;
-			if (unequippedItem.getEnchantLevel() > 0)
-			{
+			if (unequippedItem.getEnchantLevel() > 0) {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.THE_EQUIPMENT_S1_S2_HAS_BEEN_REMOVED);
 				sm.addInt(unequippedItem.getEnchantLevel());
 				sm.addItemName(unequippedItem);
-			}
-			else
-			{
+			} else {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_UNEQUIPPED);
 				sm.addItemName(unequippedItem);
 			}
 			targetPlayer.sendPacket(sm);
 		}
-		
-		if (count == unequiped.length)
-		{
+
+		if (count == unequiped.length) {
 			return;
 		}
-		
+
 		final ItemInstance destroyItem = targetPlayer.getInventory().destroyItem("ChangeWeapon", wpn, targetPlayer, null);
-		if (destroyItem == null)
-		{
+		if (destroyItem == null) {
 			return;
 		}
-		
+
 		final ItemInstance newItem = targetPlayer.getInventory().addItem("ChangeWeapon", newItemId, 1, targetPlayer, destroyItem);
-		if (newItem == null)
-		{
+		if (newItem == null) {
 			return;
 		}
-		
+
 		// Add elementals.
-		if (elementals != null)
-		{
+		if (elementals != null) {
 			newItem.setAttribute(elementals, true);
 		}
-		
+
 		// Add augmentation.
-		if (augmentation != null)
-		{
+		if (augmentation != null) {
 			newItem.setAugmentation(augmentation, true);
 		}
-		
+
 		// Add special abilities.
 		int i = 1;
-		for (EnsoulOption ensoul : specialAbilities)
-		{
+		for (EnsoulOption ensoul : specialAbilities) {
 			newItem.addSpecialAbility(ensoul, i++, 1, true);
 		}
 		i = 1;
-		for (EnsoulOption ensoul : specialAbilitiesAdditional)
-		{
+		for (EnsoulOption ensoul : specialAbilitiesAdditional) {
 			newItem.addSpecialAbility(ensoul, i++, 2, true);
 		}
 		newItem.setEnchantLevel(enchantLevel);
 		targetPlayer.getInventory().equipItem(newItem);
-		
+
 		final SystemMessage msg;
-		if (newItem.getEnchantLevel() > 0)
-		{
+		if (newItem.getEnchantLevel() > 0) {
 			msg = SystemMessage.getSystemMessage(SystemMessageId.EQUIPPED_S1_S2);
 			msg.addInt(newItem.getEnchantLevel());
 			msg.addItemName(newItem);
-		}
-		else
-		{
+		} else {
 			msg = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_EQUIPPED_YOUR_S1);
 			msg.addItemName(newItem);
 		}
 		targetPlayer.sendPacket(msg);
-		
+
 		final InventoryUpdate u = new InventoryUpdate();
 		u.addRemovedItem(destroyItem);
 		u.addItem(newItem);

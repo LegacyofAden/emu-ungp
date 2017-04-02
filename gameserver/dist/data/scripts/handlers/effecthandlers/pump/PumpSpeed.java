@@ -18,9 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.SpeedType;
 import org.l2junity.gameserver.enums.StatModifierType;
 import org.l2junity.gameserver.model.StatsSet;
@@ -29,69 +26,57 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public final class PumpSpeed extends AbstractEffect
-{
+public final class PumpSpeed extends AbstractEffect {
 	private final double _amount;
 	private final StatModifierType _mode;
 	private List<SpeedType> _speedType;
-	
-	public PumpSpeed(StatsSet params)
-	{
+
+	public PumpSpeed(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 		_speedType = params.getEnumList("weaponType", SpeedType.class);
-		if (_speedType == null)
-		{
+		if (_speedType == null) {
 			_speedType = Arrays.asList(SpeedType.ALL);
 		}
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_mode)
-		{
-			case DIFF:
-			{
-				for (SpeedType type : _speedType)
-				{
-					switch (type)
-					{
-						case RUN:
-						{
+	public void pump(Creature target, Skill skill) {
+		switch (_mode) {
+			case DIFF: {
+				for (SpeedType type : _speedType) {
+					switch (type) {
+						case RUN: {
 							target.getStat().mergeAdd(DoubleStat.RUN_SPEED, _amount);
 							break;
 						}
-						case WALK:
-						{
+						case WALK: {
 							target.getStat().mergeAdd(DoubleStat.WALK_SPEED, _amount);
 							break;
 						}
-						case SWIM_RUN:
-						{
+						case SWIM_RUN: {
 							target.getStat().mergeAdd(DoubleStat.SWIM_RUN_SPEED, _amount);
 							break;
 						}
-						case SWIM_WALK:
-						{
+						case SWIM_WALK: {
 							target.getStat().mergeAdd(DoubleStat.SWIM_WALK_SPEED, _amount);
 							break;
 						}
-						case FLY_RUN:
-						{
+						case FLY_RUN: {
 							target.getStat().mergeAdd(DoubleStat.FLY_RUN_SPEED, _amount);
 							break;
 						}
-						case FLY_WALK:
-						{
+						case FLY_WALK: {
 							target.getStat().mergeAdd(DoubleStat.FLY_WALK_SPEED, _amount);
 							break;
 						}
-						default:
-						{
+						default: {
 							target.getStat().mergeAdd(DoubleStat.RUN_SPEED, _amount);
 							target.getStat().mergeAdd(DoubleStat.WALK_SPEED, _amount);
 							target.getStat().mergeAdd(DoubleStat.SWIM_RUN_SPEED, _amount);
@@ -104,44 +89,34 @@ public final class PumpSpeed extends AbstractEffect
 				}
 				break;
 			}
-			case PER:
-			{
-				for (SpeedType type : _speedType)
-				{
-					switch (type)
-					{
-						case RUN:
-						{
+			case PER: {
+				for (SpeedType type : _speedType) {
+					switch (type) {
+						case RUN: {
 							target.getStat().mergeMul(DoubleStat.RUN_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						case WALK:
-						{
+						case WALK: {
 							target.getStat().mergeMul(DoubleStat.WALK_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						case SWIM_RUN:
-						{
+						case SWIM_RUN: {
 							target.getStat().mergeMul(DoubleStat.SWIM_RUN_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						case SWIM_WALK:
-						{
+						case SWIM_WALK: {
 							target.getStat().mergeMul(DoubleStat.SWIM_WALK_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						case FLY_RUN:
-						{
+						case FLY_RUN: {
 							target.getStat().mergeMul(DoubleStat.FLY_RUN_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						case FLY_WALK:
-						{
+						case FLY_WALK: {
 							target.getStat().mergeMul(DoubleStat.FLY_WALK_SPEED, (_amount / 100) + 1);
 							break;
 						}
-						default:
-						{
+						default: {
 							target.getStat().mergeMul(DoubleStat.RUN_SPEED, (_amount / 100) + 1);
 							target.getStat().mergeMul(DoubleStat.WALK_SPEED, (_amount / 100) + 1);
 							target.getStat().mergeMul(DoubleStat.SWIM_RUN_SPEED, (_amount / 100) + 1);

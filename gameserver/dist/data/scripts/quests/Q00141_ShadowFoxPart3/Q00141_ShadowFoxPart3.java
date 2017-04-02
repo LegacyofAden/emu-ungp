@@ -18,9 +18,6 @@
  */
 package quests.Q00141_ShadowFoxPart3;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -28,56 +25,53 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00140_ShadowFoxPart2.Q00140_ShadowFoxPart2;
 import quests.Q00998_FallenAngelSelect.Q00998_FallenAngelSelect;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Shadow Fox - 3 (141)
+ *
  * @author Nono
  */
-public class Q00141_ShadowFoxPart3 extends Quest
-{
+public class Q00141_ShadowFoxPart3 extends Quest {
 	// NPCs
 	private static final int NATOOLS = 30894;
 	// Monsters
 	private static final Map<Integer, Integer> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(20135, 53); // Alligator
 		MOBS.put(20791, 100); // Crokian Warrior
 		MOBS.put(20792, 92); // Farhite
 	}
-	
+
 	// Items
 	private static final int PREDECESSORS_REPORT = 10350;
 	// Misc
 	private static final int MIN_LEVEL = 37;
 	private static final int MAX_REWARD_LEVEL = 42;
 	private static final int REPORT_COUNT = 30;
-	
-	public Q00141_ShadowFoxPart3()
-	{
+
+	public Q00141_ShadowFoxPart3() {
 		super(141);
 		addStartNpc(NATOOLS);
 		addTalkId(NATOOLS);
 		addKillId(MOBS.keySet());
 		registerQuestItems(PREDECESSORS_REPORT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30894-05.html":
 			case "30894-10.html":
 			case "30894-11.html":
@@ -104,16 +98,14 @@ public class Q00141_ShadowFoxPart3 extends Quest
 				break;
 			case "30894-21.html":
 				giveAdena(player, 88888, true);
-				if (player.getLevel() <= MAX_REWARD_LEVEL)
-				{
+				if (player.getLevel() <= MAX_REWARD_LEVEL) {
 					addExp(player, 278005);
 					addSp(player, 17058); // TODO Incorrect SP reward.
 				}
 				st.exitQuest(false, true);
-				
+
 				final Quest q = QuestManager.getInstance().getQuest(Q00998_FallenAngelSelect.class.getSimpleName());
-				if (q != null)
-				{
+				if (q != null) {
 					q.newQuestState(player).setState(State.STARTED);
 				}
 				break;
@@ -123,49 +115,39 @@ public class Q00141_ShadowFoxPart3 extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance member = getRandomPartyMember(player, 2);
-		if (member == null)
-		{
+		if (member == null) {
 			return super.onKill(npc, player, isSummon);
 		}
 		final QuestState st = getQuestState(member, false);
-		if ((getRandom(100) < MOBS.get(npc.getId())))
-		{
+		if ((getRandom(100) < MOBS.get(npc.getId()))) {
 			giveItems(player, PREDECESSORS_REPORT, 1);
-			if (getQuestItemsCount(player, PREDECESSORS_REPORT) >= REPORT_COUNT)
-			{
+			if (getQuestItemsCount(player, PREDECESSORS_REPORT) >= REPORT_COUNT) {
 				st.setCond(3, true);
-			}
-			else
-			{
+			} else {
 				playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = (player.getLevel() >= MIN_LEVEL) ? player.hasQuestCompleted(Q00140_ShadowFoxPart2.class.getSimpleName()) ? "30894-01.htm" : "30894-00.html" : "30894-02.htm";
 				break;
 			case State.STARTED:
-				switch (st.getCond())
-				{
+				switch (st.getCond()) {
 					case 1:
 						htmltext = "30894-04.html";
 						break;
@@ -173,16 +155,11 @@ public class Q00141_ShadowFoxPart3 extends Quest
 						htmltext = "30894-07.html";
 						break;
 					case 3:
-						if (st.getInt("talk") == 1)
-						{
+						if (st.getInt("talk") == 1) {
 							htmltext = "30894-09.html";
-						}
-						else if (st.getInt("talk") == 2)
-						{
+						} else if (st.getInt("talk") == 2) {
 							htmltext = "30894-16.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "30894-08.html";
 							takeItems(player, PREDECESSORS_REPORT, -1);
 							st.set("talk", "1");

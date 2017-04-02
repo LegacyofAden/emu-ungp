@@ -28,10 +28,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Jewel of Antharas (10504)
+ *
  * @author Zoey76
  */
-public final class Q10504_JewelOfAntharas extends Quest
-{
+public final class Q10504_JewelOfAntharas extends Quest {
 	// NPC
 	private static final int THEODRIC = 30755;
 	// Monster
@@ -43,51 +43,42 @@ public final class Q10504_JewelOfAntharas extends Quest
 	private static final int PORTAL_STONE = 3865;
 	// Misc
 	private static final int MIN_LEVEL = 84;
-	
-	public Q10504_JewelOfAntharas()
-	{
+
+	public Q10504_JewelOfAntharas() {
 		super(10504);
 		addStartNpc(THEODRIC);
 		addTalkId(THEODRIC);
 		addKillId(ANTHARAS);
 		registerQuestItems(CLEAR_CRYSTAL, FILLED_CRYSTAL_ANTHARAS_ENERGY);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false))
-		{
+		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false)) {
 			takeItems(player, CLEAR_CRYSTAL, -1);
 			giveItems(player, FILLED_CRYSTAL_ANTHARAS_ENERGY, 1);
 			playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			st.setCond(2, true);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, PORTAL_STONE))
-		{
-			switch (event)
-			{
+		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, PORTAL_STONE)) {
+			switch (event) {
 				case "30755-05.htm":
-				case "30755-06.htm":
-				{
+				case "30755-06.htm": {
 					htmltext = event;
 					break;
 				}
-				case "30755-07.html":
-				{
+				case "30755-07.html": {
 					st.startQuest();
 					giveItems(player, CLEAR_CRYSTAL, 1);
 					htmltext = event;
@@ -97,56 +88,40 @@ public final class Q10504_JewelOfAntharas extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, true);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (player.getLevel() < MIN_LEVEL)
-				{
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (player.getLevel() < MIN_LEVEL) {
 					htmltext = "30755-02.html";
-				}
-				else if (!hasQuestItems(player, PORTAL_STONE))
-				{
+				} else if (!hasQuestItems(player, PORTAL_STONE)) {
 					htmltext = "30755-04.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "30755-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
-						if (hasQuestItems(player, CLEAR_CRYSTAL))
-						{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
+						if (hasQuestItems(player, CLEAR_CRYSTAL)) {
 							htmltext = "30755-08.html";
-						}
-						else
-						{
+						} else {
 							giveItems(player, CLEAR_CRYSTAL, 1);
 							htmltext = "30755-09.html";
 						}
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						giveItems(player, JEWEL_OF_ANTHARAS, 1);
 						playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 						st.exitQuest(false, true);
@@ -156,8 +131,7 @@ public final class Q10504_JewelOfAntharas extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "30755-03.html";
 				break;
 			}

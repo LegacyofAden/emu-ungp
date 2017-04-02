@@ -24,23 +24,21 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.ThirdClassTransferQuest;
 
 /**
  * Day of Destiny: Elven Fate (10342)
+ *
  * @author St3eT
  */
-public final class Q10342_DayOfDestinyElvenFate extends ThirdClassTransferQuest
-{
+public final class Q10342_DayOfDestinyElvenFate extends ThirdClassTransferQuest {
 	// NPC
 	private static final int WINONIN = 30856;
 	// Misc
 	private static final int MIN_LEVEL = 76;
 	private static final Race START_RACE = Race.ELF;
-	
-	public Q10342_DayOfDestinyElvenFate()
-	{
+
+	public Q10342_DayOfDestinyElvenFate() {
 		super(10342, MIN_LEVEL, START_RACE);
 		addStartNpc(WINONIN);
 		addTalkId(WINONIN);
@@ -48,62 +46,48 @@ public final class Q10342_DayOfDestinyElvenFate extends ThirdClassTransferQuest
 		addCondRace(START_RACE, "30856-11.html");
 		addCondInCategory(CategoryType.THIRD_CLASS_GROUP, "30856-12.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "30856-02.htm":
 			case "30856-03.htm":
 			case "30856-04.htm":
-			case "30856-08.html":
-			{
+			case "30856-08.html": {
 				htmltext = event;
 				break;
 			}
-			case "30856-05.htm":
-			{
+			case "30856-05.htm": {
 				st.startQuest();
 				st.set("STARTED_CLASS", player.getClassId().getId());
 				htmltext = event;
 				break;
 			}
-			default:
-			{
+			default: {
 				htmltext = super.onAdvEvent(event, npc, player);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (npc.getId() == WINONIN)
-		{
-			if (st.getState() == State.CREATED)
-			{
+
+		if (npc.getId() == WINONIN) {
+			if (st.getState() == State.CREATED) {
 				htmltext = "30856-01.htm";
-			}
-			else if (st.getState() == State.STARTED)
-			{
-				if (st.isCond(1))
-				{
+			} else if (st.getState() == State.STARTED) {
+				if (st.isCond(1)) {
 					htmltext = "30856-06.html";
-				}
-				else if (st.isCond(13))
-				{
+				} else if (st.isCond(13)) {
 					htmltext = "30856-07.html";
 				}
 			}

@@ -25,32 +25,28 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Passive effect implementation.
+ *
  * @author Adry_85
  */
-public final class PumpPassive extends AbstractEffect
-{
-	public PumpPassive(StatsSet params)
-	{
+public final class PumpPassive extends AbstractEffect {
+	public PumpPassive(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isAttackable();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.abortAttack();
 		target.abortCast();
 		target.disableAllSkills();
 		target.setIsImmobilized(true);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.enableAllSkills();
 		target.setIsImmobilized(false);
 	}

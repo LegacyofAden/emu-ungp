@@ -29,32 +29,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpCheckClassSkillCondition implements ISkillCondition
-{
+public class OpCheckClassSkillCondition implements ISkillCondition {
 	private final ClassId _classId;
 	private final SkillConditionAffectType _affectType;
 	private final boolean _isWithin;
-	
-	public OpCheckClassSkillCondition(StatsSet params)
-	{
+
+	public OpCheckClassSkillCondition(StatsSet params) {
 		_classId = params.getEnum("classId", ClassId.class);
 		_affectType = params.getEnum("affectType", SkillConditionAffectType.class);
 		_isWithin = params.getBoolean("isWithin");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_affectType)
-		{
-			case CASTER:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_affectType) {
+			case CASTER: {
 				return caster.isPlayer() && (_isWithin == (_classId == caster.getActingPlayer().getClassId()));
 			}
-			case TARGET:
-			{
-				if ((target != null) && !target.isPlayer())
-				{
+			case TARGET: {
+				if ((target != null) && !target.isPlayer()) {
 					return _isWithin == (_classId == target.getActingPlayer().getClassId());
 				}
 				break;

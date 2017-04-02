@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpCheckPcbangPointSkillCondition implements ISkillCondition
-{
+public class OpCheckPcbangPointSkillCondition implements ISkillCondition {
 	private final int _amount;
-	
-	public OpCheckPcbangPointSkillCondition(StatsSet params)
-	{
+
+	public OpCheckPcbangPointSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return target.isPlayer() && ((target.getActingPlayer().getPcCafePoints() + _amount) <= 200_000);
 	}
 }

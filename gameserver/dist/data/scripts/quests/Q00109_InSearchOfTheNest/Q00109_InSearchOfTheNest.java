@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * In Search of the Nest (109)
+ *
  * @author Adry_85, Gladicek
  */
-public class Q00109_InSearchOfTheNest extends Quest
-{
+public class Q00109_InSearchOfTheNest extends Quest {
 	// NPCs
 	private static final int PIERCE = 31553;
 	private static final int SCOUTS_CORPSE = 32015;
@@ -38,56 +38,45 @@ public class Q00109_InSearchOfTheNest extends Quest
 	private static final int SCOUTS_NOTE = 14858;
 	// Misc
 	private static final int MIN_LEVEL = 81;
-	
-	public Q00109_InSearchOfTheNest()
-	{
+
+	public Q00109_InSearchOfTheNest() {
 		super(109);
 		addStartNpc(PIERCE);
 		addTalkId(PIERCE, SCOUTS_CORPSE, KAHMAN);
 		addCondMinLevel(MIN_LEVEL, "31553-04.htm");
 		registerQuestItems(SCOUTS_NOTE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
-			case "31553-02.html":
-			{
+
+		switch (event) {
+			case "31553-02.html": {
 				st.startQuest();
 				break;
 			}
-			case "32015-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "32015-02.html": {
+				if (st.isCond(1)) {
 					giveItems(player, SCOUTS_NOTE, 1);
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "31553-06.html":
-			{
-				if (st.isCond(2))
-				{
+			case "31553-06.html": {
+				if (st.isCond(2)) {
 					takeItems(player, SCOUTS_NOTE, -1);
 					st.setCond(3, true);
 				}
 				break;
 			}
-			case "31554-02.html":
-			{
-				if (st.isCond(3))
-				{
+			case "31554-02.html": {
+				if (st.isCond(3)) {
 					giveAdena(player, 900_990, true);
 					addExp(player, 8_550_000);
 					addSp(player, 2052);
@@ -98,35 +87,26 @@ public class Q00109_InSearchOfTheNest extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == PIERCE)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == PIERCE) {
 					htmltext = "31553-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case PIERCE:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case PIERCE: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "31553-03.html";
 								break;
@@ -139,22 +119,16 @@ public class Q00109_InSearchOfTheNest extends Quest
 						}
 						break;
 					}
-					case SCOUTS_CORPSE:
-					{
-						if (st.isCond(1))
-						{
+					case SCOUTS_CORPSE: {
+						if (st.isCond(1)) {
 							htmltext = "32015-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "32015-03.html";
 						}
 						break;
 					}
-					case KAHMAN:
-					{
-						if (st.isCond(3))
-						{
+					case KAHMAN: {
+						if (st.isCond(3)) {
 							htmltext = "31554-01.html";
 						}
 						break;

@@ -23,105 +23,84 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00109_InSearchOfTheNest.Q00109_InSearchOfTheNest;
 
 /**
  * The Zero Hour (146)
+ *
  * @author Gnacik, malyelfik
  */
-public class Q00146_TheZeroHour extends Quest
-{
+public class Q00146_TheZeroHour extends Quest {
 	// NPCs
 	private static final int KAHMAN = 31554;
 	private static final int QUEEN_SHYEED = 25671;
 	// Item
 	private static final int KAHMANS_SUPPLY_BOX = 14849;
 	private static final int FANG = 14859;
-	
-	public Q00146_TheZeroHour()
-	{
+
+	public Q00146_TheZeroHour() {
 		super(146);
 		addStartNpc(KAHMAN);
 		addTalkId(KAHMAN);
 		addKillId(QUEEN_SHYEED);
 		registerQuestItems(FANG);
 	}
-	
+
 	@Override
-	public int getNpcStringId()
-	{
+	public int getNpcStringId() {
 		return 640;
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equalsIgnoreCase("31554-03.htm"))
-		{
+
+		if (event.equalsIgnoreCase("31554-03.htm")) {
 			st.startQuest();
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final PlayerInstance partyMember = getRandomPartyMember(killer, 1);
-		if (partyMember != null)
-		{
+		if (partyMember != null) {
 			final QuestState st = getQuestState(partyMember, false);
-			if (!hasQuestItems(partyMember, FANG))
-			{
+			if (!hasQuestItems(partyMember, FANG)) {
 				giveItems(partyMember, FANG, 1);
 				st.setCond(2, true);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
-				if (player.getLevel() < 81)
-				{
+				if (player.getLevel() < 81) {
 					htmltext = "31554-02.htm";
-				}
-				else
-				{
-					if (player.hasQuestCompleted(Q00109_InSearchOfTheNest.class.getSimpleName()))
-					{
+				} else {
+					if (player.hasQuestCompleted(Q00109_InSearchOfTheNest.class.getSimpleName())) {
 						htmltext = "31554-01a.htm";
-					}
-					else
-					{
+					} else {
 						htmltext = "31554-04.html";
 					}
 				}
 				break;
 			case State.STARTED:
-				if (st.isCond(1))
-				{
+				if (st.isCond(1)) {
 					htmltext = "31554-06.html";
-				}
-				else
-				{
+				} else {
 					giveItems(player, KAHMANS_SUPPLY_BOX, 1);
 					addExp(player, 154616);
 					addSp(player, 12500); // TODO Incorrect SP reward.

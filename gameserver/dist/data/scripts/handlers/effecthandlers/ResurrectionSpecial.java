@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
@@ -30,56 +26,49 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Resurrection Special effect implementation.
+ *
  * @author Zealar
  */
-public final class ResurrectionSpecial extends AbstractBooleanStatEffect
-{
+public final class ResurrectionSpecial extends AbstractBooleanStatEffect {
 	private final int _power;
 	private final Set<Integer> _instanceId;
-	
-	public ResurrectionSpecial(StatsSet params)
-	{
+
+	public ResurrectionSpecial(StatsSet params) {
 		super(BooleanStat.RESURRECTION_SPECIAL);
 		_power = params.getInt("power", 0);
-		
+
 		final String instanceIds = params.getString("instanceId", null);
-		if ((instanceIds != null) && !instanceIds.isEmpty())
-		{
+		if ((instanceIds != null) && !instanceIds.isEmpty()) {
 			_instanceId = new HashSet<>();
-			for (String id : instanceIds.split(";"))
-			{
+			for (String id : instanceIds.split(";")) {
 				_instanceId.add(Integer.parseInt(id));
 			}
-		}
-		else
-		{
-			_instanceId = Collections.<Integer> emptySet();
+		} else {
+			_instanceId = Collections.<Integer>emptySet();
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature effector, Creature target, Skill skill)
-	{
-		if (!target.isPlayer() && !target.isPet())
-		{
+	public void pumpEnd(Creature effector, Creature target, Skill skill) {
+		if (!target.isPlayer() && !target.isPet()) {
 			return;
 		}
-		
+
 		final PlayerInstance caster = effector.getActingPlayer();
 		final Instance instance = caster.getInstanceWorld();
-		if (!_instanceId.isEmpty() && ((instance == null) || !_instanceId.contains(instance.getTemplateId())))
-		{
+		if (!_instanceId.isEmpty() && ((instance == null) || !_instanceId.contains(instance.getTemplateId()))) {
 			return;
 		}
-		
-		if (target.isPlayer())
-		{
+
+		if (target.isPlayer()) {
 			target.getActingPlayer().reviveRequest(caster, skill, false, _power);
-		}
-		else if (target.isPet())
-		{
+		} else if (target.isPet()) {
 			final L2PetInstance pet = (L2PetInstance) target;
 			target.getActingPlayer().reviveRequest(pet.getActingPlayer(), skill, true, _power);
 		}

@@ -28,23 +28,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Recovery effect implementation.
+ *
  * @author Kerberos
  */
-public final class InstantChangeSkillLevel extends AbstractEffect
-{
-	public InstantChangeSkillLevel(StatsSet params)
-	{
+public final class InstantChangeSkillLevel extends AbstractEffect {
+	public InstantChangeSkillLevel(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		// TODO: retail does not hardcode this i_change_skill_level;<skill id>;<diff>
 		targetPlayer.decreaseShilensBreathDebuff();
 	}

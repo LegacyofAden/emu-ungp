@@ -18,60 +18,49 @@
  */
 package ai.individual.WindmillHill;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Commando AI.
+ *
  * @author St3eT, Gladicek
  */
-public final class Commando extends AbstractNpcAI
-{
+public final class Commando extends AbstractNpcAI {
 	// NPCs
 	private static final int COMMANDO_1 = 33422;
 	private static final int COMMANDO_2 = 33423;
-	
-	private Commando()
-	{
+
+	private Commando() {
 		addSpawnId(COMMANDO_1, COMMANDO_2);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT1"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT1")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WE_RE_COLLECTING_SEEKER_OF_ADEN);
 			getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_SHOUT2"))
-		{
+		} else if (event.equals("NPC_SHOUT2")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.AH_THIS_IS_THE_WINDMILL_HILL);
 			getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == COMMANDO_1)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == COMMANDO_1) {
 			getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (npc.getId() == COMMANDO_2)
-		{
+		} else if (npc.getId() == COMMANDO_2) {
 			getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Commando();
 	}
 }

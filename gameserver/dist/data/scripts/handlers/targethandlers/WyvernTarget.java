@@ -25,13 +25,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * TODO: Target while riding wyvern.
+ *
  * @author Nik
  */
-public class WyvernTarget implements ITargetTypeHandler
-{
+public class WyvernTarget implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		return null;
 	}
 }

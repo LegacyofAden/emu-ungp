@@ -31,31 +31,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantDespawn extends AbstractEffect
-{
+public class InstantDespawn extends AbstractEffect {
 	final private double _chance;
-	
-	public InstantDespawn(StatsSet params)
-	{
+
+	public InstantDespawn(StatsSet params) {
 		_chance = params.getDouble("chance");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		if ((Rnd.nextDouble() * 100) <= _chance)
-		{
+
+		if ((Rnd.nextDouble() * 100) <= _chance) {
 			targetPlayer.getServitors().values().forEach(s -> s.unSummon(targetPlayer));
-			
+
 			final Summon pet = targetPlayer.getPet();
-			if (pet != null)
-			{
+			if (pet != null) {
 				pet.unSummon(targetPlayer);
 			}
 		}

@@ -26,29 +26,25 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Party Info user command.
+ *
  * @author Tempy
  */
-public class PartyInfo implements IUserCommandHandler
-{
+public class PartyInfo implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		81
-	};
-	
+			{
+					81
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
+
 		activeChar.sendPacket(SystemMessageId.PARTY_INFORMATION);
-		if (activeChar.isInParty())
-		{
+		if (activeChar.isInParty()) {
 			final Party party = activeChar.getParty();
-			switch (party.getDistributionType())
-			{
+			switch (party.getDistributionType()) {
 				case FINDERS_KEEPERS:
 					activeChar.sendPacket(SystemMessageId.LOOTING_METHOD_FINDERS_KEEPERS);
 					break;
@@ -65,7 +61,7 @@ public class PartyInfo implements IUserCommandHandler
 					activeChar.sendPacket(SystemMessageId.LOOTING_METHOD_BY_TURN_INCLUDING_SPOIL);
 					break;
 			}
-			
+
 			// Not used in Infinite Odissey
 			// if (!party.isLeader(activeChar))
 			// {
@@ -77,15 +73,13 @@ public class PartyInfo implements IUserCommandHandler
 		activeChar.sendPacket(SystemMessageId.EMPTY3);
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new PartyInfo());
 	}
 }

@@ -34,10 +34,10 @@ import org.l2junity.gameserver.model.quest.State;
  * <li><b>Hardin</b> (first talk event)</li>
  * <li><b>AwakeningMaster</b> (first talk event)</li>
  * </ul>
+ *
  * @author malyelfik
  */
-public final class Q10472_WindsOfFateEncroachingShadows extends Quest
-{
+public final class Q10472_WindsOfFateEncroachingShadows extends Quest {
 	// NPCs
 	private static final int NAVARI = 33931;
 	private static final int ZEPHYRA = 33978;
@@ -49,15 +49,15 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 	private static final int RAINA = 33491;
 	// Mobs
 	private static final int[] MOBS =
-	{
-		23174, // Arbitor of Darkness
-		23175, // Altar of Evil Spirit Offering Box
-		23176, // Mutated Cerberos
-		23177, // Dartanion
-		23178, // Insane Phion
-		23179, // Dimensional Rifter
-		23180, // Hellgate Fighting Dog
-	};
+			{
+					23174, // Arbitor of Darkness
+					23175, // Altar of Evil Spirit Offering Box
+					23176, // Mutated Cerberos
+					23177, // Dartanion
+					23178, // Insane Phion
+					23179, // Dimensional Rifter
+					23180, // Hellgate Fighting Dog
+			};
 	// Items
 	private static final int DARK_FRAGMENT = 40060;
 	private static final int COUNTERFEIT_ATELIA = 40059;
@@ -79,32 +79,28 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 	// Misc
 	private static final double DROP_CHANCE = 0.6d; // Guessed
 	private static final int DARK_FRAGMENT_COUNT = 50;
-	
-	public Q10472_WindsOfFateEncroachingShadows()
-	{
+
+	public Q10472_WindsOfFateEncroachingShadows() {
 		super(10472);
 		addStartNpc(NAVARI);
 		addTalkId(NAVARI, ZEPHYRA, MOMET, BLACK_MARKETEER_MAMMON, BLACKSMITH_OF_MAMMON, HARDIN, KARLA, RAINA);
 		addKillId(MOBS);
-		
+
 		addCondRace(Race.ERTHEIA, "");
 		addCondCompletedQuest("Q10753_WindsOfFateChoices", "33931-00.htm"); // TODO: Replace quest name
-		
+
 		registerQuestItems(DARK_FRAGMENT, COUNTERFEIT_ATELIA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33931-02.htm":
 			case "33931-03.htm":
 			case "33931-04.htm":
@@ -135,16 +131,13 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			}
 			case "33978-03.html": // Zephyra
 			{
-				if (qs.isCond(1))
-				{
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 				}
 				break;
 			}
-			case "33978-07.html":
-			{
-				if (qs.isCond(17))
-				{
+			case "33978-07.html": {
+				if (qs.isCond(17)) {
 					// TODO: Here Zephyra should cast some skill to player which recovers CP/HP/MP
 					qs.setCond(18, true);
 				}
@@ -152,8 +145,7 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			}
 			case "33998-04.html": // Momet
 			{
-				if (qs.isCond(2))
-				{
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 				}
 				break;
@@ -163,25 +155,20 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 				htmltext = getHtm(player.getHtmlPrefix(), event).replace("%playerName%", player.getName());
 				break;
 			}
-			case "31092-03.html":
-			{
-				if (qs.isCond(3))
-				{
+			case "31092-03.html": {
+				if (qs.isCond(3)) {
 					qs.setCond(4, true);
 				}
 				break;
 			}
-			case "31092-06.html":
-			{
+			case "31092-06.html": {
 				npc.setTarget(player);
 				npc.doCast(ABSORB_WIND.getSkill());
 				qs.setMemoState(1);
 				break;
 			}
-			case "31092-08.html":
-			{
-				if (qs.isCond(5))
-				{
+			case "31092-08.html": {
+				if (qs.isCond(5)) {
 					qs.setCond(6, true);
 					qs.setMemoState(0);
 					takeItems(player, DARK_FRAGMENT, DARK_FRAGMENT_COUNT);
@@ -190,8 +177,7 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			}
 			case "31126-08.html": // Blacksmith Mammon
 			{
-				if (qs.isCond(6))
-				{
+				if (qs.isCond(6)) {
 					qs.setCond(7, true);
 					giveItems(player, COUNTERFEIT_ATELIA, 1);
 				}
@@ -199,16 +185,13 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			}
 			case "33870-05.html": // Hardin
 			{
-				if (qs.isCond(7))
-				{
+				if (qs.isCond(7)) {
 					qs.setCond(8, true);
 				}
 				break;
 			}
-			case "33870-09.html":
-			{
-				if (qs.isCond(16))
-				{
+			case "33870-09.html": {
+				if (qs.isCond(16)) {
 					takeItems(player, COUNTERFEIT_ATELIA, 1);
 					npc.setTarget(player);
 					npc.doCast(ATELIA_ENERGY.getSkill()); // TODO: Implement this skill
@@ -218,18 +201,15 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			}
 			case "33933-03.html": // Karla
 			{
-				if (qs.isCond(18))
-				{
+				if (qs.isCond(18)) {
 					qs.setCond(19, true);
 				}
 				break;
 			}
 			case "33491-red": // Raina
 			case "33491-blue":
-			case "33491-green":
-			{
-				if (qs.isCond(19))
-				{
+			case "33491-green": {
+				if (qs.isCond(19)) {
 					qs.set("SoulCrystal", event.split("-")[1]);
 					htmltext = "33491-05.html";
 				}
@@ -240,13 +220,10 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 			case "33491-earth":
 			case "33491-wind":
 			case "33491-dark":
-			case "33491-holy":
-			{
-				if (qs.isCond(19) && qs.isSet("SoulCrystal"))
-				{
+			case "33491-holy": {
+				if (qs.isCond(19) && qs.isSet("SoulCrystal")) {
 					// Give attribute stones
-					switch (event.split("-")[1])
-					{
+					switch (event.split("-")[1]) {
 						case "fire":
 							giveItems(player, FIRE_STONE);
 							break;
@@ -267,8 +244,7 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 							break;
 					}
 					// Give soul crystal
-					switch (qs.get("SoulCrystal"))
-					{
+					switch (qs.get("SoulCrystal")) {
 						case "red":
 							giveItems(player, RED_SOUL_CRYSTAL_15);
 							break;
@@ -293,23 +269,19 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == NAVARI)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == NAVARI) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "33931-01.htm";
 					break;
 				case State.STARTED:
-					if (qs.isCond(1))
-					{
+					if (qs.isCond(1)) {
 						htmltext = "33931-06.html";
 					}
 					break;
@@ -317,11 +289,8 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if ((npc.getId() == ZEPHYRA) && qs.isStarted())
-		{
-			switch (qs.getCond())
-			{
+		} else if ((npc.getId() == ZEPHYRA) && qs.isStarted()) {
+			switch (qs.getCond()) {
 				case 1:
 					htmltext = "33978-01.html";
 					break;
@@ -335,22 +304,14 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 					htmltext = "33978-08.html";
 					break;
 			}
-		}
-		else if ((npc.getId() == MOMET) && qs.isStarted())
-		{
-			if (qs.isCond(2))
-			{
+		} else if ((npc.getId() == MOMET) && qs.isStarted()) {
+			if (qs.isCond(2)) {
 				htmltext = "33998-01.html";
-			}
-			else if (qs.isCond(3))
-			{
+			} else if (qs.isCond(3)) {
 				htmltext = "33998-05.html";
 			}
-		}
-		else if ((npc.getId() == BLACK_MARKETEER_MAMMON) && qs.isStarted())
-		{
-			switch (qs.getCond())
-			{
+		} else if ((npc.getId() == BLACK_MARKETEER_MAMMON) && qs.isStarted()) {
+			switch (qs.getCond()) {
 				case 3:
 					htmltext = "31092-01.html";
 					break;
@@ -364,22 +325,14 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 					htmltext = "31092-08.html";
 					break;
 			}
-		}
-		else if ((npc.getId() == BLACKSMITH_OF_MAMMON) && qs.isStarted())
-		{
-			if (qs.isCond(6))
-			{
+		} else if ((npc.getId() == BLACKSMITH_OF_MAMMON) && qs.isStarted()) {
+			if (qs.isCond(6)) {
 				htmltext = "31126-01.html";
-			}
-			else if (qs.isCond(7))
-			{
+			} else if (qs.isCond(7)) {
 				htmltext = "31126-09.html";
 			}
-		}
-		else if ((npc.getId() == HARDIN) && qs.isStarted())
-		{
-			switch (qs.getCond())
-			{
+		} else if ((npc.getId() == HARDIN) && qs.isStarted()) {
+			switch (qs.getCond()) {
 				case 7:
 					htmltext = "33870-01.html";
 					break;
@@ -394,40 +347,28 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest
 					htmltext = "33870-10.html";
 					break;
 			}
-		}
-		else if ((npc.getId() == KARLA) && qs.isStarted())
-		{
-			if (qs.isCond(18))
-			{
+		} else if ((npc.getId() == KARLA) && qs.isStarted()) {
+			if (qs.isCond(18)) {
 				htmltext = getHtm(player.getHtmlPrefix(), "33933-01.html");
 				htmltext = htmltext.replace("%playerName%", player.getName());
-			}
-			else if (qs.isCond(19))
-			{
+			} else if (qs.isCond(19)) {
 				htmltext = "33933-04.html";
 			}
-		}
-		else if ((npc.getId() == RAINA))
-		{
-			if (qs.isStarted() && qs.isCond(19))
-			{
+		} else if ((npc.getId() == RAINA)) {
+			if (qs.isStarted() && qs.isCond(19)) {
 				htmltext = getHtm(player.getHtmlPrefix(), "33491-01.html");
 				htmltext = htmltext.replace("%playerName%", player.getName());
-			}
-			else if (qs.isCompleted())
-			{
+			} else if (qs.isCompleted()) {
 				htmltext = getAlreadyCompletedMsg(player);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(4) && giveItemRandomly(killer, npc, DARK_FRAGMENT, 1, DARK_FRAGMENT_COUNT, DROP_CHANCE, true))
-		{
+		if ((qs != null) && qs.isCond(4) && giveItemRandomly(killer, npc, DARK_FRAGMENT, 1, DARK_FRAGMENT_COUNT, DROP_CHANCE, true)) {
 			qs.setCond(5);
 		}
 		return super.onKill(npc, killer, isSummon);

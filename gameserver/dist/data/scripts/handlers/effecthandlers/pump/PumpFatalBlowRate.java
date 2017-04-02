@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpFatalBlowRate extends AbstractDoubleStatEffect
-{
-	public PumpFatalBlowRate(StatsSet params)
-	{
+public class PumpFatalBlowRate extends AbstractDoubleStatEffect {
+	public PumpFatalBlowRate(StatsSet params) {
 		super(params, DoubleStat.BLOW_RATE);
 	}
 }

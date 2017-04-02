@@ -28,33 +28,27 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class TerritoryStatus implements IBypassHandler
-{
+public class TerritoryStatus implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"TerritoryStatus"
-	};
-	
+			{
+					"TerritoryStatus"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
+
 		final Npc npc = (Npc) target;
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		{
-			if (npc.getCastle().getOwnerId() > 0)
-			{
+			if (npc.getCastle().getOwnerId() > 0) {
 				html.setFile(activeChar.getHtmlPrefix(), "data/html/territorystatus.htm");
 				L2Clan clan = ClanTable.getInstance().getClan(npc.getCastle().getOwnerId());
 				html.replace("%clanname%", clan.getName());
 				html.replace("%clanleadername%", clan.getLeaderName());
-			}
-			else
-			{
+			} else {
 				html.setFile(activeChar.getHtmlPrefix(), "data/html/territorynoclan.htm");
 			}
 		}
@@ -62,27 +56,22 @@ public class TerritoryStatus implements IBypassHandler
 		html.replace("%taxpercent%", "" + npc.getCastle().getTaxPercent(TaxType.BUY));
 		html.replace("%objectId%", String.valueOf(npc.getObjectId()));
 		{
-			if (npc.getCastle().getResidenceId() > 6)
-			{
+			if (npc.getCastle().getResidenceId() > 6) {
 				html.replace("%territory%", "The Kingdom of Elmore");
-			}
-			else
-			{
+			} else {
 				html.replace("%territory%", "The Kingdom of Aden");
 			}
 		}
 		activeChar.sendPacket(html);
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new TerritoryStatus());
 	}
 }

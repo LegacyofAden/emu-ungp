@@ -31,34 +31,27 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class TickGetEnergy extends AbstractEffect
-{
-	public TickGetEnergy(StatsSet params)
-	{
+public class TickGetEnergy extends AbstractEffect {
+	public TickGetEnergy(StatsSet params) {
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			final PlayerInstance player = target.getActingPlayer();
 			final int maxCharge = (int) target.getStat().getValue(DoubleStat.MAX_MOMENTUM, 0);
 			final int newCharge = Math.min(player.getCharges() + 1, maxCharge);
-			
+
 			player.setCharges(maxCharge);
-			
-			if (newCharge == maxCharge)
-			{
+
+			if (newCharge == maxCharge) {
 				player.sendPacket(SystemMessageId.YOUR_FORCE_HAS_REACHED_MAXIMUM_CAPACITY);
-			}
-			else
-			{
+			} else {
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_FORCE_HAS_INCREASED_TO_LEVEL_S1);
 				sm.addInt(newCharge);
 				player.sendPacket(sm);
 			}
-			
+
 			player.sendPacket(new EtcStatusUpdate(player));
 		}
 	}

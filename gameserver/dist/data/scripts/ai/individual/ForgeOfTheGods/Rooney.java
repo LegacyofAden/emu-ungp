@@ -18,6 +18,7 @@
  */
 package ai.individual.ForgeOfTheGods;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -25,74 +26,68 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Rooney AI
+ *
  * @author malyelfik
  */
-public final class Rooney extends AbstractNpcAI
-{
+public final class Rooney extends AbstractNpcAI {
 	// NPC
 	private static final int ROONEY = 32049;
 	// Locations
 	private static final Location[] LOCATIONS =
-	{
-		new Location(175937, -112167, -5550),
-		new Location(178896, -112425, -5860),
-		new Location(180628, -115992, -6135),
-		new Location(183010, -114753, -6135),
-		new Location(184496, -116773, -6135),
-		new Location(181857, -109491, -5865),
-		new Location(178917, -107633, -5853),
-		new Location(178804, -110080, -5853),
-		new Location(182221, -106806, -6025),
-		new Location(186488, -109715, -5915),
-		new Location(183847, -119231, -3113),
-		new Location(185193, -120342, -3113),
-		new Location(188047, -120867, -3113),
-		new Location(189734, -120471, -3113),
-		new Location(188754, -118940, -3313),
-		new Location(190022, -116803, -3313),
-		new Location(188443, -115814, -3313),
-		new Location(186421, -114614, -3313),
-		new Location(185188, -113307, -3313),
-		new Location(187378, -112946, -3313),
-		new Location(189815, -113425, -3313),
-		new Location(189301, -111327, -3313),
-		new Location(190289, -109176, -3313),
-		new Location(187783, -110478, -3313),
-		new Location(185889, -109990, -3313),
-		new Location(181881, -109060, -3695),
-		new Location(183570, -111344, -3675),
-		new Location(182077, -112567, -3695),
-		new Location(180127, -112776, -3698),
-		new Location(179155, -108629, -3695),
-		new Location(176282, -109510, -3698),
-		new Location(176071, -113163, -3515),
-		new Location(179376, -117056, -3640),
-		new Location(179760, -115385, -3640),
-		new Location(177950, -119691, -4140),
-		new Location(177037, -120820, -4340),
-		new Location(181125, -120148, -3702),
-		new Location(182212, -117969, -3352),
-		new Location(186074, -118154, -3312)
-	};
-	
-	private Rooney()
-	{
+			{
+					new Location(175937, -112167, -5550),
+					new Location(178896, -112425, -5860),
+					new Location(180628, -115992, -6135),
+					new Location(183010, -114753, -6135),
+					new Location(184496, -116773, -6135),
+					new Location(181857, -109491, -5865),
+					new Location(178917, -107633, -5853),
+					new Location(178804, -110080, -5853),
+					new Location(182221, -106806, -6025),
+					new Location(186488, -109715, -5915),
+					new Location(183847, -119231, -3113),
+					new Location(185193, -120342, -3113),
+					new Location(188047, -120867, -3113),
+					new Location(189734, -120471, -3113),
+					new Location(188754, -118940, -3313),
+					new Location(190022, -116803, -3313),
+					new Location(188443, -115814, -3313),
+					new Location(186421, -114614, -3313),
+					new Location(185188, -113307, -3313),
+					new Location(187378, -112946, -3313),
+					new Location(189815, -113425, -3313),
+					new Location(189301, -111327, -3313),
+					new Location(190289, -109176, -3313),
+					new Location(187783, -110478, -3313),
+					new Location(185889, -109990, -3313),
+					new Location(181881, -109060, -3695),
+					new Location(183570, -111344, -3675),
+					new Location(182077, -112567, -3695),
+					new Location(180127, -112776, -3698),
+					new Location(179155, -108629, -3695),
+					new Location(176282, -109510, -3698),
+					new Location(176071, -113163, -3515),
+					new Location(179376, -117056, -3640),
+					new Location(179760, -115385, -3640),
+					new Location(177950, -119691, -4140),
+					new Location(177037, -120820, -4340),
+					new Location(181125, -120148, -3702),
+					new Location(182212, -117969, -3352),
+					new Location(186074, -118154, -3312)
+			};
+
+	private Rooney() {
 		addSeeCreatureId(ROONEY);
 		addSpawn(ROONEY, LOCATIONS[getRandom(LOCATIONS.length)], false, 0);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("teleport") && !npc.isDecayed())
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("teleport") && !npc.isDecayed()) {
 			final int aiVal = npc.getScriptValue();
-			switch (aiVal)
-			{
+			switch (aiVal) {
 				case 1:
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.HURRY_HURRY);
 					break;
@@ -115,21 +110,18 @@ public final class Rooney extends AbstractNpcAI
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer() && npc.isScriptValue(0))
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer() && npc.isScriptValue(0)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WELCOME);
 			startQuestTimer("teleport", 60000, npc, null);
 			npc.setScriptValue(1);
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Rooney();
 	}
 }

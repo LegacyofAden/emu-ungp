@@ -18,11 +18,7 @@
  */
 package ai.uncategorized;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Attackable;
@@ -32,18 +28,20 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Polymorphing on attack monsters AI.
+ *
  * @author Slyce
  */
-public final class PolymorphingOnAttack extends AbstractNpcAI
-{
+public final class PolymorphingOnAttack extends AbstractNpcAI {
 	private static final Map<Integer, List<Integer>> MOBSPAWNS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBSPAWNS.put(21258, Arrays.asList(21259, 100, 100, -1)); // Fallen Orc Shaman -> Sharp Talon Tiger (always polymorphs)
 		MOBSPAWNS.put(21261, Arrays.asList(21262, 100, 20, 0)); // Ol Mahum Transcender 1st stage
 		MOBSPAWNS.put(21262, Arrays.asList(21263, 100, 10, 1)); // Ol Mahum Transcender 2nd stage
@@ -58,49 +56,43 @@ public final class PolymorphingOnAttack extends AbstractNpcAI
 		MOBSPAWNS.put(21533, Arrays.asList(21534, 100, 30, -1)); // Alliance of Splendor
 		MOBSPAWNS.put(21537, Arrays.asList(21538, 100, 30, -1)); // Fang of Splendor
 	}
-	
+
 	protected static final NpcStringId[][] MOBTEXTS =
-	{
-		new NpcStringId[]
-		{
-			NpcStringId.ENOUGH_FOOLING_AROUND_GET_READY_TO_DIE,
-			NpcStringId.YOU_IDIOT_I_VE_JUST_BEEN_TOYING_WITH_YOU,
-			NpcStringId.NOW_THE_FUN_STARTS
-		},
-		new NpcStringId[]
-		{
-			NpcStringId.I_MUST_ADMIT_NO_ONE_MAKES_MY_BLOOD_BOIL_QUITE_LIKE_YOU_DO,
-			NpcStringId.NOW_THE_BATTLE_BEGINS,
-			NpcStringId.WITNESS_MY_TRUE_POWER
-		},
-		new NpcStringId[]
-		{
-			NpcStringId.PREPARE_TO_DIE,
-			NpcStringId.I_LL_DOUBLE_MY_STRENGTH,
-			NpcStringId.YOU_HAVE_MORE_SKILL_THAN_I_THOUGHT
-		}
-	};
-	
-	private PolymorphingOnAttack()
-	{
+			{
+					new NpcStringId[]
+							{
+									NpcStringId.ENOUGH_FOOLING_AROUND_GET_READY_TO_DIE,
+									NpcStringId.YOU_IDIOT_I_VE_JUST_BEEN_TOYING_WITH_YOU,
+									NpcStringId.NOW_THE_FUN_STARTS
+							},
+					new NpcStringId[]
+							{
+									NpcStringId.I_MUST_ADMIT_NO_ONE_MAKES_MY_BLOOD_BOIL_QUITE_LIKE_YOU_DO,
+									NpcStringId.NOW_THE_BATTLE_BEGINS,
+									NpcStringId.WITNESS_MY_TRUE_POWER
+							},
+					new NpcStringId[]
+							{
+									NpcStringId.PREPARE_TO_DIE,
+									NpcStringId.I_LL_DOUBLE_MY_STRENGTH,
+									NpcStringId.YOU_HAVE_MORE_SKILL_THAN_I_THOUGHT
+							}
+			};
+
+	private PolymorphingOnAttack() {
 		addAttackId(MOBSPAWNS.keySet());
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (npc.isSpawned() && !npc.isDead())
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (npc.isSpawned() && !npc.isDead()) {
 			final List<Integer> tmp = MOBSPAWNS.get(npc.getId());
-			if (tmp != null)
-			{
-				if ((npc.getCurrentHp() <= ((npc.getMaxHp() * tmp.get(1)) / 100.0)) && (getRandom(100) < tmp.get(2)))
-				{
-					if (tmp.get(3) >= 0)
-					{
+			if (tmp != null) {
+				if ((npc.getCurrentHp() <= ((npc.getMaxHp() * tmp.get(1)) / 100.0)) && (getRandom(100) < tmp.get(2))) {
+					if (tmp.get(3) >= 0) {
 						NpcStringId npcString = MOBTEXTS[tmp.get(3)][getRandom(MOBTEXTS[tmp.get(3)].length)];
 						npc.broadcastPacket(new CreatureSay(npc.getObjectId(), ChatType.NPC_GENERAL, npc.getName(), npcString));
-						
+
 					}
 					npc.deleteMe();
 					final Attackable newNpc = (Attackable) addSpawn(tmp.get(0), npc.getX(), npc.getY(), npc.getZ() + 10, npc.getHeading(), false, 0, true);
@@ -113,9 +105,8 @@ public final class PolymorphingOnAttack extends AbstractNpcAI
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PolymorphingOnAttack();
 	}
 }

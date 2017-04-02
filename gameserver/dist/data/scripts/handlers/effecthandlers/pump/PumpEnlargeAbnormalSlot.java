@@ -25,26 +25,23 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Enlarge Abnormal Slot effect implementation.
+ *
  * @author Zoey76
  */
-public final class PumpEnlargeAbnormalSlot extends AbstractEffect
-{
+public final class PumpEnlargeAbnormalSlot extends AbstractEffect {
 	private final int _slots;
-	
-	public PumpEnlargeAbnormalSlot(StatsSet params)
-	{
+
+	public PumpEnlargeAbnormalSlot(StatsSet params) {
 		_slots = params.getInt("slots", 0);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeMaxBuffCount(_slots);
 	}
 }

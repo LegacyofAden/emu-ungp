@@ -33,48 +33,40 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Magical Attack MP effect.
+ *
  * @author Adry_85
  */
-public final class InstantMAttackMp extends AbstractEffect
-{
+public final class InstantMAttackMp extends AbstractEffect {
 	private final double _power;
 	private final boolean _critical;
 	private final double _criticalLimit;
-	
-	public InstantMAttackMp(StatsSet params)
-	{
+
+	public InstantMAttackMp(StatsSet params) {
 		_power = params.getDouble("power");
 		_critical = params.getBoolean("critical");
 		_criticalLimit = params.getDouble("criticalLimit");
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return false;
 		}
 
-		if (targetCreature.isMpBlocked())
-		{
+		if (targetCreature.isMpBlocked()) {
 			return false;
 		}
 
-		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId()))
-		{
+		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId())) {
 			return false;
 		}
-		
-		if (!Formulas.calcMagicAffected(caster, targetCreature, skill))
-		{
-			if (caster.isPlayer())
-			{
+
+		if (!Formulas.calcMagicAffected(caster, targetCreature, skill)) {
+			if (caster.isPlayer()) {
 				caster.sendPacket(SystemMessageId.YOUR_ATTACK_HAS_FAILED);
 			}
-			if (targetCreature.isPlayer())
-			{
+			if (targetCreature.isPlayer()) {
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_RESISTED_C2_S_DRAIN);
 				sm.addCharName(targetCreature);
 				sm.addCharName(caster);
@@ -84,24 +76,20 @@ public final class InstantMAttackMp extends AbstractEffect
 		}
 		return true;
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (!targetCreature.isCreature() || caster.isAlikeDead())
-		{
+		if (!targetCreature.isCreature() || caster.isAlikeDead()) {
 			return;
 		}
 
@@ -111,23 +99,20 @@ public final class InstantMAttackMp extends AbstractEffect
 		final boolean mcrit = _critical ? Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill) : false;
 		double damage = Formulas.calcManaDam(caster, targetCreature, skill, _power, shld, sps, bss, mcrit, _criticalLimit);
 		double mp = Math.min(targetCreature.getCurrentMp(), damage);
-		
-		if (damage > 0)
-		{
+
+		if (damage > 0) {
 			targetCreature.stopEffectsOnDamage();
 			targetCreature.setCurrentMp(targetCreature.getCurrentMp() - mp);
 		}
-		
-		if (targetCreature.isPlayer())
-		{
+
+		if (targetCreature.isPlayer()) {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_S_MP_HAS_BEEN_DRAINED_BY_C1);
 			sm.addCharName(caster);
 			sm.addInt((int) mp);
 			targetCreature.sendPacket(sm);
 		}
-		
-		if (caster.isPlayer())
-		{
+
+		if (caster.isPlayer()) {
 			SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.YOUR_OPPONENT_S_MP_WAS_REDUCED_BY_S1);
 			sm2.addInt((int) mp);
 			caster.sendPacket(sm2);

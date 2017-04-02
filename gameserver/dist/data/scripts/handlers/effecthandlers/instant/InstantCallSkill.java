@@ -33,56 +33,42 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Call Skill effect implementation.
+ *
  * @author NosBit
  */
-public final class InstantCallSkill extends AbstractEffect
-{
+public final class InstantCallSkill extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantCallSkill.class);
 
 	private final SkillHolder _skillHolder;
 	private final int _skillLevelScaleTo;
-	
-	public InstantCallSkill(StatsSet params)
-	{
+
+	public InstantCallSkill(StatsSet params) {
 		_skillHolder = new SkillHolder(params.getInt("skillId"), params.getInt("skillLevel", 1), params.getInt("skillSubLevel", 0));
 		_skillLevelScaleTo = params.getInt("skillLevelScaleTo", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Skill triggerSkill;
-		if (_skillLevelScaleTo <= 0)
-		{
+		if (_skillLevelScaleTo <= 0) {
 			triggerSkill = _skillHolder.getSkill();
-		}
-		else
-		{
+		} else {
 			final Creature targetCreature = target.asCreature();
-			if (targetCreature != null)
-			{
+			if (targetCreature != null) {
 				final BuffInfo buffInfo = targetCreature.getEffectList().getBuffInfoBySkillId(_skillHolder.getSkillId());
-				if (buffInfo != null)
-				{
+				if (buffInfo != null) {
 					triggerSkill = SkillData.getInstance().getSkill(_skillHolder.getSkillId(), Math.min(_skillLevelScaleTo, buffInfo.getSkill().getLevel() + 1));
-				}
-				else
-				{
+				} else {
 					triggerSkill = _skillHolder.getSkill();
 				}
-			}
-			else
-			{
+			} else {
 				triggerSkill = _skillHolder.getSkill();
 			}
 		}
-		
-		if (triggerSkill != null)
-		{
+
+		if (triggerSkill != null) {
 			SkillCaster.triggerCast(caster, target, triggerSkill);
-		}
-		else
-		{
+		} else {
 			LOGGER.warn("Skill not found effect called from {}", skill);
 		}
 	}

@@ -18,90 +18,75 @@
  */
 package ai.individual.Other.CastleAmbassador;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 
-import ai.AbstractNpcAI;
-
 /**
  * Castle Ambassador AI.
+ *
  * @author St3eT
  */
-public final class CastleAmbassador extends AbstractNpcAI
-{
+public final class CastleAmbassador extends AbstractNpcAI {
 	// NPCs
 	// @formatter:off
 	private static final int[] CASTLE_AMBASSADOR =
-	{
-		36393, 36394, 36437, 36435, // Gludio
-		36395, 36436, 36439, 36441, // Dion
-		36396, 36440, 36444, 36449, 36451, // Giran
-		36397, 36438, 36442, 36443, 36446, // Oren
-		36398, 36399, 36445, 36448, // Aden
-		36400, 36450, // Innadril
-		36401, 36447, 36453, // Goddard
-		36433, 36452, 36454, // Rune
-		36434, 36455, // Schuttgart
-	};
+			{
+					36393, 36394, 36437, 36435, // Gludio
+					36395, 36436, 36439, 36441, // Dion
+					36396, 36440, 36444, 36449, 36451, // Giran
+					36397, 36438, 36442, 36443, 36446, // Oren
+					36398, 36399, 36445, 36448, // Aden
+					36400, 36450, // Innadril
+					36401, 36447, 36453, // Goddard
+					36433, 36452, 36454, // Rune
+					36434, 36455, // Schuttgart
+			};
 	// @formatter:on
-	
-	private CastleAmbassador()
-	{
+
+	private CastleAmbassador() {
 		addStartNpc(CASTLE_AMBASSADOR);
 		addTalkId(CASTLE_AMBASSADOR);
 		addFirstTalkId(CASTLE_AMBASSADOR);
 		addEventReceivedId(CASTLE_AMBASSADOR);
 		addSpawnId(CASTLE_AMBASSADOR);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		if (npc != null)
-		{
+
+		if (npc != null) {
 			final Fort fortresss = npc.getFort();
-			
-			switch (event)
-			{
-				case "signed":
-				{
-					if (fortresss.getFortState() == 0)
-					{
+
+			switch (event) {
+				case "signed": {
+					if (fortresss.getFortState() == 0) {
 						fortresss.setFortState(2, fortresss.getCastleIdByAmbassador(npc.getId()));
 						cancelQuestTimer("DESPAWN", npc, null);
 						startQuestTimer("DESPAWN", 3000, npc, null);
 						htmltext = "ambassador-05.html";
-					}
-					else if (fortresss.getFortState() == 1)
-					{
+					} else if (fortresss.getFortState() == 1) {
 						htmltext = "ambassador-04.html";
 					}
 					break;
 				}
-				case "rejected":
-				{
-					if (fortresss.getFortState() == 0)
-					{
+				case "rejected": {
+					if (fortresss.getFortState() == 0) {
 						fortresss.setFortState(1, fortresss.getCastleIdByAmbassador(npc.getId()));
 						cancelQuestTimer("DESPAWN", npc, null);
 						startQuestTimer("DESPAWN", 3000, npc, null);
 						htmltext = "ambassador-02.html";
-					}
-					else if (fortresss.getFortState() == 2)
-					{
+					} else if (fortresss.getFortState() == 2) {
 						htmltext = "ambassador-02.html";
 					}
 					break;
 				}
-				case "DESPAWN":
-				{
-					if (fortresss.getFortState() == 0)
-					{
+				case "DESPAWN": {
+					if (fortresss.getFortState() == 0) {
 						fortresss.setFortState(1, fortresss.getCastleIdByAmbassador(npc.getId()));
 					}
 					cancelQuestTimer("DESPAWN", npc, null);
@@ -113,63 +98,51 @@ public final class CastleAmbassador extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference)
-	{
-		if ((receiver != null) && eventName.equals("DESPAWN"))
-		{
+	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference) {
+		if ((receiver != null) && eventName.equals("DESPAWN")) {
 			receiver.deleteMe();
 		}
 		return super.onEventReceived(eventName, sender, receiver, reference);
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		final Fort fortresss = npc.getFort();
 		final int fortOwner = fortresss.getOwnerClan() == null ? 0 : fortresss.getOwnerClan().getId();
 		String htmltext = null;
-		
-		if (player.isClanLeader() && (player.getClan() != null) && (player.getClanId() == fortOwner))
-		{
+
+		if (player.isClanLeader() && (player.getClan() != null) && (player.getClanId() == fortOwner)) {
 			htmltext = (fortresss.isBorderFortress()) ? "ambassador-01.html" : "ambassador.html";
-		}
-		else
-		{
+		} else {
 			htmltext = "ambassador-03.html";
 		}
-		
+
 		htmltext = getHtm(player.getHtmlPrefix(), htmltext);
 		htmltext = htmltext.replace("%castleName%", String.valueOf(fortresss.getCastleByAmbassador(npc.getId()).getName()));
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final Fort fort = npc.getFort();
-		if (fort == null)
-		{
+		if (fort == null) {
 			npc.deleteMe();
 			_log.warn("Spawned: {} location: {} without fort!", npc, npc.getLocation());
 			return null;
 		}
-		
+
 		final Castle castle = fort.getCastleByAmbassador(npc.getId());
-		if ((castle == null) || (castle.getOwnerId() == 0))
-		{
+		if ((castle == null) || (castle.getOwnerId() == 0)) {
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			startQuestTimer("DESPAWN", 3600000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new CastleAmbassador();
 	}
 }

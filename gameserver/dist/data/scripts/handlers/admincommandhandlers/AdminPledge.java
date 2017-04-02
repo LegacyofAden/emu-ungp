@@ -18,8 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -31,6 +29,8 @@ import org.l2junity.gameserver.network.client.send.GMViewPledgeInfo;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.StringTokenizer;
+
 /**
  * <B>Pledge Manipulation:</B><BR>
  * <LI>With target in a character without clan:<BR>
@@ -41,159 +41,123 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
  * //pledge setlevel level<BR>
  * //pledge rep reputation_points<BR>
  */
-public class AdminPledge implements IAdminCommandHandler
-{
+public class AdminPledge implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_pledge"
-	};
-	
+			{
+					"admin_pledge"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		final WorldObject target = activeChar.getTarget();
 		final PlayerInstance targetPlayer = target instanceof PlayerInstance ? (PlayerInstance) target : null;
 		L2Clan clan = targetPlayer != null ? targetPlayer.getClan() : null;
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			showMainPage(activeChar);
 			return false;
 		}
-		switch (cmd)
-		{
-			case "admin_pledge":
-			{
-				if (!st.hasMoreTokens())
-				{
+		switch (cmd) {
+			case "admin_pledge": {
+				if (!st.hasMoreTokens()) {
 					activeChar.sendMessage("Missing parameters!");
 					break;
 				}
 				final String action = st.nextToken();
-				if (!st.hasMoreTokens())
-				{
+				if (!st.hasMoreTokens()) {
 					activeChar.sendMessage("Missing parameters!");
 					break;
 				}
 				final String param = st.nextToken();
-				
-				switch (action)
-				{
-					case "create":
-					{
-						if (clan != null)
-						{
+
+				switch (action) {
+					case "create": {
+						if (clan != null) {
 							activeChar.sendMessage("Target player has clan!");
 							break;
 						}
-						
+
 						final long penalty = targetPlayer.getClanCreateExpiryTime();
 						targetPlayer.setClanCreateExpiryTime(0);
 						clan = ClanTable.getInstance().createClan(targetPlayer, param);
-						if (clan != null)
-						{
+						if (clan != null) {
 							activeChar.sendMessage("Clan " + param + " created. Leader: " + targetPlayer.getName());
-						}
-						else
-						{
+						} else {
 							targetPlayer.setClanCreateExpiryTime(penalty);
 							activeChar.sendMessage("There was a problem while creating the clan.");
 						}
 						break;
 					}
-					case "dismiss":
-					{
-						if (clan == null)
-						{
+					case "dismiss": {
+						if (clan == null) {
 							activeChar.sendMessage("Target player has no clan!");
 							break;
 						}
-						
-						if (!targetPlayer.isClanLeader())
-						{
+
+						if (!targetPlayer.isClanLeader()) {
 							SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER);
 							sm.addCharName(targetPlayer);
 							activeChar.sendPacket(sm);
 							showMainPage(activeChar);
 							return false;
 						}
-						
+
 						ClanTable.getInstance().destroyClan(targetPlayer.getClanId());
 						clan = targetPlayer.getClan();
-						if (clan == null)
-						{
+						if (clan == null) {
 							activeChar.sendMessage("Clan disbanded.");
-						}
-						else
-						{
+						} else {
 							activeChar.sendMessage("There was a problem while destroying the clan.");
 						}
 						break;
 					}
-					case "info":
-					{
-						if (clan == null)
-						{
+					case "info": {
+						if (clan == null) {
 							activeChar.sendMessage("Target player has no clan!");
 							break;
 						}
-						
+
 						activeChar.sendPacket(new GMViewPledgeInfo(clan, targetPlayer));
 						break;
 					}
-					case "setlevel":
-					{
-						if (clan == null)
-						{
+					case "setlevel": {
+						if (clan == null) {
 							activeChar.sendMessage("Target player has no clan!");
 							break;
-						}
-						else if (param == null)
-						{
+						} else if (param == null) {
 							activeChar.sendMessage("Usage: //pledge <setlevel|rep> <number>");
 							break;
 						}
-						
+
 						int level = Integer.parseInt(param);
-						if ((level >= 0) && (level < 12))
-						{
+						if ((level >= 0) && (level < 12)) {
 							clan.changeLevel(level);
-							for (PlayerInstance member : clan.getOnlineMembers(0))
-							{
+							for (PlayerInstance member : clan.getOnlineMembers(0)) {
 								member.broadcastUserInfo(UserInfoType.RELATION, UserInfoType.CLAN);
 							}
 							activeChar.sendMessage("You set level " + level + " for clan " + clan.getName());
-						}
-						else
-						{
+						} else {
 							activeChar.sendMessage("Level incorrect.");
 						}
 						break;
 					}
-					case "rep":
-					{
-						if (clan == null)
-						{
+					case "rep": {
+						if (clan == null) {
 							activeChar.sendMessage("Target player has no clan!");
 							break;
-						}
-						else if (clan.getLevel() < 5)
-						{
+						} else if (clan.getLevel() < 5) {
 							activeChar.sendMessage("Only clans of level 5 or above may receive reputation points.");
 							showMainPage(activeChar);
 							return false;
 						}
-						
-						try
-						{
+
+						try {
 							final int points = Integer.parseInt(param);
 							clan.addReputationScore(points, true);
 							activeChar.sendMessage("You " + (points > 0 ? "add " : "remove ") + Math.abs(points) + " points " + (points > 0 ? "to " : "from ") + clan.getName() + "'s reputation. Their current score is " + clan.getReputationScore());
-						}
-						catch (Exception e)
-						{
+						} catch (Exception e) {
 							activeChar.sendMessage("Usage: //pledge <rep> <number>");
 						}
 						break;
@@ -205,20 +169,17 @@ public class AdminPledge implements IAdminCommandHandler
 		showMainPage(activeChar);
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void showMainPage(PlayerInstance activeChar)
-	{
+
+	private void showMainPage(PlayerInstance activeChar) {
 		AdminHtml.showAdminHtml(activeChar, "game_menu.htm");
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminPledge());
 	}
 }

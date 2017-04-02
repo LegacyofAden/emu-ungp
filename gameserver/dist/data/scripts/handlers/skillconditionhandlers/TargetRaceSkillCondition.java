@@ -28,20 +28,16 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class TargetRaceSkillCondition implements ISkillCondition
-{
+public class TargetRaceSkillCondition implements ISkillCondition {
 	private final Race _race;
-	
-	public TargetRaceSkillCondition(StatsSet params)
-	{
+
+	public TargetRaceSkillCondition(StatsSet params) {
 		_race = params.getEnum("race", Race.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target == null) || !target.isCreature())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target == null) || !target.isCreature()) {
 			return false;
 		}
 		final Creature targetCreature = (Creature) target;

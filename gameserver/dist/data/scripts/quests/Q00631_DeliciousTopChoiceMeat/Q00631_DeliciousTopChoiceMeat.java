@@ -18,20 +18,20 @@
  */
 package quests.Q00631_DeliciousTopChoiceMeat;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Delicious Top Choice Meat (631)
+ *
  * @author Adry_85
  */
-public class Q00631_DeliciousTopChoiceMeat extends Quest
-{
+public class Q00631_DeliciousTopChoiceMeat extends Quest {
 	// NPC
 	private static final int TUNATUN = 31537;
 	// Items
@@ -42,38 +42,37 @@ public class Q00631_DeliciousTopChoiceMeat extends Quest
 	private static final int PRIME_MEAT_COUNT = 120;
 	// Rewards
 	private static final int[] RECIPE =
-	{
-		10373, // Recipe - Icarus Sawsword (60%)
-		10374, // Recipe - Icarus Disperser (60%)
-		10375, // Recipe - Icarus Spirit (60%)
-		10376, // Recipe - Icarus Heavy Arms (60%)
-		10377, // Recipe - Icarus Trident (60%)
-		10378, // Recipe - Icarus Hammer (60%)
-		10379, // Recipe - Icarus Hand (60%)
-		10380, // Recipe - Icarus Hall (60%)
-		10381, // Recipe - Icarus Spitter (60%)
-	};
-	
+			{
+					10373, // Recipe - Icarus Sawsword (60%)
+					10374, // Recipe - Icarus Disperser (60%)
+					10375, // Recipe - Icarus Spirit (60%)
+					10376, // Recipe - Icarus Heavy Arms (60%)
+					10377, // Recipe - Icarus Trident (60%)
+					10378, // Recipe - Icarus Hammer (60%)
+					10379, // Recipe - Icarus Hand (60%)
+					10380, // Recipe - Icarus Hall (60%)
+					10381, // Recipe - Icarus Spitter (60%)
+			};
+
 	private static final int[] PIECE =
-	{
-		10397, // Icarus Sawsword Piece
-		10398, // Icarus Disperser Piece
-		10399, // Icarus Spirit Piece
-		10400, // Icarus Heavy Arms Piece
-		10401, // Icarus Trident Piece
-		10402, // Icarus Hammer Piece
-		10403, // Icarus Hand Piece
-		10404, // Icarus Hall Piece
-		10405, // Icarus Spitter Piece
-	};
-	
+			{
+					10397, // Icarus Sawsword Piece
+					10398, // Icarus Disperser Piece
+					10399, // Icarus Spirit Piece
+					10400, // Icarus Heavy Arms Piece
+					10401, // Icarus Trident Piece
+					10402, // Icarus Hammer Piece
+					10403, // Icarus Hand Piece
+					10404, // Icarus Hall Piece
+					10405, // Icarus Spitter Piece
+			};
+
 	private static final int GOLDEN_SPICE_CRATE = 15482;
 	private static final int CRYSTAL_SPICE_COMPRESSED_PACK = 15483;
-	
+
 	private static final Map<Integer, Double> MOBS_MEAT = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS_MEAT.put(18878, 0.172); // Full Grown Kookaburra
 		MOBS_MEAT.put(18879, 0.334); // Full Grown Kookaburra
 		MOBS_MEAT.put(18885, 0.172); // Full Grown Cougar
@@ -83,94 +82,73 @@ public class Q00631_DeliciousTopChoiceMeat extends Quest
 		MOBS_MEAT.put(18899, 0.182); // Full Grown Grendel
 		MOBS_MEAT.put(18900, 0.349); // Full Grown Grendel
 	}
-	
-	public Q00631_DeliciousTopChoiceMeat()
-	{
+
+	public Q00631_DeliciousTopChoiceMeat() {
 		super(631);
 		addStartNpc(TUNATUN);
 		addTalkId(TUNATUN);
 		addKillId(MOBS_MEAT.keySet());
 		registerQuestItems(TOP_QUALITY_MEAT, PRIME_MEAT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "quest_accept":
-			{
-				if (player.getLevel() >= MIN_LEVEL)
-				{
+		switch (event) {
+			case "quest_accept": {
+				if (player.getLevel() >= MIN_LEVEL) {
 					st.startQuest();
 					htmltext = "31537-02.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "31537-03.html";
 				}
 				break;
 			}
-			case "31537-06.html":
-			{
-				if (st.isCond(2) && (getQuestItemsCount(player, PRIME_MEAT) >= PRIME_MEAT_COUNT))
-				{
-					switch (getRandom(10))
-					{
-						case 0:
-						{
+			case "31537-06.html": {
+				if (st.isCond(2) && (getQuestItemsCount(player, PRIME_MEAT) >= PRIME_MEAT_COUNT)) {
+					switch (getRandom(10)) {
+						case 0: {
 							rewardItems(player, RECIPE[getRandom(RECIPE.length)], 1);
 							break;
 						}
-						case 1:
-						{
+						case 1: {
 							rewardItems(player, PIECE[getRandom(PIECE.length)], 1);
 							break;
 						}
-						case 2:
-						{
+						case 2: {
 							rewardItems(player, PIECE[getRandom(PIECE.length)], 2);
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							rewardItems(player, PIECE[getRandom(PIECE.length)], 3);
 							break;
 						}
-						case 4:
-						{
+						case 4: {
 							rewardItems(player, PIECE[getRandom(PIECE.length)], getRandom(5) + 2);
 							break;
 						}
-						case 5:
-						{
+						case 5: {
 							rewardItems(player, PIECE[getRandom(PIECE.length)], getRandom(7) + 2);
 							break;
 						}
-						case 6:
-						{
+						case 6: {
 							rewardItems(player, GOLDEN_SPICE_CRATE, 1);
 							break;
 						}
-						case 7:
-						{
+						case 7: {
 							rewardItems(player, GOLDEN_SPICE_CRATE, 2);
 							break;
 						}
-						case 8:
-						{
+						case 8: {
 							rewardItems(player, CRYSTAL_SPICE_COMPRESSED_PACK, 1);
 							break;
 						}
-						case 9:
-						{
+						case 9: {
 							rewardItems(player, CRYSTAL_SPICE_COMPRESSED_PACK, 2);
 							break;
 						}
@@ -183,48 +161,35 @@ public class Q00631_DeliciousTopChoiceMeat extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getRandomPartyMemberState(player, 1, 3, npc);
-		if (st != null)
-		{
-			if (giveItemRandomly(st.getPlayer(), npc, PRIME_MEAT, 1, PRIME_MEAT_COUNT, MOBS_MEAT.get(npc.getId()), true))
-			{
+		if (st != null) {
+			if (giveItemRandomly(st.getPlayer(), npc, PRIME_MEAT, 1, PRIME_MEAT_COUNT, MOBS_MEAT.get(npc.getId()), true)) {
 				st.setCond(2, true);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isCreated())
-		{
+
+		if (st.isCreated()) {
 			htmltext = "31537-01.htm";
-		}
-		else if (st.isStarted())
-		{
-			if (st.isCond(1))
-			{
-				if (getQuestItemsCount(player, PRIME_MEAT) < PRIME_MEAT_COUNT)
-				{
+		} else if (st.isStarted()) {
+			if (st.isCond(1)) {
+				if (getQuestItemsCount(player, PRIME_MEAT) < PRIME_MEAT_COUNT) {
 					htmltext = "31537-04.html";
 				}
-			}
-			else if (st.isCond(2))
-			{
-				if (getQuestItemsCount(player, PRIME_MEAT) >= PRIME_MEAT_COUNT)
-				{
+			} else if (st.isCond(2)) {
+				if (getQuestItemsCount(player, PRIME_MEAT) >= PRIME_MEAT_COUNT) {
 					htmltext = "31537-05.html";
 				}
 			}

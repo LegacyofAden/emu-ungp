@@ -18,12 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.enums.Faction;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -31,83 +26,71 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
 /**
  * Admin Factions manage admin commands.
+ *
  * @author St3eT
  */
-public final class AdminFactions implements IAdminCommandHandler
-{
+public final class AdminFactions implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_factions",
-	};
-	
+			{
+					"admin_factions",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		
-		if (actualCommand.equals("admin_factions"))
-		{
-			if (st.hasMoreTokens())
-			{
+
+		if (actualCommand.equals("admin_factions")) {
+			if (st.hasMoreTokens()) {
 				final Faction faction = Faction.valueOf(st.nextToken());
 				final String action = st.nextToken();
-				
+
 				final PlayerInstance target = getTarget(activeChar);
-				if ((target == null) || !st.hasMoreTokens())
-				{
+				if ((target == null) || !st.hasMoreTokens()) {
 					return false;
 				}
-				
+
 				int value = 0;
-				try
-				{
+				try {
 					value = Integer.parseInt(st.nextToken());
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					showMenuHtml(activeChar);
 					activeChar.sendMessage("Invalid Value!");
 					return false;
 				}
-				
-				switch (action)
-				{
-					case "increase":
-					{
+
+				switch (action) {
+					case "increase": {
 						activeChar.addFactionPoints(faction, value);
 						target.sendMessage("Admin increase your Faction " + faction + " Point(s) by " + value + "!");
 						activeChar.sendMessage("You increased Faction " + faction + " Point(s) of " + target.getName() + " by " + value);
 						break;
 					}
-					case "decrease":
-					{
+					case "decrease": {
 						activeChar.removeFactionPoints(faction, value);
 						target.sendMessage("Admin decreased your Faction " + faction + " Point(s) by " + value + "!");
 						activeChar.sendMessage("You decreased Faction " + faction + " Point(s) of " + target.getName() + " by " + value);
 						break;
 					}
-					case "rewardOnline":
-					{
+					case "rewardOnline": {
 						int range = 0;
-						try
-						{
+						try {
 							range = Integer.parseInt(st.nextToken());
+						} catch (Exception e) {
+
 						}
-						catch (Exception e)
-						{
-							
-						}
-						
-						if (range <= 0)
-						{
+
+						if (range <= 0) {
 							final int count = increaseForAll(World.getInstance().getPlayers(), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all online players (" + count + ") by " + value + ".");
-						}
-						else if (range > 0)
-						{
+						} else if (range > 0) {
 							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, PlayerInstance.class, range), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all players (" + count + ") in range " + range + " by " + value + ".");
 						}
@@ -115,22 +98,17 @@ public final class AdminFactions implements IAdminCommandHandler
 					}
 				}
 				showMenuHtml(activeChar);
-			}
-			else
-			{
+			} else {
 				showMenuHtml(activeChar);
 			}
 		}
 		return true;
 	}
-	
-	private int increaseForAll(Collection<PlayerInstance> playerList, Faction faction, int value)
-	{
+
+	private int increaseForAll(Collection<PlayerInstance> playerList, Faction faction, int value) {
 		int counter = 0;
-		for (PlayerInstance temp : playerList)
-		{
-			if ((temp != null) && (temp.isOnlineInt() == 1))
-			{
+		for (PlayerInstance temp : playerList) {
+			if ((temp != null) && (temp.isOnlineInt() == 1)) {
 				temp.addFactionPoints(faction, value);
 				temp.sendMessage("Admin increase your Faction " + faction + " Point(s) by " + value + "!");
 				counter++;
@@ -138,19 +116,17 @@ public final class AdminFactions implements IAdminCommandHandler
 		}
 		return counter;
 	}
-	
-	private PlayerInstance getTarget(PlayerInstance activeChar)
-	{
+
+	private PlayerInstance getTarget(PlayerInstance activeChar) {
 		return ((activeChar.getTarget() != null) && (activeChar.getTarget().getActingPlayer() != null)) ? activeChar.getTarget().getActingPlayer() : activeChar;
 	}
-	
-	private void showMenuHtml(PlayerInstance activeChar)
-	{
+
+	private void showMenuHtml(PlayerInstance activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		final PlayerInstance target = getTarget(activeChar);
-		html.setHtml(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/factions.htm"));
+		html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/factions.htm"));
 		html.replace("%targetName%", target.getName());
-		
+
 		final StringBuilder sb = new StringBuilder();
 		target.getFactionsPoints().entrySet().forEach(entry ->
 		{
@@ -161,20 +137,18 @@ public final class AdminFactions implements IAdminCommandHandler
 			sb.append("</td></tr>");
 		});
 		html.replace("%currentPoints%", sb.toString());
-		
+
 		html.replace("%factions%", Arrays.stream(Faction.values()).map(Faction::name).collect(Collectors.joining(";")));
-		
+
 		activeChar.sendPacket(html);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminFactions());
 	}
 }

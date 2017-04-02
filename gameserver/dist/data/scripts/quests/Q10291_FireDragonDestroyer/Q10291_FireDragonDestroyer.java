@@ -18,8 +18,6 @@
  */
 package quests.Q10291_FireDragonDestroyer;
 
-import java.util.function.Function;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -27,12 +25,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.function.Function;
+
 /**
  * Fire Dragon Destroyer (10291)
+ *
  * @author malyelfik
  */
-public class Q10291_FireDragonDestroyer extends Quest
-{
+public class Q10291_FireDragonDestroyer extends Quest {
 	// NPC
 	private static final int KLEIN = 31540;
 	// Monster
@@ -41,52 +41,44 @@ public class Q10291_FireDragonDestroyer extends Quest
 	private static final int FLOATING_STONE = 7267;
 	private static final int POOR_NECKLACE = 15524;
 	private static final int VALOR_NECKLACE = 15525;
-	
+
 	private static final int VALAKAS_SLAYER_CIRCLET = 8567;
-	
-	public Q10291_FireDragonDestroyer()
-	{
+
+	public Q10291_FireDragonDestroyer() {
 		super(10291);
 		addStartNpc(KLEIN);
 		addTalkId(KLEIN);
 		addKillId(VALAKAS);
 		registerQuestItems(POOR_NECKLACE, VALOR_NECKLACE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equals("31540-05.htm"))
-		{
+
+		if (event.equals("31540-05.htm")) {
 			st.startQuest();
 			giveItems(player, POOR_NECKLACE, 1);
 		}
-		
+
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (!player.isInParty())
-		{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (!player.isInParty()) {
 			return super.onKill(npc, player, isSummon);
 		}
-		
+
 		Function<PlayerInstance, Boolean> rewardCheck = p ->
 		{
-			if (Util.checkIfInRange(8000, npc, p, false))
-			{
+			if (Util.checkIfInRange(8000, npc, p, false)) {
 				QuestState st = getQuestState(p, false);
-				
-				if ((st != null) && st.isCond(1) && hasQuestItems(p, POOR_NECKLACE))
-				{
+
+				if ((st != null) && st.isCond(1) && hasQuestItems(p, POOR_NECKLACE)) {
 					takeItems(p, POOR_NECKLACE, -1);
 					giveItems(p, VALOR_NECKLACE, 1);
 					st.setCond(2, true);
@@ -94,60 +86,43 @@ public class Q10291_FireDragonDestroyer extends Quest
 			}
 			return true;
 		};
-		
+
 		// Rewards go only to command channel, not to a single party or player.
-		if (player.getParty().isInCommandChannel())
-		{
+		if (player.getParty().isInCommandChannel()) {
 			player.getParty().getCommandChannel().forEachMember(rewardCheck);
-		}
-		else
-		{
+		} else {
 			player.getParty().forEachMember(rewardCheck);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (player.getLevel() < 83)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (player.getLevel() < 83) {
 					htmltext = "31540-00.htm";
-				}
-				else
-				{
+				} else {
 					htmltext = hasQuestItems(player, FLOATING_STONE) ? "31540-02.htm" : "31540-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
-					if (hasQuestItems(player, POOR_NECKLACE))
-					{
+			case State.STARTED: {
+				if (st.isCond(1)) {
+					if (hasQuestItems(player, POOR_NECKLACE)) {
 						htmltext = "31540-06.html";
-					}
-					else
-					{
+					} else {
 						giveItems(player, POOR_NECKLACE, 1);
 						htmltext = "31540-07.html";
 					}
-				}
-				else if (st.isCond(2) && hasQuestItems(player, VALOR_NECKLACE))
-				{
+				} else if (st.isCond(2) && hasQuestItems(player, VALOR_NECKLACE)) {
 					htmltext = "31540-08.html";
 					giveAdena(player, 126549, true);
 					addExp(player, 717291);
@@ -157,13 +132,12 @@ public class Q10291_FireDragonDestroyer extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "31540-09.html";
 				break;
 			}
 		}
-		
+
 		return htmltext;
 	}
 }

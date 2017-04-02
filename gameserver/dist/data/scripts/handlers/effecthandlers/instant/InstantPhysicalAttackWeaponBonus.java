@@ -18,9 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.model.StatsSet;
@@ -35,113 +32,101 @@ import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Physical Attack effect implementation. <br>
  * <b>Note</b>: Initial formula taken from PhysicalAttack.
+ *
  * @author Adry_85, Nik
  */
-public final class InstantPhysicalAttackWeaponBonus extends AbstractEffect
-{
+public final class InstantPhysicalAttackWeaponBonus extends AbstractEffect {
 	private final double _power;
 	private final double _criticalChance;
 	private final boolean _ignoreShieldDefence;
 	private final boolean _overHit;
 	private final double _pDefMod;
-	
+
 	private final Map<WeaponType, Double> _weaponBonus = new HashMap<>();
-	
-	public InstantPhysicalAttackWeaponBonus(StatsSet params)
-	{
+
+	public InstantPhysicalAttackWeaponBonus(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_criticalChance = params.getDouble("criticalChance", 0);
 		_ignoreShieldDefence = params.getBoolean("ignoreShieldDefence", false);
 		_overHit = params.getBoolean("overHit", false);
 		_pDefMod = params.getDouble("pDefMod", 1.0);
-		
-		for (WeaponType weapon : WeaponType.values())
-		{
+
+		for (WeaponType weapon : WeaponType.values()) {
 			final double bonus = params.getDouble(weapon.name(), 1);
-			if (bonus != 1)
-			{
+			if (bonus != 1) {
 				_weaponBonus.put(weapon, bonus);
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.isAlikeDead())
-		{
+		if (caster.isAlikeDead()) {
 			return;
 		}
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.asPlayer().stopFakeDeath(true);
 		}
-		
-		if (_overHit && targetCreature.isAttackable())
-		{
+
+		if (_overHit && targetCreature.isAttackable()) {
 			targetCreature.asAttackable().overhitEnabled(true);
 		}
 
 		final double attack = caster.getPAtk();
 		double defence = targetCreature.getPDef() * _pDefMod;
-		if (!_ignoreShieldDefence)
-		{
-			switch (Formulas.calcShldUse(caster, targetCreature))
-			{
-				case Formulas.SHIELD_DEFENSE_SUCCEED:
-				{
+		if (!_ignoreShieldDefence) {
+			switch (Formulas.calcShldUse(caster, targetCreature)) {
+				case Formulas.SHIELD_DEFENSE_SUCCEED: {
 					defence += targetCreature.getShldDef();
 					break;
 				}
-				case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK:
-				{
+				case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK: {
 					defence = -1;
 					break;
 				}
 			}
 		}
-		
+
 		double damage = 1;
 		final boolean critical = (_criticalChance > 0) && ((BaseStats.STR.calcBonus(caster) * _criticalChance) > (Rnd.nextDouble() * 100));
-		
-		if (defence != -1)
-		{
+
+		if (defence != -1) {
 			// Trait, elements
 			final double weaponTraitMod = Formulas.calcWeaponTraitBonus(caster, targetCreature);
 			final double generalTraitMod = Formulas.calcGeneralTraitBonus(caster, targetCreature, skill.getTraitType(), true);
 			final double attributeMod = Formulas.calcAttributeBonus(caster, targetCreature, skill);
 			final double pvpPveMod = Formulas.calculatePvpPveBonus(caster, targetCreature, skill, true);
 			final double randomMod = caster.getRandomDamageMultiplier();
-			
+
 			// Skill specific mods.
 			final double wpnMod = caster.getAttackType().isRanged() ? 70 : (70 * 1.10113);
 			final double weaponBonus = _weaponBonus.getOrDefault(caster.getAttackType(), 1.0);
 			final double rangedBonus = caster.getAttackType().isRanged() ? (attack + _power) : 0;
 			final double critMod = critical ? Formulas.calcCritDamage(caster, targetCreature, skill) : 1;
 			final double ssmod = (skill.useSoulShot() && caster.isChargedShot(ShotType.SOULSHOTS)) ? (2 * caster.getStat().getValue(DoubleStat.SOULSHOTS_BONUS)) : 1; // 2.04 for dual weapon?
-			
+
 			// ...................____________Melee Damage_____________......................................___________________Ranged Damage____________________
 			// ATTACK CALCULATION 77 * ((pAtk * lvlMod) + power) / pdef            RANGED ATTACK CALCULATION 70 * ((pAtk * lvlMod) + power + patk + power) / pdef
 			// ```````````````````^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^``````````````````````````````````````^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -149,7 +134,7 @@ public final class InstantPhysicalAttackWeaponBonus extends AbstractEffect
 			damage = baseMod * ssmod * critMod * weaponBonus * weaponTraitMod * generalTraitMod * attributeMod * pvpPveMod * randomMod;
 			damage = caster.getStat().getValue(DoubleStat.PHYSICAL_SKILL_POWER, damage);
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, critical, false);
 	}
 }

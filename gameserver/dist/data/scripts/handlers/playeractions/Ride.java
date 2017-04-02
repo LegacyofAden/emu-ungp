@@ -25,18 +25,16 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Mount/Dismount player action handler.
+ *
  * @author Nik
  */
-public final class Ride implements IPlayerActionHandler
-{
+public final class Ride implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		activeChar.mountPlayer(activeChar.getPet());
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new Ride());
 	}
 }

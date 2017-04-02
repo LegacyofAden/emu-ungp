@@ -18,19 +18,18 @@
  */
 package ai.individual.FreyasGarden.Jinia;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import ai.AbstractNpcAI;
 import quests.Q10286_ReunionWithSirra.Q10286_ReunionWithSirra;
 
 /**
  * Jinia AI.
+ *
  * @author Adry_85
  */
-public final class Jinia extends AbstractNpcAI
-{
+public final class Jinia extends AbstractNpcAI {
 	// NPC
 	private static final int JINIA = 32781;
 	// Items
@@ -38,40 +37,29 @@ public final class Jinia extends AbstractNpcAI
 	private static final int BLACK_FROZEN_CORE = 15470;
 	// Misc
 	private static final int MIN_LEVEL = 82;
-	
-	private Jinia()
-	{
+
+	private Jinia() {
 		addStartNpc(JINIA);
 		addFirstTalkId(JINIA);
 		addTalkId(JINIA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "32781-10.html":
-			case "32781-11.html":
-			{
+			case "32781-11.html": {
 				htmltext = event;
 				break;
 			}
-			case "check":
-			{
-				if (hasAtLeastOneQuestItem(player, FROZEN_CORE, BLACK_FROZEN_CORE))
-				{
+			case "check": {
+				if (hasAtLeastOneQuestItem(player, FROZEN_CORE, BLACK_FROZEN_CORE)) {
 					htmltext = "32781-03.html";
-				}
-				else
-				{
-					if (player.hasQuestCompleted(Q10286_ReunionWithSirra.class.getSimpleName()))
-					{
+				} else {
+					if (player.hasQuestCompleted(Q10286_ReunionWithSirra.class.getSimpleName())) {
 						giveItems(player, FROZEN_CORE, 1);
-					}
-					else
-					{
+					} else {
 						giveItems(player, BLACK_FROZEN_CORE, 1);
 					}
 					htmltext = "32781-04.html";
@@ -81,27 +69,21 @@ public final class Jinia extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = player.getQuestState(Q10286_ReunionWithSirra.class.getSimpleName());
-		if ((st != null) && (player.getLevel() >= MIN_LEVEL))
-		{
-			if (st.isCond(5) || st.isCond(6))
-			{
+		if ((st != null) && (player.getLevel() >= MIN_LEVEL)) {
+			if (st.isCond(5) || st.isCond(6)) {
 				return "32781-09.html";
-			}
-			else if (st.isCond(7))
-			{
+			} else if (st.isCond(7)) {
 				return "32781-01.html";
 			}
 		}
 		return "32781-02.html";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Jinia();
 	}
 }

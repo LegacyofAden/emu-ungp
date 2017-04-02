@@ -25,13 +25,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * TODO: Target item.
+ *
  * @author Nik
  */
-public class Item implements ITargetTypeHandler
-{
+public class Item implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		return null;
 	}
 }

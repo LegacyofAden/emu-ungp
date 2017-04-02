@@ -32,55 +32,46 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Unsummon effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantNpcKill extends AbstractEffect
-{
+public final class InstantNpcKill extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantNpcKill(StatsSet params)
-	{
+
+	public InstantNpcKill(StatsSet params) {
 		_chance = params.getInt("chance", -1);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
-		if (!target.isCreature())
-		{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
+		if (!target.isCreature()) {
 			return false;
-		}
-		else if (_chance < 0)
-		{
+		} else if (_chance < 0) {
 			return true;
 		}
-		
+
 		final Creature targetCreature = target.asCreature();
 		int magicLevel = skill.getMagicLevel();
-		if ((magicLevel <= 0) || ((targetCreature.getLevel() - 9) <= magicLevel))
-		{
+		if ((magicLevel <= 0) || ((targetCreature.getLevel() - 9) <= magicLevel)) {
 			double chance = _chance * Formulas.calcAttributeBonus(caster, targetCreature, skill) * Formulas.calcGeneralTraitBonus(caster, targetCreature, skill.getTraitType(), false);
-			if ((chance >= 100) || (chance > (Rnd.nextDouble() * 100)))
-			{
+			if ((chance >= 100) || (chance > (Rnd.nextDouble() * 100))) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (target.isServitor())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (target.isServitor()) {
 			final Summon servitor = target.asSummon();
 			final PlayerInstance summonOwner = servitor.getOwner();
-			
+
 			servitor.abortAttack();
 			servitor.abortCast();
 			servitor.stopAllEffects();
-			
+
 			servitor.unSummon(summonOwner);
 			summonOwner.sendPacket(SystemMessageId.YOUR_SERVITOR_HAS_VANISHED_YOU_LL_NEED_TO_SUMMON_A_NEW_ONE);
 		}

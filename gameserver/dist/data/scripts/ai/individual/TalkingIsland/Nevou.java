@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,29 +26,23 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Nevou AI.
+ *
  * @author Gladicek
  */
-public final class Nevou extends AbstractNpcAI
-{
+public final class Nevou extends AbstractNpcAI {
 	// NPC
 	private static final int NEVOU = 33101;
-	
-	private Nevou()
-	{
+
+	private Nevou() {
 		addSpawnId(NEVOU);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT"))
-		{
-			switch (getRandom(3))
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT")) {
+			switch (getRandom(3)) {
 				case 0:
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.KIDS_THESE_DAYS);
 					break;
@@ -58,17 +53,15 @@ public final class Nevou extends AbstractNpcAI
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		SuperpointManager.getInstance().startMoving(npc, "si_town_05");
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Nevou();
 	}
 }

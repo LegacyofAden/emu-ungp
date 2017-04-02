@@ -35,605 +35,467 @@ import org.l2junity.gameserver.util.Broadcast;
 /**
  * @author littlecrow Admin commands handler for controllable mobs
  */
-public class AdminMobGroup implements IAdminCommandHandler
-{
+public class AdminMobGroup implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_mobmenu",
-		"admin_mobgroup_list",
-		"admin_mobgroup_create",
-		"admin_mobgroup_remove",
-		"admin_mobgroup_delete",
-		"admin_mobgroup_spawn",
-		"admin_mobgroup_unspawn",
-		"admin_mobgroup_kill",
-		"admin_mobgroup_idle",
-		"admin_mobgroup_attack",
-		"admin_mobgroup_rnd",
-		"admin_mobgroup_return",
-		"admin_mobgroup_follow",
-		"admin_mobgroup_casting",
-		"admin_mobgroup_nomove",
-		"admin_mobgroup_attackgrp",
-		"admin_mobgroup_invul"
-	};
-	
+			{
+					"admin_mobmenu",
+					"admin_mobgroup_list",
+					"admin_mobgroup_create",
+					"admin_mobgroup_remove",
+					"admin_mobgroup_delete",
+					"admin_mobgroup_spawn",
+					"admin_mobgroup_unspawn",
+					"admin_mobgroup_kill",
+					"admin_mobgroup_idle",
+					"admin_mobgroup_attack",
+					"admin_mobgroup_rnd",
+					"admin_mobgroup_return",
+					"admin_mobgroup_follow",
+					"admin_mobgroup_casting",
+					"admin_mobgroup_nomove",
+					"admin_mobgroup_attackgrp",
+					"admin_mobgroup_invul"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("admin_mobmenu"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("admin_mobmenu")) {
 			showMainPage(activeChar, command);
 			return true;
-		}
-		else if (command.equals("admin_mobgroup_list"))
-		{
+		} else if (command.equals("admin_mobgroup_list")) {
 			showGroupList(activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_create"))
-		{
+		} else if (command.startsWith("admin_mobgroup_create")) {
 			createGroup(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_delete") || command.startsWith("admin_mobgroup_remove"))
-		{
+		} else if (command.startsWith("admin_mobgroup_delete") || command.startsWith("admin_mobgroup_remove")) {
 			removeGroup(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_spawn"))
-		{
+		} else if (command.startsWith("admin_mobgroup_spawn")) {
 			spawnGroup(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_unspawn"))
-		{
+		} else if (command.startsWith("admin_mobgroup_unspawn")) {
 			unspawnGroup(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_kill"))
-		{
+		} else if (command.startsWith("admin_mobgroup_kill")) {
 			killGroup(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_attackgrp"))
-		{
+		} else if (command.startsWith("admin_mobgroup_attackgrp")) {
 			attackGrp(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_attack"))
-		{
-			if (activeChar.getTarget() instanceof Creature)
-			{
+		} else if (command.startsWith("admin_mobgroup_attack")) {
+			if (activeChar.getTarget() instanceof Creature) {
 				Creature target = (Creature) activeChar.getTarget();
 				attack(command, activeChar, target);
 			}
-		}
-		else if (command.startsWith("admin_mobgroup_rnd"))
-		{
+		} else if (command.startsWith("admin_mobgroup_rnd")) {
 			setNormal(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_idle"))
-		{
+		} else if (command.startsWith("admin_mobgroup_idle")) {
 			idle(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_return"))
-		{
+		} else if (command.startsWith("admin_mobgroup_return")) {
 			returnToChar(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_follow"))
-		{
+		} else if (command.startsWith("admin_mobgroup_follow")) {
 			follow(command, activeChar, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_casting"))
-		{
+		} else if (command.startsWith("admin_mobgroup_casting")) {
 			setCasting(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_nomove"))
-		{
+		} else if (command.startsWith("admin_mobgroup_nomove")) {
 			noMove(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_invul"))
-		{
+		} else if (command.startsWith("admin_mobgroup_invul")) {
 			invul(command, activeChar);
-		}
-		else if (command.startsWith("admin_mobgroup_teleport"))
-		{
+		} else if (command.startsWith("admin_mobgroup_teleport")) {
 			teleportGroup(command, activeChar);
 		}
 		showMainPage(activeChar, command);
 		return true;
 	}
-	
+
 	/**
 	 * @param activeChar
 	 * @param command
 	 */
-	private void showMainPage(PlayerInstance activeChar, String command)
-	{
+	private void showMainPage(PlayerInstance activeChar, String command) {
 		String filename = "mobgroup.htm";
 		AdminHtml.showAdminHtml(activeChar, filename);
 	}
-	
-	private void returnToChar(String command, PlayerInstance activeChar)
-	{
+
+	private void returnToChar(String command, PlayerInstance activeChar) {
 		int groupId;
-		try
-		{
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Incorrect command arguments.");
 			return;
 		}
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		if (group == null)
-		{
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
 		group.returnGroup(activeChar);
 	}
-	
-	private void idle(String command, PlayerInstance activeChar)
-	{
+
+	private void idle(String command, PlayerInstance activeChar) {
 		int groupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Incorrect command arguments.");
 			return;
 		}
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		if (group == null)
-		{
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
 		group.setIdleMode();
 	}
-	
-	private void setNormal(String command, PlayerInstance activeChar)
-	{
+
+	private void setNormal(String command, PlayerInstance activeChar) {
 		int groupId;
-		try
-		{
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Incorrect command arguments.");
 			return;
 		}
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		if (group == null)
-		{
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
 		group.setAttackRandom();
 	}
-	
-	private void attack(String command, PlayerInstance activeChar, Creature target)
-	{
+
+	private void attack(String command, PlayerInstance activeChar, Creature target) {
 		int groupId;
-		try
-		{
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Incorrect command arguments.");
 			return;
 		}
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		if (group == null)
-		{
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
 		group.setAttackTarget(target);
 	}
-	
-	private void follow(String command, PlayerInstance activeChar, Creature target)
-	{
+
+	private void follow(String command, PlayerInstance activeChar, Creature target) {
 		int groupId;
-		try
-		{
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Incorrect command arguments.");
 			return;
 		}
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		if (group == null)
-		{
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
 		group.setFollowMode(target);
 	}
-	
-	private void createGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void createGroup(String command, PlayerInstance activeChar) {
 		int groupId;
 		int templateId;
 		int mobCount;
-		
-		try
-		{
+
+		try {
 			String[] cmdParams = command.split(" ");
-			
+
 			groupId = Integer.parseInt(cmdParams[1]);
 			templateId = Integer.parseInt(cmdParams[2]);
 			mobCount = Integer.parseInt(cmdParams[3]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_create <group> <npcid> <count>");
 			return;
 		}
-		
-		if (MobGroupTable.getInstance().getGroup(groupId) != null)
-		{
+
+		if (MobGroupTable.getInstance().getGroup(groupId) != null) {
 			activeChar.sendMessage("Mob group " + groupId + " already exists.");
 			return;
 		}
-		
+
 		L2NpcTemplate template = NpcData.getInstance().getTemplate(templateId);
-		
-		if (template == null)
-		{
+
+		if (template == null) {
 			activeChar.sendMessage("Invalid NPC ID specified.");
 			return;
 		}
-		
+
 		MobGroup group = new MobGroup(groupId, template, mobCount);
 		MobGroupTable.getInstance().addGroup(groupId, group);
-		
+
 		activeChar.sendMessage("Mob group " + groupId + " created.");
 	}
-	
-	private void removeGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void removeGroup(String command, PlayerInstance activeChar) {
 		int groupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_remove <groupId>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		doAnimation(activeChar);
 		group.unspawnGroup();
-		
-		if (MobGroupTable.getInstance().removeGroup(groupId))
-		{
+
+		if (MobGroupTable.getInstance().removeGroup(groupId)) {
 			activeChar.sendMessage("Mob group " + groupId + " unspawned and removed.");
 		}
 	}
-	
-	private void spawnGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void spawnGroup(String command, PlayerInstance activeChar) {
 		int groupId;
 		boolean topos = false;
 		int posx = 0;
 		int posy = 0;
 		int posz = 0;
-		
-		try
-		{
+
+		try {
 			String[] cmdParams = command.split(" ");
 			groupId = Integer.parseInt(cmdParams[1]);
-			
-			try
-			{ // we try to get a position
+
+			try { // we try to get a position
 				posx = Integer.parseInt(cmdParams[2]);
 				posy = Integer.parseInt(cmdParams[3]);
 				posz = Integer.parseInt(cmdParams[4]);
 				topos = true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// no position given
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_spawn <group> [ x y z ]");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		doAnimation(activeChar);
-		
-		if (topos)
-		{
+
+		if (topos) {
 			group.spawnGroup(posx, posy, posz);
-		}
-		else
-		{
+		} else {
 			group.spawnGroup(activeChar);
 		}
-		
+
 		activeChar.sendMessage("Mob group " + groupId + " spawned.");
 	}
-	
-	private void unspawnGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void unspawnGroup(String command, PlayerInstance activeChar) {
 		int groupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_unspawn <groupId>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		doAnimation(activeChar);
 		group.unspawnGroup();
-		
+
 		activeChar.sendMessage("Mob group " + groupId + " unspawned.");
 	}
-	
-	private void killGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void killGroup(String command, PlayerInstance activeChar) {
 		int groupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_kill <groupId>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		doAnimation(activeChar);
 		group.killGroup(activeChar);
 	}
-	
-	private void setCasting(String command, PlayerInstance activeChar)
-	{
+
+	private void setCasting(String command, PlayerInstance activeChar) {
 		int groupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_casting <groupId>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		group.setCastMode();
 	}
-	
-	private void noMove(String command, PlayerInstance activeChar)
-	{
+
+	private void noMove(String command, PlayerInstance activeChar) {
 		int groupId;
 		String enabled;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
 			enabled = command.split(" ")[2];
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_nomove <groupId> <on|off>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
-		if (enabled.equalsIgnoreCase("on") || enabled.equalsIgnoreCase("true"))
-		{
+
+		if (enabled.equalsIgnoreCase("on") || enabled.equalsIgnoreCase("true")) {
 			group.setNoMoveMode(true);
-		}
-		else if (enabled.equalsIgnoreCase("off") || enabled.equalsIgnoreCase("false"))
-		{
+		} else if (enabled.equalsIgnoreCase("off") || enabled.equalsIgnoreCase("false")) {
 			group.setNoMoveMode(false);
-		}
-		else
-		{
+		} else {
 			activeChar.sendMessage("Incorrect command arguments.");
 		}
 	}
-	
-	private void doAnimation(PlayerInstance activeChar)
-	{
+
+	private void doAnimation(PlayerInstance activeChar) {
 		Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, 1008, 1, 4000, 0), 1500);
 		activeChar.sendPacket(new SetupGauge(activeChar.getObjectId(), 0, 4000));
 	}
-	
-	private void attackGrp(String command, PlayerInstance activeChar)
-	{
+
+	private void attackGrp(String command, PlayerInstance activeChar) {
 		int groupId;
 		int othGroupId;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
 			othGroupId = Integer.parseInt(command.split(" ")[2]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_attackgrp <groupId> <TargetGroupId>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		MobGroup othGroup = MobGroupTable.getInstance().getGroup(othGroupId);
-		
-		if (othGroup == null)
-		{
+
+		if (othGroup == null) {
 			activeChar.sendMessage("Incorrect target group.");
 			return;
 		}
-		
+
 		group.setAttackGroup(othGroup);
 	}
-	
-	private void invul(String command, PlayerInstance activeChar)
-	{
+
+	private void invul(String command, PlayerInstance activeChar) {
 		int groupId;
 		String enabled;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
 			enabled = command.split(" ")[2];
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_invul <groupId> <on|off>");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
-		if (enabled.equalsIgnoreCase("on") || enabled.equalsIgnoreCase("true"))
-		{
+
+		if (enabled.equalsIgnoreCase("on") || enabled.equalsIgnoreCase("true")) {
 			group.setInvul(true);
-		}
-		else if (enabled.equalsIgnoreCase("off") || enabled.equalsIgnoreCase("false"))
-		{
+		} else if (enabled.equalsIgnoreCase("off") || enabled.equalsIgnoreCase("false")) {
 			group.setInvul(false);
-		}
-		else
-		{
+		} else {
 			activeChar.sendMessage("Incorrect command arguments.");
 		}
 	}
-	
-	private void teleportGroup(String command, PlayerInstance activeChar)
-	{
+
+	private void teleportGroup(String command, PlayerInstance activeChar) {
 		int groupId;
 		String targetPlayerStr = null;
 		PlayerInstance targetPlayer = null;
-		
-		try
-		{
+
+		try {
 			groupId = Integer.parseInt(command.split(" ")[1]);
 			targetPlayerStr = command.split(" ")[2];
-			
-			if (targetPlayerStr != null)
-			{
+
+			if (targetPlayerStr != null) {
 				targetPlayer = World.getInstance().getPlayer(targetPlayerStr);
 			}
-			
-			if (targetPlayer == null)
-			{
+
+			if (targetPlayer == null) {
 				targetPlayer = activeChar;
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Usage: //mobgroup_teleport <groupId> [playerName]");
 			return;
 		}
-		
+
 		MobGroup group = MobGroupTable.getInstance().getGroup(groupId);
-		
-		if (group == null)
-		{
+
+		if (group == null) {
 			activeChar.sendMessage("Invalid group specified.");
 			return;
 		}
-		
+
 		group.teleportGroup(activeChar);
 	}
-	
-	private void showGroupList(PlayerInstance activeChar)
-	{
+
+	private void showGroupList(PlayerInstance activeChar) {
 		MobGroup[] mobGroupList = MobGroupTable.getInstance().getGroups();
-		
+
 		activeChar.sendMessage("======= <Mob Groups> =======");
-		
-		for (MobGroup mobGroup : mobGroupList)
-		{
+
+		for (MobGroup mobGroup : mobGroupList) {
 			activeChar.sendMessage(mobGroup.getGroupId() + ": " + mobGroup.getActiveMobCount() + " alive out of " + mobGroup.getMaxMobCount() + " of NPC ID " + mobGroup.getTemplate().getId() + " (" + mobGroup.getStatus() + ")");
 		}
-		
+
 		activeChar.sendPacket(SystemMessageId.EMPTY3);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminMobGroup());
 	}
 }

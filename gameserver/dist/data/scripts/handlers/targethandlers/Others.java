@@ -26,15 +26,13 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target other things
+ *
  * @author Nik
  */
-public class Others implements ITargetTypeHandler
-{
+public class Others implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (selectedTarget == activeChar)
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (selectedTarget == activeChar) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_THIS_ON_YOURSELF);
 			return null;
 		}

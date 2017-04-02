@@ -31,38 +31,33 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Delete Hate Of Me effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantDeleteHateOfMe extends AbstractEffect
-{
+public final class InstantDeleteHateOfMe extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantDeleteHateOfMe(StatsSet params)
-	{
+
+	public InstantDeleteHateOfMe(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isAttackable() && Formulas.calcProbability(_chance, caster, target.asAttackable(), skill);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.HATE;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Attackable targetAttackable = target.asAttackable();
-		if (targetAttackable == null)
-		{
+		if (targetAttackable == null) {
 			return;
 		}
-		
+
 		targetAttackable.stopHating(caster);
 		targetAttackable.setWalking();
 		targetAttackable.getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);

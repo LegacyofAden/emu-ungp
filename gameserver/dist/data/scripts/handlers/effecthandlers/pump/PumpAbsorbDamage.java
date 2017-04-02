@@ -18,9 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -30,48 +27,45 @@ import org.l2junity.gameserver.model.events.listeners.FunctionEventListener;
 import org.l2junity.gameserver.model.events.returns.DamageReturn;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Sdw
  */
-public class PumpAbsorbDamage extends AbstractEffect
-{
+public class PumpAbsorbDamage extends AbstractEffect {
 	private final double _damage;
 	private static final Map<Integer, Double> _damageHolder = new ConcurrentHashMap<>();
-	
-	public PumpAbsorbDamage(StatsSet params)
-	{
+
+	public PumpAbsorbDamage(StatsSet params) {
 		_damage = params.getDouble("damage", 0);
 	}
-	
-	private DamageReturn onDamageReceivedEvent(OnCreatureDamageReceived event)
-	{
+
+	private DamageReturn onDamageReceivedEvent(OnCreatureDamageReceived event) {
 		// DOT effects are not taken into account.
-		if (event.isDamageOverTime())
-		{
+		if (event.isDamageOverTime()) {
 			return null;
 		}
-		
+
 		final int objectId = event.getTarget().getObjectId();
-		
+
 		double damageLeft = _damageHolder.get(objectId);
 		double newDamageLeft = Math.max(damageLeft - event.getDamage(), 0);
 		double newDamage = Math.max(event.getDamage() - damageLeft, 0);
-		
+
 		_damageHolder.put(objectId, newDamageLeft);
-		
+
 		return new DamageReturn(false, true, false, newDamage);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_DAMAGE_RECEIVED, listener -> listener.getOwner() == this);
 		_damageHolder.remove(target.getObjectId());
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		_damageHolder.put(target.getObjectId(), _damage);
 		target.addListener(new FunctionEventListener(target, EventType.ON_CREATURE_DAMAGE_RECEIVED, (OnCreatureDamageReceived event) -> onDamageReceivedEvent(event), this));
 	}

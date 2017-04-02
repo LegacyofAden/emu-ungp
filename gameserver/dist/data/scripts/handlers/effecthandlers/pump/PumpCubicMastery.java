@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 
 /**
  * @author Sdw
  */
-public final class PumpCubicMastery extends AbstractDoubleStatAddEffect
-{
-	public PumpCubicMastery(StatsSet params)
-	{
+public final class PumpCubicMastery extends AbstractDoubleStatAddEffect {
+	public PumpCubicMastery(StatsSet params) {
 		super(params, DoubleStat.MAX_CUBIC);
 	}
 }

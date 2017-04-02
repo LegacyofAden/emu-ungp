@@ -28,18 +28,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpPledgeSkillCondition implements ISkillCondition
-{
+public class OpPledgeSkillCondition implements ISkillCondition {
 	private final int _level;
-	
-	public OpPledgeSkillCondition(StatsSet params)
-	{
+
+	public OpPledgeSkillCondition(StatsSet params) {
 		_level = params.getInt("level");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final L2Clan clan = caster.getClan();
 		return (clan != null) && (clan.getLevel() >= _level);
 	}

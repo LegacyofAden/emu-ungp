@@ -26,32 +26,27 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 
 /**
  * An effect that stops vitality points consumption, but still allows vitality bonus to be received.
+ *
  * @author Nik
  */
-public final class StopConsumeVitalPoint extends AbstractBooleanStatEffect
-{
+public final class StopConsumeVitalPoint extends AbstractBooleanStatEffect {
 	final boolean _countVitalityItemUsed;
-	
-	public StopConsumeVitalPoint(StatsSet params)
-	{
+
+	public StopConsumeVitalPoint(StatsSet params) {
 		super(BooleanStat.MAINTAIN_VITALITY);
 		_countVitalityItemUsed = params.getBoolean("countVitalityItemUsed");
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (_countVitalityItemUsed)
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (_countVitalityItemUsed) {
 			final PlayerInstance player = target.getActingPlayer();
-			if (player != null)
-			{
+			if (player != null) {
 				player.setVitalityItemsUsed(player.getVitalityItemsUsed() + 1);
 			}
 		}

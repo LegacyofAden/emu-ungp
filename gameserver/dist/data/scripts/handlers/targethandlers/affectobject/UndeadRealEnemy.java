@@ -23,19 +23,17 @@ import org.l2junity.gameserver.model.actor.Creature;
 
 /**
  * Undead enemy npc affect object implementation.
+ *
  * @author Nik
  */
-public class UndeadRealEnemy implements IAffectObjectHandler
-{
+public class UndeadRealEnemy implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
 		// You are not an enemy of yourself.
-		if (activeChar == target)
-		{
+		if (activeChar == target) {
 			return false;
 		}
-		
+
 		return target.isUndead() && target.isAutoAttackable(activeChar);
 	}
 }

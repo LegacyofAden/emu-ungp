@@ -18,8 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.commons.lang.management.ShutdownManager;
 import org.l2junity.commons.lang.management.TerminationStatus;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -29,85 +27,70 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.StringTokenizer;
+
 /**
  * This class handles following admin commands: - server_shutdown [sec] = shows menu or shuts down server in sec seconds
  */
-public class AdminShutdown implements IAdminCommandHandler
-{
+public class AdminShutdown implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_server_shutdown",
-		"admin_server_restart",
-		"admin_server_abort"
-	};
-	
+			{
+					"admin_server_shutdown",
+					"admin_server_restart",
+					"admin_server_abort"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		st.nextToken();
-		
-		if (command.startsWith("admin_server_shutdown"))
-		{
+
+		if (command.startsWith("admin_server_shutdown")) {
 			start(command, activeChar, TerminationStatus.MANUAL_SHUTDOWN);
-		}
-		else if (command.startsWith("admin_server_restart"))
-		{
+		} else if (command.startsWith("admin_server_restart")) {
 			start(command, activeChar, TerminationStatus.MANUAL_RESTART);
+		} else if (command.startsWith("admin_server_abort")) {
+			ShutdownManager.getInstance().abort(activeChar.getName());
 		}
-		else if (command.startsWith("admin_server_abort"))
-		{
-			ShutdownManager.abort(activeChar.getName());
-		}
-		
+
 		return true;
 	}
-	
-	private void start(String command, PlayerInstance player, TerminationStatus mode)
-	{
+
+	private void start(String command, PlayerInstance player, TerminationStatus mode) {
 		final StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
-		
-		try
-		{
+
+		try {
 			final int duration = Integer.parseInt(st.nextToken());
 			int interval = 0;
-			
-			try
-			{
+
+			try {
 				interval = Integer.parseInt(st.nextToken());
-			}
-			catch (final Exception e)
-			{
+			} catch (final Exception e) {
 				interval = 1;
 			}
-			
-			ShutdownManager.start(mode, duration, interval, player.getName());
-		}
-		catch (final Exception e)
-		{
+
+			ShutdownManager.getInstance().start(mode, duration, interval, player.getName());
+		} catch (final Exception e) {
 			sendHtmlForm(player);
 		}
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void sendHtmlForm(PlayerInstance activeChar)
-	{
+
+	private void sendHtmlForm(PlayerInstance activeChar) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "data/html/admin/shutdown.htm");
+		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/shutdown.htm");
 		adminReply.replace("%count%", String.valueOf(World.getInstance().getPlayers().size()));
 		adminReply.replace("%used%", String.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
 		adminReply.replace("%time%", GameTimeManager.getInstance().getGameTime().toString());
 		activeChar.sendPacket(adminReply);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminShutdown());
 	}
 }

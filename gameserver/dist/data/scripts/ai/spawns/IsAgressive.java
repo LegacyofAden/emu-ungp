@@ -18,33 +18,27 @@
  */
 package ai.spawns;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.spawns.SpawnGroup;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 
-import ai.AbstractNpcAI;
-
 /**
  * @author Sdw
  */
-public class IsAgressive extends AbstractNpcAI
-{
-	private IsAgressive()
-	{
+public class IsAgressive extends AbstractNpcAI {
+	private IsAgressive() {
 	}
-	
+
 	@Override
-	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc)
-	{
-		if (npc.isMonster())
-		{
+	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc) {
+		if (npc.isMonster()) {
 			((L2MonsterInstance) npc).setIsAgressive(npc.getParameters().getBoolean("IsAgressive"));
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new IsAgressive();
 	}
 }

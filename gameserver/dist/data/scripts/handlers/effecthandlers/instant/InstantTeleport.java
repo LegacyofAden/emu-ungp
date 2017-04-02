@@ -29,29 +29,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Teleport effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantTeleport extends AbstractEffect
-{
+public final class InstantTeleport extends AbstractEffect {
 	private final Location _loc;
-	
-	public InstantTeleport(StatsSet params)
-	{
+
+	public InstantTeleport(StatsSet params) {
 		_loc = new Location(params.getInt("x", 0), params.getInt("y", 0), params.getInt("z", 0));
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.TELEPORT;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 

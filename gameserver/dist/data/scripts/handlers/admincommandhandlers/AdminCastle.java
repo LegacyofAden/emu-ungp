@@ -18,10 +18,8 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.commons.util.StringUtil;
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -34,155 +32,110 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.StringTokenizer;
+
 /**
  * Admin Castle manage admin commands.
+ *
  * @author St3eT
  */
-public final class AdminCastle implements IAdminCommandHandler
-{
+public final class AdminCastle implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_castlemanage",
-	};
-	
+			{
+					"admin_castlemanage",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		
-		if (actualCommand.equals("admin_castlemanage"))
-		{
-			if (st.hasMoreTokens())
-			{
+
+		if (actualCommand.equals("admin_castlemanage")) {
+			if (st.hasMoreTokens()) {
 				final String param = st.nextToken();
 				final Castle castle;
-				if (Util.isDigit(param))
-				{
+				if (Util.isDigit(param)) {
 					castle = CastleManager.getInstance().getCastleById(Integer.parseInt(param));
-				}
-				else
-				{
+				} else {
 					castle = CastleManager.getInstance().getCastle(param);
 				}
-				
-				if (castle == null)
-				{
+
+				if (castle == null) {
 					activeChar.sendMessage("Invalid parameters! Usage: //castlemanage <castleId[1-9] / castleName>");
 					return false;
 				}
-				
-				if (!st.hasMoreTokens())
-				{
+
+				if (!st.hasMoreTokens()) {
 					showCastleMenu(activeChar, castle.getResidenceId());
-				}
-				else
-				{
+				} else {
 					final String action = st.nextToken();
 					final PlayerInstance target = checkTarget(activeChar) ? activeChar.getActingPlayer() : null;
-					switch (action)
-					{
-						case "showRegWindow":
-						{
+					switch (action) {
+						case "showRegWindow": {
 							castle.getSiege().listRegisterClan(activeChar);
 							break;
 						}
-						case "addAttacker":
-						{
-							if (checkTarget(activeChar))
-							{
+						case "addAttacker": {
+							if (checkTarget(activeChar)) {
 								castle.getSiege().registerAttacker(target, true);
-							}
-							else
-							{
+							} else {
 								activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 							}
 							break;
 						}
-						case "removeAttacker":
-						{
-							if (checkTarget(activeChar))
-							{
+						case "removeAttacker": {
+							if (checkTarget(activeChar)) {
 								castle.getSiege().removeSiegeClan(activeChar);
-							}
-							else
-							{
+							} else {
 								activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 							}
 							break;
 						}
-						case "addDeffender":
-						{
-							if (checkTarget(activeChar))
-							{
+						case "addDeffender": {
+							if (checkTarget(activeChar)) {
 								castle.getSiege().registerDefender(target, true);
-							}
-							else
-							{
+							} else {
 								activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 							}
 							break;
 						}
-						case "removeDeffender":
-						{
-							if (checkTarget(activeChar))
-							{
+						case "removeDeffender": {
+							if (checkTarget(activeChar)) {
 								castle.getSiege().removeSiegeClan(target);
-							}
-							else
-							{
+							} else {
 								activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 							}
 							break;
 						}
-						case "startSiege":
-						{
-							if (!castle.getSiege().getAttackerClans().isEmpty())
-							{
+						case "startSiege": {
+							if (!castle.getSiege().getAttackerClans().isEmpty()) {
 								castle.getSiege().startSiege();
-							}
-							else
-							{
+							} else {
 								activeChar.sendMessage("There is currently not registered any clan for castle siege!");
 							}
 							break;
 						}
-						case "stopSiege":
-						{
-							if (castle.getSiege().isInProgress())
-							{
+						case "stopSiege": {
+							if (castle.getSiege().isInProgress()) {
 								castle.getSiege().endSiege();
-							}
-							else
-							{
+							} else {
 								activeChar.sendMessage("Castle siege is not currently in progress!");
 							}
 							showCastleMenu(activeChar, castle.getResidenceId());
 							break;
 						}
-						case "setOwner":
-						{
-							if ((target == null) || !checkTarget(activeChar))
-							{
+						case "setOwner": {
+							if ((target == null) || !checkTarget(activeChar)) {
 								activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
-							}
-							else if (target.getClan().getCastleId() > 0)
-							{
+							} else if (target.getClan().getCastleId() > 0) {
 								activeChar.sendMessage("This clan already have castle!");
-							}
-							else if (castle.getOwner() != null)
-							{
+							} else if (castle.getOwner() != null) {
 								activeChar.sendMessage("This castle is already taken by another clan!");
-							}
-							else if (!st.hasMoreTokens())
-							{
+							} else if (!st.hasMoreTokens()) {
 								activeChar.sendMessage("Invalid parameters!!");
-							}
-							else
-							{
+							} else {
 								final CastleSide side = Enum.valueOf(CastleSide.class, st.nextToken().toUpperCase());
-								if (side != null)
-								{
+								if (side != null) {
 									castle.setSide(side);
 									castle.setOwner(target.getClan());
 								}
@@ -190,32 +143,22 @@ public final class AdminCastle implements IAdminCommandHandler
 							showCastleMenu(activeChar, castle.getResidenceId());
 							break;
 						}
-						case "takeCastle":
-						{
+						case "takeCastle": {
 							final L2Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
-							if (clan != null)
-							{
+							if (clan != null) {
 								castle.removeOwner(clan);
-							}
-							else
-							{
+							} else {
 								activeChar.sendMessage("Error during removing castle!");
 							}
 							showCastleMenu(activeChar, castle.getResidenceId());
 							break;
 						}
-						case "switchSide":
-						{
-							if (castle.getSide() == CastleSide.DARK)
-							{
+						case "switchSide": {
+							if (castle.getSide() == CastleSide.DARK) {
 								castle.setSide(CastleSide.LIGHT);
-							}
-							else if (castle.getSide() == CastleSide.LIGHT)
-							{
+							} else if (castle.getSide() == CastleSide.LIGHT) {
 								castle.setSide(CastleSide.DARK);
-							}
-							else
-							{
+							} else {
 								activeChar.sendMessage("You can't switch sides when is castle neutral!");
 							}
 							showCastleMenu(activeChar, castle.getResidenceId());
@@ -223,26 +166,22 @@ public final class AdminCastle implements IAdminCommandHandler
 						}
 					}
 				}
-			}
-			else
-			{
+			} else {
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-				html.setHtml(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/castlemanage.htm"));
+				html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/castlemanage.htm"));
 				activeChar.sendPacket(html);
 			}
 		}
 		return true;
 	}
-	
-	private void showCastleMenu(PlayerInstance player, int castleId)
-	{
+
+	private void showCastleMenu(PlayerInstance player, int castleId) {
 		final Castle castle = CastleManager.getInstance().getCastleById(castleId);
-		
-		if (castle != null)
-		{
+
+		if (castle != null) {
 			final L2Clan ownerClan = castle.getOwner();
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-			html.setHtml(HtmCache.getInstance().getHtm(player.getHtmlPrefix(), "data/html/admin/castlemanage_selected.htm"));
+			html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/castlemanage_selected.htm"));
 			html.replace("%castleId%", castle.getResidenceId());
 			html.replace("%castleName%", castle.getName());
 			html.replace("%ownerName%", ownerClan != null ? ownerClan.getLeaderName() : "NPC");
@@ -251,20 +190,17 @@ public final class AdminCastle implements IAdminCommandHandler
 			player.sendPacket(html);
 		}
 	}
-	
-	private boolean checkTarget(PlayerInstance player)
-	{
+
+	private boolean checkTarget(PlayerInstance player) {
 		return ((player.getTarget() != null) && player.getTarget().isPlayer() && (((PlayerInstance) player.getTarget()).getClan() != null));
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminCastle());
 	}
 }

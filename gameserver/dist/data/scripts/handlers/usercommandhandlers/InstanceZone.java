@@ -25,34 +25,30 @@ import org.l2junity.gameserver.network.client.send.ExInzoneWaiting;
 
 /**
  * Instance Zone user command.
+ *
  * @author nille02, UnAfraid
  */
-public class InstanceZone implements IUserCommandHandler
-{
+public class InstanceZone implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		90
-	};
-	
+			{
+					90
+			};
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
 		activeChar.sendPacket(new ExInzoneWaiting(activeChar));
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new InstanceZone());
 	}
 }

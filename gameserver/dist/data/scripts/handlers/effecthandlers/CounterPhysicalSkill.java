@@ -24,10 +24,8 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class CounterPhysicalSkill extends AbstractDoubleStatAddEffect
-{
-	public CounterPhysicalSkill(StatsSet params)
-	{
+public class CounterPhysicalSkill extends AbstractDoubleStatAddEffect {
+	public CounterPhysicalSkill(StatsSet params) {
 		super(params, DoubleStat.VENGEANCE_SKILL_PHYSICAL_DAMAGE);
 	}
 }

@@ -18,8 +18,6 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.handler.IItemHandler;
@@ -34,79 +32,69 @@ import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
-public class BlessedSpiritShot implements IItemHandler
-{
+import java.util.List;
+
+public class BlessedSpiritShot implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		PlayerInstance activeChar = (PlayerInstance) playable;
 		ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
 		Weapon weaponItem = activeChar.getActiveWeaponItem();
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);
-		
+
 		int itemId = item.getId();
-		
-		if (skills == null)
-		{
+
+		if (skills == null) {
 			_log.warn(getClass().getSimpleName() + ": is missing skills!");
 			return false;
 		}
-		
+
 		// Check if Blessed SpiritShot can be used
-		if ((weaponInst == null) || (weaponItem == null) || (weaponItem.getSpiritShotCount() == 0))
-		{
-			if (!activeChar.getAutoSoulShot().contains(itemId))
-			{
+		if ((weaponInst == null) || (weaponItem == null) || (weaponItem.getSpiritShotCount() == 0)) {
+			if (!activeChar.getAutoSoulShot().contains(itemId)) {
 				activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_USE_SPIRITSHOTS);
 			}
 			return false;
 		}
-		
+
 		// Check if Blessed SpiritShot is already active (it can be charged over SpiritShot)
-		if (activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOTS))
-		{
+		if (activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOTS)) {
 			return false;
 		}
-		
+
 		// Check for correct grade
 		boolean gradeCheck = item.isEtcItem() && (item.getEtcItem().getDefaultAction() == ActionType.SPIRITSHOT) && (weaponInst.getItem().getCrystalTypePlus() == item.getItem().getCrystalTypePlus());
-		
-		if (!gradeCheck)
-		{
-			if (!activeChar.getAutoSoulShot().contains(itemId))
-			{
+
+		if (!gradeCheck) {
+			if (!activeChar.getAutoSoulShot().contains(itemId)) {
 				activeChar.sendPacket(SystemMessageId.YOUR_SPIRITSHOT_DOES_NOT_MATCH_THE_WEAPON_S_GRADE);
 			}
-			
+
 			return false;
 		}
-		
+
 		// Consume Blessed SpiritShot if player has enough of them
-		if (!activeChar.destroyItemWithoutTrace("Consume", item.getObjectId(), weaponItem.getSpiritShotCount(), null, false))
-		{
-			if (!activeChar.disableAutoShot(itemId))
-			{
+		if (!activeChar.destroyItemWithoutTrace("Consume", item.getObjectId(), weaponItem.getSpiritShotCount(), null, false)) {
+			if (!activeChar.disableAutoShot(itemId)) {
 				activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_SPIRITSHOT_FOR_THAT);
 			}
 			return false;
 		}
-		
+
 		// Send message to client
 		activeChar.sendPacket(SystemMessageId.YOUR_SPIRITSHOT_HAS_BEEN_ENABLED);
 		activeChar.setChargedShot(ShotType.BLESSED_SPIRITSHOTS, true);
-		
+
 		skills.forEach(holder -> Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, activeChar, holder.getSkillId(), holder.getSkillLevel(), 0, 0), 600));
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new BlessedSpiritShot());
 	}
 }

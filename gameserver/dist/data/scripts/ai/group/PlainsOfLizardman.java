@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
@@ -27,14 +28,12 @@ import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
-import ai.AbstractNpcAI;
-
 /**
  * Plains of Lizardmen AI.
+ *
  * @author Gnacik, malyelfik
  */
-public final class PlainsOfLizardman extends AbstractNpcAI
-{
+public final class PlainsOfLizardman extends AbstractNpcAI {
 	// NPCs
 	private static final int INVISIBLE_NPC = 18919;
 	private static final int TANTA_GUARD = 18862;
@@ -46,15 +45,15 @@ public final class PlainsOfLizardman extends AbstractNpcAI
 	private static final int TANTA_MAGICIAN = 22773;
 	private static final int TANTA_SUMMONER = 22774;
 	private static final int[] TANTA_LIZARDMEN =
-	{
-		22768, // Tanta Lizardman Scout
-		22769, // Tanta Lizardman Warrior
-		22770, // Tanta Lizardman Soldier
-		22771, // Tanta Lizardman Berserker
-		22772, // Tanta Lizardman Archer
-		22773, // Tanta Lizardman Magician
-		22774, // Tanta Lizardman Summoner
-	};
+			{
+					22768, // Tanta Lizardman Scout
+					22769, // Tanta Lizardman Warrior
+					22770, // Tanta Lizardman Soldier
+					22771, // Tanta Lizardman Berserker
+					22772, // Tanta Lizardman Archer
+					22773, // Tanta Lizardman Magician
+					22774, // Tanta Lizardman Summoner
+			};
 	// Skills
 	private static final SkillHolder STUN_EFFECT = new SkillHolder(6622, 1);
 	private static final SkillHolder DEMOTIVATION_HEX = new SkillHolder(6425, 1);
@@ -64,41 +63,38 @@ public final class PlainsOfLizardman extends AbstractNpcAI
 	private static final SkillHolder ENERGY_PLANT_SKILL = new SkillHolder(6430, 1);
 	// Buffs
 	private static final SkillHolder[] BUFFS =
-	{
-		new SkillHolder(6625, 1), // Energy of Life
-		new SkillHolder(6626, 1), // Energy of Life's Power
-		new SkillHolder(6627, 1), // Energy of Life's Highest Power
-		new SkillHolder(6628, 1), // Energy of Mana
-		new SkillHolder(6629, 1), // Energy of Mana's Power
-		new SkillHolder(6630, 1), // Energy of Mana's Highest Power
-		new SkillHolder(6631, 1), // Energy of Power
-		new SkillHolder(6633, 1), // Energy of Attack Speed
-		new SkillHolder(6635, 1), // Energy of Crt Rate
-		new SkillHolder(6636, 1), // Energy of Moving Speed
-		new SkillHolder(6638, 1), // Aura of Mystery
-		new SkillHolder(6639, 1), // Bane of Auras - Damage
-		new SkillHolder(6640, 1), // Energizing Aura
-		new SkillHolder(6674, 1), // Energy of Range Increment
-	};
+			{
+					new SkillHolder(6625, 1), // Energy of Life
+					new SkillHolder(6626, 1), // Energy of Life's Power
+					new SkillHolder(6627, 1), // Energy of Life's Highest Power
+					new SkillHolder(6628, 1), // Energy of Mana
+					new SkillHolder(6629, 1), // Energy of Mana's Power
+					new SkillHolder(6630, 1), // Energy of Mana's Highest Power
+					new SkillHolder(6631, 1), // Energy of Power
+					new SkillHolder(6633, 1), // Energy of Attack Speed
+					new SkillHolder(6635, 1), // Energy of Crt Rate
+					new SkillHolder(6636, 1), // Energy of Moving Speed
+					new SkillHolder(6638, 1), // Aura of Mystery
+					new SkillHolder(6639, 1), // Bane of Auras - Damage
+					new SkillHolder(6640, 1), // Energizing Aura
+					new SkillHolder(6674, 1), // Energy of Range Increment
+			};
 	// Misc
 	// @formatter:off
 	private static final int[] BUFF_LIST =
-	{
-		6, 7, 8, 11, 13
-	};
+			{
+					6, 7, 8, 11, 13
+			};
 	// @formatter:on
-	
-	private PlainsOfLizardman()
-	{
+
+	private PlainsOfLizardman() {
 		addAttackId(FANTASY_MUSHROOM, RAINBOW_FROG, STICKY_MUSHROOM, ENERGY_PLANT, TANTA_SUMMONER);
 		addKillId(TANTA_LIZARDMEN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("fantasy_mushroom") && (npc != null) && (player != null))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("fantasy_mushroom") && (npc != null) && (player != null)) {
 			npc.doCast(FANTASY_MUSHROOM_SKILL.getSkill());
 			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 200, monster ->
 			{
@@ -110,15 +106,12 @@ public final class PlainsOfLizardman extends AbstractNpcAI
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		switch (npc.getId())
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		switch (npc.getId()) {
 			case TANTA_SUMMONER:
-				if (!npc.isAffectedBySkill(DEMOTIVATION_HEX.getSkillId()))
-				{
+				if (!npc.isAffectedBySkill(DEMOTIVATION_HEX.getSkillId())) {
 					npc.doCast(DEMOTIVATION_HEX.getSkill());
 				}
 				break;
@@ -132,14 +125,12 @@ public final class PlainsOfLizardman extends AbstractNpcAI
 				castSkill(npc, attacker, STICKY_MUSHROOM_SKILL);
 				break;
 			case FANTASY_MUSHROOM:
-				if (npc.isScriptValue(0))
-				{
+				if (npc.isScriptValue(0)) {
 					npc.setScriptValue(1);
 					npc.setIsInvul(true);
 					World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, monster ->
 					{
-						if ((monster.getId() == TANTA_MAGICIAN) || (monster.getId() == TANTA_SCOUT))
-						{
+						if ((monster.getId() == TANTA_MAGICIAN) || (monster.getId() == TANTA_SCOUT)) {
 							monster.setIsRunning(true);
 							monster.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(npc.getX(), npc.getY(), npc.getZ(), 0));
 						}
@@ -150,86 +141,66 @@ public final class PlainsOfLizardman extends AbstractNpcAI
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		// Tanta Guard
-		if (getRandom(1000) == 0)
-		{
+		if (getRandom(1000) == 0) {
 			addAttackPlayerDesire(addSpawn(TANTA_GUARD, npc), killer);
 		}
-		
+
 		// Invisible buff npc
 		final int random = getRandom(100);
 		final Npc buffer = addSpawn(INVISIBLE_NPC, npc.getLocation(), false, 6000);
 		buffer.setTarget(killer);
-		
-		if (random <= 42)
-		{
+
+		if (random <= 42) {
 			castRandomBuff(buffer, 7, 45, BUFFS[0], BUFFS[1], BUFFS[2]);
 		}
-		if (random <= 11)
-		{
+		if (random <= 11) {
 			castRandomBuff(buffer, 8, 60, BUFFS[3], BUFFS[4], BUFFS[5]);
 			castRandomBuff(buffer, 3, 6, BUFFS[9], BUFFS[10], BUFFS[12]);
 		}
-		if (random <= 25)
-		{
+		if (random <= 25) {
 			buffer.doCast(BUFFS[BUFF_LIST[getRandom(BUFF_LIST.length)]].getSkill());
 		}
-		if (random <= 10)
-		{
+		if (random <= 10) {
 			buffer.doCast(BUFFS[13].getSkill());
 		}
-		if (random <= 1)
-		{
+		if (random <= 1) {
 			final int i = getRandom(100);
-			if (i <= 34)
-			{
+			if (i <= 34) {
 				buffer.doCast(BUFFS[6].getSkill());
 				buffer.doCast(BUFFS[7].getSkill());
 				buffer.doCast(BUFFS[8].getSkill());
-			}
-			else if (i < 67)
-			{
+			} else if (i < 67) {
 				buffer.doCast(BUFFS[13].getSkill());
-			}
-			else
-			{
+			} else {
 				buffer.doCast(BUFFS[2].getSkill());
 				buffer.doCast(BUFFS[5].getSkill());
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	private void castRandomBuff(Npc npc, int chance1, int chance2, SkillHolder... buffs)
-	{
+
+	private void castRandomBuff(Npc npc, int chance1, int chance2, SkillHolder... buffs) {
 		final int rand = getRandom(100);
-		if (rand <= chance1)
-		{
+		if (rand <= chance1) {
 			npc.doCast(buffs[2].getSkill());
-		}
-		else if (rand <= chance2)
-		{
+		} else if (rand <= chance2) {
 			npc.doCast(buffs[1].getSkill());
-		}
-		else
-		{
+		} else {
 			npc.doCast(buffs[0].getSkill());
 		}
 	}
-	
+
 	@Override
-	protected void castSkill(Npc npc, Playable target, SkillHolder skill)
-	{
+	protected void castSkill(Npc npc, Playable target, SkillHolder skill) {
 		npc.doDie(target);
 		super.castSkill(addSpawn(INVISIBLE_NPC, npc, false, 6000), target, skill);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PlainsOfLizardman();
 	}
 }

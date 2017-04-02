@@ -35,26 +35,22 @@ import org.l2junity.gameserver.network.client.send.ValidateLocation;
  * This Blink effect switches the location of the caster and the target.<br>
  * This effect is totally done based on client description. <br>
  * Assume that geodata checks are done on the skill cast and not needed to repeat here.
+ *
  * @author Nik
  */
-public final class InstantPositionChange extends AbstractEffect
-{
-	public InstantPositionChange(StatsSet params)
-	{
+public final class InstantPositionChange extends AbstractEffect {
+	public InstantPositionChange(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(Double.NaN, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
@@ -66,7 +62,7 @@ public final class InstantPositionChange extends AbstractEffect
 		caster.abortCast();
 		caster.setXYZ(targetLocation);
 		caster.broadcastPacket(new ValidateLocation(caster));
-		
+
 		targetCreature.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		targetCreature.broadcastPacket(new FlyToLocation(targetCreature, casterLocation, FlyType.DUMMY));
 		targetCreature.abortAttack();

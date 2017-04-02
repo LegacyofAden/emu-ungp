@@ -28,38 +28,31 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpReduceDropPenalty extends AbstractEffect
-{
+public class PumpReduceDropPenalty extends AbstractEffect {
 	private final double _exp;
 	private final double _deathPenalty;
 	private final ReduceDropType _type;
-	
-	public PumpReduceDropPenalty(StatsSet params)
-	{
+
+	public PumpReduceDropPenalty(StatsSet params) {
 		_exp = params.getDouble("exp", 0);
 		_deathPenalty = params.getDouble("deathPenalty", 0);
 		_type = params.getEnum("type", ReduceDropType.class, ReduceDropType.MOB);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_type)
-		{
-			case MOB:
-			{
+	public void pump(Creature target, Skill skill) {
+		switch (_type) {
+			case MOB: {
 				target.getStat().mergeMul(DoubleStat.REDUCE_EXP_LOST_BY_MOB, (_exp / 100) + 1);
 				target.getStat().mergeMul(DoubleStat.REDUCE_DEATH_PENALTY_BY_MOB, (_deathPenalty / 100) + 1);
 				break;
 			}
-			case PK:
-			{
+			case PK: {
 				target.getStat().mergeMul(DoubleStat.REDUCE_EXP_LOST_BY_PVP, (_exp / 100) + 1);
 				target.getStat().mergeMul(DoubleStat.REDUCE_DEATH_PENALTY_BY_PVP, (_deathPenalty / 100) + 1);
 				break;
 			}
-			case RAID:
-			{
+			case RAID: {
 				target.getStat().mergeMul(DoubleStat.REDUCE_EXP_LOST_BY_RAID, (_exp / 100) + 1);
 				target.getStat().mergeMul(DoubleStat.REDUCE_DEATH_PENALTY_BY_RAID, (_deathPenalty / 100) + 1);
 				break;

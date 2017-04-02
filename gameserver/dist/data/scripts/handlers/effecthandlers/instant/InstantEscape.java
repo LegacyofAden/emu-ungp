@@ -29,39 +29,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Escape effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantEscape extends AbstractEffect
-{
+public final class InstantEscape extends AbstractEffect {
 	private final TeleportWhereType _escapeType;
-	
-	public InstantEscape(StatsSet params)
-	{
+
+	public InstantEscape(StatsSet params) {
 		_escapeType = params.getEnum("escapeType", TeleportWhereType.class, null);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.TELEPORT;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.cannotEscape())
-		{
+		if (targetCreature.cannotEscape()) {
 			return;
 		}
-		
-		if (_escapeType != null)
-		{
+
+		if (_escapeType != null) {
 			targetCreature.teleToLocation(_escapeType, null);
 		}
 	}

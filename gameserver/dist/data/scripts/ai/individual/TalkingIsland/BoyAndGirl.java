@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
@@ -26,69 +27,56 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
-
 /**
  * Boy and Girl AI.
+ *
  * @author St3eT
  */
-public final class BoyAndGirl extends AbstractNpcAI
-{
+public final class BoyAndGirl extends AbstractNpcAI {
 	// NPCs
 	private static final int BOY = 33224;
 	private static final int GIRL = 33217;
 	// Items
 	private static final int WEAPON = 15304;
-	
-	private BoyAndGirl()
-	{
+
+	private BoyAndGirl() {
 		addSpawnId(BOY, GIRL);
 		addMoveFinishedId(BOY, GIRL);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_CHANGEWEAP"))
-		{
-			if (npc.isScriptValue(1))
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_CHANGEWEAP")) {
+			if (npc.isScriptValue(1)) {
 				npc.unequipWeapon();
 				npc.setScriptValue(0);
-			}
-			else
-			{
+			} else {
 				npc.setRHandId(WEAPON);
 				npc.setScriptValue(1);
 			}
 			getTimers().addTimer("NPC_CHANGEWEAP", 15000 + (getRandom(5) * 1000), npc, null);
-		}
-		else if (event.equals("NPC_SHOUT"))
-		{
+		} else if (event.equals("NPC_SHOUT")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, npc.getId() == BOY ? NpcStringId.WEEE : NpcStringId.BOYS_ARE_SO_ANNOYING);
 			getTimers().addTimer("NPC_SHOUT", 10000 + (getRandom(5) * 1000), npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_CHANGEWEAP", 15000 + (getRandom(5) * 1000), npc, null);
 		getTimers().addTimer("NPC_SHOUT", 10000 + (getRandom(5) * 1000), npc, null);
 		npc.setIsRunning(true);
 		addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 200, 600), npc.getInstanceWorld()), 23);
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public void onMoveFinished(Npc npc)
-	{
+	public void onMoveFinished(Npc npc) {
 		addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 200, 600), npc.getInstanceWorld()), 23);
 		super.onMoveFinished(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BoyAndGirl();
 	}
 }

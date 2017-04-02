@@ -36,42 +36,36 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * HpCpHeal effect implementation.
+ *
  * @author Sdw
  */
-public final class InstantHealSpecial extends AbstractEffect
-{
+public final class InstantHealSpecial extends AbstractEffect {
 	private final double _power;
-	
-	public InstantHealSpecial(StatsSet params)
-	{
+
+	public InstantHealSpecial(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.HEAL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
 
-		if (!caster.equals(targetCreature) && targetCreature.getStat().has(BooleanStat.FACE_OFF))
-		{
+		if (!caster.equals(targetCreature) && targetCreature.getStat().has(BooleanStat.FACE_OFF)) {
 			return;
 		}
-		
+
 		// TODO: Shots bonus needs more propper formula.
 		final double shotsBonus = skill.isMagic() ? caster.getStat().getValue(DoubleStat.SPIRITSHOTS_BONUS) * (caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS) ? 36 : (caster.isChargedShot(ShotType.SPIRITSHOTS) ? 18 : 1)) : 1;
 		final double mAtkBonus = Math.sqrt(caster.getMAtk() * shotsBonus);
@@ -79,62 +73,50 @@ public final class InstantHealSpecial extends AbstractEffect
 		final double levelMod = (((caster.getLevel() + 89) + (5.5 * Math.max(caster.getLevel() - 99, 0))) / 100);
 		final double weaponBonus = Math.min(levelMod * DoubleStat.weaponBaseValue(caster, DoubleStat.MAGIC_ATTACK) * BaseStats.MEN.calcBonus(caster), baseAmount);
 		double amount = baseAmount + weaponBonus;
-		
+
 		// Heal critic, since CT2.3 Gracia Final
-		if (skill.isMagic() && Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill))
-		{
+		if (skill.isMagic() && Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill)) {
 			amount *= 3;
 			caster.sendPacket(SystemMessageId.M_CRITICAL);
 			caster.sendPacket(new ExMagicAttackInfo(caster.getObjectId(), targetCreature.getObjectId(), ExMagicAttackInfo.CRITICAL_HEAL));
-			if (targetCreature.isPlayer() && (targetCreature != caster))
-			{
+			if (targetCreature.isPlayer() && (targetCreature != caster)) {
 				targetCreature.sendPacket(new ExMagicAttackInfo(caster.getObjectId(), targetCreature.getObjectId(), ExMagicAttackInfo.CRITICAL_HEAL));
 			}
 		}
-		
+
 		// Prevents overheal
 		final double hpAmount = Math.min(amount, targetCreature.getMaxRecoverableHp() - targetCreature.getCurrentHp());
-		if (hpAmount != 0)
-		{
+		if (hpAmount != 0) {
 			final double newHp = hpAmount + targetCreature.getCurrentHp();
 			targetCreature.setCurrentHp(newHp, false);
 			targetCreature.broadcastStatusUpdate(caster);
 		}
-		
-		if (targetCreature.isPlayer())
-		{
-			if (caster.isPlayer() && (caster != targetCreature))
-			{
+
+		if (targetCreature.isPlayer()) {
+			if (caster.isPlayer() && (caster != targetCreature)) {
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_HP_HAS_BEEN_RESTORED_BY_C1);
 				sm.addString(caster.getName());
 				sm.addInt((int) hpAmount);
 				targetCreature.sendPacket(sm);
-			}
-			else
-			{
+			} else {
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 				sm.addInt((int) hpAmount);
 				targetCreature.sendPacket(sm);
 			}
-			
+
 			final double cpAmount = Math.max(Math.min(amount - hpAmount, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp()), 0);
-			if (cpAmount != 0)
-			{
+			if (cpAmount != 0) {
 				final double newCp = cpAmount + targetCreature.getCurrentCp();
 				targetCreature.setCurrentCp(newCp, false);
 			}
-			
-			if ((cpAmount > 0) || (hpAmount == 0))
-			{
-				if (caster.isPlayer() && (caster != targetCreature))
-				{
+
+			if ((cpAmount > 0) || (hpAmount == 0)) {
+				if (caster.isPlayer() && (caster != targetCreature)) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_CP_HAS_BEEN_RESTORED_BY_C1);
 					sm.addString(caster.getName());
 					sm.addInt((int) cpAmount);
 					targetCreature.sendPacket(sm);
-				}
-				else
-				{
+				} else {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CP_HAS_BEEN_RESTORED);
 					sm.addInt((int) cpAmount);
 					targetCreature.sendPacket(sm);

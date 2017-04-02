@@ -32,41 +32,37 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * A Clan's Prestige (510)
+ *
  * @author Adry_85
  */
-public class Q00510_AClansPrestige extends Quest
-{
+public class Q00510_AClansPrestige extends Quest {
 	// NPC
 	private static final int VALDIS = 31331;
 	// Quest Item
 	private static final int TYRANNOSAURUS_CLAW = 8767;
-	
+
 	private static final int[] MOBS =
-	{
-		22215,
-		22216,
-		22217
-	};
-	
-	public Q00510_AClansPrestige()
-	{
+			{
+					22215,
+					22216,
+					22217
+			};
+
+	public Q00510_AClansPrestige() {
 		super(510);
 		addStartNpc(VALDIS);
 		addTalkId(VALDIS);
 		addKillId(MOBS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "31331-3.html":
 				st.startQuest();
 				break;
@@ -76,66 +72,52 @@ public class Q00510_AClansPrestige extends Quest
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (player.getClan() == null)
-		{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (player.getClan() == null) {
 			return null;
 		}
-		
+
 		QuestState st = null;
-		if (player.isClanLeader())
-		{
+		if (player.isClanLeader()) {
 			st = getQuestState(player, false);
-		}
-		else
-		{
+		} else {
 			final PlayerInstance pleader = player.getClan().getLeader().getPlayerInstance();
-			if ((pleader != null) && player.isInRadius3d(pleader, 1500))
-			{
+			if ((pleader != null) && player.isInRadius3d(pleader, 1500)) {
 				st = getQuestState(pleader, false);
 			}
 		}
-		
-		if ((st != null) && st.isStarted())
-		{
+
+		if ((st != null) && st.isStarted()) {
 			rewardItems(st.getPlayer(), TYRANNOSAURUS_CLAW, 1);
 			playSound(st.getPlayer(), QuestSound.ITEMSOUND_QUEST_ITEMGET);
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final L2Clan clan = player.getClan();
-		switch (st.getState())
-		{
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = ((clan == null) || !player.isClanLeader() || (clan.getLevel() < 5)) ? "31331-0.htm" : "31331-1.htm";
 				break;
 			case State.STARTED:
-				if ((clan == null) || !player.isClanLeader())
-				{
+				if ((clan == null) || !player.isClanLeader()) {
 					st.exitQuest(QuestType.REPEATABLE);
 					return "31331-8.html";
 				}
-				
-				if (!hasQuestItems(player, TYRANNOSAURUS_CLAW))
-				{
+
+				if (!hasQuestItems(player, TYRANNOSAURUS_CLAW)) {
 					htmltext = "31331-4.html";
-				}
-				else
-				{
+				} else {
 					final int count = (int) getQuestItemsCount(player, TYRANNOSAURUS_CLAW);
 					final int reward = (count < 10) ? (30 * count) : (59 + (30 * count));
 					playSound(player, QuestSound.ITEMSOUND_QUEST_FANFARE_1);

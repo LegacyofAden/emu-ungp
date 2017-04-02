@@ -30,32 +30,28 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Refuel Airship effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantRefuelAirship extends AbstractEffect
-{
+public final class InstantRefuelAirship extends AbstractEffect {
 	private final int _value;
-	
-	public InstantRefuelAirship(StatsSet params)
-	{
+
+	public InstantRefuelAirship(StatsSet params) {
 		_value = params.getInt("value", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.REFUEL_AIRSHIP;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final L2AirShipInstance ship = casterPlayer.getAirShip();
 		ship.setFuel(ship.getFuel() + _value);
 		ship.updateAbnormalVisualEffects();

@@ -18,27 +18,23 @@
  */
 package handlers.itemhandlers;
 
-import org.l2junity.gameserver.config.L2JModsConfig;
+import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class ManaPotion extends ItemSkills
-{
+public class ManaPotion extends ItemSkills {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!L2JModsConfig.L2JMOD_ENABLE_MANA_POTIONS_SUPPORT)
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!L2JModsConfig.L2JMOD_ENABLE_MANA_POTIONS_SUPPORT) {
 			playable.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 			return false;
 		}
 		return super.useItem(playable, item, forceUse);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new ManaPotion());
 	}
 }

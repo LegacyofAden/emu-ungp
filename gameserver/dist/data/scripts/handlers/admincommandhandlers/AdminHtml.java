@@ -18,52 +18,45 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.StringTokenizer;
+
 /**
  * @author NosBit
  */
-public class AdminHtml implements IAdminCommandHandler
-{
+public class AdminHtml implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_html",
-		"admin_loadhtml"
-	};
-	
+			{
+					"admin_html",
+					"admin_loadhtml"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		switch (actualCommand.toLowerCase())
-		{
-			case "admin_html":
-			{
-				if (!st.hasMoreTokens())
-				{
+		switch (actualCommand.toLowerCase()) {
+			case "admin_html": {
+				if (!st.hasMoreTokens()) {
 					activeChar.sendMessage("Usage: //html path");
 					return false;
 				}
-				
+
 				final String path = st.nextToken();
 				showAdminHtml(activeChar, path);
 				break;
 			}
-			case "admin_loadhtml":
-			{
-				if (!st.hasMoreTokens())
-				{
+			case "admin_loadhtml": {
+				if (!st.hasMoreTokens()) {
 					activeChar.sendMessage("Usage: //loadhtml path");
 					return false;
 				}
-				
+
 				final String path = st.nextToken();
 				showHtml(activeChar, path, true);
 				break;
@@ -71,55 +64,42 @@ public class AdminHtml implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Shows a html message to activeChar
+	 *
 	 * @param activeChar activeChar where html is shown
-	 * @param path relative path from directory data/html/admin/ to html
+	 * @param path       relative path from directory data/html/admin/ to html
 	 */
-	public static void showAdminHtml(PlayerInstance activeChar, String path)
-	{
+	public static void showAdminHtml(PlayerInstance activeChar, String path) {
 		showHtml(activeChar, "data/html/admin/" + path, false);
 	}
-	
+
 	/**
 	 * Shows a html message to activeChar.
+	 *
 	 * @param activeChar activeChar where html message is shown.
-	 * @param path relative path from Config.DATAPACK_ROOT to html.
-	 * @param reload {@code true} will reload html and show it {@code false} will show it from cache.
+	 * @param path       relative path from Config.DATAPACK_ROOT to html.
+	 * @param reload     {@code true} will reload html and show it {@code false} will show it from cache.
 	 */
-	public static void showHtml(PlayerInstance activeChar, String path, boolean reload)
-	{
-		String content = null;
-		if (reload)
-		{
-			content = HtmCache.getInstance().loadFile(HtmCache.getInstance().getHtmFilePath(path));
-		}
-		else
-		{
-			content = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), path);
-		}
-		
+	public static void showHtml(PlayerInstance activeChar, String path, boolean reload) {
+		String content = HtmRepository.getInstance().getCustomHtm(path);
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		if (content != null)
-		{
+		if (content != null) {
 			html.setHtml(content);
-		}
-		else
-		{
+		} else {
 			html.setHtml("<html><body>My text is missing:<br>" + path + "</body></html>");
 		}
 		activeChar.sendPacket(html);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminHtml());
 	}
 }

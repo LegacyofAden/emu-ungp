@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Dark Ambition (10450)
+ *
  * @author St3eT
  */
-public final class Q10450_ADarkAmbition extends Quest
-{
+public final class Q10450_ADarkAmbition extends Quest {
 	// NPCs
 	private static final int MATHIAS = 31340;
 	private static final int TUSKA = 33839;
@@ -41,51 +41,42 @@ public final class Q10450_ADarkAmbition extends Quest
 	private static final int SOE = 37019; // Scroll of Escape: Gainak
 	// Misc
 	private static final int MIN_LEVEL = 99;
-	
-	public Q10450_ADarkAmbition()
-	{
+
+	public Q10450_ADarkAmbition() {
 		super(10450);
 		addStartNpc(MATHIAS);
 		addTalkId(MATHIAS, TUSKA);
 		addCondMinLevel(MIN_LEVEL, "31340-07.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31340-02.htm":
 			case "31340-03.htm":
-			case "33839-02.html":
-			{
+			case "33839-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "31340-05.htm":
-			{
+			case "31340-05.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33839-03.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33839-03.html": {
+				if (st.isCond(2)) {
 					giveItems(player, ELIXIR_LIFE, 50);
 					giveItems(player, ELIXIR_MANA, 50);
 					giveItems(player, SSR, 10000);
 					giveItems(player, BSSR, 10000);
 					giveItems(player, SOE, 1);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 15_436_575);
 						addSp(player, 3_704);
 					}
@@ -97,33 +88,26 @@ public final class Q10450_ADarkAmbition extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == MATHIAS)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == MATHIAS) {
 					htmltext = "31340-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == MATHIAS ? "31340-06.html" : "33839-01.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

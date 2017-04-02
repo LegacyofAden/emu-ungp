@@ -18,8 +18,6 @@
  */
 package handlers.skillconditionhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.CrystallizationType;
 import org.l2junity.gameserver.enums.ItemGrade;
 import org.l2junity.gameserver.model.StatsSet;
@@ -29,31 +27,29 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class TargetItemCrystalTypeSkillCondition implements ISkillCondition
-{
+public class TargetItemCrystalTypeSkillCondition implements ISkillCondition {
 	private final List<CrystallizationType> _itemType;
 	private final ItemGrade _crystalType;
 	private final int _scrollGroup;
-	
-	public TargetItemCrystalTypeSkillCondition(StatsSet params)
-	{
+
+	public TargetItemCrystalTypeSkillCondition(StatsSet params) {
 		_itemType = params.getEnumList("itemType", CrystallizationType.class);
 		_crystalType = params.getEnum("crystalType", ItemGrade.class);
 		_scrollGroup = params.getInt("scrollGroup", 1);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target != null) && target.isItem())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target != null) && target.isItem()) {
 			final ItemInstance item = (ItemInstance) target;
 			return item.getItem().getItemGrade().equals(_crystalType) && _itemType.contains(CrystallizationType.getByItem(item.getItem())) && (item.getItem().getEnchantGroup() == _scrollGroup);
 		}
-		
+
 		return false;
 	}
 }

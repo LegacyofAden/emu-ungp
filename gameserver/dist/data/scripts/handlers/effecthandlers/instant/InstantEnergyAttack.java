@@ -34,98 +34,85 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Energy Attack effect implementation.
+ *
  * @author NosBit
  */
-public final class InstantEnergyAttack extends AbstractEffect
-{
+public final class InstantEnergyAttack extends AbstractEffect {
 	private final double _power;
 	private final int _criticalChance;
 	private final boolean _ignoreShieldDefence;
 	private final boolean _overHit;
 	private final double _pDefMod;
-	
-	public InstantEnergyAttack(StatsSet params)
-	{
+
+	public InstantEnergyAttack(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_criticalChance = params.getInt("criticalChance", 0);
 		_ignoreShieldDefence = params.getBoolean("ignoreShieldDefence", false);
 		_overHit = params.getBoolean("overHit", false);
 		_pDefMod = params.getDouble("pDefMod", 1.0);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		// TODO: Verify this on retail
 		return target.isCreature() && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (casterPlayer.distance3d(target) > targetCreature.getStat().getValue(DoubleStat.SPHERIC_BARRIER_RANGE, Integer.MAX_VALUE))
-		{
+
+		if (casterPlayer.distance3d(target) > targetCreature.getStat().getValue(DoubleStat.SPHERIC_BARRIER_RANGE, Integer.MAX_VALUE)) {
 			return;
 		}
-		
-		if (_overHit && targetCreature.isAttackable())
-		{
+
+		if (_overHit && targetCreature.isAttackable()) {
 			targetCreature.asAttackable().overhitEnabled(true);
 		}
-		
+
 		double defence = targetCreature.getPDef() * _pDefMod;
-		if (!_ignoreShieldDefence)
-		{
+		if (!_ignoreShieldDefence) {
 			byte shield = Formulas.calcShldUse(casterPlayer, targetCreature);
-			switch (shield)
-			{
-				case Formulas.SHIELD_DEFENSE_SUCCEED:
-				{
+			switch (shield) {
+				case Formulas.SHIELD_DEFENSE_SUCCEED: {
 					defence += targetCreature.getShldDef();
 					break;
 				}
-				case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK:
-				{
+				case Formulas.SHIELD_DEFENSE_PERFECT_BLOCK: {
 					defence = -1;
 					break;
 				}
 			}
 		}
-		
+
 		double damage = 1;
 		final boolean critical = (_criticalChance > 0) && ((BaseStats.STR.calcBonus(casterPlayer) * _criticalChance) > (Rnd.nextDouble() * 100));
-		
-		if (defence != -1)
-		{
+
+		if (defence != -1) {
 			// Trait, elements
 			final double weaponTraitMod = Formulas.calcWeaponTraitBonus(casterPlayer, targetCreature);
 			final double generalTraitMod = Formulas.calcGeneralTraitBonus(casterPlayer, targetCreature, skill.getTraitType(), true);
 			final double attributeMod = Formulas.calcAttributeBonus(casterPlayer, targetCreature, skill);
 			final double pvpPveMod = Formulas.calculatePvpPveBonus(casterPlayer, targetCreature, skill, true);
-			
+
 			// Skill specific mods.
 			final double energyChargesBoost = 1 + (Math.min(skill.getChargeConsume(), casterPlayer.getCharges()) * 0.1); // 10% bonus damage for each charge used.
 			final double critMod = critical ? Formulas.calcCritDamage(casterPlayer, targetCreature, skill) : 1;
 			final double ssmod = (skill.useSoulShot() && casterPlayer.isChargedShot(ShotType.SOULSHOTS)) ? (2 * casterPlayer.getStat().getValue(DoubleStat.SOULSHOTS_BONUS)) : 1; // 2.04 for dual weapon?
-			
+
 			// ...................________Initial Damage_________...__Charges Additional Damage__...____________________________________
 			// ATTACK CALCULATION ((77 * ((pAtk * lvlMod) + power) * (1 + (0.1 * chargesConsumed)) / pdef) * skillPower) + skillPowerAdd
 			// ```````````````````^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^```^^^^^^^^^^^^^^^^^^^^^^^^^^^^^```^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -133,9 +120,9 @@ public final class InstantEnergyAttack extends AbstractEffect
 			damage = baseMod * ssmod * critMod * weaponTraitMod * generalTraitMod * attributeMod * energyChargesBoost * pvpPveMod;
 			damage = casterPlayer.getStat().getValue(DoubleStat.PHYSICAL_SKILL_POWER, damage);
 		}
-		
+
 		damage = Math.max(0, damage);
-		
+
 		casterPlayer.doAttack(damage, targetCreature, skill, false, false, critical, false);
 	}
 }

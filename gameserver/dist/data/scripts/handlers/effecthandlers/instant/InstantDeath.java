@@ -32,84 +32,71 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Lethal effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantDeath extends AbstractEffect
-{
+public final class InstantDeath extends AbstractEffect {
 	private final double _fullLethal;
 	private final double _halfLethal;
-	
-	public InstantDeath(StatsSet params)
-	{
+
+	public InstantDeath(StatsSet params) {
 		_fullLethal = params.getDouble("fullLethal", 0);
 		_halfLethal = params.getDouble("halfLethal", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (caster.isPlayer() && !caster.getAccessLevel().canGiveDamage())
-		{
+
+		if (caster.isPlayer() && !caster.getAccessLevel().canGiveDamage()) {
 			return;
 		}
-		
-		if (skill.getMagicLevel() < (targetCreature.getLevel() - 6))
-		{
+
+		if (skill.getMagicLevel() < (targetCreature.getLevel() - 6)) {
 			return;
 		}
-		
-		if (!targetCreature.isLethalable() || targetCreature.isHpBlocked())
-		{
+
+		if (!targetCreature.isLethalable() || targetCreature.isHpBlocked()) {
 			return;
 		}
-		
-		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId()))
-		{
+
+		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId())) {
 			return;
 		}
-		
+
 		double chanceMultiplier = Formulas.calcAttributeBonus(caster, targetCreature, skill) * Formulas.calcGeneralTraitBonus(caster, targetCreature, skill.getTraitType(), false) * targetCreature.getStat().getValue(DoubleStat.INSTANT_KILL_RESIST, 1);
 		// Lethal Strike
-		if (Rnd.get(100) < (_fullLethal * chanceMultiplier))
-		{
+		if (Rnd.get(100) < (_fullLethal * chanceMultiplier)) {
 			// for Players CP and HP is set to 1.
-			if (targetCreature.isPlayer())
-			{
+			if (targetCreature.isPlayer()) {
 				targetCreature.setCurrentCp(1);
 				targetCreature.setCurrentHp(1);
 				targetCreature.sendPacket(SystemMessageId.LETHAL_STRIKE);
 			}
 			// for Monsters HP is set to 1.
-			else if (targetCreature.isMonster() || targetCreature.isSummon())
-			{
+			else if (targetCreature.isMonster() || targetCreature.isSummon()) {
 				targetCreature.setCurrentHp(1);
 			}
 			caster.sendPacket(SystemMessageId.HIT_WITH_LETHAL_STRIKE);
 		}
 		// Half-Kill
-		else if (Rnd.get(100) < (_halfLethal * chanceMultiplier))
-		{
+		else if (Rnd.get(100) < (_halfLethal * chanceMultiplier)) {
 			// for Players CP is set to 1.
-			if (targetCreature.isPlayer())
-			{
+			if (targetCreature.isPlayer()) {
 				targetCreature.setCurrentCp(1);
 				targetCreature.sendPacket(SystemMessageId.HALF_KILL);
 				targetCreature.sendPacket(SystemMessageId.YOUR_CP_WAS_DRAINED_BECAUSE_YOU_WERE_HIT_WITH_A_HALF_KILL_SKILL);
 			}
 			// for Monsters HP is set to 50%.
-			else if (targetCreature.isMonster() || targetCreature.isSummon())
-			{
+			else if (targetCreature.isMonster() || targetCreature.isSummon()) {
 				targetCreature.setCurrentHp(targetCreature.getCurrentHp() * 0.5);
 			}
 			caster.sendPacket(SystemMessageId.HALF_KILL);
 		}
-		
+
 		// No matter if lethal succeeded or not, its reflected.
 		Formulas.calcCounterAttack(caster, targetCreature, skill, false);
 	}

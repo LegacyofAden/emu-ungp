@@ -18,37 +18,34 @@
  */
 package handlers.communityboard;
 
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IParseBoardHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Homepage board.
+ *
  * @author Zoey76
  */
-public class HomepageBoard implements IParseBoardHandler
-{
+public class HomepageBoard implements IParseBoardHandler {
 	private static final String[] COMMANDS =
-	{
-		"_bbslink"
-	};
-	
+			{
+					"_bbslink"
+			};
+
 	@Override
-	public String[] getCommunityBoardCommands()
-	{
+	public String[] getCommunityBoardCommands() {
 		return COMMANDS;
 	}
-	
+
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar)
-	{
-		CommunityBoardHandler.separateAndSend(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/homepage.html"), activeChar);
+	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+		CommunityBoardHandler.separateAndSend(HtmRepository.getInstance().getCustomHtm("CommunityBoard/homepage.html"), activeChar);
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		CommunityBoardHandler.getInstance().registerHandler(new HomepageBoard());
 	}
 }

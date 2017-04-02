@@ -28,17 +28,14 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpCheckCrtEffectSkillCondition implements ISkillCondition
-{
-	
-	public OpCheckCrtEffectSkillCondition(StatsSet params)
-	{
-		
+public class OpCheckCrtEffectSkillCondition implements ISkillCondition {
+
+	public OpCheckCrtEffectSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return (target != null) && (!target.isNpc() || !((Npc) target).getTemplate().canBeCrt());
 	}
 }

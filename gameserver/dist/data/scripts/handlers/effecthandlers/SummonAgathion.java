@@ -31,30 +31,26 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Summon Agathion effect implementation.
+ *
  * @author Zoey76
  */
-public final class SummonAgathion extends AbstractEffect
-{
+public final class SummonAgathion extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SummonAgathion.class);
 
 	private final int _npcId;
-	
-	public SummonAgathion(StatsSet params)
-	{
-		if (params.isEmpty())
-		{
+
+	public SummonAgathion(StatsSet params) {
+		if (params.isEmpty()) {
 			LOGGER.warn(getClass().getSimpleName() + ": must have parameters.");
 		}
-		
+
 		_npcId = params.getInt("npcId", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 

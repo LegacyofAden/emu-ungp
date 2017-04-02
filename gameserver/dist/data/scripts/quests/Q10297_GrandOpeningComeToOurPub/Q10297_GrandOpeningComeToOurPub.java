@@ -26,11 +26,11 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Grand Opening! Come to Our Pub! (10297)
+ *
  * @author Gladicek
  */
 
-public final class Q10297_GrandOpeningComeToOurPub extends Quest
-{
+public final class Q10297_GrandOpeningComeToOurPub extends Quest {
 	// NPCs
 	private static final int SETTLEN = 34180;
 	private static final int LOLLIA = 34182;
@@ -43,28 +43,24 @@ public final class Q10297_GrandOpeningComeToOurPub extends Quest
 	private static final int SCROLL_OF_ESCAPE_MYSTIC_TAVERN = 46564;
 	// Misc
 	private static final int MIN_LEVEL = 99;
-	
-	public Q10297_GrandOpeningComeToOurPub()
-	{
+
+	public Q10297_GrandOpeningComeToOurPub() {
 		super(10297);
 		addStartNpc(SETTLEN);
 		addTalkId(SETTLEN, LOLLIA, HANNA, MEI, BRODIEN, LUPIA, LAILLY);
 		addCondMinLevel(MIN_LEVEL, "34180-05.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "34180-02.htm":
 			case "34182-02.html":
 			case "34183-02.html":
@@ -74,66 +70,52 @@ public final class Q10297_GrandOpeningComeToOurPub extends Quest
 			case "34185-02.html":
 			case "34185-03.html":
 			case "34186-02.html":
-			case "34186-03.html":
-			{
+			case "34186-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "34180-03.htm":
-			{
+			case "34180-03.htm": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "34182-04.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "34182-04.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "34183-04.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "34183-04.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "34186-04.html":
-			{
-				if (qs.isCond(3))
-				{
+			case "34186-04.html": {
+				if (qs.isCond(3)) {
 					qs.setCond(4, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "34184-04.html":
-			{
-				if (qs.isCond(4))
-				{
+			case "34184-04.html": {
+				if (qs.isCond(4)) {
 					qs.setCond(5, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "34185-04.html":
-			{
-				if (qs.isCond(5))
-				{
+			case "34185-04.html": {
+				if (qs.isCond(5)) {
 					qs.setCond(6, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "34181-02.html":
-			{
-				if (qs.isCond(6))
-				{
+			case "34181-02.html": {
+				if (qs.isCond(6)) {
 					giveItems(player, SCROLL_OF_ESCAPE_MYSTIC_TAVERN, 5);
 					qs.exitQuest(false, true);
 					htmltext = event;
@@ -143,104 +125,73 @@ public final class Q10297_GrandOpeningComeToOurPub extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == SETTLEN)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == SETTLEN) {
 					htmltext = "34180-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case SETTLEN:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case SETTLEN: {
+						if (qs.isCond(1)) {
 							htmltext = "34180-04.html";
 						}
 						break;
 					}
-					case LOLLIA:
-					{
-						if (qs.isCond(1))
-						{
+					case LOLLIA: {
+						if (qs.isCond(1)) {
 							htmltext = "34182-01.html";
-						}
-						else if (qs.isCond(2))
-						{
+						} else if (qs.isCond(2)) {
 							htmltext = "34182-05.html";
 						}
 						break;
 					}
-					case HANNA:
-					{
-						if (qs.isCond(2))
-						{
+					case HANNA: {
+						if (qs.isCond(2)) {
 							htmltext = "34183-01.html";
-						}
-						else if (qs.isCond(3))
-						{
+						} else if (qs.isCond(3)) {
 							htmltext = "34183-05.html";
 						}
 						break;
 					}
-					case MEI:
-					{
-						if (qs.isCond(3))
-						{
+					case MEI: {
+						if (qs.isCond(3)) {
 							htmltext = "34186-01.html";
-						}
-						else if (qs.isCond(4))
-						{
+						} else if (qs.isCond(4)) {
 							htmltext = "34186-05.html";
 						}
 						break;
 					}
-					case BRODIEN:
-					{
-						if (qs.isCond(4))
-						{
+					case BRODIEN: {
+						if (qs.isCond(4)) {
 							htmltext = "34184-01.html";
-						}
-						else if (qs.isCond(5))
-						{
+						} else if (qs.isCond(5)) {
 							htmltext = "34184-05.html";
 						}
 						break;
 					}
-					case LUPIA:
-					{
-						if (qs.isCond(5))
-						{
+					case LUPIA: {
+						if (qs.isCond(5)) {
 							htmltext = "34185-01.html";
-						}
-						else if (qs.isCond(6))
-						{
+						} else if (qs.isCond(6)) {
 							htmltext = "34185-05.html";
 						}
 						break;
 					}
-					case LAILLY:
-					{
-						if (qs.isCond(6))
-						{
+					case LAILLY: {
+						if (qs.isCond(6)) {
 							htmltext = "34181-01.html";
 						}
 						break;
@@ -248,10 +199,8 @@ public final class Q10297_GrandOpeningComeToOurPub extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == SETTLEN)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == SETTLEN) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

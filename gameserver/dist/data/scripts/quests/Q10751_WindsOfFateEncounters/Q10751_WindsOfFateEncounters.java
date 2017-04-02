@@ -18,9 +18,6 @@
  */
 package quests.Q10751_WindsOfFateEncounters;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.HtmlActionScope;
 import org.l2junity.gameserver.enums.Race;
@@ -42,21 +39,19 @@ import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.TutorialCloseHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowQuestionMark;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Winds of Fate: Encounters (10751)
+ *
  * @author malyelfik
  */
-public final class Q10751_WindsOfFateEncounters extends Quest
-{
+public final class Q10751_WindsOfFateEncounters extends Quest {
 	// NPC
 	private static final int NAVARI = 33931;
 	private static final int AYANTHE = 33942;
@@ -66,10 +61,10 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 	private static final int TELESHA = 33981;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		27528, // Skeleton Warrior
-		27529, // Skeleton Archer
-	};
+			{
+					27528, // Skeleton Warrior
+					27529, // Skeleton Archer
+			};
 	// Items
 	private static final int WIND_SPIRIT_REALMS_RELIC = 39535;
 	private static final int MAJOR_HEALING_POTION = 1061;
@@ -81,9 +76,8 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 38;
 	private static final String KILL_COUNT_VAR = "KillCount";
-	
-	public Q10751_WindsOfFateEncounters()
-	{
+
+	public Q10751_WindsOfFateEncounters() {
 		super(10751);
 		addStartNpc(NAVARI);
 		addFirstTalkId(TELESHA);
@@ -94,19 +88,16 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 		addCondMinLevel(MIN_LEVEL, "33931-00.htm");
 		registerQuestItems(WIND_SPIRIT_REALMS_RELIC);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30289-02.html":
 			case "30289-06.html":
 			case "33942-05.html":
@@ -122,49 +113,37 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 			case "33943-09.html":
 			case "33943-10.html":
 				break;
-			case "33931-02.htm":
-			{
+			case "33931-02.htm": {
 				qs.startQuest();
-				if (player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+				if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 					qs.setCond(3, true);
-				}
-				else
-				{
+				} else {
 					qs.setCond(2, true);
 					htmltext = "33931-03.htm";
 				}
 				break;
 			}
-			case "33943-02.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "33943-02.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(4, true);
 				}
 				break;
 			}
-			case "33942-02.html":
-			{
-				if (qs.isCond(3))
-				{
+			case "33942-02.html": {
+				if (qs.isCond(3)) {
 					qs.setCond(5, true);
 				}
 				break;
 			}
-			case "30289-03.html":
-			{
-				if (qs.isCond(4) || qs.isCond(5))
-				{
+			case "30289-03.html": {
+				if (qs.isCond(4) || qs.isCond(5)) {
 					giveItems(player, WIND_SPIRIT_REALMS_RELIC, 1);
 					qs.setCond(6, true);
 				}
 				break;
 			}
-			case "SPAWN_WIZZARD":
-			{
-				if (qs.isCond(6) && (npc != null) && (npc.getId() == TELESHA))
-				{
+			case "SPAWN_WIZZARD": {
+				if (qs.isCond(6) && (npc != null) && (npc.getId() == TELESHA)) {
 					final Npc wizzard = addSpawn(MYSTERIOUS_WIZARD, npc, true, 30000);
 					wizzard.setSummoner(player);
 					wizzard.setTitle(player.getAppearance().getVisibleName());
@@ -175,29 +154,21 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 				htmltext = null;
 				break;
 			}
-			case "30289-07.html":
-			{
-				if (qs.isCond(7))
-				{
-					if (!player.isInCategory(CategoryType.MAGE_GROUP))
-					{
+			case "30289-07.html": {
+				if (qs.isCond(7)) {
+					if (!player.isInCategory(CategoryType.MAGE_GROUP)) {
 						qs.setCond(8, true);
-					}
-					else
-					{
+					} else {
 						qs.setCond(9, true);
 						htmltext = "30289-08.html";
 					}
 				}
 				break;
 			}
-			case "33942-11.html":
-			{
+			case "33942-11.html": {
 				final ClassId newClass = ClassId.CLOUD_BREAKER;
-				if (qs.isCond(9) && newClass.childOf(player.getClassId()))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+				if (qs.isCond(9) && newClass.childOf(player.getClassId())) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						player.setBaseClass(newClass);
 						player.setClassId(newClass.getId());
 						player.broadcastUserInfo();
@@ -211,21 +182,16 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 						addExp(player, 2_700_000);
 						addSp(player, 648);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
 				break;
 			}
-			case "33943-11.html":
-			{
+			case "33943-11.html": {
 				final ClassId newClass = ClassId.MARAUDER;
-				if (qs.isCond(8) && newClass.childOf(player.getClassId()))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+				if (qs.isCond(8) && newClass.childOf(player.getClassId())) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						player.setBaseClass(newClass);
 						player.setClassId(newClass.getId());
 						player.broadcastUserInfo();
@@ -239,9 +205,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 						addExp(player, 2_700_000);
 						addSp(player, 648);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -252,37 +216,29 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
-		if (npc.getId() == TELESHA)
-		{
+		if (npc.getId() == TELESHA) {
 			htmltext = "33981-01.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (npc.getId())
-		{
-			case NAVARI:
-			{
-				switch (qs.getState())
-				{
+
+		switch (npc.getId()) {
+			case NAVARI: {
+				switch (qs.getState()) {
 					case State.CREATED:
 						htmltext = "33931-01.htm";
 						break;
-					case State.STARTED:
-					{
-						switch (qs.getCond())
-						{
+					case State.STARTED: {
+						switch (qs.getCond()) {
 							case 2:
 								htmltext = "33931-04.html";
 								break;
@@ -298,14 +254,10 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 				}
 				break;
 			}
-			case KATALIN:
-			{
-				if (!player.isInCategory(CategoryType.MAGE_GROUP))
-				{
-					if (qs.isStarted())
-					{
-						switch (qs.getCond())
-						{
+			case KATALIN: {
+				if (!player.isInCategory(CategoryType.MAGE_GROUP)) {
+					if (qs.isStarted()) {
+						switch (qs.getCond()) {
 							case 2:
 								htmltext = "33943-01.html";
 								break;
@@ -316,22 +268,16 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 								htmltext = "33943-04.html";
 								break;
 						}
-					}
-					else if (qs.isCompleted())
-					{
+					} else if (qs.isCompleted()) {
 						htmltext = getAlreadyCompletedMsg(player);
 					}
 				}
 				break;
 			}
-			case AYANTHE:
-			{
-				if (player.isInCategory(CategoryType.MAGE_GROUP))
-				{
-					if (qs.isStarted())
-					{
-						switch (qs.getCond())
-						{
+			case AYANTHE: {
+				if (player.isInCategory(CategoryType.MAGE_GROUP)) {
+					if (qs.isStarted()) {
+						switch (qs.getCond()) {
 							case 3:
 								htmltext = "33942-01.html";
 								break;
@@ -342,20 +288,15 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 								htmltext = "33942-04.html";
 								break;
 						}
-					}
-					else if (qs.isCompleted())
-					{
+					} else if (qs.isCompleted()) {
 						htmltext = getAlreadyCompletedMsg(player);
 					}
 				}
 				break;
 			}
-			case RAYMOND:
-			{
-				if (qs.isStarted())
-				{
-					switch (qs.getCond())
-					{
+			case RAYMOND: {
+				if (qs.isStarted()) {
+					switch (qs.getCond()) {
 						case 4:
 						case 5:
 							htmltext = "30289-01.html";
@@ -379,22 +320,18 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(6))
-		{
+		if ((qs != null) && qs.isCond(6)) {
 			int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount <= 5)
-			{
+			if (killCount <= 5) {
 				qs.set(KILL_COUNT_VAR, ++killCount);
 				sendNpcLogList(killer);
 			}
-			
-			if ((killCount >= 5) && !World.getInstance().getVisibleObjects(npc, Npc.class, 1000).stream().anyMatch(n -> ((n.getId() == TELESHA) && (n.getSummoner() == killer))))
-			{
+
+			if ((killCount >= 5) && !World.getInstance().getVisibleObjects(npc, Npc.class, 1000).stream().anyMatch(n -> ((n.getId() == TELESHA) && (n.getSummoner() == killer)))) {
 				final Npc telsha = addSpawn(TELESHA, npc, false, 30000);
 				telsha.setSummoner(killer);
 				telsha.setTitle(killer.getAppearance().getVisibleName());
@@ -404,16 +341,13 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && qs.isCond(6))
-		{
+		if ((qs != null) && qs.isCond(6)) {
 			final int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount > 0)
-			{
+			if (killCount > 0) {
 				final Set<NpcLogListHolder> holder = new HashSet<>(1);
 				holder.add(new NpcLogListHolder(NpcStringId.KILL_SKELETONS, killCount));
 				return holder;
@@ -421,101 +355,76 @@ public final class Q10751_WindsOfFateEncounters extends Quest
 		}
 		return super.getNpcLogList(player);
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event)
-	{
-		if (event.getQuestId() == getId())
-		{
+	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
+		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
 			final QuestState qs = getQuestState(player, false);
-			if (qs == null)
-			{
+			if (qs == null) {
 				player.sendPacket(new PlaySound(3, "Npcdialog1.serenia_quest_12", 0, 0, 0, 0, 0));
 				player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup.html")));
 			}
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_BYPASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerBypass(OnPlayerBypass event)
-	{
+	public void OnPlayerBypass(OnPlayerBypass event) {
 		final String command = event.getCommand();
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
-			if (command.equals("Q10751_teleport"))
-			{
+
+		if (st == null) {
+			if (command.equals("Q10751_teleport")) {
 				player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
-				
-				if (CastleManager.getInstance().getCastles().stream().anyMatch(c -> c.getSiege().isInProgress()))
-				{
+
+				if (CastleManager.getInstance().getCastles().stream().anyMatch(c -> c.getSiege().isInProgress())) {
 					showOnScreenMsg(player, NpcStringId.YOU_MAY_NOT_TELEPORT_IN_MIDDLE_OF_A_SIEGE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isInParty())
-				{
+				} else if (player.isInParty()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_IN_PARTY_STATUS, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isInInstance())
-				{
+				} else if (player.isInInstance()) {
 					showOnScreenMsg(player, NpcStringId.YOU_MAY_NOT_TELEPORT_WHILE_USING_INSTANCE_ZONE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player))
-				{
+				} else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player)) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_IN_COMBAT, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isTransformed())
-				{
+				} else if (player.isTransformed()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_WHILE_IN_A_TRANSFORMED_STATE, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else if (player.isDead())
-				{
+				} else if (player.isDead()) {
 					showOnScreenMsg(player, NpcStringId.YOU_CANNOT_TELEPORT_WHILE_YOU_ARE_DEAD, ExShowScreenMessage.TOP_CENTER, 5000);
-				}
-				else
-				{
+				} else {
 					player.teleToLocation(TELEPORT_LOC);
 				}
 				player.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
-			}
-			else if (command.equals("Q10751_close"))
-			{
+			} else if (command.equals("Q10751_close")) {
 				player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
 				player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 				player.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
 			}
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLevelChanged(OnPlayerLevelChanged event)
-	{
+	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
-		
-		if ((st == null) && (player.getRace().equals(Race.ERTHEIA)) && (oldLevel < newLevel) && (newLevel >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP)))
-		{
+
+		if ((st == null) && (player.getRace().equals(Race.ERTHEIA)) && (oldLevel < newLevel) && (newLevel >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP))) {
 			showOnScreenMsg(player, NpcStringId.QUEEN_NAVARI_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLogin(OnPlayerLogin event)
-	{
+	public void OnPlayerLogin(OnPlayerLogin event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
-		
-		if ((st == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP)))
-		{
+
+		if ((st == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP))) {
 			showOnScreenMsg(player, NpcStringId.QUEEN_NAVARI_HAS_SENT_A_LETTER_NCLICK_THE_QUESTION_MARK_ICON_TO_READ, ExShowScreenMessage.TOP_CENTER, 10000);
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 		}

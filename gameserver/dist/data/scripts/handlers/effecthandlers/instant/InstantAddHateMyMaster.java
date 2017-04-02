@@ -28,38 +28,31 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that adds hate to affected NPCs, but instead of effector being hated, it is effector's summoner being hated.
+ *
  * @author Nik
  */
-public final class InstantAddHateMyMaster extends AbstractEffect
-{
+public final class InstantAddHateMyMaster extends AbstractEffect {
 	private final int _power;
-	
-	public InstantAddHateMyMaster(StatsSet params)
-	{
+
+	public InstantAddHateMyMaster(StatsSet params) {
 		_power = params.getInt("power", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		// This effect only affects effector's master.
-		if (caster.getSummoner() == null)
-		{
+		if (caster.getSummoner() == null) {
 			return;
 		}
-		
+
 		final Attackable targetAttackable = target.asAttackable();
-		if (targetAttackable == null)
-		{
+		if (targetAttackable == null) {
 			return;
 		}
-		
-		if (_power > 0)
-		{
+
+		if (_power > 0) {
 			targetAttackable.addDamageHate(caster.getSummoner(), 0, _power);
-		}
-		else if (_power < 0)
-		{
+		} else if (_power < 0) {
 			targetAttackable.reduceHate(caster.getSummoner(), -_power);
 		}
 	}

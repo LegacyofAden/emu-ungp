@@ -29,26 +29,23 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Item Effect: Gives teleport bookmark slots to the owner.
+ *
  * @author Nik
  */
-public final class InstantBookmarkAddSlot extends AbstractEffect
-{
+public final class InstantBookmarkAddSlot extends AbstractEffect {
 	private final int _amount;
-	
-	public InstantBookmarkAddSlot(StatsSet params)
-	{
+
+	public InstantBookmarkAddSlot(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		targetPlayer.setBookMarkSlot(targetPlayer.getBookMarkSlot() + _amount);
 		targetPlayer.sendPacket(SystemMessageId.THE_NUMBER_OF_MY_TELEPORTS_SLOTS_HAS_BEEN_INCREASED);
 	}

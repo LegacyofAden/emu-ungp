@@ -18,64 +18,54 @@
  */
 package instances.ElcadiasTent;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import instances.AbstractInstance;
 import quests.Q10292_SevenSignsGirlOfDoubt.Q10292_SevenSignsGirlOfDoubt;
 import quests.Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom.Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom;
 import quests.Q10294_SevenSignsToTheMonasteryOfSilence.Q10294_SevenSignsToTheMonasteryOfSilence;
 
 /**
  * Elcadia's Tent instance zone.
+ *
  * @author Adry_85
  */
-public final class ElcadiasTent extends AbstractInstance
-{
+public final class ElcadiasTent extends AbstractInstance {
 	// NPCs
 	private static final int ELCADIA = 32784;
 	private static final int GRUFF_LOOKING_MAN = 32862;
 	// Misc
 	private static final int TEMPLATE_ID = 158;
-	
-	public ElcadiasTent()
-	{
+
+	public ElcadiasTent() {
 		super(TEMPLATE_ID);
 		addFirstTalkId(GRUFF_LOOKING_MAN, ELCADIA);
 		addStartNpc(GRUFF_LOOKING_MAN, ELCADIA);
 		addTalkId(GRUFF_LOOKING_MAN, ELCADIA);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
-		if (npc.getId() == GRUFF_LOOKING_MAN)
-		{
+	public String onTalk(Npc npc, PlayerInstance talker) {
+		if (npc.getId() == GRUFF_LOOKING_MAN) {
 			final QuestState GirlOfDoubt = talker.getQuestState(Q10292_SevenSignsGirlOfDoubt.class.getSimpleName());
 			final QuestState ForbiddenBook = talker.getQuestState(Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom.class.getSimpleName());
 			final QuestState Monastery = talker.getQuestState(Q10294_SevenSignsToTheMonasteryOfSilence.class.getSimpleName());
 			if (((GirlOfDoubt != null) && GirlOfDoubt.isStarted()) //
-				|| ((GirlOfDoubt != null) && GirlOfDoubt.isCompleted() && (ForbiddenBook == null)) //
-				|| ((ForbiddenBook != null) && ForbiddenBook.isStarted()) //
-				|| ((ForbiddenBook != null) && ForbiddenBook.isCompleted() && (Monastery == null)))
-			{
+					|| ((GirlOfDoubt != null) && GirlOfDoubt.isCompleted() && (ForbiddenBook == null)) //
+					|| ((ForbiddenBook != null) && ForbiddenBook.isStarted()) //
+					|| ((ForbiddenBook != null) && ForbiddenBook.isCompleted() && (Monastery == null))) {
 				enterInstance(talker, npc, TEMPLATE_ID);
-			}
-			else
-			{
+			} else {
 				return "32862-01.html";
 			}
-		}
-		else
-		{
+		} else {
 			finishInstance(talker, 0);
 		}
 		return super.onTalk(npc, talker);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ElcadiasTent();
 	}
 }

@@ -28,56 +28,45 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpStatUp extends AbstractEffect
-{
+public class PumpStatUp extends AbstractEffect {
 	private final BaseStats _stat;
 	private final double _amount;
-	
-	public PumpStatUp(StatsSet params)
-	{
+
+	public PumpStatUp(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_stat = params.getEnum("stat", BaseStats.class, BaseStats.STR);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		DoubleStat stat = DoubleStat.STAT_STR;
-		
-		switch (_stat)
-		{
-			case INT:
-			{
+
+		switch (_stat) {
+			case INT: {
 				stat = DoubleStat.STAT_INT;
 				break;
 			}
-			case DEX:
-			{
+			case DEX: {
 				stat = DoubleStat.STAT_DEX;
 				break;
 			}
-			case WIT:
-			{
+			case WIT: {
 				stat = DoubleStat.STAT_WIT;
 				break;
 			}
-			case CON:
-			{
+			case CON: {
 				stat = DoubleStat.STAT_CON;
 				break;
 			}
-			case MEN:
-			{
+			case MEN: {
 				stat = DoubleStat.STAT_MEN;
 				break;
 			}
-			case CHA:
-			{
+			case CHA: {
 				stat = DoubleStat.STAT_CHA;
 				break;
 			}
-			case LUC:
-			{
+			case LUC: {
 				stat = DoubleStat.STAT_LUC;
 				break;
 			}

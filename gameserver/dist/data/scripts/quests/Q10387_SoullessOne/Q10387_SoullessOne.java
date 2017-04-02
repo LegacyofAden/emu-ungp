@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10386_MysteriousJourney.Q10386_MysteriousJourney;
 
 /**
  * Soulless One (10387)
+ *
  * @author St3eT
  */
-public final class Q10387_SoullessOne extends Quest
-{
+public final class Q10387_SoullessOne extends Quest {
 	// NPCs
 	private static final int HASED = 33780;
 	private static final int VERNA = 33796;
@@ -44,9 +43,8 @@ public final class Q10387_SoullessOne extends Quest
 	private static final int POUCH = 34861; // Ingredient and Hardener Pouch (R-grade)
 	// Misc
 	private static final int MIN_LEVEL = 93;
-	
-	public Q10387_SoullessOne()
-	{
+
+	public Q10387_SoullessOne() {
 		super(10387);
 		addStartNpc(HASED);
 		addTalkId(HASED, VERNA);
@@ -54,52 +52,42 @@ public final class Q10387_SoullessOne extends Quest
 		addCondMinLevel(MIN_LEVEL, "33796-12.htm");
 		addCondCompletedQuest(Q10386_MysteriousJourney.class.getSimpleName(), "33796-12.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33796-02.html":
 			case "33796-03.html":
 			case "33796-04.html":
 			case "33796-08.html":
-			case "33796-09.html":
-			{
+			case "33796-09.html": {
 				htmltext = event;
 				break;
 			}
-			case "33780-02.htm":
-			{
+			case "33780-02.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33796-05.html":
-			{
-				if (st.isCond(1))
-				{
+			case "33796-05.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					playMovie(player, Movie.SC_METUCELLAR_OPENING); // TODO: Need be created instance and run movie in instance
 					htmltext = event;
 				}
 				break;
 			}
-			case "reward1":
-			{
-				if (st.isCond(3))
-				{
+			case "reward1": {
+				if (st.isCond(3)) {
 					giveItems(player, COKES, 68);
 					giveItems(player, EAR, 5);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 817_330_500);
 						addSp(player, 196_159);
 					}
@@ -107,14 +95,11 @@ public final class Q10387_SoullessOne extends Quest
 				}
 				break;
 			}
-			case "reward2":
-			{
-				if (st.isCond(3))
-				{
+			case "reward2": {
+				if (st.isCond(3)) {
 					giveItems(player, EWR, 1);
 					giveItems(player, EAR, 6);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 817_330_500);
 						addSp(player, 196_159);
 					}
@@ -122,14 +107,11 @@ public final class Q10387_SoullessOne extends Quest
 				}
 				break;
 			}
-			case "reward3":
-			{
-				if (st.isCond(3))
-				{
+			case "reward3": {
+				if (st.isCond(3)) {
 					giveItems(player, POUCH, 1);
 					giveItems(player, EAR, 5);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 817_330_500);
 						addSp(player, 196_159);
 					}
@@ -140,36 +122,26 @@ public final class Q10387_SoullessOne extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == HASED)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == HASED) {
 					htmltext = "33780-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == HASED)
-				{
-					if (st.isCond(1))
-					{
+			case State.STARTED: {
+				if (npc.getId() == HASED) {
+					if (st.isCond(1)) {
 						htmltext = "33780-03.html";
 					}
-				}
-				else
-				{
-					switch (st.getCond())
-					{
+				} else {
+					switch (st.getCond()) {
 						case 1:
 							htmltext = "33796-01.htm";
 							break;
@@ -183,28 +155,24 @@ public final class Q10387_SoullessOne extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = npc.getId() == VERNA ? "33796-11.htm" : "33780-04.html";
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, false);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(2))
-		{
+		if ((st != null) && st.isCond(2)) {
 			st.setCond(3, true);
 		}
 	}

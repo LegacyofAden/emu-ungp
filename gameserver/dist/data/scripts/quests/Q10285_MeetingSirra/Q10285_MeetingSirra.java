@@ -27,15 +27,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10284_AcquisitionOfDivineSword.Q10284_AcquisitionOfDivineSword;
 
 /**
  * Meeting Sirra (10285)
+ *
  * @author Adry_85
  */
-public final class Q10285_MeetingSirra extends Quest
-{
+public final class Q10285_MeetingSirra extends Quest {
 	// NPCs
 	private static final int RAFFORTY = 32020;
 	private static final int FREYAS_STEWARD = 32029;
@@ -48,60 +47,48 @@ public final class Q10285_MeetingSirra extends Quest
 	// Locations
 	private static final Location EXIT_LOC = new Location(113793, -109342, -845, 0);
 	private static final Location FREYA_LOC = new Location(103045, -124361, -2768, 0);
-	
-	public Q10285_MeetingSirra()
-	{
+
+	public Q10285_MeetingSirra() {
 		super(10285);
 		addStartNpc(RAFFORTY);
 		addTalkId(RAFFORTY, JINIA, KEGOR, SIRRA, JINIA2, FREYAS_STEWARD);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32020-02.htm":
-			{
+		switch (event) {
+			case "32020-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32020-03.htm":
-			{
+			case "32020-03.htm": {
 				st.startQuest();
 				st.setMemoState(1);
 				htmltext = event;
 				break;
 			}
-			case "32760-02.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 0))
-				{
+			case "32760-02.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 0)) {
 					st.set("ex", 1);
 					st.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32760-05.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 2))
-				{
+			case "32760-05.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32760-06.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 2))
-				{
+			case "32760-06.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 2)) {
 					final Npc sirra = addSpawn(SIRRA, -23905, -8790, -5384, 56238, false, 0, false, npc.getInstanceId());
 					sirra.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THERE_S_NOTHING_YOU_CAN_T_SAY_I_CAN_T_LISTEN_TO_YOU_ANYMORE);
 					st.set("ex", 3);
@@ -112,53 +99,42 @@ public final class Q10285_MeetingSirra extends Quest
 			}
 			case "32760-09.html":
 			case "32760-10.html":
-			case "32760-11.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 4))
-				{
+			case "32760-11.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 4)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32760-12.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 4))
-				{
+			case "32760-12.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 4)) {
 					st.set("ex", 5);
 					st.setCond(7, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32760-13.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 5))
-				{
+			case "32760-13.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 5)) {
 					st.unset("ex");
 					st.setMemoState(2);
-					
+
 					final Instance world = player.getInstanceWorld();
-					if (world != null)
-					{
+					if (world != null) {
 						world.finishInstance(0);
 					}
 					htmltext = event;
 				}
 				break;
 			}
-			case "32760-14.html":
-			{
-				if (st.isMemoState(2))
-				{
+			case "32760-14.html": {
+				if (st.isMemoState(2)) {
 					player.teleToLocation(EXIT_LOC, 0);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32761-02.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 1))
-				{
+			case "32761-02.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 1)) {
 					st.set("ex", 2);
 					st.setCond(4, true);
 					htmltext = event;
@@ -170,18 +146,14 @@ public final class Q10285_MeetingSirra extends Quest
 			case "32762-04.html":
 			case "32762-05.html":
 			case "32762-06.html":
-			case "32762-07.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 3))
-				{
+			case "32762-07.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 3)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32762-08.html":
-			{
-				if (st.isMemoState(1) && (st.getInt("ex") == 3))
-				{
+			case "32762-08.html": {
+				if (st.isMemoState(1) && (st.getInt("ex") == 3)) {
 					st.set("ex", 4);
 					st.setCond(6, true);
 					htmltext = event;
@@ -190,18 +162,14 @@ public final class Q10285_MeetingSirra extends Quest
 				break;
 			}
 			case "32781-02.html":
-			case "32781-03.html":
-			{
-				if (st.isMemoState(2))
-				{
+			case "32781-03.html": {
+				if (st.isMemoState(2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "TELEPORT":
-			{
-				if (player.getLevel() >= MIN_LEVEL)
-				{
+			case "TELEPORT": {
+				if (player.getLevel() >= MIN_LEVEL) {
 					player.teleToLocation(FREYA_LOC, 0);
 				}
 				break;
@@ -209,50 +177,37 @@ public final class Q10285_MeetingSirra extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
-				if (npc.getId() == RAFFORTY)
-				{
+		switch (st.getState()) {
+			case State.COMPLETED: {
+				if (npc.getId() == RAFFORTY) {
 					htmltext = "32020-05.htm";
 				}
 				break;
 			}
-			case State.CREATED:
-			{
-				if (npc.getId() == RAFFORTY)
-				{
+			case State.CREATED: {
+				if (npc.getId() == RAFFORTY) {
 					htmltext = ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q10284_AcquisitionOfDivineSword.class.getSimpleName())) ? "32020-01.htm" : "32020-04.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case RAFFORTY:
-					{
-						switch (st.getMemoState())
-						{
-							case 1:
-							{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case RAFFORTY: {
+						switch (st.getMemoState()) {
+							case 1: {
 								htmltext = (player.getLevel() >= MIN_LEVEL) ? "32020-06.html" : "32020-09.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "32020-07.html";
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								giveAdena(player, 283425, true);
 								addExp(player, 939075);
 								addSp(player, 83855); // TODO Incorrect SP reward.
@@ -263,40 +218,31 @@ public final class Q10285_MeetingSirra extends Quest
 						}
 						break;
 					}
-					case JINIA:
-					{
-						if (st.isMemoState(1))
-						{
+					case JINIA: {
+						if (st.isMemoState(1)) {
 							final int state = st.getInt("ex");
-							switch (state)
-							{
-								case 0:
-								{
+							switch (state) {
+								case 0: {
 									htmltext = "32760-01.html";
 									break;
 								}
-								case 1:
-								{
+								case 1: {
 									htmltext = "32760-03.html";
 									break;
 								}
-								case 2:
-								{
+								case 2: {
 									htmltext = "32760-04.html";
 									break;
 								}
-								case 3:
-								{
+								case 3: {
 									htmltext = "32760-07.html";
 									break;
 								}
-								case 4:
-								{
+								case 4: {
 									htmltext = "32760-08.html";
 									break;
 								}
-								case 5:
-								{
+								case 5: {
 									htmltext = "32760-15.html";
 									break;
 								}
@@ -304,25 +250,19 @@ public final class Q10285_MeetingSirra extends Quest
 						}
 						break;
 					}
-					case KEGOR:
-					{
-						if (st.isMemoState(1))
-						{
+					case KEGOR: {
+						if (st.isMemoState(1)) {
 							final int state = st.getInt("ex");
-							switch (state)
-							{
-								case 1:
-								{
+							switch (state) {
+								case 1: {
 									htmltext = "32761-01.html";
 									break;
 								}
-								case 2:
-								{
+								case 2: {
 									htmltext = "32761-03.html";
 									break;
 								}
-								case 3:
-								{
+								case 3: {
 									htmltext = "32761-04.html";
 									break;
 								}
@@ -330,38 +270,27 @@ public final class Q10285_MeetingSirra extends Quest
 						}
 						break;
 					}
-					case SIRRA:
-					{
-						if (st.isMemoState(1))
-						{
+					case SIRRA: {
+						if (st.isMemoState(1)) {
 							final int state = st.getInt("ex");
-							if (state == 3)
-							{
+							if (state == 3) {
 								htmltext = "32762-01.html";
-							}
-							else if (state == 4)
-							{
+							} else if (state == 4) {
 								htmltext = "32762-09.html";
 							}
 						}
 						break;
 					}
-					case JINIA2:
-					{
-						if (st.isMemoState(2))
-						{
+					case JINIA2: {
+						if (st.isMemoState(2)) {
 							htmltext = "32781-01.html";
-						}
-						else if (st.isMemoState(3))
-						{
+						} else if (st.isMemoState(3)) {
 							htmltext = "32781-04.html";
 						}
 						break;
 					}
-					case FREYAS_STEWARD:
-					{
-						if (st.isMemoState(2))
-						{
+					case FREYAS_STEWARD: {
+						if (st.isMemoState(2)) {
 							htmltext = "32029-01.html";
 							st.setCond(8, true);
 						}

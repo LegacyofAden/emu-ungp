@@ -18,64 +18,56 @@
  */
 package ai.individual.KartiasLabyrinth;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
 import org.l2junity.gameserver.model.instancezone.Instance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Kartia Helper Eliyah AI.
+ *
  * @author St3eT
  */
-public final class KartiaHelperEliyah extends AbstractNpcAI
-{
+public final class KartiaHelperEliyah extends AbstractNpcAI {
 	// NPCs
 	private static final int[] KARTIA_ELIYAH =
-	{
-		33615, // Eliyah (Kartia 85)
-		33626, // Eliyah (Kartia 90)
-		33637, // Eliyah (Kartia 95)
-	};
+			{
+					33615, // Eliyah (Kartia 85)
+					33626, // Eliyah (Kartia 90)
+					33637, // Eliyah (Kartia 95)
+			};
 	// Misc
 	private static final int[] KARTIA_SOLO_INSTANCES =
-	{
-		205, // Solo 85
-		206, // Solo 90
-		207, // Solo 95
-	};
-	
-	private KartiaHelperEliyah()
-	{
+			{
+					205, // Solo 85
+					206, // Solo 90
+					207, // Solo 95
+			};
+
+	private KartiaHelperEliyah() {
 		setInstanceStatusChangeId(this::onInstanceStatusChange, KARTIA_SOLO_INSTANCES);
 	}
-	
-	public void onInstanceStatusChange(OnInstanceStatusChange event)
-	{
+
+	public void onInstanceStatusChange(OnInstanceStatusChange event) {
 		final Instance instance = event.getWorld();
 		final int status = event.getStatus();
-		switch (status)
-		{
-			case 1:
-			{
+		switch (status) {
+			case 1: {
 				// Nothing for now
 				break;
 			}
 			case 2:
-			case 3:
-			{
+			case 3: {
 				final Location loc = instance.getTemplateParameters().getLocation("eliyahTeleportStatus" + status);
-				if (loc != null)
-				{
+				if (loc != null) {
 					instance.getAliveNpcs(KARTIA_ELIYAH).forEach(eliyah -> eliyah.teleToLocation(loc));
 				}
 				break;
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new KartiaHelperEliyah();
 	}
 }

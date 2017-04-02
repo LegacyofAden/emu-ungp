@@ -28,47 +28,38 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpEnchantRangeSkillCondition implements ISkillCondition
-{
+public class OpEnchantRangeSkillCondition implements ISkillCondition {
 	private final int _minEnchant;
 	private final int _maxEnchant;
 	private final OpEnchantRangeType _type;
-	
-	public OpEnchantRangeSkillCondition(StatsSet params)
-	{
+
+	public OpEnchantRangeSkillCondition(StatsSet params) {
 		_minEnchant = params.getInt("minEnchant");
 		_maxEnchant = params.getInt("maxEnchant");
 		_type = params.getEnum("type", OpEnchantRangeType.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target != null) && target.isItem())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target != null) && target.isItem()) {
 			final ItemInstance item = (ItemInstance) target;
-			
-			switch (_type)
-			{
-				case NONE:
-				{
+
+			switch (_type) {
+				case NONE: {
 					return (item.getEnchantLevel() >= _minEnchant) && (item.getEnchantLevel() <= _maxEnchant);
 				}
-				case NORMAL:
-				{
+				case NORMAL: {
 					return item.isWeapon() && (item.getWeaponItem().isMagicWeapon() || ((item.getEnchantLevel() >= _minEnchant) && (item.getEnchantLevel() <= _maxEnchant)));
 				}
-				case MAGIC:
-				{
+				case MAGIC: {
 					return item.isWeapon() && (!item.getWeaponItem().isMagicWeapon() || ((item.getEnchantLevel() >= _minEnchant) && (item.getEnchantLevel() <= _maxEnchant)));
 				}
 			}
 		}
 		return false;
 	}
-	
-	public enum OpEnchantRangeType
-	{
+
+	public enum OpEnchantRangeType {
 		NONE,
 		NORMAL,
 		MAGIC;

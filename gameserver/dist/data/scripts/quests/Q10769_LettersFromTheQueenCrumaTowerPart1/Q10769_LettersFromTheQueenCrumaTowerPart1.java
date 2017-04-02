@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Letters from the Queen: Cruma Tower, Part 1 (10769)
+ *
  * @author malyelfik
  */
-public final class Q10769_LettersFromTheQueenCrumaTowerPart1 extends LetterQuest
-{
+public final class Q10769_LettersFromTheQueenCrumaTowerPart1 extends LetterQuest {
 	// NPCs
 	private static final int SYLVAIN = 30070;
 	private static final int LORAIN = 30673;
@@ -44,9 +43,8 @@ public final class Q10769_LettersFromTheQueenCrumaTowerPart1 extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 40;
 	private static final int MAX_LEVEL = 45;
-	
-	public Q10769_LettersFromTheQueenCrumaTowerPart1()
-	{
+
+	public Q10769_LettersFromTheQueenCrumaTowerPart1() {
 		super(10769);
 		addTalkId(SYLVAIN, LORAIN);
 		setIsErtheiaQuest(true);
@@ -55,46 +53,36 @@ public final class Q10769_LettersFromTheQueenCrumaTowerPart1 extends LetterQuest
 		setStartQuestSound("Npcdialog1.serenia_quest_3");
 		registerQuestItems(SOE_DION_TOWN, SOE_CRUMA_TOWER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30070-02.html":
 			case "30673-02.html":
 				break;
-			case "30070-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30070-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, SOE_CRUMA_TOWER, 1);
 					showOnScreenMsg(player, NpcStringId.TRY_USING_THE_TELEPORT_SCROLL_SYLVAIN_GAVE_YOU_TO_GO_TO_CRUMA_TOWER, ExShowScreenMessage.TOP_CENTER, 5000);
 				}
 				break;
 			}
-			case "30673-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "30673-03.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 370_440);
 						addSp(player, 88);
 						showOnScreenMsg(player, NpcStringId.GROW_STRONGER_HERE_UNTIL_YOU_RECEIVE_THE_NEXT_LETTER_FROM_QUEEN_NAVARI_AT_LV_46, ExShowScreenMessage.TOP_CENTER, 8000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -105,25 +93,19 @@ public final class Q10769_LettersFromTheQueenCrumaTowerPart1 extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if (qs.isStarted())
-		{
-			if (npc.getId() == SYLVAIN)
-			{
+
+		if (qs.isStarted()) {
+			if (npc.getId() == SYLVAIN) {
 				htmltext = (qs.isCond(1)) ? "30070-01.html" : "30070-04.html";
-			}
-			else if (qs.isCond(2))
-			{
+			} else if (qs.isCond(2)) {
 				htmltext = "30673-01.html";
 			}
 		}

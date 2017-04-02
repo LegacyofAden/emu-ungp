@@ -18,9 +18,6 @@
  */
 package quests.Q10743_StrangeFungus;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -32,12 +29,15 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Strange Fungus (10743)
+ *
  * @author Sdw
  */
-public final class Q10743_StrangeFungus extends Quest
-{
+public final class Q10743_StrangeFungus extends Quest {
 	// NPCs
 	private static final int LEIRA = 33952;
 	private static final int MILONE = 33953;
@@ -53,9 +53,8 @@ public final class Q10743_StrangeFungus extends Quest
 	private static final int MAX_LEVEL = 20;
 	private static final String EVOLVED_SPAWN_VAR = "EvolvedSpawn";
 	private static final String KILL_COUNT_VAR = "KillCount";
-	
-	public Q10743_StrangeFungus()
-	{
+
+	public Q10743_StrangeFungus() {
 		super(10743);
 		addStartNpc(LEIRA);
 		addTalkId(LEIRA, MILONE);
@@ -64,40 +63,31 @@ public final class Q10743_StrangeFungus extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33952-00.htm");
 		registerQuestItems(PECULIAR_MUSHROOM_SPORE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33952-02.htm":
 			case "33953-02.html":
 				break;
-			case "33952-03.htm":
-			{
+			case "33952-03.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33953-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33953-03.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, LEATHER_SHOES);
 						addExp(player, 93_982);
 						showOnScreenMsg(player, NpcStringId.CHECK_YOUR_EQUIPMENT_IN_YOUR_INVENTORY, ExShowScreenMessage.TOP_CENTER, 10000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -108,19 +98,15 @@ public final class Q10743_StrangeFungus extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (npc.getId())
-		{
-			case LEIRA:
-			{
-				switch (qs.getState())
-				{
+
+		switch (npc.getId()) {
+			case LEIRA: {
+				switch (qs.getState()) {
 					case State.CREATED:
 						htmltext = "33952-01.htm";
 						break;
@@ -133,48 +119,37 @@ public final class Q10743_StrangeFungus extends Quest
 				}
 				break;
 			}
-			case MILONE:
-			{
-				if (qs.isStarted() && qs.isCond(2))
-				{
+			case MILONE: {
+				if (qs.isStarted() && qs.isCond(2)) {
 					htmltext = "33953-01.html";
 				}
 				break;
 			}
 		}
-		
+
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1) && (getQuestItemsCount(killer, PECULIAR_MUSHROOM_SPORE) < 10))
-		{
-			switch (npc.getId())
-			{
+		if ((qs != null) && qs.isCond(1) && (getQuestItemsCount(killer, PECULIAR_MUSHROOM_SPORE) < 10)) {
+			switch (npc.getId()) {
 				case GROWLER:
-				case ROBUST_GROWLER:
-				{
+				case ROBUST_GROWLER: {
 					final int killCount = qs.getInt(EVOLVED_SPAWN_VAR) + 1;
-					if (killCount >= 3)
-					{
+					if (killCount >= 3) {
 						addAttackPlayerDesire(addSpawn(EVOLVED_GROWLER, npc.getLocation()), killer);
 						qs.set(EVOLVED_SPAWN_VAR, 0);
-					}
-					else
-					{
+					} else {
 						qs.set(EVOLVED_SPAWN_VAR, killCount);
 					}
 					qs.set(KILL_COUNT_VAR, qs.getInt(KILL_COUNT_VAR) + 1);
 					sendNpcLogList(killer);
 					break;
 				}
-				case EVOLVED_GROWLER:
-				{
-					if (giveItemRandomly(killer, npc, PECULIAR_MUSHROOM_SPORE, 1, 10, 1.0, true))
-					{
+				case EVOLVED_GROWLER: {
+					if (giveItemRandomly(killer, npc, PECULIAR_MUSHROOM_SPORE, 1, 10, 1.0, true)) {
 						qs.setCond(2);
 					}
 					break;
@@ -183,16 +158,13 @@ public final class Q10743_StrangeFungus extends Quest
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			final int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount > 0)
-			{
+			if (killCount > 0) {
 				final Set<NpcLogListHolder> holder = new HashSet<>();
 				holder.add(new NpcLogListHolder(GROWLER, false, killCount));
 				return holder;

@@ -38,75 +38,65 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Summon Pet effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantSummonPet extends AbstractEffect
-{
+public final class InstantSummonPet extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantSummonPet.class);
 
-	public InstantSummonPet(StatsSet params)
-	{
+	public InstantSummonPet(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
-		if (casterPlayer.isAlikeDead())
-		{
+		if (casterPlayer.isAlikeDead()) {
 			return;
 		}
 
-		if (casterPlayer.hasPet() || casterPlayer.isMounted())
-		{
+		if (casterPlayer.hasPet() || casterPlayer.isMounted()) {
 			casterPlayer.sendPacket(SystemMessageId.YOU_ALREADY_HAVE_A_PET);
 			return;
 		}
-		
+
 		final PetItemHolder holder = casterPlayer.removeScript(PetItemHolder.class);
-		if (holder == null)
-		{
+		if (holder == null) {
 			LOGGER.warn("Summoning pet without attaching PetItemHandler!", new Throwable());
 			return;
 		}
-		
+
 		final ItemInstance collar = holder.getItem();
-		if (casterPlayer.getInventory().getItemByObjectId(collar.getObjectId()) != collar)
-		{
+		if (casterPlayer.getInventory().getItemByObjectId(collar.getObjectId()) != collar) {
 			LOGGER.warn("Player: {} is trying to summon pet from item that he doesn't owns.", casterPlayer);
 			return;
 		}
-		
+
 		final PetData petData = PetDataTable.getInstance().getPetDataByItemId(collar.getId());
-		if ((petData == null) || (petData.getNpcId() == -1))
-		{
+		if ((petData == null) || (petData.getNpcId() == -1)) {
 			return;
 		}
-		
+
 		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(petData.getNpcId());
 		final L2PetInstance pet = L2PetInstance.spawnPet(npcTemplate, casterPlayer, collar);
-		
+
 		pet.setShowSummonAnimation(true);
-		if (!pet.isRespawned())
-		{
+		if (!pet.isRespawned()) {
 			pet.setCurrentHp(pet.getMaxHp());
 			pet.setCurrentMp(pet.getMaxMp());
 			pet.getStat().setExp(pet.getExpForThisLevel());
 			pet.setCurrentFed(pet.getMaxFed());
 		}
-		
+
 		pet.setRunning();
-		
-		if (!pet.isRespawned())
-		{
+
+		if (!pet.isRespawned()) {
 			pet.storeMe();
 		}
-		
+
 		collar.setEnchantLevel(pet.getLevel());
 		casterPlayer.setPet(pet);
 		pet.spawnMe(casterPlayer.getX() + 50, casterPlayer.getY() + 100, casterPlayer.getZ());

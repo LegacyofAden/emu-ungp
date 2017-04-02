@@ -18,21 +18,21 @@
  */
 package quests.Q00642_APowerfulPrimevalCreature;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A Powerful Primeval Creature (642)
+ *
  * @author Adry_85
  */
-public class Q00642_APowerfulPrimevalCreature extends Quest
-{
+public class Q00642_APowerfulPrimevalCreature extends Quest {
 	// NPC
 	private static final int DINN = 32105;
 	// Items
@@ -42,11 +42,10 @@ public class Q00642_APowerfulPrimevalCreature extends Quest
 	private static final int MIN_LEVEL = 75;
 	// Mobs
 	private static final int ANCIENT_EGG = 18344;
-	
+
 	private static final Map<Integer, Double> MOBS_TISSUE = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS_TISSUE.put(22196, 0.309); // Velociraptor
 		MOBS_TISSUE.put(22197, 0.309); // Velociraptor
 		MOBS_TISSUE.put(22198, 0.309); // Velociraptor
@@ -57,9 +56,8 @@ public class Q00642_APowerfulPrimevalCreature extends Quest
 		MOBS_TISSUE.put(22218, 0.309); // Velociraptor
 		MOBS_TISSUE.put(22223, 0.309); // Velociraptor
 	}
-	
-	public Q00642_APowerfulPrimevalCreature()
-	{
+
+	public Q00642_APowerfulPrimevalCreature() {
 		super(642);
 		addStartNpc(DINN);
 		addTalkId(DINN);
@@ -67,52 +65,39 @@ public class Q00642_APowerfulPrimevalCreature extends Quest
 		addKillId(MOBS_TISSUE.keySet());
 		registerQuestItems(DINOSAUR_TISSUE, DINOSAUR_EGG);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "32105-05.html":
-			{
+		switch (event) {
+			case "32105-05.html": {
 				qs.startQuest();
 				break;
 			}
-			case "32105-06.htm":
-			{
+			case "32105-06.htm": {
 				qs.exitQuest(QuestType.REPEATABLE);
 				break;
 			}
-			case "32105-09.html":
-			{
-				if (hasQuestItems(player, DINOSAUR_TISSUE))
-				{
+			case "32105-09.html": {
+				if (hasQuestItems(player, DINOSAUR_TISSUE)) {
 					giveAdena(player, 5000 * getQuestItemsCount(player, DINOSAUR_TISSUE), true);
 					takeItems(player, DINOSAUR_TISSUE, -1);
-				}
-				else
-				{
+				} else {
 					htmltext = "32105-14.html";
 				}
 				break;
 			}
-			case "exit":
-			{
-				if (hasQuestItems(player, DINOSAUR_TISSUE))
-				{
+			case "exit": {
+				if (hasQuestItems(player, DINOSAUR_TISSUE)) {
 					giveAdena(player, 5000 * getQuestItemsCount(player, DINOSAUR_TISSUE), true);
 					qs.exitQuest(true, true);
 					htmltext = "32105-12.html";
-				}
-				else
-				{
+				} else {
 					qs.exitQuest(true, true);
 					htmltext = "32105-13.html";
 				}
@@ -121,42 +106,33 @@ public class Q00642_APowerfulPrimevalCreature extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, -1, 3, npc);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return null;
 		}
-		
+
 		int npcId = npc.getId();
-		
-		if (MOBS_TISSUE.containsKey(npcId))
-		{
+
+		if (MOBS_TISSUE.containsKey(npcId)) {
 			giveItemRandomly(qs.getPlayer(), npc, DINOSAUR_TISSUE, 1, 0, MOBS_TISSUE.get(npcId), true);
-		}
-		else
-		{
+		} else {
 			giveItemRandomly(qs.getPlayer(), npc, DINOSAUR_EGG, 1, 0, 1.0, true);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs.isCreated())
-		{
+
+		if (qs.isCreated()) {
 			htmltext = player.getLevel() < MIN_LEVEL ? "32105-01.htm" : "32105-02.htm";
-		}
-		else if (qs.isStarted())
-		{
+		} else if (qs.isStarted()) {
 			htmltext = (hasAtLeastOneQuestItem(player, DINOSAUR_TISSUE, DINOSAUR_EGG)) ? "32105-08.html" : "32105-07.html";
 		}
 		return htmltext;

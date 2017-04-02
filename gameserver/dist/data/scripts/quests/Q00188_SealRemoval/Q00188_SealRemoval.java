@@ -22,7 +22,6 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-
 import quests.Q00184_ArtOfPersuasion.Q00184_ArtOfPersuasion;
 import quests.Q00185_NikolasCooperation.Q00185_NikolasCooperation;
 import quests.Q00186_ContractExecution.Q00186_ContractExecution;
@@ -30,10 +29,10 @@ import quests.Q00187_NikolasHeart.Q00187_NikolasHeart;
 
 /**
  * Seal Removal (188)
+ *
  * @author ivantotov
  */
-public final class Q00188_SealRemoval extends Quest
-{
+public final class Q00188_SealRemoval extends Quest {
 	// NPCs
 	private static final int MAESTRO_NIKOLA = 30621;
 	private static final int RESEARCHER_LORAIN = 30673;
@@ -44,31 +43,25 @@ public final class Q00188_SealRemoval extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 41;
 	private static final int MAX_LEVEL_FOR_EXP_SP = 47;
-	
-	public Q00188_SealRemoval()
-	{
+
+	public Q00188_SealRemoval() {
 		super(188);
 		addStartNpc(RESEARCHER_LORAIN);
 		addTalkId(RESEARCHER_LORAIN, MAESTRO_NIKOLA, DOROTHY_LOCKSMITH);
 		registerQuestItems(BROKEN_METAL_PIECES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30673-03.htm":
-			{
-				if (qs.isCreated())
-				{
+		switch (event) {
+			case "30673-03.htm": {
+				if (qs.isCreated()) {
 					qs.startQuest();
 					qs.setMemoState(1);
 					giveItems(player, BROKEN_METAL_PIECES, 1);
@@ -76,47 +69,36 @@ public final class Q00188_SealRemoval extends Quest
 				}
 				break;
 			}
-			case "30621-02.html":
-			{
-				if (qs.isMemoState(1))
-				{
+			case "30621-02.html": {
+				if (qs.isMemoState(1)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30621-03.html":
-			{
-				if (qs.isMemoState(1))
-				{
+			case "30621-03.html": {
+				if (qs.isMemoState(1)) {
 					qs.setMemoState(2);
 					qs.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30621-04.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "30621-04.html": {
+				if (qs.isMemoState(2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30970-02.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "30970-02.html": {
+				if (qs.isMemoState(2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30970-03.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "30970-03.html": {
+				if (qs.isMemoState(2)) {
 					giveAdena(player, 98583, true);
-					if (player.getLevel() < MAX_LEVEL_FOR_EXP_SP)
-					{
+					if (player.getLevel() < MAX_LEVEL_FOR_EXP_SP) {
 						addExp(player, 285935);
 						addSp(player, 18711); // TODO Incorrect SP reward.
 					}
@@ -128,63 +110,45 @@ public final class Q00188_SealRemoval extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (qs.isCreated())
-		{
-			if (npc.getId() == RESEARCHER_LORAIN)
-			{
-				if (!hasQuestItems(player, LORAINES_CERTIFICATE))
-				{
+		if (qs.isCreated()) {
+			if (npc.getId() == RESEARCHER_LORAIN) {
+				if (!hasQuestItems(player, LORAINES_CERTIFICATE)) {
 					if (player.hasQuestCompleted(Q00184_ArtOfPersuasion.class.getSimpleName()) || //
-						(player.hasQuestCompleted(Q00185_NikolasCooperation.class.getSimpleName()) && //
-							!player.hasQuestState(Q00186_ContractExecution.class.getSimpleName()) && //
-							!player.hasQuestState(Q00187_NikolasHeart.class.getSimpleName())))
-					{
+							(player.hasQuestCompleted(Q00185_NikolasCooperation.class.getSimpleName()) && //
+									!player.hasQuestState(Q00186_ContractExecution.class.getSimpleName()) && //
+									!player.hasQuestState(Q00187_NikolasHeart.class.getSimpleName()))) {
 						htmltext = (player.getLevel() >= MIN_LEVEL) ? "30673-01.htm" : "30673-02.htm";
 					}
 				}
 			}
-		}
-		else if (qs.isStarted())
-		{
-			switch (npc.getId())
-			{
-				case RESEARCHER_LORAIN:
-				{
+		} else if (qs.isStarted()) {
+			switch (npc.getId()) {
+				case RESEARCHER_LORAIN: {
 					htmltext = "30673-04.html";
 					break;
 				}
-				case MAESTRO_NIKOLA:
-				{
-					if (qs.isMemoState(1))
-					{
+				case MAESTRO_NIKOLA: {
+					if (qs.isMemoState(1)) {
 						htmltext = "30621-01.html";
-					}
-					else if (qs.isMemoState(2))
-					{
+					} else if (qs.isMemoState(2)) {
 						htmltext = "30621-05.html";
 					}
 					break;
 				}
-				case DOROTHY_LOCKSMITH:
-				{
-					if (qs.isMemoState(2))
-					{
+				case DOROTHY_LOCKSMITH: {
+					if (qs.isMemoState(2)) {
 						htmltext = "30970-01.html";
 					}
 					break;
 				}
 			}
-		}
-		else if (qs.isCompleted())
-		{
-			if (npc.getId() == RESEARCHER_LORAIN)
-			{
+		} else if (qs.isCompleted()) {
+			if (npc.getId() == RESEARCHER_LORAIN) {
 				htmltext = getAlreadyCompletedMsg(player);
 			}
 		}

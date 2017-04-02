@@ -18,30 +18,28 @@
  */
 package village_master.ProofOfCourage;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 
-import ai.AbstractNpcAI;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Proof Of Courage implementation.
+ *
  * @author St3eT
  */
-public final class ProofOfCourage extends AbstractNpcAI
-{
+public final class ProofOfCourage extends AbstractNpcAI {
 	// Misc
 	private static final Map<Integer, List<ClassId>> CLASSLIST = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		CLASSLIST.put(32146, Arrays.asList(ClassId.TROOPER, ClassId.WARDER));
 		CLASSLIST.put(32147, Arrays.asList(ClassId.ELVEN_KNIGHT, ClassId.ELVEN_SCOUT, ClassId.ELVEN_WIZARD, ClassId.ORACLE));
 		CLASSLIST.put(32150, Arrays.asList(ClassId.ORC_RAIDER, ClassId.ORC_MONK));
@@ -49,30 +47,24 @@ public final class ProofOfCourage extends AbstractNpcAI
 		CLASSLIST.put(32157, Arrays.asList(ClassId.SCAVENGER, ClassId.ARTISAN));
 		CLASSLIST.put(32160, Arrays.asList(ClassId.PALUS_KNIGHT, ClassId.ASSASSIN, ClassId.DARK_WIZARD, ClassId.SHILLIEN_ORACLE));
 	}
-	
-	private ProofOfCourage()
-	{
+
+	private ProofOfCourage() {
 		addStartNpc(CLASSLIST.keySet());
 		addTalkId(CLASSLIST.keySet());
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
-		if (talker.isInCategory(CategoryType.FIRST_CLASS_GROUP))
-		{
+	public String onTalk(Npc npc, PlayerInstance talker) {
+		if (talker.isInCategory(CategoryType.FIRST_CLASS_GROUP)) {
 			return npc.getId() + "-noclass.html";
-		}
-		else if (!CLASSLIST.get(npc.getId()).contains(talker.getClassId()))
-		{
+		} else if (!CLASSLIST.get(npc.getId()).contains(talker.getClassId())) {
 			return npc.getId() + "-no.html";
 		}
 		MultisellData.getInstance().separateAndSend(717, talker, npc, false);
 		return super.onTalk(npc, talker);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ProofOfCourage();
 	}
 }

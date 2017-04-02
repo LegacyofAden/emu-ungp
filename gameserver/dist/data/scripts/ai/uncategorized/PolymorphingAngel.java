@@ -18,46 +18,40 @@
  */
 package ai.uncategorized;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Angel spawns...when one of the angels in the keys dies, the other angel will spawn.
  */
-public final class PolymorphingAngel extends AbstractNpcAI
-{
+public final class PolymorphingAngel extends AbstractNpcAI {
 	private static final Map<Integer, Integer> ANGELSPAWNS = new HashMap<>(5);
-	
-	static
-	{
+
+	static {
 		ANGELSPAWNS.put(20830, 20859);
 		ANGELSPAWNS.put(21067, 21068);
 		ANGELSPAWNS.put(21062, 21063);
 		ANGELSPAWNS.put(20831, 20860);
 		ANGELSPAWNS.put(21070, 21071);
 	}
-	
-	private PolymorphingAngel()
-	{
+
+	private PolymorphingAngel() {
 		addKillId(ANGELSPAWNS.keySet());
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Attackable newNpc = (Attackable) addSpawn(ANGELSPAWNS.get(npc.getId()), npc);
 		newNpc.setRunning();
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PolymorphingAngel();
 	}
 }

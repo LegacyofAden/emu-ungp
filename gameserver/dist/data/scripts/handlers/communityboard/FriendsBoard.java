@@ -18,57 +18,49 @@
  */
 package handlers.communityboard;
 
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IParseBoardHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Friends board.
+ *
  * @author Zoey76
  */
-public class FriendsBoard implements IParseBoardHandler
-{
+public class FriendsBoard implements IParseBoardHandler {
 	private static final String[] COMMANDS =
-	{
-		"_friendlist",
-		"_friendblocklist"
-	};
-	
+			{
+					"_friendlist",
+					"_friendblocklist"
+			};
+
 	@Override
-	public String[] getCommunityBoardCommands()
-	{
+	public String[] getCommunityBoardCommands() {
 		return COMMANDS;
 	}
-	
+
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("_friendlist"))
-		{
+	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("_friendlist")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Friends List", command);
-			
-			final String html = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/friends_list.html");
-			
+
+			final String html = HtmRepository.getInstance().getCustomHtm("CommunityBoard/friends_list.html");
+
 			CommunityBoardHandler.separateAndSend(html, activeChar);
-		}
-		else if (command.equals("_friendblocklist"))
-		{
+		} else if (command.equals("_friendblocklist")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Ignore list", command);
-			
-			final String html = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/friends_block_list.html");
-			
+
+			final String html = HtmRepository.getInstance().getCustomHtm("CommunityBoard/friends_block_list.html");
+
 			CommunityBoardHandler.separateAndSend(html, activeChar);
-		}
-		else
-		{
-			
+		} else {
+
 		}
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		CommunityBoardHandler.getInstance().registerHandler(new FriendsBoard());
 	}
 }

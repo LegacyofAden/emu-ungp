@@ -26,8 +26,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class L2ArtefactInstanceAction implements IActionHandler
-{
+public class L2ArtefactInstanceAction implements IActionHandler {
 	/**
 	 * Manage actions when a player click on the L2ArtefactInstance.<BR>
 	 * <BR>
@@ -43,36 +42,28 @@ public class L2ArtefactInstanceAction implements IActionHandler
 	 * <BR>
 	 */
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (!((Npc) target).canTarget(activeChar))
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (!((Npc) target).canTarget(activeChar)) {
 			return false;
 		}
-		if (activeChar.getTarget() != target)
-		{
+		if (activeChar.getTarget() != target) {
 			activeChar.setTarget(target);
-		}
-		else if (interact)
-		{
+		} else if (interact) {
 			// Calculate the distance between the L2PcInstance and the L2NpcInstance
-			if (!((Npc) target).canInteract(activeChar))
-			{
+			if (!((Npc) target).canInteract(activeChar)) {
 				// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 				activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, target);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2ArtefactInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionHandler.getInstance().registerHandler(new L2ArtefactInstanceAction());
 	}
 }

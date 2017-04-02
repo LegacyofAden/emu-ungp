@@ -31,62 +31,49 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 /**
  * @author Sdw
  */
-public class LevelOneDayRewardHandler extends AbstractOneDayRewardHandler
-{
+public class LevelOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _level;
-	
-	public LevelOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+
+	public LevelOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_level = holder.getParams().getInt("level");
 	}
-	
+
 	@Override
-	public void init()
-	{
+	public void init() {
 		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_LEVEL_CHANGED, (OnPlayerLevelChanged event) -> onPlayerLevelChanged(event), this));
 	}
-	
+
 	@Override
-	public boolean isAvailable(PlayerInstance player)
-	{
+	public boolean isAvailable(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
-		if (entry != null)
-		{
-			switch (entry.getStatus())
-			{
-				case NOT_AVAILABLE:
-				{
-					if (player.getLevel() >= _level)
-					{
+		if (entry != null) {
+			switch (entry.getStatus()) {
+				case NOT_AVAILABLE: {
+					if (player.getLevel() >= _level) {
 						entry.setStatus(OneDayRewardStatus.AVAILABLE);
 						storePlayerEntry(entry);
 					}
 					break;
 				}
-				case AVAILABLE:
-				{
+				case AVAILABLE: {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
-	public void reset()
-	{
+	public void reset() {
 		// Level rewards doesn't reset daily
 	}
-	
-	private void onPlayerLevelChanged(OnPlayerLevelChanged event)
-	{
+
+	private void onPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (player.getLevel() >= _level)
-		{
+		if (player.getLevel() >= _level) {
 			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
-			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE)
-			{
+			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
 				entry.setStatus(OneDayRewardStatus.AVAILABLE);
 				storePlayerEntry(entry);
 			}

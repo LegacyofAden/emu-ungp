@@ -27,39 +27,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that removes equipment grade penalty. Its the base effect for the grade penalty mechanics.
+ *
  * @author Nik
  */
-public final class PumpRemoveEquipPenalty extends AbstractEffect
-{
+public final class PumpRemoveEquipPenalty extends AbstractEffect {
 	private final CrystalType _grade;
-	
-	public PumpRemoveEquipPenalty(StatsSet params)
-	{
+
+	public PumpRemoveEquipPenalty(StatsSet params) {
 		_grade = params.getEnum("grade", CrystalType.class);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setExpertiseLevel(_grade);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setExpertiseLevel(null);
 		}
 	}

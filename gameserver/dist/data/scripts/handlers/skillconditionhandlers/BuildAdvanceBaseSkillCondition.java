@@ -27,16 +27,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author
  */
-public class BuildAdvanceBaseSkillCondition implements ISkillCondition
-{
-	public BuildAdvanceBaseSkillCondition(StatsSet params)
-	{
-		
+public class BuildAdvanceBaseSkillCondition implements ISkillCondition {
+	public BuildAdvanceBaseSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return false;
 	}
 }

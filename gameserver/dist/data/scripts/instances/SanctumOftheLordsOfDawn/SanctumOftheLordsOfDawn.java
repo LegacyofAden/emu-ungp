@@ -18,6 +18,7 @@
  */
 package instances.SanctumOftheLordsOfDawn;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
@@ -29,16 +30,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
-import instances.AbstractInstance;
 import quests.Q00195_SevenSignsSecretRitualOfThePriests.Q00195_SevenSignsSecretRitualOfThePriests;
 
 /**
  * Sanctum of the Lords of Dawn instance zone.
+ *
  * @author Adry_85
  */
-public final class SanctumOftheLordsOfDawn extends AbstractInstance
-{
+public final class SanctumOftheLordsOfDawn extends AbstractInstance {
 	// NPCs
 	private static final int GUARDS_OF_THE_DAWN = 18834;
 	private static final int GUARDS_OF_THE_DAWN_2 = 18835;
@@ -58,53 +57,43 @@ public final class SanctumOftheLordsOfDawn extends AbstractInstance
 	private static final int DOOR_TWO = 17240003;
 	private static final int DOOR_THREE = 17240005;
 	private static final Location[] SAVE_POINT = new Location[]
-	{
-		new Location(-75775, 213415, -7120),
-		new Location(-74959, 209240, -7472),
-		new Location(-77699, 208905, -7640),
-		new Location(-79939, 205857, -7888),
-	};
-	
-	public SanctumOftheLordsOfDawn()
-	{
+			{
+					new Location(-75775, 213415, -7120),
+					new Location(-74959, 209240, -7472),
+					new Location(-77699, 208905, -7640),
+					new Location(-79939, 205857, -7888),
+			};
+
+	public SanctumOftheLordsOfDawn() {
 		super(TEMPLATE_ID);
 		addStartNpc(LIGHT_OF_DAWN);
 		addTalkId(LIGHT_OF_DAWN, IDENTITY_CONFIRM_DEVICE, PASSWORD_ENTRY_DEVICE, DARKNESS_OF_DAWN, SHELF);
 		addAggroRangeEnterId(GUARDS_OF_THE_DAWN, GUARDS_OF_THE_DAWN_2, GUARDS_OF_THE_DAWN_3);
 		addInstanceCreatedId(TEMPLATE_ID);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "spawn":
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "spawn": {
 				final Instance world = player.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.spawnGroup("high_priest_of_dawn");
 					player.sendPacket(SystemMessageId.BY_USING_THE_INVISIBLE_SKILL_SNEAK_INTO_THE_DAWN_S_DOCUMENT_STORAGE);
 				}
 				break;
 			}
-			case "teleportPlayer":
-			{
-				switch (npc.getId())
-				{
-					case GUARDS_OF_THE_DAWN:
-					{
+			case "teleportPlayer": {
+				switch (npc.getId()) {
+					case GUARDS_OF_THE_DAWN: {
 						npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.INTRUDER_PROTECT_THE_PRIESTS_OF_DAWN);
 						break;
 					}
-					case GUARDS_OF_THE_DAWN_2:
-					{
+					case GUARDS_OF_THE_DAWN_2: {
 						npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.HOW_DARE_YOU_INTRUDE_WITH_THAT_TRANSFORMATION_GET_LOST);
 						break;
 					}
-					case GUARDS_OF_THE_DAWN_3:
-					{
+					case GUARDS_OF_THE_DAWN_3: {
 						npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WHO_ARE_YOU_A_NEW_FACE_LIKE_YOU_CAN_T_APPROACH_THIS_PLACE);
 						break;
 					}
@@ -114,40 +103,30 @@ public final class SanctumOftheLordsOfDawn extends AbstractInstance
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
-		switch (npc.getId())
-		{
-			case LIGHT_OF_DAWN:
-			{
+	public String onTalk(Npc npc, PlayerInstance talker) {
+		switch (npc.getId()) {
+			case LIGHT_OF_DAWN: {
 				final QuestState qs = talker.getQuestState(Q00195_SevenSignsSecretRitualOfThePriests.class.getSimpleName());
-				if ((qs != null) && qs.isCond(3) && hasQuestItems(talker, IDENTITY_CARD) && (talker.getTransformationId() == 113))
-				{
+				if ((qs != null) && qs.isCond(3) && hasQuestItems(talker, IDENTITY_CARD) && (talker.getTransformationId() == 113)) {
 					enterInstance(talker, npc, TEMPLATE_ID);
 					return "32575-01.html";
 				}
 				return "32575-02.html";
 			}
-			case IDENTITY_CONFIRM_DEVICE:
-			{
+			case IDENTITY_CONFIRM_DEVICE: {
 				final Instance world = npc.getInstanceWorld();
-				if (world != null)
-				{
-					if (hasQuestItems(talker, IDENTITY_CARD) && (talker.getTransformationId() == 113))
-					{
-						if (world.isStatus(0))
-						{
+				if (world != null) {
+					if (hasQuestItems(talker, IDENTITY_CARD) && (talker.getTransformationId() == 113)) {
+						if (world.isStatus(0)) {
 							talker.sendPacket(SystemMessageId.BY_USING_THE_INVISIBLE_SKILL_SNEAK_INTO_THE_DAWN_S_DOCUMENT_STORAGE);
 							talker.sendPacket(SystemMessageId.MALE_GUARDS_CAN_DETECT_THE_CONCEALMENT_BUT_THE_FEMALE_GUARDS_CANNOT);
 							talker.sendPacket(SystemMessageId.FEMALE_GUARDS_NOTICE_THE_DISGUISES_FROM_FAR_AWAY_BETTER_THAN_THE_MALE_GUARDS_DO_SO_BEWARE);
 							world.openCloseDoor(DOOR_ONE, true);
 							world.setStatus(1);
 							npc.decayMe();
-						}
-						else if (world.isStatus(1))
-						{
+						} else if (world.isStatus(1)) {
 							world.openCloseDoor(DOOR_TWO, true);
 							world.setStatus(2);
 							npc.decayMe();
@@ -159,23 +138,19 @@ public final class SanctumOftheLordsOfDawn extends AbstractInstance
 				}
 				break;
 			}
-			case PASSWORD_ENTRY_DEVICE:
-			{
+			case PASSWORD_ENTRY_DEVICE: {
 				final Instance world = npc.getInstanceWorld();
-				if (world != null)
-				{
+				if (world != null) {
 					world.openCloseDoor(DOOR_THREE, true);
 					return "32577-01.html";
 				}
 				break;
 			}
-			case DARKNESS_OF_DAWN:
-			{
+			case DARKNESS_OF_DAWN: {
 				finishInstance(talker, 0);
 				return "32579-01.html";
 			}
-			case SHELF:
-			{
+			case SHELF: {
 				finishInstance(talker);
 				talker.teleToLocation(-75925, 213399, -7128);
 				return "32580-01.html";
@@ -183,17 +158,15 @@ public final class SanctumOftheLordsOfDawn extends AbstractInstance
 		}
 		return "";
 	}
-	
+
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
 		npc.broadcastPacket(new MagicSkillUse(npc, player, GUARD_SKILL.getSkillId(), 1, 2000, 1));
 		startQuestTimer("teleportPlayer", 2000, npc, player);
 		return super.onAggroRangeEnter(npc, player, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new SanctumOftheLordsOfDawn();
 	}
 }

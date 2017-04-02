@@ -28,52 +28,43 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Item Effect: Decreases/resets karma count.
+ *
  * @author Nik
  */
-public class InstantKarmaCount extends AbstractEffect
-{
+public class InstantKarmaCount extends AbstractEffect {
 	private final int _amount;
 	private final int _mode;
-	
-	public InstantKarmaCount(StatsSet params)
-	{
+
+	public InstantKarmaCount(StatsSet params) {
 		_amount = params.getInt("amount", 0);
-		switch (params.getString("mode", "DIFF"))
-		{
-			case "DIFF":
-			{
+		switch (params.getString("mode", "DIFF")) {
+			case "DIFF": {
 				_mode = 0;
 				break;
 			}
-			case "RESET":
-			{
+			case "RESET": {
 				_mode = 1;
 				break;
 			}
-			default:
-			{
+			default: {
 				throw new IllegalArgumentException("Mode should be DIFF or RESET skill id:" + params.getInt("id"));
 			}
 		}
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		// Check if player has no karma.
-		if (targetPlayer.getReputation() >= 0)
-		{
+		if (targetPlayer.getReputation() >= 0) {
 			return;
 		}
-		
-		switch (_mode)
-		{
+
+		switch (_mode) {
 			case 0: // diff
 			{
 				int newReputation = Math.min(targetPlayer.getReputation() + _amount, 0);

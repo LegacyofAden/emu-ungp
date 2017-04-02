@@ -18,9 +18,6 @@
  */
 package quests.Q10761_AnOrcInLove;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,33 +27,35 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * An Orc in Love (10761)
+ *
  * @author malyelfik
  */
-public class Q10761_AnOrcInLove extends Quest
-{
+public class Q10761_AnOrcInLove extends Quest {
 	// NPC
 	private static final int VORBOS = 33966;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20494, // Turek War Hound
-		20495, // Turek Orc Prefect
-		20496, // Turek Orc Archer
-		20497, // Turek Orc Skirmisher
-		20498, // Turek Orc Supplier
-		20499, // Turek Orc Footman
-		20500, // Turek Orc Sentinel
-		20501, // Turek Orc Priest
-		20546, // Turek Orc Elder
-	};
+			{
+					20494, // Turek War Hound
+					20495, // Turek Orc Prefect
+					20496, // Turek Orc Archer
+					20497, // Turek Orc Skirmisher
+					20498, // Turek Orc Supplier
+					20499, // Turek Orc Footman
+					20500, // Turek Orc Sentinel
+					20501, // Turek Orc Priest
+					20546, // Turek Orc Elder
+			};
 	// Misc
 	private static final int MIN_LEVEL = 30;
 	private static final String KILL_COUNT_VAR = "KillCount";
-	
-	public Q10761_AnOrcInLove()
-	{
+
+	public Q10761_AnOrcInLove() {
 		super(10761);
 		addStartNpc(VORBOS);
 		addTalkId(VORBOS);
@@ -64,41 +63,32 @@ public class Q10761_AnOrcInLove extends Quest
 		addCondRace(Race.ERTHEIA, "33966-00.htm");
 		addCondMinLevel(MIN_LEVEL, "33966-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33966-02.htm":
 			case "33966-03.htm":
 			case "33966-04.htm":
 				break;
-			case "33966-05.htm":
-			{
+			case "33966-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33966-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33966-08.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 706_841);
 						addSp(player, 85);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -109,15 +99,13 @@ public class Q10761_AnOrcInLove extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33966-01.htm";
 				break;
@@ -130,39 +118,30 @@ public class Q10761_AnOrcInLove extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount < 30)
-			{
+			if (killCount < 30) {
 				qs.set(KILL_COUNT_VAR, ++killCount);
-				if (killCount >= 30)
-				{
+				if (killCount >= 30) {
 					qs.setCond(2, true);
-				}
-				else
-				{
+				} else {
 					sendNpcLogList(killer);
 				}
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			final int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount > 0)
-			{
+			if (killCount > 0) {
 				final Set<NpcLogListHolder> holder = new HashSet<>(1);
 				holder.add(new NpcLogListHolder(NpcStringId.KILL_TUREK_ORCS, killCount));
 				return holder;

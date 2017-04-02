@@ -18,9 +18,7 @@
  */
 package ai.individual.Other.AdventureGuildsman;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
@@ -31,14 +29,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.network.client.send.ExShowQuestInfo;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Adventure Guildsman AI.
+ *
  * @author ChaosPaladin
  */
-public class AdventureGuildsman extends AbstractNpcAI
-{
+public class AdventureGuildsman extends AbstractNpcAI {
 	// NPC
 	private static final int ADVENTURE_GUILDSMAN = 33946;
 	// Items
@@ -61,23 +60,24 @@ public class AdventureGuildsman extends AbstractNpcAI
 	private static final SkillHolder WARRIOR = new SkillHolder(17295, 1); // Player Commendation - Warrior's Harmony
 	private static final SkillHolder WIZARD = new SkillHolder(17296, 1); // Player Commendation - Wizard's Harmony
 	private static final SkillHolder[] GROUP_MELODY =
-	{
-		new SkillHolder(9273, 1), // Player Commendation - Horn Melody
-		new SkillHolder(9274, 1), // Player Commendation - Drum Melody
-		new SkillHolder(9275, 1), // Player Commendation - Lute Melody
-		new SkillHolder(9276, 1), // Player Commendation - Pipe Organ Melody
-		new SkillHolder(9277, 1), // Player Commendation - Guitar Melody
-		new SkillHolder(9278, 1), // Player Commendation - Harp Melody
-	};
+			{
+					new SkillHolder(9273, 1), // Player Commendation - Horn Melody
+					new SkillHolder(9274, 1), // Player Commendation - Drum Melody
+					new SkillHolder(9275, 1), // Player Commendation - Lute Melody
+					new SkillHolder(9276, 1), // Player Commendation - Pipe Organ Melody
+					new SkillHolder(9277, 1), // Player Commendation - Guitar Melody
+					new SkillHolder(9278, 1), // Player Commendation - Harp Melody
+			};
 	private static final SkillHolder[] GROUP_SONATA =
-	{
-		new SkillHolder(17291, 1), // Player Commendation - Prevailing Sonata
-		new SkillHolder(17292, 1), // Player Commendation - Daring Sonata
-		new SkillHolder(17293, 1), // Player Commendation - Refreshing Sonata
-	};
+			{
+					new SkillHolder(17291, 1), // Player Commendation - Prevailing Sonata
+					new SkillHolder(17292, 1), // Player Commendation - Daring Sonata
+					new SkillHolder(17293, 1), // Player Commendation - Refreshing Sonata
+			};
 	// Misc
 	//@formatter:off
 	private static final Map<CategoryType, Integer> R_CLASS_TALISMAN = new HashMap<>();
+
 	{
 		R_CLASS_TALISMAN.put(CategoryType.SIXTH_SIGEL_GROUP, 735);
 		R_CLASS_TALISMAN.put(CategoryType.SIXTH_TIR_GROUP, 736);
@@ -90,7 +90,9 @@ public class AdventureGuildsman extends AbstractNpcAI
 		R_CLASS_TALISMAN.put(CategoryType.ERTHEIA_FIGHTER_GROUP, 736);
 		R_CLASS_TALISMAN.put(CategoryType.ERTHEIA_WIZARD_GROUP, 741);
 	}
+
 	private static final Map<CategoryType, Integer> R90_CLASS_TALISMAN = new HashMap<>();
+
 	{
 		R90_CLASS_TALISMAN.put(CategoryType.SIXTH_SIGEL_GROUP, 743);
 		R90_CLASS_TALISMAN.put(CategoryType.SIXTH_TIR_GROUP, 744);
@@ -103,7 +105,9 @@ public class AdventureGuildsman extends AbstractNpcAI
 		R90_CLASS_TALISMAN.put(CategoryType.ERTHEIA_FIGHTER_GROUP, 744);
 		R90_CLASS_TALISMAN.put(CategoryType.ERTHEIA_WIZARD_GROUP, 749);
 	}
+
 	private static final Map<CategoryType, Integer> R95_CLASS_TALISMAN = new HashMap<>();
+
 	{
 		R95_CLASS_TALISMAN.put(CategoryType.SIXTH_SIGEL_GROUP, 751);
 		R95_CLASS_TALISMAN.put(CategoryType.SIXTH_TIR_GROUP, 752);
@@ -116,7 +120,9 @@ public class AdventureGuildsman extends AbstractNpcAI
 		R95_CLASS_TALISMAN.put(CategoryType.ERTHEIA_FIGHTER_GROUP, 752);
 		R95_CLASS_TALISMAN.put(CategoryType.ERTHEIA_WIZARD_GROUP, 757);
 	}
+
 	private static final Map<CategoryType, Integer> R99_CLASS_TALISMAN = new HashMap<>();
+
 	{
 		R99_CLASS_TALISMAN.put(CategoryType.SIXTH_SIGEL_GROUP, 759);
 		R99_CLASS_TALISMAN.put(CategoryType.SIXTH_TIR_GROUP, 760);
@@ -130,38 +136,31 @@ public class AdventureGuildsman extends AbstractNpcAI
 		R99_CLASS_TALISMAN.put(CategoryType.ERTHEIA_WIZARD_GROUP, 765);
 	}
 	//@formatter:on
-	
-	private AdventureGuildsman()
-	{
+
+	private AdventureGuildsman() {
 		addStartNpc(ADVENTURE_GUILDSMAN);
 		addTalkId(ADVENTURE_GUILDSMAN);
 		addFirstTalkId(ADVENTURE_GUILDSMAN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
-			case "pccafe_list":
-			{
+
+		switch (event) {
+			case "pccafe_list": {
 				htmltext = "pccafe_list001.htm";
 				break;
 			}
-			case "quest_list":
-			{
+			case "quest_list": {
 				player.sendPacket(ExShowQuestInfo.STATIC_PACKET);
 				break;
 			}
-			case "buff_list":
-			{
+			case "buff_list": {
 				htmltext = "pccafe_buff_1001.htm";
 				break;
 			}
-			case "item_list":
-			{
+			case "item_list": {
 				htmltext = "pccafe_item001.htm";
 				break;
 			}
@@ -186,307 +185,233 @@ public class AdventureGuildsman extends AbstractNpcAI
 			case "voucher_trader1006.htm":
 			case "voucher_trader2006.htm":
 			case "voucher_trader3006.htm":
-			case "voucher_trader4006.htm":
-			{
+			case "voucher_trader4006.htm": {
 				htmltext = event;
 				break;
 			}
-			case "index":
-			{
+			case "index": {
 				htmltext = player.getLevel() < 40 ? "adventurer_agent_town_77001.htm" : "adventurer_agent_town_77001e.htm";
 				break;
 			}
-			case "buff_setlist":
-			{
+			case "buff_setlist": {
 				htmltext = "pccafe_newbuff_001.htm";
 				break;
 			}
-			case "buff_group":
-			{
+			case "buff_group": {
 				htmltext = player.getPcCafePoints() >= 120 ? applyBuffsGroup(npc, player, GROUP_MELODY.length) : "pccafe_buff_1001.htm";
 				break;
 			}
-			case "knight":
-			{
+			case "knight": {
 				htmltext = player.getPcCafePoints() >= 200 ? applyBuffs(npc, player, KNIGHT.getSkill()) : "pccafe_buff_1001.htm";
 				break;
 			}
-			case "warrior":
-			{
+			case "warrior": {
 				htmltext = player.getPcCafePoints() >= 200 ? applyBuffs(npc, player, WARRIOR.getSkill()) : "pccafe_buff_1001.htm";
 				break;
 			}
-			case "wizard":
-			{
+			case "wizard": {
 				htmltext = player.getPcCafePoints() >= 200 ? applyBuffs(npc, player, WIZARD.getSkill()) : "pccafe_buff_1001.htm";
 				break;
 			}
-			case "give_lottery_ticket":
-			{
-				if (!player.getVariables().getBoolean(PlayerVariables.USED_PC_LOTTERY_TICKET, false))
-				{
+			case "give_lottery_ticket": {
+				if (!player.getVariables().getBoolean(PlayerVariables.USED_PC_LOTTERY_TICKET, false)) {
 					player.getVariables().set(PlayerVariables.USED_PC_LOTTERY_TICKET, true);
 					giveItems(player, PCCAFE_LOTTERY_TICKET_30DAYS, 1);
-				}
-				else
-				{
+				} else {
 					htmltext = "pccafe_help_lottery_notoneday.htm";
 				}
 				break;
 			}
-			case "trade_10":
-			{
+			case "trade_10": {
 				htmltext = tradeItem(player, PCCAFE_5TH_LOTTERY_TICKET_30DAYS, 10);
 				break;
 			}
-			case "trade_100":
-			{
+			case "trade_100": {
 				htmltext = tradeItem(player, PCCAFE_4TH_LOTTERY_TICKET_30DAYS, 100);
 				break;
 			}
-			case "trade_200":
-			{
+			case "trade_200": {
 				htmltext = tradeItem(player, PCCAFE_3RD_LOTTERY_TICKET_30DAYS, 200);
 				break;
 			}
-			case "trade_1000":
-			{
+			case "trade_1000": {
 				htmltext = tradeItem(player, PCCAFE_2ND_LOTTERY_TICKET_30DAYS, 1000);
 				break;
 			}
-			case "trade_10000":
-			{
+			case "trade_10000": {
 				htmltext = tradeItem(player, PCCAFE_1ST_LOTTERY_TICKET_30DAYS, 10000);
 				break;
 			}
-			case "trade_seal85":
-			{
-				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP))
-				{
-					if (hasQuestItems(player, VOUCHER_LEV_85))
-					{
+			case "trade_seal85": {
+				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP)) {
+					if (hasQuestItems(player, VOUCHER_LEV_85)) {
 						takeItems(player, VOUCHER_LEV_85, 1);
 						giveItems(player, SEAL_LEV_85, 20);
 						addExp(player, 60_000_000);
-					}
-					else
-					{
+					} else {
 						htmltext = "voucher_trader1003b.htm";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "voucher_trader1007.htm";
 				}
 				break;
 			}
-			case "trade_seal90":
-			{
-				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP))
-				{
-					if (hasQuestItems(player, VOUCHER_LEV_90))
-					{
+			case "trade_seal90": {
+				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP)) {
+					if (hasQuestItems(player, VOUCHER_LEV_90)) {
 						takeItems(player, VOUCHER_LEV_90, 1);
 						giveItems(player, SEAL_LEV_90, 20);
 						addExp(player, 66_000_000);
-					}
-					else
-					{
+					} else {
 						htmltext = "voucher_trader2003b.htm";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "voucher_trader1007.htm";
 				}
 				break;
 			}
-			case "trade_seal95":
-			{
-				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP))
-				{
-					if (hasQuestItems(player, VOUCHER_LEV_95))
-					{
+			case "trade_seal95": {
+				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP)) {
+					if (hasQuestItems(player, VOUCHER_LEV_95)) {
 						takeItems(player, VOUCHER_LEV_95, 1);
 						giveItems(player, SEAL_LEV_95, 20);
 						addExp(player, 68_000_000);
-					}
-					else
-					{
+					} else {
 						htmltext = "voucher_trader3003b.htm";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "voucher_trader1007.htm";
 				}
 				break;
 			}
-			case "trade_seal97":
-			{
-				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP))
-				{
-					if (hasQuestItems(player, VOUCHER_LEV_97))
-					{
+			case "trade_seal97": {
+				if (player.isInCategory(CategoryType.SIXTH_CLASS_GROUP)) {
+					if (hasQuestItems(player, VOUCHER_LEV_97)) {
 						takeItems(player, VOUCHER_LEV_97, 1);
 						giveItems(player, SEAL_LEV_97, 20);
 						addExp(player, 76_000_000);
-					}
-					else
-					{
+					} else {
 						htmltext = "voucher_trader3003b.htm";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "voucher_trader1007.htm";
 				}
 				break;
 			}
-			case "give_talismanR_by_class":
-			{
+			case "give_talismanR_by_class": {
 				int multisellId = -1;
-				
-				for (CategoryType type : R_CLASS_TALISMAN.keySet())
-				{
-					if (player.isInCategory(type))
-					{
+
+				for (CategoryType type : R_CLASS_TALISMAN.keySet()) {
+					if (player.isInCategory(type)) {
 						multisellId = R_CLASS_TALISMAN.get(type);
 						break;
 					}
 				}
-				
-				if (multisellId > 0)
-				{
+
+				if (multisellId > 0) {
 					MultisellData.getInstance().separateAndSend(multisellId, player, npc, false);
 				}
 				break;
 			}
-			case "give_talismanR90_by_class":
-			{
+			case "give_talismanR90_by_class": {
 				int multisellId = -1;
-				
-				for (CategoryType type : R90_CLASS_TALISMAN.keySet())
-				{
-					if (player.isInCategory(type))
-					{
+
+				for (CategoryType type : R90_CLASS_TALISMAN.keySet()) {
+					if (player.isInCategory(type)) {
 						multisellId = R90_CLASS_TALISMAN.get(type);
 						break;
 					}
 				}
-				
-				if (multisellId > 0)
-				{
+
+				if (multisellId > 0) {
 					MultisellData.getInstance().separateAndSend(multisellId, player, npc, false);
 				}
 				break;
 			}
-			case "give_talismanR95_by_class":
-			{
+			case "give_talismanR95_by_class": {
 				int multisellId = -1;
-				for (CategoryType type : R95_CLASS_TALISMAN.keySet())
-				{
-					if (player.isInCategory(type))
-					{
+				for (CategoryType type : R95_CLASS_TALISMAN.keySet()) {
+					if (player.isInCategory(type)) {
 						multisellId = R95_CLASS_TALISMAN.get(type);
 						break;
 					}
 				}
-				
-				if (multisellId > 0)
-				{
+
+				if (multisellId > 0) {
 					MultisellData.getInstance().separateAndSend(multisellId, player, npc, false);
 				}
 				break;
 			}
-			
-			case "give_talismanR99_by_class":
-			{
+
+			case "give_talismanR99_by_class": {
 				int multisellId = -1;
-				
-				for (CategoryType type : R99_CLASS_TALISMAN.keySet())
-				{
-					if (player.isInCategory(type))
-					{
+
+				for (CategoryType type : R99_CLASS_TALISMAN.keySet()) {
+					if (player.isInCategory(type)) {
 						multisellId = R99_CLASS_TALISMAN.get(type);
 						break;
 					}
 				}
-				
-				if (multisellId > 0)
-				{
+
+				if (multisellId > 0) {
 					MultisellData.getInstance().separateAndSend(multisellId, player, npc, false);
 				}
 				break;
 			}
 		}
-		if (event.startsWith("melody"))
-		{
+		if (event.startsWith("melody")) {
 			final int buffOffset = CommonUtil.constrain(Integer.parseInt(event.substring(event.indexOf(" ") + 1)), 0, GROUP_MELODY.length);
-			if (player.getPcCafePoints() >= 20)
-			{
+			if (player.getPcCafePoints() >= 20) {
 				npc.setTarget(player);
 				npc.doCast(GROUP_MELODY[buffOffset].getSkill());
 				player.decreasePcCafePoints(20);
 				htmltext = "pccafe_buff_1001.htm";
-			}
-			else
-			{
+			} else {
 				htmltext = "pccafe_notpoint001.htm";
 			}
-			
+
 		}
 		return htmltext;
 	}
-	
-	private String applyBuffs(Npc npc, PlayerInstance player, Skill skill)
-	{
-		for (SkillHolder holder : GROUP_MELODY)
-		{
+
+	private String applyBuffs(Npc npc, PlayerInstance player, Skill skill) {
+		for (SkillHolder holder : GROUP_MELODY) {
 			npc.doInstantCast(player, holder);
 		}
-		for (SkillHolder holder : GROUP_SONATA)
-		{
+		for (SkillHolder holder : GROUP_SONATA) {
 			npc.doInstantCast(player, holder);
 		}
 		npc.doInstantCast(player, skill);
 		player.decreasePcCafePoints(200);
 		return null;
 	}
-	
-	private String applyBuffsGroup(Npc npc, PlayerInstance player, int length)
-	{
-		for (SkillHolder holder : GROUP_MELODY)
-		{
+
+	private String applyBuffsGroup(Npc npc, PlayerInstance player, int length) {
+		for (SkillHolder holder : GROUP_MELODY) {
 			npc.doInstantCast(player, holder);
 		}
 		player.decreasePcCafePoints(120);
 		return null;
 	}
-	
-	private String tradeItem(PlayerInstance player, int itemId, int points)
-	{
-		if (player.getPcCafePoints() >= 200000)
-		{
+
+	private String tradeItem(PlayerInstance player, int itemId, int points) {
+		if (player.getPcCafePoints() >= 200000) {
 			return "pccafe_help_lottery_fail2.htm";
 		}
-		
-		if (takeItems(player, itemId, 1))
-		{
+
+		if (takeItems(player, itemId, 1)) {
 			player.increasePcCafePoints(points);
 			return "pccafe_help_lottery003.htm";
 		}
 		return "pccafe_help_lottery_fail.htm";
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return player.getLevel() < 40 ? "adventurer_agent_town_77001.htm" : "adventurer_agent_town_77001e.htm";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new AdventureGuildsman();
 	}
 }

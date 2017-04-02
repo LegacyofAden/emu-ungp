@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Block escape effect implementation
+ *
  * @author UnAfraid
  */
-public class PumpBlockEscape extends AbstractBooleanStatEffect
-{
-	public PumpBlockEscape(StatsSet params)
-	{
+public class PumpBlockEscape extends AbstractBooleanStatEffect {
+	public PumpBlockEscape(StatsSet params) {
 		super(BooleanStat.BLOCK_ESCAPE);
 	}
 }

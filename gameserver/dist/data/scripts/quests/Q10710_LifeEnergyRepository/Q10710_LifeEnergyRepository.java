@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10406_BeforeDarknessBearsFruit.Q10406_BeforeDarknessBearsFruit;
 
 /**
  * Life Energy Repository (10710)
+ *
  * @author St3eT
  */
-public final class Q10710_LifeEnergyRepository extends Quest
-{
+public final class Q10710_LifeEnergyRepository extends Quest {
 	// NPCs
 	private static final int SHUVANN = 33867;
 	private static final int LIFE_ENERGY = 33961; // Life Energy Repository
@@ -44,19 +43,18 @@ public final class Q10710_LifeEnergyRepository extends Quest
 	private static final int EAA = 730; // Scroll: Enchant Armor (A-grade)
 	// Locations
 	private static final Location[] EMBRYO_LOC =
-	{
-		new Location(177832, -14365, -2464),
-		new Location(177531, -14191, -2464),
-		new Location(177746, -14364, -2464),
-		new Location(177658, -14223, -2464),
-		new Location(177555, -14281, -2464),
-	};
+			{
+					new Location(177832, -14365, -2464),
+					new Location(177531, -14191, -2464),
+					new Location(177746, -14364, -2464),
+					new Location(177658, -14223, -2464),
+					new Location(177555, -14281, -2464),
+			};
 	// Misc
 	private static final int MIN_LEVEL = 61;
 	private static final int MAX_LEVEL = 65;
-	
-	public Q10710_LifeEnergyRepository()
-	{
+
+	public Q10710_LifeEnergyRepository() {
 		super(10710);
 		addStartNpc(SHUVANN);
 		addTalkId(SHUVANN, LIFE_ENERGY);
@@ -64,61 +62,48 @@ public final class Q10710_LifeEnergyRepository extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33867-08.htm");
 		addCondCompletedQuest(Q10406_BeforeDarknessBearsFruit.class.getSimpleName(), "33867-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (event.equals("action"))
-		{
-			if ((st != null) && st.isCond(1))
-			{
+
+		if (event.equals("action")) {
+			if ((st != null) && st.isCond(1)) {
 				st.setCond(2, true);
 				giveItems(player, FRAGMENT, 1);
-				
-				for (Location loc : EMBRYO_LOC)
-				{
+
+				for (Location loc : EMBRYO_LOC) {
 					final Npc embryo = addSpawn(EMBRYO, loc, false, 120000);
 					embryo.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THE_REPOSITORY_IS_ATTACKED_FIGHT_FIGHT);
 					addAttackPlayerDesire(embryo, player);
 				}
-			}
-			else
-			{
+			} else {
 				return "33962.html";
 			}
 		}
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33867-02.htm":
-			case "33867-03.htm":
-			{
+			case "33867-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33867-04.htm":
-			{
+			case "33867-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33867-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33867-07.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 2);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 3_125_586);
 						addSp(player, 750);
 					}
@@ -129,35 +114,27 @@ public final class Q10710_LifeEnergyRepository extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == SHUVANN)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == SHUVANN) {
 					htmltext = "33867-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == SHUVANN)
-				{
+			case State.STARTED: {
+				if (npc.getId() == SHUVANN) {
 					htmltext = st.isCond(1) ? "33867-05.html" : "33867-06.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == SHUVANN)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == SHUVANN) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

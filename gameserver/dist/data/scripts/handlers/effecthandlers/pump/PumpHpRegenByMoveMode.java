@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractStatByMoveType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractStatByMoveType;
 
 /**
  * @author Sdw
  */
-public class PumpHpRegenByMoveMode extends AbstractStatByMoveType
-{
-	public PumpHpRegenByMoveMode(StatsSet params)
-	{
+public class PumpHpRegenByMoveMode extends AbstractStatByMoveType {
+	public PumpHpRegenByMoveMode(StatsSet params) {
 		super(params, DoubleStat.REGENERATE_HP_RATE);
 	}
 }

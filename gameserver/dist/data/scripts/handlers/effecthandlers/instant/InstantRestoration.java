@@ -31,32 +31,28 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Restoration effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantRestoration extends AbstractEffect
-{
+public final class InstantRestoration extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantRestoration.class);
 
 	private final int _itemId;
 	private final int _itemCount;
-	
-	public InstantRestoration(StatsSet params)
-	{
+
+	public InstantRestoration(StatsSet params) {
 		_itemId = params.getInt("itemId", 0);
 		_itemCount = params.getInt("itemCount", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
-		if ((_itemId <= 0) || (_itemCount <= 0))
-		{
+
+		if ((_itemId <= 0) || (_itemCount <= 0)) {
 			casterPlayer.sendPacket(SystemMessageId.THERE_WAS_NOTHING_FOUND_INSIDE);
 			LOGGER.warn("Effect with wrong item Id/count: {}/{}!", _itemId, _itemCount);
 			return;

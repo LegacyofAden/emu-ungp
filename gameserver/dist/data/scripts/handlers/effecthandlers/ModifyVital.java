@@ -28,87 +28,71 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 
 /**
  * Modify vital effect implementation.
+ *
  * @author malyelfik
  */
-public final class ModifyVital extends AbstractEffect
-{
+public final class ModifyVital extends AbstractEffect {
 	// Modify types
-	enum ModifyType
-	{
+	enum ModifyType {
 		DIFF,
 		SET,
 		PER;
 	}
-	
+
 	// Effect parameters
 	private final ModifyType _type;
 	private final int _hp;
 	private final int _mp;
 	private final int _cp;
-	
-	public ModifyVital(StatsSet params)
-	{
+
+	public ModifyVital(StatsSet params) {
 		_type = params.getEnum("type", ModifyType.class);
-		if (!_type.equals(ModifyType.SET))
-		{
+		if (!_type.equals(ModifyType.SET)) {
 			_hp = params.getInt("hp", 0);
 			_mp = params.getInt("mp", 0);
 			_cp = params.getInt("cp", 0);
-		}
-		else
-		{
+		} else {
 			_hp = params.getInt("hp", -1);
 			_mp = params.getInt("mp", -1);
 			_cp = params.getInt("cp", -1);
 		}
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead())
-		{
+		if (targetCreature.isDead()) {
 			return;
 		}
-		
-		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId()))
-		{
+
+		if (caster.isPlayer() && targetCreature.isPlayer() && targetCreature.getStat().has(BooleanStat.FACE_OFF) && (targetCreature.asPlayer().getAttackerObjId() != caster.getObjectId())) {
 			return;
 		}
-		
-		switch (_type)
-		{
-			case DIFF:
-			{
+
+		switch (_type) {
+			case DIFF: {
 				targetCreature.setCurrentCp(targetCreature.getCurrentCp() + _cp);
 				targetCreature.setCurrentHp(targetCreature.getCurrentHp() + _hp);
 				targetCreature.setCurrentMp(targetCreature.getCurrentMp() + _mp);
 				break;
 			}
-			case SET:
-			{
-				if (_cp >= 0)
-				{
+			case SET: {
+				if (_cp >= 0) {
 					targetCreature.setCurrentCp(_cp);
 				}
-				if (_hp >= 0)
-				{
+				if (_hp >= 0) {
 					targetCreature.setCurrentHp(_hp);
 				}
-				if (_mp >= 0)
-				{
+				if (_mp >= 0) {
 					targetCreature.setCurrentMp(_mp);
 				}
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				targetCreature.setCurrentCp(targetCreature.getCurrentCp() + (targetCreature.getMaxCp() * (_cp / 100)));
 				targetCreature.setCurrentHp(targetCreature.getCurrentHp() + (targetCreature.getMaxHp() * (_hp / 100)));
 				targetCreature.setCurrentMp(targetCreature.getCurrentMp() + (targetCreature.getMaxMp() * (_mp / 100)));

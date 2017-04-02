@@ -28,45 +28,41 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Good Day to Fly (10273)
+ *
  * @author nonom
  */
-public class Q10273_GoodDayToFly extends Quest
-{
+public class Q10273_GoodDayToFly extends Quest {
 	// NPC
 	private static final int LEKON = 32557;
 	// Monsters
 	private static final int[] MOBS =
-	{
-		22614, // Vulture Rider
-		22615, // Vulture Rider
-	};
-	
+			{
+					22614, // Vulture Rider
+					22615, // Vulture Rider
+			};
+
 	// Item
 	private static final int MARK = 13856;
 	// Skills
 	private static final SkillHolder AURA_BIRD_FALCON = new SkillHolder(5982, 1);
 	private static final SkillHolder AURA_BIRD_OWL = new SkillHolder(5983, 1);
-	
-	public Q10273_GoodDayToFly()
-	{
+
+	public Q10273_GoodDayToFly() {
 		super(10273);
 		addStartNpc(LEKON);
 		addTalkId(LEKON);
 		addKillId(MOBS);
 		registerQuestItems(MARK);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32557-06.htm":
 				st.startQuest();
 				break;
@@ -79,8 +75,7 @@ public class Q10273_GoodDayToFly extends Quest
 				npc.doInstantCast(player, AURA_BIRD_OWL);
 				break;
 			case "32557-13.html":
-				switch (st.getInt("transform"))
-				{
+				switch (st.getInt("transform")) {
 					case 1:
 						npc.doInstantCast(player, AURA_BIRD_FALCON);
 						break;
@@ -92,45 +87,36 @@ public class Q10273_GoodDayToFly extends Quest
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		if ((st == null) || !st.isStarted())
-		{
+		if ((st == null) || !st.isStarted()) {
 			return null;
 		}
-		
+
 		final long count = getQuestItemsCount(killer, MARK);
-		if (st.isCond(1) && (count < 5))
-		{
+		if (st.isCond(1) && (count < 5)) {
 			giveItems(killer, MARK, 1);
-			if (count == 4)
-			{
+			if (count == 4) {
 				st.setCond(2, true);
-			}
-			else
-			{
+			} else {
 				playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final int transform = st.getInt("transform");
-		switch (st.getState())
-		{
+		switch (st.getState()) {
 			case State.COMPLETED:
 				htmltext = "32557-0a.html";
 				break;
@@ -138,28 +124,20 @@ public class Q10273_GoodDayToFly extends Quest
 				htmltext = (player.getLevel() < 75) ? "32557-00.html" : "32557-01.htm";
 				break;
 			default:
-				if (getQuestItemsCount(player, MARK) >= 5)
-				{
+				if (getQuestItemsCount(player, MARK) >= 5) {
 					htmltext = "32557-14.html";
-					if (transform == 1)
-					{
+					if (transform == 1) {
 						giveItems(player, 13553, 1);
-					}
-					else if (transform == 2)
-					{
+					} else if (transform == 2) {
 						giveItems(player, 13554, 1);
 					}
 					giveItems(player, 13857, 1);
 					addExp(player, 25160);
 					addSp(player, 2525); // TODO Incorrect SP reward.
 					st.exitQuest(false, true);
-				}
-				else if (transform == 0)
-				{
+				} else if (transform == 0) {
 					htmltext = "32557-07.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "32557-11.html";
 				}
 				break;

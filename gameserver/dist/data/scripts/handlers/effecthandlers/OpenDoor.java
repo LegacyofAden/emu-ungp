@@ -30,45 +30,37 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Open Door effect implementation.
+ *
  * @author Adry_85
  */
-public final class OpenDoor extends AbstractEffect
-{
+public final class OpenDoor extends AbstractEffect {
 	private final int _chance;
 	private final boolean _isItem;
-	
-	public OpenDoor(StatsSet params)
-	{
+
+	public OpenDoor(StatsSet params) {
 		_chance = params.getInt("chance", 0);
 		_isItem = params.getBoolean("isItem", false);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final DoorInstance targetDoor = target.asDoor();
-		if (targetDoor == null)
-		{
+		if (targetDoor == null) {
 			return;
 		}
 
-		if (caster.getInstanceWorld() != targetDoor.getInstanceWorld())
-		{
+		if (caster.getInstanceWorld() != targetDoor.getInstanceWorld()) {
 			return;
 		}
 
-		if ((!targetDoor.isOpenableBySkill() && !_isItem) || (targetDoor.getFort() != null))
-		{
+		if ((!targetDoor.isOpenableBySkill() && !_isItem) || (targetDoor.getFort() != null)) {
 			caster.sendPacket(SystemMessageId.THIS_DOOR_CANNOT_BE_UNLOCKED);
 			return;
 		}
-		
-		if ((Rnd.get(100) < _chance) && !targetDoor.isOpen())
-		{
+
+		if ((Rnd.get(100) < _chance) && !targetDoor.isOpen()) {
 			targetDoor.openMe();
-		}
-		else
-		{
+		} else {
 			caster.sendPacket(SystemMessageId.YOU_HAVE_FAILED_TO_UNLOCK_THE_DOOR);
 		}
 	}

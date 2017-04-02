@@ -29,32 +29,28 @@ import org.l2junity.gameserver.network.client.send.UserInfo;
 
 /**
  * Vitality Point Up effect implementation.
+ *
  * @author Sdw
  */
-public final class InstantRestoreVitalPointNonCount extends AbstractEffect
-{
+public final class InstantRestoreVitalPointNonCount extends AbstractEffect {
 	private final int _amount;
-	
-	public InstantRestoreVitalPointNonCount(StatsSet params)
-	{
+
+	public InstantRestoreVitalPointNonCount(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		targetPlayer.updateVitalityPoints(_amount, false, false);
 		targetPlayer.sendPacket(new UserInfo(targetPlayer));
 	}

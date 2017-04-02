@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -31,43 +27,39 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * @author Sdw
  */
-public final class PumpAbilityChange extends AbstractEffect
-{
+public final class PumpAbilityChange extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PumpAbilityChange.class);
 
 	private final Map<DoubleStat, Float> _sharedStats = new HashMap<>();
-	
-	public PumpAbilityChange(StatsSet params)
-	{
-		if (params.isEmpty())
-		{
+
+	public PumpAbilityChange(StatsSet params) {
+		if (params.isEmpty()) {
 			LOGGER.warn(getClass().getSimpleName() + ": this effect must have parameters!");
 			return;
 		}
-		
-		for (Entry<String, Object> param : params.getSet().entrySet())
-		{
+
+		for (Entry<String, Object> param : params.getSet().entrySet()) {
 			_sharedStats.put(DoubleStat.valueOf(param.getKey()), (Float.parseFloat((String) param.getValue())) / 100);
 		}
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isSummon();
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		final PlayerInstance owner = target.getActingPlayer();
-		if (owner != null)
-		{
-			for (Entry<DoubleStat, Float> stats : _sharedStats.entrySet())
-			{
+		if (owner != null) {
+			for (Entry<DoubleStat, Float> stats : _sharedStats.entrySet()) {
 				target.getStat().mergeAdd(stats.getKey(), owner.getStat().getValue(stats.getKey()) * stats.getValue());
 			}
 		}

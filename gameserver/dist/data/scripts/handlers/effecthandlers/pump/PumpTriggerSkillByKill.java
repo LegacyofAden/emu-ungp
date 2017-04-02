@@ -32,53 +32,45 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 
 /**
  * Trigger Skill By Kill effect implementation.
+ *
  * @author Sdw
  */
-public final class PumpTriggerSkillByKill extends AbstractEffect
-{
+public final class PumpTriggerSkillByKill extends AbstractEffect {
 	private final int _chance;
 	private final InstanceType _attackerType;
 	private final SkillHolder _skill;
-	
-	public PumpTriggerSkillByKill(StatsSet params)
-	{
+
+	public PumpTriggerSkillByKill(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 		_attackerType = params.getEnum("attackerType", InstanceType.class, InstanceType.L2Character);
 		_skill = new SkillHolder(params.getInt("skillId", 0), params.getInt("skillLevel", 0));
 	}
-	
-	public void onCreatureKilled(OnCreatureKilled event, Creature target)
-	{
-		if ((_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0)))
-		{
+
+	public void onCreatureKilled(OnCreatureKilled event, Creature target) {
+		if ((_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0))) {
 			return;
 		}
-		
-		if (event.getAttacker() == event.getTarget())
-		{
+
+		if (event.getAttacker() == event.getTarget()) {
 			return;
 		}
-		
-		if ((Rnd.get(100) > _chance) || !event.getTarget().getInstanceType().isType(_attackerType))
-		{
+
+		if ((Rnd.get(100) > _chance) || !event.getTarget().getInstanceType().isType(_attackerType)) {
 			return;
 		}
-		
-		if (event.getAttacker() == target)
-		{
+
+		if (event.getAttacker() == target) {
 			SkillCaster.triggerCast(target, target, _skill.getSkill());
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_KILLED, listener -> listener.getOwner() == this);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new ConsumerEventListener(target, EventType.ON_CREATURE_KILLED, (OnCreatureKilled event) -> onCreatureKilled(event, target), this));
 	}
 }

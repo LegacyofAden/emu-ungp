@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,53 +26,44 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Soros AI.
+ *
  * @author Gladicek
  */
-public final class Soros extends AbstractNpcAI
-{
+public final class Soros extends AbstractNpcAI {
 	// NPC
 	private static final int SOROS = 33218;
 	private static final int REMONS = 33570;
-	
-	private Soros()
-	{
+
+	private Soros() {
 		addSpawnId(SOROS);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "NPC_SHOUT":
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "NPC_SHOUT": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.SOMETHING_LIKE_THAT_COMES_OUT_OF_THE_RUINS);
 				getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "NPC_FOLLOW":
-			{
+			case "NPC_FOLLOW": {
 				addSpawn(REMONS, npc.getX() + 10, npc.getY() + 10, npc.getZ() + 10, 0, false, 0);
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addTimer("NPC_FOLLOW", 100, npc, null);
 		SuperpointManager.getInstance().startMoving(npc, "si_monkey_road02");
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Soros();
 	}
 }

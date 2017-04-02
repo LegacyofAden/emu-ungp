@@ -18,9 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -30,45 +27,41 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Dispel effects by skill id and level defined.
+ *
  * @author Nik
  */
-public final class InstantDispelByName extends AbstractEffect
-{
+public final class InstantDispelByName extends AbstractEffect {
 	private final Set<SkillHolder> _dispelSkills = new HashSet<>();
-	
-	public InstantDispelByName(StatsSet params)
-	{
-		for (StatsSet group : params.getList("skills", StatsSet.class))
-		{
-			for (StatsSet skill : group.getList(".", StatsSet.class))
-			{
+
+	public InstantDispelByName(StatsSet params) {
+		for (StatsSet group : params.getList("skills", StatsSet.class)) {
+			for (StatsSet skill : group.getList(".", StatsSet.class)) {
 				_dispelSkills.add(new SkillHolder(skill.getInt(".id"), skill.getInt(".level")));
 			}
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DISPEL_BY_SLOT;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (_dispelSkills.isEmpty())
-		{
+
+		if (_dispelSkills.isEmpty()) {
 			return;
 		}
-		
+
 		// The effectlist should already check if it has buff with this abnormal type or not.
 		targetCreature.getEffectList().stopEffects(info -> !info.getSkill().isIrreplacableBuff() && _dispelSkills.stream().anyMatch(h -> (info.getSkill().getId() == h.getSkillId()) && ((h.getSkillLevel() == 0) || (info.getSkill().getLevel() == h.getSkillLevel()))), true, true);
 	}

@@ -24,33 +24,28 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.ExShowBaseAttributeCancelWindow;
 
-public class ReleaseAttribute implements IBypassHandler
-{
+public class ReleaseAttribute implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"ReleaseAttribute"
-	};
-	
+			{
+					"ReleaseAttribute"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
+
 		activeChar.sendPacket(new ExShowBaseAttributeCancelWindow(activeChar));
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new ReleaseAttribute());
 	}
 }

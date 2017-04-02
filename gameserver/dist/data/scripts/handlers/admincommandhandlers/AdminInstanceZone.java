@@ -18,9 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
@@ -29,26 +26,25 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.GMAudit;
 
-public class AdminInstanceZone implements IAdminCommandHandler
-{
+import java.util.Map;
+import java.util.StringTokenizer;
+
+public class AdminInstanceZone implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_instancezone",
-		"admin_instancezone_clear"
-	};
-	
+			{
+					"admin_instancezone",
+					"admin_instancezone_clear"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		String target = (activeChar.getTarget() != null) ? activeChar.getTarget().getName() : "no-target";
 		GMAudit.auditGMAction(activeChar.getName(), command, target, "");
-		
-		if (command.startsWith("admin_instancezone_clear"))
-		{
-			try
-			{
+
+		if (command.startsWith("admin_instancezone_clear")) {
+			try {
 				StringTokenizer st = new StringTokenizer(command, " ");
-				
+
 				st.nextToken();
 				final PlayerInstance player = World.getInstance().getPlayer(st.nextToken());
 				final int instanceId = Integer.parseInt(st.nextToken());
@@ -56,96 +52,75 @@ public class AdminInstanceZone implements IAdminCommandHandler
 				InstanceManager.getInstance().deleteInstanceTime(player, instanceId);
 				activeChar.sendMessage("Instance zone " + name + " cleared for player " + player.getName());
 				player.sendMessage("Admin cleared instance zone " + name + " for you");
-				
+
 				return true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed clearing instance time: " + e.getMessage());
 				activeChar.sendMessage("Usage: //instancezone_clear <playername> [instanceId]");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_instancezone"))
-		{
+		} else if (command.startsWith("admin_instancezone")) {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			command = st.nextToken();
-			
-			if (st.hasMoreTokens())
-			{
+
+			if (st.hasMoreTokens()) {
 				PlayerInstance player = null;
 				String playername = st.nextToken();
-				
-				try
-				{
+
+				try {
 					player = World.getInstance().getPlayer(playername);
+				} catch (Exception e) {
 				}
-				catch (Exception e)
-				{
-				}
-				
-				if (player != null)
-				{
+
+				if (player != null) {
 					display(player, activeChar);
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("The player " + playername + " is not online");
 					activeChar.sendMessage("Usage: //instancezone [playername]");
 					return false;
 				}
-			}
-			else if (activeChar.getTarget() != null)
-			{
-				if (activeChar.getTarget() instanceof PlayerInstance)
-				{
+			} else if (activeChar.getTarget() != null) {
+				if (activeChar.getTarget() instanceof PlayerInstance) {
 					display((PlayerInstance) activeChar.getTarget(), activeChar);
 				}
-			}
-			else
-			{
+			} else {
 				display(activeChar, activeChar);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void display(PlayerInstance player, PlayerInstance activeChar)
-	{
+
+	private void display(PlayerInstance player, PlayerInstance activeChar) {
 		Map<Integer, Long> instanceTimes = InstanceManager.getInstance().getAllInstanceTimes(player);
-		
+
 		final StringBuilder html = new StringBuilder(500 + (instanceTimes.size() * 200));
 		html.append("<html><center><table width=260><tr><td width=40><button value=\"Main\" action=\"bypass -h admin_admin\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center>Character Instances</center></td><td width=40><button value=\"Back\" action=\"bypass -h admin_current_player\" width=40 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br><font color=\"LEVEL\">Instances for " + player.getName() + "</font><center><br><table><tr><td width=150>Name</td><td width=50>Time</td><td width=70>Action</td></tr>");
-		
-		for (int id : instanceTimes.keySet())
-		{
+
+		for (int id : instanceTimes.keySet()) {
 			int hours = 0;
 			int minutes = 0;
 			long remainingTime = (instanceTimes.get(id) - System.currentTimeMillis()) / 1000;
-			if (remainingTime > 0)
-			{
+			if (remainingTime > 0) {
 				hours = (int) (remainingTime / 3600);
 				minutes = (int) ((remainingTime % 3600) / 60);
 			}
-			
+
 			html.append("<tr><td>" + InstanceManager.getInstance().getInstanceName(id) + "</td><td>" + hours + ":" + minutes + "</td><td><button value=\"Clear\" action=\"bypass -h admin_instancezone_clear " + player.getName() + " " + id + "\" width=60 height=15 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr>");
 		}
-		
+
 		html.append("</table></html>");
-		
+
 		final NpcHtmlMessage ms = new NpcHtmlMessage(0, 1);
 		ms.setHtml(html.toString());
 		activeChar.sendPacket(ms);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminInstanceZone());
 	}
 }

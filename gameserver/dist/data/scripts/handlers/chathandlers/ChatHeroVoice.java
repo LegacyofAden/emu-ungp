@@ -18,7 +18,7 @@
  */
 package handlers.chathandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
@@ -31,54 +31,46 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Hero chat handler.
+ *
  * @author durgus
  */
-public final class ChatHeroVoice implements IChatHandler
-{
+public final class ChatHeroVoice implements IChatHandler {
 	private static final ChatType[] CHAT_TYPES =
-	{
-		ChatType.HERO_VOICE,
-	};
-	
+			{
+					ChatType.HERO_VOICE,
+			};
+
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text)
-	{
-		if (!activeChar.isHero() && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS))
-		{
+	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+		if (!activeChar.isHero() && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS)) {
 			activeChar.sendPacket(SystemMessageId.ONLY_HEROES_CAN_ENTER_THE_HERO_CHANNEL);
 			return;
 		}
-		
-		if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type))
-		{
+
+		if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type)) {
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER_CHATTING_BAN_TIME_REMAINING_S1_SECONDS);
 			return;
 		}
-		
-		if (!activeChar.getFloodProtectors().getHeroVoice().tryPerformAction("hero voice"))
-		{
+
+		if (!activeChar.getFloodProtectors().getHeroVoice().tryPerformAction("hero voice")) {
 			activeChar.sendMessage("Action failed. Heroes are only able to speak in the global channel once every 10 seconds.");
 			return;
 		}
-		
+
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		for (PlayerInstance player : World.getInstance().getPlayers())
-		{
-			if ((player != null) && !BlockList.isBlocked(player, activeChar))
-			{
+		for (PlayerInstance player : World.getInstance().getPlayers()) {
+			if ((player != null) && !BlockList.isBlocked(player, activeChar)) {
 				player.sendPacket(cs);
 			}
 		}
 	}
-	
+
 	@Override
-	public ChatType[] getChatTypeList()
-	{
+	public ChatType[] getChatTypeList() {
 		return CHAT_TYPES;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ChatHandler.getInstance().registerHandler(new ChatHeroVoice());
 	}
 }

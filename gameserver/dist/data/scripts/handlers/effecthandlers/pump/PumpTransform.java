@@ -18,59 +18,50 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Transformation effect implementation.
+ *
  * @author nBd
  */
-public final class PumpTransform extends AbstractEffect
-{
+public final class PumpTransform extends AbstractEffect {
 	private final List<Integer> _id;
-	
-	public PumpTransform(StatsSet params)
-	{
+
+	public PumpTransform(StatsSet params) {
 		final String ids = params.getString("transformationId", null);
-		if ((ids != null) && !ids.isEmpty())
-		{
+		if ((ids != null) && !ids.isEmpty()) {
 			_id = new ArrayList<>();
-			for (String id : ids.split(";"))
-			{
+			for (String id : ids.split(";")) {
 				_id.add(Integer.parseInt(id));
 			}
-		}
-		else
-		{
+		} else {
 			_id = Collections.emptyList();
 		}
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return !target.isDoor();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (!_id.isEmpty())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (!_id.isEmpty()) {
 			target.transform(_id.get(Rnd.get(_id.size())), true);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.stopTransformation(false);
 	}
 }

@@ -25,18 +25,16 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Target automatically one of my summons.
+ *
  * @author Nik
  */
-public class Summon implements ITargetTypeHandler
-{
+public class Summon implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (activeChar.isPlayer() && activeChar.hasSummon())
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (activeChar.isPlayer() && activeChar.hasSummon()) {
 			return activeChar.getActingPlayer().getAnyServitor();
 		}
-		
+
 		return activeChar.getPet();
 	}
 }

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 
 /**
  * @author Sdw
  */
-public class PumpGetDamageLimit extends AbstractDoubleStatAddEffect
-{
-	public PumpGetDamageLimit(StatsSet params)
-	{
+public class PumpGetDamageLimit extends AbstractDoubleStatAddEffect {
+	public PumpGetDamageLimit(StatsSet params) {
 		super(params, DoubleStat.DAMAGE_LIMIT);
 	}
 }

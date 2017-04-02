@@ -18,48 +18,42 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Milia AI.
+ *
  * @author St3eT
  */
-public final class Milia extends AbstractNpcAI
-{
+public final class Milia extends AbstractNpcAI {
 	// NPCs
 	private static final int MILIA = 30006;
-	
-	private Milia()
-	{
+
+	private Milia() {
 		addSpawnId(MILIA);
 		addStartNpc(MILIA);
 		addTalkId(MILIA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("TEXT_SPAM") && (npc != null))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("TEXT_SPAM") && (npc != null)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.SPEAK_WITH_ME_ABOUT_TRAVELING_AROUND_ADEN, 1000);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		startQuestTimer("TEXT_SPAM", 10000, npc, null, true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Milia();
 	}
 }

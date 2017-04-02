@@ -27,32 +27,26 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Nik
  */
-public class PumpDroprateModify extends AbstractEffect
-{
+public class PumpDroprateModify extends AbstractEffect {
 	private final int _dropRate;
 	private final int _spoilRate;
 	private final int _adenaRate;
-	
-	public PumpDroprateModify(StatsSet params)
-	{
+
+	public PumpDroprateModify(StatsSet params) {
 		_dropRate = params.getInt("drop", 0);
 		_spoilRate = params.getInt("spoil", 0);
 		_adenaRate = params.getInt("adena", 0);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		if (_dropRate > 0)
-		{
+	public void pump(Creature target, Skill skill) {
+		if (_dropRate > 0) {
 			target.getStat().mergeAdd(DoubleStat.BONUS_DROP, _dropRate);
 		}
-		if (_spoilRate > 0)
-		{
+		if (_spoilRate > 0) {
 			target.getStat().mergeAdd(DoubleStat.BONUS_SPOIL, _spoilRate);
 		}
-		if (_adenaRate > 0)
-		{
+		if (_adenaRate > 0) {
 			target.getStat().mergeAdd(DoubleStat.BONUS_ADENA, _adenaRate);
 		}
 	}

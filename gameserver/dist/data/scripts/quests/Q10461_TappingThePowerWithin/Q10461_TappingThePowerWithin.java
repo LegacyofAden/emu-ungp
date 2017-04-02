@@ -31,53 +31,45 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * Tapping The Power Within (10461)
+ *
  * @author Gladicek
  */
 
-public final class Q10461_TappingThePowerWithin extends Quest
-{
+public final class Q10461_TappingThePowerWithin extends Quest {
 	// NPCs
 	private static final int LIONEL_HUNTER = 33907;
 	// Misc
 	private static final int MIN_LEVEL = 99;
-	
-	public Q10461_TappingThePowerWithin()
-	{
+
+	public Q10461_TappingThePowerWithin() {
 		super(10461);
 		addStartNpc(LIONEL_HUNTER);
 		addTalkId(LIONEL_HUNTER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "33907-02.htm":
-			case "33907-03.htm":
-			{
+			case "33907-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33907-04.htm":
-			{
+			case "33907-04.htm": {
 				qs.startQuest();
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DOES_YOUR_FATE_NOT_WEIGH_UPON_YOU);
 				player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2text\\QT_025_ability_01.htm", TutorialShowHtml.LARGE_WINDOW));
 				break;
 			}
-			case "33907-06.html":
-			{
-				if (!player.isSubClassActive() || (player.isDualClassActive()))
-				{
+			case "33907-06.html": {
+				if (!player.isSubClassActive() || (player.isDualClassActive())) {
 					showOnScreenMsg(player, NpcStringId.OPEN_THE_ABILITY_SCREEN_IN_THE_CHARACTER_INFORMATION_SCREEN_NPRESS_ADJUST_POINTS_TO_ADJUST_THE_ACQUIRED_SP_AND_ABILITY_POINTS, ExShowScreenMessage.TOP_CENTER, 5000);
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THIS_IS_JUST_THE_BEGINNING);
 					player.sendPacket(ExShowAPListWnd.STATIC_PACKET);
@@ -90,40 +82,32 @@ public final class Q10461_TappingThePowerWithin extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (((player.getLevel() >= MIN_LEVEL) && player.isNoble()))
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (((player.getLevel() >= MIN_LEVEL) && player.isNoble())) {
 					htmltext = "33907-01.htm";
 					break;
 				}
 				htmltext = "33907-07.html";
 				break;
 			}
-			case State.STARTED:
-			{
-				if (qs.isCond(1))
-				{
+			case State.STARTED: {
+				if (qs.isCond(1)) {
 					htmltext = "33907-05.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "33907-08.html";
 				break;
 			}

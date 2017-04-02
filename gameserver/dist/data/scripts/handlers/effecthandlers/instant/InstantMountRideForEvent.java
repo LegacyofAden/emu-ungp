@@ -29,21 +29,17 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantMountRideForEvent extends AbstractEffect
-{
+public class InstantMountRideForEvent extends AbstractEffect {
 	final private int _npcId;
-	
-	public InstantMountRideForEvent(StatsSet params)
-	{
+
+	public InstantMountRideForEvent(StatsSet params) {
 		_npcId = params.getInt("npcId");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 

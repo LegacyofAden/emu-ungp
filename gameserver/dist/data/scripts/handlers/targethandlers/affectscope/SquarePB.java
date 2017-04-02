@@ -18,9 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.awt.Color;
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
@@ -33,74 +30,70 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.gameserver.util.Util;
 
+import java.awt.*;
+import java.util.function.Consumer;
+
 /**
  * Square point blank affect scope implementation (actually more like a rectangle). Gathers objects around yourself except target itself.
+ *
  * @author Nik
  */
-public class SquarePB implements IAffectScopeHandler
-{
+public class SquarePB implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final int squareStartAngle = skill.getFanRange()[1];
 		final int squareLength = skill.getFanRange()[2];
 		final int squareWidth = skill.getFanRange()[3];
 		final int radius = (int) Math.sqrt((squareLength * squareLength) + (squareWidth * squareWidth));
 		final int affectLimit = skill.getAffectLimit();
-		
+
 		final double rectX = activeChar.getX();
 		final double rectY = activeChar.getY() - (squareWidth / 2);
 		final double heading = Math.toRadians(squareStartAngle + Util.convertHeadingToDegree(activeChar.getHeading()));
 		final double cos = Math.cos(-heading);
 		final double sin = Math.sin(-heading);
-		
+
 		// Target checks.
 		final MutableInt affected = new MutableInt(0);
-		
+
 		// Check and add targets.
 		World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, c ->
 		{
-			if ((affectLimit > 0) && (affected.intValue() >= affectLimit))
-			{
+			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;
 			}
-			if (c.isDead())
-			{
+			if (c.isDead()) {
 				return;
 			}
-			
+
 			// Check if inside square.
 			double xp = c.getX() - activeChar.getX();
 			double yp = c.getY() - activeChar.getY();
 			double xr = (activeChar.getX() + (xp * cos)) - (yp * sin);
 			double yr = activeChar.getY() + (xp * sin) + (yp * cos);
-			if ((xr > rectX) && (xr < (rectX + squareLength)) && (yr > rectY) && (yr < (rectY + squareWidth)))
-			{
-				if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
-				{
+			if ((xr > rectX) && (xr < (rectX + squareLength)) && (yr > rectY) && (yr < (rectY + squareWidth))) {
+				if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c)) {
 					return;
 				}
-				if (!GeoData.getInstance().canSeeTarget(activeChar, c))
-				{
+				if (!GeoData.getInstance().canSeeTarget(activeChar, c)) {
 					return;
 				}
-				
+
 				affected.incrementAndGet();
 				action.accept(c);
 			}
 		});
 	}
-	
+
 	@Override
-	public void drawEffected(Creature activeChar, WorldObject target, Skill skill)
-	{
+	public void drawEffected(Creature activeChar, WorldObject target, Skill skill) {
 		final ExServerPrimitive packet = new ExServerPrimitive(getClass().getSimpleName() + "-" + activeChar.getObjectId(), activeChar);
-		
+
 		final int squareStartAngle = skill.getFanRange()[1]; // 0
 		final int squareLength = skill.getFanRange()[2]; // 900
 		// final int squareWidth = skill.getFanRange()[3]; // 50
 		final int squareHalfWidth = skill.getFanRange()[3] / 2; // 50
-		
+
 		final double x = activeChar.getX();
 		final double y = activeChar.getY();
 		final double heading = Math.toRadians(squareStartAngle + Util.convertHeadingToDegree(activeChar.getHeading()));
@@ -108,12 +101,12 @@ public class SquarePB implements IAffectScopeHandler
 		final double sin = Math.sin(heading);
 		final double cos90 = Math.cos(heading + (Math.PI / 2));
 		final double sin90 = Math.sin(heading + (Math.PI / 2));
-		
+
 		int x1 = (int) (x + (squareHalfWidth * cos90));
 		int x2 = (int) (x - (squareHalfWidth * cos90));
 		int x3 = (int) (x1 + (squareLength * cos));
 		int x4 = (int) (x2 + (squareLength * cos));
-		
+
 		int y1 = (int) (y + (squareHalfWidth * sin90));
 		int y2 = (int) (y - (squareHalfWidth * sin90));
 		int y3 = (int) (y1 + (squareLength * sin));
@@ -126,13 +119,13 @@ public class SquarePB implements IAffectScopeHandler
 		final ILocational point2 = new Location(x2, y2, activeChar.getZ());
 		final ILocational point3 = new Location(x3, y3, activeChar.getZ());
 		final ILocational point4 = new Location(x4, y4, activeChar.getZ());
-		
+
 		packet.addLine("X -> 1", Color.BLUE, true, activeChar, point1);
 		packet.addLine("X -> 2", Color.BLUE, true, activeChar, point2);
 		packet.addLine("1 -> 3", Color.BLUE, true, point1, point3);
 		packet.addLine("2 -> 4", Color.BLUE, true, point2, point4);
 		packet.addLine("3 -> 4", Color.BLUE, true, point3, point4);
-		
+
 		activeChar.sendDebugPacket(packet);
 	}
 }

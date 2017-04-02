@@ -31,41 +31,36 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Mana Heal By Level Self effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantMpByLevelSelf extends AbstractEffect
-{
+public final class InstantMpByLevelSelf extends AbstractEffect {
 	private final double _power;
-	
-	public InstantMpByLevelSelf(StatsSet params)
-	{
+
+	public InstantMpByLevelSelf(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MANAHEAL_BY_LEVEL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (caster.isDead() || caster.isMpBlocked())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (caster.isDead() || caster.isMpBlocked()) {
 			return;
 		}
-		
+
 		double power = 0;
 		final int levelDiff = caster.getLevel() - skill.getMagicLevel();
-		if (levelDiff <= 9)
-		{
+		if (levelDiff <= 9) {
 			power = _power * ((10 * (10 - CommonUtil.constrain(levelDiff, 0, 9))) / 100);
 		}
-		
+
 		final double healedAmount = CommonUtil.constrain(power, 0, caster.getMaxRecoverableMp() - caster.getCurrentMp());
 		caster.setCurrentMp(caster.getCurrentMp() + healedAmount);
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MP_HAS_BEEN_RESTORED);
 		sm.addInt((int) healedAmount);
 		caster.sendPacket(sm);

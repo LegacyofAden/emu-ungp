@@ -27,31 +27,30 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Suspicious Badge (10398)
+ *
  * @author St3eT
  */
-public final class Q10398_ASuspiciousBadge extends Quest
-{
+public final class Q10398_ASuspiciousBadge extends Quest {
 	// NPCs
 	private static final int ANDY = 33845;
 	private static final int BACON = 33846;
 	private static final int[] MONSTERS =
-	{
-		20555, // Giant Fungus
-		20558, // Rotting Tree
-		23305, // Corroded Skeleton
-		23306, // Rotten Corpse
-		23307, // Corpse Spider
-		23308, // Explosive Spider
-	};
+			{
+					20555, // Giant Fungus
+					20558, // Rotting Tree
+					23305, // Corroded Skeleton
+					23306, // Rotten Corpse
+					23307, // Corpse Spider
+					23308, // Explosive Spider
+			};
 	// Items
 	private static final int BADGE = 36666; // Unidentified Suspicious Badge
 	private static final int EAB = 948; // Scroll: Enchant Armor (B-grade)
 	// Misc
 	private static final int MIN_LEVEL = 52;
 	private static final int MAX_LEVEL = 58;
-	
-	public Q10398_ASuspiciousBadge()
-	{
+
+	public Q10398_ASuspiciousBadge() {
 		super(10398);
 		addStartNpc(ANDY);
 		addTalkId(ANDY, BACON);
@@ -60,39 +59,31 @@ public final class Q10398_ASuspiciousBadge extends Quest
 		addCondNotRace(Race.ERTHEIA, "33845-05.html");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33845-04.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "33845-02.htm":
-			{
+		switch (event) {
+			case "33845-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33845-03.html":
-			{
+			case "33845-03.html": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33846-03.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33846-03.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAB, 5);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 3_811_500);
 						addSp(player, 914);
 					}
@@ -102,39 +93,29 @@ public final class Q10398_ASuspiciousBadge extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ANDY)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ANDY) {
 					htmltext = "33845-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ANDY ? "33845-03.html" : "33846-01.html";
-				}
-				else if (st.isCond(2) && (npc.getId() == BACON))
-				{
+				} else if (st.isCond(2) && (npc.getId() == BACON)) {
 					htmltext = "33846-02.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == ANDY)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == ANDY) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;
@@ -142,16 +123,13 @@ public final class Q10398_ASuspiciousBadge extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, npc, BADGE, 1, 20, 0.75, true))
-			{
+
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
+			if (giveItemRandomly(killer, npc, BADGE, 1, 20, 0.75, true)) {
 				st.setCond(2);
 			}
 		}

@@ -18,24 +18,23 @@
  */
 package quests.Q00310_OnlyWhatRemains;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00240_ImTheOnlyOneYouCanTrust.Q00240_ImTheOnlyOneYouCanTrust;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Only What Remains (310)
+ *
  * @author malyelfik
  */
-public class Q00310_OnlyWhatRemains extends Quest
-{
+public class Q00310_OnlyWhatRemains extends Quest {
 	// NPC
 	private static final int KINTAIJIN = 32640;
 	// Items
@@ -44,9 +43,8 @@ public class Q00310_OnlyWhatRemains extends Quest
 	private static final int DIRTY_BEAD = 14880;
 	// Monsters
 	private static final Map<Integer, Integer> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(22617, 646);
 		MOBS.put(22618, 646);
 		MOBS.put(22619, 646);
@@ -65,29 +63,25 @@ public class Q00310_OnlyWhatRemains extends Quest
 		MOBS.put(22632, 722);
 		MOBS.put(22633, 638);
 	}
-	
-	public Q00310_OnlyWhatRemains()
-	{
+
+	public Q00310_OnlyWhatRemains() {
 		super(310);
 		addStartNpc(KINTAIJIN);
 		addTalkId(KINTAIJIN);
 		addKillId(MOBS.keySet());
 		registerQuestItems(DIRTY_BEAD);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "32640-04.htm":
 				st.startQuest();
 				break;
@@ -106,52 +100,41 @@ public class Q00310_OnlyWhatRemains extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
-		
-		if (partyMember == null)
-		{
+
+		if (partyMember == null) {
 			return super.onKill(npc, player, isSummon);
 		}
-		
-		if (getRandom(1000) < MOBS.get(npc.getId()))
-		{
+
+		if (getRandom(1000) < MOBS.get(npc.getId())) {
 			giveItems(partyMember, DIRTY_BEAD, 1);
 			playSound(partyMember, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = ((player.getLevel() >= 81) && player.hasQuestCompleted(Q00240_ImTheOnlyOneYouCanTrust.class.getSimpleName())) ? "32640-01.htm" : "32640-00.htm";
 				break;
 			case State.STARTED:
-				if (!hasQuestItems(player, DIRTY_BEAD))
-				{
+				if (!hasQuestItems(player, DIRTY_BEAD)) {
 					htmltext = "32640-08.html";
-				}
-				else if (getQuestItemsCount(player, DIRTY_BEAD) < 500)
-				{
+				} else if (getQuestItemsCount(player, DIRTY_BEAD) < 500) {
 					htmltext = "32640-09.html";
-				}
-				else
-				{
+				} else {
 					takeItems(player, DIRTY_BEAD, 500);
 					giveItems(player, GROW_ACCELERATOR, 1);
 					giveItems(player, MULTI_COLORED_JEWEL, 1);

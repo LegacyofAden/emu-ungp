@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00141_ShadowFoxPart3.Q00141_ShadowFoxPart3;
 import quests.Q00142_FallenAngelRequestOfDawn.Q00142_FallenAngelRequestOfDawn;
 import quests.Q00143_FallenAngelRequestOfDusk.Q00143_FallenAngelRequestOfDusk;
@@ -32,34 +31,30 @@ import quests.Q00143_FallenAngelRequestOfDusk.Q00143_FallenAngelRequestOfDusk;
 /**
  * Fallen Angel Select (998 - Custom)<br>
  * NOTE: This quest is used for start quest 142 or 143
+ *
  * @author Nono
  */
-public class Q00998_FallenAngelSelect extends Quest
-{
+public class Q00998_FallenAngelSelect extends Quest {
 	// NPCs
 	private static final int NATOOLS = 30894;
 	// Misc
 	private static final int MIN_LEVEL = 38;
-	
-	public Q00998_FallenAngelSelect()
-	{
+
+	public Q00998_FallenAngelSelect() {
 		super(998);
 		setIsCustom(true);
 		addStartNpc(NATOOLS);
 		addTalkId(NATOOLS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30894-01.html":
 			case "30894-02.html":
 			case "30894-03.html":
@@ -73,25 +68,21 @@ public class Q00998_FallenAngelSelect extends Quest
 		}
 		return null;
 	}
-	
-	private void startQuest(String name, PlayerInstance player)
-	{
+
+	private void startQuest(String name, PlayerInstance player) {
 		final Quest q = QuestManager.getInstance().getQuest(name);
-		if (q != null)
-		{
+		if (q != null) {
 			q.newQuestState(player);
 			q.notifyEvent("30894-01.html", null, player);
 			player.getQuestState(getName()).setState(State.COMPLETED);
 		}
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		final QuestState qs = player.getQuestState(Q00141_ShadowFoxPart3.class.getSimpleName());
-		if ((st == null) || !st.isStarted())
-		{
+		if ((st == null) || !st.isStarted()) {
 			return getNoQuestMsg(player);
 		}
 		return ((player.getLevel() >= MIN_LEVEL) && (qs != null) && qs.isCompleted()) ? "30894-01.html" : "30894-00.html";

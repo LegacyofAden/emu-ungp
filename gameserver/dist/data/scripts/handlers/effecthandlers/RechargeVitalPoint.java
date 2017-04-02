@@ -26,32 +26,27 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 
 /**
  * An effect that reverses vitality consumption effect into vitality replenishing effect.
+ *
  * @author Nik
  */
-public final class RechargeVitalPoint extends AbstractBooleanStatEffect
-{
+public final class RechargeVitalPoint extends AbstractBooleanStatEffect {
 	final boolean _countVitalityItemUsed;
-	
-	public RechargeVitalPoint(StatsSet params)
-	{
+
+	public RechargeVitalPoint(StatsSet params) {
 		super(BooleanStat.RECHARGE_VITALITY);
 		_countVitalityItemUsed = params.getBoolean("countVitalityItemUsed");
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (_countVitalityItemUsed)
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (_countVitalityItemUsed) {
 			final PlayerInstance player = target.getActingPlayer();
-			if (player != null)
-			{
+			if (player != null) {
 				player.setVitalityItemsUsed(player.getVitalityItemsUsed() + 1);
 			}
 		}

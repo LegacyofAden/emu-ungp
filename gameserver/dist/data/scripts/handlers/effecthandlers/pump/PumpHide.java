@@ -28,30 +28,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Hide effect implementation.
+ *
  * @author ZaKaX, nBd
  */
-public final class PumpHide extends AbstractEffect
-{
-	public PumpHide(StatsSet params)
-	{
+public final class PumpHide extends AbstractEffect {
+	public PumpHide(StatsSet params) {
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature effected, Skill skill)
-	{
-		if (effected.isPlayer())
-		{
+	public void pumpStart(Creature caster, Creature effected, Skill skill) {
+		if (effected.isPlayer()) {
 			effected.setInvisible(true);
-			
-			if ((effected.getAI().getNextIntention() != null) && (effected.getAI().getNextIntention().getCtrlIntention() == CtrlIntention.AI_INTENTION_ATTACK))
-			{
+
+			if ((effected.getAI().getNextIntention() != null) && (effected.getAI().getNextIntention().getCtrlIntention() == CtrlIntention.AI_INTENTION_ATTACK)) {
 				effected.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 			}
-			
+
 			World.getInstance().forEachVisibleObject(effected, Creature.class, target ->
 			{
-				if ((target.getTarget() == effected))
-				{
+				if ((target.getTarget() == effected)) {
 					target.setTarget(null);
 					target.abortAttack();
 					target.abortCast();
@@ -60,15 +55,12 @@ public final class PumpHide extends AbstractEffect
 			});
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			PlayerInstance activeChar = target.getActingPlayer();
-			if (!activeChar.inObserverMode())
-			{
+			if (!activeChar.inObserverMode()) {
 				activeChar.setInvisible(false);
 			}
 		}

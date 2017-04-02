@@ -18,27 +18,24 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Physical Attack Mute effect implementation.
+ *
  * @author -Rnn-
  */
-public final class PumpBlockAttack extends AbstractBooleanStatEffect
-{
-	public PumpBlockAttack(StatsSet params)
-	{
+public final class PumpBlockAttack extends AbstractBooleanStatEffect {
+	public PumpBlockAttack(StatsSet params) {
 		super(BooleanStat.ATTACK_MUTED);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.abortAttack();
 	}
 }

@@ -24,33 +24,29 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Mount user command.
+ *
  * @author Tempy
  */
-public class Mount implements IUserCommandHandler
-{
+public class Mount implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		61
-	};
-	
+			{
+					61
+			};
+
 	@Override
-	public synchronized boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public synchronized boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
 		return activeChar.mountPlayer(activeChar.getPet());
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new Mount());
 	}
 }

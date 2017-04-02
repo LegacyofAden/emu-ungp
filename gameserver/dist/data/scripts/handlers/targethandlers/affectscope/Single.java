@@ -18,31 +18,26 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.util.function.Consumer;
-
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.function.Consumer;
+
 /**
  * Single target affect scope implementation.
+ *
  * @author Nik
  */
-public class Single implements IAffectScopeHandler
-{
+public class Single implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
-		if (target.isCreature())
-		{
-			if (skill.getAffectObjectHandler().checkAffectedObject(activeChar, (Creature) target))
-			{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
+		if (target.isCreature()) {
+			if (skill.getAffectObjectHandler().checkAffectedObject(activeChar, (Creature) target)) {
 				action.accept(target); // Return yourself to mark that effects can use your current skill's world position.
 			}
-		}
-		else if (target.isItem())
-		{
+		} else if (target.isItem()) {
 			action.accept(target); // Return yourself to mark that effects can use your current skill's world position.
 		}
 	}

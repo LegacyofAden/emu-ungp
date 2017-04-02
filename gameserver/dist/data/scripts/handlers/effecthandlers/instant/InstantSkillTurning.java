@@ -29,40 +29,33 @@ import org.l2junity.gameserver.model.stats.Formulas;
 /**
  * Skill Turning effect implementation.
  */
-public final class InstantSkillTurning extends AbstractEffect
-{
+public final class InstantSkillTurning extends AbstractEffect {
 	private final int _magicType;
 	private final int _chance;
-	
-	public InstantSkillTurning(StatsSet params)
-	{
+
+	public InstantSkillTurning(StatsSet params) {
 		_magicType = params.getInt("magicType", 0);
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.equals(targetCreature) || targetCreature.isRaid())
-		{
+		if (caster.equals(targetCreature) || targetCreature.isRaid()) {
 			return;
 		}
-		
 
-		if (targetCreature.isCastingNow(skillCaster -> skillCaster.getSkill().getMagicType() == _magicType))
-		{
+
+		if (targetCreature.isCastingNow(skillCaster -> skillCaster.getSkill().getMagicType() == _magicType)) {
 			targetCreature.breakCast();
 		}
 	}

@@ -22,15 +22,14 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-
 import quests.Q00188_SealRemoval.Q00188_SealRemoval;
 
 /**
  * Vain Conclusion (191)
+ *
  * @author ivantotov
  */
-public final class Q00191_VainConclusion extends Quest
-{
+public final class Q00191_VainConclusion extends Quest {
 	// NPCs
 	private static final int SHEGFIELD = 30068;
 	private static final int HEAD_BLACKSMITH_KUSTO = 30512;
@@ -41,36 +40,29 @@ public final class Q00191_VainConclusion extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 42;
 	private static final int MAX_LEVEL_FOR_EXP_SP = 48;
-	
-	public Q00191_VainConclusion()
-	{
+
+	public Q00191_VainConclusion() {
 		super(191);
 		addStartNpc(DOROTHY_LOCKSMITH);
 		addTalkId(DOROTHY_LOCKSMITH, HEAD_BLACKSMITH_KUSTO, RESEARCHER_LORAIN, SHEGFIELD);
 		registerQuestItems(REPAIRED_METALLOGRAPH);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30970-03.htm":
-			{
+		switch (event) {
+			case "30970-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "30970-04.htm":
-			{
-				if (qs.isCreated())
-				{
+			case "30970-04.htm": {
+				if (qs.isCreated()) {
 					qs.startQuest();
 					qs.setMemoState(1);
 					giveItems(player, REPAIRED_METALLOGRAPH, 1);
@@ -78,31 +70,24 @@ public final class Q00191_VainConclusion extends Quest
 				}
 				break;
 			}
-			case "30068-02.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "30068-02.html": {
+				if (qs.isMemoState(2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "30068-03.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "30068-03.html": {
+				if (qs.isMemoState(2)) {
 					qs.setMemoState(3);
 					qs.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30512-02.html":
-			{
-				if (qs.isMemoState(4))
-				{
+			case "30512-02.html": {
+				if (qs.isMemoState(4)) {
 					giveAdena(player, 117327, true);
-					if (player.getLevel() < MAX_LEVEL_FOR_EXP_SP)
-					{
+					if (player.getLevel() < MAX_LEVEL_FOR_EXP_SP) {
 						addExp(player, 309467);
 						addSp(player, 20614); // TODO Incorrect SP reward.
 					}
@@ -111,10 +96,8 @@ public final class Q00191_VainConclusion extends Quest
 				}
 				break;
 			}
-			case "30673-02.html":
-			{
-				if (qs.isMemoState(1))
-				{
+			case "30673-02.html": {
+				if (qs.isMemoState(1)) {
 					qs.setMemoState(2);
 					qs.setCond(2, true);
 					takeItems(player, REPAIRED_METALLOGRAPH, -1);
@@ -125,82 +108,61 @@ public final class Q00191_VainConclusion extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (qs.isCreated())
-		{
-			if (npc.getId() == DOROTHY_LOCKSMITH)
-			{
-				if (player.hasQuestCompleted(Q00188_SealRemoval.class.getSimpleName()))
-				{
+		if (qs.isCreated()) {
+			if (npc.getId() == DOROTHY_LOCKSMITH) {
+				if (player.hasQuestCompleted(Q00188_SealRemoval.class.getSimpleName())) {
 					htmltext = (player.getLevel() >= MIN_LEVEL) ? "30970-01.htm" : "30970-02.htm";
 				}
 			}
-		}
-		else if (qs.isStarted())
-		{
-			switch (npc.getId())
-			{
-				case DOROTHY_LOCKSMITH:
-				{
-					if (qs.getMemoState() >= 1)
-					{
+		} else if (qs.isStarted()) {
+			switch (npc.getId()) {
+				case DOROTHY_LOCKSMITH: {
+					if (qs.getMemoState() >= 1) {
 						htmltext = "30970-05.html";
 					}
 					break;
 				}
-				case SHEGFIELD:
-				{
-					switch (qs.getCond())
-					{
-						case 2:
-						{
+				case SHEGFIELD: {
+					switch (qs.getCond()) {
+						case 2: {
 							htmltext = "30068-01.html";
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							htmltext = "30068-04.html";
 							break;
 						}
 					}
 					break;
 				}
-				case HEAD_BLACKSMITH_KUSTO:
-				{
-					if (qs.isMemoState(4))
-					{
+				case HEAD_BLACKSMITH_KUSTO: {
+					if (qs.isMemoState(4)) {
 						htmltext = "30512-01.html";
 					}
 					break;
 				}
-				case RESEARCHER_LORAIN:
-				{
-					switch (qs.getCond())
-					{
-						case 1:
-						{
+				case RESEARCHER_LORAIN: {
+					switch (qs.getCond()) {
+						case 1: {
 							htmltext = "30673-01.html";
 							break;
 						}
-						case 2:
-						{
+						case 2: {
 							htmltext = "30673-03.html";
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							qs.setMemoState(4);
 							qs.setCond(4, true);
 							htmltext = "30673-04.html";
 							break;
 						}
-						case 4:
-						{
+						case 4: {
 							htmltext = "30673-05.html";
 							break;
 						}
@@ -208,11 +170,8 @@ public final class Q00191_VainConclusion extends Quest
 					break;
 				}
 			}
-		}
-		else if (qs.isCompleted())
-		{
-			if (npc.getId() == DOROTHY_LOCKSMITH)
-			{
+		} else if (qs.isCompleted()) {
+			if (npc.getId() == DOROTHY_LOCKSMITH) {
 				htmltext = getAlreadyCompletedMsg(player);
 			}
 		}

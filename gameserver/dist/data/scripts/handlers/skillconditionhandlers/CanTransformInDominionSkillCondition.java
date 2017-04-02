@@ -27,16 +27,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author
  */
-public class CanTransformInDominionSkillCondition implements ISkillCondition
-{
-	public CanTransformInDominionSkillCondition(StatsSet params)
-	{
-		
+public class CanTransformInDominionSkillCondition implements ISkillCondition {
+	public CanTransformInDominionSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return false;
 	}
 }

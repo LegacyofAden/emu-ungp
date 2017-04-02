@@ -18,29 +18,26 @@
  */
 package handlers.conditions;
 
+import org.l2junity.gameserver.handler.IConditionHandler;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.handler.IConditionHandler;
 
 /**
  * @author Sdw
  */
-public class NpcLevelCondition implements IConditionHandler
-{
+public class NpcLevelCondition implements IConditionHandler {
 	private final int _minLevel;
 	private final int _maxLevel;
-	
-	public NpcLevelCondition(StatsSet params)
-	{
+
+	public NpcLevelCondition(StatsSet params) {
 		_minLevel = params.getInt("minLevel");
 		_maxLevel = params.getInt("maxLevel");
 	}
-	
+
 	@Override
-	public boolean test(Creature creature, WorldObject object)
-	{
+	public boolean test(Creature creature, WorldObject object) {
 		return object.isNpc() && (((Creature) object).getLevel() >= _minLevel) && (((Creature) object).getLevel() < _maxLevel);
 	}
-	
+
 }

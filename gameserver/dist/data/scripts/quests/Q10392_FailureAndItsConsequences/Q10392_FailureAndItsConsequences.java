@@ -24,33 +24,31 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10391_ASuspiciousHelper.Q10391_ASuspiciousHelper;
 
 /**
  * Failure and its Consequences (10392)
+ *
  * @author St3eT
  */
-public final class Q10392_FailureAndItsConsequences extends Quest
-{
+public final class Q10392_FailureAndItsConsequences extends Quest {
 	// NPCs
 	private static final int IASON = 33859;
 	private static final int ELI = 33858;
 	private static final int[] MONSTERS =
-	{
-		20991, // Swamp Tribe
-		20992, // Swamp Alligator
-		20993, // Swamp Warrior
-	};
+			{
+					20991, // Swamp Tribe
+					20992, // Swamp Alligator
+					20993, // Swamp Warrior
+			};
 	// Items
 	private static final int FRAGMENT = 36709; // Suspicious Fragment
 	private static final int EAC = 952; // Scroll: Enchant Armor (C-grade)
 	// Misc
 	private static final int MIN_LEVEL = 40;
 	private static final int MAX_LEVEL = 46;
-	
-	public Q10392_FailureAndItsConsequences()
-	{
+
+	public Q10392_FailureAndItsConsequences() {
 		super(10392);
 		addStartNpc(IASON);
 		addTalkId(IASON, ELI);
@@ -60,46 +58,37 @@ public final class Q10392_FailureAndItsConsequences extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33859-09.htm");
 		addCondCompletedQuest(Q10391_ASuspiciousHelper.class.getSimpleName(), "33859-09.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33859-02.htm":
 			case "33859-03.htm":
 			case "33858-02.html":
-			case "33858-03.html":
-			{
+			case "33858-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "33859-04.htm":
-			{
+			case "33859-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33859-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33859-07.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33858-04.html":
-			{
-				if (st.isCond(3))
-				{
+			case "33858-04.html": {
+				if (st.isCond(3)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAC, 5);
 					giveStoryQuestReward(npc, player);
@@ -112,59 +101,44 @@ public final class Q10392_FailureAndItsConsequences extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == IASON)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == IASON) {
 					htmltext = "33859-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == IASON)
-				{
-					switch (st.getCond())
-					{
-						case 1:
-						{
+			case State.STARTED: {
+				if (npc.getId() == IASON) {
+					switch (st.getCond()) {
+						case 1: {
 							htmltext = "33859-05.html";
 							break;
 						}
-						case 2:
-						{
+						case 2: {
 							htmltext = "33859-06.html";
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							htmltext = "33859-08.html";
 							break;
 						}
 					}
-				}
-				else if (npc.getId() == ELI)
-				{
-					if (st.isCond(3))
-					{
+				} else if (npc.getId() == ELI) {
+					if (st.isCond(3)) {
 						htmltext = "33858-01.html";
 					}
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == IASON)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == IASON) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;
@@ -172,16 +146,13 @@ public final class Q10392_FailureAndItsConsequences extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, npc, FRAGMENT, 1, 4, 30, 0.8, true))
-			{
+
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
+			if (giveItemRandomly(killer, npc, FRAGMENT, 1, 4, 30, 0.8, true)) {
 				st.setCond(2);
 			}
 		}

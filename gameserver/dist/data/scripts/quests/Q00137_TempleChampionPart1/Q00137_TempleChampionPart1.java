@@ -24,27 +24,26 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00134_TempleMissionary.Q00134_TempleMissionary;
 import quests.Q00135_TempleExecutor.Q00135_TempleExecutor;
 
 /**
  * Temple Champion - 1 (137)
+ *
  * @author nonom, Gladicek
  */
-public class Q00137_TempleChampionPart1 extends Quest
-{
+public class Q00137_TempleChampionPart1 extends Quest {
 	// NPCs
 	private static final int SYLVAIN = 30070;
 	private static final int MOBS[] =
-	{
-		20083, // Granite Golem
-		20144, // Hangman Tree
-		20199, // Amber Basilisk
-		20200, // Strain
-		20201, // Ghoul
-		20202, // Dead Seeker
-	};
+			{
+					20083, // Granite Golem
+					20144, // Hangman Tree
+					20199, // Amber Basilisk
+					20200, // Strain
+					20201, // Ghoul
+					20202, // Dead Seeker
+			};
 	// Items
 	private static final int FRAGMENT = 10340;
 	private static final int EXECUTOR = 10334;
@@ -52,9 +51,8 @@ public class Q00137_TempleChampionPart1 extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 35;
 	private static final int MAX_LEVEL = 41;
-	
-	public Q00137_TempleChampionPart1()
-	{
+
+	public Q00137_TempleChampionPart1() {
 		super(137);
 		addStartNpc(SYLVAIN);
 		addTalkId(SYLVAIN);
@@ -64,61 +62,47 @@ public class Q00137_TempleChampionPart1 extends Quest
 		addCondCompletedQuest(Q00135_TempleExecutor.class.getSimpleName(), "30070-18.html");
 		registerQuestItems(FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "30070-02.htm":
-			{
+		switch (event) {
+			case "30070-02.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30070-05.html":
-			{
+			case "30070-05.html": {
 				st.set("talk", "1");
 				break;
 			}
-			case "30070-06.html":
-			{
+			case "30070-06.html": {
 				st.set("talk", "2");
 				break;
 			}
-			case "30070-08.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30070-08.html": {
+				if (st.isCond(1)) {
 					st.unset("talk");
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "30070-16.html":
-			{
-				if (st.isCond(3) && (hasQuestItems(player, EXECUTOR) && hasQuestItems(player, MISSIONARY)))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "30070-16.html": {
+				if (st.isCond(3) && (hasQuestItems(player, EXECUTOR) && hasQuestItems(player, MISSIONARY))) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						takeItems(player, EXECUTOR, -1);
 						takeItems(player, MISSIONARY, -1);
 						giveAdena(player, 69146, true);
-						if (player.getLevel() < MAX_LEVEL)
-						{
+						if (player.getLevel() < MAX_LEVEL) {
 							addExp(player, 219_975);
 							addSp(player, 20); // TODO: Retail value
 						}
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -127,51 +111,38 @@ public class Q00137_TempleChampionPart1 extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(2) && (getQuestItemsCount(player, FRAGMENT) < 30))
-		{
+		if ((st != null) && st.isCond(2) && (getQuestItemsCount(player, FRAGMENT) < 30)) {
 			giveItems(player, FRAGMENT, 1);
-			if (getQuestItemsCount(player, FRAGMENT) >= 30)
-			{
+			if (getQuestItemsCount(player, FRAGMENT) >= 30) {
 				st.setCond(3, true);
-			}
-			else
-			{
+			} else {
 				playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = "30070-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
-						switch (st.getInt("talk"))
-						{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
+						switch (st.getInt("talk")) {
 							case 1:
 								htmltext = "30070-05.html";
 								break;
@@ -184,19 +155,14 @@ public class Q00137_TempleChampionPart1 extends Quest
 						}
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						htmltext = "30070-08.html";
 						break;
 					}
-					case 3:
-					{
-						if (st.getInt("talk") == 1)
-						{
+					case 3: {
+						if (st.getInt("talk") == 1) {
 							htmltext = "30070-10.html";
-						}
-						else if (getQuestItemsCount(player, FRAGMENT) >= 30)
-						{
+						} else if (getQuestItemsCount(player, FRAGMENT) >= 30) {
 							st.set("talk", "1");
 							htmltext = "30070-09.html";
 							takeItems(player, FRAGMENT, -1);
@@ -206,8 +172,7 @@ public class Q00137_TempleChampionPart1 extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

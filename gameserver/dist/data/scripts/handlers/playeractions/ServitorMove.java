@@ -27,37 +27,32 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Servitor move to target player action handler.
+ *
  * @author Nik
  */
-public final class ServitorMove implements IPlayerActionHandler
-{
+public final class ServitorMove implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (!activeChar.hasServitors())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (!activeChar.hasServitors()) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 			return;
 		}
-		
-		if (activeChar.getTarget() != null)
-		{
+
+		if (activeChar.getTarget() != null) {
 			activeChar.getServitors().values().stream().filter(s -> (s != activeChar.getTarget()) && !s.isMovementDisabled()).forEach(s ->
 			{
-				if (s.isBetrayed())
-				{
+				if (s.isBetrayed()) {
 					activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 					return;
 				}
-				
+
 				s.setFollowStatus(false);
 				s.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, activeChar.getTarget().getLocation());
 			});
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new ServitorMove());
 	}
 }

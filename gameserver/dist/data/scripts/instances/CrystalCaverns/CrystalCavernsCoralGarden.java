@@ -18,6 +18,7 @@
  */
 package instances.CrystalCaverns;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
@@ -29,14 +30,12 @@ import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import instances.AbstractInstance;
-
 /**
  * Crystal Caverns - Coral Garden instance zone.
+ *
  * @author St3eT
  */
-public final class CrystalCavernsCoralGarden extends AbstractInstance
-{
+public final class CrystalCavernsCoralGarden extends AbstractInstance {
 	// NPCs
 	private static final int ENTRANCE_PORTAL = 33522;
 	private static final int MICHAELA_NORMAL = 25799;
@@ -52,9 +51,8 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 	private static final int TEMPLATE_ID = 165;
 	private static final int BOSS_DOOR_ID = 24240026;
 	private static final int PLAYER_MAX_DISTANCE = 250;
-	
-	public CrystalCavernsCoralGarden()
-	{
+
+	public CrystalCavernsCoralGarden() {
 		super(TEMPLATE_ID);
 		addStartNpc(ENTRANCE_PORTAL);
 		addTalkId(ENTRANCE_PORTAL);
@@ -65,28 +63,22 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 		addInstanceEnterId(TEMPLATE_ID);
 		addInstanceLeaveId(TEMPLATE_ID);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
-			
-			switch (event)
-			{
-				case "SUCCESS_TIMER":
-				{
+
+			switch (event) {
+				case "SUCCESS_TIMER": {
 					showOnScreenMsg(instance, NpcStringId.GOLEM_LOCATION_SUCCESSFUL_ENTRY_ACCESSED, ExShowScreenMessage.MIDDLE_CENTER, 5000);
 					break;
 				}
-				case "LOOP_TIMER":
-				{
+				case "LOOP_TIMER": {
 					player = npcVars.getObject("PLAYER_OBJECT", PlayerInstance.class);
-					
-					if ((player != null) && (npc.distance3d(player) > PLAYER_MAX_DISTANCE) && npcVars.getBoolean("NPC_FOLLOWING", true))
-					{
+
+					if ((player != null) && (npc.distance3d(player) > PLAYER_MAX_DISTANCE) && npcVars.getBoolean("NPC_FOLLOWING", true)) {
 						SuperpointManager.getInstance().cancelMoving(npc);
 						addMoveToDesire(npc, npc.getRandomPosition(100, 150), 23);
 						npc.setIsRunning(true);
@@ -96,12 +88,10 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 					}
 					break;
 				}
-				case "FAIL_TIMER":
-				{
+				case "FAIL_TIMER": {
 					final L2Spawn spawn = npc.getSpawn();
-					
-					if (!npcVars.getBoolean("NPC_FOLLOWING", true))
-					{
+
+					if (!npcVars.getBoolean("NPC_FOLLOWING", true)) {
 						npc.setIsRunning(false);
 						npc.teleToLocation(npc.getSpawn().getX(), npc.getSpawn().getY(), npc.getSpawn().getZ());
 						npc.setScriptValue(0);
@@ -116,42 +106,35 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("enterInstance"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public void onInstanceEnter(PlayerInstance player, Instance instance)
-	{
+	public void onInstanceEnter(PlayerInstance player, Instance instance) {
 		final int startTime = (int) (instance.getElapsedTime() / 1000);
 		final int endTime = (int) (instance.getRemainingTime() / 1000);
 		player.sendPacket(new ExSendUIEvent(player, false, true, startTime, endTime, NpcStringId.ELAPSED_TIME));
 	}
-	
+
 	@Override
-	public void onInstanceLeave(PlayerInstance player, Instance instance)
-	{
+	public void onInstanceLeave(PlayerInstance player, Instance instance) {
 		player.sendPacket(new ExSendUIEvent(player, true, true, 0, 0, NpcStringId.ELAPSED_TIME));
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
 			final StatsSet npcVars = npc.getVariables();
-			
-			if (npc.isScriptValue(0))
-			{
+
+			if (npc.isScriptValue(0)) {
 				npcVars.getBoolean("NPC_FOLLOWING", false);
 				npc.setScriptValue(1);
 				SuperpointManager.getInstance().startMoving(npc, npcParams.getString("SuperPointName", "none"));
@@ -164,59 +147,45 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 		}
 		return null;
 	}
-	
+
 	@Override
-	public void onRouteFinished(Npc npc)
-	{
+	public void onRouteFinished(Npc npc) {
 		final Instance instance = npc.getInstanceWorld();
-		if (instance != null)
-		{
+		if (instance != null) {
 			showOnScreenMsg(instance, NpcStringId.GOLEM_ENTERED_THE_REQUIRED_ZONE, ExShowScreenMessage.MIDDLE_CENTER, 5000);
 			npc.deleteMe();
-			
-			if (instance.getAliveNpcs(GOLEM_1, GOLEM_2).isEmpty())
-			{
+
+			if (instance.getAliveNpcs(GOLEM_1, GOLEM_2).isEmpty()) {
 				instance.openCloseDoor(BOSS_DOOR_ID, true);
-				
+
 				final int random = getRandom(100);
 				int bossId = -1;
-				
-				if (random < 55)
-				{
+
+				if (random < 55) {
 					bossId = MICHAELA_NORMAL;
-				}
-				else if (random < 80)
-				{
+				} else if (random < 80) {
 					bossId = MICHAELA_WISE;
-				}
-				else if (random < 95)
-				{
+				} else if (random < 95) {
 					bossId = MICHAELA_WEALTHY;
-				}
-				else
-				{
+				} else {
 					bossId = MICHAELA_ARMED;
 				}
-				
+
 				final Npc boss = addSpawn(bossId, BOSS_LOC, false, 0, false, instance.getId());
 				getTimers().addTimer("SUCCESS_TIMER", 5000, boss, null);
 			}
 		}
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
 				case MICHAELA_NORMAL:
 				case MICHAELA_WISE:
 				case MICHAELA_WEALTHY:
-				case MICHAELA_ARMED:
-				{
+				case MICHAELA_ARMED: {
 					instance.finishInstance();
 					break;
 				}
@@ -224,22 +193,17 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
 				case MICHAELA_NORMAL:
 				case MICHAELA_WISE:
 				case MICHAELA_WEALTHY:
-				case MICHAELA_ARMED:
-				{
-					if (npc.isScriptValue(0))
-					{
+				case MICHAELA_ARMED: {
+					if (npc.isScriptValue(0)) {
 						npc.setScriptValue(1);
 						instance.openCloseDoor(BOSS_DOOR_ID, false);
 					}
@@ -249,9 +213,8 @@ public final class CrystalCavernsCoralGarden extends AbstractInstance
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new CrystalCavernsCoralGarden();
 	}
 }

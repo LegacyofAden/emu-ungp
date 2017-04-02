@@ -18,8 +18,6 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.handler.IItemHandler;
@@ -36,68 +34,61 @@ import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
+import java.util.List;
+
 /**
  * @author -Nemesiss-
  */
-public class FishShots implements IItemHandler
-{
+public class FishShots implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
 		final ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
 		final Weapon weaponItem = activeChar.getActiveWeaponItem();
-		
-		if ((weaponInst == null) || (weaponItem.getItemType() != WeaponType.FISHINGROD))
-		{
+
+		if ((weaponInst == null) || (weaponItem.getItemType() != WeaponType.FISHINGROD)) {
 			return false;
 		}
-		
-		if (activeChar.isChargedShot(ShotType.FISH_SOULSHOTS))
-		{
+
+		if (activeChar.isChargedShot(ShotType.FISH_SOULSHOTS)) {
 			return false;
 		}
-		
+
 		final long count = item.getCount();
 		boolean gradeCheck = item.isEtcItem() && (item.getEtcItem().getDefaultAction() == ActionType.FISHINGSHOT) && (weaponInst.getItem().getCrystalTypePlus() == item.getItem().getCrystalTypePlus());
-		
-		if (!gradeCheck)
-		{
+
+		if (!gradeCheck) {
 			activeChar.sendPacket(SystemMessageId.THAT_IS_THE_WRONG_GRADE_OF_SOULSHOT_FOR_THAT_FISHING_POLE);
 			return false;
 		}
-		
-		if (count < 1)
-		{
+
+		if (count < 1) {
 			return false;
 		}
-		
+
 		activeChar.setChargedShot(ShotType.FISH_SOULSHOTS, true);
 		activeChar.destroyItemWithoutTrace("Consume", item.getObjectId(), 1, null, false);
 		WorldObject oldTarget = activeChar.getTarget();
 		activeChar.setTarget(activeChar);
-		
+
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);
-		
-		if (skills == null)
-		{
+
+		if (skills == null) {
 			_log.warn(getClass().getSimpleName() + ": is missing skills!");
 			return false;
 		}
-		
+
 		skills.forEach(holder -> Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, activeChar, holder.getSkillId(), holder.getSkillLevel(), 0, 0), 600));
 		activeChar.setTarget(oldTarget);
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new FishShots());
 	}
 }

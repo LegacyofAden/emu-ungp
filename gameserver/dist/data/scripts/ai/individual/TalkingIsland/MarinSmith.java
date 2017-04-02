@@ -18,46 +18,40 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Marin Smith AI.
+ *
  * @author Gladicek
  */
-public final class MarinSmith extends AbstractNpcAI
-{
+public final class MarinSmith extends AbstractNpcAI {
 	// NPCs
 	private static final int MARIN_SMITH = 33285;
-	
-	private MarinSmith()
-	{
+
+	private MarinSmith() {
 		addSpawnId(MARIN_SMITH);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("SPAM_TEXT") && (npc != null))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("SPAM_TEXT") && (npc != null)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.HMM_IS_THIS_STILL_A_DECENT_WEAPON, 1000);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		startQuestTimer("SPAM_TEXT", 6000, npc, null, true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new MarinSmith();
 	}
 }

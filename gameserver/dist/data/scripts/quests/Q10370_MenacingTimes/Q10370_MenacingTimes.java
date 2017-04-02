@@ -18,16 +18,12 @@
  */
 package quests.Q10370_MenacingTimes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10341_DayOfDestinyHumansFate.Q10341_DayOfDestinyHumansFate;
 import quests.Q10342_DayOfDestinyElvenFate.Q10342_DayOfDestinyElvenFate;
 import quests.Q10343_DayOfDestinyDarkElfsFate.Q10343_DayOfDestinyDarkElfsFate;
@@ -35,12 +31,15 @@ import quests.Q10344_DayOfDestinyOrcsFate.Q10344_DayOfDestinyOrcsFate;
 import quests.Q10345_DayOfDestinyDwarfsFate.Q10345_DayOfDestinyDwarfsFate;
 import quests.Q10346_DayOfDestinyKamaelsFate.Q10346_DayOfDestinyKamaelsFate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Menacing Times (10370)
+ *
  * @author netvirus
  */
-public class Q10370_MenacingTimes extends Quest
-{
+public class Q10370_MenacingTimes extends Quest {
 	// NPCs
 	private static final int ORVEN = 30857;
 	private static final int WINONIN = 30856;
@@ -54,8 +53,8 @@ public class Q10370_MenacingTimes extends Quest
 	private static final int REMNANT_ASHES = 34765;
 	// Monsters
 	private static final Map<Integer, Double> MONSTER_DROP_CHANCES = new HashMap<>();
-	static
-	{
+
+	static {
 		MONSTER_DROP_CHANCES.put(21646, 0.187); // Scavenger Scarab
 		MONSTER_DROP_CHANCES.put(21647, 0.222); // Grave Scarab
 		MONSTER_DROP_CHANCES.put(21648, 0.205); // Grave Ant
@@ -63,41 +62,37 @@ public class Q10370_MenacingTimes extends Quest
 		MONSTER_DROP_CHANCES.put(21650, 0.222); // Shrine Knight
 		MONSTER_DROP_CHANCES.put(21651, 0.212); // Shrine Royal Guard
 	}
+
 	// Misc
 	private static final int MIN_LVL = 76;
 	private static final int MAX_LVL = 81;
-	
-	public Q10370_MenacingTimes()
-	{
+
+	public Q10370_MenacingTimes() {
 		super(10370);
 		addStartNpc(ORVEN, WINONIN, OLTRAN, LADANZA, FERRIS, BROME);
 		addTalkId(ORVEN, WINONIN, OLTRAN, LADANZA, FERRIS, BROME, ANDREI, GERKENSHTEIN);
 		addKillId(MONSTER_DROP_CHANCES.keySet());
 		registerQuestItems(REMNANT_ASHES);
 		addCondInCategory(CategoryType.FOURTH_CLASS_GROUP, "");
-		
+
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30847-06.htm":
 			case "30856-06.htm":
 			case "30857-06.htm":
 			case "30862-06.htm":
 			case "30865-06.htm":
 			case "31292-02.html":
-			case "32221-06.htm":
-			{
+			case "32221-06.htm": {
 				htmltext = event;
 				break;
 			}
@@ -106,25 +101,20 @@ public class Q10370_MenacingTimes extends Quest
 			case "30857-07.htm":
 			case "30862-07.htm":
 			case "30865-07.htm":
-			case "32221-07.htm":
-			{
+			case "32221-07.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31292-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31292-03.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33648-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33648-02.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
@@ -133,303 +123,213 @@ public class Q10370_MenacingTimes extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final int npcId = npc.getId();
-		
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
-				switch (npcId)
-				{
-					case ORVEN:
-					{
-						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP))
-						{
+
+		switch (st.getState()) {
+			case State.COMPLETED: {
+				switch (npcId) {
+					case ORVEN: {
+						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP)) {
 							htmltext = "30857-05.html";
 						}
 						break;
 					}
-					case WINONIN:
-					{
-						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP))
-						{
+					case WINONIN: {
+						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30856-05.html";
 						}
 						break;
 					}
-					case OLTRAN:
-					{
-						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP))
-						{
+					case OLTRAN: {
+						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30862-05.html";
 						}
 						break;
 					}
-					case LADANZA:
-					{
-						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP))
-						{
+					case LADANZA: {
+						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP)) {
 							htmltext = "30865-05.html";
 						}
 						break;
 					}
-					case FERRIS:
-					{
-						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP))
-						{
+					case FERRIS: {
+						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30847-05.html";
 						}
 						break;
 					}
-					case BROME:
-					{
-						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP))
-						{
+					case BROME: {
+						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP)) {
 							htmltext = "32221-05.html";
 						}
 						break;
 					}
-					case GERKENSHTEIN:
-					{
+					case GERKENSHTEIN: {
 						htmltext = "33648-03.html";
 						break;
 					}
 				}
 				break;
 			}
-			case State.CREATED:
-			{
-				switch (npcId)
-				{
-					case ORVEN:
-					{
-						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+			case State.CREATED: {
+				switch (npcId) {
+					case ORVEN: {
+						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10341_DayOfDestinyHumansFate.class.getSimpleName()) ? "30857-01.htm" : "30857-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "30857-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "30857-04.htm";
 						}
 						break;
 					}
-					case WINONIN:
-					{
-						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+					case WINONIN: {
+						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10342_DayOfDestinyElvenFate.class.getSimpleName()) ? "30856-01.htm" : "30856-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "30856-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "30856-04.htm";
 						}
 						break;
 					}
-					case OLTRAN:
-					{
-						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+					case OLTRAN: {
+						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10343_DayOfDestinyDarkElfsFate.class.getSimpleName()) ? "30862-01.htm" : "30862-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "30862-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "30862-04.htm";
 						}
 						break;
 					}
-					case LADANZA:
-					{
-						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+					case LADANZA: {
+						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10344_DayOfDestinyOrcsFate.class.getSimpleName()) ? "30865-01.htm" : "30865-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "30865-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "30865-04.htm";
 						}
 						break;
 					}
-					case FERRIS:
-					{
-						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+					case FERRIS: {
+						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10345_DayOfDestinyDwarfsFate.class.getSimpleName()) ? "30847-01.htm" : "30847-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "30847-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "30847-04.htm";
 						}
 						break;
 					}
-					case BROME:
-					{
-						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP))
-						{
-							if (checkLevel(player))
-							{
+					case BROME: {
+						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP)) {
+							if (checkLevel(player)) {
 								htmltext = player.hasQuestCompleted(Q10346_DayOfDestinyKamaelsFate.class.getSimpleName()) ? "32221-01.htm" : "32221-02.htm";
-							}
-							else
-							{
+							} else {
 								htmltext = "32221-03.htm";
 							}
-						}
-						else
-						{
+						} else {
 							htmltext = "32221-04.htm";
 						}
 						break;
 					}
-					default:
-					{
+					default: {
 						htmltext = getNoQuestMsg(player);
 						break;
 					}
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npcId)
-				{
-					case ORVEN:
-					{
-						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP))
-						{
+			case State.STARTED: {
+				switch (npcId) {
+					case ORVEN: {
+						if (player.isInCategory(CategoryType.HUMAN_FOURTH_CLASS_GROUP)) {
 							htmltext = "30857-08.html";
 						}
 						break;
 					}
-					case WINONIN:
-					{
-						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP))
-						{
+					case WINONIN: {
+						if (player.isInCategory(CategoryType.ELF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30856-08.html";
 						}
 						break;
 					}
-					case OLTRAN:
-					{
-						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP))
-						{
+					case OLTRAN: {
+						if (player.isInCategory(CategoryType.DARKELF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30862-08.html";
 						}
 						break;
 					}
-					case LADANZA:
-					{
-						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP))
-						{
+					case LADANZA: {
+						if (player.isInCategory(CategoryType.ORC_FOURTH_CLASS_GROUP)) {
 							htmltext = "30865-08.html";
 						}
 						break;
 					}
-					case FERRIS:
-					{
-						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP))
-						{
+					case FERRIS: {
+						if (player.isInCategory(CategoryType.DWARF_FOURTH_CLASS_GROUP)) {
 							htmltext = "30847-08.html";
 						}
 						break;
 					}
-					case BROME:
-					{
-						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP))
-						{
+					case BROME: {
+						if (player.isInCategory(CategoryType.KAMAEL_FOURTH_CLASS_GROUP)) {
 							htmltext = "32221-08.html";
 						}
 						break;
 					}
-					case ANDREI:
-					{
-						switch (st.getCond())
-						{
-							case 1:
-							{
+					case ANDREI: {
+						switch (st.getCond()) {
+							case 1: {
 								htmltext = "31292-01.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "31292-04.html";
 								break;
 							}
 						}
 						break;
 					}
-					case GERKENSHTEIN:
-					{
-						switch (st.getCond())
-						{
-							case 2:
-							{
+					case GERKENSHTEIN: {
+						switch (st.getCond()) {
+							case 2: {
 								htmltext = "33648-01.html";
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								htmltext = "33648-04.html";
 								break;
 							}
-							case 4:
-							{
-								if (!isSimulated)
-								{
-									if (player.getLevel() >= MIN_LVL)
-									{
+							case 4: {
+								if (!isSimulated) {
+									if (player.getLevel() >= MIN_LVL) {
 										addExp(player, 22451400);
 										addSp(player, 5388);
 										giveAdena(player, 479620, true);
 										st.exitQuest(false, true);
-									}
-									else
-									{
+									} else {
 										htmltext = getNoQuestLevelRewardMsg(player);
 										break;
 									}
@@ -446,28 +346,23 @@ public class Q10370_MenacingTimes extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getRandomPartyMemberState(killer, 3, 2, npc);
-		if ((st != null) && !st.isCompleted() && (npc.distance3d(killer) <= 1500))
-		{
+		if ((st != null) && !st.isCompleted() && (npc.distance3d(killer) <= 1500)) {
 			final PlayerInstance player = st.getPlayer();
 			giveItemRandomly(player, npc, REMNANT_ASHES, 1, 0, MONSTER_DROP_CHANCES.get(npc.getId()), true);
-			if (getQuestItemsCount(player, REMNANT_ASHES) >= 30)
-			{
+			if (getQuestItemsCount(player, REMNANT_ASHES) >= 30) {
 				st.setCond(4, true);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public boolean checkLevel(PlayerInstance player)
-	{
+
+	public boolean checkLevel(PlayerInstance player) {
 		final int level = player.getLevel();
-		if ((level >= MIN_LVL) && (level <= MAX_LVL))
-		{
+		if ((level >= MIN_LVL) && (level <= MAX_LVL)) {
 			return true;
 		}
 		return false;

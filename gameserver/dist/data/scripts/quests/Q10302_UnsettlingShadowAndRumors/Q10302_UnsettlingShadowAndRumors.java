@@ -23,15 +23,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10301_ShadowOfTerrorBlackishRedFog.Q10301_ShadowOfTerrorBlackishRedFog;
 
 /**
  * Unsettling Shadow and Rumors (10302)
+ *
  * @author Gladicek
  */
-public final class Q10302_UnsettlingShadowAndRumors extends Quest
-{
+public final class Q10302_UnsettlingShadowAndRumors extends Quest {
 	// NPCs
 	private static final int KANTARUBIS = 32898;
 	private static final int IZAEL = 32894;
@@ -42,92 +41,74 @@ public final class Q10302_UnsettlingShadowAndRumors extends Quest
 	private static final int OLD_ROLL_OF_PAPER = 34033;
 	// Misc
 	private static final int MIN_LEVEL = 88;
-	
-	public Q10302_UnsettlingShadowAndRumors()
-	{
+
+	public Q10302_UnsettlingShadowAndRumors() {
 		super(10302);
 		addStartNpc(KANTARUBIS);
 		addTalkId(KANTARUBIS, IZAEL, CAS, MR_KAY, KITT);
-		
+
 		addCondMinLevel(MIN_LEVEL, "32898-10.html");
 		addCondCompletedQuest(Q10301_ShadowOfTerrorBlackishRedFog.class.getSimpleName(), "32898-10.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32898-02.htm":
 			case "32898-06.html":
 			case "32898-07.html":
-			case "32894-05.html":
-			{
+			case "32894-05.html": {
 				htmltext = event;
 				break;
 			}
-			case "32898-03.htm":
-			{
+			case "32898-03.htm": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "32894-02.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "32894-02.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32901-02.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "32901-02.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32903-02.html":
-			{
-				if (qs.isCond(3))
-				{
+			case "32903-02.html": {
+				if (qs.isCond(3)) {
 					qs.setCond(4, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32902-02.html":
-			{
-				if (qs.isCond(4))
-				{
+			case "32902-02.html": {
+				if (qs.isCond(4)) {
 					qs.setCond(5, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32894-06.html":
-			{
-				if (qs.isCond(5))
-				{
+			case "32894-06.html": {
+				if (qs.isCond(5)) {
 					qs.setCond(6, true);
 					htmltext = event;
 				}
 				break;
 			}
-			default:
-			{
-				if (event.startsWith("giveReward_") && qs.isCond(6) && (player.getLevel() >= MIN_LEVEL))
-				{
+			default: {
+				if (event.startsWith("giveReward_") && qs.isCond(6) && (player.getLevel() >= MIN_LEVEL)) {
 					final int itemId = Integer.parseInt(event.replace("giveReward_", ""));
 					giveAdena(player, 2_177_190, false);
 					giveItems(player, itemId, 15);
@@ -136,52 +117,38 @@ public final class Q10302_UnsettlingShadowAndRumors extends Quest
 					addSp(player, 1_614);
 					qs.exitQuest(false, true);
 					htmltext = "32898-08.html";
-				}
-				else
-				{
+				} else {
 					htmltext = getNoQuestLevelRewardMsg(player);
 				}
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == KANTARUBIS)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == KANTARUBIS) {
 					htmltext = "32898-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case KANTARUBIS:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case KANTARUBIS: {
+						if (qs.isCond(1)) {
 							htmltext = "32898-04.html";
-						}
-						else if (qs.isCond(6))
-						{
+						} else if (qs.isCond(6)) {
 							htmltext = "32898-05.html";
 						}
 						break;
 					}
-					case IZAEL:
-					{
-						switch (qs.getCond())
-						{
+					case IZAEL: {
+						switch (qs.getCond()) {
 							case 1:
 								htmltext = "32894-01.html";
 								break;
@@ -197,38 +164,26 @@ public final class Q10302_UnsettlingShadowAndRumors extends Quest
 						}
 						break;
 					}
-					case CAS:
-					{
-						if (qs.isCond(2))
-						{
+					case CAS: {
+						if (qs.isCond(2)) {
 							htmltext = "32901-01.html";
-						}
-						else if (qs.isCond(3))
-						{
+						} else if (qs.isCond(3)) {
 							htmltext = "32901-03.html";
 						}
 						break;
 					}
-					case MR_KAY:
-					{
-						if (qs.isCond(3))
-						{
+					case MR_KAY: {
+						if (qs.isCond(3)) {
 							htmltext = "32903-01.html";
-						}
-						else if (qs.isCond(4))
-						{
+						} else if (qs.isCond(4)) {
 							htmltext = "32903-03.html";
 						}
 						break;
 					}
-					case KITT:
-					{
-						if (qs.isCond(4))
-						{
+					case KITT: {
+						if (qs.isCond(4)) {
 							htmltext = "32902-01.html";
-						}
-						else if (qs.isCond(5))
-						{
+						} else if (qs.isCond(5)) {
 							htmltext = "32902-03.html";
 						}
 						break;
@@ -236,10 +191,8 @@ public final class Q10302_UnsettlingShadowAndRumors extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == KANTARUBIS)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == KANTARUBIS) {
 					htmltext = "32898-09.html";
 				}
 				break;

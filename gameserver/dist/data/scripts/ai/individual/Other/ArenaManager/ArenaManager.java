@@ -18,6 +18,7 @@
  */
 package ai.individual.Other.ArenaManager;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -26,88 +27,70 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Arena Manager AI.
+ *
  * @author St3eT
  */
-public final class ArenaManager extends AbstractNpcAI
-{
+public final class ArenaManager extends AbstractNpcAI {
 	// NPCs
 	private static final int[] ARENA_MANAGER =
-	{
-		31226, // Arena Director (MDT)
-		31225, // Arena Manager (Coliseum)
-	};
+			{
+					31226, // Arena Director (MDT)
+					31225, // Arena Manager (Coliseum)
+			};
 	// Skills
 	private static final SkillHolder[] BUFFS =
-	{
-		new SkillHolder(6805, 1), // Arena Empower
-		new SkillHolder(6806, 1), // Arena Acumen
-		new SkillHolder(6807, 1), // Arena Concentration
-		new SkillHolder(6808, 1), // Arena Might
-		new SkillHolder(6804, 1), // Arena Wind Walk
-		new SkillHolder(6812, 1), // Arena Berserker Spirit
-	};
+			{
+					new SkillHolder(6805, 1), // Arena Empower
+					new SkillHolder(6806, 1), // Arena Acumen
+					new SkillHolder(6807, 1), // Arena Concentration
+					new SkillHolder(6808, 1), // Arena Might
+					new SkillHolder(6804, 1), // Arena Wind Walk
+					new SkillHolder(6812, 1), // Arena Berserker Spirit
+			};
 	private static final SkillHolder CP_RECOVERY = new SkillHolder(4380, 1); // Arena: CP Recovery
 	private static final SkillHolder HP_RECOVERY = new SkillHolder(6817, 1); // Arena HP Recovery
 	// Misc
 	private static final int CP_COST = 1000;
 	private static final int HP_COST = 1000;
 	private static final int BUFF_COST = 2000;
-	
-	private ArenaManager()
-	{
+
+	private ArenaManager() {
 		addStartNpc(ARENA_MANAGER);
 		addTalkId(ARENA_MANAGER);
 		addFirstTalkId(ARENA_MANAGER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "CPrecovery":
-			{
-				if (player.getAdena() >= CP_COST)
-				{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "CPrecovery": {
+				if (player.getAdena() >= CP_COST) {
 					takeItems(player, Inventory.ADENA_ID, CP_COST);
 					getTimers().addTimer("CPrecovery_delay", 2000, npc, player);
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 				}
 				break;
 			}
-			case "HPrecovery":
-			{
-				if (player.getAdena() >= HP_COST)
-				{
+			case "HPrecovery": {
+				if (player.getAdena() >= HP_COST) {
 					takeItems(player, Inventory.ADENA_ID, HP_COST);
 					getTimers().addTimer("HPrecovery_delay", 2000, npc, player);
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 				}
 				break;
 			}
-			case "Buff":
-			{
-				if (player.getAdena() >= BUFF_COST)
-				{
+			case "Buff": {
+				if (player.getAdena() >= BUFF_COST) {
 					takeItems(player, Inventory.ADENA_ID, BUFF_COST);
 					npc.setTarget(player);
-					for (SkillHolder skill : BUFFS)
-					{
+					for (SkillHolder skill : BUFFS) {
 						npc.doCast(skill.getSkill());
 					}
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 				}
 				break;
@@ -115,27 +98,21 @@ public final class ArenaManager extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if ((player != null) && !player.isInsideZone(ZoneId.PVP))
-		{
-			if (event.equals("CPrecovery_delay"))
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if ((player != null) && !player.isInsideZone(ZoneId.PVP)) {
+			if (event.equals("CPrecovery_delay")) {
 				npc.setTarget(player);
 				npc.doCast(CP_RECOVERY.getSkill());
-			}
-			else if (event.equals("HPrecovery_delay"))
-			{
+			} else if (event.equals("HPrecovery_delay")) {
 				npc.setTarget(player);
 				npc.doCast(HP_RECOVERY.getSkill());
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ArenaManager();
 	}
 }

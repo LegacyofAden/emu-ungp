@@ -36,98 +36,81 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Sow effect implementation.
+ *
  * @author Adry_85, l3x
  */
-public final class InstantSow extends AbstractEffect
-{
-	public InstantSow(StatsSet params)
-	{
+public final class InstantSow extends AbstractEffect {
+	public InstantSow(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
 		final L2MonsterInstance targetMonster = target.asMonster();
-		if (targetMonster == null)
-		{
+		if (targetMonster == null) {
 			return;
 		}
-		
-		if (targetMonster.isDead() || !targetMonster.getTemplate().canBeSown() || targetMonster.isSeeded() || (targetMonster.getSeederId() != casterPlayer.getObjectId()))
-		{
+
+		if (targetMonster.isDead() || !targetMonster.getTemplate().canBeSown() || targetMonster.isSeeded() || (targetMonster.getSeederId() != casterPlayer.getObjectId())) {
 			return;
 		}
-		
+
 		// Consuming used seed
 		final L2Seed seed = targetMonster.getSeed();
-		if (!casterPlayer.destroyItemByItemId("Consume", seed.getSeedId(), 1, targetMonster, false))
-		{
+		if (!casterPlayer.destroyItemByItemId("Consume", seed.getSeedId(), 1, targetMonster, false)) {
 			return;
 		}
-		
+
 		final SystemMessage sm;
-		if (calcSuccess(casterPlayer, targetMonster, seed))
-		{
+		if (calcSuccess(casterPlayer, targetMonster, seed)) {
 			casterPlayer.sendPacket(QuestSound.ITEMSOUND_QUEST_ITEMGET.getPacket());
 			targetMonster.setSeeded(casterPlayer.asPlayer());
 			sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SEED_WAS_SUCCESSFULLY_SOWN);
-		}
-		else
-		{
+		} else {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SEED_WAS_NOT_SOWN);
 		}
-		
+
 		Party party = casterPlayer.getParty();
-		if (party != null)
-		{
+		if (party != null) {
 			party.broadcastPacket(sm);
-		}
-		else
-		{
+		} else {
 			casterPlayer.sendPacket(sm);
 		}
-		
+
 		// TODO: Mob should not aggro on player, this way doesn't work really nice
 		targetMonster.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 	}
-	
-	private static boolean calcSuccess(Creature activeChar, Creature target, L2Seed seed)
-	{
+
+	private static boolean calcSuccess(Creature activeChar, Creature target, L2Seed seed) {
 		// TODO: check all the chances
 		final int minlevelSeed = seed.getLevel() - 5;
 		final int maxlevelSeed = seed.getLevel() + 5;
 		final int levelPlayer = activeChar.getLevel(); // Attacker Level
 		final int levelTarget = target.getLevel(); // target Level
 		int basicSuccess = seed.isAlternative() ? 20 : 90;
-		
+
 		// seed level
-		if (levelTarget < minlevelSeed)
-		{
+		if (levelTarget < minlevelSeed) {
 			basicSuccess -= 5 * (minlevelSeed - levelTarget);
 		}
-		if (levelTarget > maxlevelSeed)
-		{
+		if (levelTarget > maxlevelSeed) {
 			basicSuccess -= 5 * (levelTarget - maxlevelSeed);
 		}
-		
+
 		// 5% decrease in chance if player level
 		// is more than +/- 5 levels to _target's_ level
 		int diff = (levelPlayer - levelTarget);
-		if (diff < 0)
-		{
+		if (diff < 0) {
 			diff = -diff;
 		}
-		if (diff > 5)
-		{
+		if (diff > 5) {
 			basicSuccess -= 5 * (diff - 5);
 		}
-		
+
 		// chance can't be less than 1%
 		Math.max(basicSuccess, 1);
 		return Rnd.nextInt(99) < basicSuccess;

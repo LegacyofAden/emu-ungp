@@ -26,28 +26,23 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Servitor Attack player action handler.
+ *
  * @author St3eT
  */
-public final class ServitorAttack implements IPlayerActionHandler
-{
+public final class ServitorAttack implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (activeChar.hasServitors())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (activeChar.hasServitors()) {
 			activeChar.getServitors().values().stream().filter(s -> s.canAttack(activeChar.getTarget(), ctrlPressed)).forEach(s ->
 			{
 				s.doAttack(activeChar.getTarget());
 			});
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new ServitorAttack());
 	}
 }

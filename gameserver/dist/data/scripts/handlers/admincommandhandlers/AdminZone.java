@@ -18,9 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
@@ -33,85 +31,73 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.StringTokenizer;
+
 /**
  * Small typo fix by Zoey76 24/02/2011
  */
-public class AdminZone implements IAdminCommandHandler
-{
+public class AdminZone implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_zone_check",
-		"admin_zone_visual",
-		"admin_zone_visual_clear"
-	};
-	
+			{
+					"admin_zone_check",
+					"admin_zone_visual",
+					"admin_zone_visual_clear"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (activeChar == null)
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (activeChar == null) {
 			return false;
 		}
-		
+
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
-		
+
 		// String val = "";
 		// if (st.countTokens() >= 1) {val = st.nextToken();}
-		
-		if (actualCommand.equalsIgnoreCase("admin_zone_check"))
-		{
+
+		if (actualCommand.equalsIgnoreCase("admin_zone_check")) {
 			showHtml(activeChar);
 			activeChar.sendMessage("MapRegion: x:" + MapRegionManager.getInstance().getMapRegionX((int) activeChar.getX()) + " y:" + MapRegionManager.getInstance().getMapRegionY((int) activeChar.getY()) + " (" + MapRegionManager.getInstance().getMapRegionLocId(activeChar) + ")");
 			getGeoRegionXY(activeChar);
 			activeChar.sendMessage("Closest Town: " + MapRegionManager.getInstance().getClosestTownName(activeChar));
-			
+
 			Location loc;
-			
+
 			loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.CASTLE);
 			activeChar.sendMessage("TeleToLocation (Castle): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
-			
+
 			loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.CLANHALL);
 			activeChar.sendMessage("TeleToLocation (ClanHall): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
-			
+
 			loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.SIEGEFLAG);
 			activeChar.sendMessage("TeleToLocation (SiegeFlag): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
-			
+
 			loc = MapRegionManager.getInstance().getTeleToLocation(activeChar, TeleportWhereType.TOWN);
 			activeChar.sendMessage("TeleToLocation (Town): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
-		}
-		else if (actualCommand.equalsIgnoreCase("admin_zone_visual"))
-		{
+		} else if (actualCommand.equalsIgnoreCase("admin_zone_visual")) {
 			String next = st.nextToken();
-			if (next.equalsIgnoreCase("all"))
-			{
-				for (ZoneType zone : ZoneManager.getInstance().getZones(activeChar))
-				{
+			if (next.equalsIgnoreCase("all")) {
+				for (ZoneType zone : ZoneManager.getInstance().getZones(activeChar)) {
 					zone.visualizeZone(activeChar.getZ());
 				}
-				for (SpawnTerritory territory : ZoneManager.getInstance().getSpawnTerritories(activeChar))
-				{
+				for (SpawnTerritory territory : ZoneManager.getInstance().getSpawnTerritories(activeChar)) {
 					territory.visualizeZone(activeChar.getZ());
 				}
 				showHtml(activeChar);
-			}
-			else
-			{
+			} else {
 				int zoneId = Integer.parseInt(next);
 				ZoneManager.getInstance().getZoneById(zoneId).visualizeZone(activeChar.getZ());
 			}
-		}
-		else if (actualCommand.equalsIgnoreCase("admin_zone_visual_clear"))
-		{
+		} else if (actualCommand.equalsIgnoreCase("admin_zone_visual_clear")) {
 			ZoneManager.getInstance().clearDebugItems();
 			showHtml(activeChar);
 		}
 		return true;
 	}
-	
-	private static void showHtml(PlayerInstance activeChar)
-	{
-		final String htmContent = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/zone.htm");
+
+	private static void showHtml(PlayerInstance activeChar) {
+		final String htmContent = HtmRepository.getInstance().getCustomHtm("admin/zone.htm");
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setHtml(htmContent);
 		adminReply.replace("%PEACE%", (activeChar.isInsideZone(ZoneId.PEACE) ? "<font color=\"LEVEL\">YES</font>" : "NO"));
@@ -130,56 +116,46 @@ public class AdminZone implements IAdminCommandHandler
 		adminReply.replace("%NOSTORE%", (activeChar.isInsideZone(ZoneId.NO_STORE) ? "<font color=\"LEVEL\">YES</font>" : "NO"));
 		adminReply.replace("%SCRIPT%", (activeChar.isInsideZone(ZoneId.SCRIPT) ? "<font color=\"LEVEL\">YES</font>" : "NO"));
 		adminReply.replace("%TAX%", (activeChar.isInsideZone(ZoneId.TAX) ? "<font color=\"LEVEL\">YES</font>" : "NO"));
-		
+
 		final StringBuilder zones = new StringBuilder(100);
-		for (ZoneType zone : ZoneManager.getInstance().getRegion(activeChar).getZones().values())
-		{
-			if (zone.isCharacterInZone(activeChar))
-			{
-				if (zone.getName() != null)
-				{
+		for (ZoneType zone : ZoneManager.getInstance().getRegion(activeChar).getZones().values()) {
+			if (zone.isCharacterInZone(activeChar)) {
+				if (zone.getName() != null) {
 					zones.append(zone.getName());
 					zones.append("<br1>");
-					if (zone.getId() < 300000)
-					{
+					if (zone.getId() < 300000) {
 						zones.append("(");
 						zones.append(zone.getId());
 						zones.append(")");
 					}
-				}
-				else
-				{
+				} else {
 					zones.append(zone.getId());
 				}
 				zones.append(" ");
 			}
 		}
-		for (SpawnTerritory territory : ZoneManager.getInstance().getSpawnTerritories(activeChar))
-		{
+		for (SpawnTerritory territory : ZoneManager.getInstance().getSpawnTerritories(activeChar)) {
 			zones.append(territory.getName());
 			zones.append("<br1>");
 		}
 		adminReply.replace("%ZLIST%", zones.toString());
 		activeChar.sendPacket(adminReply);
 	}
-	
-	private static void getGeoRegionXY(PlayerInstance activeChar)
-	{
+
+	private static void getGeoRegionXY(PlayerInstance activeChar) {
 		int worldX = (int) activeChar.getX();
 		int worldY = (int) activeChar.getY();
 		int geoX = ((((worldX - (-327680)) >> 4) >> 11) + 10);
 		int geoY = ((((worldY - (-262144)) >> 4) >> 11) + 10);
 		activeChar.sendMessage("GeoRegion: " + geoX + "_" + geoY + "");
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminZone());
 	}
 }

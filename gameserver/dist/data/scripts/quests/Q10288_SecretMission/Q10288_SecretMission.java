@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Secret Mission (10288)
+ *
  * @author Gnacik
  */
-public class Q10288_SecretMission extends Quest
-{
+public class Q10288_SecretMission extends Quest {
 	// NPCs
 	private static final int DOMINIC = 31350;
 	private static final int AQUILANI = 32780;
@@ -39,32 +39,27 @@ public class Q10288_SecretMission extends Quest
 	private static final int LETTER = 15529;
 	// Location
 	private static final Location TELEPORT = new Location(118833, -80589, -2688);
-	
-	public Q10288_SecretMission()
-	{
+
+	public Q10288_SecretMission() {
 		super(10288);
 		addStartNpc(AQUILANI, DOMINIC);
 		addFirstTalkId(AQUILANI);
 		addTalkId(DOMINIC, GREYMORE, AQUILANI);
 		registerQuestItems(LETTER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
 		String htmltext = event;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "31350-03.html":
-				if (player.getLevel() < 82)
-				{
+				if (player.getLevel() < 82) {
 					htmltext = "31350-02b.html";
 				}
 				break;
@@ -73,14 +68,12 @@ public class Q10288_SecretMission extends Quest
 				giveItems(player, LETTER, 1);
 				break;
 			case "32780-03.html":
-				if (st.isCond(1) && hasQuestItems(player, LETTER))
-				{
+				if (st.isCond(1) && hasQuestItems(player, LETTER)) {
 					st.setCond(2, true);
 				}
 				break;
 			case "32757-03.html":
-				if (st.isCond(2) && hasQuestItems(player, LETTER))
-				{
+				if (st.isCond(2) && hasQuestItems(player, LETTER)) {
 					giveAdena(player, 106583, true);
 					addExp(player, 417788);
 					addSp(player, 46320); // TODO Incorrect SP reward.
@@ -88,48 +81,40 @@ public class Q10288_SecretMission extends Quest
 				}
 				break;
 			case "teleport":
-				if ((npc.getId() == AQUILANI) && st.isCompleted())
-				{
+				if ((npc.getId() == AQUILANI) && st.isCompleted()) {
 					player.teleToLocation(TELEPORT);
 					return null;
 				}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, false);
 		// dialog only changes when you talk to Aquilani after quest completion
-		if ((st != null) && st.isCompleted())
-		{
+		if ((st != null) && st.isCompleted()) {
 			return "32780-05.html";
 		}
 		return "data/html/default/32780.htm";
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
+
+		switch (npc.getId()) {
 			case DOMINIC:
-				switch (st.getState())
-				{
+				switch (st.getState()) {
 					case State.CREATED:
 						htmltext = "31350-01.htm";
 						break;
 					case State.STARTED:
-						if (st.isCond(1))
-						{
+						if (st.isCond(1)) {
 							htmltext = "31350-06.html";
 						}
 						break;
@@ -139,21 +124,16 @@ public class Q10288_SecretMission extends Quest
 				}
 				break;
 			case AQUILANI:
-				if (st.isStarted())
-				{
-					if (st.isCond(1) && hasQuestItems(player, LETTER))
-					{
+				if (st.isStarted()) {
+					if (st.isCond(1) && hasQuestItems(player, LETTER)) {
 						htmltext = "32780-01.html";
-					}
-					else if (st.isCond(2))
-					{
+					} else if (st.isCond(2)) {
 						htmltext = "32780-04.html";
 					}
 				}
 				break;
 			case GREYMORE:
-				if (st.isStarted() && st.isCond(2) && hasQuestItems(player, LETTER))
-				{
+				if (st.isStarted() && st.isCond(2) && hasQuestItems(player, LETTER)) {
 					return "32757-01.html";
 				}
 				break;

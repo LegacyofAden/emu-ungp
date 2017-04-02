@@ -27,38 +27,32 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * Mp Consume Per Level effect implementation.
  */
-public final class ConsumeMp extends AbstractEffect
-{
+public final class ConsumeMp extends AbstractEffect {
 	private final double _power;
-	
-	public ConsumeMp(StatsSet params)
-	{
+
+	public ConsumeMp(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public boolean consume(Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public boolean consume(Creature target, Skill skill) {
+		if (target.isDead()) {
 			return false;
 		}
-		
+
 		final double consume = _power * getTicksMultiplier();
 		double mp = target.getCurrentMp();
 		final double maxMp = target.getMaxRecoverableMp();
-		if ((consume > 0) && (mp > maxMp))
-		{
+		if ((consume > 0) && (mp > maxMp)) {
 			return false;
 		}
-		
-		if ((consume < 0) && ((mp + consume) <= 0))
-		{
+
+		if ((consume < 0) && ((mp + consume) <= 0)) {
 			target.sendPacket(SystemMessageId.YOUR_SKILL_WAS_DEACTIVATED_DUE_TO_LACK_OF_MP);
 			return false;
 		}
-		
+
 		target.setCurrentMp(Math.min(target.getCurrentMp() + consume, maxMp));
 		return true;
 	}

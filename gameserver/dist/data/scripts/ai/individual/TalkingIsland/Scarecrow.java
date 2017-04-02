@@ -18,35 +18,31 @@
  */
 package ai.individual.TalkingIsland;
 
-import org.l2junity.gameserver.model.actor.Npc;
-
 import ai.AbstractNpcAI;
+import org.l2junity.gameserver.model.actor.Npc;
 
 /**
  * Scarecrow AI.
+ *
  * @author ivantotov
  */
-public final class Scarecrow extends AbstractNpcAI
-{
+public final class Scarecrow extends AbstractNpcAI {
 	// NPCs
 	private static final int SCARECROW = 27457;
 	private static final int TRAINING_DUMMY = 19546;
-	
-	private Scarecrow()
-	{
+
+	private Scarecrow() {
 		addSpawnId(SCARECROW, TRAINING_DUMMY);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.disableCoreAI(true);
 		npc.setIsImmobilized(true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Scarecrow();
 	}
 }

@@ -18,19 +18,18 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Ruins Of Ye Sagira AI.
+ *
  * @author St3eT
  */
-public final class RuinsOfYeSagira extends AbstractNpcAI
-{
+public final class RuinsOfYeSagira extends AbstractNpcAI {
 	// NPC
 	private static final int GUARD = 33119;
 	// Locations
@@ -38,27 +37,22 @@ public final class RuinsOfYeSagira extends AbstractNpcAI
 	// Misc
 	private static final String ROUTE_NAME1 = "si_esagira_guide01";
 	private static final String ROUTE_NAME2 = "si_esagira_guide02";
-	
-	private RuinsOfYeSagira()
-	{
+
+	private RuinsOfYeSagira() {
 		addRouteFinishedId(GUARD);
 		startQuestTimer("SPAWN_FIRST", 15000, null, null, true);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "SPAWN_FIRST":
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "SPAWN_FIRST": {
 				final Npc guard = addSpawn(GUARD, GUARD_LOC);
 				SuperpointManager.getInstance().startMoving(guard, ROUTE_NAME1);
 				startQuestTimer("SPAWN_SECOND", 4000, null, null);
 				break;
 			}
-			case "SPAWN_SECOND":
-			{
+			case "SPAWN_SECOND": {
 				final Npc guard = addSpawn(GUARD, GUARD_LOC);
 				SuperpointManager.getInstance().startMoving(guard, ROUTE_NAME2);
 				break;
@@ -66,15 +60,13 @@ public final class RuinsOfYeSagira extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public void onRouteFinished(Npc npc)
-	{
+	public void onRouteFinished(Npc npc) {
 		npc.deleteMe();
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new RuinsOfYeSagira();
 	}
 }

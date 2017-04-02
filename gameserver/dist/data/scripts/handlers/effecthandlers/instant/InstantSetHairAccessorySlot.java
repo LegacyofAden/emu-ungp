@@ -31,23 +31,18 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author UnAfraid
  */
-public class InstantSetHairAccessorySlot extends AbstractEffect
-{
-	public InstantSetHairAccessorySlot(StatsSet params)
-	{
+public class InstantSetHairAccessorySlot extends AbstractEffect {
+	public InstantSetHairAccessorySlot(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
-		if (casterPlayer.isAlikeDead())
-		{
+		if (casterPlayer.isAlikeDead()) {
 			return;
 		}
 

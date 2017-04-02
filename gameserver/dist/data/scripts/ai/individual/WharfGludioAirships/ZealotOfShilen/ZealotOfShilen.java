@@ -18,6 +18,7 @@
  */
 package ai.individual.WharfGludioAirships.ZealotOfShilen;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
@@ -25,44 +26,37 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Zealot of Shilen AI.
+ *
  * @author nonom
  */
-public final class ZealotOfShilen extends AbstractNpcAI
-{
+public final class ZealotOfShilen extends AbstractNpcAI {
 	// NPCs
 	private static final int ZEALOT = 18782;
 	private static final int[] GUARDS =
-	{
-		32628,
-		32629
-	};
-	
-	public ZealotOfShilen()
-	{
+			{
+					32628,
+					32629
+			};
+
+	public ZealotOfShilen() {
 		addSpawnId(ZEALOT);
 		addSpawnId(GUARDS);
 		addFirstTalkId(GUARDS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (npc == null)
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (npc == null) {
 			return null;
 		}
-		
+
 		startQuestTimer("WATCHING", 10000, npc, null, true);
-		if (event.equalsIgnoreCase("WATCHING") && !npc.isAttackingNow())
-		{
+		if (event.equalsIgnoreCase("WATCHING") && !npc.isAttackingNow()) {
 			World.getInstance().forEachVisibleObject(npc, L2MonsterInstance.class, character ->
 			{
-				if (!character.isDead() && !character.isDecayed())
-				{
+				if (!character.isDead() && !character.isDecayed()) {
 					npc.setRunning();
 					((Attackable) npc).addDamageHate(character, 0, 999);
 					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, character, null);
@@ -71,31 +65,25 @@ public final class ZealotOfShilen extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return (npc.isAttackingNow()) ? "32628-01.html" : npc.getId() + ".html";
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == ZEALOT)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == ZEALOT) {
 			npc.setRandomWalking(true);
-		}
-		else
-		{
+		} else {
 			npc.setIsInvul(true);
 			((Attackable) npc).setCanReturnToSpawnPoint(false);
 			startQuestTimer("WATCHING", 10000, npc, null, true);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ZealotOfShilen();
 	}
 }

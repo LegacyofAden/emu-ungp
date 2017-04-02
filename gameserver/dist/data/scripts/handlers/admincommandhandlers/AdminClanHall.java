@@ -18,13 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -42,52 +35,49 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.BypassParser;
 
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
 /**
  * Clan Hall admin commands.
+ *
  * @author St3eT
  */
-public final class AdminClanHall implements IAdminCommandHandler
-{
+public final class AdminClanHall implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_clanhall",
-	};
-	
+			{
+					"admin_clanhall",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		
-		if (actualCommand.toLowerCase().equals("admin_clanhall"))
-		{
+
+		if (actualCommand.toLowerCase().equals("admin_clanhall")) {
 			processBypass(activeChar, new BypassParser(command));
 		}
 		return true;
 	}
-	
-	private void doAction(PlayerInstance player, int clanHallId, String action, String actionVal)
-	{
+
+	private void doAction(PlayerInstance player, int clanHallId, String action, String actionVal) {
 		final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallId);
-		if (clanHall != null)
-		{
-			switch (action)
-			{
-				case "openCloseDoors":
-				{
-					if (actionVal != null)
-					{
+		if (clanHall != null) {
+			switch (action) {
+				case "openCloseDoors": {
+					if (actionVal != null) {
 						clanHall.openCloseDoors(Boolean.parseBoolean(actionVal));
 					}
 					break;
 				}
-				case "teleport":
-				{
-					if (actionVal != null)
-					{
+				case "teleport": {
+					if (actionVal != null) {
 						final Location loc;
-						switch (actionVal)
-						{
+						switch (actionVal) {
 							case "inside":
 								loc = clanHall.getOwnerLocation();
 								break;
@@ -101,109 +91,93 @@ public final class AdminClanHall implements IAdminCommandHandler
 					}
 					break;
 				}
-				case "give":
-				{
-					if ((player.getTarget() != null) && (player.getTarget().getActingPlayer() != null))
-					{
+				case "give": {
+					if ((player.getTarget() != null) && (player.getTarget().getActingPlayer() != null)) {
 						final L2Clan targetClan = player.getTarget().getActingPlayer().getClan();
-						if ((targetClan == null) || (targetClan.getHideoutId() != 0))
-						{
+						if ((targetClan == null) || (targetClan.getHideoutId() != 0)) {
 							player.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 						}
-						
+
 						clanHall.setOwner(targetClan);
-					}
-					else
-					{
+					} else {
 						player.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 					}
 					break;
 				}
-				case "take":
-				{
+				case "take": {
 					final L2Clan clan = clanHall.getOwner();
-					if (clan != null)
-					{
+					if (clan != null) {
 						clanHall.setOwner(null);
-					}
-					else
-					{
+					} else {
 						player.sendMessage("You cannot take Clan Hall which don't have any owner.");
 					}
 					break;
 				}
-				case "cancelFunc":
-				{
+				case "cancelFunc": {
 					final ResidenceFunction function = clanHall.getFunction(Integer.parseInt(actionVal));
-					if (function != null)
-					{
+					if (function != null) {
 						clanHall.removeFunction(function);
 						sendClanHallDetails(player, clanHallId);
 					}
 					break;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			player.sendMessage("Clan Hall with id " + clanHallId + " does not exist!");
 		}
 		useAdminCommand("admin_clanhall id=" + clanHallId, player);
 	}
-	
-	private void sendClanHallList(PlayerInstance player, int page, BypassParser parser)
-	{
+
+	private void sendClanHallList(PlayerInstance player, int page, BypassParser parser) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(player.getHtmlPrefix(), "data/html/admin/clanhall_list.htm");
 		final List<ClanHall> clanHallList = ClanHallData.getInstance().getClanHalls().stream().sorted(Comparator.comparingLong(ClanHall::getResidenceId)).collect(Collectors.toList());
-		
+
 		//@formatter:off
 		final PageResult result = PageBuilder.newBuilder(clanHallList, 4, "bypass -h admin_clanhall")
-			.currentPage(page)
-			.pageHandler(NextPrevPageHandler.INSTANCE)
-			.formatter(BypassParserFormatter.INSTANCE)
-			.style(ButtonsStyle.INSTANCE)
-			.bodyHandler((pages, clanHall, sb) ->
-		{
-			sb.append("<table border=0 cellpadding=0 cellspacing=0 bgcolor=\"363636\">");
-			sb.append("<tr><td align=center fixwidth=\"250\"><font color=\"LEVEL\">&%" + clanHall.getResidenceId() + "; (" + clanHall.getResidenceId() + ")</font></td></tr>");
-			sb.append("</table>");
+				.currentPage(page)
+				.pageHandler(NextPrevPageHandler.INSTANCE)
+				.formatter(BypassParserFormatter.INSTANCE)
+				.style(ButtonsStyle.INSTANCE)
+				.bodyHandler((pages, clanHall, sb) ->
+				{
+					sb.append("<table border=0 cellpadding=0 cellspacing=0 bgcolor=\"363636\">");
+					sb.append("<tr><td align=center fixwidth=\"250\"><font color=\"LEVEL\">&%" + clanHall.getResidenceId() + "; (" + clanHall.getResidenceId() + ")</font></td></tr>");
+					sb.append("</table>");
 
-			sb.append("<table border=0 cellpadding=0 cellspacing=0 bgcolor=\"363636\">");
-			sb.append("<tr>");		
-			sb.append("<td align=center fixwidth=\"83\">Status:</td>");		
-			sb.append("<td align=center fixwidth=\"83\"></td>");		
-			sb.append("<td align=center fixwidth=\"83\">" + (clanHall.getOwner() == null ? "<font color=\"00FF00\">Free</font>" : "<font color=\"FF9900\">Owned</font>") + "</td>");		
-			sb.append("</tr>");
-			
-			sb.append("<tr>");
-			sb.append("<td align=center fixwidth=\"83\">Location:</td>");
-			sb.append("<td align=center fixwidth=\"83\"></td>");
-			sb.append("<td align=center fixwidth=\"83\">&^" + clanHall.getResidenceId() + ";</td>");
-			sb.append("</tr>");
-			
-			sb.append("<tr>");
-			sb.append("<td align=center fixwidth=\"83\">Detailed Info:</td>");
-			sb.append("<td align=center fixwidth=\"83\"></td>");
-			sb.append("<td align=center fixwidth=\"83\"><button value=\"Show me!\" action=\"bypass -h admin_clanhall id=" + clanHall.getResidenceId() + "\" width=\"85\" height=\"20\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
-			sb.append("</tr>");
-			
-			
-			sb.append("</table>");
-			sb.append("<br>");
-		}).build();
+					sb.append("<table border=0 cellpadding=0 cellspacing=0 bgcolor=\"363636\">");
+					sb.append("<tr>");
+					sb.append("<td align=center fixwidth=\"83\">Status:</td>");
+					sb.append("<td align=center fixwidth=\"83\"></td>");
+					sb.append("<td align=center fixwidth=\"83\">" + (clanHall.getOwner() == null ? "<font color=\"00FF00\">Free</font>" : "<font color=\"FF9900\">Owned</font>") + "</td>");
+					sb.append("</tr>");
+
+					sb.append("<tr>");
+					sb.append("<td align=center fixwidth=\"83\">Location:</td>");
+					sb.append("<td align=center fixwidth=\"83\"></td>");
+					sb.append("<td align=center fixwidth=\"83\">&^" + clanHall.getResidenceId() + ";</td>");
+					sb.append("</tr>");
+
+					sb.append("<tr>");
+					sb.append("<td align=center fixwidth=\"83\">Detailed Info:</td>");
+					sb.append("<td align=center fixwidth=\"83\"></td>");
+					sb.append("<td align=center fixwidth=\"83\"><button value=\"Show me!\" action=\"bypass -h admin_clanhall id=" + clanHall.getResidenceId() + "\" width=\"85\" height=\"20\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
+					sb.append("</tr>");
+
+
+					sb.append("</table>");
+					sb.append("<br>");
+				}).build();
 		//@formatter:on
-		
+
 		html.replace("%pages%", result.getPages() > 0 ? "<center><table width=\"100%\" cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table></center>" : "");
 		html.replace("%data%", result.getBodyTemplate().toString());
 		player.sendPacket(html);
 	}
-	
-	private void sendClanHallDetails(PlayerInstance player, int clanHallId)
-	{
+
+	private void sendClanHallDetails(PlayerInstance player, int clanHallId) {
 		final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallId);
-		if (clanHall != null)
-		{
+		if (clanHall != null) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 			final StringBuilder sb = new StringBuilder();
 			html.setFile(player.getHtmlPrefix(), "data/html/admin/clanhall_detail.htm");
@@ -212,9 +186,8 @@ public final class AdminClanHall implements IAdminCommandHandler
 			final String grade = clanHall.getGrade().toString().replace("GRADE_", "") + " Grade";
 			html.replace("%clanHallGrade%", grade);
 			html.replace("%clanHallSize%", clanHall.getGrade().getGradeValue());
-			
-			if (!clanHall.getFunctions().isEmpty())
-			{
+
+			if (!clanHall.getFunctions().isEmpty()) {
 				sb.append("<table border=0 cellpadding=0 cellspacing=0 bgcolor=\"363636\">");
 				sb.append("<tr>");
 				sb.append("<td align=center fixwidth=\"40\"><font color=\"LEVEL\">ID</font></td>");
@@ -236,50 +209,38 @@ public final class AdminClanHall implements IAdminCommandHandler
 					sb.append("</tr>");
 				});
 				sb.append("</table>");
-			}
-			else
-			{
+			} else {
 				sb.append("This Clan Hall doesn't have any Function yet.");
 			}
 			html.replace("%functionList%", sb.toString());
 			player.sendPacket(html);
-		}
-		else
-		{
+		} else {
 			player.sendMessage("Clan Hall with id " + clanHallId + " does not exist!");
 			useAdminCommand("admin_clanhall", player);
 		}
 	}
-	
-	private void processBypass(PlayerInstance player, BypassParser parser)
-	{
+
+	private void processBypass(PlayerInstance player, BypassParser parser) {
 		final int page = parser.getInt("page", 0);
 		final int clanHallId = parser.getInt("id", 0);
 		final String action = parser.getString("action", null);
 		final String actionVal = parser.getString("actionVal", null);
-		
-		if ((clanHallId > 0) && (action != null))
-		{
+
+		if ((clanHallId > 0) && (action != null)) {
 			doAction(player, clanHallId, action, actionVal);
-		}
-		else if (clanHallId > 0)
-		{
+		} else if (clanHallId > 0) {
 			sendClanHallDetails(player, clanHallId);
-		}
-		else
-		{
+		} else {
 			sendClanHallList(player, page, parser);
 		}
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminClanHall());
 	}
 }

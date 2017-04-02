@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -26,62 +27,52 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Altar of Evil AI.
+ *
  * @author St3eT
  */
-public final class AltarOfEvil extends AbstractNpcAI
-{
+public final class AltarOfEvil extends AbstractNpcAI {
 	// NPCs
 	private static final int RIFTER = 23179; // Dimensional Rifter
 	// Skill
 	private static final SkillHolder SKILL = new SkillHolder(14643, 1); // Summon
-	
-	public AltarOfEvil()
-	{
+
+	public AltarOfEvil() {
 		addAttackId(RIFTER);
 		addNpcHateId(RIFTER);
 		addSpellFinishedId(RIFTER);
 	}
-	
+
 	@Override
-	public boolean onNpcHate(Attackable mob, PlayerInstance player, boolean isSummon)
-	{
+	public boolean onNpcHate(Attackable mob, PlayerInstance player, boolean isSummon) {
 		teleportPlayer(mob, player);
 		return super.onNpcHate(mob, player, isSummon);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
 		teleportPlayer(npc, attacker);
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
-		if (skill.getId() == SKILL.getSkillId())
-		{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+		if (skill.getId() == SKILL.getSkillId()) {
 			showOnScreenMsg(player, NpcStringId.DIMENSIONAL_RIFTER_SUMMONED_YOU, ExShowScreenMessage.TOP_CENTER, 5000);
 			player.teleToLocation(npc);
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
-	private void teleportPlayer(Npc npc, PlayerInstance player)
-	{
-		if (npc.isScriptValue(0) && !npc.isInRadius3d(player, 200))
-		{
+
+	private void teleportPlayer(Npc npc, PlayerInstance player) {
+		if (npc.isScriptValue(0) && !npc.isInRadius3d(player, 200)) {
 			addSkillCastDesire(npc, player, SKILL, 23);
 			npc.setScriptValue(1);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new AltarOfEvil();
 	}
 }

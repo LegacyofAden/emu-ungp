@@ -29,25 +29,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Take Fort effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantCaptureFlag extends AbstractEffect
-{
-	public InstantCaptureFlag(StatsSet params)
-	{
+public final class InstantCaptureFlag extends AbstractEffect {
+	public InstantCaptureFlag(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (!caster.isPlayer())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (!caster.isPlayer()) {
 			return;
 		}
-		
+
 		final Fort fort = FortManager.getInstance().getFort(caster);
-		if (fort != null)
-		{
+		if (fort != null) {
 			fort.endOfSiege(caster.getClan());
 		}
 	}

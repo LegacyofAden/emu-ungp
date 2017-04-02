@@ -31,65 +31,52 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 /**
  * @author UnAfraid
  */
-public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler
-{
+public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
-	
-	public OlympiadOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+
+	public OlympiadOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
-	
+
 	@Override
-	public void init()
-	{
+	public void init() {
 		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_OLYMPIAD_MATCH_RESULT, (OnOlympiadMatchResult event) -> onOlympiadMatchResult(event), this));
 	}
-	
+
 	@Override
-	public boolean isAvailable(PlayerInstance player)
-	{
+	public boolean isAvailable(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
-		if (entry != null)
-		{
-			switch (entry.getStatus())
-			{
+		if (entry != null) {
+			switch (entry.getStatus()) {
 				case NOT_AVAILABLE: // Initial state
 				{
-					if (entry.getProgress() >= _amount)
-					{
+					if (entry.getProgress() >= _amount) {
 						entry.setStatus(OneDayRewardStatus.AVAILABLE);
 						storePlayerEntry(entry);
 					}
 					break;
 				}
-				case AVAILABLE:
-				{
+				case AVAILABLE: {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	private void onOlympiadMatchResult(OnOlympiadMatchResult event)
-	{
+
+	private void onOlympiadMatchResult(OnOlympiadMatchResult event) {
 		final OneDayRewardPlayerEntry winnerEntry = getPlayerEntry(event.getWinner().getObjectId(), true);
-		if (winnerEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE)
-		{
-			if (winnerEntry.increaseProgress() >= _amount)
-			{
+		if (winnerEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+			if (winnerEntry.increaseProgress() >= _amount) {
 				winnerEntry.setStatus(OneDayRewardStatus.AVAILABLE);
 			}
 			storePlayerEntry(winnerEntry);
 		}
-		
+
 		final OneDayRewardPlayerEntry loseEntry = getPlayerEntry(event.getLoser().getObjectId(), true);
-		if (loseEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE)
-		{
-			if (loseEntry.increaseProgress() >= _amount)
-			{
+		if (loseEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+			if (loseEntry.increaseProgress() >= _amount) {
 				loseEntry.setStatus(OneDayRewardStatus.AVAILABLE);
 			}
 			storePlayerEntry(loseEntry);

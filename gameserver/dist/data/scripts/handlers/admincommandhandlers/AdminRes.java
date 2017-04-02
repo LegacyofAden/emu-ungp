@@ -18,7 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
@@ -33,171 +33,136 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class handles following admin commands: - res = resurrects target L2Character
+ *
  * @version $Revision: 1.2.4.5 $ $Date: 2005/04/11 10:06:06 $
  */
-public class AdminRes implements IAdminCommandHandler
-{
+public class AdminRes implements IAdminCommandHandler {
 	private static Logger _log = LoggerFactory.getLogger(AdminRes.class);
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_res",
-		"admin_res_monster"
-	};
-	
+			{
+					"admin_res",
+					"admin_res_monster"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_res "))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_res ")) {
 			handleRes(activeChar, command.split(" ")[1]);
-		}
-		else if (command.equals("admin_res"))
-		{
+		} else if (command.equals("admin_res")) {
 			handleRes(activeChar);
-		}
-		else if (command.startsWith("admin_res_monster "))
-		{
+		} else if (command.startsWith("admin_res_monster ")) {
 			handleNonPlayerRes(activeChar, command.split(" ")[1]);
-		}
-		else if (command.equals("admin_res_monster"))
-		{
+		} else if (command.equals("admin_res_monster")) {
 			handleNonPlayerRes(activeChar);
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void handleRes(PlayerInstance activeChar)
-	{
+
+	private void handleRes(PlayerInstance activeChar) {
 		handleRes(activeChar, null);
 	}
-	
-	private void handleRes(PlayerInstance activeChar, String resParam)
-	{
+
+	private void handleRes(PlayerInstance activeChar, String resParam) {
 		WorldObject obj = activeChar.getTarget();
-		
-		if (resParam != null)
-		{
+
+		if (resParam != null) {
 			// Check if a player name was specified as a param.
 			PlayerInstance plyr = World.getInstance().getPlayer(resParam);
-			
-			if (plyr != null)
-			{
+
+			if (plyr != null) {
 				obj = plyr;
-			}
-			else
-			{
+			} else {
 				// Otherwise, check if the param was a radius.
-				try
-				{
+				try {
 					int radius = Integer.parseInt(resParam);
-					
+
 					World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, radius, knownPlayer ->
 					{
 						doResurrect(knownPlayer);
 					});
-					
+
 					activeChar.sendMessage("Resurrected all players within a " + radius + " unit radius.");
 					return;
-				}
-				catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 					activeChar.sendMessage("Enter a valid player name or radius.");
 					return;
 				}
 			}
 		}
-		
-		if (obj == null)
-		{
+
+		if (obj == null) {
 			obj = activeChar;
 		}
-		
-		if (obj instanceof L2ControllableMobInstance)
-		{
+
+		if (obj instanceof L2ControllableMobInstance) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		
+
 		doResurrect((Creature) obj);
-		
-		if (GeneralConfig.DEBUG)
-		{
+
+		if (GeneralConfig.DEBUG) {
 			_log.debug("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") resurrected character " + obj.getObjectId());
 		}
 	}
-	
-	private void handleNonPlayerRes(PlayerInstance activeChar)
-	{
+
+	private void handleNonPlayerRes(PlayerInstance activeChar) {
 		handleNonPlayerRes(activeChar, "");
 	}
-	
-	private void handleNonPlayerRes(PlayerInstance activeChar, String radiusStr)
-	{
+
+	private void handleNonPlayerRes(PlayerInstance activeChar, String radiusStr) {
 		WorldObject obj = activeChar.getTarget();
-		
-		try
-		{
+
+		try {
 			int radius = 0;
-			
-			if (!radiusStr.isEmpty())
-			{
+
+			if (!radiusStr.isEmpty()) {
 				radius = Integer.parseInt(radiusStr);
-				
+
 				World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, knownChar ->
 				{
-					if (!(knownChar instanceof PlayerInstance) && !(knownChar instanceof L2ControllableMobInstance))
-					{
+					if (!(knownChar instanceof PlayerInstance) && !(knownChar instanceof L2ControllableMobInstance)) {
 						doResurrect(knownChar);
 					}
 				});
-				
+
 				activeChar.sendMessage("Resurrected all non-players within a " + radius + " unit radius.");
 			}
-		}
-		catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			activeChar.sendMessage("Enter a valid radius.");
 			return;
 		}
-		
-		if ((obj instanceof PlayerInstance) || (obj instanceof L2ControllableMobInstance))
-		{
+
+		if ((obj instanceof PlayerInstance) || (obj instanceof L2ControllableMobInstance)) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		
+
 		doResurrect((Creature) obj);
 	}
-	
-	private void doResurrect(Creature targetChar)
-	{
-		if (!targetChar.isDead())
-		{
+
+	private void doResurrect(Creature targetChar) {
+		if (!targetChar.isDead()) {
 			return;
 		}
-		
+
 		// If the target is a player, then restore the XP lost on death.
-		if (targetChar instanceof PlayerInstance)
-		{
+		if (targetChar instanceof PlayerInstance) {
 			((PlayerInstance) targetChar).restoreExp(100.0);
-		}
-		else
-		{
+		} else {
 			DecayTaskManager.getInstance().cancel(targetChar);
 		}
-		
+
 		targetChar.doRevive();
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminRes());
 	}
 }

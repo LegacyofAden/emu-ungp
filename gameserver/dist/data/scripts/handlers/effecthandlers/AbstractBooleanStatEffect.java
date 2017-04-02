@@ -26,18 +26,15 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 /**
  * @author Sdw
  */
-public abstract class AbstractBooleanStatEffect extends AbstractEffect
-{
+public abstract class AbstractBooleanStatEffect extends AbstractEffect {
 	private final BooleanStat _stat;
-	
-	public AbstractBooleanStatEffect(BooleanStat stat)
-	{
+
+	public AbstractBooleanStatEffect(BooleanStat stat) {
 		_stat = stat;
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().set(_stat);
 	}
 }

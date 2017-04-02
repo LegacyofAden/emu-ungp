@@ -18,9 +18,6 @@
  */
 package handlers.skillconditionhandlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -30,28 +27,26 @@ import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class Op2hWeaponSkillCondition implements ISkillCondition
-{
+public class Op2hWeaponSkillCondition implements ISkillCondition {
 	private final List<WeaponType> _weaponTypes = new ArrayList<>();
-	
-	public Op2hWeaponSkillCondition(StatsSet params)
-	{
+
+	public Op2hWeaponSkillCondition(StatsSet params) {
 		final List<String> weaponTypes = params.getList("weaponType", String.class);
-		if (weaponTypes != null)
-		{
+		if (weaponTypes != null) {
 			weaponTypes.stream().map(WeaponType::valueOf).forEach(_weaponTypes::add);
 		}
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final Weapon weapon = caster.getActiveWeaponItem();
-		if (weapon == null)
-		{
+		if (weapon == null) {
 			return false;
 		}
 		return _weaponTypes.stream().anyMatch(weaponType -> (weapon.getItemType() == weaponType) && ((weapon.getBodyPart() & L2Item.SLOT_LR_HAND) != 0));

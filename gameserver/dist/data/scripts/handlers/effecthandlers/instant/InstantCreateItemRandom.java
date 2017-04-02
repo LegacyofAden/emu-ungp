@@ -34,51 +34,40 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public class InstantCreateItemRandom extends AbstractEffect
-{
+public class InstantCreateItemRandom extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantCreateItemRandom.class);
-	
-	public InstantCreateItemRandom(StatsSet params)
-	{
+
+	public InstantCreateItemRandom(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
-		}
-		else if (item == null)
-		{
+		} else if (item == null) {
 			LOGGER.warn("{} Attempting to cast skill: {} without item defined!", targetPlayer, skill);
 			return;
-		}
-		else if (item.getItem().getCreateItems().isEmpty())
-		{
+		} else if (item.getItem().getCreateItems().isEmpty()) {
 			LOGGER.warn("{} Attempting to cast skill: {} with item {} without createItems defined!", targetPlayer, skill, item);
 			return;
 		}
-		
+
 		ItemChanceHolder selectedItem = null;
 		final double random = Rnd.nextDouble() * 100;
 		double comulativeChance = 0;
-		for (ItemChanceHolder holder : item.getItem().getCreateItems())
-		{
-			if ((comulativeChance += holder.getChance()) >= random)
-			{
+		for (ItemChanceHolder holder : item.getItem().getCreateItems()) {
+			if ((comulativeChance += holder.getChance()) >= random) {
 				selectedItem = holder;
 				break;
 			}
 		}
-		
-		if (selectedItem == null)
-		{
+
+		if (selectedItem == null) {
 			targetPlayer.sendPacket(SystemMessageId.THERE_WAS_NOTHING_FOUND_INSIDE);
 			return;
 		}
-		
+
 		targetPlayer.addItem("CreateItems", selectedItem.getId(), selectedItem.getCount(), targetPlayer, true);
 	}
 }

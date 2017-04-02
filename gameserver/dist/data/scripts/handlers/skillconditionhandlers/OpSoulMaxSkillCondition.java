@@ -28,15 +28,12 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author UnAfraid
  */
-public class OpSoulMaxSkillCondition implements ISkillCondition
-{
-	public OpSoulMaxSkillCondition(StatsSet params)
-	{
+public class OpSoulMaxSkillCondition implements ISkillCondition {
+	public OpSoulMaxSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final int maxSouls = (int) caster.getStat().getValue(DoubleStat.MAX_SOULS);
 		return caster.isPlayable() && (caster.getActingPlayer().getChargedSouls() < maxSouls);
 	}

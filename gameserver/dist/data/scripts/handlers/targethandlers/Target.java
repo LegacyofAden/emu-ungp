@@ -27,66 +27,54 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Any friendly selected target or enemy if force use. Works on dead targets or doors as well.
+ *
  * @author Nik
  */
-public class Target implements ITargetTypeHandler
-{
+public class Target implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (selectedTarget == null)
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (selectedTarget == null) {
 			return null;
 		}
-		
-		if (!selectedTarget.isCreature())
-		{
-			if (sendMessage)
-			{
+
+		if (!selectedTarget.isCreature()) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
 			return null;
 		}
-		
+
 		final Creature target = (Creature) selectedTarget;
-		
+
 		// You can always target yourself.
-		if (activeChar == target)
-		{
+		if (activeChar == target) {
 			return target;
 		}
-		
+
 		// Check for cast range if character cannot move. TODO: char will start follow until within castrange, but if his moving is blocked by geodata, this msg will be sent.
-		if (dontMove)
-		{
-			if (activeChar.distance3d(target) > skill.getCastRange())
-			{
-				if (sendMessage)
-				{
+		if (dontMove) {
+			if (activeChar.distance3d(target) > skill.getCastRange()) {
+				if (sendMessage) {
 					activeChar.sendPacket(SystemMessageId.THE_DISTANCE_IS_TOO_FAR_AND_SO_THE_CASTING_HAS_BEEN_STOPPED);
 				}
-				
+
 				return null;
 			}
 		}
-		
-		if ((skill.isFlyType()) && !GeoData.getInstance().canMove(activeChar, target))
-		{
-			if (sendMessage)
-			{
+
+		if ((skill.isFlyType()) && !GeoData.getInstance().canMove(activeChar, target)) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.THE_TARGET_IS_LOCATED_WHERE_YOU_CANNOT_CHARGE);
 			}
 			return null;
 		}
-		
+
 		// Geodata check when character is within range.
-		if (!GeoData.getInstance().canSeeTarget(activeChar, target))
-		{
-			if (sendMessage)
-			{
+		if (!GeoData.getInstance().canSeeTarget(activeChar, target)) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 			}
-			
+
 			return null;
 		}
 		return target;

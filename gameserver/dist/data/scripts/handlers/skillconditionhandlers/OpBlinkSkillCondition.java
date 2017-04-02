@@ -30,48 +30,41 @@ import org.l2junity.gameserver.util.Util;
 /**
  * @author Sdw
  */
-public class OpBlinkSkillCondition implements ISkillCondition
-{
+public class OpBlinkSkillCondition implements ISkillCondition {
 	private final int _angle;
 	private final int _range;
-	
-	public OpBlinkSkillCondition(StatsSet params)
-	{
-		switch (params.getEnum("direction", Position.class))
-		{
-			case BACK:
-			{
+
+	public OpBlinkSkillCondition(StatsSet params) {
+		switch (params.getEnum("direction", Position.class)) {
+			case BACK: {
 				_angle = 0;
 				break;
 			}
-			case FRONT:
-			{
+			case FRONT: {
 				_angle = 180;
 				break;
 			}
-			default:
-			{
+			default: {
 				_angle = -1;
 				break;
 			}
 		}
-		
+
 		_range = params.getInt("range");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final double angle = Util.convertHeadingToDegree(caster.getHeading());
 		final double radian = Math.toRadians(angle);
 		final double course = Math.toRadians(_angle);
 		final double x1 = Math.cos(Math.PI + radian + course) * _range;
 		final double y1 = Math.sin(Math.PI + radian + course) * _range;
-		
+
 		double x = caster.getX() + x1;
 		double y = caster.getY() + y1;
 		double z = caster.getZ();
-		
+
 		return GeoData.getInstance().canMove(caster.getX(), caster.getY(), caster.getZ(), x, y, z, caster.getInstanceWorld());
 	}
 }

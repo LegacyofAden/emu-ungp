@@ -18,8 +18,7 @@
  */
 package ai.individual.MonasteryOfSilence;
 
-import java.util.ArrayList;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
@@ -29,14 +28,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.QuestTimer;
 
-import ai.AbstractNpcAI;
+import java.util.ArrayList;
 
 /**
  * Anais AI.
+ *
  * @author nonom
  */
-public final class Anais extends AbstractNpcAI
-{
+public final class Anais extends AbstractNpcAI {
 	// NPCs
 	private static final int ANAIS = 25701;
 	private static final int DIVINE_BURNER = 18915;
@@ -48,47 +47,37 @@ public final class Anais extends AbstractNpcAI
 	private PlayerInstance _nextTarget = null;
 	private Npc _current = null;
 	private int _pot = 0;
-	
-	private Anais()
-	{
+
+	private Anais() {
 		addAttackId(ANAIS);
 		addSpawnId(DIVINE_BURNER);
 		addKillId(GRAIL_WARD);
 	}
-	
-	private void burnerOnAttack(int pot, Npc anais)
-	{
+
+	private void burnerOnAttack(int pot, Npc anais) {
 		Npc npc = _divineBurners.get(pot);
 		npc.setState(1);
 		npc.setIsRunning(false);
-		if (pot < 4)
-		{
+		if (pot < 4) {
 			_current = npc;
 			QuestTimer checkAround = getQuestTimer("CHECK", anais, null);
 			if (checkAround == null) // || !checkAround.getIsActive()
 			{
 				startQuestTimer("CHECK", 3000, anais, null);
 			}
-		}
-		else
-		{
+		} else {
 			cancelQuestTimer("CHECK", anais, null);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "CHECK":
-			{
-				if (!npc.isAttackingNow())
-				{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "CHECK": {
+				if (!npc.isAttackingNow()) {
 					cancelQuestTimer("CHECK", npc, null);
 				}
-				if ((_current != null) || (_pot < 4))
-				{
+				if ((_current != null) || (_pot < 4)) {
 					final WorldObject target = npc.getTarget();
 					_nextTarget = target instanceof PlayerInstance ? (PlayerInstance) target : null;
 					final Npc b = _divineBurners.get(_pot);
@@ -105,29 +94,22 @@ public final class Anais extends AbstractNpcAI
 				}
 				break;
 			}
-			case "GUARD_ATTACK":
-			{
-				if (_nextTarget != null)
-				{
+			case "GUARD_ATTACK": {
+				if (_nextTarget != null) {
 					final double distance = npc.distance2d(_nextTarget);
-					if (distance < 100)
-					{
+					if (distance < 100) {
 						npc.doCast(DIVINE_NOVA.getSkill());
-					}
-					else if (distance > 2000)
-					{
+					} else if (distance > 2000) {
 						npc.doDie(null);
 						cancelQuestTimer("GUARD_ATTACK", npc, player);
 					}
 				}
 				break;
 			}
-			case "SUICIDE":
-			{
+			case "SUICIDE": {
 				npc.doCast(DIVINE_NOVA.getSkill());
 				cancelQuestTimer("GUARD_ATTACK", npc, _nextTarget);
-				if (_current != null)
-				{
+				if (_current != null) {
 					_current.setState(2);
 					_current.setIsRunning(false);
 					_current = null;
@@ -138,57 +120,45 @@ public final class Anais extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (_pot == 0)
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (_pot == 0) {
 			burnerOnAttack(0, npc);
-		}
-		else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.75)) && (_pot == 1))
-		{
+		} else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.75)) && (_pot == 1)) {
 			burnerOnAttack(1, npc);
-		}
-		else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.5)) && (_pot == 2))
-		{
+		} else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.5)) && (_pot == 2)) {
 			burnerOnAttack(2, npc);
-		}
-		else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.25)) && (_pot == 3))
-		{
+		} else if ((npc.getCurrentHp() <= (npc.getMaxRecoverableHp() * 0.25)) && (_pot == 3)) {
 			burnerOnAttack(3, npc);
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.gameserver.model.quest.Quest#onSpawn(org.l2junity.gameserver.model.actor.L2Npc)
 	 */
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		_divineBurners.add(npc);
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		npc.doCast(DIVINE_NOVA.getSkill());
 		cancelQuestTimer("GUARD_ATTACK", npc, _nextTarget);
 		cancelQuestTimer("CHECK", npc, null);
-		if (_current != null)
-		{
+		if (_current != null) {
 			_current.setState(2);
 			_current.setIsRunning(false);
 			_current = null;
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Anais();
 	}
 }

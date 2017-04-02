@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Effect that blocks all incoming debuffs.
+ *
  * @author Nik
  */
-public final class PumpBlockDebuff extends AbstractBooleanStatEffect
-{
-	public PumpBlockDebuff(StatsSet params)
-	{
+public final class PumpBlockDebuff extends AbstractBooleanStatEffect {
+	public PumpBlockDebuff(StatsSet params) {
 		super(BooleanStat.BLOCK_DEBUFF);
 	}
 }

@@ -30,53 +30,44 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author HorridoJoho, UnAfraid
  */
-public class SummonItems extends ItemSkillsTemplate
-{
+public class SummonItems extends ItemSkillsTemplate {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
-		if (!activeChar.getFloodProtectors().getItemPetSummon().tryPerformAction("summon items") || (activeChar.getBlockCheckerArena() != -1) || activeChar.inObserverMode() || activeChar.isAllSkillsDisabled() || activeChar.isCastingNow())
-		{
+		if (!activeChar.getFloodProtectors().getItemPetSummon().tryPerformAction("summon items") || (activeChar.getBlockCheckerArena() != -1) || activeChar.inObserverMode() || activeChar.isAllSkillsDisabled() || activeChar.isCastingNow()) {
 			return false;
 		}
-		
-		if (activeChar.isSitting())
-		{
+
+		if (activeChar.isSitting()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_MOVE_WHILE_SITTING);
 			return false;
 		}
-		
-		if (activeChar.hasPet() || activeChar.isMounted())
-		{
+
+		if (activeChar.hasPet() || activeChar.isMounted()) {
 			activeChar.sendPacket(SystemMessageId.YOU_ALREADY_HAVE_A_PET);
 			return false;
 		}
-		
-		if (activeChar.isAttackingNow())
-		{
+
+		if (activeChar.isAttackingNow()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_SUMMON_DURING_COMBAT);
 			return false;
 		}
-		
+
 		final PetData petData = PetDataTable.getInstance().getPetDataByItemId(item.getId());
-		if ((petData == null) || (petData.getNpcId() == -1))
-		{
+		if ((petData == null) || (petData.getNpcId() == -1)) {
 			return false;
 		}
-		
+
 		activeChar.addScript(new PetItemHolder(item));
 		return super.useItem(playable, item, forceUse);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new SummonItems());
 	}
 }

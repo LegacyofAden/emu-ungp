@@ -28,10 +28,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Suspicious Vagabond in the Swamp (10409)
+ *
  * @author St3eT
  */
-public final class Q10409_ASuspiciousVagabondInTheSwamp extends Quest
-{
+public final class Q10409_ASuspiciousVagabondInTheSwamp extends Quest {
 	// NPCs
 	private static final int DOKARA = 33847;
 	private static final int VAGABOND = 33848; // Critically-injured Suspicious Vagabond
@@ -40,9 +40,8 @@ public final class Q10409_ASuspiciousVagabondInTheSwamp extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 65;
 	private static final int MAX_LEVEL = 70;
-	
-	public Q10409_ASuspiciousVagabondInTheSwamp()
-	{
+
+	public Q10409_ASuspiciousVagabondInTheSwamp() {
 		super(10409);
 		addStartNpc(DOKARA);
 		addTalkId(DOKARA, VAGABOND);
@@ -50,40 +49,32 @@ public final class Q10409_ASuspiciousVagabondInTheSwamp extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33847-08.htm");
 		addCondInCategory(CategoryType.FIGHTER_GROUP, "33847-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33847-02.htm":
-			case "33847-03.htm":
-			{
+			case "33847-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33847-04.htm":
-			{
+			case "33847-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33847-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33847-07.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 3);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 942_690);
 						addSp(player, 226);
 					}
@@ -94,43 +85,32 @@ public final class Q10409_ASuspiciousVagabondInTheSwamp extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == DOKARA)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == DOKARA) {
 					htmltext = "33847-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == DOKARA)
-				{
+			case State.STARTED: {
+				if (npc.getId() == DOKARA) {
 					htmltext = st.isCond(1) ? "33847-05.html" : "33847-06.html";
-				}
-				else if ((npc.getId() == VAGABOND) && st.isCond(1))
-				{
-					if (!isSimulated)
-					{
+				} else if ((npc.getId() == VAGABOND) && st.isCond(1)) {
+					if (!isSimulated) {
 						st.setCond(2, true);
 					}
 					htmltext = "33848-01.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == DOKARA)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == DOKARA) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

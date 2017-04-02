@@ -18,9 +18,6 @@
  */
 package handlers.playeractions;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-
 import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
@@ -31,88 +28,71 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Optional;
+import java.util.OptionalInt;
+
 /**
  * Pet skill use player action handler.
+ *
  * @author Nik
  */
-public final class PetSkillUse implements IPlayerActionHandler
-{
+public final class PetSkillUse implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (activeChar.getTarget() == null)
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (activeChar.getTarget() == null) {
 			return;
 		}
-		
+
 		final L2PetInstance pet = activeChar.getPet();
-		if (pet == null)
-		{
+		if (pet == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_PET);
-		}
-		else if (pet.isUncontrollable())
-		{
+		} else if (pet.isUncontrollable()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
-		}
-		else if (pet.isBetrayed())
-		{
+		} else if (pet.isBetrayed()) {
 			activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
-		}
-		else if ((pet.getLevel() - activeChar.getLevel()) > 20)
-		{
+		} else if ((pet.getLevel() - activeChar.getLevel()) > 20) {
 			activeChar.sendPacket(SystemMessageId.YOUR_PET_IS_TOO_HIGH_LEVEL_TO_CONTROL);
-		}
-		else
-		{
+		} else {
 			final OptionalInt step = getStep(pet);
 			final Optional<SkillHolder> holder = step.isPresent() ? getSkill(pet, step.getAsInt(), data.getOptionId()) : pet.getTemplate().getParameters().getSkillHolder(data.getOptionId());
-			if (holder.isPresent())
-			{
+			if (holder.isPresent()) {
 				pet.setTarget(activeChar.getTarget());
 				pet.useMagic(holder.get().getSkill(), pet.getTarget(), null, ctrlPressed, shiftPressed);
 			}
-			
-			if (data.getOptionId() == CommonSkill.PET_SWITCH_STANCE.getId())
-			{
+
+			if (data.getOptionId() == CommonSkill.PET_SWITCH_STANCE.getId()) {
 				pet.switchMode();
 			}
 		}
 	}
-	
-	private static OptionalInt getStep(L2PetInstance pet)
-	{
+
+	private static OptionalInt getStep(L2PetInstance pet) {
 		OptionalInt step = OptionalInt.empty();
-		for (int i = 0; i < 7; i++)
-		{
+		for (int i = 0; i < 7; i++) {
 			final int level = pet.getTemplate().getParameters().getInt("lv_step" + i, 0);
-			if (pet.getLevel() >= level)
-			{
+			if (pet.getLevel() >= level) {
 				step = OptionalInt.of(i);
 			}
 		}
 		return step;
 	}
-	
-	private static Optional<SkillHolder> getSkill(L2PetInstance pet, int step, int skillId)
-	{
+
+	private static Optional<SkillHolder> getSkill(L2PetInstance pet, int step, int skillId) {
 		final StatsSet params = pet.getTemplate().getParameters();
 		Optional<SkillHolder> skill = Optional.empty();
-		
-		for (int i = 0; i < 8; i++)
-		{
+
+		for (int i = 0; i < 8; i++) {
 			final SkillHolder holder = params.getSkillHolder("step" + step + "_skill0" + i);
-			if ((holder != null) && (holder.getSkillId() == skillId))
-			{
+			if ((holder != null) && (holder.getSkillId() == skillId)) {
 				skill = Optional.of(holder);
 				break;
 			}
 		}
-		
+
 		return skill;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new PetSkillUse());
 	}
 }

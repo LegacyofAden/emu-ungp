@@ -18,9 +18,6 @@
  */
 package quests.Q00476_PlainMission;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
@@ -31,45 +28,47 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Plain Mission (476)
+ *
  * @author St3eT
  */
-public final class Q00476_PlainMission extends Quest
-{
+public final class Q00476_PlainMission extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int ANDREI = 31292;
 	private static final int[] GRENDEL =
-	{
-		21290,
-		21291,
-		21292,
-	};
+			{
+					21290,
+					21291,
+					21292,
+			};
 	private static final int[] BUFFALO =
-	{
-		21286,
-		21287,
-		21288,
-	};
+			{
+					21286,
+					21287,
+					21288,
+			};
 	private static final int[] ANTELOPE =
-	{
-		21278,
-		21279,
-		21280,
-	};
+			{
+					21278,
+					21279,
+					21280,
+			};
 	private static final int[] BANDERSNATCH =
-	{
-		21282,
-		21283,
-		21284,
-	};
+			{
+					21282,
+					21283,
+					21284,
+			};
 	// Misc
 	private static final int MIN_LEVEL = 65;
 	private static final int MAX_LEVEL = 69;
-	
-	public Q00476_PlainMission()
-	{
+
+	public Q00476_PlainMission() {
 		super(476);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, ANDREI);
@@ -79,28 +78,23 @@ public final class Q00476_PlainMission extends Quest
 		addKillId(GRENDEL);
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
-			case "32327-03.htm":
-			{
+			case "32327-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32327-04.htm":
-			{
+			case "32327-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
@@ -108,43 +102,30 @@ public final class Q00476_PlainMission extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER) {
 					htmltext = "32327-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ADVENTURER ? "32327-05.html" : "31292-03.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (npc.getId() == ADVENTURER)
-					{
+				} else if (st.isCond(2)) {
+					if (npc.getId() == ADVENTURER) {
 						htmltext = "32327-06.html";
-					}
-					else if (npc.getId() == ANDREI)
-					{
-						if (!isSimulated)
-						{
+					} else if (npc.getId() == ANDREI) {
+						if (!isSimulated) {
 							st.exitQuest(QuestType.DAILY, true);
 							giveAdena(player, 142_200, true);
-							if (player.getLevel() >= MIN_LEVEL)
-							{
+							if (player.getLevel() >= MIN_LEVEL) {
 								addExp(player, 4_685_175);
 								addSp(player, 1_124);
 							}
@@ -154,18 +135,13 @@ public final class Q00476_PlainMission extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if ((npc.getId() == ADVENTURER) && st.isNowAvailable())
-				{
-					if (!isSimulated)
-					{
+			case State.COMPLETED: {
+				if ((npc.getId() == ADVENTURER) && st.isNowAvailable()) {
+					if (!isSimulated) {
 						st.setState(State.CREATED);
 					}
 					htmltext = "32327-01.htm";
-				}
-				else if ((npc.getId() == ANDREI) && st.isCompleted() && !st.isNowAvailable())
-				{
+				} else if ((npc.getId() == ANDREI) && st.isCompleted() && !st.isNowAvailable()) {
 					htmltext = "31292-02.html";
 				}
 				break;
@@ -173,71 +149,55 @@ public final class Q00476_PlainMission extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
+
+		if ((st != null) && st.isCond(1)) {
 			int killedAntelope = st.getInt("killed_" + ANTELOPE[0]);
 			int killedBandersnatch = st.getInt("killed_" + BANDERSNATCH[0]);
 			int killedBuffalo = st.getInt("killed_" + BUFFALO[0]);
 			int killedGrendel = st.getInt("killed_" + GRENDEL[0]);
-			
-			if (ArrayUtil.contains(ANTELOPE, npc.getId()))
-			{
-				if (killedAntelope < 45)
-				{
+
+			if (ArrayUtil.contains(ANTELOPE, npc.getId())) {
+				if (killedAntelope < 45) {
 					killedAntelope++;
 					st.set("killed_" + ANTELOPE[0], killedAntelope);
 					playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
-			}
-			else if (ArrayUtil.contains(BANDERSNATCH, npc.getId()))
-			{
-				if (killedBandersnatch < 45)
-				{
+			} else if (ArrayUtil.contains(BANDERSNATCH, npc.getId())) {
+				if (killedBandersnatch < 45) {
 					killedBandersnatch++;
 					st.set("killed_" + BANDERSNATCH[0], killedBandersnatch);
 					playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
-			}
-			else if (ArrayUtil.contains(BUFFALO, npc.getId()))
-			{
-				if (killedBuffalo < 45)
-				{
+			} else if (ArrayUtil.contains(BUFFALO, npc.getId())) {
+				if (killedBuffalo < 45) {
 					killedBuffalo++;
 					st.set("killed_" + BUFFALO[0], killedBuffalo);
 					playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
-			}
-			else
-			{
-				if (killedGrendel < 45)
-				{
+			} else {
+				if (killedGrendel < 45) {
 					killedGrendel++;
 					st.set("killed_" + GRENDEL[0], killedGrendel);
 					playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
 			}
-			
-			if ((killedAntelope == 45) && (killedBandersnatch == 45) && (killedBuffalo == 45) && (killedGrendel == 45))
-			{
+
+			if ((killedAntelope == 45) && (killedBandersnatch == 45) && (killedBuffalo == 45) && (killedGrendel == 45)) {
 				st.setCond(2, true);
 			}
 			sendNpcLogList(killer);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
 		final QuestState st = getQuestState(activeChar, false);
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(4);
 			npcLogList.add(new NpcLogListHolder(ANTELOPE[0], false, st.getInt("killed_" + ANTELOPE[0])));
 			npcLogList.add(new NpcLogListHolder(BANDERSNATCH[0], false, st.getInt("killed_" + BANDERSNATCH[0])));

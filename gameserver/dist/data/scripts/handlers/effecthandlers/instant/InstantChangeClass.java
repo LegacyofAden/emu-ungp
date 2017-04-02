@@ -18,9 +18,7 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.enums.SubclassInfoType;
 import org.l2junity.gameserver.model.StatsSet;
@@ -36,50 +34,46 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Sdw
  */
-public class InstantChangeClass extends AbstractEffect
-{
+public class InstantChangeClass extends AbstractEffect {
 	private final int _index;
 	private final static int IDENTITY_CRISIS_SKILL_ID = 1570;
-	
-	public InstantChangeClass(StatsSet params)
-	{
+
+	public InstantChangeClass(StatsSet params) {
 		_index = params.getInt("index", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		// TODO: FIX ME - Executing 1 second later otherwise interupted exception during storeCharBase()
-		ThreadPool.schedule(() ->
+		ThreadPool.getInstance().scheduleGeneral(() ->
 		{
 			final int activeClass = targetPlayer.getClassId().getId();
-			
-			if (!targetPlayer.setActiveClass(_index))
-			{
+
+			if (!targetPlayer.setActiveClass(_index)) {
 				targetPlayer.sendMessage("You cannot switch your class right now!");
 				return;
 			}
-			
+
 			final Skill identifyCrisis = SkillData.getInstance().getSkill(IDENTITY_CRISIS_SKILL_ID, 1);
-			if (identifyCrisis != null)
-			{
+			if (identifyCrisis != null) {
 				identifyCrisis.applyEffects(targetPlayer, targetPlayer);
 			}
-			
+
 			final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_SUCCESSFULLY_SWITCHED_S1_TO_S2);
 			msg.addClassId(activeClass);
 			msg.addClassId(targetPlayer.getClassId().getId());
 			targetPlayer.sendPacket(msg);
-			
+
 			targetPlayer.broadcastUserInfo();
 			targetPlayer.sendPacket(new AcquireSkillList(targetPlayer));
 			targetPlayer.sendPacket(new ExSubjobInfo(targetPlayer, SubclassInfoType.CLASS_CHANGED));

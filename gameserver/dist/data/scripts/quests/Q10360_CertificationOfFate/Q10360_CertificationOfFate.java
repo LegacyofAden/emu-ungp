@@ -18,7 +18,7 @@
  */
 package quests.Q10360_CertificationOfFate;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.Race;
@@ -43,10 +43,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Certification of Fate (10360)
+ *
  * @author St3eT
  */
-public final class Q10360_CertificationOfFate extends Quest
-{
+public final class Q10360_CertificationOfFate extends Quest {
 	// NPCs
 	private static final int RAYMOND = 30289;
 	private static final int RAINS = 30288;
@@ -73,9 +73,8 @@ public final class Q10360_CertificationOfFate extends Quest
 	private static final Location WASTELANDS_TELEPORT = new Location(-24795, 188754, -3960);
 	// Misc
 	private static final int MIN_LEVEL = 38;
-	
-	public Q10360_CertificationOfFate()
-	{
+
+	public Q10360_CertificationOfFate() {
 		super(10360);
 		addStartNpc(RAYMOND, RAINS, TOBIAS, DRIKUS, MENDIO, GERSHWIN, ESRANDELL, ELLENIA);
 		addTalkId(RAYMOND, RAINS, TOBIAS, DRIKUS, MENDIO, GERSHWIN, ESRANDELL, ELLENIA, RENFAD, JOEL, SCHUAZEN, SELON);
@@ -85,19 +84,16 @@ public final class Q10360_CertificationOfFate extends Quest
 		addCondNotRace(Race.ERTHEIA, "");
 		addCondMinLevel(MIN_LEVEL, "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "30155-03.htm":
 			case "30158-03.htm":
 			case "32196-03.htm":
@@ -111,8 +107,7 @@ public final class Q10360_CertificationOfFate extends Quest
 			case "33517-02.htm":
 			case "33518-03.htm":
 			case "33518-04.htm":
-			case "33518-05.htm":
-			{
+			case "33518-05.htm": {
 				htmltext = event;
 				break;
 			}
@@ -123,41 +118,33 @@ public final class Q10360_CertificationOfFate extends Quest
 			case "30505-04.htm":
 			case "30297-04.htm":
 			case "30288-04.htm":
-			case "30289-04.htm":
-			{
+			case "30289-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "teleport":
-			{
+			case "teleport": {
 				player.teleToLocation(WASTELANDS_TELEPORT);
 				break;
 			}
-			case "33524-03.htm":
-			{
-				if (st.isCond(1))
-				{
+			case "33524-03.htm": {
+				if (st.isCond(1)) {
 					playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 					st.setCond(2);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33516-03.htm":
-			{
-				if (st.isCond(3))
-				{
+			case "33516-03.htm": {
+				if (st.isCond(3)) {
 					playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 					st.setCond(4);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33517-03.htm":
-			{
-				if (st.isCond(5))
-				{
+			case "33517-03.htm": {
+				if (st.isCond(5)) {
 					playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 					st.setCond(6);
 					player.sendPacket(ExShowUsm.SECOND_TRANSFER_QUEST);
@@ -165,10 +152,8 @@ public final class Q10360_CertificationOfFate extends Quest
 				}
 				break;
 			}
-			case "33518-06.htm":
-			{
-				switch (player.getRace())
-				{
+			case "33518-06.htm": {
+				switch (player.getRace()) {
 					case HUMAN:
 						st.setCond(player.isInCategory(CategoryType.MAGE_GROUP) ? 9 : 8);
 						htmltext = player.isInCategory(CategoryType.MAGE_GROUP) ? "33518-06.htm" : "33518-07.htm";
@@ -197,24 +182,17 @@ public final class Q10360_CertificationOfFate extends Quest
 				playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 				break;
 			}
-			default:
-			{
-				if (event.startsWith("class_preview_"))
-				{
+			default: {
+				if (event.startsWith("class_preview_")) {
 					htmltext = event;
-				}
-				else if (event.startsWith("classChange;"))
-				{
+				} else if (event.startsWith("classChange;")) {
 					final ClassId newClassId = ClassId.getClassId(Integer.parseInt(event.replace("classChange;", "")));
 					final ClassId currentClassId = player.getClassId();
-					
-					if (currentClassId.childOf(newClassId) || (st.getCond() < 8))
-					{
+
+					if (currentClassId.childOf(newClassId) || (st.getCond() < 8)) {
 						Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to cheat the 2nd class transfer!", GeneralConfig.DEFAULT_PUNISH);
 						return null;
-					}
-					else if ((player.getLevel() >= MIN_LEVEL))
-					{
+					} else if ((player.getLevel() >= MIN_LEVEL)) {
 						player.setBaseClass(newClassId);
 						player.setClassId(newClassId.getId());
 						player.broadcastUserInfo();
@@ -228,9 +206,7 @@ public final class Q10360_CertificationOfFate extends Quest
 						addSp(player, 648);
 						st.exitQuest(false, true);
 						htmltext = "transfer_complete_" + player.getClassId().toString().toLowerCase() + ".html";
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -239,52 +215,41 @@ public final class Q10360_CertificationOfFate extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState st = getQuestState(player, true);
-		
-		if ((st == null) || st.isCompleted())
-		{
+
+		if ((st == null) || st.isCompleted()) {
 			npc.showChatWindow(player);
 			return super.onFirstTalk(npc, player);
 		}
-		
-		if ((npc.getId() == JOEL) && (st.getCond() < 3))
-		{
+
+		if ((npc.getId() == JOEL) && (st.getCond() < 3)) {
 			htmltext = "33516.html";
-		}
-		else if ((npc.getId() == SCHUAZEN) && (st.getCond() < 5))
-		{
+		} else if ((npc.getId() == SCHUAZEN) && (st.getCond() < 5)) {
 			htmltext = "33517.html";
 		}
-		
-		if (htmltext == null)
-		{
+
+		if (htmltext == null) {
 			npc.showChatWindow(player);
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if ((st == null) || (player.getRace() == Race.ERTHEIA) || (player.getLevel() < MIN_LEVEL))
-		{
+
+		if ((st == null) || (player.getRace() == Race.ERTHEIA) || (player.getLevel() < MIN_LEVEL)) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				switch (npc.getId())
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				switch (npc.getId()) {
 					case RAYMOND:
 					case ESRANDELL:
 					case RAINS:
@@ -292,18 +257,15 @@ public final class Q10360_CertificationOfFate extends Quest
 					case TOBIAS:
 					case DRIKUS:
 					case MENDIO:
-					case GERSHWIN:
-					{
+					case GERSHWIN: {
 						htmltext = isRightMaster(npc, player) ? npc.getId() + "-02.htm" : npc.getId() + "-01.html";
 						break;
 					}
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
+			case State.STARTED: {
+				switch (npc.getId()) {
 					case RAYMOND:
 					case ESRANDELL:
 					case RAINS:
@@ -311,62 +273,42 @@ public final class Q10360_CertificationOfFate extends Quest
 					case TOBIAS:
 					case DRIKUS:
 					case MENDIO:
-					case GERSHWIN:
-					{
-						if (st.isCond(1) && isRightMaster(npc, player))
-						{
+					case GERSHWIN: {
+						if (st.isCond(1) && isRightMaster(npc, player)) {
 							htmltext = npc.getId() + "-05.htm";
-						}
-						else if ((st.getCond() >= 8) && (st.getCond() <= 15))
-						{
+						} else if ((st.getCond() >= 8) && (st.getCond() <= 15)) {
 							htmltext = isRightMaster(npc, player) ? ("class_select_" + player.getClassId().toString().toLowerCase() + ".html") : (npc.getId() + "-06.html");
 						}
 						break;
 					}
-					case RENFAD:
-					{
-						if (st.isCond(1))
-						{
+					case RENFAD: {
+						if (st.isCond(1)) {
 							htmltext = "33524-01.htm";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "33524-04.htm";
 						}
 						break;
 					}
-					case JOEL:
-					{
-						if (st.isCond(3))
-						{
+					case JOEL: {
+						if (st.isCond(3)) {
 							htmltext = "33516-01.htm";
-						}
-						else if (st.isCond(4))
-						{
+						} else if (st.isCond(4)) {
 							htmltext = "33516-04.htm";
 						}
 						break;
 					}
-					case SCHUAZEN:
-					{
-						if (st.isCond(5))
-						{
+					case SCHUAZEN: {
+						if (st.isCond(5)) {
 							htmltext = "33517-01.htm";
-						}
-						else if (st.isCond(6))
-						{
+						} else if (st.isCond(6)) {
 							htmltext = "33517-04.htm";
 						}
 						break;
 					}
-					case SELON:
-					{
-						if (st.isCond(6))
-						{
+					case SELON: {
+						if (st.isCond(6)) {
 							htmltext = "33518-01.htm";
-						}
-						else if (st.isCond(7))
-						{
+						} else if (st.isCond(7)) {
 							htmltext = "33518-02.htm";
 						}
 						break;
@@ -374,10 +316,8 @@ public final class Q10360_CertificationOfFate extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
 					case RAYMOND:
 					case ESRANDELL:
 					case RAINS:
@@ -385,8 +325,7 @@ public final class Q10360_CertificationOfFate extends Quest
 					case TOBIAS:
 					case DRIKUS:
 					case MENDIO:
-					case GERSHWIN:
-					{
+					case GERSHWIN: {
 						htmltext = npc.getId() + "-07.html";
 						break;
 					}
@@ -396,38 +335,29 @@ public final class Q10360_CertificationOfFate extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted())
-		{
-			switch (npc.getId())
-			{
-				case REGENERATED_KANILOV:
-				{
-					if (st.isCond(2))
-					{
+
+		if ((st != null) && st.isStarted()) {
+			switch (npc.getId()) {
+				case REGENERATED_KANILOV: {
+					if (st.isCond(2)) {
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 						st.setCond(3);
 					}
 					break;
 				}
-				case REGENERATED_POSLOF:
-				{
-					if (st.isCond(4))
-					{
+				case REGENERATED_POSLOF: {
+					if (st.isCond(4)) {
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 						st.setCond(5);
 					}
 					break;
 				}
-				case SAKUM:
-				{
-					if (st.isCond(6))
-					{
+				case SAKUM: {
+					if (st.isCond(6)) {
 						giveItems(killer, SHINE_STONE, 1);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 						st.setCond(7);
@@ -438,25 +368,19 @@ public final class Q10360_CertificationOfFate extends Quest
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	private boolean isRightMaster(Npc npc, PlayerInstance player)
-	{
-		switch (npc.getId())
-		{
+
+	private boolean isRightMaster(Npc npc, PlayerInstance player) {
+		switch (npc.getId()) {
 			case RAYMOND:
-			case ESRANDELL:
-			{
-				if ((npc.getRace() == player.getRace()) && player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+			case ESRANDELL: {
+				if ((npc.getRace() == player.getRace()) && player.isInCategory(CategoryType.MAGE_GROUP)) {
 					return true;
 				}
 				break;
 			}
 			case RAINS:
-			case ELLENIA:
-			{
-				if ((npc.getRace() == player.getRace()) && !player.isInCategory(CategoryType.MAGE_GROUP))
-				{
+			case ELLENIA: {
+				if ((npc.getRace() == player.getRace()) && !player.isInCategory(CategoryType.MAGE_GROUP)) {
 					return true;
 				}
 				break;
@@ -464,10 +388,8 @@ public final class Q10360_CertificationOfFate extends Quest
 			case TOBIAS:
 			case DRIKUS:
 			case MENDIO:
-			case GERSHWIN:
-			{
-				if (npc.getRace() == player.getRace())
-				{
+			case GERSHWIN: {
+				if (npc.getRace() == player.getRace()) {
 					return true;
 				}
 				break;
@@ -475,28 +397,23 @@ public final class Q10360_CertificationOfFate extends Quest
 		}
 		return false;
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event)
-	{
-		if (event.getQuestId() == getId())
-		{
+	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
+		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
 			String fileName = "";
-			switch (player.getRace())
-			{
+			switch (player.getRace()) {
 				case DARK_ELF:
 				case DWARF:
 				case KAMAEL:
-				case ORC:
-				{
+				case ORC: {
 					fileName = "popup-" + player.getRace().toString().toLowerCase() + ".htm";
 					break;
 				}
 				case ELF:
-				case HUMAN:
-				{
+				case HUMAN: {
 					fileName = "popup-" + player.getRace().toString().toLowerCase() + "-" + (player.isInCategory(CategoryType.MAGE_GROUP) ? "m" : "f") + ".htm";
 					break;
 				}
@@ -504,33 +421,28 @@ public final class Q10360_CertificationOfFate extends Quest
 			player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), fileName)));
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLevelChanged(OnPlayerLevelChanged event)
-	{
+	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
-		
-		if ((oldLevel < newLevel) && (newLevel == MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.SECOND_CLASS_GROUP)))
-		{
+
+		if ((oldLevel < newLevel) && (newLevel == MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.SECOND_CLASS_GROUP))) {
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
-			
+
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLogin(OnPlayerLogin event)
-	{
+	public void OnPlayerLogin(OnPlayerLogin event) {
 		final PlayerInstance player = event.getActiveChar();
-		
-		if ((player.getLevel() >= MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.SECOND_CLASS_GROUP)))
-		{
+
+		if ((player.getLevel() >= MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.SECOND_CLASS_GROUP))) {
 			final QuestState st = getQuestState(player, true);
-			if (st.isCreated())
-			{
+			if (st.isCreated()) {
 				player.sendPacket(new TutorialShowQuestionMark(st));
 			}
 		}

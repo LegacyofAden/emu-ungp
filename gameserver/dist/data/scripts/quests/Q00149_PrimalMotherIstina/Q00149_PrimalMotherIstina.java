@@ -27,10 +27,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Primal Mother, Istina (149)
+ *
  * @author netvirus
  */
-public class Q00149_PrimalMotherIstina extends Quest
-{
+public class Q00149_PrimalMotherIstina extends Quest {
 	// NPCs
 	private static final int RUMIESE = 33293;
 	// Item
@@ -43,17 +43,16 @@ public class Q00149_PrimalMotherIstina extends Quest
 	private static final int SCROLL_ENCHANT_ARMOR_R = 17527;
 	private static final int ISTINAS_BRACELET = 19455;
 	private static final int[] STONES =
-	{
-		22635, // Fire Stone
-		22636, // Water Stone
-		22637, // Earth Stones
-		22638, // Wind Stones
-		22639, // Dark Stone
-		22640 // Holy Stone
-	};
-	
-	public Q00149_PrimalMotherIstina()
-	{
+			{
+					22635, // Fire Stone
+					22636, // Water Stone
+					22637, // Earth Stones
+					22638, // Wind Stones
+					22639, // Dark Stone
+					22640 // Holy Stone
+			};
+
+	public Q00149_PrimalMotherIstina() {
 		super(149);
 		addStartNpc(RUMIESE);
 		addTalkId(RUMIESE);
@@ -61,26 +60,21 @@ public class Q00149_PrimalMotherIstina extends Quest
 		registerQuestItems(SHILENS_MARK);
 		addCondMinLevel(MIN_LVL, "33293-02.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "33293-04.htm":
-			case "33293-05.htm":
-			{
+			case "33293-05.htm": {
 				break;
 			}
-			case "33293-06.html":
-			{
+			case "33293-06.html": {
 				st.startQuest();
 				break;
 			}
@@ -89,16 +83,12 @@ public class Q00149_PrimalMotherIstina extends Quest
 			case "2":
 			case "3":
 			case "4":
-			case "5":
-			{
-				if (Util.isDigit(event) && st.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LVL)
-					{
+			case "5": {
+				if (Util.isDigit(event) && st.isCond(2)) {
+					if (player.getLevel() >= MIN_LVL) {
 						htmltext = "33293-09.htm";
 						final int index = Integer.parseInt(event);
-						if ((index >= 0) && (index < STONES.length))
-						{
+						if ((index >= 0) && (index < STONES.length)) {
 							giveItems(player, STONES[index], 15);
 						}
 						addExp(player, 833_065_000);
@@ -106,9 +96,7 @@ public class Q00149_PrimalMotherIstina extends Quest
 						giveItems(player, SCROLL_ENCHANT_ARMOR_R, 10);
 						giveItems(player, ISTINAS_BRACELET, 1);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -117,39 +105,29 @@ public class Q00149_PrimalMotherIstina extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (npc.getId() == RUMIESE)
-		{
-			switch (st.getState())
-			{
-				case State.COMPLETED:
-				{
+
+		if (npc.getId() == RUMIESE) {
+			switch (st.getState()) {
+				case State.COMPLETED: {
 					htmltext = "33293-03.html";
 					break;
 				}
-				case State.CREATED:
-				{
+				case State.CREATED: {
 					htmltext = "33293-01.htm";
 					break;
 				}
-				case State.STARTED:
-				{
-					if (st.isCond(1))
-					{
+				case State.STARTED: {
+					if (st.isCond(1)) {
 						htmltext = "33293-07.html";
-					}
-					else if (st.isCond(2))
-					{
+					} else if (st.isCond(2)) {
 						htmltext = "33293-08.html";
 					}
 					break;
@@ -158,19 +136,16 @@ public class Q00149_PrimalMotherIstina extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		npc.getInstanceWorld().getPlayers().forEach(this::giveItem);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	private void giveItem(PlayerInstance player)
-	{
+
+	private void giveItem(PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1) && !hasQuestItems(player, SHILENS_MARK))
-		{
+		if ((st != null) && st.isCond(1) && !hasQuestItems(player, SHILENS_MARK)) {
 			giveItems(player, SHILENS_MARK, 1);
 			st.setCond(2, true);
 		}

@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Help The Uncle! (42)
+ *
  * @author malyelfik
  */
-public final class Q00042_HelpTheUncle extends Quest
-{
+public final class Q00042_HelpTheUncle extends Quest {
 	// NPCs
 	private static final int WATERS = 30828;
 	private static final int SOPHYA = 30735;
@@ -44,9 +44,8 @@ public final class Q00042_HelpTheUncle extends Quest
 	private static final int PET_TICKET = 7583;
 	// Misc
 	private static final int MIN_LVL = 25;
-	
-	public Q00042_HelpTheUncle()
-	{
+
+	public Q00042_HelpTheUncle() {
 		super(42);
 		addStartNpc(WATERS);
 		addTalkId(WATERS, SOPHYA);
@@ -54,75 +53,54 @@ public final class Q00042_HelpTheUncle extends Quest
 		registerQuestItems(MAP, MAP_PIECE);
 		addCondMinLevel(MIN_LVL, "30828-00a.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "30828-01.htm":
-			{
+		switch (event) {
+			case "30828-01.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30828-03.html":
-			{
-				if (hasQuestItems(player, TRIDENT))
-				{
+			case "30828-03.html": {
+				if (hasQuestItems(player, TRIDENT)) {
 					takeItems(player, TRIDENT, 1);
 					st.setCond(2, true);
-				}
-				else
-				{
+				} else {
 					htmltext = "30828-03a.html";
 				}
 				break;
 			}
-			case "30828-06.html":
-			{
-				if (getQuestItemsCount(player, MAP_PIECE) == 30)
-				{
+			case "30828-06.html": {
+				if (getQuestItemsCount(player, MAP_PIECE) == 30) {
 					takeItems(player, MAP_PIECE, -1);
 					giveItems(player, MAP, 1);
 					st.setCond(4, true);
-				}
-				else
-				{
+				} else {
 					htmltext = "30828-06a.html";
 				}
 				break;
 			}
-			case "30735-02.html":
-			{
-				if (hasQuestItems(player, MAP))
-				{
+			case "30735-02.html": {
+				if (hasQuestItems(player, MAP)) {
 					takeItems(player, MAP, -1);
 					st.setCond(5, true);
-				}
-				else
-				{
+				} else {
 					htmltext = "30735-02a.html";
 				}
 				break;
 			}
-			case "30828-09.html":
-			{
-				if (st.isCond(5))
-				{
-					if ((player.getLevel() >= MIN_LVL))
-					{
+			case "30828-09.html": {
+				if (st.isCond(5)) {
+					if ((player.getLevel() >= MIN_LVL)) {
 						giveItems(player, PET_TICKET, 1);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -131,52 +109,39 @@ public final class Q00042_HelpTheUncle extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		
-		if ((st != null) && st.isCond(2))
-		{
+
+		if ((st != null) && st.isCond(2)) {
 			giveItems(player, MAP_PIECE, 1);
-			if (getQuestItemsCount(player, MAP_PIECE) == 30)
-			{
+			if (getQuestItemsCount(player, MAP_PIECE) == 30) {
 				st.setCond(3, true);
-			}
-			else
-			{
+			} else {
 				playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
-			case WATERS:
-			{
-				switch (st.getState())
-				{
-					case State.CREATED:
-					{
+
+		switch (npc.getId()) {
+			case WATERS: {
+				switch (st.getState()) {
+					case State.CREATED: {
 						htmltext = "30828-00.htm";
 						break;
 					}
-					case State.STARTED:
-					{
-						switch (st.getCond())
-						{
+					case State.STARTED: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = (hasQuestItems(player, TRIDENT)) ? "30828-02.html" : "30828-02a.html";
 								break;
@@ -195,24 +160,18 @@ public final class Q00042_HelpTheUncle extends Quest
 						}
 						break;
 					}
-					case State.COMPLETED:
-					{
+					case State.COMPLETED: {
 						htmltext = getAlreadyCompletedMsg(player);
 						break;
 					}
 				}
 				break;
 			}
-			case SOPHYA:
-			{
-				if (st.isStarted())
-				{
-					if (st.isCond(4))
-					{
+			case SOPHYA: {
+				if (st.isStarted()) {
+					if (st.isCond(4)) {
 						htmltext = "30735-01.html";
-					}
-					else if (st.isCond(5))
-					{
+					} else if (st.isCond(5)) {
 						htmltext = "30735-03.html";
 					}
 				}

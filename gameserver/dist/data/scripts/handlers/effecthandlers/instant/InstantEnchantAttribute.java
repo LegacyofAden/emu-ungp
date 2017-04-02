@@ -32,32 +32,28 @@ import org.l2junity.gameserver.network.client.send.ExChooseInventoryAttributeIte
 /**
  * @author Sdw
  */
-public class InstantEnchantAttribute extends AbstractEffect
-{
+public class InstantEnchantAttribute extends AbstractEffect {
 	final AttributeType _weaponAttribute;
 	final AttributeType _armorAttribute;
 	final int _maxLevel;
 	final int _minValue;
 	final int _maxValue;
-	
-	public InstantEnchantAttribute(StatsSet params)
-	{
+
+	public InstantEnchantAttribute(StatsSet params) {
 		_weaponAttribute = params.getEnum("weaponAttribute", AttributeType.class);
 		_armorAttribute = params.getEnum("armorAttribute", AttributeType.class);
 		_maxLevel = params.getInt("maxLevel");
 		_minValue = params.getInt("minValue", 0);
 		_maxValue = params.getInt("maxValue", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		casterPlayer.addRequest(new EnchantItemAttributeRequest(casterPlayer, item.getObjectId(), _weaponAttribute, _armorAttribute, _maxLevel, _minValue, _maxValue));
 		casterPlayer.sendPacket(new ExChooseInventoryAttributeItem(casterPlayer, item));
 	}

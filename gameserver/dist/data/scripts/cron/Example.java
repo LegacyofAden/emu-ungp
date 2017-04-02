@@ -21,10 +21,8 @@ package cron;
 import org.l2junity.gameserver.scripting.annotations.Disabled;
 
 @Disabled
-public class Example
-{
-	public static void main(String[] args)
-	{
+public class Example {
+	public static void main(String[] args) {
 		System.out.println("Hello world!");
 	}
 }

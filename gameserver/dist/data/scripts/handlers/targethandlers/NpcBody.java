@@ -28,71 +28,59 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target dead monster.
+ *
  * @author Nik
  */
-public class NpcBody implements ITargetTypeHandler
-{
+public class NpcBody implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (selectedTarget == null)
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (selectedTarget == null) {
 			return null;
 		}
-		
-		if (!selectedTarget.isCreature())
-		{
+
+		if (!selectedTarget.isCreature()) {
 			return null;
 		}
-		
-		if (!selectedTarget.isNpc())
-		{
-			if (sendMessage)
-			{
+
+		if (!selectedTarget.isNpc()) {
+			if (sendMessage) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
-			
+
 			return null;
 		}
-		
+
 		Npc npc = (Npc) selectedTarget;
-		
-		if (npc.isDead())
-		{
+
+		if (npc.isDead()) {
 			// Check for cast range if character cannot move. TODO: char will start follow until within castrange, but if his moving is blocked by geodata, this msg will be sent.
-			if (dontMove)
-			{
-				if (activeChar.distance2d(npc) > skill.getCastRange())
-				{
-					if (sendMessage)
-					{
+			if (dontMove) {
+				if (activeChar.distance2d(npc) > skill.getCastRange()) {
+					if (sendMessage) {
 						activeChar.sendPacket(SystemMessageId.THE_DISTANCE_IS_TOO_FAR_AND_SO_THE_CASTING_HAS_BEEN_STOPPED);
 					}
-					
+
 					return null;
 				}
 			}
-			
+
 			// Geodata check when character is within range.
-			if (!GeoData.getInstance().canSeeTarget(activeChar, npc))
-			{
-				if (sendMessage)
-				{
+			if (!GeoData.getInstance().canSeeTarget(activeChar, npc)) {
+				if (sendMessage) {
 					activeChar.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 				}
-				
+
 				return null;
 			}
-			
+
 			return npc;
 		}
-		
+
 		// If target is not dead or not player/pet it will not even bother to walk within range, unlike Enemy target type.
-		if (sendMessage)
-		{
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
-		
+
 		return null;
 	}
 }

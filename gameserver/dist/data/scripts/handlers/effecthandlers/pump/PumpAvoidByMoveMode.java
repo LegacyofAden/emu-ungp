@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractStatByMoveType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractStatByMoveType;
 
 /**
  * @author Sdw
  */
-public class PumpAvoidByMoveMode extends AbstractStatByMoveType
-{
-	public PumpAvoidByMoveMode(StatsSet params)
-	{
+public class PumpAvoidByMoveMode extends AbstractStatByMoveType {
+	public PumpAvoidByMoveMode(StatsSet params) {
 		super(params, DoubleStat.EVASION_RATE);
 	}
 }

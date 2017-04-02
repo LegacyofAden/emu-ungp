@@ -18,6 +18,7 @@
  */
 package ai.individual.KartiasLabyrinth;
 
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
@@ -33,138 +34,109 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Kartia Helper Barton AI.
+ *
  * @author St3eT
  */
-public final class KartiaHelperBarton extends AbstractNpcAI
-{
+public final class KartiaHelperBarton extends AbstractNpcAI {
 	// NPCs
 	private static final int[] KARTIA_BARTON =
-	{
-		33611, // Barton (Kartia 85)
-		33622, // Barton (Kartia 90)
-		33633, // Barton (Kartia 95)
-	};
+			{
+					33611, // Barton (Kartia 85)
+					33622, // Barton (Kartia 90)
+					33633, // Barton (Kartia 95)
+			};
 	private static final int[] KARTIA_ADOLPH =
-	{
-		33609, // Adolph (Kartia 85)
-		33620, // Adolph (Kartia 90)
-		33631, // Adolph (Kartia 95)
-	};
+			{
+					33609, // Adolph (Kartia 85)
+					33620, // Adolph (Kartia 90)
+					33631, // Adolph (Kartia 95)
+			};
 	// Misc
 	private static final int[] KARTIA_SOLO_INSTANCES =
-	{
-		205, // Solo 85
-		206, // Solo 90
-		207, // Solo 95
-	};
-	
-	private KartiaHelperBarton()
-	{
+			{
+					205, // Solo 85
+					206, // Solo 90
+					207, // Solo 95
+			};
+
+	private KartiaHelperBarton() {
 		setCreatureAttackedId(this::onCreatureAttacked, KARTIA_BARTON);
 		addSeeCreatureId(KARTIA_BARTON);
 		setInstanceStatusChangeId(this::onInstanceStatusChange, KARTIA_SOLO_INSTANCES);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if ((instance != null) && event.equals("CHECK_ACTION"))
-		{
+		if ((instance != null) && event.equals("CHECK_ACTION")) {
 			final FriendlyNpcInstance adolph = npc.getVariables().getObject("ADOLPH_OBJECT", FriendlyNpcInstance.class);
-			if (adolph != null)
-			{
+			if (adolph != null) {
 				final double distance = npc.distance2d(adolph);
-				if (distance > 200)
-				{
+				if (distance > 200) {
 					final Location loc = new Location(adolph.getX() + getRandom(-100, 100), adolph.getY() + getRandom(-100, 100), adolph.getZ() + 50);
-					if (distance > 500)
-					{
+					if (distance > 500) {
 						npc.teleToLocation(loc);
-					}
-					else
-					{
+					} else {
 						npc.setIsRunning(true);
 						addMoveToDesire(npc, loc, 23);
 					}
-				}
-				else if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null))
-				{
+				} else if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
 					final Creature monster = (Creature) adolph.getTarget();
-					if ((monster != null) && adolph.isInCombat())
-					{
+					if ((monster != null) && adolph.isInCombat()) {
 						addAttackDesire(npc, monster);
 					}
 				}
 			}
 		}
 	}
-	
-	public void onInstanceStatusChange(OnInstanceStatusChange event)
-	{
+
+	public void onInstanceStatusChange(OnInstanceStatusChange event) {
 		final Instance instance = event.getWorld();
 		final int status = event.getStatus();
-		switch (status)
-		{
-			case 1:
-			{
+		switch (status) {
+			case 1: {
 				instance.getAliveNpcs(KARTIA_BARTON).forEach(barton -> getTimers().addRepeatingTimer("CHECK_ACTION", 1000, barton, null));
 				break;
 			}
 			case 2:
-			case 3:
-			{
+			case 3: {
 				final Location loc = instance.getTemplateParameters().getLocation("bartonTeleportStatus" + status);
-				if (loc != null)
-				{
+				if (loc != null) {
 					instance.getAliveNpcs(KARTIA_BARTON).forEach(barton -> barton.teleToLocation(loc));
 				}
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			npc.getVariables().set("PLAYER_OBJECT", creature.getActingPlayer());
-		}
-		else if (ArrayUtil.contains(KARTIA_ADOLPH, creature.getId()))
-		{
+		} else if (ArrayUtil.contains(KARTIA_ADOLPH, creature.getId())) {
 			npc.getVariables().set("ADOLPH_OBJECT", creature);
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
-	public void onCreatureAttacked(OnCreatureAttacked event)
-	{
+
+	public void onCreatureAttacked(OnCreatureAttacked event) {
 		final Npc npc = (Npc) event.getTarget();
 		final Instance instance = npc.getInstanceWorld();
-		if ((instance != null) && !event.getAttacker().isPlayable())
-		{
+		if ((instance != null) && !event.getAttacker().isPlayable()) {
 			final StatsSet instParams = instance.getTemplateParameters();
 			final int random = getRandom(1000);
-			
-			if (random < 333)
-			{
+
+			if (random < 333) {
 				final SkillHolder infinitySkill = instParams.getSkillHolder("bartonInfinity");
-				if ((infinitySkill != null) && SkillCaster.checkUseConditions(npc, infinitySkill.getSkill()))
-				{
+				if ((infinitySkill != null) && SkillCaster.checkUseConditions(npc, infinitySkill.getSkill())) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DIE3);
 					addSkillCastDesire(npc, npc.getTarget(), infinitySkill, 23);
 				}
-			}
-			else if ((npc.getCurrentHpPercent() < 50) && npc.isScriptValue(0))
-			{
+			} else if ((npc.getCurrentHpPercent() < 50) && npc.isScriptValue(0)) {
 				final SkillHolder berserkerSkill = instParams.getSkillHolder("bartonBerserker");
-				if ((berserkerSkill != null) && !npc.isAffectedBySkill(berserkerSkill.getSkillId()) && SkillCaster.checkUseConditions(npc, berserkerSkill.getSkill()))
-				{
+				if ((berserkerSkill != null) && !npc.isAffectedBySkill(berserkerSkill.getSkillId()) && SkillCaster.checkUseConditions(npc, berserkerSkill.getSkill())) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WAAAAAAAAHHHHHH);
 					addSkillCastDesire(npc, npc.getTarget(), berserkerSkill, 23);
 					getTimers().addTimer("RESTORE_SCRIPTVAL", 10000, n -> npc.setScriptValue(0));
@@ -172,9 +144,8 @@ public final class KartiaHelperBarton extends AbstractNpcAI
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new KartiaHelperBarton();
 	}
 }

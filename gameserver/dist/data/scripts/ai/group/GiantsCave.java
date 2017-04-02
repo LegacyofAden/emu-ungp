@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
@@ -25,80 +26,63 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Giant's Cave AI.
+ *
  * @author Gnacik, St3eT
  */
-public final class GiantsCave extends AbstractNpcAI
-{
+public final class GiantsCave extends AbstractNpcAI {
 	// NPC
 	private static final int[] SCOUTS =
-	{
-		22668, // Gamlin (Scout)
-		22669, // Leogul (Scout)
-	};
-	
-	private GiantsCave()
-	{
+			{
+					22668, // Gamlin (Scout)
+					22669, // Leogul (Scout)
+			};
+
+	private GiantsCave() {
 		addAttackId(SCOUTS);
 		addAggroRangeEnterId(SCOUTS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("ATTACK") && (player != null) && (npc != null) && !npc.isDead())
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("ATTACK") && (player != null) && (npc != null) && !npc.isDead()) {
 			if (npc.getId() == SCOUTS[0]) // Gamlin
 			{
 				npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.INTRUDER_DETECTED);
-			}
-			else
-			{
+			} else {
 				npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.OH_GIANTS_AN_INTRUDER_HAS_BEEN_DISCOVERED);
 			}
-			
+
 			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 450, characters ->
 			{
-				if ((getRandomBoolean()))
-				{
+				if ((getRandomBoolean())) {
 					addAttackPlayerDesire(characters, player);
 				}
 			});
-		}
-		else if (event.equals("CLEAR") && (npc != null) && !npc.isDead())
-		{
+		} else if (event.equals("CLEAR") && (npc != null) && !npc.isDead()) {
 			npc.setScriptValue(0);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (npc.isScriptValue(0))
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			startQuestTimer("ATTACK", 6000, npc, attacker);
 			startQuestTimer("CLEAR", 120000, npc, null);
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (npc.isScriptValue(0))
-		{
+	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
-			if (getRandomBoolean())
-			{
+			if (getRandomBoolean()) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_GUYS_ARE_DETECTED);
-			}
-			else
-			{
+			} else {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WHAT_KIND_OF_CREATURES_ARE_YOU);
 			}
 			startQuestTimer("ATTACK", 6000, npc, player);
@@ -106,9 +90,8 @@ public final class GiantsCave extends AbstractNpcAI
 		}
 		return super.onAggroRangeEnter(npc, player, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new GiantsCave();
 	}
 }

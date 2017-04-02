@@ -29,68 +29,52 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Charm Of Courage Handler
+ *
  * @author Zealar
  */
-public class CharmOfCourage implements IItemHandler
-{
+public class CharmOfCourage implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+
+		if (!playable.isPlayer()) {
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
-		
+
 		int level = activeChar.getLevel();
 		final int itemLevel = item.getItem().getCrystalType().getLevel();
-		
-		if (level < 20)
-		{
+
+		if (level < 20) {
 			level = 0;
-		}
-		else if (level < 40)
-		{
+		} else if (level < 40) {
 			level = 1;
-		}
-		else if (level < 52)
-		{
+		} else if (level < 52) {
 			level = 2;
-		}
-		else if (level < 61)
-		{
+		} else if (level < 61) {
 			level = 3;
-		}
-		else if (level < 76)
-		{
+		} else if (level < 76) {
 			level = 4;
-		}
-		else
-		{
+		} else {
 			level = 5;
 		}
-		
-		if (itemLevel < level)
-		{
+
+		if (itemLevel < level) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			sm.addItemName(item.getId());
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (activeChar.destroyItemWithoutTrace("Consume", item.getObjectId(), 1, null, false))
-		{
+
+		if (activeChar.destroyItemWithoutTrace("Consume", item.getObjectId(), 1, null, false)) {
 			activeChar.setCharmOfCourage(true);
 			activeChar.sendPacket(new EtcStatusUpdate(activeChar));
 			return true;
 		}
 		return false;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new CharmOfCourage());
 	}
 }

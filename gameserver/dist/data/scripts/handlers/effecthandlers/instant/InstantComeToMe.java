@@ -29,30 +29,26 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * An effect making targets walk towards you.
+ *
  * @author Nik
  */
-public final class InstantComeToMe extends AbstractEffect
-{
-	public InstantComeToMe(StatsSet params)
-	{
-		
+public final class InstantComeToMe extends AbstractEffect {
+	public InstantComeToMe(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(Double.NaN, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		targetCreature.setRunning();
 		targetCreature.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, caster.getLocation());
 	}

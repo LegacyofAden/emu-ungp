@@ -18,8 +18,7 @@
  */
 package ai.individual.Other.DimensionalMerchant;
 
-import java.util.HashMap;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -28,14 +27,14 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ExGetPremiumItemList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
 
 /**
  * Dimensional Merchant AI.
+ *
  * @author St3eT
  */
-public final class DimensionalMerchant extends AbstractNpcAI
-{
+public final class DimensionalMerchant extends AbstractNpcAI {
 	// NPC
 	private static final int MERCHANT = 32478; // Dimensional Merchant
 	// Items
@@ -47,7 +46,7 @@ public final class DimensionalMerchant extends AbstractNpcAI
 	private static final int ENH_MINION_COUPON_EV = 22240; // Enhanced Rose Spirit Coupon (5-hour) - Event
 	// Misc
 	private static final HashMap<String, Integer> MINION_EXCHANGE = new HashMap<>();
-	
+
 	{
 		// Normal
 		MINION_EXCHANGE.put("whiteWeasel", 13017); // White Weasel Minion Necklace
@@ -66,21 +65,18 @@ public final class DimensionalMerchant extends AbstractNpcAI
 		MINION_EXCHANGE.put("lapham", 20919); // Enhanced Rose Necklace: Lapham
 		MINION_EXCHANGE.put("mafum", 20920); // Enhanced Rose Necklace: Mafum
 	}
-	
-	private DimensionalMerchant()
-	{
+
+	private DimensionalMerchant() {
 		addStartNpc(MERCHANT);
 		addFirstTalkId(MERCHANT);
 		addTalkId(MERCHANT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32478.html":
 			case "32478-01.html":
 			case "32478-02.html":
@@ -104,19 +100,14 @@ public final class DimensionalMerchant extends AbstractNpcAI
 			case "32478-20.html":
 			case "32478-21.html":
 			case "32478-22.html":
-			case "32478-23.html":
-			{
+			case "32478-23.html": {
 				htmltext = event;
 				break;
 			}
-			case "getDimensonalItem":
-			{
-				if (player.getPremiumItemList().isEmpty())
-				{
+			case "getDimensonalItem": {
+				if (player.getPremiumItemList().isEmpty()) {
 					player.sendPacket(SystemMessageId.THERE_ARE_NO_MORE_DIMENSIONAL_ITEMS_TO_BE_FOUND);
-				}
-				else
-				{
+				} else {
 					player.sendPacket(new ExGetPremiumItemList(player));
 				}
 				break;
@@ -124,15 +115,13 @@ public final class DimensionalMerchant extends AbstractNpcAI
 			case "whiteWeasel":
 			case "fairyPrincess":
 			case "wildBeast":
-			case "foxShaman":
-			{
+			case "foxShaman": {
 				htmltext = giveMinion(player, event, MINION_COUPON, MINION_COUPON_EV);
 				break;
 			}
 			case "toyKnight":
 			case "spiritShaman":
-			case "turtleAscetic":
-			{
+			case "turtleAscetic": {
 				htmltext = giveMinion(player, event, SUP_MINION_COUPON, SUP_MINION_COUPON_EV);
 				break;
 			}
@@ -141,35 +130,30 @@ public final class DimensionalMerchant extends AbstractNpcAI
 			case "lekang":
 			case "lilias":
 			case "lapham":
-			case "mafum":
-			{
+			case "mafum": {
 				htmltext = giveMinion(player, event, ENH_MINION_COUPON, ENH_MINION_COUPON_EV);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	private String giveMinion(PlayerInstance player, String event, int couponId, int eventCouponId)
-	{
-		if (hasAtLeastOneQuestItem(player, couponId, eventCouponId))
-		{
+
+	private String giveMinion(PlayerInstance player, String event, int couponId, int eventCouponId) {
+		if (hasAtLeastOneQuestItem(player, couponId, eventCouponId)) {
 			takeItems(player, (hasQuestItems(player, eventCouponId) ? eventCouponId : couponId), 1);
 			final int minionId = MINION_EXCHANGE.get(event);
 			giveItems(player, minionId, 1);
 			final ItemInstance summonItem = player.getInventory().getItemByItemId(minionId);
 			final IItemHandler handler = ItemHandler.getInstance().getHandler(summonItem.getEtcItem());
-			if ((handler != null) && !player.hasPet())
-			{
+			if ((handler != null) && !player.hasPet()) {
 				handler.useItem(player, summonItem, true);
 			}
 			return "32478-08.html";
 		}
 		return "32478-07.html";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new DimensionalMerchant();
 	}
 }

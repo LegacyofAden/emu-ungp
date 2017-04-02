@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10403_TheGuardianGiant.Q10403_TheGuardianGiant;
 
 /**
  * The Stolen Seed (10709)
+ *
  * @author St3eT
  */
-public final class Q10709_TheStolenSeed extends Quest
-{
+public final class Q10709_TheStolenSeed extends Quest {
 	// NPCs
 	private static final int NOVIAN = 33866;
 	private static final int CONTROL_DEVICE = 33961; // Magic Circle Control Device
@@ -48,9 +47,8 @@ public final class Q10709_TheStolenSeed extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 58;
 	private static final int MAX_LEVEL = 61;
-	
-	public Q10709_TheStolenSeed()
-	{
+
+	public Q10709_TheStolenSeed() {
 		super(10709);
 		addStartNpc(NOVIAN);
 		addTalkId(NOVIAN, CONTROL_DEVICE);
@@ -59,69 +57,57 @@ public final class Q10709_TheStolenSeed extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33866-08.htm");
 		addCondCompletedQuest(Q10403_TheGuardianGiant.class.getSimpleName(), "33866-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (event.equals("action"))
-		{
-			if ((st != null) && st.isCond(1))
-			{
+
+		if (event.equals("action")) {
+			if ((st != null) && st.isCond(1)) {
 				// Take items
 				takeItems(player, MEMORY_FRAGMENT, -1);
-				
+
 				// Spawn + chat
 				final Npc akum = addSpawn(REMEMBERED_AKUM, npc.getX() + 100, npc.getY() + 100, npc.getZ(), 0, false, 0);
 				akum.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.ARGH_WHO_IS_HIDING_THERE);
 				final Npc embryo = addSpawn(REMEMBERED_EMBRYO, akum.getX() + 100, akum.getY() + 100, akum.getZ(), 0, false, 0);
 				embryo.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.A_SMART_GIANT_HUH_WELL_HAND_IT_OVER_THE_KARTIA_S_SEED_IS_OURS);
-				
+
 				// Attack + invul
 				akum.reduceCurrentHp(1, embryo, null);
 				embryo.reduceCurrentHp(1, akum, null); // TODO: Find better way for attack
-				
+
 				embryo.setIsInvul(true);
 				akum.setIsInvul(true);
-				
+
 				getTimers().addTimer("EMBRYO_DELAY", 3000, embryo, player);
-			}
-			else
-			{
+			} else {
 				return "33961-01.html";
 			}
 		}
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33866-02.htm":
-			case "33866-03.htm":
-			{
+			case "33866-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33866-04.htm":
-			{
+			case "33866-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33866-07.html":
-			{
-				if (st.isCond(3))
-				{
+			case "33866-07.html": {
+				if (st.isCond(3)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAB, 5);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 731_010);
 						addSp(player, 175);
 					}
@@ -132,17 +118,14 @@ public final class Q10709_TheStolenSeed extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("EMBRYO_DELAY"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("EMBRYO_DELAY")) {
 			final Npc akum = (Npc) npc.getTarget();
 			final QuestState st = getQuestState(player, true);
-			
-			if ((akum != null) && (st != null))
-			{
+
+			if ((akum != null) && (st != null)) {
 				st.setCond(2, true);
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.KARTIA_S_SEED_GOT_IT);
 				akum.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.ARGHH);
@@ -153,37 +136,28 @@ public final class Q10709_TheStolenSeed extends Quest
 			}
 		}
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == NOVIAN)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == NOVIAN) {
 					htmltext = "33866-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == NOVIAN)
-				{
-					switch (st.getCond())
-					{
+			case State.STARTED: {
+				if (npc.getId() == NOVIAN) {
+					switch (st.getCond()) {
 						case 1:
-						case 2:
-						{
+						case 2: {
 							htmltext = "33866-05.html";
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							htmltext = "33866-06.html";
 							break;
 						}
@@ -191,10 +165,8 @@ public final class Q10709_TheStolenSeed extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == NOVIAN)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == NOVIAN) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;
@@ -202,14 +174,12 @@ public final class Q10709_TheStolenSeed extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(2))
-		{
+
+		if ((st != null) && st.isStarted() && st.isCond(2)) {
 			st.setCond(3, true);
 			giveItems(killer, FRAGMENT, 1);
 		}

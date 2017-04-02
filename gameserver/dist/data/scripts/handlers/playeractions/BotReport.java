@@ -18,7 +18,7 @@
  */
 package handlers.playeractions;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.BotReportTable;
 import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
@@ -27,25 +27,20 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Bot Report button player action handler.
+ *
  * @author Nik
  */
-public final class BotReport implements IPlayerActionHandler
-{
+public final class BotReport implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (GeneralConfig.BOTREPORT_ENABLE)
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (GeneralConfig.BOTREPORT_ENABLE) {
 			BotReportTable.getInstance().reportBot(activeChar);
-		}
-		else
-		{
+		} else {
 			activeChar.sendMessage("This feature is disabled.");
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new BotReport());
 	}
 }

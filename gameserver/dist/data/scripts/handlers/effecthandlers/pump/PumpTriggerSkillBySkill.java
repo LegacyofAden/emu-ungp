@@ -36,85 +36,69 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 
 /**
  * Trigger Skill By Skill effect implementation.
+ *
  * @author Zealar
  */
-public final class PumpTriggerSkillBySkill extends AbstractEffect
-{
+public final class PumpTriggerSkillBySkill extends AbstractEffect {
 	private final int _castSkillId;
 	private final int _chance;
 	private final SkillHolder _skill;
 	private final int _skillLevelScaleTo;
 	private final ITargetTypeHandler _targetTypeHandler;
-	
-	public PumpTriggerSkillBySkill(StatsSet params)
-	{
+
+	public PumpTriggerSkillBySkill(StatsSet params) {
 		_castSkillId = params.getInt("castSkillId");
 		_chance = params.getInt("chance", 100);
 		_skill = new SkillHolder(params.getInt("skillId"), params.getInt("skillLevel"));
 		_skillLevelScaleTo = params.getInt("skillLevelScaleTo", 0);
 		final String targetType = params.getString("targetType", "TARGET");
 		_targetTypeHandler = TargetHandler.getInstance().getTargetTypeHandler(targetType);
-		if (_targetTypeHandler == null)
-		{
+		if (_targetTypeHandler == null) {
 			throw new RuntimeException("Target Type not found for effect[" + getClass().getSimpleName() + "] TargetType[" + targetType + "].");
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new ConsumerEventListener(target, EventType.ON_CREATURE_SKILL_FINISH_CAST, (OnCreatureSkillFinishCast event) -> onSkillUseEvent(event), this));
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_SKILL_FINISH_CAST, listener -> listener.getOwner() == this);
 	}
-	
-	private void onSkillUseEvent(OnCreatureSkillFinishCast event)
-	{
-		if ((_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0) || (_castSkillId == 0)))
-		{
+
+	private void onSkillUseEvent(OnCreatureSkillFinishCast event) {
+		if ((_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0) || (_castSkillId == 0))) {
 			return;
 		}
-		
-		if (_castSkillId != event.getSkill().getId())
-		{
+
+		if (_castSkillId != event.getSkill().getId()) {
 			return;
 		}
-		
-		if (!event.getTarget().isCreature())
-		{
+
+		if (!event.getTarget().isCreature()) {
 			return;
 		}
-		
-		if ((_chance < 100) && (Rnd.get(100) > _chance))
-		{
+
+		if ((_chance < 100) && (Rnd.get(100) > _chance)) {
 			return;
 		}
-		
+
 		final Skill triggerSkill;
-		if (_skillLevelScaleTo <= 0)
-		{
+		if (_skillLevelScaleTo <= 0) {
 			triggerSkill = _skill.getSkill();
-		}
-		else
-		{
+		} else {
 			final BuffInfo buffInfo = ((Creature) event.getTarget()).getEffectList().getBuffInfoBySkillId(_skill.getSkillId());
-			if (buffInfo != null)
-			{
+			if (buffInfo != null) {
 				triggerSkill = SkillData.getInstance().getSkill(_skill.getSkillId(), Math.min(_skillLevelScaleTo, buffInfo.getSkill().getLevel() + 1));
-			}
-			else
-			{
+			} else {
 				triggerSkill = _skill.getSkill();
 			}
 		}
-		
+
 		final WorldObject target = _targetTypeHandler.getTarget(event.getCaster(), event.getTarget(), triggerSkill, false, false, false);
-		if ((target != null) && target.isCreature())
-		{
+		if ((target != null) && target.isCreature()) {
 			SkillCaster.triggerCast(event.getCaster(), target, triggerSkill);
 		}
 	}

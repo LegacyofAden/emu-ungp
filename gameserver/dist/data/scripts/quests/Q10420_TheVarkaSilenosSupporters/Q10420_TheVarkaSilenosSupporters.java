@@ -18,9 +18,6 @@
  */
 package quests.Q10420_TheVarkaSilenosSupporters;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.ChatType;
@@ -34,40 +31,42 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * The Varka Silenos Supporters (10420)
+ *
  * @author St3eT
  */
-public final class Q10420_TheVarkaSilenosSupporters extends Quest
-{
+public final class Q10420_TheVarkaSilenosSupporters extends Quest {
 	// NPCs
 	private static final int HANSEN = 33853;
 	private static final int EMBRYO_SHOOTER = 27514;
 	private static final int EMBRYO_WIZARD = 27515;
 	private static final int[] SHOOTER_MONSTERS =
-	{
-		21350, // Varka Silenos Recruit
-		21351, // Varka Silenos Footman
-		21353, // Varka Silenos Scout
-		21354, // Varka Silenos Hunter
-		21355, // Varka Silenos Shaman
-		21356, // Grazing Nepenthes
-		21358, // Varka Silenos Warrior
-		21369, // Varka's Commander
-		27514, // Varka Backup Shooter
-	};
+			{
+					21350, // Varka Silenos Recruit
+					21351, // Varka Silenos Footman
+					21353, // Varka Silenos Scout
+					21354, // Varka Silenos Hunter
+					21355, // Varka Silenos Shaman
+					21356, // Grazing Nepenthes
+					21358, // Varka Silenos Warrior
+					21369, // Varka's Commander
+					27514, // Varka Backup Shooter
+			};
 	private static final int[] WIZARD_MONSTERS =
-	{
-		21357, // Varka Silenos Priest
-		27515, // Varka Backup Wizard
-	};
+			{
+					21357, // Varka Silenos Priest
+					27515, // Varka Backup Wizard
+			};
 	// Items
 	private static final int EAS = 26353; // Scroll: Enchant Armor (S-grade)
 	// Misc
 	private static final int MIN_LEVEL = 76;
-	
-	public Q10420_TheVarkaSilenosSupporters()
-	{
+
+	public Q10420_TheVarkaSilenosSupporters() {
 		super(10420);
 		addStartNpc(HANSEN);
 		addTalkId(HANSEN);
@@ -77,40 +76,32 @@ public final class Q10420_TheVarkaSilenosSupporters extends Quest
 		addCondInCategory(CategoryType.FIGHTER_GROUP, "33853-08.htm");
 		addCondMinLevel(MIN_LEVEL, "33853-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33853-02.htm":
-			case "33853-03.htm":
-			{
+			case "33853-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33853-04.htm":
-			{
+			case "33853-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33853-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33853-07.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAS, 2);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 22_997_520);
 						addSp(player, 5519);
 					}
@@ -121,83 +112,62 @@ public final class Q10420_TheVarkaSilenosSupporters extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = "33853-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = st.isCond(1) ? "33853-05.html" : "33853-06.html";
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
-			if ((npc.getId() == EMBRYO_SHOOTER) || (npc.getId() == EMBRYO_WIZARD))
-			{
+
+		if ((st != null) && st.isCond(1)) {
+			if ((npc.getId() == EMBRYO_SHOOTER) || (npc.getId() == EMBRYO_WIZARD)) {
 				int shooterCount = st.getInt("KillCount_" + EMBRYO_SHOOTER);
 				int wizardCount = st.getInt("KillCount_" + EMBRYO_WIZARD);
-				
-				if (npc.getId() == EMBRYO_SHOOTER)
-				{
-					if (shooterCount < 50)
-					{
+
+				if (npc.getId() == EMBRYO_SHOOTER) {
+					if (shooterCount < 50) {
 						st.set("KillCount_" + EMBRYO_SHOOTER, ++shooterCount);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
-				}
-				else
-				{
-					if (wizardCount < 50)
-					{
+				} else {
+					if (wizardCount < 50) {
 						st.set("KillCount_" + EMBRYO_WIZARD, ++wizardCount);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 				}
-				
-				if ((shooterCount >= 50) && (wizardCount >= 50))
-				{
+
+				if ((shooterCount >= 50) && (wizardCount >= 50)) {
 					st.setCond(2, true);
 				}
-			}
-			else
-			{
-				if (ArrayUtil.contains(WIZARD_MONSTERS, npc.getId()))
-				{
-					if (st.getInt("KillCount_" + EMBRYO_WIZARD) < 50)
-					{
+			} else {
+				if (ArrayUtil.contains(WIZARD_MONSTERS, npc.getId())) {
+					if (st.getInt("KillCount_" + EMBRYO_WIZARD) < 50) {
 						final Npc embryo = addSpawn(EMBRYO_WIZARD, npc, false, 60000);
 						addAttackPlayerDesire(embryo, killer);
 						embryo.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_DARE_INTERFERE_WITH_EMBRYO_SURELY_YOU_WISH_FOR_DEATH);
 					}
-				}
-				else
-				{
-					if (st.getInt("KillCount_" + EMBRYO_SHOOTER) < 50)
-					{
+				} else {
+					if (st.getInt("KillCount_" + EMBRYO_SHOOTER) < 50) {
 						final Npc embryo = addSpawn(EMBRYO_SHOOTER, npc, false, 60000);
 						addAttackPlayerDesire(embryo, killer);
 						embryo.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_DARE_INTERFERE_WITH_EMBRYO_SURELY_YOU_WISH_FOR_DEATH);
@@ -207,13 +177,11 @@ public final class Q10420_TheVarkaSilenosSupporters extends Quest
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
 		final QuestState st = getQuestState(activeChar, false);
-		if ((st != null) && st.isCond(1))
-		{
+		if ((st != null) && st.isCond(1)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(2);
 			npcLogList.add(new NpcLogListHolder(EMBRYO_SHOOTER, false, st.getInt("KillCount_" + EMBRYO_SHOOTER)));
 			npcLogList.add(new NpcLogListHolder(EMBRYO_WIZARD, false, st.getInt("KillCount_" + EMBRYO_WIZARD)));

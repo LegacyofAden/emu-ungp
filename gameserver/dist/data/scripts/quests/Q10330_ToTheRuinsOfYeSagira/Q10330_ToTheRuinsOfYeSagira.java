@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * To The Ruins of Ye Sagira (10330)
+ *
  * @author Gladicek
  */
-public final class Q10330_ToTheRuinsOfYeSagira extends Quest
-{
+public final class Q10330_ToTheRuinsOfYeSagira extends Quest {
 	// NPCs
 	private static final int FRANCO = 32153;
 	private static final int RIVIAN = 32147;
@@ -46,27 +46,23 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 7;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10330_ToTheRuinsOfYeSagira()
-	{
+
+	public Q10330_ToTheRuinsOfYeSagira() {
 		super(10330);
 		addStartNpc(FRANCO, RIVIAN, DEVON, TOOK, MOKA, VALFAR);
 		addTalkId(FRANCO, RIVIAN, DEVON, TOOK, MOKA, VALFAR, MILIA, LAKCIS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32153-03.htm":
 			case "32147-03.htm":
 			case "32150-03.htm":
@@ -79,8 +75,7 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 			case "32146-04.htm":
 			case "32160-04.htm":
 			case "32157-04.htm":
-			case "30006-02.html":
-			{
+			case "30006-02.html": {
 				htmltext = event;
 				break;
 			}
@@ -89,36 +84,28 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 			case "32150-05.html":
 			case "32146-05.html":
 			case "32160-05.html":
-			case "32157-05.html":
-			{
+			case "32157-05.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "30006-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30006-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32977-02.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "32977-02.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, RING_OF_KNOWLEDGE, 2);
 						giveItems(player, HEALING_POTION, 100);
 						addExp(player, 20100);
 						addSp(player, 11);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -127,25 +114,18 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState qs = getQuestState(player, true);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				switch (npc.getId())
-				{
-					case FRANCO:
-					{
-						if (player.getRace() == Race.HUMAN)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				switch (npc.getId()) {
+					case FRANCO: {
+						if (player.getRace() == Race.HUMAN) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32153-01.htm";
 								break;
 							}
@@ -155,12 +135,9 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 						htmltext = "32153-02.htm";
 						break;
 					}
-					case RIVIAN:
-					{
-						if (player.getRace() == Race.ELF)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+					case RIVIAN: {
+						if (player.getRace() == Race.ELF) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32147-01.htm";
 								break;
 							}
@@ -170,12 +147,9 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 						htmltext = "32147-02.htm";
 						break;
 					}
-					case DEVON:
-					{
-						if (player.getRace() == Race.DARK_ELF)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+					case DEVON: {
+						if (player.getRace() == Race.DARK_ELF) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32160-01.htm";
 								break;
 							}
@@ -185,12 +159,9 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 						htmltext = "32160-02.htm";
 						break;
 					}
-					case TOOK:
-					{
-						if (player.getRace() == Race.ORC)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+					case TOOK: {
+						if (player.getRace() == Race.ORC) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32150-01.htm";
 								break;
 							}
@@ -200,12 +171,9 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 						htmltext = "32150-02.htm";
 						break;
 					}
-					case MOKA:
-					{
-						if (player.getRace() == Race.DWARF)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+					case MOKA: {
+						if (player.getRace() == Race.DWARF) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32157-01.htm";
 								break;
 							}
@@ -215,12 +183,9 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 						htmltext = "32157-02.htm";
 						break;
 					}
-					case VALFAR:
-					{
-						if (player.getRace() == Race.KAMAEL)
-						{
-							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL))
-							{
+					case VALFAR: {
+						if (player.getRace() == Race.KAMAEL) {
+							if ((player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL)) {
 								htmltext = "32146-01.htm";
 								break;
 							}
@@ -232,74 +197,54 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 					}
 				}
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case FRANCO:
-					{
-						if ((player.getRace() == Race.HUMAN) && qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case FRANCO: {
+						if ((player.getRace() == Race.HUMAN) && qs.isCond(1)) {
 							htmltext = "32153-06.html";
 						}
 						break;
 					}
-					case RIVIAN:
-					{
-						if ((player.getRace() == Race.ELF) && qs.isCond(1))
-						{
+					case RIVIAN: {
+						if ((player.getRace() == Race.ELF) && qs.isCond(1)) {
 							htmltext = "32147-06.html";
 						}
 						break;
 					}
-					case DEVON:
-					{
-						if ((player.getRace() == Race.DARK_ELF) && qs.isCond(1))
-						{
+					case DEVON: {
+						if ((player.getRace() == Race.DARK_ELF) && qs.isCond(1)) {
 							htmltext = "32160-06.html";
 						}
 						break;
 					}
-					case TOOK:
-					{
-						if ((player.getRace() == Race.ORC) && qs.isCond(1))
-						{
+					case TOOK: {
+						if ((player.getRace() == Race.ORC) && qs.isCond(1)) {
 							htmltext = "32150-06.html";
 						}
 						break;
 					}
-					case MOKA:
-					{
-						if ((player.getRace() == Race.DWARF) && qs.isCond(1))
-						{
+					case MOKA: {
+						if ((player.getRace() == Race.DWARF) && qs.isCond(1)) {
 							htmltext = "32157-06.html";
 						}
 						break;
 					}
-					case VALFAR:
-					{
-						if ((player.getRace() == Race.KAMAEL) && qs.isCond(1))
-						{
+					case VALFAR: {
+						if ((player.getRace() == Race.KAMAEL) && qs.isCond(1)) {
 							htmltext = "32146-06.html";
 						}
 						break;
 					}
-					case MILIA:
-					{
-						if (qs.isCond(1))
-						{
+					case MILIA: {
+						if (qs.isCond(1)) {
 							htmltext = "30006-01.html";
-						}
-						else if (qs.isCond(2))
-						{
+						} else if (qs.isCond(2)) {
 							htmltext = "30006-03.html";
 						}
 						break;
 					}
-					case LAKCIS:
-					{
-						if (qs.isCond(2))
-						{
+					case LAKCIS: {
+						if (qs.isCond(2)) {
 							htmltext = "32977-01.html";
 						}
 						break;
@@ -307,10 +252,8 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
 					case FRANCO:
 					case RIVIAN:
 					case DEVON:
@@ -318,8 +261,7 @@ public final class Q10330_ToTheRuinsOfYeSagira extends Quest
 					case MOKA:
 					case VALFAR:
 					case MILIA:
-					case LAKCIS:
-					{
+					case LAKCIS: {
 						htmltext = getAlreadyCompletedMsg(player);
 						break;
 					}

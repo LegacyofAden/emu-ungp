@@ -28,10 +28,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * How Lavasauruses Are Made (901)
+ *
  * @author UnAfraid, nonom, malyelfik
  */
-public class Q00901_HowLavasaurusesAreMade extends Quest
-{
+public class Q00901_HowLavasaurusesAreMade extends Quest {
 	// NPC
 	private static final int ROONEY = 32049;
 	// Monsters
@@ -49,28 +49,24 @@ public class Q00901_HowLavasaurusesAreMade extends Quest
 	private static final int TOTEM_OF_SPIRIT = 21900;
 	private static final int TOTEM_OF_COURAGE = 21901;
 	private static final int TOTEM_OF_FORTITUDE = 21902;
-	
-	public Q00901_HowLavasaurusesAreMade()
-	{
+
+	public Q00901_HowLavasaurusesAreMade() {
 		super(901);
 		addStartNpc(ROONEY);
 		addTalkId(ROONEY);
 		addKillId(LAVASAURUS_NEWBORN, LAVASAURUS_FLEDGIING, LAVASAURUS_ADULT, LAVASAURUS_ELDERLY);
 		registerQuestItems(FRAGMENT_STONE, FRAGMENT_HORN, FRAGMENT_HEAD, FRAGMENT_BODY);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "32049-03.htm":
 			case "32049-08.html":
 			case "32049-09.html":
@@ -102,15 +98,12 @@ public class Q00901_HowLavasaurusesAreMade extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1))
-		{
-			switch (npc.getId())
-			{
+		if ((st != null) && st.isCond(1)) {
+			switch (npc.getId()) {
 				case LAVASAURUS_NEWBORN:
 					giveQuestItems(st, FRAGMENT_STONE);
 					break;
@@ -127,73 +120,56 @@ public class Q00901_HowLavasaurusesAreMade extends Quest
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = (st.getPlayer().getLevel() >= 76) ? "32049-01.htm" : "32049-02.htm";
 				break;
 			case State.STARTED:
-				if (st.isCond(1))
-				{
+				if (st.isCond(1)) {
 					htmltext = "32049-05.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (gotAllQuestItems(st))
-					{
+				} else if (st.isCond(2)) {
+					if (gotAllQuestItems(st)) {
 						takeItems(player, FRAGMENT_STONE, -1);
 						takeItems(player, FRAGMENT_HEAD, -1);
 						takeItems(player, FRAGMENT_BODY, -1);
 						takeItems(player, FRAGMENT_HORN, -1);
 						htmltext = "32049-06.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "32049-07.html";
 					}
 				}
 				break;
 			case State.COMPLETED:
-				if (st.isNowAvailable())
-				{
+				if (st.isNowAvailable()) {
 					st.setState(State.CREATED);
 					htmltext = (st.getPlayer().getLevel() >= 76) ? "32049-01.htm" : "32049-02.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "32049-16.html";
 				}
 				break;
 		}
 		return htmltext;
 	}
-	
-	public static void giveQuestItems(QuestState st, int itemId)
-	{
-		if (getQuestItemsCount(st.getPlayer(), itemId) < 10)
-		{
+
+	public static void giveQuestItems(QuestState st, int itemId) {
+		if (getQuestItemsCount(st.getPlayer(), itemId) < 10) {
 			giveItems(st.getPlayer(), itemId, 1);
 			playSound(st.getPlayer(), QuestSound.ITEMSOUND_QUEST_ITEMGET);
-		}
-		else if (gotAllQuestItems(st))
-		{
+		} else if (gotAllQuestItems(st)) {
 			st.setCond(2, true);
 		}
 	}
-	
-	public static boolean gotAllQuestItems(QuestState st)
-	{
+
+	public static boolean gotAllQuestItems(QuestState st) {
 		return (getQuestItemsCount(st.getPlayer(), FRAGMENT_STONE) >= 10) && (getQuestItemsCount(st.getPlayer(), FRAGMENT_HEAD) >= 10) && (getQuestItemsCount(st.getPlayer(), FRAGMENT_BODY) >= 10) && (getQuestItemsCount(st.getPlayer(), FRAGMENT_HORN) >= 10);
 	}
 }

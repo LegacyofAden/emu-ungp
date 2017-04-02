@@ -18,9 +18,7 @@
  */
 package ai.individual.Other.NpcBuffers;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,71 +27,62 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author UnAfraid
  */
-public class NpcBufferAI implements Runnable
-{
+public class NpcBufferAI implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NpcBufferAI.class);
 	private final Npc _npc;
 	private final NpcBufferSkillData _skillData;
-	
-	protected NpcBufferAI(Npc npc, NpcBufferSkillData skill)
-	{
+
+	protected NpcBufferAI(Npc npc, NpcBufferSkillData skill) {
 		_npc = npc;
 		_skillData = skill;
 	}
-	
-	private Skill getSkill(PlayerInstance player)
-	{
-		if (_skillData.getScaleToLevel() < 1)
-		{
+
+	private Skill getSkill(PlayerInstance player) {
+		if (_skillData.getScaleToLevel() < 1) {
 			return _skillData.getSkill();
 		}
-		
+
 		final BuffInfo currentBuff = player.getEffectList().getBuffInfoBySkillId(_skillData.getSkill().getId());
-		if (currentBuff != null)
-		{
+		if (currentBuff != null) {
 			int level = currentBuff.getSkill().getLevel();
-			if (_skillData.getScaleToLevel() > level)
-			{
+			if (_skillData.getScaleToLevel() > level) {
 				level++;
 			}
-			
+
 			final Skill skill = SkillData.getInstance().getSkill(_skillData.getSkill().getId(), level);
-			if (skill == null)
-			{
+			if (skill == null) {
 				LOGGER.warn("Requested non existing skill level: {} for id: {}", level, _skillData.getSkill().getId());
 			}
 			return skill;
 		}
-		
+
 		return _skillData.getSkill();
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if ((_npc == null) || !_npc.isSpawned() || _npc.isDecayed() || _npc.isDead() || (_skillData == null) || (_skillData.getSkill() == null))
-		{
+	public void run() {
+		if ((_npc == null) || !_npc.isSpawned() || _npc.isDecayed() || _npc.isDead() || (_skillData == null) || (_skillData.getSkill() == null)) {
 			return;
 		}
-		
-		if ((_npc.getSummoner() == null) || !_npc.getSummoner().isPlayer())
-		{
+
+		if ((_npc.getSummoner() == null) || !_npc.getSummoner().isPlayer()) {
 			return;
 		}
-		
+
 		final PlayerInstance player = _npc.getSummoner().getActingPlayer();
-		
+
 		final Skill skill = getSkill(player);
-		if (skill == null)
-		{
+		if (skill == null) {
 			return;
 		}
-		
+
 		_npc.doCast(skill);
-		
-		ThreadPool.schedule(this, skill.getReuseDelay(), TimeUnit.MILLISECONDS);
+
+		ThreadPool.getInstance().scheduleGeneral(this, skill.getReuseDelay(), TimeUnit.MILLISECONDS);
 	}
 }

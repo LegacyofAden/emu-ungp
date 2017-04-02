@@ -18,8 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -30,117 +28,89 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.GeoUtils;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.StringTokenizer;
+
 /**
  * @author -Nemesiss-, HorridoJoho
  */
-public class AdminGeodata implements IAdminCommandHandler
-{
+public class AdminGeodata implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_geo_pos",
-		"admin_geo_spawn_pos",
-		"admin_geo_can_move",
-		"admin_geo_can_see",
-		"admin_geogrid",
-		"admin_showgeogrid",
-	};
-	
+			{
+					"admin_geo_pos",
+					"admin_geo_spawn_pos",
+					"admin_geo_can_move",
+					"admin_geo_can_see",
+					"admin_geogrid",
+					"admin_showgeogrid",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		switch (actualCommand.toLowerCase())
-		{
-			case "admin_geo_pos":
-			{
+		switch (actualCommand.toLowerCase()) {
+			case "admin_geo_pos": {
 				final double worldX = activeChar.getX();
 				final double worldY = activeChar.getY();
 				final double worldZ = activeChar.getZ();
 				final int geoX = GeoData.getInstance().getGeoX(worldX);
 				final int geoY = GeoData.getInstance().getGeoY(worldY);
-				
-				if (GeoData.getInstance().hasGeoPos(geoX, geoY))
-				{
+
+				if (GeoData.getInstance().hasGeoPos(geoX, geoY)) {
 					activeChar.sendMessage("WorldX: " + worldX + ", WorldY: " + worldY + ", WorldZ: " + worldZ + ", GeoX: " + geoX + ", GeoY: " + geoY + ", GeoZ: " + GeoData.getInstance().getNearestZ(geoX, geoY, worldZ));
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("There is no geodata at this position.");
 				}
 				break;
 			}
-			case "admin_geo_spawn_pos":
-			{
+			case "admin_geo_spawn_pos": {
 				final double worldX = activeChar.getX();
 				final double worldY = activeChar.getY();
 				final double worldZ = activeChar.getZ();
 				final int geoX = GeoData.getInstance().getGeoX(worldX);
 				final int geoY = GeoData.getInstance().getGeoY(worldY);
-				
-				if (GeoData.getInstance().hasGeoPos(geoX, geoY))
-				{
+
+				if (GeoData.getInstance().hasGeoPos(geoX, geoY)) {
 					activeChar.sendMessage("WorldX: " + worldX + ", WorldY: " + worldY + ", WorldZ: " + worldZ + ", GeoX: " + geoX + ", GeoY: " + geoY + ", GeoZ: " + GeoData.getInstance().getSpawnHeight(worldX, worldY, worldZ));
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("There is no geodata at this position.");
 				}
 				break;
 			}
-			case "admin_geo_can_move":
-			{
+			case "admin_geo_can_move": {
 				final WorldObject target = activeChar.getTarget();
-				if (target != null)
-				{
-					if (GeoData.getInstance().canSeeTarget(activeChar, target))
-					{
+				if (target != null) {
+					if (GeoData.getInstance().canSeeTarget(activeChar, target)) {
 						activeChar.sendMessage("Can move beeline.");
-					}
-					else
-					{
+					} else {
 						activeChar.sendMessage("Can not move beeline!");
 					}
-				}
-				else
-				{
+				} else {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				}
 				break;
 			}
-			case "admin_geo_can_see":
-			{
+			case "admin_geo_can_see": {
 				final WorldObject target = activeChar.getTarget();
-				if (target != null)
-				{
-					if (GeoData.getInstance().canSeeTarget(activeChar, target))
-					{
+				if (target != null) {
+					if (GeoData.getInstance().canSeeTarget(activeChar, target)) {
 						activeChar.sendMessage("Can see target.");
-					}
-					else
-					{
+					} else {
 						activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_SEE_TARGET));
 					}
-				}
-				else
-				{
+				} else {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				}
 				break;
 			}
-			case "admin_geogrid":
-			{
+			case "admin_geogrid": {
 				showGeoGrid(activeChar, activeChar, st);
 				break;
 			}
-			case "admin_showgeogrid":
-			{
-				if ((activeChar.getTarget() == null) || !activeChar.getTarget().isPlayer())
-				{
+			case "admin_showgeogrid": {
+				if ((activeChar.getTarget() == null) || !activeChar.getTarget().isPlayer()) {
 					showGeoGrid(activeChar, activeChar, st);
-				}
-				else
-				{
+				} else {
 					showGeoGrid(activeChar, activeChar.getTarget().getActingPlayer(), st);
 				}
 				break;
@@ -148,45 +118,33 @@ public class AdminGeodata implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
-	private void showGeoGrid(PlayerInstance caller, PlayerInstance target, StringTokenizer st)
-	{
-		if (st.hasMoreTokens())
-		{
+
+	private void showGeoGrid(PlayerInstance caller, PlayerInstance target, StringTokenizer st) {
+		if (st.hasMoreTokens()) {
 			String nextCommand = st.nextToken();
-			
-			if (Util.isDigit(nextCommand))
-			{
+
+			if (Util.isDigit(nextCommand)) {
 				final int geoRadius = Integer.parseInt(nextCommand);
-				
-				if (geoRadius > 25)
-				{
+
+				if (geoRadius > 25) {
 					caller.sendMessage("Wrong usage! radius can not be greater than 25!");
-				}
-				else
-				{
+				} else {
 					GeoUtils.debugGrid(target, geoRadius);
 				}
-			}
-			else
-			{
+			} else {
 				caller.sendMessage("Wrong usage! //geogrid <0-25> / //showgeogrid <0-25>");
 			}
-		}
-		else
-		{
+		} else {
 			caller.sendMessage("Wrong usage! //geogrid <0-25> / //showgeogrid <0-25>");
 		}
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminGeodata());
 	}
 }

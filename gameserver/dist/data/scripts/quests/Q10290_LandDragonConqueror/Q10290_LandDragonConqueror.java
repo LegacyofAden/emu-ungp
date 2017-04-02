@@ -18,8 +18,6 @@
  */
 package quests.Q10290_LandDragonConqueror;
 
-import java.util.function.Function;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -27,12 +25,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.function.Function;
+
 /**
  * Land Dragon Conqueror (10290)
+ *
  * @author malyelfik
  */
-public final class Q10290_LandDragonConqueror extends Quest
-{
+public final class Q10290_LandDragonConqueror extends Quest {
 	// NPC
 	private static final int THEODRIC = 30755;
 	// Monster
@@ -45,49 +45,41 @@ public final class Q10290_LandDragonConqueror extends Quest
 	private static final int ANTHARAS_SLAYER_CIRCLET = 8568;
 	// Misc
 	private static final int MIN_LEVEL = 83;
-	
-	public Q10290_LandDragonConqueror()
-	{
+
+	public Q10290_LandDragonConqueror() {
 		super(10290);
 		addStartNpc(THEODRIC);
 		addTalkId(THEODRIC);
 		addKillId(ANTHARAS);
 		registerQuestItems(MIRACLE_NECKLACE, SHABBY_NECKLACE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equals("30755-05.htm"))
-		{
+
+		if (event.equals("30755-05.htm")) {
 			st.startQuest();
 			giveItems(player, SHABBY_NECKLACE, 1);
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (!player.isInParty())
-		{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (!player.isInParty()) {
 			return super.onKill(npc, player, isSummon);
 		}
-		
+
 		Function<PlayerInstance, Boolean> rewardCheck = p ->
 		{
-			if (Util.checkIfInRange(8000, npc, p, false))
-			{
+			if (Util.checkIfInRange(8000, npc, p, false)) {
 				QuestState st = getQuestState(p, false);
-				
-				if ((st != null) && st.isCond(1) && hasQuestItems(player, SHABBY_NECKLACE))
-				{
+
+				if ((st != null) && st.isCond(1) && hasQuestItems(player, SHABBY_NECKLACE)) {
 					takeItems(player, SHABBY_NECKLACE, -1);
 					giveItems(player, MIRACLE_NECKLACE, 1);
 					st.setCond(2, true);
@@ -95,54 +87,38 @@ public final class Q10290_LandDragonConqueror extends Quest
 			}
 			return true;
 		};
-		
+
 		// rewards go only to command channel, not to a single party or player (retail Freya AI)
-		if (player.getParty().isInCommandChannel())
-		{
+		if (player.getParty().isInCommandChannel()) {
 			player.getParty().getCommandChannel().forEachMember(rewardCheck);
-		}
-		else
-		{
+		} else {
 			player.getParty().forEachMember(rewardCheck);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (player.getLevel() < MIN_LEVEL)
-				{
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (player.getLevel() < MIN_LEVEL) {
 					htmltext = "30755-00.htm";
-				}
-				else
-				{
+				} else {
 					htmltext = hasQuestItems(player, PORTAL_STONE) ? "30755-02.htm" : "30755-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
-					if (hasQuestItems(player, SHABBY_NECKLACE))
-					{
+			case State.STARTED: {
+				if (st.isCond(1)) {
+					if (hasQuestItems(player, SHABBY_NECKLACE)) {
 						htmltext = "30755-06.html";
-					}
-					else
-					{
+					} else {
 						giveItems(player, SHABBY_NECKLACE, 1);
 						htmltext = "30755-07.html";
 					}
-				}
-				else if ((st.isCond(2)) && hasQuestItems(player, MIRACLE_NECKLACE))
-				{
+				} else if ((st.isCond(2)) && hasQuestItems(player, MIRACLE_NECKLACE)) {
 					htmltext = "30755-08.html";
 					giveAdena(player, 131236, true);
 					addExp(player, 702557);
@@ -152,8 +128,7 @@ public final class Q10290_LandDragonConqueror extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = "30755-09.html";
 				break;
 			}

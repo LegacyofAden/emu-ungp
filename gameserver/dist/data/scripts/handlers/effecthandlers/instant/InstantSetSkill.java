@@ -29,31 +29,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Set Skill effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantSetSkill extends AbstractEffect
-{
+public final class InstantSetSkill extends AbstractEffect {
 	private final int _skillId;
 	private final int _skillLvl;
-	
-	public InstantSetSkill(StatsSet params)
-	{
+
+	public InstantSetSkill(StatsSet params) {
 		_skillId = params.getInt("skillId", 0);
 		_skillLvl = params.getInt("skillLvl", 1);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		final Skill setSkill = SkillData.getInstance().getSkill(_skillId, _skillLvl);
-		if (setSkill == null)
-		{
+		if (setSkill == null) {
 			return;
 		}
 

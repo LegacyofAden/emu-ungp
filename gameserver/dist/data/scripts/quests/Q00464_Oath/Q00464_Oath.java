@@ -18,9 +18,6 @@
  */
 package quests.Q00464_Oath;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,41 +26,43 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Oath (464)
+ *
  * @author malyelfik
  */
-public class Q00464_Oath extends Quest
-{
+public class Q00464_Oath extends Quest {
 	// NPCs @formatter:off
 	private static final int[][] NPC =
-	{
-		// TODO: Incorrect rewards.
-		// NPC id, EXP, SP, Adena
-		{32596,	0, 0, 0},
-		{30657,	15449, 17696, 42910},
-		{30839, 189377, 21692, 52599},
-		{30899,	249180, 28542, 69210},
-		{31350, 249180, 28542, 69210},
-		{30539,	19408, 47062, 169442},
-		{30297,	24146, 58551, 210806},
-		{31960,	15449, 17696, 42910},
-		{31588,	15449, 17696, 42910}
-	};
+			{
+					// TODO: Incorrect rewards.
+					// NPC id, EXP, SP, Adena
+					{32596, 0, 0, 0},
+					{30657, 15449, 17696, 42910},
+					{30839, 189377, 21692, 52599},
+					{30899, 249180, 28542, 69210},
+					{31350, 249180, 28542, 69210},
+					{30539, 19408, 47062, 169442},
+					{30297, 24146, 58551, 210806},
+					{31960, 15449, 17696, 42910},
+					{31588, 15449, 17696, 42910}
+			};
 	// @formatter:on
-	
+
 	// Items
 	private static final int STRONGBOX = 15537;
 	private static final int BOOK = 15538;
 	private static final int BOOK2 = 15539;
 	// Misc
 	private static final int MIN_LEVEL = 82;
-	
+
 	// Monsters
 	private static final Map<Integer, Integer> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(22799, 9);
 		MOBS.put(22794, 6);
 		MOBS.put(22800, 10);
@@ -77,44 +76,37 @@ public class Q00464_Oath extends Quest
 		MOBS.put(22792, 4);
 		MOBS.put(22793, 5);
 	}
-	
-	public Q00464_Oath()
-	{
+
+	public Q00464_Oath() {
 		super(464);
-		for (int[] npc : NPC)
-		{
+		for (int[] npc : NPC) {
 			addTalkId(npc[0]);
 		}
 		addKillId(MOBS.keySet());
 		addItemTalkId(STRONGBOX);
 		registerQuestItems(BOOK, BOOK2);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "32596-04.html":
-				if (!hasQuestItems(player, BOOK))
-				{
+				if (!hasQuestItems(player, BOOK)) {
 					return getNoQuestMsg(player);
 				}
-				
+
 				final int cond = getRandom(2, 9);
 				st.set("npc", String.valueOf(NPC[cond - 1][0]));
 				st.setCond(cond, true);
 				takeItems(player, BOOK, 1);
 				giveItems(player, BOOK2, 1);
-				switch (cond)
-				{
+				switch (cond) {
 					case 2:
 						htmltext = "32596-04.html";
 						break;
@@ -142,11 +134,10 @@ public class Q00464_Oath extends Quest
 				}
 				break;
 			case "end_quest":
-				if (!hasQuestItems(player, BOOK2))
-				{
+				if (!hasQuestItems(player, BOOK2)) {
 					return getNoQuestMsg(player);
 				}
-				
+
 				final int i = st.getCond() - 1;
 				addExp(player, NPC[i][1]);
 				addSp(player, NPC[i][2]);
@@ -163,16 +154,14 @@ public class Q00464_Oath extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onItemTalk(ItemInstance item, PlayerInstance player)
-	{
+	public String onItemTalk(ItemInstance item, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
+
 		boolean startQuest = false;
-		switch (st.getState())
-		{
+		switch (st.getState()) {
 			case State.CREATED:
 				startQuest = true;
 				break;
@@ -180,60 +169,47 @@ public class Q00464_Oath extends Quest
 				htmltext = "strongbox-02.html";
 				break;
 			case State.COMPLETED:
-				if (st.isNowAvailable())
-				{
+				if (st.isNowAvailable()) {
 					st.setState(State.CREATED);
 					startQuest = true;
-				}
-				else
-				{
+				} else {
 					htmltext = "strongbox-03.html";
 				}
 				break;
 		}
-		
-		if (startQuest)
-		{
-			if (player.getLevel() >= MIN_LEVEL)
-			{
+
+		if (startQuest) {
+			if (player.getLevel() >= MIN_LEVEL) {
 				st.startQuest();
 				takeItems(player, STRONGBOX, 1);
 				giveItems(player, BOOK, 1);
 				htmltext = "strongbox-01.htm";
-			}
-			else
-			{
+			} else {
 				htmltext = "strongbox-00.htm";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (getRandom(1000) < MOBS.get(npc.getId()))
-		{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (getRandom(1000) < MOBS.get(npc.getId())) {
 			npc.dropItem(killer, STRONGBOX, 1);
 		}
-		
+
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if ((st != null) && st.isStarted())
-		{
+
+		if ((st != null) && st.isStarted()) {
 			int npcId = npc.getId();
-			
-			if (npcId == NPC[0][0])
-			{
-				switch (st.getCond())
-				{
+
+			if (npcId == NPC[0][0]) {
+				switch (st.getCond()) {
 					case 1:
 						htmltext = "32596-01.html";
 						break;
@@ -262,9 +238,7 @@ public class Q00464_Oath extends Quest
 						htmltext = "32596-05g.html";
 						break;
 				}
-			}
-			else if ((st.getCond() > 1) && (st.getInt("npc") == npcId))
-			{
+			} else if ((st.getCond() > 1) && (st.getInt("npc") == npcId)) {
 				htmltext = npcId + "-01.html";
 			}
 		}

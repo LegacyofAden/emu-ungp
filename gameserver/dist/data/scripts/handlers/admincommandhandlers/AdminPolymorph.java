@@ -30,139 +30,112 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Polymorph admin command implementation.
+ *
  * @author Zoey76
  */
-public class AdminPolymorph implements IAdminCommandHandler
-{
+public class AdminPolymorph implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_polymorph",
-		"admin_unpolymorph",
-		"admin_transform",
-		"admin_untransform",
-		"admin_transform_menu",
-	};
-	
+			{
+					"admin_polymorph",
+					"admin_unpolymorph",
+					"admin_transform",
+					"admin_untransform",
+					"admin_transform_menu",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("admin_transform_menu"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("admin_transform_menu")) {
 			AdminHtml.showAdminHtml(activeChar, "transform.htm");
 			return true;
-		}
-		else if (command.startsWith("admin_untransform"))
-		{
+		} else if (command.startsWith("admin_untransform")) {
 			WorldObject obj = activeChar.getTarget();
-			if (obj instanceof Creature)
-			{
+			if (obj instanceof Creature) {
 				((Creature) obj).stopTransformation(true);
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			}
-		}
-		else if (command.startsWith("admin_transform"))
-		{
+		} else if (command.startsWith("admin_transform")) {
 			final WorldObject obj = activeChar.getTarget();
-			if ((obj == null) || !obj.isPlayer())
-			{
+			if ((obj == null) || !obj.isPlayer()) {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				return false;
 			}
-			
+
 			final PlayerInstance player = obj.getActingPlayer();
-			if (activeChar.isSitting())
-			{
+			if (activeChar.isSitting()) {
 				activeChar.sendPacket(SystemMessageId.YOU_CANNOT_TRANSFORM_WHILE_SITTING);
 				return false;
 			}
-			
-			if (player.isTransformed())
-			{
-				if (!command.contains(" "))
-				{
+
+			if (player.isTransformed()) {
+				if (!command.contains(" ")) {
 					player.untransform();
 					return true;
 				}
 				activeChar.sendPacket(SystemMessageId.YOU_ALREADY_POLYMORPHED_AND_CANNOT_POLYMORPH_AGAIN);
 				return false;
 			}
-			
-			if (player.isInWater())
-			{
+
+			if (player.isInWater()) {
 				activeChar.sendPacket(SystemMessageId.YOU_CANNOT_POLYMORPH_INTO_THE_DESIRED_FORM_IN_WATER);
 				return false;
 			}
-			
-			if (player.isFlyingMounted() || player.isMounted())
-			{
+
+			if (player.isFlyingMounted() || player.isMounted()) {
 				activeChar.sendPacket(SystemMessageId.YOU_CANNOT_TRANSFORM_WHILE_RIDING_A_PET);
 				return false;
 			}
-			
+
 			final String[] parts = command.split(" ");
-			if ((parts.length != 2) || !Util.isDigit(parts[1]))
-			{
+			if ((parts.length != 2) || !Util.isDigit(parts[1])) {
 				activeChar.sendMessage("Usage: //transform <id>");
 				return false;
 			}
-			
+
 			final int id = Integer.parseInt(parts[1]);
-			if (!player.transform(id, true))
-			{
+			if (!player.transform(id, true)) {
 				player.sendMessage("Unknown transformation ID: " + id);
 				return false;
 			}
 		}
-		if (command.startsWith("admin_polymorph"))
-		{
+		if (command.startsWith("admin_polymorph")) {
 			final String[] parts = command.split(" ");
-			if ((parts.length < 2) || !Util.isDigit(parts[1]))
-			{
+			if ((parts.length < 2) || !Util.isDigit(parts[1])) {
 				activeChar.sendMessage("Usage: //polymorph [type] <id>");
 				return false;
 			}
-			
-			if (parts.length > 2)
-			{
+
+			if (parts.length > 2) {
 				doPolymorph(activeChar, activeChar.getTarget(), parts[2], parts[1]);
-			}
-			else
-			{
+			} else {
 				doPolymorph(activeChar, activeChar.getTarget(), parts[1], "npc");
 			}
-		}
-		else if (command.equals("admin_unpolymorph"))
-		{
+		} else if (command.equals("admin_unpolymorph")) {
 			doUnPolymorph(activeChar, activeChar.getTarget());
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
+
 	/**
 	 * Polymorph a creature.
+	 *
 	 * @param activeChar the active Game Master
-	 * @param obj the target
-	 * @param id the polymorph ID
-	 * @param type the polymorph type
+	 * @param obj        the target
+	 * @param id         the polymorph ID
+	 * @param type       the polymorph type
 	 */
-	private static void doPolymorph(PlayerInstance activeChar, WorldObject obj, String id, String type)
-	{
-		if (obj != null)
-		{
+	private static void doPolymorph(PlayerInstance activeChar, WorldObject obj, String id, String type) {
+		if (obj != null) {
 			obj.getPoly().setPolyInfo(type, id);
 			// animation
-			if (obj instanceof Creature)
-			{
+			if (obj instanceof Creature) {
 				Creature Char = (Creature) obj;
 				MagicSkillUse msk = new MagicSkillUse(Char, 1008, 1, 4000, 0);
 				Char.broadcastPacket(msk);
@@ -172,34 +145,28 @@ public class AdminPolymorph implements IAdminCommandHandler
 			// end of animation
 			obj.broadcastInfo();
 			activeChar.sendMessage("Polymorph succeed");
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
 	}
-	
+
 	/**
 	 * Unpolymorh a creature.
+	 *
 	 * @param activeChar the active Game Master
-	 * @param target the target
+	 * @param target     the target
 	 */
-	private static void doUnPolymorph(PlayerInstance activeChar, WorldObject target)
-	{
-		if (target != null)
-		{
+	private static void doUnPolymorph(PlayerInstance activeChar, WorldObject target) {
+		if (target != null) {
 			target.getPoly().setPolyInfo(null, "1");
 			target.broadcastInfo();
 			activeChar.sendMessage("Unpolymorph succeed");
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminPolymorph());
 	}
 }

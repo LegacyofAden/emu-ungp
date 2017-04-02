@@ -18,9 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-import java.util.function.Predicate;
-
 import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -40,185 +37,156 @@ import org.l2junity.gameserver.util.BypassBuilder;
 import org.l2junity.gameserver.util.BypassParser;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.StringTokenizer;
+import java.util.function.Predicate;
+
 /**
  * @author NosBit
  */
-public class AdminScan implements IAdminCommandHandler
-{
+public class AdminScan implements IAdminCommandHandler {
 	private static final String SPACE = " ";
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_scan",
-		"admin_deleteNpcByObjectId"
-	};
-	
+			{
+					"admin_scan",
+					"admin_deleteNpcByObjectId"
+			};
+
 	private static final int DEFAULT_RADIUS = 1000;
-	
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		switch (actualCommand.toLowerCase())
-		{
-			case "admin_scan":
-			{
+		switch (actualCommand.toLowerCase()) {
+			case "admin_scan": {
 				processBypass(activeChar, new BypassParser(command));
 				break;
 			}
-			case "admin_deletenpcbyobjectid":
-			{
-				if (!st.hasMoreElements())
-				{
+			case "admin_deletenpcbyobjectid": {
+				if (!st.hasMoreElements()) {
 					activeChar.sendMessage("Usage: //deletenpcbyobjectid objectId=<object_id>");
 					return false;
 				}
-				
+
 				final BypassParser parser = new BypassParser(command);
-				try
-				{
+				try {
 					final int objectId = parser.getInt("objectId", 0);
-					if (objectId == 0)
-					{
+					if (objectId == 0) {
 						activeChar.sendMessage("objectId is not set!");
 					}
-					
+
 					final WorldObject target = World.getInstance().findObject(objectId);
 					final Npc npc = target instanceof Npc ? (Npc) target : null;
-					if (npc == null)
-					{
+					if (npc == null) {
 						activeChar.sendMessage("NPC does not exist or object_id does not belong to an NPC");
 						return false;
 					}
-					
+
 					npc.deleteMe();
-					
+
 					final L2Spawn spawn = npc.getSpawn();
-					if (spawn != null)
-					{
+					if (spawn != null) {
 						spawn.stopRespawn();
-						
-						if (DBSpawnManager.getInstance().isDefined(spawn.getId()))
-						{
+
+						if (DBSpawnManager.getInstance().isDefined(spawn.getId())) {
 							DBSpawnManager.getInstance().deleteSpawn(spawn, true);
-						}
-						else
-						{
+						} else {
 							SpawnTable.getInstance().deleteSpawn(spawn, true);
 						}
 					}
-					
+
 					activeChar.sendMessage(npc.getName() + " have been deleted.");
-				}
-				catch (NumberFormatException e)
-				{
+				} catch (NumberFormatException e) {
 					activeChar.sendMessage("object_id must be a number.");
 					return false;
 				}
-				
+
 				processBypass(activeChar, parser);
 				break;
 			}
 		}
 		return true;
 	}
-	
-	private void processBypass(PlayerInstance activeChar, BypassParser parser)
-	{
+
+	private void processBypass(PlayerInstance activeChar, BypassParser parser) {
 		final int id = parser.getInt("id", 0);
 		final String name = parser.getString("name", null);
 		int radius = parser.getInt("radius", parser.getInt("range", DEFAULT_RADIUS));
 		int page = parser.getInt("page", 0);
-		
+
 		final Predicate<Npc> condition;
-		if (id > 0)
-		{
+		if (id > 0) {
 			condition = npc -> npc.getId() == id;
-		}
-		else if (name != null)
-		{
+		} else if (name != null) {
 			condition = npc -> npc.getName().toLowerCase().startsWith(name.toLowerCase());
-		}
-		else
-		{
+		} else {
 			condition = npc -> true;
 		}
-		
+
 		sendNpcList(activeChar, radius, page, condition, parser);
 	}
-	
-	private BypassBuilder createBypassBuilder(BypassParser parser, String bypass)
-	{
+
+	private BypassBuilder createBypassBuilder(BypassParser parser, String bypass) {
 		final int id = parser.getInt("id", 0);
 		final String name = parser.getString("name", null);
 		final int radius = parser.getInt("radius", parser.getInt("range", DEFAULT_RADIUS));
 		final BypassBuilder builder = new BypassBuilder(bypass);
-		
-		if (id > 0)
-		{
+
+		if (id > 0) {
 			builder.addParam("id", id);
-		}
-		else if (name != null)
-		{
+		} else if (name != null) {
 			builder.addParam("name", name);
 		}
-		
-		if (radius > DEFAULT_RADIUS)
-		{
+
+		if (radius > DEFAULT_RADIUS) {
 			builder.addParam("radius", radius);
 		}
 		return builder;
 	}
-	
-	private void sendNpcList(PlayerInstance activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser)
-	{
+
+	private void sendNpcList(PlayerInstance activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser) {
 		final BypassBuilder bypassParser = createBypassBuilder(parser, "bypass -h admin_scan");
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/scan.htm");
-		
+
 		//@formatter:off
 		final PageResult result = PageBuilder.newBuilder(World.getInstance().getVisibleObjects(activeChar, Npc.class, radius, condition), 15, bypassParser.toString())
-			.currentPage(page)
-			.pageHandler(NextPrevPageHandler.INSTANCE)
-			.formatter(BypassParserFormatter.INSTANCE)
-			.style(ButtonsStyle.INSTANCE)
-			.bodyHandler((pages, character, sb) ->
-		{
-			final BypassBuilder builder = createBypassBuilder(parser, "bypass -h admin_deleteNpcByObjectId");
-			final String npcName = character.getName();
-			builder.addParam("page", page);
-			builder.addParam("objectId", character.getObjectId());
-			
-			sb.append("<tr>");
-			sb.append("<td width=\"45\">").append(character.getId()).append("</td>");
-			sb.append("<td><a action=\"bypass -h admin_move_to ").append(character.getX()).append(SPACE).append(character.getY()).append(SPACE).append(character.getZ()).append("\">").append(npcName.isEmpty() ? "No name NPC" : npcName).append("</a></td>");
-			sb.append("<td width=\"60\">").append(Util.formatAdena(Math.round(activeChar.distance2d(character)))).append("</td>");
-			sb.append("<td width=\"54\"><a action=\"").append(builder.toStringBuilder()).append("\"><font color=\"LEVEL\">Delete</font></a></td>");
-			sb.append("</tr>");
-		}).build();
+				.currentPage(page)
+				.pageHandler(NextPrevPageHandler.INSTANCE)
+				.formatter(BypassParserFormatter.INSTANCE)
+				.style(ButtonsStyle.INSTANCE)
+				.bodyHandler((pages, character, sb) ->
+				{
+					final BypassBuilder builder = createBypassBuilder(parser, "bypass -h admin_deleteNpcByObjectId");
+					final String npcName = character.getName();
+					builder.addParam("page", page);
+					builder.addParam("objectId", character.getObjectId());
+
+					sb.append("<tr>");
+					sb.append("<td width=\"45\">").append(character.getId()).append("</td>");
+					sb.append("<td><a action=\"bypass -h admin_move_to ").append(character.getX()).append(SPACE).append(character.getY()).append(SPACE).append(character.getZ()).append("\">").append(npcName.isEmpty() ? "No name NPC" : npcName).append("</a></td>");
+					sb.append("<td width=\"60\">").append(Util.formatAdena(Math.round(activeChar.distance2d(character)))).append("</td>");
+					sb.append("<td width=\"54\"><a action=\"").append(builder.toStringBuilder()).append("\"><font color=\"LEVEL\">Delete</font></a></td>");
+					sb.append("</tr>");
+				}).build();
 		//@formatter:on
-		
-		if (result.getPages() > 0)
-		{
+
+		if (result.getPages() > 0) {
 			html.replace("%pages%", "<center><table width=\"100%\" cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table></center>");
-		}
-		else
-		{
+		} else {
 			html.replace("%pages%", "");
 		}
-		
+
 		html.replace("%data%", result.getBodyTemplate().toString());
 		activeChar.sendPacket(html);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminScan());
 	}
 }

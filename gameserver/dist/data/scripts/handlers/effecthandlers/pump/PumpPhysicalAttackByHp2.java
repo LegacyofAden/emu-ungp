@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatConditionalHpEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatConditionalHpEffect;
 
 /**
  * @author Sdw
  */
-public class PumpPhysicalAttackByHp2 extends AbstractDoubleStatConditionalHpEffect
-{
-	public PumpPhysicalAttackByHp2(StatsSet params)
-	{
+public class PumpPhysicalAttackByHp2 extends AbstractDoubleStatConditionalHpEffect {
+	public PumpPhysicalAttackByHp2(StatsSet params) {
 		super(params, DoubleStat.PHYSICAL_ATTACK, 60);
 	}
 }

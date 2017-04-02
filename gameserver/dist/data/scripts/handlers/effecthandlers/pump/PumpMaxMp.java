@@ -18,34 +18,28 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
-import handlers.effecthandlers.AbstractDoubleStatEffect;
-
 /**
  * @author Sdw
  */
-public class PumpMaxMp extends AbstractDoubleStatEffect
-{
+public class PumpMaxMp extends AbstractDoubleStatEffect {
 	private final boolean _heal;
-	
-	public PumpMaxMp(StatsSet params)
-	{
+
+	public PumpMaxMp(StatsSet params) {
 		super(params, DoubleStat.MAX_MP);
-		
+
 		_heal = params.getBoolean("heal", false);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (_heal)
-		{
-			switch (_mode)
-			{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (_heal) {
+			switch (_mode) {
 				case DIFF: // DIFF
 				{
 					target.setCurrentMp(target.getCurrentMp() + _amount);

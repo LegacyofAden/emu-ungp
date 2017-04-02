@@ -18,9 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Collection;
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.FortManager;
@@ -32,167 +29,129 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Collection;
+import java.util.StringTokenizer;
+
 /**
  * This class handles all siege commands: Todo: change the class name, and neaten it up
  */
-public class AdminFortSiege implements IAdminCommandHandler
-{
+public class AdminFortSiege implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_fortsiege",
-		"admin_add_fortattacker",
-		"admin_list_fortsiege_clans",
-		"admin_clear_fortsiege_list",
-		"admin_spawn_fortdoors",
-		"admin_endfortsiege",
-		"admin_startfortsiege",
-		"admin_setfort",
-		"admin_removefort"
-	};
-	
+			{
+					"admin_fortsiege",
+					"admin_add_fortattacker",
+					"admin_list_fortsiege_clans",
+					"admin_clear_fortsiege_list",
+					"admin_spawn_fortdoors",
+					"admin_endfortsiege",
+					"admin_startfortsiege",
+					"admin_setfort",
+					"admin_removefort"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		StringTokenizer st = new StringTokenizer(command, " ");
 		command = st.nextToken(); // Get actual command
-		
+
 		// Get fort
 		Fort fort = null;
 		int fortId = 0;
-		if (st.hasMoreTokens())
-		{
+		if (st.hasMoreTokens()) {
 			fortId = Integer.parseInt(st.nextToken());
 			fort = FortManager.getInstance().getFortById(fortId);
 		}
 		// Get fort
-		if (((fort == null) || (fortId == 0)))
-		{
+		if (((fort == null) || (fortId == 0))) {
 			// No fort specified
 			showFortSelectPage(activeChar);
-		}
-		else
-		{
+		} else {
 			WorldObject target = activeChar.getTarget();
 			PlayerInstance player = null;
-			if (target instanceof PlayerInstance)
-			{
+			if (target instanceof PlayerInstance) {
 				player = (PlayerInstance) target;
 			}
-			
-			if (command.equalsIgnoreCase("admin_add_fortattacker"))
-			{
-				if (player == null)
-				{
+
+			if (command.equalsIgnoreCase("admin_add_fortattacker")) {
+				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
-				}
-				else
-				{
-					if (fort.getSiege().addAttacker(player, false) == 4)
-					{
+				} else {
+					if (fort.getSiege().addAttacker(player, false) == 4) {
 						final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_CLAN_HAS_BEEN_REGISTERED_TO_S1_S_FORTRESS_BATTLE);
 						sm.addCastleId(fort.getResidenceId());
 						player.sendPacket(sm);
-					}
-					else
-					{
+					} else {
 						player.sendMessage("During registering error occurred!");
 					}
 				}
-			}
-			else if (command.equalsIgnoreCase("admin_clear_fortsiege_list"))
-			{
+			} else if (command.equalsIgnoreCase("admin_clear_fortsiege_list")) {
 				fort.getSiege().clearSiegeClan();
-			}
-			else if (command.equalsIgnoreCase("admin_endfortsiege"))
-			{
+			} else if (command.equalsIgnoreCase("admin_endfortsiege")) {
 				fort.getSiege().endSiege();
-			}
-			else if (command.equalsIgnoreCase("admin_list_fortsiege_clans"))
-			{
+			} else if (command.equalsIgnoreCase("admin_list_fortsiege_clans")) {
 				activeChar.sendMessage("Not implemented yet.");
-			}
-			else if (command.equalsIgnoreCase("admin_setfort"))
-			{
-				if ((player == null) || (player.getClan() == null))
-				{
+			} else if (command.equalsIgnoreCase("admin_setfort")) {
+				if ((player == null) || (player.getClan() == null)) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
-				}
-				else
-				{
+				} else {
 					fort.endOfSiege(player.getClan());
 				}
-			}
-			else if (command.equalsIgnoreCase("admin_removefort"))
-			{
+			} else if (command.equalsIgnoreCase("admin_removefort")) {
 				L2Clan clan = fort.getOwnerClan();
-				if (clan != null)
-				{
+				if (clan != null) {
 					fort.removeOwner(true);
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("Unable to remove fort");
 				}
-			}
-			else if (command.equalsIgnoreCase("admin_spawn_fortdoors"))
-			{
+			} else if (command.equalsIgnoreCase("admin_spawn_fortdoors")) {
 				fort.resetDoors();
-			}
-			else if (command.equalsIgnoreCase("admin_startfortsiege"))
-			{
+			} else if (command.equalsIgnoreCase("admin_startfortsiege")) {
 				fort.getSiege().startSiege();
 			}
-			
+
 			showFortSiegePage(activeChar, fort);
 		}
 		return true;
 	}
-	
-	private void showFortSelectPage(PlayerInstance activeChar)
-	{
+
+	private void showFortSelectPage(PlayerInstance activeChar) {
 		int i = 0;
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "data/html/admin/forts.htm");
-		
+
 		final Collection<Fort> forts = FortManager.getInstance().getForts();
 		final StringBuilder cList = new StringBuilder(forts.size() * 100);
-		
-		for (Fort fort : forts)
-		{
-			if (fort != null)
-			{
+
+		for (Fort fort : forts) {
+			if (fort != null) {
 				cList.append("<td fixwidth=90><a action=\"bypass -h admin_fortsiege " + fort.getResidenceId() + "\">" + fort.getName() + " id: " + fort.getResidenceId() + "</a></td>");
 				i++;
 			}
-			
-			if (i > 2)
-			{
+
+			if (i > 2) {
 				cList.append("</tr><tr>");
 				i = 0;
 			}
 		}
-		
+
 		adminReply.replace("%forts%", cList.toString());
 		activeChar.sendPacket(adminReply);
 	}
-	
-	private void showFortSiegePage(PlayerInstance activeChar, Fort fort)
-	{
+
+	private void showFortSiegePage(PlayerInstance activeChar, Fort fort) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "data/html/admin/fort.htm");
 		adminReply.replace("%fortName%", fort.getName());
 		adminReply.replace("%fortId%", String.valueOf(fort.getResidenceId()));
 		activeChar.sendPacket(adminReply);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminFortSiege());
 	}
 }

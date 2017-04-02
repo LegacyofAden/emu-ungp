@@ -31,57 +31,46 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 /**
  * @author UnAfraid
  */
-public class CeremonyOfChaosOneDayRewardHandler extends AbstractOneDayRewardHandler
-{
+public class CeremonyOfChaosOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
-	
-	public CeremonyOfChaosOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+
+	public CeremonyOfChaosOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
-	
+
 	@Override
-	public void init()
-	{
+	public void init() {
 		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_CEREMONY_OF_CHAOS_MATCH_RESULT, (OnCeremonyOfChaosMatchResult event) -> onCeremonyOfChaosMatchResult(event), this));
 	}
-	
+
 	@Override
-	public boolean isAvailable(PlayerInstance player)
-	{
+	public boolean isAvailable(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
-		if (entry != null)
-		{
-			switch (entry.getStatus())
-			{
+		if (entry != null) {
+			switch (entry.getStatus()) {
 				case NOT_AVAILABLE: // Initial state
 				{
-					if (entry.getProgress() >= _amount)
-					{
+					if (entry.getProgress() >= _amount) {
 						entry.setStatus(OneDayRewardStatus.AVAILABLE);
 						storePlayerEntry(entry);
 					}
 					break;
 				}
-				case AVAILABLE:
-				{
+				case AVAILABLE: {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	private void onCeremonyOfChaosMatchResult(OnCeremonyOfChaosMatchResult event)
-	{
+
+	private void onCeremonyOfChaosMatchResult(OnCeremonyOfChaosMatchResult event) {
 		event.getMembers().forEach(member ->
 		{
 			final OneDayRewardPlayerEntry entry = getPlayerEntry(member.getObjectId(), true);
-			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE)
-			{
-				if (entry.increaseProgress() >= _amount)
-				{
+			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+				if (entry.increaseProgress() >= _amount) {
 					entry.setStatus(OneDayRewardStatus.AVAILABLE);
 				}
 				storePlayerEntry(entry);

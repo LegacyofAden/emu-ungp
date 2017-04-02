@@ -35,15 +35,13 @@ import org.l2junity.gameserver.util.HtmlUtil;
 
 /**
  * This class manage shift + click on {@link DoorInstance}.
+ *
  * @author St3eT
  */
-public class DoorInstanceActionShift implements IActionShiftHandler
-{
+public class DoorInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (activeChar.isGM())
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (activeChar.isGM()) {
 			activeChar.setTarget(target);
 			final DoorInstance door = (DoorInstance) target;
 			final ClanHall clanHall = ClanHallData.getInstance().getClanHallByDoorId(door.getId());
@@ -74,15 +72,13 @@ public class DoorInstanceActionShift implements IActionShiftHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.DoorInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionShiftHandler.getInstance().registerHandler(new DoorInstanceActionShift());
 	}
 }

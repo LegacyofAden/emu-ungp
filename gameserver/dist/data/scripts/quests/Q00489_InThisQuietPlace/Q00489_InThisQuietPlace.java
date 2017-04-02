@@ -27,30 +27,29 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * In This Quiet Place (489)
+ *
  * @author St3eT
  */
-public final class Q00489_InThisQuietPlace extends Quest
-{
+public final class Q00489_InThisQuietPlace extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int BESTIAN = 31280;
 	private static final int[] MONSTERS =
-	{
-		21646, // Grave Scarab
-		21647, // Scavenger Scarab
-		21648, // Grave Ant
-		21649, // Scavenger Ant
-		21650, // Shrine Knight
-		21651, // Shrine Guard
-	};
+			{
+					21646, // Grave Scarab
+					21647, // Scavenger Scarab
+					21648, // Grave Ant
+					21649, // Scavenger Ant
+					21650, // Shrine Knight
+					21651, // Shrine Guard
+			};
 	// Items
 	private static final int EVIL_SPIRIT = 19501; // Trace of Evil Spirit
 	// Misc
 	private static final int MIN_LEVEL = 75;
 	private static final int MAX_LEVEL = 79;
-	
-	public Q00489_InThisQuietPlace()
-	{
+
+	public Q00489_InThisQuietPlace() {
 		super(489);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, BESTIAN);
@@ -58,28 +57,23 @@ public final class Q00489_InThisQuietPlace extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 		registerQuestItems(EVIL_SPIRIT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
-			case "32327-03.htm":
-			{
+			case "32327-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32327-04.htm":
-			{
+			case "32327-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
@@ -87,43 +81,30 @@ public final class Q00489_InThisQuietPlace extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER) {
 					htmltext = "32327-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ADVENTURER ? "32327-05.html" : "31280-01.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (npc.getId() == ADVENTURER)
-					{
+				} else if (st.isCond(2)) {
+					if (npc.getId() == ADVENTURER) {
 						htmltext = "32327-06.html";
-					}
-					else if (npc.getId() == BESTIAN)
-					{
-						if (!isSimulated)
-						{
+					} else if (npc.getId() == BESTIAN) {
+						if (!isSimulated) {
 							st.exitQuest(QuestType.DAILY, true);
 							giveAdena(player, 426_045, true);
-							if (player.getLevel() >= MIN_LEVEL)
-							{
+							if (player.getLevel() >= MIN_LEVEL) {
 								addExp(player, 19_890_000);
 								addSp(player, 4_773);
 							}
@@ -133,18 +114,13 @@ public final class Q00489_InThisQuietPlace extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if ((npc.getId() == ADVENTURER) && st.isNowAvailable())
-				{
-					if (!isSimulated)
-					{
+			case State.COMPLETED: {
+				if ((npc.getId() == ADVENTURER) && st.isNowAvailable()) {
+					if (!isSimulated) {
 						st.setState(State.CREATED);
 					}
 					htmltext = "32327-01.htm";
-				}
-				else if ((npc.getId() == BESTIAN) && st.isCompleted() && !st.isNowAvailable())
-				{
+				} else if ((npc.getId() == BESTIAN) && st.isCompleted() && !st.isNowAvailable()) {
 					htmltext = "32180-03.html";
 				}
 				break;
@@ -152,16 +128,13 @@ public final class Q00489_InThisQuietPlace extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, EVIL_SPIRIT, 1, 77, 0.4, true))
-			{
+
+		if ((st != null) && st.isCond(1)) {
+			if (giveItemRandomly(killer, EVIL_SPIRIT, 1, 77, 0.4, true)) {
 				st.setCond(2, true);
 			}
 		}

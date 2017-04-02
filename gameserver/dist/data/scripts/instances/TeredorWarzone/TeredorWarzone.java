@@ -18,9 +18,7 @@
  */
 package instances.TeredorWarzone;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import instances.AbstractInstance;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.Party;
@@ -38,14 +36,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import instances.AbstractInstance;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Teredor Warzone instance zone.
+ *
  * @author St3eT
  */
-public final class TeredorWarzone extends AbstractInstance
-{
+public final class TeredorWarzone extends AbstractInstance {
 	// NPCs
 	private static final int FILAUR = 30535;
 	private static final int TEREDOR = 25785;
@@ -74,21 +73,20 @@ public final class TeredorWarzone extends AbstractInstance
 	private static final int MIN_PLAYERS = 5;
 	//@formatter:off
 	private static final Map<Integer, String[]> WALKING_DATA = new HashMap<>();
-	static
-	{
-		WALKING_DATA.put(1, new String[] {"trajan101", "trajan102", "trajan103", "trajan104", "trajan105"});
-		WALKING_DATA.put(2, new String[] {"trajan106", "trajan107", "trajan108", "trajan109", "trajan110"});
-		WALKING_DATA.put(3, new String[] {"trajan111", "trajan112", "trajan113"});
-		WALKING_DATA.put(4, new String[] {"trajan114", "trajan115"});
-		WALKING_DATA.put(5, new String[] {"trajan116", "trajan117"});
-		WALKING_DATA.put(6, new String[] {"trajan118", "trajan119", "trajan120"});
-		WALKING_DATA.put(7, new String[] {"trajan121", "trajan122"});
-		WALKING_DATA.put(8, new String[] {"trajan14", "trajan15", "trajan16"});
+
+	static {
+		WALKING_DATA.put(1, new String[]{"trajan101", "trajan102", "trajan103", "trajan104", "trajan105"});
+		WALKING_DATA.put(2, new String[]{"trajan106", "trajan107", "trajan108", "trajan109", "trajan110"});
+		WALKING_DATA.put(3, new String[]{"trajan111", "trajan112", "trajan113"});
+		WALKING_DATA.put(4, new String[]{"trajan114", "trajan115"});
+		WALKING_DATA.put(5, new String[]{"trajan116", "trajan117"});
+		WALKING_DATA.put(6, new String[]{"trajan118", "trajan119", "trajan120"});
+		WALKING_DATA.put(7, new String[]{"trajan121", "trajan122"});
+		WALKING_DATA.put(8, new String[]{"trajan14", "trajan15", "trajan16"});
 	}
 	//@formatter:on
-	
-	public TeredorWarzone()
-	{
+
+	public TeredorWarzone() {
 		super(TEMPLATE_ID);
 		addStartNpc(FILAUR);
 		addTalkId(FILAUR);
@@ -99,68 +97,54 @@ public final class TeredorWarzone extends AbstractInstance
 		addKillId(EGG_2, TEREDOR);
 		setCreatureSeeId(this::onCreatureSee, BEETLE, POS_CHECKER, EGG_2, FAKE_TEREDOR);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
 			final StatsSet npcParams = npc.getParameters();
-			
-			switch (event)
-			{
-				case "EGG_SPAWN_TIMER":
-				{
+
+			switch (event) {
+				case "EGG_SPAWN_TIMER": {
 					final Npc minion = addSpawn(AWAKENED_MILLIPADE, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 					SuperpointManager.getInstance().startMoving(minion, getRandomEntry(WALKING_DATA.get(npcParams.getInt("Spot", 0))));
 					npc.deleteMe();
 					break;
 				}
-				case "FAKE_TEREDOR_POISON_TIMER":
-				{
+				case "FAKE_TEREDOR_POISON_TIMER": {
 					addSpawn(TEREDOR_POISON, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 					break;
 				}
 				case "POISON_TIMER_1":
 				case "POISON_TIMER_2":
 				case "POISON_TIMER_3":
-				case "POISON_TIMER_4":
-				{
+				case "POISON_TIMER_4": {
 					addSkillCastDesire(npc, npc, POISON_SKILL, 23);
 					break;
 				}
-				case "DELETE_ME":
-				{
+				case "DELETE_ME": {
 					npc.deleteMe();
 					break;
 				}
-				case "TEREDOR_LAIR_CHECK":
-				{
+				case "TEREDOR_LAIR_CHECK": {
 					final ILocational spawnLoc = npc.getSpawn();
-					
-					if (((spawnLoc.getX() - npc.getX()) > 1000) || ((spawnLoc.getX() - npc.getX()) < -2000))
-					{
+
+					if (((spawnLoc.getX() - npc.getX()) > 1000) || ((spawnLoc.getX() - npc.getX()) < -2000)) {
 						showOnScreenMsg(instance, NpcStringId.TEREDOR_SUMMONS_SUBORDINATE_BECAUSE_YOU_MOVED_OUT_OF_TEREDOR_S_AREA, ExShowScreenMessage.TOP_CENTER, 4000);
 						addSpawn(ELITE_MILLIPADE, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 					}
 					break;
 				}
-				case "TEREDOR_BUHATIMER":
-				{
+				case "TEREDOR_BUHATIMER": {
 					npcVars.increaseInt("i_ai3", 0, 1);
 					break;
 				}
-				case "TEREDOR_POISON_TIMER":
-				{
+				case "TEREDOR_POISON_TIMER": {
 					int i_ai4 = npcVars.increaseInt("i_ai4", 0, 1);
-					if (i_ai4 == 7)
-					{
+					if (i_ai4 == 7) {
 						npcVars.increaseInt("i_ai4", 0, -7);
-					}
-					else
-					{
+					} else {
 						addSpawn(TEREDOR_POISON, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 						getTimers().addTimer("TEREDOR_POISON_TIMER", 2000, npc, null);
 					}
@@ -169,8 +153,7 @@ public final class TeredorWarzone extends AbstractInstance
 				case "TEREDOR_RUNTIMER_1":
 				case "TEREDOR_RUNTIMER_2":
 				case "TEREDOR_RUNTIMER_3":
-				case "TEREDOR_RUNTIMER_4":
-				{
+				case "TEREDOR_RUNTIMER_4": {
 					npc.disableCoreAI(false);
 					npc.setTargetable(true);
 					npc.broadcastSocialAction(3);
@@ -179,90 +162,69 @@ public final class TeredorWarzone extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
-			case "enterInstance":
-			{
+
+		switch (event) {
+			case "enterInstance": {
 				enterInstance(player, npc, TEMPLATE_ID);
 				break;
 			}
-			case "checkConditions":
-			{
+			case "checkConditions": {
 				final Instance playerInstance = getPlayerInstance(player);
 				final Party playerParty = player.getParty();
-				
-				if ((playerInstance != null) && (playerInstance.getTemplateId() == TEMPLATE_ID))
-				{
+
+				if ((playerInstance != null) && (playerInstance.getTemplateId() == TEMPLATE_ID)) {
 					enterInstance(player, npc, TEMPLATE_ID);
-				}
-				else if (playerParty == null)
-				{
+				} else if (playerParty == null) {
 					htmltext = "condNoParty.html";
-				}
-				else
-				{
-					if (playerParty.getLeader() == player)
-					{
+				} else {
+					if (playerParty.getLeader() == player) {
 						htmltext = (playerParty.getMemberCount() >= MIN_PLAYERS ? "30535-01.html" : "condMinLimit.html");
-					}
-					else
-					{
+					} else {
 						htmltext = "condNoPartyLeader.html";
 					}
 				}
 				break;
 			}
-			case "30535-02.html":
-			{
+			case "30535-02.html": {
 				htmltext = event;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
-			
-			switch (npc.getId())
-			{
-				case TEREDOR:
-				{
+
+			switch (npc.getId()) {
+				case TEREDOR: {
 					SuperpointManager.getInstance().startMoving(npc, "trajan5");
 					getTimers().addRepeatingTimer("TEREDOR_LAIR_CHECK", 5000, npc, null);
 					((Attackable) npc).setCanReturnToSpawnPoint(false);
 					npc.initSeenCreatures();
 					break;
 				}
-				case BEETLE:
-				{
-					if (npcParams.getInt("Sp", 0) == 1)
-					{
+				case BEETLE: {
+					if (npcParams.getInt("Sp", 0) == 1) {
 						SuperpointManager.getInstance().startMoving(npc, npcParams.getString("SuperPointName1", ""));
 					}
 					npc.initSeenCreatures();
 					break;
 				}
-				case FAKE_TEREDOR:
-				{
+				case FAKE_TEREDOR: {
 					SuperpointManager.getInstance().startMoving(npc, npcParams.getString("SuperPointName", ""));
 					npc.setRHandId(FAKE_TEREDOR_WEAPON);
 					npc.initSeenCreatures();
 					getTimers().addTimer("FAKE_TEREDOR_POISON_TIMER", 3000, npc, null);
 					break;
 				}
-				case TEREDOR_POISON:
-				{
+				case TEREDOR_POISON: {
 					getTimers().addTimer("POISON_TIMER_1", 5000, npc, null);
 					getTimers().addTimer("POISON_TIMER_2", 10000, npc, null);
 					getTimers().addTimer("POISON_TIMER_3", 15000, npc, null);
@@ -270,8 +232,7 @@ public final class TeredorWarzone extends AbstractInstance
 					getTimers().addTimer("DELETE_ME", 22000, npc, null);
 					break;
 				}
-				default:
-				{
+				default: {
 					npc.initSeenCreatures();
 					break;
 				}
@@ -279,32 +240,25 @@ public final class TeredorWarzone extends AbstractInstance
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public void onCreatureSee(OnCreatureSee event)
-	{
+
+	public void onCreatureSee(OnCreatureSee event) {
 		final Creature creature = event.getSeen();
 		final Npc npc = (Npc) event.getSeer();
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance))
-		{
+
+		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
-			
-			switch (npc.getId())
-			{
-				case BEETLE:
-				{
-					if (creature.isPlayer() && npc.isScriptValue(0))
-					{
+
+			switch (npc.getId()) {
+				case BEETLE: {
+					if (creature.isPlayer() && npc.isScriptValue(0)) {
 						npc.setScriptValue(1);
 						addSkillCastDesire(npc, npc, BEETLE_SKILL, 23);
 					}
 					break;
 				}
-				case FAKE_TEREDOR:
-				{
-					if (creature.isPlayer() && npc.isScriptValue(0))
-					{
+				case FAKE_TEREDOR: {
+					if (creature.isPlayer() && npc.isScriptValue(0)) {
 						npc.setScriptValue(1);
 						addSkillCastDesire(npc, npc, FAKE_TEREDOR_JUMP_SKILL, 23);
 						getTimers().addTimer("FAKE_TEREDOR_ELITE_REUSE", 30000, n -> npc.setScriptValue(0));
@@ -313,43 +267,35 @@ public final class TeredorWarzone extends AbstractInstance
 					}
 					break;
 				}
-				case POS_CHECKER:
-				{
-					if (creature.isPlayer() && npc.isScriptValue(0))
-					{
+				case POS_CHECKER: {
+					if (creature.isPlayer() && npc.isScriptValue(0)) {
 						npc.setScriptValue(1);
 						final int spot = npcParams.getInt("Spot", 0);
-						
-						switch (spot)
-						{
-							case 1:
-							{
+
+						switch (spot) {
+							case 1: {
 								instance.spawnGroup("schuttgart29_2512_sp1m1");
 								npc.broadcastEvent("SCE_BREAK_AN_EGG1", 800, null);
 								getTimers().addTimer("EGG_SPAWN_TIMER_2", 30000, n -> npc.broadcastEvent("SCE_BREAK_AN_EGG2", 800, creature));
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								instance.spawnGroup("schuttgart29_2512_sp2m1");
 								npc.broadcastEvent("SCE_BREAK_AN_EGG1", 800, null);
 								getTimers().addTimer("EGG_SPAWN_TIMER_2", 30000, n -> npc.broadcastEvent("SCE_BREAK_AN_EGG2", 800, creature));
 								break;
 							}
-							case 5:
-							{
+							case 5: {
 								instance.spawnGroup("schuttgart29_2512_sp4m1");
 								break;
 							}
-							case 6:
-							{
+							case 6: {
 								instance.spawnGroup("schuttgart29_2512_306m1");
 								npc.broadcastEvent("SCE_BREAK_AN_EGG1", 800, null);
 								getTimers().addTimer("EGG_SPAWN_TIMER_2", 30000, n -> npc.broadcastEvent("SCE_BREAK_AN_EGG2", 800, creature));
 								break;
 							}
-							case 7:
-							{
+							case 7: {
 								instance.spawnGroup("schuttgart29_2512_305m1");
 								npc.broadcastEvent("SCE_BREAK_AN_EGG1", 800, null);
 								getTimers().addTimer("EGG_SPAWN_TIMER_2", 30000, n -> npc.broadcastEvent("SCE_BREAK_AN_EGG2", 800, creature));
@@ -359,10 +305,8 @@ public final class TeredorWarzone extends AbstractInstance
 					}
 					break;
 				}
-				case EGG_2:
-				{
-					if (creature.isPlayer() && npc.isScriptValue(0))
-					{
+				case EGG_2: {
+					if (creature.isPlayer() && npc.isScriptValue(0)) {
 						npc.setScriptValue(1);
 						getTimers().addTimer("EGG_SPAWN_TIMER", (180 + getRandom(120)) * 1000, npc, null);
 						npc.getVariables().set("SEE_CREATURE_ID", creature.getObjectId());
@@ -372,43 +316,33 @@ public final class TeredorWarzone extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public String onEventReceived(String eventName, Npc sender, Npc npc, WorldObject reference)
-	{
+	public String onEventReceived(String eventName, Npc sender, Npc npc, WorldObject reference) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case EGG_2:
-				{
-					switch (eventName)
-					{
-						case "SCE_EGG_DIE":
-						{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case EGG_2: {
+					switch (eventName) {
+						case "SCE_EGG_DIE": {
 							npc.setState(2);
 							final PlayerInstance player = instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0));
-							if (player != null)
-							{
+							if (player != null) {
 								final Npc minion = addSpawn(getRandomBoolean() ? HATCHET_MILLIPADE : HATCHET_UNDERBUG, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 								addAttackPlayerDesire(minion, player, 23);
 								npc.deleteMe();
 							}
 							break;
 						}
-						case "SCE_BREAK_AN_EGG1":
-						{
+						case "SCE_BREAK_AN_EGG1": {
 							npc.setState(2);
 							break;
 						}
-						case "SCE_BREAK_AN_EGG2":
-						{
+						case "SCE_BREAK_AN_EGG2": {
 							final PlayerInstance player = reference == null ? instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0)) : reference.getActingPlayer();
 							int npcId = 0;
-							
-							switch (npc.getParameters().getInt("Spot", 0))
-							{
+
+							switch (npc.getParameters().getInt("Spot", 0)) {
 								case 1:
 									npcId = getRandomBoolean() ? TEREDOR_LARVA : MUTANTED_MILLIPADE;
 									break;
@@ -425,20 +359,17 @@ public final class TeredorWarzone extends AbstractInstance
 									npcId = getRandomEntry(MUTANTED_MILLIPADE, HATCHET_UNDERBUG, HATCHET_MILLIPADE);
 									break;
 							}
-							
-							if (npcId > 0)
-							{
+
+							if (npcId > 0) {
 								final Npc minion = addSpawn(npcId, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
-								if ((player != null) && (minion.distance3d(player) < 2000))
-								{
+								if ((player != null) && (minion.distance3d(player) < 2000)) {
 									addAttackPlayerDesire(minion, player, 23);
 								}
 								npc.deleteMe();
 							}
 							break;
 						}
-						case "SCE_BREAK_AN_EGG3":
-						{
+						case "SCE_BREAK_AN_EGG3": {
 							npc.setState(4);
 							break;
 						}
@@ -449,31 +380,24 @@ public final class TeredorWarzone extends AbstractInstance
 		}
 		return super.onEventReceived(eventName, sender, npc, reference);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case TEREDOR:
-				{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case TEREDOR: {
 					final StatsSet npcVars = npc.getVariables();
 					final int hpPer = npc.getCurrentHpPercent();
 					int teredorStatus = npcVars.getInt("TEREDOR_STATUS", 1);
-					
-					if ((npc.distance3d(attacker) > 450) && (getRandom(100) < 5))
-					{
+
+					if ((npc.distance3d(attacker) > 450) && (getRandom(100) < 5)) {
 						addSkillCastDesire(npc, attacker, TEREDOR_POISON_SKILL, 23);
 						addSpawn(TEREDOR_POISON, attacker.getX(), attacker.getY(), attacker.getZ(), 0, false, 0, false, instance.getId());
 					}
-					
-					if ((hpPer <= 80) && (hpPer >= 60))
-					{
-						if (teredorStatus == 1)
-						{
+
+					if ((hpPer <= 80) && (hpPer >= 60)) {
+						if (teredorStatus == 1) {
 							addSkillCastDesire(npc, npc, TEREDOR_CANCEL, 23);
 							teredorStatus = npcVars.increaseInt("TEREDOR_STATUS", 1);
 							npc.disableCoreAI(true);
@@ -488,17 +412,12 @@ public final class TeredorWarzone extends AbstractInstance
 							getTimers().addTimer("TEREDOR_BUHATIMER", 10000, npc, null);
 							getTimers().addTimer("TEREDOR_RUNTIMER_1", 30000, npc, null);
 							getTimers().addTimer("TEREDOR_POISON_TIMER", 2000, npc, null);
-						}
-						else if (getRandom(100) < 1)
-						{
+						} else if (getRandom(100) < 1) {
 							addSkillCastDesire(npc, attacker, TEREDOR_POISON_SKILL, 23);
 							addSpawn(TEREDOR_POISON, attacker.getX(), attacker.getY(), attacker.getZ(), 0, false, 0, false, instance.getId());
 						}
-					}
-					else if ((hpPer <= 60) && (hpPer >= 40))
-					{
-						if (teredorStatus == 2)
-						{
+					} else if ((hpPer <= 60) && (hpPer >= 40)) {
+						if (teredorStatus == 2) {
 							addSkillCastDesire(npc, npc, TEREDOR_CANCEL, 23);
 							teredorStatus = npcVars.increaseInt("TEREDOR_STATUS", 1);
 							npc.disableCoreAI(true);
@@ -514,17 +433,12 @@ public final class TeredorWarzone extends AbstractInstance
 							getTimers().addTimer("TEREDOR_BUHATIMER", 10000, npc, null);
 							getTimers().addTimer("TEREDOR_RUNTIMER_2", 30000, npc, null);
 							getTimers().addTimer("TEREDOR_POISON_TIMER", 2000, npc, null);
-						}
-						else if (getRandom(100) < 3)
-						{
+						} else if (getRandom(100) < 3) {
 							addSkillCastDesire(npc, attacker, TEREDOR_POISON_SKILL, 23);
 							addSpawn(TEREDOR_POISON, attacker.getX(), attacker.getY(), attacker.getZ(), 0, false, 0, false, instance.getId());
 						}
-					}
-					else if ((hpPer <= 40) && (hpPer >= 20))
-					{
-						if (teredorStatus == 3)
-						{
+					} else if ((hpPer <= 40) && (hpPer >= 20)) {
+						if (teredorStatus == 3) {
 							addSkillCastDesire(npc, npc, TEREDOR_CANCEL, 23);
 							// if (myself->i_ai2 == 1)
 							// {
@@ -553,17 +467,12 @@ public final class TeredorWarzone extends AbstractInstance
 							getTimers().addTimer("TEREDOR_BUHATIMER", 10000, npc, null);
 							getTimers().addTimer("TEREDOR_RUNTIMER_3", 30000, npc, null);
 							getTimers().addTimer("TEREDOR_POISON_TIMER", 2000, npc, null);
-						}
-						else if (getRandom(100) < 5)
-						{
+						} else if (getRandom(100) < 5) {
 							addSkillCastDesire(npc, attacker, TEREDOR_POISON_SKILL, 23);
 							addSpawn(TEREDOR_POISON, attacker.getX(), attacker.getY(), attacker.getZ(), 0, false, 0, false, instance.getId());
 						}
-					}
-					else if (hpPer < 20)
-					{
-						if (teredorStatus == 4)
-						{
+					} else if (hpPer < 20) {
+						if (teredorStatus == 4) {
 							addSkillCastDesire(npc, npc, TEREDOR_CANCEL, 23);
 							// if (myself->i_ai2 == 1)
 							// {
@@ -594,19 +503,13 @@ public final class TeredorWarzone extends AbstractInstance
 							getTimers().addTimer("TEREDOR_BUHATIMER", 10000, npc, null);
 							getTimers().addTimer("TEREDOR_RUNTIMER_4", 30000, npc, null);
 							getTimers().addTimer("TEREDOR_POISON_TIMER", 2000, npc, null);
-						}
-						else if (getRandom(100) < 5)
-						{
+						} else if (getRandom(100) < 5) {
 							addSkillCastDesire(npc, attacker, TEREDOR_POISON_SKILL_2, 23);
 							addSpawn(TEREDOR_POISON, attacker.getX(), attacker.getY(), attacker.getZ(), 0, false, 0, false, instance.getId());
-						}
-						else if (getRandom(100) < 5)
-						{
+						} else if (getRandom(100) < 5) {
 							// myself->AddUseSkillDesire(attacker, Specialskill1, @ATTACK, @MOVE_TO_TARGET, 1000000);
 						}
-					}
-					else if ((teredorStatus == 5) && (hpPer < 7))
-					{
+					} else if ((teredorStatus == 5) && (hpPer < 7)) {
 						// myself->BroadcastScriptEvent(@SCE_ALL_BREAK_AN_EGG5, gg->GetIndexFromCreature(c0), 3000);
 						teredorStatus = npcVars.increaseInt("TEREDOR_STATUS", 1);
 					}
@@ -616,24 +519,18 @@ public final class TeredorWarzone extends AbstractInstance
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case TEREDOR:
-				{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case TEREDOR: {
 					instance.finishInstance();
 					break;
 				}
-				case EGG_2:
-				{
-					if (getRandom(4) < 3)
-					{
+				case EGG_2: {
+					if (getRandom(4) < 3) {
 						final Npc minion = addSpawn(getRandomBoolean() ? MUTANTED_MILLIPADE : TEREDOR_LARVA, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 						addAttackPlayerDesire(minion, killer, 23);
 						npc.deleteMe();
@@ -644,17 +541,13 @@ public final class TeredorWarzone extends AbstractInstance
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case BEETLE:
-				{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case BEETLE: {
 					npc.broadcastEvent("SCE_EGG_DIE", 500, null);
 					break;
 				}
@@ -662,9 +555,8 @@ public final class TeredorWarzone extends AbstractInstance
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new TeredorWarzone();
 	}
 }

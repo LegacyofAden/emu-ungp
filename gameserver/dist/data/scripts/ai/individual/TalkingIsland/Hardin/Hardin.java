@@ -18,43 +18,38 @@
  */
 package ai.individual.TalkingIsland.Hardin;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import ai.AbstractNpcAI;
 import quests.Q10472_WindsOfFateEncroachingShadows.Q10472_WindsOfFateEncroachingShadows;
 
 /**
  * Hardin AI.
+ *
  * @author malyelfik
  */
-public final class Hardin extends AbstractNpcAI
-{
+public final class Hardin extends AbstractNpcAI {
 	// NPC
 	private static final int HARDIN = 33870;
-	
-	private Hardin()
-	{
+
+	private Hardin() {
 		addStartNpc(HARDIN);
 		addFirstTalkId(HARDIN);
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = "33870-01.html"; // Anybody except Ertheia race TODO: Find HTML
-		if (player.getRace().equals(Race.ERTHEIA))
-		{
+		if (player.getRace().equals(Race.ERTHEIA)) {
 			final QuestState st = player.getQuestState(Q10472_WindsOfFateEncroachingShadows.class.getSimpleName());
 			htmltext = ((st != null) && (st.getCond() >= 7) && (st.getCond() <= 17)) ? "33870-03.html" : "33870-02.html";
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Hardin();
 	}
 }

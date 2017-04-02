@@ -18,8 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -28,90 +26,70 @@ import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class AdminLevel implements IAdminCommandHandler
-{
+import java.util.StringTokenizer;
+
+public class AdminLevel implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_add_level",
-		"admin_set_level"
-	};
-	
+			{
+					"admin_add_level",
+					"admin_set_level"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		WorldObject targetChar = activeChar.getTarget();
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
-		
+
 		String val = "";
-		if (st.countTokens() >= 1)
-		{
+		if (st.countTokens() >= 1) {
 			val = st.nextToken();
 		}
-		
-		if (actualCommand.equalsIgnoreCase("admin_add_level"))
-		{
-			try
-			{
-				if (targetChar instanceof Playable)
-				{
+
+		if (actualCommand.equalsIgnoreCase("admin_add_level")) {
+			try {
+				if (targetChar instanceof Playable) {
 					((Playable) targetChar).getStat().addLevel(Byte.parseByte(val));
 				}
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				activeChar.sendMessage("Wrong Number Format");
 			}
-		}
-		else if (actualCommand.equalsIgnoreCase("admin_set_level"))
-		{
-			try
-			{
-				if (!(targetChar instanceof PlayerInstance))
-				{
+		} else if (actualCommand.equalsIgnoreCase("admin_set_level")) {
+			try {
+				if (!(targetChar instanceof PlayerInstance)) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET); // incorrect target!
 					return false;
 				}
 				PlayerInstance targetPlayer = (PlayerInstance) targetChar;
-				
+
 				byte lvl = Byte.parseByte(val);
-				if ((lvl >= 1) && (lvl <= ExperienceData.getInstance().getMaxLevel()))
-				{
+				if ((lvl >= 1) && (lvl <= ExperienceData.getInstance().getMaxLevel())) {
 					long pXp = targetPlayer.getExp();
 					long tXp = ExperienceData.getInstance().getExpForLevel(lvl);
-					
-					if (pXp > tXp)
-					{
+
+					if (pXp > tXp) {
 						targetPlayer.removeExpAndSp(pXp - tXp, 0);
-					}
-					else if (pXp < tXp)
-					{
+					} else if (pXp < tXp) {
 						targetPlayer.addExpAndSp(tXp - pXp, 0);
 					}
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("You must specify level between 1 and " + ExperienceData.getInstance().getMaxLevel() + ".");
 					return false;
 				}
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				activeChar.sendMessage("You must specify level between 1 and " + ExperienceData.getInstance().getMaxLevel() + ".");
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminLevel());
 	}
 }

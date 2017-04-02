@@ -26,11 +26,11 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * The Road to Infinity (10702)
+ *
  * @author Gladicek
  */
 
-public final class Q10702_TheRoadToInfinity extends Quest
-{
+public final class Q10702_TheRoadToInfinity extends Quest {
 	// NPCs
 	private static final int KEUCEREUS = 32548;
 	private static final int TEPIOS = 32603;
@@ -38,55 +38,44 @@ public final class Q10702_TheRoadToInfinity extends Quest
 	private static final int KEUCEREUS_INTRODUCTION_SOI = 38578;
 	// Misc
 	private static final int MIN_LEVEL = 95;
-	
-	public Q10702_TheRoadToInfinity()
-	{
+
+	public Q10702_TheRoadToInfinity() {
 		super(10702);
 		addStartNpc(KEUCEREUS);
 		addTalkId(KEUCEREUS, TEPIOS);
 		addCondMinLevel(MIN_LEVEL, "32548-06.htm");
 		registerQuestItems(KEUCEREUS_INTRODUCTION_SOI);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32548-02.htm":
-			case "32548-03.htm":
-			{
+			case "32548-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32548-04.html":
-			{
+			case "32548-04.html": {
 				qs.startQuest();
 				giveItems(player, KEUCEREUS_INTRODUCTION_SOI, 1);
 				break;
 			}
-			case "32603-02.html":
-			{
-				if (qs.isCond(1))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "32603-02.html": {
+				if (qs.isCond(1)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveAdena(player, 18243, true);
 						addExp(player, 8_528_625);
 						addSp(player, 2046);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -95,37 +84,29 @@ public final class Q10702_TheRoadToInfinity extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == KEUCEREUS)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == KEUCEREUS) {
 					htmltext = "32548-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = npc.getId() == KEUCEREUS ? "32548-05.html" : "32603-01.html";
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == KEUCEREUS)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == KEUCEREUS) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * An Impending Threat (10445)
+ *
  * @author St3eT
  */
-public final class Q10445_AnImpendingThreat extends Quest
-{
+public final class Q10445_AnImpendingThreat extends Quest {
 	// NPCs
 	private static final int MATHIAS = 31340;
 	private static final int TUSKA = 33839;
@@ -44,46 +44,38 @@ public final class Q10445_AnImpendingThreat extends Quest
 	private static final int SOE = 37017; // Scroll of Escape: Raider's Crossroads
 	// Misc
 	private static final int MIN_LEVEL = 97;
-	
-	public Q10445_AnImpendingThreat()
-	{
+
+	public Q10445_AnImpendingThreat() {
 		super(10445);
 		addStartNpc(MATHIAS);
 		addTalkId(MATHIAS, TUSKA, BRUENER);
 		registerQuestItems(LETTER, BADGE);
 		addCondMinLevel(MIN_LEVEL, "31340-06.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31340-02.htm":
 			case "31340-03.htm":
-			case "33839-02.html":
-			{
+			case "33839-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "31340-04.htm":
-			{
+			case "31340-04.htm": {
 				st.startQuest();
 				giveItems(player, LETTER, 1);
 				htmltext = event;
 				break;
 			}
-			case "33839-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "33839-03.html": {
+				if (st.isCond(1)) {
 					st.setCond(2);
 					takeItems(player, LETTER, 1);
 					giveItems(player, BADGE, 1);
@@ -91,17 +83,14 @@ public final class Q10445_AnImpendingThreat extends Quest
 				}
 				break;
 			}
-			case "33840-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33840-02.html": {
+				if (st.isCond(2)) {
 					giveItems(player, ELIXIR_LIFE, 50);
 					giveItems(player, ELIXIR_MANA, 50);
 					giveItems(player, SSR, 10000);
 					giveItems(player, BSSR, 10000);
 					giveItems(player, SOE, 1);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 100_506_183);
 						addSp(player, 241_212);
 					}
@@ -113,51 +102,37 @@ public final class Q10445_AnImpendingThreat extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == MATHIAS)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == MATHIAS) {
 					htmltext = "31340-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case MATHIAS:
-					{
-						if (st.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case MATHIAS: {
+						if (st.isCond(1)) {
 							htmltext = "31340-05.html";
 						}
 						break;
 					}
-					case TUSKA:
-					{
-						if (st.isCond(1))
-						{
+					case TUSKA: {
+						if (st.isCond(1)) {
 							htmltext = "33839-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "33839-04.html";
 						}
 						break;
 					}
-					case BRUENER:
-					{
-						if (st.isCond(2))
-						{
+					case BRUENER: {
+						if (st.isCond(2)) {
 							htmltext = "33840-01.html";
 						}
 						break;
@@ -165,10 +140,8 @@ public final class Q10445_AnImpendingThreat extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == MATHIAS)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == MATHIAS) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

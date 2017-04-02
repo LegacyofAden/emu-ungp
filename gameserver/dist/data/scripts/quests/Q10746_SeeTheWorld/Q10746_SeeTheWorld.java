@@ -30,10 +30,10 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * See the World (10746)
+ *
  * @author Sdw
  */
-public final class Q10746_SeeTheWorld extends Quest
-{
+public final class Q10746_SeeTheWorld extends Quest {
 	// NPCs
 	private static final int KARLA = 33933;
 	private static final int ASTIEL = 33948;
@@ -48,37 +48,30 @@ public final class Q10746_SeeTheWorld extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 19;
 	private static final int MAX_LEVEL = 25;
-	
-	public Q10746_SeeTheWorld()
-	{
+
+	public Q10746_SeeTheWorld() {
 		super(10746);
 		addStartNpc(KARLA);
 		addTalkId(KARLA, ASTIEL, LEVIAN);
 		addCondRace(Race.ERTHEIA, "");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33933-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "33933-02.htm":
-			{
+		switch (event) {
+			case "33933-02.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33948-03.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "33948-03.html": {
+				if (qs.isCond(2)) {
 					player.teleToLocation(GLUDIN_VILLAGE);
 				}
 				break;
@@ -88,26 +81,20 @@ public final class Q10746_SeeTheWorld extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (npc.getId())
-		{
-			case KARLA:
-			{
-				switch (qs.getState())
-				{
+
+		switch (npc.getId()) {
+			case KARLA: {
+				switch (qs.getState()) {
 					case State.CREATED:
 						htmltext = "33933-01.htm";
 						break;
-					case State.STARTED:
-					{
-						if (qs.isCond(1))
-						{
+					case State.STARTED: {
+						if (qs.isCond(1)) {
 							htmltext = "33933-03.html";
 						}
 						break;
@@ -118,33 +105,23 @@ public final class Q10746_SeeTheWorld extends Quest
 				}
 				break;
 			}
-			case ASTIEL:
-			{
-				if (qs.isStarted())
-				{
-					if (qs.isCond(1))
-					{
-						if (!isSimulated)
-						{
+			case ASTIEL: {
+				if (qs.isStarted()) {
+					if (qs.isCond(1)) {
+						if (!isSimulated) {
 							qs.setCond(2, true);
 						}
 						htmltext = "33948-01.html";
-					}
-					else if (qs.isCond(2))
-					{
+					} else if (qs.isCond(2)) {
 						htmltext = "33948-02.html";
 					}
 				}
 				break;
 			}
-			case LEVIAN:
-			{
-				if (qs.isStarted() && qs.isCond(2))
-				{
-					if (!isSimulated)
-					{
-						if ((player.getLevel() >= MIN_LEVEL))
-						{
+			case LEVIAN: {
+				if (qs.isStarted() && qs.isCond(2)) {
+					if (!isSimulated) {
+						if ((player.getLevel() >= MIN_LEVEL)) {
 							giveItems(player, SOULSHOT_D, 1500);
 							giveItems(player, SPIRITSHOT_D, 1500);
 							giveItems(player, SCROLL_OF_ESCAPE, 10);
@@ -153,18 +130,14 @@ public final class Q10746_SeeTheWorld extends Quest
 							addSp(player, 5);
 							showOnScreenMsg(player, NpcStringId.CHECK_YOUR_EQUIPMENT_IN_YOUR_INVENTORY, ExShowScreenMessage.TOP_CENTER, 10000);
 							qs.exitQuest(false, true);
-						}
-						else
-						{
+						} else {
 							htmltext = getNoQuestLevelRewardMsg(player);
 						}
 						break;
 					}
 					htmltext = "30037-01.html";
 					break;
-				}
-				else if (qs.isCompleted())
-				{
+				} else if (qs.isCompleted()) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

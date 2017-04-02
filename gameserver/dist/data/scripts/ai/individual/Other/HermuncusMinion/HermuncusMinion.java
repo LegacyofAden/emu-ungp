@@ -18,31 +18,25 @@
  */
 package ai.individual.Other.HermuncusMinion;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import ai.AbstractNpcAI;
+import java.util.*;
 
 /**
  * Hermuncus' Minion AI.
+ *
  * @author St3eT
  */
-public final class HermuncusMinion extends AbstractNpcAI
-{
+public final class HermuncusMinion extends AbstractNpcAI {
 	// NPCs
 	private static final Map<Integer, Integer> HERMUNCUS_MINIONS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		HERMUNCUS_MINIONS.put(33560, 1010720); // Town of Schuttgart
 		HERMUNCUS_MINIONS.put(33561, 1010721); // Seed of Annihilation
 		HERMUNCUS_MINIONS.put(33562, 1010722); // Bloody Swampland
@@ -56,22 +50,20 @@ public final class HermuncusMinion extends AbstractNpcAI
 		HERMUNCUS_MINIONS.put(33747, 1010114); // Guilloutine Fortress
 		HERMUNCUS_MINIONS.put(33779, 0); // Nornil's Cave
 	}
-	
+
 	// Locations
 	private static final Map<Integer, Location> TELEPORTS_85 = new LinkedHashMap<>();
-	
-	static
-	{
+
+	static {
 		TELEPORTS_85.put(1010720, new Location(86153, -143707, -1336)); // Town of Schuttgart
 		TELEPORTS_85.put(1010721, new Location(-178445, 154072, 2568)); // Seed of Annihilation
 		TELEPORTS_85.put(1010722, new Location(-15826, 30477, -3616)); // Bloody Swampland
 		TELEPORTS_85.put(1010723, new Location(-116021, 236167, -3088)); // Ruins of Ye Sagira
 	}
-	
+
 	private static final Map<Integer, Location> TELEPORTS_90 = new LinkedHashMap<>();
-	
-	static
-	{
+
+	static {
 		TELEPORTS_90.put(1010724, new Location(207688, 84720, -1144)); // Ancient City Arcan
 		TELEPORTS_90.put(1010725, new Location(207129, 111132, -2040)); // Garden of Genesis (Lv. 90)
 		TELEPORTS_90.put(1010726, new Location(214432, 79587, 824)); // Fairy Settlement (Lv. 90)
@@ -81,91 +73,72 @@ public final class HermuncusMinion extends AbstractNpcAI
 		TELEPORTS_90.put(1010732, new Location(-74377, 53701, -3672)); // Isle of Souls Harbot
 		TELEPORTS_90.put(1010729, new Location(149358, 172479, -952)); // Parnassus (Lv. 97)
 	}
-	
-	private HermuncusMinion()
-	{
+
+	private HermuncusMinion() {
 		addStartNpc(HERMUNCUS_MINIONS.keySet());
 		addTalkId(HERMUNCUS_MINIONS.keySet());
 		addFirstTalkId(HERMUNCUS_MINIONS.keySet());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final StringTokenizer st = new StringTokenizer(event, " ");
 		event = st.nextToken();
-		
-		if (event.equals("teleportList"))
-		{
-			if (!player.isAwakenedClass())
-			{
+
+		if (event.equals("teleportList")) {
+			if (!player.isAwakenedClass()) {
 				htmltext = "HermuncusMinion-no.html";
-			}
-			else
-			{
+			} else {
 				final ArrayList<Integer> teleportList = new ArrayList<>(TELEPORTS_85.keySet());
-				if (player.getLevel() >= 90)
-				{
+				if (player.getLevel() >= 90) {
 					teleportList.addAll(TELEPORTS_90.keySet());
 				}
-				
+
 				final Integer currentLoc = HERMUNCUS_MINIONS.get(npc.getId());
-				if (teleportList.contains(currentLoc))
-				{
+				if (teleportList.contains(currentLoc)) {
 					teleportList.remove(currentLoc);
 				}
-				
+
 				final StringBuilder sb = new StringBuilder();
-				for (Integer teleportLoc : teleportList)
-				{
+				for (Integer teleportLoc : teleportList) {
 					sb.append(generateButton(teleportLoc));
 				}
 				htmltext = getHtm(player.getHtmlPrefix(), "HermuncusMinion-01.html").replace("%locations%", sb.toString());
 			}
-		}
-		else if (event.equals("teleport") && st.hasMoreTokens())
-		{
+		} else if (event.equals("teleport") && st.hasMoreTokens()) {
 			final int locId = Integer.parseInt(st.nextToken());
-			
-			if (player.getAdena() < 150000)
-			{
+
+			if (player.getAdena() < 150000) {
 				player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA);
 				return null;
 			}
-			
+
 			Location loc = null;
-			if (TELEPORTS_85.containsKey(locId))
-			{
+			if (TELEPORTS_85.containsKey(locId)) {
 				loc = TELEPORTS_85.get(locId);
-			}
-			else if (TELEPORTS_90.containsKey(locId))
-			{
+			} else if (TELEPORTS_90.containsKey(locId)) {
 				loc = TELEPORTS_90.get(locId);
 			}
-			
-			if (loc != null)
-			{
+
+			if (loc != null) {
 				takeItems(player, Inventory.ADENA_ID, 150000);
 				player.teleToLocation(loc);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return player.isAwakenedClass() ? "HermuncusMinion.html" : "HermuncusMinion-no.html";
 	}
-	
-	private String generateButton(Integer locationId)
-	{
+
+	private String generateButton(Integer locationId) {
 		return "<Button align=LEFT icon=TELEPORT action=\"bypass -h Quest HermuncusMinion teleport " + locationId + "\" msg=\"811;F;" + locationId + "\"><fstring>" + locationId + "</fstring> - 150000 <fstring>1000308</fstring></Button>";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new HermuncusMinion();
 	}
 }
