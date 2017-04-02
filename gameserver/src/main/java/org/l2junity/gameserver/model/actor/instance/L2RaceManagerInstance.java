@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.MonsterRace;
 import org.l2junity.gameserver.enums.InstanceType;

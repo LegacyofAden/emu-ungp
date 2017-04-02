@@ -1,7 +1,8 @@
 package org.l2junity.commons.network;
 
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.commons.idfactory.AbstractIdFactory;
+import org.l2junity.commons.idfactory.DefaultIdFactory;
 import org.l2junity.commons.util.AIOUtils;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class Connection<TClient extends Client> {
 
 	Connection(NetworkThread<TClient> server, AsynchronousSocketChannel socketChannel, InetSocketAddress socketAddress) {
 		try {
-			_connectionId = IdFactory.getInstance().getNextId();
+			_connectionId = DefaultIdFactory.getInstance().getNextId();
 			_socketChannel = AIOUtils.applySocketOptions(socketChannel, server.getClientSocketOptions());
 			_socketAddress = socketAddress;
 			_receiveHandler = new ReceiveHandler<>(this);
@@ -98,7 +99,7 @@ public class Connection<TClient extends Client> {
 				_client.onClose();
 			} finally {
 				AIOUtils.closeAsyncChannelSilent(getSocketChannel());
-				IdFactory.getInstance().releaseId(_connectionId);
+				DefaultIdFactory.getInstance().releaseId(_connectionId);
 			}
 		}
 	}

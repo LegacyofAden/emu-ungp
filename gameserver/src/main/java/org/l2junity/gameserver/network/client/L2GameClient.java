@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.LoginServerThread;

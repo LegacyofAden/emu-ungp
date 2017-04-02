@@ -20,7 +20,7 @@ package org.l2junity.gameserver.data.sql.impl;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GeneralConfig;

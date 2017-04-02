@@ -14,7 +14,7 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.data.xml.impl.FenceData;
 import org.l2junity.gameserver.enums.FenceState;
 import org.l2junity.gameserver.model.World;

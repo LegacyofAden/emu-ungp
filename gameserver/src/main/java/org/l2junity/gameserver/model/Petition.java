@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.PetitionState;
 import org.l2junity.gameserver.enums.PetitionType;
 import org.l2junity.gameserver.instancemanager.PetitionManager;

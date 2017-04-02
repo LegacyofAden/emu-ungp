@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.zone;
 
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;

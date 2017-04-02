@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.commons.idfactory.IdFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.handler.ActionHandler;
