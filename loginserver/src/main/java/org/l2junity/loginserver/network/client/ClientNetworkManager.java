@@ -38,7 +38,6 @@ public class ClientNetworkManager extends NetworkManager {
 		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new ClientInitializer(), NetworkConfig.HOST, NetworkConfig.PORT);
 		try {
 			start();
-			getChannelFuture().channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			log.error("Error while starting ClientNetworkManager", e);
 		}

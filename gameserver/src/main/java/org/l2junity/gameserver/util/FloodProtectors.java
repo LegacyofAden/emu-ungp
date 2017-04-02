@@ -102,7 +102,7 @@ public final class FloodProtectors {
 		_useItem = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_USE_ITEM);
 		_rollDice = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_ROLL_DICE);
 		_firework = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_FIREWORK);
-		_itemPetSummon = new FloodProtectorAction(client, org.l2junity.core.configs.FloodProtectorConfig.FLOOD_PROTECTOR_ITEM_PET_SUMMON);
+		_itemPetSummon = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_ITEM_PET_SUMMON);
 		_heroVoice = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_HERO_VOICE);
 		_globalChat = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_GLOBAL_CHAT);
 		_subclass = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_SUBCLASS);

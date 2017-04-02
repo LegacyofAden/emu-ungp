@@ -38,7 +38,6 @@ public class GameServerNetworkManager extends NetworkManager {
 		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new GameServerInitializer(), LoginServerConfig.GAME_SERVER_LOGIN_HOST, LoginServerConfig.GAME_SERVER_LOGIN_PORT);
 		try {
 			start();
-			getChannelFuture().channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			log.error("Error while starting GameServerNetworkManager", e);
 		}

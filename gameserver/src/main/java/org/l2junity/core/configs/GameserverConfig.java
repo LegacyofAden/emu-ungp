@@ -32,6 +32,7 @@ public class GameserverConfig {
 	})
 	public static Path DATAPACK_ROOT;
 
+	@ConfigProperty(name = "LoginHost", value = "127.0.0.1")
 	@ConfigComments(comment = {
 			"Where's the Login server this gameserver should connect to",
 			"WARNING: <u><b><font color='red'>Please don't change default IPs here if you don't know what are you doing!</font></b></u>",
