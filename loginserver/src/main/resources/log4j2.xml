@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
 	<Appenders>
-		<Console name="Console" target="SYSTEM_ERR">
+		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%xEx%n"/>
 		</Console>
 		<RollingFile name="ConsoleFile" fileName="log/console.log"
