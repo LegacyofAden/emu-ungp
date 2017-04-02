@@ -63,8 +63,6 @@ public class Olympiad {
 
 	protected static final Logger _logResults = LoggerFactory.getLogger("olympiad");
 
-	public static final String OLYMPIAD_CONFIG_FILE = "./config/Olympiad.properties"; // FIXME is it still in function?
-
 	private static final Map<Integer, StatsSet> _nobles = new ConcurrentHashMap<>();
 	private static final Map<Integer, Integer> _noblesRank = new HashMap<>();
 
@@ -134,7 +132,6 @@ public class Olympiad {
 	private final ListenersContainer _listenersContainer = new ListenersContainer();
 
 	protected Olympiad() {
-		MultiboxManager.getInstance().registerManager(this);
 		load();
 	}
 
@@ -157,22 +154,13 @@ public class Olympiad {
 		}
 
 		if (!loaded) {
-			log.info("failed to load data from database, trying to load from file.");
+			log.info("Failed to load data from database, trying defaults from config.");
 
-			Properties OlympiadProperties = new Properties();
-			try (InputStream is = new FileInputStream(OLYMPIAD_CONFIG_FILE)) {
-
-				OlympiadProperties.load(is);
-			} catch (Exception e) {
-				log.error("Error loading olympiad properties: ", e);
-				return;
-			}
-
-			_currentCycle = Integer.parseInt(OlympiadProperties.getProperty("CurrentCycle", "1"));
-			_period = Integer.parseInt(OlympiadProperties.getProperty("Period", "0"));
-			_olympiadEnd = Long.parseLong(OlympiadProperties.getProperty("OlympiadEnd", "0"));
-			_validationEnd = Long.parseLong(OlympiadProperties.getProperty("ValidationEnd", "0"));
-			_nextWeeklyChange = Long.parseLong(OlympiadProperties.getProperty("NextWeeklyChange", "0"));
+			_currentCycle = OlympiadConfig.CURRENT_CYCLE;
+			_period = OlympiadConfig.PERIOD;
+			_olympiadEnd = OlympiadConfig.OLYMPIAD_END;
+			_validationEnd = OlympiadConfig.VALIDATION_END;
+			_nextWeeklyChange = OlympiadConfig.NEXT_WEEKLY_CHANGE;
 		}
 
 		switch (_period) {

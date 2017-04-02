@@ -17,6 +17,36 @@ import java.util.List;
 @Slf4j
 @ConfigFile(name = "configs/olympiad.properties")
 public class OlympiadConfig {
+	@ConfigProperty(name = "CurrentCycle", value = "1")
+	@ConfigComments(comment = {
+			"Current cycle of olympiad at server first start."
+	})
+	public static int CURRENT_CYCLE;
+
+	@ConfigProperty(name = "Period", value = "0")
+	@ConfigComments(comment = {
+			"Period of olympiad at server first start."
+	})
+	public static int PERIOD;
+
+	@ConfigProperty(name = "OlympiadEnd", value = "0")
+	@ConfigComments(comment = {
+			"Olympiad end at server first start."
+	})
+	public static long OLYMPIAD_END;
+
+	@ConfigProperty(name = "ValidationEnd", value = "0")
+	@ConfigComments(comment = {
+			"Olympiad validation end at server first start."
+	})
+	public static long VALIDATION_END;
+
+	@ConfigProperty(name = "NextWeeklyChange", value = "0")
+	@ConfigComments(comment = {
+			"Olympiad next weekly change at server first start."
+	})
+	public static long NEXT_WEEKLY_CHANGE;
+
 	@ConfigProperty(name = "AltOlyStartTime", value = "18")
 	@ConfigComments(comment = {
 			"Olympiad Start Time in Military hours Default 6pm (18)"
