@@ -56,7 +56,7 @@ public final class GameScriptsLoader implements IGameXmlReader {
 
 		try {
 			// load script configurations
-			parseDatapackFile("config/scripts.xml");
+			parseDatapackFile("config/xml/scripts.xml");
 			LOGGER.info("Loaded {} files to exclude.", _exclusions.length);
 
 			LOGGER.info("Loading server script(s) ...");
