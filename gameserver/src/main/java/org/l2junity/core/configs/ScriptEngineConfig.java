@@ -27,7 +27,7 @@ public class ScriptEngineConfig {
 	})
 	public static String CLASS_LOADER;
 
-	@ConfigProperty(name = "ClassLoader", value = "System")
+	@ConfigProperty(name = "SourceCompatibility", value = "1.8")
 	@ConfigComments(comment = {
 			"Source compatibility"
 	})
