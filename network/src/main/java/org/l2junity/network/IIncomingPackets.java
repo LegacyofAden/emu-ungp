@@ -21,14 +21,13 @@ package org.l2junity.network;
 import java.util.Set;
 
 /**
- * @author Nos
  * @param <T>
+ * @author Nos
  */
-public interface IIncomingPackets<T> extends IConnectionState
-{
+public interface IIncomingPackets<T> extends IConnectionState {
 	int getPacketId();
-	
+
 	IIncomingPacket<T> newIncomingPacket();
-	
+
 	Set<IConnectionState> getConnectionStates();
 }

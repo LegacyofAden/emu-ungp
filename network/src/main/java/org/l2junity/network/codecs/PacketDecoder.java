@@ -18,8 +18,9 @@
  */
 package org.l2junity.network.codecs;
 
-import java.util.List;
-
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import org.l2junity.network.IConnectionState;
 import org.l2junity.network.IIncomingPacket;
 import org.l2junity.network.IIncomingPackets;
@@ -27,66 +28,53 @@ import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import java.util.List;
 
 /**
- * @author Nos
  * @param <T>
+ * @author Nos
  */
-public class PacketDecoder<T> extends ByteToMessageDecoder
-{
+public class PacketDecoder<T> extends ByteToMessageDecoder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PacketDecoder.class);
-	
+
 	private final IIncomingPackets<T>[] _incomingPackets;
 	private final T _client;
-	
-	public PacketDecoder(IIncomingPackets<T>[] incomingPackets, T client)
-	{
+
+	public PacketDecoder(IIncomingPackets<T>[] incomingPackets, T client) {
 		_incomingPackets = incomingPackets;
 		_client = client;
 	}
-	
+
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
-	{
-		if ((in == null) || !in.isReadable())
-		{
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+		if ((in == null) || !in.isReadable()) {
 			return;
 		}
-		
-		try
-		{
+
+		try {
 			final short packetId = in.readUnsignedByte();
-			if (packetId >= _incomingPackets.length)
-			{
+			if (packetId >= _incomingPackets.length) {
 				LOGGER.debug("Unknown packet: {}", Integer.toHexString(packetId));
 				return;
 			}
-			
+
 			final IIncomingPackets<T> incomingPacket = _incomingPackets[packetId];
-			if (incomingPacket == null)
-			{
+			if (incomingPacket == null) {
 				LOGGER.debug("Unknown packet: {}", Integer.toHexString(packetId));
 				return;
 			}
-			
+
 			final IConnectionState connectionState = ctx.channel().attr(IConnectionState.ATTRIBUTE_KEY).get();
-			if ((connectionState == null) || !incomingPacket.getConnectionStates().contains(connectionState))
-			{
+			if ((connectionState == null) || !incomingPacket.getConnectionStates().contains(connectionState)) {
 				LOGGER.warn("{}: Connection at invalid state: {} Required States: {}", incomingPacket, connectionState, incomingPacket.getConnectionStates());
 				return;
 			}
-			
+
 			final IIncomingPacket<T> packet = incomingPacket.newIncomingPacket();
-			if ((packet != null) && packet.read(_client, new PacketReader(in)))
-			{
+			if ((packet != null) && packet.read(_client, new PacketReader(in))) {
 				out.add(packet);
 			}
-		}
-		finally
-		{
+		} finally {
 			// We always consider that we read whole packet.
 			in.readerIndex(in.writerIndex());
 		}

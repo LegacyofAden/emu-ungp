@@ -18,52 +18,41 @@
  */
 package org.l2junity.network.codecs;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 import org.l2junity.network.IOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
-
 /**
  * @author Nos
  */
 @Sharable
-public class PacketEncoder extends MessageToByteEncoder<IOutgoingPacket>
-{
+public class PacketEncoder extends MessageToByteEncoder<IOutgoingPacket> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PacketEncoder.class);
-	
+
 	private final int _maxPacketSize;
-	
-	public PacketEncoder(int maxPacketSize)
-	{
+
+	public PacketEncoder(int maxPacketSize) {
 		super();
 		_maxPacketSize = maxPacketSize;
 	}
-	
+
 	@Override
-	protected void encode(ChannelHandlerContext ctx, IOutgoingPacket packet, ByteBuf out)
-	{
-		try
-		{
-			if (packet.write(new PacketWriter(out)))
-			{
-				if (out.writerIndex() > _maxPacketSize)
-				{
+	protected void encode(ChannelHandlerContext ctx, IOutgoingPacket packet, ByteBuf out) {
+		try {
+			if (packet.write(new PacketWriter(out))) {
+				if (out.writerIndex() > _maxPacketSize) {
 					throw new IllegalStateException("Packet (" + packet + ") size (" + out.writerIndex() + ") is bigger than the limit (" + _maxPacketSize + ")");
 				}
-			}
-			else
-			{
+			} else {
 				// Avoid sending the packet
 				out.clear();
 			}
-		}
-		catch (Throwable e)
-		{
+		} catch (Throwable e) {
 			LOGGER.warn("Failed sending Packet({})", packet, e);
 			// Avoid sending the packet if some exception happened
 			out.clear();

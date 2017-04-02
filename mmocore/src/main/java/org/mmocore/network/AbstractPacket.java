@@ -20,17 +20,15 @@ package org.mmocore.network;
 import java.nio.ByteBuffer;
 
 /**
- * @author KenM
  * @param <T>
+ * @author KenM
  */
-public abstract class AbstractPacket<T extends MMOClient<?>>
-{
+public abstract class AbstractPacket<T extends MMOClient<?>> {
 	protected ByteBuffer _buf;
-	
+
 	protected T _client;
-	
-	public final T getClient()
-	{
+
+	public final T getClient() {
 		return _client;
 	}
 }
