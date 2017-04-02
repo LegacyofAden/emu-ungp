@@ -42,7 +42,7 @@ public final class MovementController extends AbstractPeriodicTaskManager {
 	@Getter(lazy = true)
 	private static final MovementController instance = new MovementController();
 
-	private final Set<Creature> _movingObjects = ConcurrentHashMap.newKeySet();
+	private static final Set<Creature> _movingObjects = ConcurrentHashMap.newKeySet();
 
 	private MovementController() {
 		super(100);
