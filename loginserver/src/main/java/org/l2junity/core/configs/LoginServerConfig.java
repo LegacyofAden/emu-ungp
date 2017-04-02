@@ -17,10 +17,10 @@ public class LoginServerConfig {
 	})
 	public static String GAME_SERVER_LOGIN_HOST;
 
-	@ConfigProperty(name = "GameServerLoginPort", value = "2104")
+	@ConfigProperty(name = "GameServerLoginPort", value = "9014")
 	@ConfigComments(comment = {
 			"Port on which login server will accept connections from other game servers.",
-			"Default: 2104"
+			"Default: 9014"
 	})
 	public static int GAME_SERVER_LOGIN_PORT;
 
