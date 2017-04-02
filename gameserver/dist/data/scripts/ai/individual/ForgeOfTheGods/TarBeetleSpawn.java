@@ -59,8 +59,8 @@ public class TarBeetleSpawn implements IGameXmlReader {
 			LOGGER.warn("Failed to load tar beetle spawns: ", e);
 		}
 		if (!zones.isEmpty()) {
-			spawnTask = ThreadPool.getInstance().scheduleAiAtFixedRate(() -> zones.forEach(SpawnZone::refreshSpawn), 1000, 60000, TimeUnit.MILLISECONDS);
-			shotTask = ThreadPool.getInstance().scheduleAiAtFixedRate(() -> zones.forEach(SpawnZone::refreshShots), 300000, 300000, TimeUnit.MILLISECONDS);
+			spawnTask = ThreadPool.getInstance().scheduleEffectAtFixedRate(() -> zones.forEach(SpawnZone::refreshSpawn), 1000, 60000, TimeUnit.MILLISECONDS);
+			shotTask = ThreadPool.getInstance().scheduleGeneralAtFixedRate(() -> zones.forEach(SpawnZone::refreshShots), 300000, 300000, TimeUnit.MILLISECONDS);
 		}
 	}
 

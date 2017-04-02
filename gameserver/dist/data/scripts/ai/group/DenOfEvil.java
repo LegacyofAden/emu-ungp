@@ -125,7 +125,7 @@ public final class DenOfEvil extends AbstractNpcAI {
 		zone.addSkill(skillId, skillLevel + 1);
 		if (skillLevel == 3) // 3+1=4
 		{
-			ThreadPool.getInstance().scheduleAi(new KashaDestruction(zone), 2 * 60 * 1000l, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(new KashaDestruction(zone), 2 * 60 * 1000l, TimeUnit.MILLISECONDS);
 			zone.broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.DEFEAT_KASHA_S_EYES_TO_LIFT_THE_GREAT_CURSE));
 		} else if (skillLevel == 2) {
 			zone.broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.A_GREAT_CURSE_CAN_BE_FELT_FROM_KASHA_S_EYES));
@@ -135,7 +135,7 @@ public final class DenOfEvil extends AbstractNpcAI {
 
 	@Override
 	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
-		ThreadPool.getInstance().scheduleAi(new RespawnNewEye(npc.getLocation()), 15000, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new RespawnNewEye(npc.getLocation()), 15000, TimeUnit.MILLISECONDS);
 		EffectZone zone = ZoneManager.getInstance().getZone(npc, EffectZone.class);
 		if (zone == null) {
 			_log.warn("NPC " + npc + " killed outside of L2EffectZone, check your zone coords! X:" + npc.getX() + " Y:" + npc.getY() + " Z:" + npc.getZ());
@@ -193,7 +193,7 @@ public final class DenOfEvil extends AbstractNpcAI {
 							// respawn eye
 							Npc npc = (Npc) character;
 							if (ArrayUtil.contains(EYE_IDS, npc.getId())) {
-								ThreadPool.getInstance().scheduleAi(new RespawnNewEye(npc.getLocation()), 15000, TimeUnit.MILLISECONDS);
+								ThreadPool.getInstance().scheduleGeneral(new RespawnNewEye(npc.getLocation()), 15000, TimeUnit.MILLISECONDS);
 							}
 						}
 					}

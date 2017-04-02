@@ -18,6 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.l2junity.commons.util.TimeUtil;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -549,7 +550,7 @@ public class StatsSet implements IParserAdvUtils {
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(enumClass);
 		final Object val = _set.get(key);
-		if (val == null) {
+		if (val == null || val instanceof String && StringUtils.isEmpty((String)val)) {
 			return defaultValue;
 		}
 		if (enumClass.isInstance(val)) {

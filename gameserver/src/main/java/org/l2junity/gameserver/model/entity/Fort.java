@@ -222,7 +222,6 @@ public final class Fort extends AbstractResidence {
 		if ((getOwnerClan() != null) && (getFortState() == 0)) {
 			spawnSpecialEnvoys();
 		}
-		loadDoor();
 	}
 
 	/**
@@ -447,7 +446,7 @@ public final class Fort extends AbstractResidence {
 	 * <BR>
 	 */
 	public void resetDoors() {
-		for (DoorInstance door : _doors) {
+		for (DoorInstance door : getDoors()) {
 			if (door.isOpen()) {
 				door.closeMe();
 			}
@@ -734,6 +733,9 @@ public final class Fort extends AbstractResidence {
 	}
 
 	public final List<DoorInstance> getDoors() {
+		if (_doors.isEmpty()) {
+			loadDoor();
+		}
 		return _doors;
 	}
 

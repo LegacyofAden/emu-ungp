@@ -50,104 +50,104 @@ public class MultiboxManager {
 	@Getter(lazy = true)
 	private static final MultiboxManager instance = new MultiboxManager();
 
-	private final Map<Object, MultiboxHolder> _holders = new ConcurrentHashMap<>();
+	private final Map<Class, MultiboxHolder> _holders = new ConcurrentHashMap<>();
 
 	private MultiboxManager() {
 		Containers.Global().addListener(new ConsumerEventListener(Containers.Global(), EventType.ON_PLAYER_LOGOUT, event -> onPlayerLogout((OnPlayerLogout) event), this));
-		registerManager(GameServer.getInstance());
-		registerManager(Olympiad.getInstance());
+		registerManager(GameServer.class);
+		registerManager(Olympiad.class);
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 */
-	public void registerManager(Object obj) {
-		final MultiboxSettings settings = MultiboxData.getInstance().getSettings(obj.getClass().getSimpleName());
+	public void registerManager(Class clazz) {
+		final MultiboxSettings settings = MultiboxData.getInstance().getSettings(clazz.getSimpleName());
 		if (settings != null) {
-			_holders.put(obj, new MultiboxHolder(settings));
+			_holders.put(clazz, new MultiboxHolder(settings));
 		} else {
-			log.warn("Attempt to register manager ({}) with non-existent settings:", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+			log.warn("Attempt to register manager ({}) with non-existent settings:", clazz.getSimpleName(), new UnsupportedOperationException());
 		}
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 */
-	public void unregisterManager(Object obj) {
-		_holders.remove(obj);
+	public void unregisterManager(Class clazz) {
+		_holders.remove(clazz);
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 */
-	public void clearManager(Object obj) {
-		if (_holders.containsKey(obj)) {
-			_holders.get(obj).clear();
+	public void clearManager(Class clazz) {
+		if (_holders.containsKey(clazz)) {
+			_holders.get(clazz).clear();
 		} else {
-			log.warn("Attempt to clear non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+			log.warn("Attempt to clear non-existent manager ({}):", clazz.getSimpleName(), new UnsupportedOperationException());
 		}
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 * @return {@code true} if player does not excess maximum amount of dual boxes, {@code false} otherwise.
 	 */
-	public boolean canRegisterClient(Object obj, L2GameClient client) {
-		if (_holders.containsKey(obj)) {
-			return _holders.get(obj).canAddClient(client);
+	public boolean canRegisterClient(Class clazz, L2GameClient client) {
+		if (_holders.containsKey(clazz)) {
+			return _holders.get(clazz).canAddClient(client);
 		}
-		log.warn("Attempt to check for registered client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to check for registered client on non-existent manager ({}):", clazz.getSimpleName(), new UnsupportedOperationException());
 		return false;
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 * @return
 	 */
-	public boolean registerClient(Object obj, L2GameClient client) {
-		if (_holders.containsKey(obj)) {
-			return _holders.get(obj).addClient(client);
+	public boolean registerClient(Class clazz, L2GameClient client) {
+		if (_holders.containsKey(clazz)) {
+			return _holders.get(clazz).addClient(client);
 		}
-		log.warn("Attempt to register client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to register client on non-existent manager ({}):", clazz.getClass().getSimpleName(), new UnsupportedOperationException());
 		return false;
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 */
-	public void unregisterClient(Object obj, L2GameClient client) {
-		if (_holders.containsKey(obj)) {
-			_holders.get(obj).removeClient(client);
+	public void unregisterClient(Class clazz, L2GameClient client) {
+		if (_holders.containsKey(clazz)) {
+			_holders.get(clazz).removeClient(client);
 		} else {
-			log.warn("Attempt to unregister client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+			log.warn("Attempt to unregister client on non-existent manager ({}):", clazz.getClass().getSimpleName(), new UnsupportedOperationException());
 		}
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 * @return
 	 */
-	public int getCurrentConnections(Object obj, L2GameClient client) {
-		if (_holders.containsKey(obj)) {
-			return _holders.get(obj).getCurrentConnections(client);
+	public int getCurrentConnections(Class clazz, L2GameClient client) {
+		if (_holders.containsKey(clazz)) {
+			return _holders.get(clazz).getCurrentConnections(client);
 		}
-		log.warn("Attempt to get current connections of client ({}) on non-existent manager ({}):", client, obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to get current connections of client ({}) on non-existent manager ({}):", client, clazz.getSimpleName(), new UnsupportedOperationException());
 		return 0;
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @return
 	 */
-	public int getMaximumConnectionsLimit(Object obj) {
-		if (_holders.containsKey(obj)) {
-			return _holders.get(obj).getSettings().getMaxClients();
+	public int getMaximumConnectionsLimit(Class clazz) {
+		if (_holders.containsKey(clazz)) {
+			return _holders.get(clazz).getSettings().getMaxClients();
 		}
-		log.warn("Attempt to get max connections limit on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to get max connections limit on non-existent manager ({}):", clazz.getSimpleName(), new UnsupportedOperationException());
 		return 0;
 	}
 
@@ -168,16 +168,16 @@ public class MultiboxManager {
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 * @return Set of multiboxes of current client.
 	 */
-	public Set<L2GameClient> getMultiboxesOf(Object obj, L2GameClient client) {
-		if (!_holders.containsKey(obj)) {
+	public Set<L2GameClient> getMultiboxesOf(Class clazz, L2GameClient client) {
+		if (!_holders.containsKey(clazz)) {
 			return Collections.emptySet();
 		}
 
-		final MultiboxHolder holder = _holders.get(obj);
+		final MultiboxHolder holder = _holders.get(clazz);
 		final MultiboxSourceType type = holder.getSettings().getProtectionType();
 
 		int hash = type.generateHash(client);
@@ -188,13 +188,13 @@ public class MultiboxManager {
 	}
 
 	/**
-	 * @param obj
+	 * @param clazz
 	 * @param client
 	 */
-	public void sendDefaultRestrictionMessage(Object obj, L2GameClient client) {
-		final MultiboxHolder holder = _holders.get(obj);
+	public void sendDefaultRestrictionMessage(Class clazz, L2GameClient client) {
+		final MultiboxHolder holder = _holders.get(clazz);
 		if (holder == null) {
-			log.warn("Attempt to send default restriction message on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+			log.warn("Attempt to send default restriction message on non-existent manager ({}):", clazz.getSimpleName(), new UnsupportedOperationException());
 			return;
 		}
 
@@ -205,10 +205,10 @@ public class MultiboxManager {
 		}
 
 		final StringBuilder sb = new StringBuilder();
-		final Set<L2GameClient> clients = getMultiboxesOf(obj, client);
+		final Set<L2GameClient> clients = getMultiboxesOf(clazz, client);
 		if (!clients.isEmpty()) {
 			sb.append("<table width=\"100%\">");
-			for (L2GameClient multiboxClient : getMultiboxesOf(obj, client)) {
+			for (L2GameClient multiboxClient : getMultiboxesOf(clazz, client)) {
 				if (multiboxClient.getActiveChar() != null) {
 					sb.append("<tr><td>Character: <font color=\"LEVEL\">" + multiboxClient.getActiveChar().getName() + "</font></td></tr>");
 				} else {
@@ -218,7 +218,7 @@ public class MultiboxManager {
 			sb.append("</table>");
 		}
 		final NpcHtmlMessage msg = new NpcHtmlMessage(html);
-		msg.replace("%max%", Integer.toString(getMaximumConnectionsLimit(obj)));
+		msg.replace("%max%", Integer.toString(getMaximumConnectionsLimit(clazz)));
 		msg.replace("%type%", holder.getSettings().getProtectionType().name());
 		msg.replace("%clients%", sb.toString());
 		client.sendPacket(msg);

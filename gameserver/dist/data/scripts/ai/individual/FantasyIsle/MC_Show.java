@@ -275,7 +275,7 @@ public class MC_Show extends AbstractNpcAI {
 	private void scheduleTimer() {
 		// TODO startRepeatingQuestTimer("Start", diff, 14400000, null, null);
 		// missing option to provide different initial delay
-		ThreadPool.getInstance().scheduleAiAtFixedRate(new StartMCShow(), 4, 4, TimeUnit.HOURS);
+		ThreadPool.getInstance().scheduleGeneralAtFixedRate(new StartMCShow(), 4, 4, TimeUnit.HOURS);
 	}
 
 	@Override
