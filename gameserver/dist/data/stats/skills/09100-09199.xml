@@ -3341,7 +3341,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>R</crystalType>
 			</condition>
@@ -3412,7 +3412,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>R</crystalType>
 				<scrollGroup>2</scrollGroup>
@@ -3555,7 +3555,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>R</crystalType>
 			</condition>

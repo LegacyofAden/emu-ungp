@@ -575,7 +575,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>D</crystalType>
 			</condition>
@@ -599,7 +599,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>C</crystalType>
 			</condition>
@@ -623,7 +623,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>B</crystalType>
 			</condition>
@@ -647,7 +647,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>A</crystalType>
 			</condition>
@@ -671,7 +671,7 @@
 			<condition name="TargetItemCrystalType">
 				<itemType>
 					<item>ARMOR</item>
-					<item>ACCCESORY</item>
+					<item>ACCESSORY</item>
 				</itemType>
 				<crystalType>S</crystalType>
 			</condition>
