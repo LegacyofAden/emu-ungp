@@ -23,8 +23,6 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.*;
 import org.l2junity.gameserver.ai.*;
 import org.l2junity.gameserver.data.xml.impl.ExtendDropData;
-import org.l2junity.gameserver.datatables.EventDroplist;
-import org.l2junity.gameserver.datatables.EventDroplist.DateDrop;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.InstanceType;
@@ -366,9 +364,6 @@ public class Attackable extends Npc {
 
 			// Manage Base, Quests and Sweep drops of the L2Attackable
 			doItemDrop((maxDealer != null) && maxDealer.isOnline() ? maxDealer : lastAttacker);
-
-			// Manage drop of Special Events created by GM for a defined period
-			doEventDrop(lastAttacker);
 
 			// Manage luck based drop
 			doLuckyDrop(getTemplate(), (maxDealer != null) && maxDealer.isOnline() ? maxDealer : lastAttacker);
@@ -878,51 +873,6 @@ public class Attackable extends Npc {
 					player.addItem("ChampionLoot", item.getId(), item.getCount(), this, true); // Give the item(s) to the L2PcInstance that has killed the L2Attackable
 				} else {
 					dropItem(player, item);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Manage Special Events drops created by GM for a defined period.<br>
-	 * Concept:<br>
-	 * During a Special Event all L2Attackable can drop extra Items.<br>
-	 * Those extra Items are defined in the table allNpcDateDrops of the EventDroplist.<br>
-	 * Each Special Event has a start and end date to stop to drop extra Items automatically.<br>
-	 * Actions: <I>If an extra drop must be generated</I><br>
-	 * Get an Item Identifier (random) from the DateDrop Item table of this Event.<br>
-	 * Get the Item quantity dropped (random).<br>
-	 * Create this or these L2ItemInstance corresponding to this Item Identifier.<br>
-	 * If the autoLoot mode is actif and if the L2Character that has killed the L2Attackable is a L2PcInstance, Give the item(s) to the L2PcInstance that has killed the L2Attackable<br>
-	 * If the autoLoot mode isn't actif or if the L2Character that has killed the L2Attackable is not a L2PcInstance, add this or these item(s) in the world as a visible object at the position where mob was last
-	 *
-	 * @param lastAttacker The L2Character that has killed the L2Attackable
-	 */
-	public void doEventDrop(Creature lastAttacker) {
-		if (lastAttacker == null) {
-			return;
-		}
-
-		PlayerInstance player = lastAttacker.getActingPlayer();
-
-		// Don't drop anything if the last attacker or owner isn't L2PcInstance
-		if (player == null) {
-			return;
-		}
-
-		if ((player.getLevel() - getLevel()) > 9) {
-			return;
-		}
-
-		// Go through DateDrop of EventDroplist allNpcDateDrops within the date range
-		for (DateDrop drop : EventDroplist.getInstance().getAllDrops()) {
-			if (Rnd.get(1000000) < drop.getEventDrop().getDropChance()) {
-				final int itemId = drop.getEventDrop().getItemIdList()[Rnd.get(drop.getEventDrop().getItemIdList().length)];
-				final long itemCount = Rnd.get(drop.getEventDrop().getMinCount(), drop.getEventDrop().getMaxCount());
-				if (PlayerConfig.AUTO_LOOT || isFlying()) {
-					player.doAutoLoot(this, itemId, itemCount); // Give the item(s) to the L2PcInstance that has killed the L2Attackable
-				} else {
-					dropItem(player, itemId, itemCount); // drop the item on the ground
 				}
 			}
 		}
