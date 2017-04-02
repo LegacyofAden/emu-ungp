@@ -101,7 +101,7 @@ public class CharacterSelect implements IClientIncomingPacket {
 					}
 
 					if (!MultiboxManager.getInstance().registerClient(GameServer.class, client)) {
-						MultiboxManager.getInstance().sendDefaultRestrictionMessage(GameServer.getInstance(), client);
+						MultiboxManager.getInstance().sendDefaultRestrictionMessage(GameServer.class, client);
 						return;
 					}
 
