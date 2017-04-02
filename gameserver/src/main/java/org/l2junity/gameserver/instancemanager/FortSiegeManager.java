@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.BasePathProvider;
+import org.l2junity.core.configs.SiegeFortConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.CombatFlag;
 import org.l2junity.gameserver.model.FortSiegeSpawn;
@@ -54,41 +55,16 @@ public final class FortSiegeManager {
 	@Getter(lazy = true)
 	private static final FortSiegeManager instance = new FortSiegeManager();
 
-	private int _attackerMaxClans = 500; // Max number of clans
-
 	// Fort Siege settings
 	private Map<Integer, List<FortSiegeSpawn>> _commanderSpawnList;
 	private Map<Integer, List<CombatFlag>> _flagList;
-	private boolean _justToTerritory = true; // Changeable in fortsiege.properties
-	private int _flagMaxCount = 1; // Changeable in fortsiege.properties
-	private int _siegeClanMinLevel = 4; // Changeable in fortsiege.properties
-	private int _siegeLength = 60; // Time in minute. Changeable in fortsiege.properties
-	private int _countDownLength = 10; // Time in minute. Changeable in fortsiege.properties
-	private int _suspiciousMerchantRespawnDelay = 180; // Time in minute. Changeable in fortsiege.properties
 	private List<FortSiege> _sieges;
 
 	protected FortSiegeManager() {
-		final Properties siegeSettings = new Properties();
-		// TODO normal config, please...
-		try (InputStream is = Files.newInputStream(BasePathProvider.resolvePath(Paths.get("config", "FortSiege.properties")))) {
-			siegeSettings.load(is);
-		} catch (Exception e) {
-			log.warn("Error while loading Fort Siege Manager settings!", e);
-		}
-
-		// Siege setting
-		_justToTerritory = Boolean.parseBoolean(siegeSettings.getProperty("JustToTerritory", "true"));
-		_attackerMaxClans = Integer.decode(siegeSettings.getProperty("AttackerMaxClans", "500"));
-		_flagMaxCount = Integer.decode(siegeSettings.getProperty("MaxFlags", "1"));
-		_siegeClanMinLevel = Integer.decode(siegeSettings.getProperty("SiegeClanMinLevel", "4"));
-		_siegeLength = Integer.decode(siegeSettings.getProperty("SiegeLength", "60"));
-		_countDownLength = Integer.decode(siegeSettings.getProperty("CountDownLength", "10"));
-		_suspiciousMerchantRespawnDelay = Integer.decode(siegeSettings.getProperty("SuspiciousMerchantRespawnDelay", "180"));
-
-		// Siege spawns settings
 		_commanderSpawnList = new ConcurrentHashMap<>();
 		_flagList = new ConcurrentHashMap<>();
-
+		// TODO: Must be controlled by AI.obj
+		/*
 		for (Fort fort : FortManager.getInstance().getForts()) {
 			List<FortSiegeSpawn> _commanderSpawns = new CopyOnWriteArrayList<>();
 			List<CombatFlag> _flagSpawns = new CopyOnWriteArrayList<>();
@@ -134,6 +110,7 @@ public final class FortSiegeManager {
 			}
 			_flagList.put(fort.getResidenceId(), _flagSpawns);
 		}
+		*/
 	}
 
 	public final void addSiegeSkills(PlayerInstance character) {
@@ -181,19 +158,19 @@ public final class FortSiegeManager {
 	}
 
 	public final int getAttackerMaxClans() {
-		return _attackerMaxClans;
+		return SiegeFortConfig.ATTACKER_MAX_CLANS;
 	}
 
 	public final int getFlagMaxCount() {
-		return _flagMaxCount;
+		return SiegeFortConfig.MAX_FLAGS;
 	}
 
 	public final boolean canRegisterJustTerritory() {
-		return _justToTerritory;
+		return SiegeFortConfig.JUST_TO_TERRITORY;
 	}
 
 	public final int getSuspiciousMerchantRespawnDelay() {
-		return _suspiciousMerchantRespawnDelay;
+		return SiegeFortConfig.SUSPICIOUS_MERCHANT_RESPAWN_DELAY;
 	}
 
 	public final FortSiege getSiege(WorldObject activeObject) {
@@ -210,15 +187,15 @@ public final class FortSiegeManager {
 	}
 
 	public final int getSiegeClanMinLevel() {
-		return _siegeClanMinLevel;
+		return SiegeFortConfig.SIEGE_CLAN_MIN_LEVEL;
 	}
 
 	public final int getSiegeLength() {
-		return _siegeLength;
+		return SiegeFortConfig.SIEGE_LENGTH;
 	}
 
 	public final int getCountDownLength() {
-		return _countDownLength;
+		return SiegeFortConfig.COUNT_DOWN_LENGTH;
 	}
 
 	public final List<FortSiege> getSieges() {

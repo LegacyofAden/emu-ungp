@@ -22,6 +22,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.PropertiesParser;
+import org.l2junity.core.configs.SiegeCastleConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.Location;
@@ -44,33 +45,12 @@ public final class SiegeManager {
 	@Getter(lazy = true)
 	private static final SiegeManager instance = new SiegeManager();
 
-	// TODO: Move to config class
-	public static final String SIEGE_CONFIGURATION_FILE = "./config/Siege.properties";
-
 	private final Map<Integer, List<TowerSpawn>> _controlTowers = new HashMap<>();
 	private final Map<Integer, List<TowerSpawn>> _flameTowers = new HashMap<>();
 
-	private int _attackerMaxClans = 500; // Max number of clans
-	private int _attackerRespawnDelay = 0; // Time in ms. Changeable in siege.config
-	private int _defenderMaxClans = 500; // Max number of clans
-	private int _flagMaxCount = 1; // Changeable in siege.config
-	private int _siegeClanMinLevel = 5; // Changeable in siege.config
-	private int _siegeLength = 120; // Time in minute. Changeable in siege.config
-	private int _bloodAllianceReward = 0; // Number of Blood Alliance items reward for successful castle defending
-
 	protected SiegeManager() {
-		final PropertiesParser siegeSettings = new PropertiesParser(SIEGE_CONFIGURATION_FILE);
-
-		// Siege setting
-		_attackerMaxClans = siegeSettings.getInt("AttackerMaxClans", 500);
-		_attackerRespawnDelay = siegeSettings.getInt("AttackerRespawn", 0);
-		_defenderMaxClans = siegeSettings.getInt("DefenderMaxClans", 500);
-		_flagMaxCount = siegeSettings.getInt("MaxFlags", 1);
-		_siegeClanMinLevel = siegeSettings.getInt("SiegeClanMinLevel", 5);
-		_siegeLength = siegeSettings.getInt("SiegeLength", 120);
-		_bloodAllianceReward = siegeSettings.getInt("BloodAllianceReward", 1);
-
-		for (Castle castle : CastleManager.getInstance().getCastles()) {
+		// TODO: Must be controlled by AI.obj
+		/*for (Castle castle : CastleManager.getInstance().getCastles()) {
 			final List<TowerSpawn> controlTowers = new ArrayList<>();
 			for (int i = 1; i < 0xFF; i++) {
 				final String settingsKeyName = castle.getName() + "ControlTower" + i;
@@ -121,7 +101,7 @@ public final class SiegeManager {
 			if (castle.getOwnerId() != 0) {
 				loadTrapUpgrade(castle.getResidenceId());
 			}
-		}
+		}*/
 	}
 
 	public final void addSiegeSkills(PlayerInstance character) {
@@ -185,19 +165,19 @@ public final class SiegeManager {
 	}
 
 	public final int getAttackerMaxClans() {
-		return _attackerMaxClans;
+		return SiegeCastleConfig.ATTACKER_MAX_CLANS;
 	}
 
 	public final int getAttackerRespawnDelay() {
-		return _attackerRespawnDelay;
+		return SiegeCastleConfig.ATTACKER_RESPAWN;
 	}
 
 	public final int getDefenderMaxClans() {
-		return _defenderMaxClans;
+		return SiegeCastleConfig.DEFENDER_MAX_CLANS;
 	}
 
 	public final int getFlagMaxCount() {
-		return _flagMaxCount;
+		return SiegeCastleConfig.MAX_FLAGS;
 	}
 
 	public final Siege getSiege(ILocational loc) {
@@ -218,15 +198,15 @@ public final class SiegeManager {
 	}
 
 	public final int getSiegeClanMinLevel() {
-		return _siegeClanMinLevel;
+		return SiegeCastleConfig.SIEGE_CLAN_MIN_LEVEL;
 	}
 
 	public final int getSiegeLength() {
-		return _siegeLength;
+		return SiegeCastleConfig.SIEGE_LENGTH;
 	}
 
 	public final int getBloodAllianceReward() {
-		return _bloodAllianceReward;
+		return SiegeCastleConfig.BLOOD_ALLIANCE_REWARD;
 	}
 
 	public final List<Siege> getSieges() {
