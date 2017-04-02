@@ -18,96 +18,79 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.Race;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.AppearanceHolder;
 import org.l2junity.gameserver.model.items.appearance.AppearanceStone;
 import org.l2junity.gameserver.model.items.appearance.AppearanceTargetType;
 import org.l2junity.gameserver.model.items.type.CrystalType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author UnAfraid
  */
-public class AppearanceItemData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(AppearanceItemData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class AppearanceItemData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final AppearanceItemData instance = new AppearanceItemData();
+
 	private final Map<Integer, AppearanceStone> _stones = new HashMap<>();
-	
-	protected AppearanceItemData()
-	{
+
+	private AppearanceItemData() {
+		reload();
 	}
-	
-	@Reload("appearance")
-	@Load(group = LoadGroup.class)
-	protected void load() throws Exception
-	{
+
+	public void reload() {
 		parseDatapackFile("data/AppearanceStones.xml");
-		LOGGER.info("Loaded: {} Stones", _stones.size());
+		log.info("Loaded: {} Stones", _stones.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("appearance_stone".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("appearance_stone".equalsIgnoreCase(d.getNodeName())) {
 						final AppearanceStone stone = new AppearanceStone(new StatsSet(parseAttributes(d)));
-						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling())
-						{
-							switch (c.getNodeName())
-							{
-								case "grade":
-								{
+						for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling()) {
+							switch (c.getNodeName()) {
+								case "grade": {
 									final CrystalType type = CrystalType.valueOf(c.getTextContent());
 									stone.addCrystalType(type);
 									break;
 								}
-								case "targetType":
-								{
+								case "targetType": {
 									final AppearanceTargetType type = AppearanceTargetType.valueOf(c.getTextContent());
 									stone.addTargetType(type);
 									break;
 								}
-								case "bodyPart":
-								{
+								case "bodyPart": {
 									final int part = ItemTable._slots.get(c.getTextContent());
 									stone.addBodyPart(part);
 									break;
 								}
-								case "race":
-								{
+								case "race": {
 									final Race race = Race.valueOf(c.getTextContent());
 									stone.addRace(race);
 									break;
 								}
-								case "raceNot":
-								{
+								case "raceNot": {
 									final Race raceNot = Race.valueOf(c.getTextContent());
 									stone.addRaceNot(raceNot);
 									break;
 								}
-								case "visual":
-								{
+								case "visual": {
 									stone.addVisualId(new AppearanceHolder(new StatsSet(parseAttributes(c))));
 								}
 							}
@@ -118,29 +101,12 @@ public class AppearanceItemData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _stones.size();
 	}
-	
-	public AppearanceStone getStone(int stone)
-	{
+
+	public AppearanceStone getStone(int stone) {
 		return _stones.get(stone);
-	}
-	
-	/**
-	 * Gets the single instance of AppearanceItemData.
-	 * @return single instance of AppearanceItemData
-	 */
-	@InstanceGetter
-	public static final AppearanceItemData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final AppearanceItemData _instance = new AppearanceItemData();
 	}
 }

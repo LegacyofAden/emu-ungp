@@ -27,46 +27,36 @@ import org.l2junity.gameserver.network.client.send.SpawnItem;
 import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.network.PacketReader;
 
-public class RequestRecordInfo implements IClientIncomingPacket
-{
+public class RequestRecordInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new UserInfo(activeChar));
-		
+
 		World.getInstance().forEachVisibleObject(activeChar, WorldObject.class, object ->
 		{
-			if (object.getPoly().isMorphed() && object.getPoly().getPolyType().equals("item"))
-			{
+			if (object.getPoly().isMorphed() && object.getPoly().getPolyType().equals("item")) {
 				client.sendPacket(new SpawnItem(object));
-			}
-			else
-			{
-				if (object.isVisibleFor(activeChar))
-				{
+			} else {
+				if (object.isVisibleFor(activeChar)) {
 					object.sendInfo(activeChar);
-					
-					if (object.isCreature())
-					{
+
+					if (object.isCreature()) {
 						// Update the state of the L2Character object client
 						// side by sending Server->Client packet
 						// MoveToPawn/CharMoveToLocation and AutoAttackStart to
 						// the L2PcInstance
 						final Creature obj = (Creature) object;
-						if (obj.getAI() != null)
-						{
+						if (obj.getAI() != null) {
 							obj.getAI().describeStateToPlayer(activeChar);
 						}
 					}

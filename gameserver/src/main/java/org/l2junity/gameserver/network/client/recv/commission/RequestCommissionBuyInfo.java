@@ -31,47 +31,38 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestCommissionBuyInfo implements IClientIncomingPacket
-{
+public class RequestCommissionBuyInfo implements IClientIncomingPacket {
 	private long _commissionId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_commissionId = packet.readQ();
 		// packet.readD(); // CommissionItemType
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!CommissionManager.isPlayerAllowedToInteract(player))
-		{
+
+		if (!CommissionManager.isPlayerAllowedToInteract(player)) {
 			client.sendPacket(ExCloseCommission.STATIC_PACKET);
 			return;
 		}
-		
-		if (!player.isInventoryUnder80(false) || (player.getWeightPenalty() >= 3))
-		{
+
+		if (!player.isInventoryUnder80(false) || (player.getWeightPenalty() >= 3)) {
 			client.sendPacket(SystemMessageId.IF_THE_WEIGHT_IS_80_OR_MORE_AND_THE_INVENTORY_NUMBER_IS_90_OR_MORE_PURCHASE_CANCELLATION_IS_NOT_POSSIBLE);
 			client.sendPacket(ExResponseCommissionBuyInfo.FAILED);
 			return;
 		}
-		
+
 		final CommissionItem commissionItem = CommissionManager.getInstance().getCommissionItem(_commissionId);
-		if (commissionItem != null)
-		{
+		if (commissionItem != null) {
 			client.sendPacket(new ExResponseCommissionBuyInfo(commissionItem));
-		}
-		else
-		{
+		} else {
 			client.sendPacket(SystemMessageId.ITEM_PURCHASE_IS_NOT_AVAILABLE_BECAUSE_THE_CORRESPONDING_ITEM_DOES_NOT_EXIST);
 			client.sendPacket(ExResponseCommissionBuyInfo.FAILED);
 		}

@@ -18,61 +18,54 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author UnAfraid
  */
-public class MpRewardTask
-{
+public class MpRewardTask {
 	private final AtomicInteger _count;
 	private final double _value;
 	private final ScheduledFuture<?> _task;
 	private final Creature _creature;
-	
-	public MpRewardTask(Creature creature, Npc npc)
-	{
+
+	public MpRewardTask(Creature creature, Npc npc) {
 		final L2NpcTemplate template = npc.getTemplate();
 		_creature = creature;
 		_count = new AtomicInteger(template.getMpRewardTicks());
 		_value = calculateBaseValue(npc, creature);
-		_task = ThreadPool.scheduleAtFixedRate(this::run, PlayerConfig.EFFECT_TICK_RATIO, PlayerConfig.EFFECT_TICK_RATIO, TimeUnit.MILLISECONDS);
+		_task = ThreadPool.getInstance().scheduleAiAtFixedRate(this::run, PlayerConfig.EFFECT_TICK_RATIO, PlayerConfig.EFFECT_TICK_RATIO, TimeUnit.MILLISECONDS);
 	}
-	
+
 	/**
 	 * @param npc
 	 * @param creature
 	 * @return
 	 */
-	private double calculateBaseValue(Npc npc, Creature creature)
-	{
+	private double calculateBaseValue(Npc npc, Creature creature) {
 		final L2NpcTemplate template = npc.getTemplate();
-		switch (template.getMpRewardType())
-		{
-			case PER:
-			{
+		switch (template.getMpRewardType()) {
+			case PER: {
 				return (creature.getMaxMp() * (template.getMpRewardValue() / 100)) / template.getMpRewardTicks();
 			}
 		}
 		return template.getMpRewardValue() / template.getMpRewardTicks();
 	}
-	
-	private void run()
-	{
-		if ((_count.decrementAndGet() <= 0) || (_creature.isPlayer() && !_creature.getActingPlayer().isOnline()))
-		{
+
+	private void run() {
+		if ((_count.decrementAndGet() <= 0) || (_creature.isPlayer() && !_creature.getActingPlayer().isOnline())) {
 			_task.cancel(false);
 			return;
 		}
-		
+
 		_creature.setCurrentMp(_creature.getCurrentMp() + _value);
 	}
 }

@@ -26,33 +26,28 @@ import org.l2junity.gameserver.network.client.send.RecipeItemMakeInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestRecipeItemMakeInfo implements IClientIncomingPacket
-{
+public final class RequestRecipeItemMakeInfo implements IClientIncomingPacket {
 	private int _id;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_id = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final RecipeHolder recipe = RecipeData.getInstance().getRecipe(_id);
-		if (recipe == null)
-		{
+		if (recipe == null) {
 			player.sendPacket(SystemMessageId.THE_RECIPE_IS_INCORRECT);
 			return;
 		}
-		
+
 		client.sendPacket(new RecipeItemMakeInfo(_id, player, recipe.getMaxOffering()));
 	}
 }

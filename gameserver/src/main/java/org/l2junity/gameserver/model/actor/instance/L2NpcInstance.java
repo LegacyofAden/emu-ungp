@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.List;
-import java.util.Map;
-
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.InstanceType;
@@ -34,99 +30,75 @@ import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.network.client.send.ExAcquirableSkillListByClass;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class L2NpcInstance extends Npc
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2NpcInstance.class);
+import java.util.List;
+import java.util.Map;
 
-	public L2NpcInstance(L2NpcTemplate template)
-	{
+public class L2NpcInstance extends Npc {
+	public L2NpcInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2NpcInstance);
 		setIsInvul(false);
 	}
-	
+
 	@Override
-	public FolkStatus getStatus()
-	{
+	public FolkStatus getStatus() {
 		return (FolkStatus) super.getStatus();
 	}
-	
+
 	@Override
-	public void initCharStatus()
-	{
+	public void initCharStatus() {
 		setStatus(new FolkStatus(this));
 	}
-	
+
 	/**
 	 * Displays Skill Tree for a given player, npc and class Id.
-	 * @param player the active character.
-	 * @param npc the last folk.
+	 *
+	 * @param player  the active character.
+	 * @param npc     the last folk.
 	 * @param classId player's active class id.
 	 */
-	public static void showSkillList(PlayerInstance player, Npc npc, ClassId classId)
-	{
-		if (GeneralConfig.DEBUG)
-		{
-			LOGGER.debug("SkillList activated on: " + npc.getObjectId());
-		}
-		
+	public static void showSkillList(PlayerInstance player, Npc npc, ClassId classId) {
 		final int npcId = npc.getTemplate().getId();
 		if (npcId == 32611) // Tolonis (Officer)
 		{
 			final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableCollectSkills(player);
-			
+
 			if (skills.isEmpty()) // No more skills to learn, come back when you level.
 			{
 				final int minLevel = SkillTreesData.getInstance().getMinLevelForNewSkill(player, SkillTreesData.getInstance().getCollectSkillTree());
-				if (minLevel > 0)
-				{
+				if (minLevel > 0) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_DO_NOT_HAVE_ANY_FURTHER_SKILLS_TO_LEARN_COME_BACK_WHEN_YOU_HAVE_REACHED_LEVEL_S1);
 					sm.addInt(minLevel);
 					player.sendPacket(sm);
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.THERE_ARE_NO_OTHER_SKILLS_TO_LEARN);
 				}
-			}
-			else
-			{
+			} else {
 				player.sendPacket(new ExAcquirableSkillListByClass(skills, AcquireSkillType.COLLECT));
 			}
 			return;
 		}
-		
+
 		// Normal skills, No LearnedByFS, no AutoGet skills.
 		final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableSkills(player, classId, false, false);
-		if (skills.isEmpty())
-		{
+		if (skills.isEmpty()) {
 			final Map<Long, SkillLearn> skillTree = SkillTreesData.getInstance().getCompleteClassSkillTree(classId);
 			final int minLevel = SkillTreesData.getInstance().getMinLevelForNewSkill(player, skillTree);
-			if (minLevel > 0)
-			{
+			if (minLevel > 0) {
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_DO_NOT_HAVE_ANY_FURTHER_SKILLS_TO_LEARN_COME_BACK_WHEN_YOU_HAVE_REACHED_LEVEL_S1);
 				sm.addInt(minLevel);
 				player.sendPacket(sm);
-			}
-			else
-			{
-				if (player.isInCategory(CategoryType.SECOND_CLASS_GROUP))
-				{
+			} else {
+				if (player.isInCategory(CategoryType.SECOND_CLASS_GROUP)) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THERE_ARE_NO_OTHER_SKILLS_TO_LEARN_PLEASE_COME_BACK_AFTER_S1ND_CLASS_CHANGE);
 					sm.addInt(2);
 					player.sendPacket(sm);
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.THERE_ARE_NO_OTHER_SKILLS_TO_LEARN);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			player.sendPacket(new ExAcquirableSkillListByClass(skills, AcquireSkillType.CLASS));
 		}
 	}

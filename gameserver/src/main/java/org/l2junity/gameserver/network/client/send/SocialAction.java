@@ -21,25 +21,22 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class SocialAction implements IClientOutgoingPacket
-{
+public class SocialAction implements IClientOutgoingPacket {
 	// TODO: Enum
 	public static final int LEVEL_UP = 2122;
-	
+
 	private final int _charObjId;
 	private final int _actionId;
-	
-	public SocialAction(int objectId, int actionId)
-	{
+
+	public SocialAction(int objectId, int actionId) {
 		_charObjId = objectId;
 		_actionId = actionId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SOCIAL_ACTION.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_actionId);
 		packet.writeD(0x00); // TODO: Find me!

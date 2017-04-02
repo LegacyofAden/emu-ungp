@@ -18,41 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send.friend;
 
-import java.util.Calendar;
-
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Calendar;
+
 /**
  * @author Sdw
  */
-public class ExFriendDetailInfo implements IClientOutgoingPacket
-{
+public class ExFriendDetailInfo implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final PlayerInstance _friend;
 	private final String _name;
 	private final int _lastAccess;
-	
-	public ExFriendDetailInfo(PlayerInstance player, String name)
-	{
+
+	public ExFriendDetailInfo(PlayerInstance player, String name) {
 		_objectId = player.getObjectId();
 		_name = name;
 		_friend = World.getInstance().getPlayer(_name);
 		_lastAccess = _friend.isBlocked(player) ? 0 : _friend.isOnline() ? (int) System.currentTimeMillis() : (int) (System.currentTimeMillis() - _friend.getLastAccess()) / 1000;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_FRIEND_DETAIL_INFO.writeId(packet);
-		
+
 		packet.writeD(_objectId);
-		
-		if (_friend == null)
-		{
+
+		if (_friend == null) {
 			packet.writeS(_name);
 			packet.writeD(0);
 			packet.writeD(0);
@@ -66,9 +62,7 @@ public class ExFriendDetailInfo implements IClientOutgoingPacket
 			packet.writeS("");
 			packet.writeD(1);
 			packet.writeS(""); // memo
-		}
-		else
-		{
+		} else {
 			packet.writeS(_friend.getName());
 			packet.writeD(_friend.isOnlineInt());
 			packet.writeD(_friend.getObjectId());

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.commission;
 /**
  * @author NosBit
  */
-public enum CommissionItemType
-{
+public enum CommissionItemType {
 	// Weapon
 	ONE_HAND_SWORD(1),
 	ONE_HAND_MAGIC_SWORD(2),
@@ -87,34 +86,31 @@ public enum CommissionItemType
 	MAGIC_ORNAMENT(57),
 	DYES(58),
 	OTHER_ITEM(59);
-	
+
 	private final int _clientId;
-	
-	CommissionItemType(int clientId)
-	{
+
+	CommissionItemType(int clientId) {
 		_clientId = clientId;
 	}
-	
+
 	/**
 	 * Gets the client id.
+	 *
 	 * @return the client id
 	 */
-	public int getClientId()
-	{
+	public int getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * Finds the commission item type by the client id
+	 *
 	 * @param clientId the client id
 	 * @return the commission item type if its found, {@code null} otherwise
 	 */
-	public static CommissionItemType findByClientId(int clientId)
-	{
-		for (CommissionItemType value : values())
-		{
-			if (value.getClientId() == clientId)
-			{
+	public static CommissionItemType findByClientId(int clientId) {
+		for (CommissionItemType value : values()) {
+			if (value.getClientId() == clientId) {
 				return value;
 			}
 		}

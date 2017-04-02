@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ShowMiniMap implements IClientOutgoingPacket
-{
+public class ShowMiniMap implements IClientOutgoingPacket {
 	private final int _mapId;
-	
-	public ShowMiniMap(int mapId)
-	{
+
+	public ShowMiniMap(int mapId) {
 		_mapId = mapId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_MINIMAP.writeId(packet);
-		
+
 		packet.writeD(_mapId);
 		packet.writeC(0x00); // Seven Signs state
 		return true;

@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.base;
 
 /**
  * Learning skill types.
+ *
  * @author Zoey76
  */
-public enum AcquireSkillType
-{
+public enum AcquireSkillType {
 	CLASS(0),
 	DUMMY(1),
 	PLEDGE(2),
@@ -39,25 +39,20 @@ public enum AcquireSkillType
 	REVELATION_DUALCLASS(12), // Need proper ID
 	DUALCLASS(13), // Need proper ID
 	ALCHEMY(140);
-	
+
 	private final int _id;
-	
-	private AcquireSkillType(int id)
-	{
+
+	private AcquireSkillType(int id) {
 		_id = id;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public static AcquireSkillType getAcquireSkillType(int id)
-	{
-		for (AcquireSkillType type : values())
-		{
-			if (type.getId() == id)
-			{
+
+	public static AcquireSkillType getAcquireSkillType(int id) {
+		for (AcquireSkillType type : values()) {
+			if (type.getId() == id) {
 				return type;
 			}
 		}

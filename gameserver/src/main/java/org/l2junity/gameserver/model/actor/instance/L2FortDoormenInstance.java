@@ -18,85 +18,69 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class L2FortDoormenInstance extends L2DoormenInstance
-{
-	public L2FortDoormenInstance(L2NpcTemplate template)
-	{
+import java.util.StringTokenizer;
+
+public class L2FortDoormenInstance extends L2DoormenInstance {
+	public L2FortDoormenInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortDoormenInstance);
 	}
-	
+
 	@Override
-	public void showChatWindow(PlayerInstance player)
-	{
+	public void showChatWindow(PlayerInstance player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		
-		if (!isOwnerClan(player))
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-no.htm");
+
+		if (!isOwnerClan(player)) {
+			html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + "-no.htm");
+		} else if (isUnderSiege()) {
+			html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + "-busy.htm");
+		} else {
+			html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + ".htm");
 		}
-		else if (isUnderSiege())
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-busy.htm");
-		}
-		else
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + ".htm");
-		}
-		
+
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		player.sendPacket(html);
 	}
-	
+
 	@Override
-	protected final void openDoors(PlayerInstance player, String command)
-	{
+	protected final void openDoors(PlayerInstance player, String command) {
 		StringTokenizer st = new StringTokenizer(command.substring(10), ", ");
 		st.nextToken();
-		
-		while (st.hasMoreTokens())
-		{
+
+		while (st.hasMoreTokens()) {
 			getFort().openDoor(player, Integer.parseInt(st.nextToken()));
 		}
 	}
-	
+
 	@Override
-	protected final void closeDoors(PlayerInstance player, String command)
-	{
+	protected final void closeDoors(PlayerInstance player, String command) {
 		StringTokenizer st = new StringTokenizer(command.substring(11), ", ");
 		st.nextToken();
-		
-		while (st.hasMoreTokens())
-		{
+
+		while (st.hasMoreTokens()) {
 			getFort().closeDoor(player, Integer.parseInt(st.nextToken()));
 		}
 	}
-	
+
 	@Override
-	protected final boolean isOwnerClan(PlayerInstance player)
-	{
-		if ((player.getClan() != null) && (getFort() != null) && (getFort().getOwnerClan() != null))
-		{
-			if (player.getClanId() == getFort().getOwnerClan().getId())
-			{
+	protected final boolean isOwnerClan(PlayerInstance player) {
+		if ((player.getClan() != null) && (getFort() != null) && (getFort().getOwnerClan() != null)) {
+			if (player.getClanId() == getFort().getOwnerClan().getId()) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
-	protected final boolean isUnderSiege()
-	{
+	protected final boolean isUnderSiege() {
 		return getFort().getZone().isActive();
 	}
 }

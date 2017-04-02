@@ -24,26 +24,22 @@ import org.l2junity.gameserver.model.Location;
 /**
  * @author St3eT
  */
-public class CastleSpawnHolder extends Location
-{
+public class CastleSpawnHolder extends Location {
 	private static final long serialVersionUID = -2901500054895111571L;
 	private final int _npcId;
 	private final CastleSide _side;
-	
-	public CastleSpawnHolder(int npcId, CastleSide side, int x, int y, int z, int heading)
-	{
+
+	public CastleSpawnHolder(int npcId, CastleSide side, int x, int y, int z, int heading) {
 		super(x, y, z, heading);
 		_npcId = npcId;
 		_side = side;
 	}
-	
-	public final int getNpcId()
-	{
+
+	public final int getNpcId() {
 		return _npcId;
 	}
-	
-	public final CastleSide getSide()
-	{
+
+	public final CastleSide getSide() {
 		return _side;
 	}
 }

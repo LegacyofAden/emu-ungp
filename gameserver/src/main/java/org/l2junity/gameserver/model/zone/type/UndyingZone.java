@@ -24,24 +24,21 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * An Undying Zone
+ *
  * @author UnAfraid
  */
-public class UndyingZone extends ZoneType
-{
-	public UndyingZone(int id)
-	{
+public class UndyingZone extends ZoneType {
+	public UndyingZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.setInsideZone(ZoneId.UNDYING, true);
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		character.setInsideZone(ZoneId.UNDYING, false);
 	}
 }

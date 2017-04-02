@@ -27,44 +27,37 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerClanWHItemAdd implements IBaseEvent
-{
+public class OnPlayerClanWHItemAdd implements IBaseEvent {
 	private final String _process;
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final ItemContainer _container;
-	
-	public OnPlayerClanWHItemAdd(String process, PlayerInstance activeChar, ItemInstance item, ItemContainer container)
-	{
+
+	public OnPlayerClanWHItemAdd(String process, PlayerInstance activeChar, ItemInstance item, ItemContainer container) {
 		_process = process;
 		_activeChar = activeChar;
 		_item = item;
 		_container = container;
 	}
-	
-	public String getProcess()
-	{
+
+	public String getProcess() {
 		return _process;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public ItemContainer getContainer()
-	{
+
+	public ItemContainer getContainer() {
 		return _container;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CLAN_WH_ITEM_ADD;
 	}
 }

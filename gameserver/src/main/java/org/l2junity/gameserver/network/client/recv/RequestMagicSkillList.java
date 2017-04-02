@@ -26,36 +26,31 @@ import org.l2junity.network.PacketReader;
  * @author UnAfraid
  */
 @SuppressWarnings("unused")
-public class RequestMagicSkillList implements IClientIncomingPacket
-{
+public class RequestMagicSkillList implements IClientIncomingPacket {
 	private int _objectId;
 	private int _charId;
 	private int _unk;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		_charId = packet.readD();
 		_unk = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.getObjectId() != _objectId)
-		{
+
+		if (activeChar.getObjectId() != _objectId) {
 			_log.warn("Player: {} requested {} with different object id: {}", activeChar, getClass().getSimpleName(), _objectId);
 			return;
 		}
-		
+
 		activeChar.sendSkillList();
 	}
 }

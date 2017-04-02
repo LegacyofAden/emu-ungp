@@ -25,25 +25,22 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * The Class ConditionPlayerSex.
  */
-public class ConditionPlayerSex extends Condition
-{
+public class ConditionPlayerSex extends Condition {
 	// male 0 female 1
 	private final int _sex;
-	
+
 	/**
 	 * Instantiates a new condition player sex.
+	 *
 	 * @param sex the sex
 	 */
-	public ConditionPlayerSex(int sex)
-	{
+	public ConditionPlayerSex(int sex) {
 		_sex = sex;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
 		return (effector.getActingPlayer().getAppearance().getSex() ? 1 : 0) == _sex;

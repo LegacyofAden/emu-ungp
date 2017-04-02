@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.CommonSkill;
@@ -29,27 +25,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author UnAfraid
  */
-public class ExAlchemySkillList implements IClientOutgoingPacket
-{
+public class ExAlchemySkillList implements IClientOutgoingPacket {
 	private final List<Skill> _skills = new ArrayList<>();
-	
-	public ExAlchemySkillList(final PlayerInstance player)
-	{
+
+	public ExAlchemySkillList(final PlayerInstance player) {
 		_skills.addAll(player.getAllSkills().stream().filter(s -> SkillTreesData.getInstance().isAlchemySkill(s.getId(), s.getLevel())).collect(Collectors.toList()));
 		_skills.add(CommonSkill.ALCHEMY_CUBE.getSkill());
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ALCHEMY_SKILL_LIST.writeId(packet);
-		
+
 		packet.writeD(_skills.size());
-		for (Skill skill : _skills)
-		{
+		for (Skill skill : _skills) {
 			packet.writeD(skill.getId());
 			packet.writeD(skill.getLevel());
 			packet.writeQ(0x00); // Always 0 on Naia, SP i guess?

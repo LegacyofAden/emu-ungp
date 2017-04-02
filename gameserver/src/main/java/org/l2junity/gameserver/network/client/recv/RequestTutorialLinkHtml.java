@@ -25,36 +25,28 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
-public class RequestTutorialLinkHtml implements IClientIncomingPacket
-{
+public class RequestTutorialLinkHtml implements IClientIncomingPacket {
 	private String _bypass;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readD();
 		_bypass = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (_bypass.startsWith("admin_"))
-		{
+
+		if (_bypass.startsWith("admin_")) {
 			AdminCommandHandler.getInstance().useAdminCommand(player, _bypass, true);
-		}
-		else
-		{
+		} else {
 			final IBypassHandler handler = BypassHandler.getInstance().getHandler(_bypass);
-			if (handler != null)
-			{
+			if (handler != null) {
 				handler.useBypass(_bypass, player, null);
 			}
 		}

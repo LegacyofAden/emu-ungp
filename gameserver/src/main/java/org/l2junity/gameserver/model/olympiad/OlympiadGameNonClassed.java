@@ -18,54 +18,46 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
+import org.l2junity.core.configs.OlympiadConfig;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+
 import java.util.List;
 import java.util.Set;
-
-import org.l2junity.gameserver.config.OlympiadConfig;
-import org.l2junity.gameserver.model.holders.ItemHolder;
 
 /**
  * @author DS
  */
-public class OlympiadGameNonClassed extends OlympiadGameNormal
-{
-	public OlympiadGameNonClassed(int id, Participant[] opponents)
-	{
+public class OlympiadGameNonClassed extends OlympiadGameNormal {
+	public OlympiadGameNonClassed(int id, Participant[] opponents) {
 		super(id, opponents);
 	}
-	
+
 	@Override
-	public final CompetitionType getType()
-	{
+	public final CompetitionType getType() {
 		return CompetitionType.NON_CLASSED;
 	}
-	
+
 	@Override
-	protected final int getDivider()
-	{
+	protected final int getDivider() {
 		return OlympiadConfig.ALT_OLY_DIVIDER_NON_CLASSED;
 	}
-	
+
 	@Override
-	protected final List<ItemHolder> getReward()
-	{
+	protected final List<ItemHolder> getReward() {
 		return OlympiadConfig.ALT_OLY_NONCLASSED_REWARD;
 	}
-	
+
 	@Override
-	protected final String getWeeklyMatchType()
-	{
+	protected final String getWeeklyMatchType() {
 		return COMP_DONE_WEEK_NON_CLASSED;
 	}
-	
-	protected static OlympiadGameNonClassed createGame(int id, Set<Integer> list)
-	{
+
+	protected static OlympiadGameNonClassed createGame(int id, Set<Integer> list) {
 		final Participant[] opponents = OlympiadGameNormal.createListOfParticipants(list);
-		if (opponents == null)
-		{
+		if (opponents == null) {
 			return null;
 		}
-		
+
 		return new OlympiadGameNonClassed(id, opponents);
 	}
 }

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum PartyMatchingRoomLevelType
-{
+public enum PartyMatchingRoomLevelType {
 	MY_LEVEL_RANGE,
 	ALL
 }

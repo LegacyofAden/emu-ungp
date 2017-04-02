@@ -24,17 +24,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author ShanSoft Packets Structure: chddd
  */
-public final class RequestChangeBookMarkSlot implements IClientIncomingPacket
-{
+public final class RequestChangeBookMarkSlot implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		
+	public void run(L2GameClient client) {
+
 	}
 }

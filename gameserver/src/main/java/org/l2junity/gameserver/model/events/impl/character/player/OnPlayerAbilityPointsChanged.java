@@ -25,37 +25,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author St3eT
  */
-public class OnPlayerAbilityPointsChanged implements IBaseEvent
-{
+public class OnPlayerAbilityPointsChanged implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _newAbilityPoints;
 	private final int _oldAbilityPoints;
-	
-	public OnPlayerAbilityPointsChanged(PlayerInstance activeChar, int newAbilityPoints, int oldAbilityPoints)
-	{
+
+	public OnPlayerAbilityPointsChanged(PlayerInstance activeChar, int newAbilityPoints, int oldAbilityPoints) {
 		_activeChar = activeChar;
 		_newAbilityPoints = newAbilityPoints;
 		_oldAbilityPoints = oldAbilityPoints;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public long getNewAbilityPoints()
-	{
+
+	public long getNewAbilityPoints() {
 		return _newAbilityPoints;
 	}
-	
-	public long getOldAbilityPoints()
-	{
+
+	public long getOldAbilityPoints() {
 		return _oldAbilityPoints;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_ABILITY_POINTS_CHANGED;
 	}
 }

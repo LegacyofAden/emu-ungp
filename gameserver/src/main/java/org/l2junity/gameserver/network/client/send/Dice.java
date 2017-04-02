@@ -21,15 +21,14 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class Dice implements IClientOutgoingPacket
-{
+public class Dice implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _itemId;
 	private final int _number;
 	private final int _x;
 	private final int _y;
 	private final int _z;
-	
+
 	/**
 	 * @param charObjId
 	 * @param itemId
@@ -38,8 +37,7 @@ public class Dice implements IClientOutgoingPacket
 	 * @param y
 	 * @param z
 	 */
-	public Dice(int charObjId, int itemId, int number, double x, double y, double z)
-	{
+	public Dice(int charObjId, int itemId, int number, double x, double y, double z) {
 		_charObjId = charObjId;
 		_itemId = itemId;
 		_number = number;
@@ -47,12 +45,11 @@ public class Dice implements IClientOutgoingPacket
 		_y = (int) y;
 		_z = (int) z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.DICE.writeId(packet);
-		
+
 		packet.writeD(_charObjId); // object id of player
 		packet.writeD(_itemId); // item id of dice (spade) 4625,4626,4627,4628
 		packet.writeD(_number); // number rolled

@@ -24,41 +24,32 @@ import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
 /**
  * @author -Nemesiss-
  */
-public class GeoNode extends AbstractNode<GeoNodeLoc>
-{
+public class GeoNode extends AbstractNode<GeoNodeLoc> {
 	private final int _neighborsIdx;
 	private short _cost;
 	private GeoNode[] _neighbors;
-	
-	public GeoNode(GeoNodeLoc Loc, int Neighbors_idx)
-	{
+
+	public GeoNode(GeoNodeLoc Loc, int Neighbors_idx) {
 		super(Loc);
 		_neighborsIdx = Neighbors_idx;
 	}
-	
-	public short getCost()
-	{
+
+	public short getCost() {
 		return _cost;
 	}
-	
-	public void setCost(int cost)
-	{
+
+	public void setCost(int cost) {
 		_cost = (short) cost;
 	}
-	
-	public GeoNode[] getNeighbors()
-	{
+
+	public GeoNode[] getNeighbors() {
 		return _neighbors;
 	}
-	
-	public void attachNeighbors()
-	{
-		if (getLoc() == null)
-		{
+
+	public void attachNeighbors() {
+		if (getLoc() == null) {
 			_neighbors = null;
-		}
-		else
-		{
+		} else {
 			_neighbors = PathFinding.getInstance().readNeighbors(this, _neighborsIdx);
 		}
 	}

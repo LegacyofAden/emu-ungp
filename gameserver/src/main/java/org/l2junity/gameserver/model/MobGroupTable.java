@@ -18,70 +18,58 @@
  */
 package org.l2junity.gameserver.model;
 
+import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
 
 /**
  * @author littlecrow
  */
-public class MobGroupTable
-{
+public class MobGroupTable {
 	private final Map<Integer, MobGroup> _groupMap = new ConcurrentHashMap<>();
-	
+
 	public static final int FOLLOW_RANGE = 300;
 	public static final int RANDOM_RANGE = 300;
-	
-	protected MobGroupTable()
-	{
+
+	protected MobGroupTable() {
 	}
-	
-	public static MobGroupTable getInstance()
-	{
+
+	public static MobGroupTable getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	public void addGroup(int groupKey, MobGroup group)
-	{
+
+	public void addGroup(int groupKey, MobGroup group) {
 		_groupMap.put(groupKey, group);
 	}
-	
-	public MobGroup getGroup(int groupKey)
-	{
+
+	public MobGroup getGroup(int groupKey) {
 		return _groupMap.get(groupKey);
 	}
-	
-	public int getGroupCount()
-	{
+
+	public int getGroupCount() {
 		return _groupMap.size();
 	}
-	
-	public MobGroup getGroupForMob(L2ControllableMobInstance mobInst)
-	{
-		for (MobGroup mobGroup : _groupMap.values())
-		{
-			if (mobGroup.isGroupMember(mobInst))
-			{
+
+	public MobGroup getGroupForMob(L2ControllableMobInstance mobInst) {
+		for (MobGroup mobGroup : _groupMap.values()) {
+			if (mobGroup.isGroupMember(mobInst)) {
 				return mobGroup;
 			}
 		}
-		
+
 		return null;
 	}
-	
-	public MobGroup[] getGroups()
-	{
+
+	public MobGroup[] getGroups() {
 		return _groupMap.values().toArray(new MobGroup[getGroupCount()]);
 	}
-	
-	public boolean removeGroup(int groupKey)
-	{
+
+	public boolean removeGroup(int groupKey) {
 		return (_groupMap.remove(groupKey) != null);
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final MobGroupTable _instance = new MobGroupTable();
 	}
 }

@@ -25,30 +25,27 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExResponseBeautyRegistReset implements IClientOutgoingPacket
-{
+public class ExResponseBeautyRegistReset implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _type;
 	private final int _result;
-	
+
 	public final static int FAILURE = 0;
 	public final static int SUCCESS = 1;
-	
+
 	public final static int CHANGE = 0;
 	public final static int RESTORE = 1;
-	
-	public ExResponseBeautyRegistReset(PlayerInstance activeChar, int type, int result)
-	{
+
+	public ExResponseBeautyRegistReset(PlayerInstance activeChar, int type, int result) {
 		_activeChar = activeChar;
 		_type = type;
 		_result = result;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESPONSE_BEAUTY_REGIST_RESET.writeId(packet);
-		
+
 		packet.writeQ(_activeChar.getAdena());
 		packet.writeQ(_activeChar.getBeautyTickets());
 		packet.writeD(_type);

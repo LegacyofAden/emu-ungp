@@ -32,63 +32,53 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.10.4.9 $ $Date: 2005/04/11 10:06:08 $
  */
-public class L2MerchantInstance extends L2NpcInstance
-{
+public class L2MerchantInstance extends L2NpcInstance {
 	private static final Logger LOGGER = LoggerFactory.getLogger(L2MerchantInstance.class);
 
-	public L2MerchantInstance(L2NpcTemplate template)
-	{
+	public L2MerchantInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2MerchantInstance);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return attacker.isMonster() || super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		String pom;
-		if (val == 0)
-		{
+		if (val == 0) {
 			pom = "" + npcId;
-		}
-		else
-		{
+		} else {
 			pom = npcId + "-" + val;
 		}
-		return "data/html/merchant/" + pom + ".htm";
+		return "merchant/" + pom + ".htm";
 	}
-	
-	public final void showBuyWindow(PlayerInstance player, int val)
-	{
+
+	public final void showBuyWindow(PlayerInstance player, int val) {
 		showBuyWindow(player, val, true);
 	}
-	
-	public final void showBuyWindow(PlayerInstance player, int val, boolean applyCastleTax)
-	{
+
+	public final void showBuyWindow(PlayerInstance player, int val, boolean applyCastleTax) {
 		final ProductList buyList = BuyListData.getInstance().getBuyList(val);
-		if (buyList == null)
-		{
+		if (buyList == null) {
 			LOGGER.warn("BuyList not found! BuyListId:" + val);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (!buyList.isNpcAllowed(getId()))
-		{
+
+		if (!buyList.isNpcAllowed(getId())) {
 			LOGGER.warn("Npc not allowed in BuyList! BuyListId:" + val + " NpcId:" + getId());
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		player.setInventoryBlockingStatus(true);
-		
+
 		player.sendPacket(new BuyList(buyList, player, (applyCastleTax) ? getCastleTaxRate(TaxType.BUY) : 0));
 		player.sendPacket(new ExBuySellList(player, false, (applyCastleTax) ? getCastleTaxRate(TaxType.SELL) : 0));
 	}

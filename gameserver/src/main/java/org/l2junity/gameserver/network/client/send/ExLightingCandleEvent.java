@@ -24,23 +24,20 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Nik
  */
-public class ExLightingCandleEvent implements IClientOutgoingPacket
-{
+public class ExLightingCandleEvent implements IClientOutgoingPacket {
 	public static final ExLightingCandleEvent DAY = new ExLightingCandleEvent(0);
 	public static final ExLightingCandleEvent NIGHT = new ExLightingCandleEvent(1);
-	
+
 	private final int _type;
-	
-	private ExLightingCandleEvent(int type)
-	{
+
+	private ExLightingCandleEvent(int type) {
 		_type = type;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_LIGHTING_CANDLE_EVENT.writeId(packet);
-		
+
 		packet.writeH(_type);
 		return true;
 	}

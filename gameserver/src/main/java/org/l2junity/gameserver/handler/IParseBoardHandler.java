@@ -24,22 +24,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Community Board interface.
+ *
  * @author Zoey76
  */
-public interface IParseBoardHandler
-{
+public interface IParseBoardHandler {
 	Logger LOG = LoggerFactory.getLogger(IParseBoardHandler.class);
-	
+
 	/**
 	 * Parses a community board command.
+	 *
 	 * @param command the command
-	 * @param player the player
+	 * @param player  the player
 	 * @return
 	 */
 	boolean parseCommunityBoardCommand(String command, PlayerInstance player);
-	
+
 	/**
 	 * Gets the community board commands.
+	 *
 	 * @return the community board commands
 	 */
 	String[] getCommunityBoardCommands();

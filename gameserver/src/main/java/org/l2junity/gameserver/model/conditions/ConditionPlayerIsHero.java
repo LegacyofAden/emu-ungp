@@ -25,24 +25,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * The Class ConditionPlayerIsHero.
  */
-public class ConditionPlayerIsHero extends Condition
-{
+public class ConditionPlayerIsHero extends Condition {
 	private final boolean _val;
-	
+
 	/**
 	 * Instantiates a new condition player is hero.
+	 *
 	 * @param val the val
 	 */
-	public ConditionPlayerIsHero(boolean val)
-	{
+	public ConditionPlayerIsHero(boolean val) {
 		_val = val;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
 		return (effector.getActingPlayer().isHero() == _val);

@@ -26,47 +26,38 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 /**
  * This class is a super-class for L2ControlTowerInstance and L2FlameTowerInstance.
+ *
  * @author Zoey76
  */
-public abstract class Tower extends Npc
-{
-	public Tower(L2NpcTemplate template)
-	{
+public abstract class Tower extends Npc {
+	public Tower(L2NpcTemplate template) {
 		super(template);
 		setIsInvul(false);
 	}
-	
+
 	@Override
-	public boolean canBeAttacked()
-	{
+	public boolean canBeAttacked() {
 		// Attackable during siege by attacker only
 		return ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getSiege().isInProgress());
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		// Attackable during siege by attacker only
 		return ((attacker != null) && attacker.isPlayer() && (getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkIsAttacker(attacker.getClan()));
 	}
-	
+
 	@Override
-	public void onAction(PlayerInstance player, boolean interact)
-	{
-		if (!canTarget(player))
-		{
+	public void onAction(PlayerInstance player, boolean interact) {
+		if (!canTarget(player)) {
 			return;
 		}
-		
-		if (this != player.getTarget())
-		{
+
+		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-		}
-		else if (interact)
-		{
-			if (isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100) && GeoData.getInstance().canSeeTarget(player, this))
-			{
+		} else if (interact) {
+			if (isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100) && GeoData.getInstance().canSeeTarget(player, this)) {
 				// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, this);
 			}
@@ -74,10 +65,9 @@ public abstract class Tower extends Npc
 		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
+
 	@Override
-	public void onForcedAttack(PlayerInstance player)
-	{
+	public void onForcedAttack(PlayerInstance player) {
 		onAction(player);
 	}
 }

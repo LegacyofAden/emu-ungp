@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -29,43 +26,36 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Class for Control Tower instance.
  */
-public class L2ControlTowerInstance extends Tower
-{
+public class L2ControlTowerInstance extends Tower {
 	private static final Logger LOGGER = LoggerFactory.getLogger(L2ControlTowerInstance.class);
 
 	private volatile Set<L2Spawn> _guards;
-	
-	public L2ControlTowerInstance(L2NpcTemplate template)
-	{
+
+	public L2ControlTowerInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ControlTowerInstance);
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
-		if (getCastle().getSiege().isInProgress())
-		{
+	public boolean doDie(Creature killer) {
+		if (getCastle().getSiege().isInProgress()) {
 			getCastle().getSiege().killedCT(this);
-			
-			if ((_guards != null) && !_guards.isEmpty())
-			{
-				for (L2Spawn spawn : _guards)
-				{
-					if (spawn == null)
-					{
+
+			if ((_guards != null) && !_guards.isEmpty()) {
+				for (L2Spawn spawn : _guards) {
+					if (spawn == null) {
 						continue;
 					}
-					try
-					{
+					try {
 						spawn.stopRespawn();
 						// spawn.getLastSpawn().doDie(spawn.getLastSpawn());
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						LOGGER.warn("Error at L2ControlTowerInstance", e);
 					}
 				}
@@ -74,20 +64,15 @@ public class L2ControlTowerInstance extends Tower
 		}
 		return super.doDie(killer);
 	}
-	
-	public void registerGuard(L2Spawn guard)
-	{
+
+	public void registerGuard(L2Spawn guard) {
 		getGuards().add(guard);
 	}
-	
-	private Set<L2Spawn> getGuards()
-	{
-		if (_guards == null)
-		{
-			synchronized (this)
-			{
-				if (_guards == null)
-				{
+
+	private Set<L2Spawn> getGuards() {
+		if (_guards == null) {
+			synchronized (this) {
+				if (_guards == null) {
 					_guards = ConcurrentHashMap.newKeySet();
 				}
 			}

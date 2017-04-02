@@ -18,21 +18,19 @@
  */
 package org.l2junity.loginserver.db.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.l2junity.loginserver.db.dto.Account;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author NosBit
  */
-public class AccountMapper implements ResultSetMapper<Account>
-{
+public class AccountMapper implements ResultSetMapper<Account> {
 	@Override
-	public Account map(int index, ResultSet r, StatementContext ctx) throws SQLException
-	{
+	public Account map(int index, ResultSet r, StatementContext ctx) throws SQLException {
 		return new Account(r.getLong("id"), r.getString("name"), r.getString("password"), r.getShort("last_server_id"), r.getTimestamp("created_at").toInstant());
 	}
 }

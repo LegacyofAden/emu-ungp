@@ -18,48 +18,41 @@
  */
 package org.l2junity.gameserver.model.options;
 
-import java.util.Map;
-
 import org.l2junity.commons.util.Rnd;
+
+import java.util.Map;
 
 /**
  * @author Pere
  */
-public final class OptionDataCategory
-{
+public final class OptionDataCategory {
 	private final Map<Options, Double> _options;
 	private final double _chance;
-	
-	public OptionDataCategory(Map<Options, Double> options, double chance)
-	{
+
+	public OptionDataCategory(Map<Options, Double> options, double chance) {
 		_options = options;
 		_chance = chance;
 	}
-	
-	Options getRandomOptions()
-	{
+
+	Options getRandomOptions() {
 		Options result = null;
-		do
-		{
+		do {
 			double random = Rnd.get() * 100.0;
-			for (Map.Entry<Options, Double> entry : _options.entrySet())
-			{
-				if (entry.getValue() >= random)
-				{
+			for (Map.Entry<Options, Double> entry : _options.entrySet()) {
+				if (entry.getValue() >= random) {
 					result = entry.getKey();
 					break;
 				}
-				
+
 				random -= entry.getValue();
 			}
 		}
 		while (result == null);
-		
+
 		return result;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
 }

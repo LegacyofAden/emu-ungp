@@ -28,54 +28,46 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExUserInfoEquipSlot extends AbstractMaskPacket<InventorySlot>
-{
+public class ExUserInfoEquipSlot extends AbstractMaskPacket<InventorySlot> {
 	private final PlayerInstance _activeChar;
-	
+
 	private final byte[] _masks = new byte[]
-	{
-		(byte) 0x00,
-		(byte) 0x00,
-		(byte) 0x00,
-		(byte) 0x00,
-		(byte) 0x00
-	};
-	
-	public ExUserInfoEquipSlot(PlayerInstance cha)
-	{
+			{
+					(byte) 0x00,
+					(byte) 0x00,
+					(byte) 0x00,
+					(byte) 0x00,
+					(byte) 0x00
+			};
+
+	public ExUserInfoEquipSlot(PlayerInstance cha) {
 		this(cha, true);
 	}
-	
-	public ExUserInfoEquipSlot(PlayerInstance cha, boolean addAll)
-	{
+
+	public ExUserInfoEquipSlot(PlayerInstance cha, boolean addAll) {
 		_activeChar = cha;
-		
-		if (addAll)
-		{
+
+		if (addAll) {
 			addComponentType(InventorySlot.values());
 		}
 	}
-	
+
 	@Override
-	protected byte[] getMasks()
-	{
+	protected byte[] getMasks() {
 		return _masks;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_USER_INFO_EQUIP_SLOT.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeH(InventorySlot.values().length);
 		packet.writeB(_masks);
-		
+
 		final PcInventory inventory = _activeChar.getInventory();
-		for (InventorySlot slot : InventorySlot.values())
-		{
-			if (containsMask(slot))
-			{
+		for (InventorySlot slot : InventorySlot.values()) {
+			if (containsMask(slot)) {
 				final VariationInstance augment = inventory.getPaperdollAugmentation(slot.getSlot());
 				packet.writeH(22); // 10 + 4 * 3
 				packet.writeD(inventory.getPaperdollObjectId(slot.getSlot()));

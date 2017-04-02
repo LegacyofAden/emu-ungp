@@ -26,35 +26,30 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.5.2.3.2.5 $ $Date: 2005/03/29 23:15:10 $
  */
-public class PetStatusUpdate implements IClientOutgoingPacket
-{
+public class PetStatusUpdate implements IClientOutgoingPacket {
 	private final Summon _summon;
 	private int _maxFed, _curFed;
-	
-	public PetStatusUpdate(Summon summon)
-	{
+
+	public PetStatusUpdate(Summon summon) {
 		_summon = summon;
-		if (_summon instanceof L2PetInstance)
-		{
+		if (_summon instanceof L2PetInstance) {
 			L2PetInstance pet = (L2PetInstance) _summon;
 			_curFed = pet.getCurrentFed(); // how fed it is
 			_maxFed = pet.getMaxFed(); // max fed it can be
-		}
-		else if (_summon instanceof L2ServitorInstance)
-		{
+		} else if (_summon instanceof L2ServitorInstance) {
 			L2ServitorInstance sum = (L2ServitorInstance) _summon;
 			_curFed = sum.getLifeTimeRemaining();
 			_maxFed = sum.getLifeTime();
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PET_STATUS_UPDATE.writeId(packet);
-		
+
 		packet.writeD(_summon.getSummonType());
 		packet.writeD(_summon.getObjectId());
 		packet.writeD((int) _summon.getX());

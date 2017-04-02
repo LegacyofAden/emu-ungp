@@ -19,66 +19,35 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.ai.CtrlEvent;
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
-/**
- * This class ...
- * @version $Revision: 1.1.2.1.2.4 $ $Date: 2005/03/27 15:29:30 $
- */
-public final class CannotMoveAnymore implements IClientIncomingPacket
-{
+public final class CannotMoveAnymore implements IClientIncomingPacket {
 	private int _x;
 	private int _y;
 	private int _z;
 	private int _heading;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_x = packet.readD();
 		_y = packet.readD();
 		_z = packet.readD();
 		_heading = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (GeneralConfig.DEBUG)
-		{
-			_log.debug("client: x:" + _x + " y:" + _y + " z:" + _z + " server x:" + player.getX() + " y:" + player.getY() + " z:" + player.getZ());
-		}
-		if (player.getAI() != null)
-		{
+
+		if (player.getAI() != null) {
 			player.getAI().notifyEvent(CtrlEvent.EVT_ARRIVED_BLOCKED, new Location(_x, _y, _z, _heading));
 		}
-		/*
-		 * if (player.getParty() != null) { player.getParty().broadcastToPartyMembers(player, new PartyMemberPosition(player)); }
-		 */
-		
-		// player.stopMove();
-		//
-		// if (Config.DEBUG)
-		// LOGGER.debug("client: x:"+_x+" y:"+_y+" z:"+_z+
-		// " server x:"+player.getX()+" y:"+player.getZ()+" z:"+player.getZ());
-		// StopMove smwl = new StopMove(player);
-		// client.getActiveChar().sendPacket(smwl);
-		// client.getActiveChar().broadcastPacket(smwl);
-		//
-		// StopRotation sr = new StopRotation(client.getActiveChar(),
-		// _heading);
-		// client.getActiveChar().sendPacket(sr);
-		// client.getActiveChar().broadcastPacket(sr);
 	}
 }

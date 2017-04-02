@@ -25,23 +25,20 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExResponseResetList implements IClientOutgoingPacket
-{
+public class ExResponseResetList implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public ExResponseResetList(PlayerInstance activeChar)
-	{
+
+	public ExResponseResetList(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESPONSE_RESET_LIST.writeId(packet);
-		
+
 		packet.writeQ(_activeChar.getAdena());
 		packet.writeQ(_activeChar.getBeautyTickets());
-		
+
 		packet.writeD(_activeChar.getAppearance().getHairStyle());
 		packet.writeD(_activeChar.getAppearance().getHairColor());
 		packet.writeD(_activeChar.getAppearance().getFace());

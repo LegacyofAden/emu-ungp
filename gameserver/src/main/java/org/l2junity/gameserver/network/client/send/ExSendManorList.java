@@ -18,33 +18,29 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author l3x
  */
-public final class ExSendManorList implements IClientOutgoingPacket
-{
+public final class ExSendManorList implements IClientOutgoingPacket {
 	public static final ExSendManorList STATIC_PACKET = new ExSendManorList();
-	
-	private ExSendManorList()
-	{
+
+	private ExSendManorList() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SEND_MANOR_LIST.writeId(packet);
-		
+
 		final Collection<Castle> castles = CastleManager.getInstance().getCastles();
 		packet.writeD(castles.size());
-		for (Castle castle : castles)
-		{
+		for (Castle castle : castles) {
 			packet.writeD(castle.getResidenceId());
 		}
 		return true;

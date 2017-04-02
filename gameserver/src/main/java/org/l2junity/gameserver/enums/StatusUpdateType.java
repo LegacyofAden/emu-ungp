@@ -18,15 +18,14 @@
  */
 package org.l2junity.gameserver.enums;
 
-import java.util.function.Function;
-
 import org.l2junity.gameserver.model.actor.Creature;
+
+import java.util.function.Function;
 
 /**
  * @author UnAfraid
  */
-public enum StatusUpdateType
-{
+public enum StatusUpdateType {
 	LEVEL(0x01, Creature::getLevel),
 	EXP(0x02, creature -> (int) creature.getStat().getExp()),
 	STR(0x03, Creature::getSTR),
@@ -35,12 +34,12 @@ public enum StatusUpdateType
 	INT(0x06, Creature::getINT),
 	WIT(0x07, Creature::getWIT),
 	MEN(0x08, Creature::getMEN),
-	
+
 	CUR_HP(0x09, creature -> (int) creature.getCurrentHp()),
 	MAX_HP(0x0A, Creature::getMaxHp),
 	CUR_MP(0x0B, creature -> (int) creature.getCurrentMp()),
 	MAX_MP(0x0C, Creature::getMaxMp),
-	
+
 	P_ATK(0x11, Creature::getPAtk),
 	ATK_SPD(0x12, Creature::getPAtkSpd),
 	P_DEF(0x13, Creature::getPDef),
@@ -52,26 +51,23 @@ public enum StatusUpdateType
 	M_DEF(0x19, Creature::getMDef),
 	PVP_FLAG(0x1A, creature -> (int) creature.getPvpFlag()),
 	REPUTATION(0x1B, creature -> creature.isPlayer() ? creature.getActingPlayer().getReputation() : 0),
-	
+
 	CUR_CP(0x21, creature -> (int) creature.getCurrentCp()),
 	MAX_CP(0x22, Creature::getMaxCp);
-	
+
 	private int _clientId;
 	private Function<Creature, Integer> _valueSupplier;
-	
-	StatusUpdateType(int clientId, Function<Creature, Integer> valueSupplier)
-	{
+
+	StatusUpdateType(int clientId, Function<Creature, Integer> valueSupplier) {
 		_clientId = clientId;
 		_valueSupplier = valueSupplier;
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
-	
-	public int getValue(Creature creature)
-	{
+
+	public int getValue(Creature creature) {
 		return _valueSupplier.apply(creature);
 	}
 }

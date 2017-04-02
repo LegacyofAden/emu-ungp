@@ -18,75 +18,59 @@
  */
 package org.l2junity.gameserver.model.drops;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author NosBit
  */
-public enum DropListScope
-{
+public enum DropListScope {
 	DEATH(DeathDropItem.class, GroupedDeathDropItem.class),
 	CORPSE(CorpseDropItem.class, GroupedCorpseDropItem.class),
 	LUCK(LuckDropItem.class, GroupedLuckDropItem.class);
-	
+
 	private static final Logger _log = LoggerFactory.getLogger(DropListScope.class);
-	
+
 	private final Class<? extends GeneralDropItem> _dropItemClass;
 	private final Class<? extends GroupedGeneralDropItem> _groupedDropItemClass;
-	
-	DropListScope(Class<? extends GeneralDropItem> dropItemClass, Class<? extends GroupedGeneralDropItem> groupedDropItemClass)
-	{
+
+	DropListScope(Class<? extends GeneralDropItem> dropItemClass, Class<? extends GroupedGeneralDropItem> groupedDropItemClass) {
 		_dropItemClass = dropItemClass;
 		_groupedDropItemClass = groupedDropItemClass;
 	}
-	
-	public IDropItem newDropItem(int itemId, long min, long max, double chance)
-	{
+
+	public IDropItem newDropItem(int itemId, long min, long max, double chance) {
 		final Constructor<? extends GeneralDropItem> constructor;
-		try
-		{
+		try {
 			constructor = _dropItemClass.getConstructor(int.class, long.class, long.class, double.class);
-		}
-		catch (NoSuchMethodException | SecurityException e)
-		{
+		} catch (NoSuchMethodException | SecurityException e) {
 			_log.error("Constructor(int, long, long, double) not found for " + _dropItemClass.getSimpleName(), e);
 			return null;
 		}
-		
-		try
-		{
+
+		try {
 			return constructor.newInstance(itemId, min, max, chance);
-		}
-		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-		{
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			_log.error("", e);
 			return null;
 		}
 	}
-	
-	public GroupedGeneralDropItem newGroupedDropItem(double chance)
-	{
+
+	public GroupedGeneralDropItem newGroupedDropItem(double chance) {
 		final Constructor<? extends GroupedGeneralDropItem> constructor;
-		try
-		{
+		try {
 			constructor = _groupedDropItemClass.getConstructor(double.class);
-		}
-		catch (NoSuchMethodException | SecurityException e)
-		{
+		} catch (NoSuchMethodException | SecurityException e) {
 			_log.error("Constructor(double) not found for " + _groupedDropItemClass.getSimpleName(), e);
 			return null;
 		}
-		
-		try
-		{
+
+		try {
 			return constructor.newInstance(chance);
-		}
-		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-		{
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			_log.error("", e);
 			return null;
 		}

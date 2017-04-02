@@ -18,14 +18,6 @@
  */
 package org.l2junity.gameserver.model.spawns;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -35,11 +27,18 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.zone.type.BannedSpawnTerritory;
 import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 /**
  * @author UnAfraid
  */
-public class SpawnTemplate implements Cloneable, ITerritorized, IParameterized<StatsSet>
-{
+public class SpawnTemplate implements Cloneable, ITerritorized, IParameterized<StatsSet> {
 	private final String _name;
 	private final String _ai;
 	private final boolean _spawnByDefault;
@@ -48,193 +47,156 @@ public class SpawnTemplate implements Cloneable, ITerritorized, IParameterized<S
 	private List<BannedSpawnTerritory> _bannedTerritories;
 	private final List<SpawnGroup> _groups = new ArrayList<>();
 	private StatsSet _parameters;
-	
-	public SpawnTemplate(StatsSet set, Path path)
-	{
+
+	public SpawnTemplate(StatsSet set, Path path) {
 		this(set.getString("name", null), set.getString("ai", null), set.getBoolean("spawnByDefault", true), path);
 	}
-	
-	private SpawnTemplate(String name, String ai, boolean spawnByDefault, Path path)
-	{
+
+	private SpawnTemplate(String name, String ai, boolean spawnByDefault, Path path) {
 		_name = name;
 		_ai = ai;
 		_spawnByDefault = spawnByDefault;
 		_path = path;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public String getAI()
-	{
+
+	public String getAI() {
 		return _ai;
 	}
-	
-	public boolean isSpawningByDefault()
-	{
+
+	public boolean isSpawningByDefault() {
 		return _spawnByDefault;
 	}
-	
-	public Path getPath()
-	{
+
+	public Path getPath() {
 		return _path;
 	}
-	
-	public String getFileName()
-	{
+
+	public String getFileName() {
 		return _path.getFileName().toString();
 	}
-	
+
 	@Override
-	public void addTerritory(SpawnTerritory territory)
-	{
-		if (_territories == null)
-		{
+	public void addTerritory(SpawnTerritory territory) {
+		if (_territories == null) {
 			_territories = new ArrayList<>();
 		}
 		_territories.add(territory);
 	}
-	
+
 	@Override
-	public List<SpawnTerritory> getTerritories()
-	{
+	public List<SpawnTerritory> getTerritories() {
 		return _territories != null ? _territories : Collections.emptyList();
 	}
-	
+
 	@Override
-	public void addBannedTerritory(BannedSpawnTerritory territory)
-	{
-		if (_bannedTerritories == null)
-		{
+	public void addBannedTerritory(BannedSpawnTerritory territory) {
+		if (_bannedTerritories == null) {
 			_bannedTerritories = new ArrayList<>();
 		}
 		_bannedTerritories.add(territory);
 	}
-	
+
 	@Override
-	public List<BannedSpawnTerritory> getBannedTerritories()
-	{
+	public List<BannedSpawnTerritory> getBannedTerritories() {
 		return _bannedTerritories != null ? _bannedTerritories : Collections.emptyList();
 	}
-	
-	public void addGroup(SpawnGroup group)
-	{
+
+	public void addGroup(SpawnGroup group) {
 		_groups.add(group);
 	}
-	
-	public List<SpawnGroup> getGroups()
-	{
+
+	public List<SpawnGroup> getGroups() {
 		return _groups;
 	}
-	
-	public List<SpawnGroup> getGroupsByName(String name)
-	{
+
+	public List<SpawnGroup> getGroupsByName(String name) {
 		return _groups.stream().filter(group -> String.valueOf(group.getName()).equalsIgnoreCase(name)).collect(Collectors.toList());
 	}
-	
+
 	@Override
-	public StatsSet getParameters()
-	{
+	public StatsSet getParameters() {
 		return _parameters;
 	}
-	
+
 	@Override
-	public void setParameters(StatsSet parameters)
-	{
+	public void setParameters(StatsSet parameters) {
 		_parameters = parameters;
 	}
-	
-	public void notifyEvent(Consumer<Quest> event)
-	{
-		if (_ai != null)
-		{
+
+	public void notifyEvent(Consumer<Quest> event) {
+		if (_ai != null) {
 			final Quest script = QuestManager.getInstance().getQuest(_ai);
-			if (script != null)
-			{
+			if (script != null) {
 				event.accept(script);
 			}
-		}
-		else
-		{
-			for (SpawnGroup group : _groups)
-			{
-				if (group.getAI() != null)
-				{
+		} else {
+			for (SpawnGroup group : _groups) {
+				if (group.getAI() != null) {
 					final Quest script = QuestManager.getInstance().getQuest(group.getAI());
-					if (script != null)
-					{
+					if (script != null) {
 						event.accept(script);
 					}
 				}
 			}
 		}
 	}
-	
-	public void spawn(Predicate<SpawnGroup> groupFilter, Instance instance)
-	{
+
+	public void spawn(Predicate<SpawnGroup> groupFilter, Instance instance) {
 		_groups.stream().filter(groupFilter).forEach(group -> group.spawnAll(instance));
 	}
-	
-	public void spawnAll()
-	{
+
+	public void spawnAll() {
 		spawnAll(null);
 	}
-	
-	public void spawnAll(Instance instance)
-	{
+
+	public void spawnAll(Instance instance) {
 		spawn(SpawnGroup::isSpawningByDefault, instance);
 	}
-	
-	public void notifyActivate()
-	{
+
+	public void notifyActivate() {
 		notifyEvent(script -> script.onSpawnActivate(this));
 	}
-	
-	public void spawnAllIncludingNotDefault(Instance instance)
-	{
+
+	public void spawnAllIncludingNotDefault(Instance instance) {
 		_groups.forEach(group -> group.spawnAll(instance));
 	}
-	
-	public void despawn(Predicate<SpawnGroup> groupFilter)
-	{
+
+	public void despawn(Predicate<SpawnGroup> groupFilter) {
 		_groups.stream().filter(groupFilter).forEach(SpawnGroup::despawnAll);
 		notifyEvent(script -> script.onSpawnDeactivate(this));
 	}
-	
-	public void despawnAll()
-	{
+
+	public void despawnAll() {
 		_groups.forEach(SpawnGroup::despawnAll);
 		notifyEvent(script -> script.onSpawnDeactivate(this));
 	}
-	
+
 	@Override
-	public SpawnTemplate clone()
-	{
+	public SpawnTemplate clone() {
 		final SpawnTemplate template = new SpawnTemplate(_name, _ai, _spawnByDefault, _path);
-		
+
 		// Clone parameters
 		template.setParameters(_parameters);
-		
+
 		// Clone banned territories
-		for (BannedSpawnTerritory territory : getBannedTerritories())
-		{
+		for (BannedSpawnTerritory territory : getBannedTerritories()) {
 			template.addBannedTerritory(territory);
 		}
-		
+
 		// Clone territories
-		for (SpawnTerritory territory : getTerritories())
-		{
+		for (SpawnTerritory territory : getTerritories()) {
 			template.addTerritory(territory);
 		}
-		
+
 		// Clone groups
-		for (SpawnGroup group : _groups)
-		{
+		for (SpawnGroup group : _groups) {
 			template.addGroup(group.clone());
 		}
-		
+
 		return template;
 	}
 }

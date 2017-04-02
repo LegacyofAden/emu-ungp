@@ -21,6 +21,5 @@ package org.l2junity.gameserver.data.sql.migrations;
 /**
  * @author UnAfraid
  */
-public interface Migrations
-{
+public interface Migrations {
 }

@@ -21,11 +21,9 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class CharDeleteSuccess implements IClientOutgoingPacket
-{
+public class CharDeleteSuccess implements IClientOutgoingPacket {
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_DELETE_SUCCESS.writeId(packet);
 		return true;
 	}

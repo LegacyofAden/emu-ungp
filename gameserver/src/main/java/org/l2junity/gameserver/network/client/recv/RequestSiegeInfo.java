@@ -23,19 +23,17 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (c) (no data, trigger)
+ *
  * @author -Wooden-
  */
-public class RequestSiegeInfo implements IClientIncomingPacket
-{
+public class RequestSiegeInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// TODO this
 	}
 }

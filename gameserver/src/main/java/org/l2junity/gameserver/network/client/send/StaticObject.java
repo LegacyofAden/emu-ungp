@@ -26,8 +26,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class StaticObject implements IClientOutgoingPacket
-{
+public class StaticObject implements IClientOutgoingPacket {
 	private final int _staticObjectId;
 	private final int _objectId;
 	private final int _type;
@@ -39,9 +38,8 @@ public class StaticObject implements IClientOutgoingPacket
 	private final int _currentHp;
 	private final boolean _showHp;
 	private final int _damageGrade;
-	
-	public StaticObject(L2StaticObjectInstance staticObject)
-	{
+
+	public StaticObject(L2StaticObjectInstance staticObject) {
 		_staticObjectId = staticObject.getId();
 		_objectId = staticObject.getObjectId();
 		_type = 0;
@@ -54,9 +52,8 @@ public class StaticObject implements IClientOutgoingPacket
 		_showHp = false;
 		_damageGrade = 0;
 	}
-	
-	public StaticObject(DoorInstance door, boolean targetable)
-	{
+
+	public StaticObject(DoorInstance door, boolean targetable) {
 		_staticObjectId = door.getId();
 		_objectId = door.getObjectId();
 		_type = 1;
@@ -69,12 +66,11 @@ public class StaticObject implements IClientOutgoingPacket
 		_showHp = door.isShowHp();
 		_damageGrade = door.getDamage();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.STATIC_OBJECT.writeId(packet);
-		
+
 		packet.writeD(_staticObjectId);
 		packet.writeD(_objectId);
 		packet.writeD(_type);

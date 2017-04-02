@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
@@ -27,42 +25,34 @@ import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author KenM
  */
-public class ExShowCastleInfo implements IClientOutgoingPacket
-{
+public class ExShowCastleInfo implements IClientOutgoingPacket {
 	public static final ExShowCastleInfo STATIC_PACKET = new ExShowCastleInfo();
-	
-	private ExShowCastleInfo()
-	{
-		
+
+	private ExShowCastleInfo() {
+
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_CASTLE_INFO.writeId(packet);
-		
+
 		final Collection<Castle> castles = CastleManager.getInstance().getCastles();
 		packet.writeD(castles.size());
-		for (Castle castle : castles)
-		{
+		for (Castle castle : castles) {
 			packet.writeD(castle.getResidenceId());
-			if (castle.getOwnerId() > 0)
-			{
-				if (ClanTable.getInstance().getClan(castle.getOwnerId()) != null)
-				{
+			if (castle.getOwnerId() > 0) {
+				if (ClanTable.getInstance().getClan(castle.getOwnerId()) != null) {
 					packet.writeS(ClanTable.getInstance().getClan(castle.getOwnerId()).getName());
-				}
-				else
-				{
+				} else {
 					_log.warn("Castle owner with no name! Castle: " + castle.getName() + " has an OwnerId = " + castle.getOwnerId() + " who does not have a  name!");
 					packet.writeS("");
 				}
-			}
-			else
-			{
+			} else {
 				packet.writeS("");
 			}
 			packet.writeD(castle.getTaxPercent(TaxType.BUY));

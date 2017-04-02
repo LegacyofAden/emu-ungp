@@ -18,29 +18,25 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PetItemList extends AbstractItemPacket
-{
+import java.util.Collection;
+
+public class PetItemList extends AbstractItemPacket {
 	private final Collection<ItemInstance> _items;
-	
-	public PetItemList(Collection<ItemInstance> items)
-	{
+
+	public PetItemList(Collection<ItemInstance> items) {
 		_items = items;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PET_ITEM_LIST.writeId(packet);
-		
+
 		packet.writeH(_items.size());
-		for (ItemInstance item : _items)
-		{
+		for (ItemInstance item : _items) {
 			writeItem(packet, item);
 		}
 		return true;

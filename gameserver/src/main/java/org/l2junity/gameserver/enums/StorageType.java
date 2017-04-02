@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum StorageType
-{
+public enum StorageType {
 	INVENTORY_NORMAL,
 	TRADE_BUY,
 	TRADE_SELL,

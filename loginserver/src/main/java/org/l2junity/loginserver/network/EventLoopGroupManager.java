@@ -23,28 +23,23 @@ import io.netty.channel.nio.NioEventLoopGroup;
 /**
  * @author NosBit
  */
-public class EventLoopGroupManager
-{
+public class EventLoopGroupManager {
 	private final NioEventLoopGroup _bossGroup = new NioEventLoopGroup();
 	private final NioEventLoopGroup _workerGroup = new NioEventLoopGroup();
-	
-	public NioEventLoopGroup getBossGroup()
-	{
+
+	public NioEventLoopGroup getBossGroup() {
 		return _bossGroup;
 	}
-	
-	public NioEventLoopGroup getWorkerGroup()
-	{
+
+	public NioEventLoopGroup getWorkerGroup() {
 		return _workerGroup;
 	}
-	
-	public static EventLoopGroupManager getInstance()
-	{
+
+	public static EventLoopGroupManager getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final EventLoopGroupManager _instance = new EventLoopGroupManager();
 	}
 }

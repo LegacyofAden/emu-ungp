@@ -22,28 +22,25 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class Snoop implements IClientOutgoingPacket
-{
+public class Snoop implements IClientOutgoingPacket {
 	private final int _convoId;
 	private final String _name;
 	private final ChatType _type;
 	private final String _speaker;
 	private final String _msg;
-	
-	public Snoop(int id, String name, ChatType type, String speaker, String msg)
-	{
+
+	public Snoop(int id, String name, ChatType type, String speaker, String msg) {
 		_convoId = id;
 		_name = name;
 		_type = type;
 		_speaker = speaker;
 		_msg = msg;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SNOOP.writeId(packet);
-		
+
 		packet.writeD(_convoId);
 		packet.writeS(_name);
 		packet.writeD(0x00); // ??

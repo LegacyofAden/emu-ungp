@@ -18,17 +18,16 @@
  */
 package org.l2junity.gameserver.model.primeshop;
 
-import java.util.List;
-
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.items.L2Item;
 
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class PrimeShopGroup
-{
+public class PrimeShopGroup {
 	private final int _brId;
 	private final int _category;
 	private final int _paymentType;
@@ -52,9 +51,8 @@ public class PrimeShopGroup
 	private final int _restrictionDay;
 	private final int _availableCount;
 	private final List<PrimeShopItem> _items;
-	
-	public PrimeShopGroup(StatsSet set, List<PrimeShopItem> items)
-	{
+
+	public PrimeShopGroup(StatsSet set, List<PrimeShopItem> items) {
 		_brId = set.getInt("id");
 		_category = set.getInt("cat", 0);
 		_paymentType = set.getInt("paymentType", 0);
@@ -79,133 +77,108 @@ public class PrimeShopGroup
 		_availableCount = set.getInt("availableCount", 0);
 		_items = items;
 	}
-	
-	public int getBrId()
-	{
+
+	public int getBrId() {
 		return _brId;
 	}
-	
-	public int getCat()
-	{
+
+	public int getCat() {
 		return _category;
 	}
-	
-	public int getPaymentType()
-	{
+
+	public int getPaymentType() {
 		return _paymentType;
 	}
-	
-	public int getPrice()
-	{
+
+	public int getPrice() {
 		return _price;
 	}
-	
-	public long getCount()
-	{
+
+	public long getCount() {
 		return _items.stream().mapToLong(item ->
 		{
 			final L2Item itemTemplate = ItemTable.getInstance().getTemplate(item.getId());
 			return ((itemTemplate != null) && itemTemplate.isStackable()) ? 1 : item.getCount();
 		}).sum();
 	}
-	
-	public int getWeight()
-	{
+
+	public int getWeight() {
 		return _items.stream().mapToInt(PrimeShopItem::getWeight).sum();
 	}
-	
-	public int getPanelType()
-	{
+
+	public int getPanelType() {
 		return _panelType;
 	}
-	
-	public int getRecommended()
-	{
+
+	public int getRecommended() {
 		return _recommended;
 	}
-	
-	public int getStartSale()
-	{
+
+	public int getStartSale() {
 		return _start;
 	}
-	
-	public int getEndSale()
-	{
+
+	public int getEndSale() {
 		return _end;
 	}
-	
-	public int getDaysOfWeek()
-	{
+
+	public int getDaysOfWeek() {
 		return _daysOfWeek;
 	}
-	
-	public int getStartHour()
-	{
+
+	public int getStartHour() {
 		return _startHour;
 	}
-	
-	public int getStartMinute()
-	{
+
+	public int getStartMinute() {
 		return _startMinute;
 	}
-	
-	public int getStopHour()
-	{
+
+	public int getStopHour() {
 		return _stopHour;
 	}
-	
-	public int getStopMinute()
-	{
+
+	public int getStopMinute() {
 		return _stopMinute;
 	}
-	
-	public int getStock()
-	{
+
+	public int getStock() {
 		return _stock;
 	}
-	
-	public int getTotal()
-	{
+
+	public int getTotal() {
 		return _maxStock;
 	}
-	
-	public int getSalePercent()
-	{
+
+	public int getSalePercent() {
 		return _salePercent;
 	}
-	
-	public int getMinLevel()
-	{
+
+	public int getMinLevel() {
 		return _minLevel;
 	}
-	
-	public int getMaxLevel()
-	{
+
+	public int getMaxLevel() {
 		return _maxLevel;
 	}
-	
-	public int getMinBirthday()
-	{
+
+	public int getMinBirthday() {
 		return _minBirthday;
 	}
-	
-	public int getMaxBirthday()
-	{
+
+	public int getMaxBirthday() {
 		return _maxBirthday;
 	}
-	
-	public int getRestrictionDay()
-	{
+
+	public int getRestrictionDay() {
 		return _restrictionDay;
 	}
-	
-	public int getAvailableCount()
-	{
+
+	public int getAvailableCount() {
 		return _availableCount;
 	}
-	
-	public List<PrimeShopItem> getItems()
-	{
+
+	public List<PrimeShopItem> getItems() {
 		return _items;
 	}
 }

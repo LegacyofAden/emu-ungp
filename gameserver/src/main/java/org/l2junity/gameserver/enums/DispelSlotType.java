@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum DispelSlotType
-{
+public enum DispelSlotType {
 	ALL,
 	BUFF,
 	DEBUFF

@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.model.TradeList;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,84 +28,65 @@ import org.l2junity.network.PacketReader;
 /**
  * This packet manages the trade response.
  */
-public final class TradeDone implements IClientIncomingPacket
-{
+public final class TradeDone implements IClientIncomingPacket {
 	private int _response;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_response = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getTransaction().tryPerformAction("trade"))
-		{
+
+		if (!client.getFloodProtectors().getTransaction().tryPerformAction("trade")) {
 			player.sendMessage("You are trading too fast.");
 			return;
 		}
-		
+
 		final TradeList trade = player.getActiveTradeList();
-		if (trade == null)
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				_log.warn("player.getTradeList == null in " + getClass().getSimpleName() + " for player " + player.getName());
-			}
+		if (trade == null) {
 			return;
 		}
-		
-		if (trade.isLocked())
-		{
+
+		if (trade.isLocked()) {
 			return;
 		}
-		
-		if (_response == 1)
-		{
-			if ((trade.getPartner() == null) || (World.getInstance().getPlayer(trade.getPartner().getObjectId()) == null))
-			{
+
+		if (_response == 1) {
+			if ((trade.getPartner() == null) || (World.getInstance().getPlayer(trade.getPartner().getObjectId()) == null)) {
 				// Trade partner not found, cancel trade
 				player.cancelActiveTrade();
 				player.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 				return;
 			}
-			
-			if ((trade.getOwner().hasItemRequest()) || (trade.getPartner().hasItemRequest()))
-			{
+
+			if ((trade.getOwner().hasItemRequest()) || (trade.getPartner().hasItemRequest())) {
 				return;
 			}
-			
-			if (!player.getAccessLevel().allowTransaction())
-			{
+
+			if (!player.getAccessLevel().allowTransaction()) {
 				player.cancelActiveTrade();
 				player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 				return;
 			}
-			
-			if (player.getInstanceWorld() != trade.getPartner().getInstanceWorld())
-			{
+
+			if (player.getInstanceWorld() != trade.getPartner().getInstanceWorld()) {
 				player.cancelActiveTrade();
 				return;
 			}
-			
-			if (!player.isInRadius3d(trade.getPartner(), 150))
-			{
+
+			if (!player.isInRadius3d(trade.getPartner(), 150)) {
 				player.cancelActiveTrade();
 				return;
 			}
 			trade.confirm();
-		}
-		else
-		{
+		} else {
 			player.cancelActiveTrade();
 		}
 	}

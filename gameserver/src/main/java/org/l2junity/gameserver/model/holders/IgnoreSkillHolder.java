@@ -23,33 +23,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author UnAfraid
  */
-public class IgnoreSkillHolder extends SkillHolder
-{
+public class IgnoreSkillHolder extends SkillHolder {
 	private static final long serialVersionUID = 5390641853521384336L;
 	private final AtomicInteger _instances = new AtomicInteger(1);
-	
-	public IgnoreSkillHolder(int skillId, int skillLevel)
-	{
+
+	public IgnoreSkillHolder(int skillId, int skillLevel) {
 		super(skillId, skillLevel);
 	}
-	
-	public IgnoreSkillHolder(SkillHolder holder)
-	{
+
+	public IgnoreSkillHolder(SkillHolder holder) {
 		super(holder.getSkill());
 	}
-	
-	public int getInstances()
-	{
+
+	public int getInstances() {
 		return _instances.get();
 	}
-	
-	public int increaseInstances()
-	{
+
+	public int increaseInstances() {
 		return _instances.incrementAndGet();
 	}
-	
-	public int decreaseInstances()
-	{
+
+	public int decreaseInstances() {
 		return _instances.decrementAndGet();
 	}
 }

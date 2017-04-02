@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.stats;
 /**
  * @author UnAfraid, NosBit
  */
-public enum TraitType
-{
+public enum TraitType {
 	NONE(0),
 	SWORD(1),
 	BLUNT(1),
@@ -90,14 +89,12 @@ public enum TraitType
 	SPIRIT_WEAKNESS(2);
 
 	private final int _type; // 1 = weapon, 2 = weakness, 3 = resistance
-	
-	TraitType(int type)
-	{
+
+	TraitType(int type) {
 		_type = type;
 	}
 
-	public int getType()
-	{
+	public int getType() {
 		return _type;
 	}
 }

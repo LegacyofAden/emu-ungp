@@ -25,13 +25,11 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExTrainingZone_Leaving implements IClientOutgoingPacket
-{
+public class ExTrainingZone_Leaving implements IClientOutgoingPacket {
 	public static ExTrainingZone_Leaving STATIC_PACKET = new ExTrainingZone_Leaving();
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_TRAINING_ZONE_LEAVING.writeId(packet);
 		return true;
 	}

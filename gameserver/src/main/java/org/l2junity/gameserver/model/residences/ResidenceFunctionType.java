@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.residences;
 /**
  * @author UnAfraid
  */
-public enum ResidenceFunctionType
-{
+public enum ResidenceFunctionType {
 	NONE,
 	HP_REGEN,
 	MP_REGEN,

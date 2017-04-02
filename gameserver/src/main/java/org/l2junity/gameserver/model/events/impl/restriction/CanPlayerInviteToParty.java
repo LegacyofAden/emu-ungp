@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class CanPlayerInviteToParty implements IBaseEvent
-{
+public final class CanPlayerInviteToParty implements IBaseEvent {
 	private final PlayerInstance _requestor;
 	private final PlayerInstance _target;
-	
-	public CanPlayerInviteToParty(PlayerInstance requestor, PlayerInstance target)
-	{
+
+	public CanPlayerInviteToParty(PlayerInstance requestor, PlayerInstance target) {
 		_requestor = requestor;
 		_target = target;
 	}
-	
-	public PlayerInstance getRequestor()
-	{
+
+	public PlayerInstance getRequestor() {
 		return _requestor;
 	}
-	
-	public PlayerInstance getTarget()
-	{
+
+	public PlayerInstance getTarget() {
 		return _target;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_INVITE_TO_PARTY;
 	}
 }

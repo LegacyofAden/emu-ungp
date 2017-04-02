@@ -18,39 +18,36 @@
  */
 package org.l2junity.gameserver.model.conditions;
 
-import java.util.ArrayList;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.ArrayList;
+
 /**
  * The Class ConditionPlayerInstanceId.
  */
-public class ConditionPlayerInstanceId extends Condition
-{
+public class ConditionPlayerInstanceId extends Condition {
 	private final ArrayList<Integer> _instanceIds;
-	
+
 	/**
 	 * Instantiates a new condition player instance id.
+	 *
 	 * @param instanceIds the instance ids
 	 */
-	public ConditionPlayerInstanceId(ArrayList<Integer> instanceIds)
-	{
+	public ConditionPlayerInstanceId(ArrayList<Integer> instanceIds) {
 		_instanceIds = instanceIds;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
 		final PlayerInstance player = effector.getActingPlayer();
-		if (player == null)
-		{
+		if (player == null) {
 			return false;
 		}
-		
+
 		final Instance instance = player.getInstanceWorld();
 		return (instance == null) ? false : _instanceIds.contains(instance.getTemplateId());
 	}

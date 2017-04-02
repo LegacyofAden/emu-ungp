@@ -26,25 +26,21 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestUserFactionInfo implements IClientIncomingPacket
-{
+public class RequestUserFactionInfo implements IClientIncomingPacket {
 	private boolean _open;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		packet.readD(); // player objectId
 		_open = packet.readC() == 1;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		
+	public void run(L2GameClient client) {
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		client.sendPacket(new ExFactionInfo(activeChar, _open));

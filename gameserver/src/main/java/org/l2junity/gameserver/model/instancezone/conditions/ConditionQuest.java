@@ -29,33 +29,29 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Instance quest condition
+ *
  * @author malyelfik
  */
-public final class ConditionQuest extends Condition
-{
-	public ConditionQuest(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionQuest extends Condition {
+	public ConditionQuest(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 		// Set message
 		setSystemMessage(SystemMessageId.C1_S_QUEST_REQUIREMENT_IS_NOT_SUFFICIENT_AND_CANNOT_BE_ENTERED, (message, player) -> message.addCharName(player));
 	}
-	
+
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc)
-	{
+	protected boolean test(PlayerInstance player, Npc npc) {
 		final int id = getParameters().getInt("id");
 		final Quest q = QuestManager.getInstance().getQuest(id);
-		if (q == null)
-		{
+		if (q == null) {
 			return false;
 		}
-		
+
 		final QuestState qs = player.getQuestState(q.getName());
-		if (qs == null)
-		{
+		if (qs == null) {
 			return false;
 		}
-		
+
 		final int cond = getParameters().getInt("cond", -1);
 		return (cond != -1) ? qs.isCond(cond) : true;
 	}

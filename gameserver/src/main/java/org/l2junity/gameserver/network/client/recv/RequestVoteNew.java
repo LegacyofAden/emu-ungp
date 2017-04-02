@@ -27,80 +27,68 @@ import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestVoteNew implements IClientIncomingPacket
-{
+public final class RequestVoteNew implements IClientIncomingPacket {
 	private int _targetId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_targetId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		WorldObject object = activeChar.getTarget();
-		
-		if (!(object instanceof PlayerInstance))
-		{
-			if (object == null)
-			{
+
+		if (!(object instanceof PlayerInstance)) {
+			if (object == null) {
 				client.sendPacket(SystemMessageId.SELECT_TARGET);
-			}
-			else
-			{
+			} else {
 				client.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 			}
 			return;
 		}
-		
+
 		PlayerInstance target = (PlayerInstance) object;
-		
-		if (target.getObjectId() != _targetId)
-		{
+
+		if (target.getObjectId() != _targetId) {
 			return;
 		}
-		
-		if (target == activeChar)
-		{
+
+		if (target == activeChar) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_RECOMMEND_YOURSELF);
 			return;
 		}
-		
-		if (activeChar.getRecomLeft() <= 0)
-		{
+
+		if (activeChar.getRecomLeft() <= 0) {
 			client.sendPacket(SystemMessageId.YOU_ARE_OUT_OF_RECOMMENDATIONS_TRY_AGAIN_LATER);
 			return;
 		}
-		
-		if (target.getRecomHave() >= 255)
-		{
+
+		if (target.getRecomHave() >= 255) {
 			client.sendPacket(SystemMessageId.YOUR_SELECTED_TARGET_CAN_NO_LONGER_RECEIVE_A_RECOMMENDATION);
 			return;
 		}
-		
+
 		activeChar.giveRecom(target);
-		
+
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_RECOMMENDED_C1_YOU_HAVE_S2_RECOMMENDATIONS_LEFT);
 		sm.addPcName(target);
 		sm.addInt(activeChar.getRecomLeft());
 		client.sendPacket(sm);
-		
+
 		sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_RECOMMENDED_BY_C1);
 		sm.addPcName(activeChar);
 		target.sendPacket(sm);
-		
+
 		client.sendPacket(new UserInfo(activeChar));
 		target.broadcastUserInfo();
-		
+
 		client.sendPacket(new ExVoteSystemInfo(activeChar));
 		target.sendPacket(new ExVoteSystemInfo(target));
 	}

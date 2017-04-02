@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum AdminTeleportType
-{
+public enum AdminTeleportType {
 	NORMAL,
 	DEMONIC,
 	SAYUNE,

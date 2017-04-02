@@ -21,22 +21,19 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ShowTownMap implements IClientOutgoingPacket
-{
+public class ShowTownMap implements IClientOutgoingPacket {
 	private final String _texture;
 	private final int _x;
 	private final int _y;
-	
-	public ShowTownMap(String texture, int x, int y)
-	{
+
+	public ShowTownMap(String texture, int x, int y) {
 		_texture = texture;
 		_x = x;
 		_y = y;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_TOWN_MAP.writeId(packet);
 		packet.writeS(_texture);
 		packet.writeD(_x);

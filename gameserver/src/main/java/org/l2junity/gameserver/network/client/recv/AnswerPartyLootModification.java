@@ -26,29 +26,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author JIV
  */
-public class AnswerPartyLootModification implements IClientIncomingPacket
-{
+public class AnswerPartyLootModification implements IClientIncomingPacket {
 	public int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_answer = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final Party party = activeChar.getParty();
-		if (party != null)
-		{
+		if (party != null) {
 			party.answerLootChangeRequest(activeChar, _answer == 1);
 		}
 	}

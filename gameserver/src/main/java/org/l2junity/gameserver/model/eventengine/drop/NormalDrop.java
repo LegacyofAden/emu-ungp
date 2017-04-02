@@ -18,44 +18,37 @@
  */
 package org.l2junity.gameserver.model.eventengine.drop;
 
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.model.holders.ItemHolder;
-
 /**
  * @author UnAfraid
  */
-public class NormalDrop implements IEventDrop
-{
+public class NormalDrop implements IEventDrop {
 	private final List<EventDropItem> _items = new ArrayList<>();
-	
-	public List<EventDropItem> getItems()
-	{
+
+	public List<EventDropItem> getItems() {
 		return _items;
 	}
-	
-	public void addItem(EventDropItem item)
-	{
+
+	public void addItem(EventDropItem item) {
 		_items.add(item);
 	}
-	
+
 	@Override
-	public Collection<ItemHolder> calculateDrops()
-	{
+	public Collection<ItemHolder> calculateDrops() {
 		final List<ItemHolder> rewards = new ArrayList<>();
 		double totalChance = 0;
 		final double random = (Rnd.nextDouble() * 100);
-		for (EventDropItem item : _items)
-		{
+		for (EventDropItem item : _items) {
 			totalChance += item.getChance();
-			if (totalChance > random)
-			{
+			if (totalChance > random) {
 				final long count = Rnd.get(item.getMin(), item.getMax());
-				if (count > 0)
-				{
+				if (count > 0) {
 					rewards.add(new ItemHolder(item.getId(), count));
 				}
 			}

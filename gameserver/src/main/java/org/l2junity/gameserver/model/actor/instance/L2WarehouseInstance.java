@@ -22,45 +22,36 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 
-public class L2WarehouseInstance extends L2NpcInstance
-{
-	public L2WarehouseInstance(L2NpcTemplate template)
-	{
+public class L2WarehouseInstance extends L2NpcInstance {
+	public L2WarehouseInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2WarehouseInstance);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if (attacker.isMonster())
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker.isMonster()) {
 			return true;
 		}
-		
+
 		return super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public boolean isWarehouse()
-	{
+	public boolean isWarehouse() {
 		return true;
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		String pom = "";
-		
-		if (val == 0)
-		{
+
+		if (val == 0) {
 			pom = "" + npcId;
-		}
-		else
-		{
+		} else {
 			pom = npcId + "-" + val;
 		}
-		
-		return "data/html/warehouse/" + pom + ".htm";
+
+		return "warehouse/" + pom + ".htm";
 	}
 }

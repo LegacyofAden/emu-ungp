@@ -18,41 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.Henna;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This server packet sends the player's henna information using the Game Master's UI.
+ *
  * @author KenM, Zoey76
  */
-public final class GMHennaInfo implements IClientOutgoingPacket
-{
+public final class GMHennaInfo implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final List<Henna> _hennas = new ArrayList<>();
-	
-	public GMHennaInfo(PlayerInstance player)
-	{
+
+	public GMHennaInfo(PlayerInstance player) {
 		_activeChar = player;
-		for (Henna henna : _activeChar.getHennaList())
-		{
-			if (henna != null)
-			{
+		for (Henna henna : _activeChar.getHennaList()) {
+			if (henna != null) {
 				_hennas.add(henna);
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GMHENNA_INFO.writeId(packet);
-		
+
 		packet.writeH(_activeChar.getHennaValue(BaseStats.INT)); // equip INT
 		packet.writeH(_activeChar.getHennaValue(BaseStats.STR)); // equip STR
 		packet.writeH(_activeChar.getHennaValue(BaseStats.CON)); // equip CON
@@ -63,8 +59,7 @@ public final class GMHennaInfo implements IClientOutgoingPacket
 		packet.writeH(_activeChar.getHennaValue(BaseStats.CHA)); // equip CHA
 		packet.writeD(3); // Slots
 		packet.writeD(_hennas.size()); // Size
-		for (Henna henna : _hennas)
-		{
+		for (Henna henna : _hennas) {
 			packet.writeD(henna.getDyeId());
 			packet.writeD(0x01);
 		}

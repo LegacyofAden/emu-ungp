@@ -29,34 +29,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Maktakien
  */
-public final class RequestGetOffVehicle implements IClientIncomingPacket
-{
+public final class RequestGetOffVehicle implements IClientIncomingPacket {
 	private int _boatId, _x, _y, _z;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_boatId = packet.readD();
 		_x = packet.readD();
 		_y = packet.readD();
 		_z = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		if (!activeChar.isInBoat() || (activeChar.getBoat().getObjectId() != _boatId) || activeChar.getBoat().isMoving() || !activeChar.isInRadius3d(_x, _y, _z, 1000))
-		{
+		if (!activeChar.isInBoat() || (activeChar.getBoat().getObjectId() != _boatId) || activeChar.getBoat().isMoving() || !activeChar.isInRadius3d(_x, _y, _z, 1000)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		activeChar.broadcastPacket(new StopMoveInVehicle(activeChar, _boatId));
 		activeChar.setVehicle(null);
 		activeChar.setInVehiclePosition(null);

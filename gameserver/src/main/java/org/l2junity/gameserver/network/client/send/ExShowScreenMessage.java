@@ -18,20 +18,20 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ExShowScreenMessage server packet implementation.
+ *
  * @author Kerberos
  */
-public class ExShowScreenMessage implements IClientOutgoingPacket
-{
+public class ExShowScreenMessage implements IClientOutgoingPacket {
 	private final int _type;
 	private final int _sysMessageId;
 	private final int _unk1;
@@ -54,14 +54,14 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 	public static final byte MIDDLE_RIGHT = 0x06;
 	public static final byte BOTTOM_CENTER = 0x07;
 	public static final byte BOTTOM_RIGHT = 0x08;
-	
+
 	/**
 	 * Display a String on the screen for a given time.
+	 *
 	 * @param text the text to display
 	 * @param time the display time
 	 */
-	public ExShowScreenMessage(String text, int time)
-	{
+	public ExShowScreenMessage(String text, int time) {
 		_type = 2;
 		_sysMessageId = -1;
 		_unk1 = 0;
@@ -75,16 +75,16 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		_effect = false;
 		_npcString = -1;
 	}
-	
+
 	/**
 	 * Display a NPC String on the screen for a given position and time.
+	 *
 	 * @param npcString the NPC String Id
-	 * @param position the position on the screen
-	 * @param time the display time
-	 * @param params the String parameters
+	 * @param position  the position on the screen
+	 * @param time      the display time
+	 * @param params    the String parameters
 	 */
-	public ExShowScreenMessage(NpcStringId npcString, int position, int time, String... params)
-	{
+	public ExShowScreenMessage(NpcStringId npcString, int position, int time, String... params) {
 		_type = 2;
 		_sysMessageId = -1;
 		_unk1 = 0x00;
@@ -97,21 +97,20 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		_size = 0x00;
 		_effect = false;
 		_npcString = npcString.getId();
-		if (params != null)
-		{
+		if (params != null) {
 			addStringParameter(params);
 		}
 	}
-	
+
 	/**
 	 * Display a System Message on the screen for a given position and time.
+	 *
 	 * @param systemMsg the System Message Id
-	 * @param position the position on the screen
-	 * @param time the display time
-	 * @param params the String parameters
+	 * @param position  the position on the screen
+	 * @param time      the display time
+	 * @param params    the String parameters
 	 */
-	public ExShowScreenMessage(SystemMessageId systemMsg, int position, int time, String... params)
-	{
+	public ExShowScreenMessage(SystemMessageId systemMsg, int position, int time, String... params) {
 		_type = 2;
 		_sysMessageId = systemMsg.getId();
 		_unk1 = 0x00;
@@ -124,22 +123,21 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		_size = 0x00;
 		_effect = false;
 		_npcString = -1;
-		if (params != null)
-		{
+		if (params != null) {
 			addStringParameter(params);
 		}
 	}
-	
+
 	/**
 	 * Display a NPC String on the screen for a given position and time.
-	 * @param npcString the NPC String Id
-	 * @param position the position on the screen
-	 * @param time the display time
+	 *
+	 * @param npcString  the NPC String Id
+	 * @param position   the position on the screen
+	 * @param time       the display time
 	 * @param showEffect upper effect
-	 * @param params the String parameters
+	 * @param params     the String parameters
 	 */
-	public ExShowScreenMessage(NpcStringId npcString, int position, int time, boolean showEffect, String... params)
-	{
+	public ExShowScreenMessage(NpcStringId npcString, int position, int time, boolean showEffect, String... params) {
 		_type = 2;
 		_sysMessageId = -1;
 		_unk1 = 0x00;
@@ -152,30 +150,29 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		_size = 0x00;
 		_effect = showEffect;
 		_npcString = npcString.getId();
-		if (params != null)
-		{
+		if (params != null) {
 			addStringParameter(params);
 		}
 	}
-	
+
 	/**
 	 * Display a Text, System Message or a NPC String on the screen for the given parameters.
-	 * @param type 0 - System Message, 1 - Text, 2 - NPC String
-	 * @param messageId the System Message Id
-	 * @param position the position on the screen
+	 *
+	 * @param type       0 - System Message, 1 - Text, 2 - NPC String
+	 * @param messageId  the System Message Id
+	 * @param position   the position on the screen
 	 * @param unk1
-	 * @param size the font size 0 - normal, 1 - small
+	 * @param size       the font size 0 - normal, 1 - small
 	 * @param unk2
 	 * @param unk3
 	 * @param showEffect upper effect (0 - disabled, 1 enabled) - _position must be 2 (center) otherwise no effect
-	 * @param time the display time
-	 * @param fade the fade effect (0 - disabled, 1 enabled)
-	 * @param text the text to display
+	 * @param time       the display time
+	 * @param fade       the fade effect (0 - disabled, 1 enabled)
+	 * @param text       the text to display
 	 * @param npcString
-	 * @param params the String parameters
+	 * @param params     the String parameters
 	 */
-	public ExShowScreenMessage(int type, int messageId, int position, int unk1, int size, int unk2, int unk3, boolean showEffect, int time, boolean fade, String text, NpcStringId npcString, String params)
-	{
+	public ExShowScreenMessage(int type, int messageId, int position, int unk1, int size, int unk2, int unk3, boolean showEffect, int time, boolean fade, String text, NpcStringId npcString, String params) {
 		_type = type;
 		_sysMessageId = messageId;
 		_unk1 = unk1;
@@ -189,28 +186,25 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		_effect = showEffect;
 		_npcString = npcString.getId();
 	}
-	
+
 	/**
 	 * String parameter for argument S1,S2,.. in npcstring-e.dat
+	 *
 	 * @param params the parameter
 	 */
-	public void addStringParameter(String... params)
-	{
-		if (_parameters == null)
-		{
+	public void addStringParameter(String... params) {
+		if (_parameters == null) {
 			_parameters = new ArrayList<>();
 		}
-		for (String param : params)
-		{
+		for (String param : params) {
 			_parameters.add(param);
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_SCREEN_MESSAGE.writeId(packet);
-		
+
 		packet.writeD(_type);
 		packet.writeD(_sysMessageId);
 		packet.writeD(_position);
@@ -222,16 +216,11 @@ public class ExShowScreenMessage implements IClientOutgoingPacket
 		packet.writeD(_time);
 		packet.writeD(_fade ? 0x01 : 0x00);
 		packet.writeD(_npcString);
-		if (_npcString == -1)
-		{
+		if (_npcString == -1) {
 			packet.writeS(_text);
-		}
-		else
-		{
-			if (_parameters != null)
-			{
-				for (String s : _parameters)
-				{
+		} else {
+			if (_parameters != null) {
+				for (String s : _parameters) {
 					packet.writeS(s);
 				}
 			}

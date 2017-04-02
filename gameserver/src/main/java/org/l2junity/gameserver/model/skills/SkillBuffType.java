@@ -20,10 +20,10 @@ package org.l2junity.gameserver.model.skills;
 
 /**
  * A custom enum representing the buff category type of the skill.
+ *
  * @author Nik
  */
-public enum SkillBuffType
-{
+public enum SkillBuffType {
 	NONE,
 	BUFF,
 	DEBUFF,

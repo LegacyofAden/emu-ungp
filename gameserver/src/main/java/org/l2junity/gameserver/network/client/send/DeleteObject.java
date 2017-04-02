@@ -22,25 +22,21 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class DeleteObject implements IClientOutgoingPacket
-{
+public final class DeleteObject implements IClientOutgoingPacket {
 	private final int _objectId;
-	
-	public DeleteObject(WorldObject obj)
-	{
+
+	public DeleteObject(WorldObject obj) {
 		_objectId = obj.getObjectId();
 	}
-	
-	public DeleteObject(int objectId)
-	{
+
+	public DeleteObject(int objectId) {
 		_objectId = objectId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.DELETE_OBJECT.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeC(0x00); // c2
 		return true;

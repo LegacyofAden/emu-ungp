@@ -25,42 +25,39 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionPlayerHasFort.
+ *
  * @author MrPoke
  */
-public final class ConditionPlayerHasFort extends Condition
-{
+public final class ConditionPlayerHasFort extends Condition {
 	private final int _fort;
-	
+
 	/**
 	 * Instantiates a new condition player has fort.
+	 *
 	 * @param fort the fort
 	 */
-	public ConditionPlayerHasFort(int fort)
-	{
+	public ConditionPlayerHasFort(int fort) {
 		_fort = fort;
 	}
-	
+
 	/**
 	 * Test impl.
+	 *
 	 * @return true, if successful
 	 */
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if (effector.getActingPlayer() == null)
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if (effector.getActingPlayer() == null) {
 			return false;
 		}
-		
+
 		final L2Clan clan = effector.getActingPlayer().getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return _fort == 0;
 		}
-		
+
 		// Any fortress
-		if (_fort == -1)
-		{
+		if (_fort == -1) {
 			return clan.getFortId() > 0;
 		}
 		return clan.getFortId() == _fort;

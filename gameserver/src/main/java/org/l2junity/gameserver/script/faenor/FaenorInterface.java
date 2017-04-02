@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.script.faenor;
 
-import java.util.List;
-
 import org.l2junity.gameserver.data.sql.impl.AnnouncementsTable;
 import org.l2junity.gameserver.datatables.EventDroplist;
 import org.l2junity.gameserver.model.announce.EventAnnouncement;
@@ -28,37 +26,33 @@ import org.l2junity.gameserver.script.EngineInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @author Luis Arias
  */
-public class FaenorInterface implements EngineInterface
-{
+public class FaenorInterface implements EngineInterface {
 	protected static final Logger _log = LoggerFactory.getLogger(FaenorInterface.class);
-	
-	public static FaenorInterface getInstance()
-	{
+
+	public static FaenorInterface getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	public List<?> getAllPlayers()
-	{
+
+	public List<?> getAllPlayers() {
 		return null;
 	}
-	
+
 	@Override
-	public void addEventDrop(int[] items, int[] count, double chance, DateRange range)
-	{
+	public void addEventDrop(int[] items, int[] count, double chance, DateRange range) {
 		EventDroplist.getInstance().addGlobalDrop(items, count, (int) (chance * 1000000), range);
 	}
-	
+
 	@Override
-	public void onPlayerLogin(String message, DateRange validDateRange)
-	{
+	public void onPlayerLogin(String message, DateRange validDateRange) {
 		AnnouncementsTable.getInstance().addAnnouncement(new EventAnnouncement(validDateRange, message));
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final FaenorInterface _instance = new FaenorInterface();
 	}
 }

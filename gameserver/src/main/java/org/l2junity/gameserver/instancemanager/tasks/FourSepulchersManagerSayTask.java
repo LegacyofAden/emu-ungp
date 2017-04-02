@@ -18,44 +18,38 @@
  */
 package org.l2junity.gameserver.instancemanager.tasks;
 
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
-
 /**
  * Four Sepulchers manager say task.
+ *
  * @author xban1x
  */
-public final class FourSepulchersManagerSayTask implements Runnable
-{
+public final class FourSepulchersManagerSayTask implements Runnable {
 	@Override
-	public void run()
-	{
-		if (FourSepulchersManager.getInstance().isAttackTime())
-		{
+	public void run() {
+		if (FourSepulchersManager.getInstance().isAttackTime()) {
 			final Calendar tmp = Calendar.getInstance();
 			tmp.setTimeInMillis(Calendar.getInstance().getTimeInMillis() - FourSepulchersManager.getInstance().getWarmUpTimeEnd());
-			if ((tmp.get(Calendar.MINUTE) + 5) < GeneralConfig.FS_TIME_ATTACK)
-			{
+			if ((tmp.get(Calendar.MINUTE) + 5) < GeneralConfig.FS_TIME_ATTACK) {
 				FourSepulchersManager.getInstance().managerSay((byte) tmp.get(Calendar.MINUTE)); // byte
 				// because
 				// minute
 				// cannot be
 				// more than
 				// 59
-				ThreadPool.schedule(new FourSepulchersManagerSayTask(), 5 * 60000, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new FourSepulchersManagerSayTask(), 5 * 60000, TimeUnit.MILLISECONDS);
 			}
 			// attack time ending chat
-			else if ((tmp.get(Calendar.MINUTE) + 5) >= GeneralConfig.FS_TIME_ATTACK)
-			{
+			else if ((tmp.get(Calendar.MINUTE) + 5) >= GeneralConfig.FS_TIME_ATTACK) {
 				FourSepulchersManager.getInstance().managerSay((byte) 90); // sending a unique id :D
 			}
-		}
-		else if (FourSepulchersManager.getInstance().isEntryTime())
-		{
+		} else if (FourSepulchersManager.getInstance().isEntryTime()) {
 			FourSepulchersManager.getInstance().managerSay((byte) 0);
 		}
 	}

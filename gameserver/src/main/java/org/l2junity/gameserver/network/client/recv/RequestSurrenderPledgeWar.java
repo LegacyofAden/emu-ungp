@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.Objects;
-
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
@@ -33,77 +31,67 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestSurrenderPledgeWar implements IClientIncomingPacket
-{
+import java.util.Objects;
+
+public final class RequestSurrenderPledgeWar implements IClientIncomingPacket {
 	private String _pledgeName;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_pledgeName = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final L2Clan myClan = activeChar.getClan();
-		if (myClan == null)
-		{
+		if (myClan == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_IN_A_CLAN);
 			return;
 		}
-		
+
 		final L2Clan targetClan = ClanTable.getInstance().getClanByName(_pledgeName);
-		if (targetClan == null)
-		{
+		if (targetClan == null) {
 			activeChar.sendPacket(SystemMessageId.THAT_CLAN_DOES_NOT_EXIST);
 			return;
-		}
-		else if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_PLEDGE_WAR))
-		{
+		} else if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_PLEDGE_WAR)) {
 			client.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (!myClan.isAtWar())
-		{
+
+		if (!myClan.isAtWar()) {
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_INVOLVED_IN_A_CLAN_WAR);
 			return;
 		}
-		
+
 		final ClanWar clanWar = myClan.getWarWith(targetClan.getId());
-		
-		if (clanWar == null)
-		{
+
+		if (clanWar == null) {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_NOT_DECLARED_A_CLAN_WAR_AGAINST_THE_CLAN_S1);
 			sm.addString(targetClan.getName());
 			activeChar.sendPacket(sm);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (clanWar.getState() == ClanWarState.BLOOD_DECLARATION)
-		{
+
+		if (clanWar.getState() == ClanWarState.BLOOD_DECLARATION) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_DECLARE_DEFEAT_AS_IT_HAS_NOT_BEEN_7_DAYS_SINCE_STARTING_A_CLAN_WAR_WITH_CLAN_S1);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (myClan.getMembers().stream().filter(Objects::nonNull).filter(ClanMember::isOnline).map(ClanMember::getPlayerInstance).anyMatch(p -> !p.isInCombat()))
-		{
+
+		if (myClan.getMembers().stream().filter(Objects::nonNull).filter(ClanMember::isOnline).map(ClanMember::getPlayerInstance).anyMatch(p -> !p.isInCombat())) {
 			activeChar.sendPacket(SystemMessageId.A_CEASE_FIRE_DURING_A_CLAN_WAR_CAN_NOT_BE_CALLED_WHILE_MEMBERS_OF_YOUR_CLAN_ARE_ENGAGED_IN_BATTLE);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		clanWar.cancel(activeChar, myClan);
 	}
 }

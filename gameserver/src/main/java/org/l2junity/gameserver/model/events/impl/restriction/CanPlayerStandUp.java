@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class CanPlayerStandUp implements IBaseEvent
-{
+public final class CanPlayerStandUp implements IBaseEvent {
 	private final PlayerInstance _activeChar;
-	
-	public CanPlayerStandUp(PlayerInstance activeChar)
-	{
+
+	public CanPlayerStandUp(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_STAND_UP;
 	}
 }

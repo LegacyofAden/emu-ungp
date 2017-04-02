@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Zoey76
  */
-public enum AISkillScope
-{
+public enum AISkillScope {
 	BUFF,
 	IMMOBILIZE,
 	HEAL,

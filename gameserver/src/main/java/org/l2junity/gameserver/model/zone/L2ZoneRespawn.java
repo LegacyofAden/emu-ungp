@@ -18,39 +18,33 @@
  */
 package org.l2junity.gameserver.model.zone;
 
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.gameserver.model.Location;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.config.PlayerConfig;
-import org.l2junity.gameserver.model.Location;
-
 /**
  * Abstract zone with spawn locations
+ *
  * @author DS, Nyaran (rework 10/07/2011)
  */
-public abstract class L2ZoneRespawn extends ZoneType
-{
+public abstract class L2ZoneRespawn extends ZoneType {
 	private List<Location> _spawnLocs = null;
 	private List<Location> _otherSpawnLocs = null;
 	private List<Location> _chaoticSpawnLocs = null;
 	private List<Location> _banishSpawnLocs = null;
-	
-	protected L2ZoneRespawn(int id)
-	{
+
+	protected L2ZoneRespawn(int id) {
 		super(id);
 	}
-	
-	public void parseLoc(int x, int y, int z, String type)
-	{
-		if ((type == null) || type.isEmpty())
-		{
+
+	public void parseLoc(int x, int y, int z, String type) {
+		if ((type == null) || type.isEmpty()) {
 			addSpawn(x, y, z);
-		}
-		else
-		{
-			switch (type)
-			{
+		} else {
+			switch (type) {
 				case "other":
 					addOtherSpawn(x, y, z);
 					break;
@@ -65,93 +59,73 @@ public abstract class L2ZoneRespawn extends ZoneType
 			}
 		}
 	}
-	
-	public final void addSpawn(int x, int y, int z)
-	{
-		if (_spawnLocs == null)
-		{
+
+	public final void addSpawn(int x, int y, int z) {
+		if (_spawnLocs == null) {
 			_spawnLocs = new ArrayList<>();
 		}
-		
+
 		_spawnLocs.add(new Location(x, y, z));
 	}
-	
-	public final void addOtherSpawn(int x, int y, int z)
-	{
-		if (_otherSpawnLocs == null)
-		{
+
+	public final void addOtherSpawn(int x, int y, int z) {
+		if (_otherSpawnLocs == null) {
 			_otherSpawnLocs = new ArrayList<>();
 		}
-		
+
 		_otherSpawnLocs.add(new Location(x, y, z));
 	}
-	
-	public final void addChaoticSpawn(int x, int y, int z)
-	{
-		if (_chaoticSpawnLocs == null)
-		{
+
+	public final void addChaoticSpawn(int x, int y, int z) {
+		if (_chaoticSpawnLocs == null) {
 			_chaoticSpawnLocs = new ArrayList<>();
 		}
-		
+
 		_chaoticSpawnLocs.add(new Location(x, y, z));
 	}
-	
-	public final void addBanishSpawn(int x, int y, int z)
-	{
-		if (_banishSpawnLocs == null)
-		{
+
+	public final void addBanishSpawn(int x, int y, int z) {
+		if (_banishSpawnLocs == null) {
 			_banishSpawnLocs = new ArrayList<>();
 		}
-		
+
 		_banishSpawnLocs.add(new Location(x, y, z));
 	}
-	
-	public final List<Location> getSpawns()
-	{
+
+	public final List<Location> getSpawns() {
 		return _spawnLocs;
 	}
-	
-	public final Location getSpawnLoc()
-	{
-		if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED)
-		{
+
+	public final Location getSpawnLoc() {
+		if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED) {
 			return _spawnLocs.get(Rnd.get(_spawnLocs.size()));
 		}
 		return _spawnLocs.get(0);
 	}
-	
-	public final Location getOtherSpawnLoc()
-	{
-		if (_otherSpawnLocs != null)
-		{
-			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED)
-			{
+
+	public final Location getOtherSpawnLoc() {
+		if (_otherSpawnLocs != null) {
+			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED) {
 				return _otherSpawnLocs.get(Rnd.get(_otherSpawnLocs.size()));
 			}
 			return _otherSpawnLocs.get(0);
 		}
 		return getSpawnLoc();
 	}
-	
-	public final Location getChaoticSpawnLoc()
-	{
-		if (_chaoticSpawnLocs != null)
-		{
-			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED)
-			{
+
+	public final Location getChaoticSpawnLoc() {
+		if (_chaoticSpawnLocs != null) {
+			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED) {
 				return _chaoticSpawnLocs.get(Rnd.get(_chaoticSpawnLocs.size()));
 			}
 			return _chaoticSpawnLocs.get(0);
 		}
 		return getSpawnLoc();
 	}
-	
-	public Location getBanishSpawnLoc()
-	{
-		if (_banishSpawnLocs != null)
-		{
-			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED)
-			{
+
+	public Location getBanishSpawnLoc() {
+		if (_banishSpawnLocs != null) {
+			if (PlayerConfig.RANDOM_RESPAWN_IN_TOWN_ENABLED) {
 				return _banishSpawnLocs.get(Rnd.get(_banishSpawnLocs.size()));
 			}
 			return _banishSpawnLocs.get(0);

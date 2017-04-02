@@ -23,19 +23,17 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) just a trigger
+ *
  * @author -Wooden-
  */
-public final class RequestExFishRanking implements IClientIncomingPacket
-{
+public final class RequestExFishRanking implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		_log.info("C5: RequestExFishRanking");
 	}
 }

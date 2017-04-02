@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExShowContactList;
@@ -26,30 +26,26 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)
+ *
  * @author mrTJO & UnAfraid
  */
-public final class RequestExShowContactList implements IClientIncomingPacket
-{
+public final class RequestExShowContactList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!GeneralConfig.ALLOW_MAIL)
-		{
+	public void run(L2GameClient client) {
+		if (!GeneralConfig.ALLOW_MAIL) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new ExShowContactList(activeChar));
 	}
 }

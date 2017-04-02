@@ -27,34 +27,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author -Wooden-
  */
-public final class RequestExEnchantSkillInfoDetail implements IClientIncomingPacket
-{
+public final class RequestExEnchantSkillInfoDetail implements IClientIncomingPacket {
 	private SkillEnchantType _type;
 	private int _skillId;
 	private int _skillLvl;
 	private int _skillSubLvl;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_type = SkillEnchantType.values()[packet.readD()];
 		_skillId = packet.readD();
 		_skillLvl = packet.readH();
 		_skillSubLvl = packet.readH();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if ((_skillId <= 0) || (_skillLvl <= 0) || (_skillSubLvl < 0))
-		{
+	public void run(L2GameClient client) {
+		if ((_skillId <= 0) || (_skillLvl <= 0) || (_skillSubLvl < 0)) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		activeChar.sendPacket(new ExEnchantSkillInfoDetail(_type, _skillId, _skillLvl, _skillSubLvl, activeChar));

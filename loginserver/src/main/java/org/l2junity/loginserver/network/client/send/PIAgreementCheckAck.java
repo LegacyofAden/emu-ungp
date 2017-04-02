@@ -24,20 +24,18 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class PIAgreementCheckAck implements IOutgoingPacket
-{
-	
+public class PIAgreementCheckAck implements IOutgoingPacket {
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.l2junity.network.IOutgoingPacket#write(org.l2junity.network.PacketWriter)
 	 */
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x11);
 		packet.writeD(0); // Unused by client
 		packet.writeC(0); // 0 - EULA, 1 - PIAgreement
 		return true;
 	}
-	
+
 }

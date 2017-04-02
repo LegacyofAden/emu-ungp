@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.SubclassInfoType;
 import org.l2junity.gameserver.enums.SubclassType;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -28,86 +25,77 @@ import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class ExSubjobInfo implements IClientOutgoingPacket
-{
+public class ExSubjobInfo implements IClientOutgoingPacket {
 	private final int _currClassId;
 	private final int _currRace;
 	private final int _type;
 	private final List<SubInfo> _subs;
-	
-	public ExSubjobInfo(PlayerInstance player, SubclassInfoType type)
-	{
+
+	public ExSubjobInfo(PlayerInstance player, SubclassInfoType type) {
 		_currClassId = player.getClassId().getId();
 		_currRace = player.getRace().ordinal();
 		_type = type.ordinal();
-		
+
 		_subs = new ArrayList<>();
 		_subs.add(0, new SubInfo(player));
-		
-		for (SubClass sub : player.getSubClasses().values())
-		{
+
+		for (SubClass sub : player.getSubClasses().values()) {
 			_subs.add(new SubInfo(sub));
 		}
 	}
-	
-	private final class SubInfo
-	{
+
+	private final class SubInfo {
 		private final int _index;
 		private final int _classId;
 		private final int _level;
 		private final int _type;
-		
-		public SubInfo(SubClass sub)
-		{
+
+		public SubInfo(SubClass sub) {
 			_index = sub.getClassIndex();
 			_classId = sub.getClassId();
 			_level = sub.getLevel();
 			_type = sub.isDualClass() ? SubclassType.DUALCLASS.ordinal() : SubclassType.SUBCLASS.ordinal();
 		}
-		
-		public SubInfo(PlayerInstance player)
-		{
+
+		public SubInfo(PlayerInstance player) {
 			_index = 0;
 			_classId = player.getBaseClass();
 			_level = player.getStat().getBaseLevel();
 			_type = SubclassType.BASECLASS.ordinal();
 		}
-		
-		public int getIndex()
-		{
+
+		public int getIndex() {
 			return _index;
 		}
-		
-		public int getClassId()
-		{
+
+		public int getClassId() {
 			return _classId;
 		}
-		
-		public int getLevel()
-		{
+
+		public int getLevel() {
 			return _level;
 		}
-		
-		public int getType()
-		{
+
+		public int getType() {
 			return _type;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SUBJOB_INFO.writeId(packet);
-		
+
 		packet.writeC(_type);
 		packet.writeD(_currClassId);
 		packet.writeD(_currRace);
 		packet.writeD(_subs.size());
-		for (SubInfo sub : _subs)
-		{
+		for (SubInfo sub : _subs) {
 			packet.writeD(sub.getIndex());
 			packet.writeD(sub.getClassId());
 			packet.writeD(sub.getLevel());

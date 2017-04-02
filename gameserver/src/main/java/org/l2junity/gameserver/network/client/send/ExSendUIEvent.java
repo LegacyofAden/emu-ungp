@@ -18,16 +18,15 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.network.PacketWriter;
 
-public class ExSendUIEvent implements IClientOutgoingPacket
-{
+import java.util.Arrays;
+import java.util.List;
+
+public class ExSendUIEvent implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _type;
 	private final int _countUp;
@@ -37,7 +36,7 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 	private final int _endTime2;
 	private final int _npcstringId;
 	private List<String> _params = null;
-	
+
 	/**
 	 * @param player
 	 * @param hide
@@ -46,11 +45,10 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 	 * @param endTime
 	 * @param text
 	 */
-	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, String text)
-	{
+	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, String text) {
 		this(player, hide ? 1 : 0, countUp ? 1 : 0, startTime / 60, startTime % 60, endTime / 60, endTime % 60, -1, text);
 	}
-	
+
 	/**
 	 * @param player
 	 * @param hide
@@ -60,11 +58,10 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 	 * @param npcString
 	 * @param params
 	 */
-	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, NpcStringId npcString, String... params)
-	{
+	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, NpcStringId npcString, String... params) {
 		this(player, hide ? 1 : 0, countUp ? 1 : 0, startTime / 60, startTime % 60, endTime / 60, endTime % 60, npcString.getId(), params);
 	}
-	
+
 	/**
 	 * @param player
 	 * @param type
@@ -76,8 +73,7 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 	 * @param npcstringId
 	 * @param params
 	 */
-	public ExSendUIEvent(PlayerInstance player, int type, int countUp, int startTime, int startTime2, int endTime, int endTime2, int npcstringId, String... params)
-	{
+	public ExSendUIEvent(PlayerInstance player, int type, int countUp, int startTime, int startTime2, int endTime, int endTime2, int npcstringId, String... params) {
 		_objectId = player.getObjectId();
 		_type = type;
 		_countUp = countUp;
@@ -88,12 +84,11 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 		_npcstringId = npcstringId;
 		_params = Arrays.asList(params);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SEND_UIEVENT.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_type); // 0 = show, 1 = hide (there is 2 = pause and 3 = resume also but they don't work well you can only pause count down and you cannot resume it because resume hides the counter).
 		packet.writeD(0);// unknown
@@ -104,10 +99,8 @@ public class ExSendUIEvent implements IClientOutgoingPacket
 		packet.writeS(String.valueOf(_endTime));
 		packet.writeS(String.valueOf(_endTime2));
 		packet.writeD(_npcstringId);
-		if (_params != null)
-		{
-			for (String param : _params)
-			{
+		if (_params != null) {
+			for (String param : _params) {
 				packet.writeS(param);
 			}
 		}

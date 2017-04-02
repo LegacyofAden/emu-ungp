@@ -26,44 +26,37 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 /**
  * @author UnAfraid
  */
-public class OnPlayerSelect implements IBaseEvent
-{
+public class OnPlayerSelect implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _objectId;
 	private final String _name;
 	private final L2GameClient _client;
-	
-	public OnPlayerSelect(PlayerInstance activeChar, int objectId, String name, L2GameClient client)
-	{
+
+	public OnPlayerSelect(PlayerInstance activeChar, int objectId, String name, L2GameClient client) {
 		_activeChar = activeChar;
 		_objectId = objectId;
 		_name = name;
 		_client = client;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getObjectId()
-	{
+
+	public int getObjectId() {
 		return _objectId;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public L2GameClient getClient()
-	{
+
+	public L2GameClient getClient() {
 		return _client;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_SELECT;
 	}
 }

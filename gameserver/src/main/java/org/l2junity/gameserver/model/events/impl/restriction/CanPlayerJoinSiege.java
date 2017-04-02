@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class CanPlayerJoinSiege implements IBaseEvent
-{
+public final class CanPlayerJoinSiege implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _castleId;
-	
-	public CanPlayerJoinSiege(PlayerInstance activeChar, int castleId)
-	{
+
+	public CanPlayerJoinSiege(PlayerInstance activeChar, int castleId) {
 		_activeChar = activeChar;
 		_castleId = castleId;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getCastleId()
-	{
+
+	public int getCastleId() {
 		return _castleId;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_JOIN_SIEGE;
 	}
 }

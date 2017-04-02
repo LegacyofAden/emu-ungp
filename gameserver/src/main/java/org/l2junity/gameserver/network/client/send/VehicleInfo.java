@@ -25,24 +25,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Maktakien
  */
-public class VehicleInfo implements IClientOutgoingPacket
-{
+public class VehicleInfo implements IClientOutgoingPacket {
 	private final int _objId, _x, _y, _z, _heading;
-	
-	public VehicleInfo(L2BoatInstance boat)
-	{
+
+	public VehicleInfo(L2BoatInstance boat) {
 		_objId = boat.getObjectId();
 		_x = (int) boat.getX();
 		_y = (int) boat.getY();
 		_z = (int) boat.getZ();
 		_heading = boat.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VEHICLE_INFO.writeId(packet);
-		
+
 		packet.writeD(_objId);
 		packet.writeD(_x);
 		packet.writeD(_y);

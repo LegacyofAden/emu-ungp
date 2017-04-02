@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ObservationMode implements IClientOutgoingPacket
-{
+public class ObservationMode implements IClientOutgoingPacket {
 	private final Location _loc;
-	
-	public ObservationMode(Location loc)
-	{
+
+	public ObservationMode(Location loc) {
 		_loc = loc;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.OBSERVER_START.writeId(packet);
-		
+
 		packet.writeD((int) _loc.getX());
 		packet.writeD((int) _loc.getY());
 		packet.writeD((int) _loc.getZ());

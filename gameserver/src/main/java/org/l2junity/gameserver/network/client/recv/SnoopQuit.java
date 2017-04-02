@@ -26,34 +26,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author -Wooden-
  */
-public final class SnoopQuit implements IClientIncomingPacket
-{
+public final class SnoopQuit implements IClientIncomingPacket {
 	private int _snoopID;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_snoopID = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = World.getInstance().getPlayer(_snoopID);
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		player.removeSnooper(activeChar);
 		activeChar.removeSnooped(player);
-		
+
 	}
 }

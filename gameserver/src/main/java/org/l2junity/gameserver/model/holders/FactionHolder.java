@@ -18,64 +18,55 @@
  */
 package org.l2junity.gameserver.model.holders;
 
+import org.l2junity.gameserver.enums.Faction;
+import org.l2junity.gameserver.model.StatsSet;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.l2junity.gameserver.enums.Faction;
-import org.l2junity.gameserver.model.StatsSet;
-
 /**
  * @author Sdw
  */
-public class FactionHolder
-{
+public class FactionHolder {
 	private final int _id;
 	private final Faction _name;
 	private final int _maxLevel;
 	private final Map<Integer, Integer> _levelPoints = new HashMap<>();
-	
-	public FactionHolder(StatsSet set)
-	{
+
+	public FactionHolder(StatsSet set) {
 		_id = set.getInt("id");
 		_name = set.getEnum("name", Faction.class);
 		_maxLevel = set.getInt("maxLevel");
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public Faction getName()
-	{
+
+	public Faction getName() {
 		return _name;
 	}
-	
-	public int getMaxLevel()
-	{
+
+	public int getMaxLevel() {
 		return _maxLevel;
 	}
-	
-	public int getLevel(int points)
-	{
+
+	public int getLevel(int points) {
 		return _levelPoints.entrySet().stream().filter(entry -> points < entry.getValue()).mapToInt(Entry::getKey).findFirst().orElse(0);
 	}
-	
-	public float getProgressToNextLevel(int points)
-	{
+
+	public float getProgressToNextLevel(int points) {
 		final int currentLevel = getLevel(points);
 		final int subPoints = currentLevel == 0 ? 0 : _levelPoints.get(currentLevel - 1);
 		return (float) (points - subPoints) / (_levelPoints.get(currentLevel) - subPoints);
 	}
-	
-	public void addPointsForLevel(int level, int points)
-	{
+
+	public void addPointsForLevel(int level, int points) {
 		_levelPoints.put(level, points);
 	}
-	
-	public int getPointsForLevel(int level)
-	{
+
+	public int getPointsForLevel(int level) {
 		return _levelPoints.get(level);
 	}
 }

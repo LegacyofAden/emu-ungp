@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnCreatureTeleported implements IBaseEvent
-{
+public class OnCreatureTeleported implements IBaseEvent {
 	private final Creature _creature;
-	
-	public OnCreatureTeleported(Creature creature)
-	{
+
+	public OnCreatureTeleported(Creature creature) {
 		_creature = creature;
 	}
-	
-	public Creature getCreature()
-	{
+
+	public Creature getCreature() {
 		return _creature;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_TELEPORTED;
 	}
 }

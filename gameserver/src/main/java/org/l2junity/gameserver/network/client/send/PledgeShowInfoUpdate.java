@@ -18,28 +18,25 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PledgeShowInfoUpdate implements IClientOutgoingPacket
-{
+public class PledgeShowInfoUpdate implements IClientOutgoingPacket {
 	private final L2Clan _clan;
-	
-	public PledgeShowInfoUpdate(L2Clan clan)
-	{
+
+	public PledgeShowInfoUpdate(L2Clan clan) {
 		_clan = clan;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_SHOW_INFO_UPDATE.writeId(packet);
-		
+
 		// sending empty data so client will ask all the info in response ;)
 		packet.writeD(_clan.getId());
-		packet.writeD(HexIDConfig.SERVER_ID);
+		packet.writeD(GameserverConfig.SERVER_ID);
 		packet.writeD(_clan.getCrestId());
 		packet.writeD(_clan.getLevel()); // clan level
 		packet.writeD(_clan.getCastleId());

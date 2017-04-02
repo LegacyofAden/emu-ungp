@@ -26,44 +26,37 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnItemCreate implements IBaseEvent
-{
+public class OnItemCreate implements IBaseEvent {
 	private final String _process;
 	private final ItemInstance _item;
 	private final PlayerInstance _activeChar;
 	private final Object _reference;
-	
-	public OnItemCreate(String process, ItemInstance item, PlayerInstance actor, Object reference)
-	{
+
+	public OnItemCreate(String process, ItemInstance item, PlayerInstance actor, Object reference) {
 		_process = process;
 		_item = item;
 		_activeChar = actor;
 		_reference = reference;
 	}
-	
-	public String getProcess()
-	{
+
+	public String getProcess() {
 		return _process;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Object getReference()
-	{
+
+	public Object getReference() {
 		return _reference;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_ITEM_CREATE;
 	}
 }

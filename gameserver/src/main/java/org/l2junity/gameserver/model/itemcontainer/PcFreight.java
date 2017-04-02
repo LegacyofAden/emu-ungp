@@ -18,64 +18,55 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * @author UnAfraid
  */
-public class PcFreight extends ItemContainer
-{
+public class PcFreight extends ItemContainer {
 	private final PlayerInstance _owner;
 	private final int _ownerId;
-	
-	public PcFreight(int object_id)
-	{
+
+	public PcFreight(int object_id) {
 		_owner = null;
 		_ownerId = object_id;
 		restore();
 	}
-	
-	public PcFreight(PlayerInstance owner)
-	{
+
+	public PcFreight(PlayerInstance owner) {
 		_owner = owner;
 		_ownerId = owner.getObjectId();
 	}
-	
+
 	@Override
-	public int getOwnerId()
-	{
+	public int getOwnerId() {
 		return _ownerId;
 	}
-	
+
 	@Override
-	public PlayerInstance getOwner()
-	{
+	public PlayerInstance getOwner() {
 		return _owner;
 	}
-	
+
 	@Override
-	public ItemLocation getBaseLocation()
-	{
+	public ItemLocation getBaseLocation() {
 		return ItemLocation.FREIGHT;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "Freight";
 	}
-	
+
 	@Override
-	public boolean validateCapacity(long slots)
-	{
+	public boolean validateCapacity(long slots) {
 		int curSlots = _owner == null ? PlayerConfig.ALT_FREIGHT_SLOTS : PlayerConfig.ALT_FREIGHT_SLOTS;
 		return ((getSize() + slots) <= curSlots);
 	}
-	
+
 	@Override
-	public void refreshWeight()
-	{
+	public void refreshWeight() {
 	}
 }

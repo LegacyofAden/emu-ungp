@@ -29,59 +29,51 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestFriendList implements IClientIncomingPacket
-{
+public final class RequestFriendList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		SystemMessage sm;
-		
+
 		// ======<Friend List>======
 		activeChar.sendPacket(SystemMessageId.FRIENDS_LIST);
-		
+
 		PlayerInstance friend = null;
-		for (int id : activeChar.getFriendList())
-		{
+		for (int id : activeChar.getFriendList()) {
 			// int friendId = rset.getInt("friendId");
 			String friendName = CharNameTable.getInstance().getNameById(id);
-			
-			if (friendName == null)
-			{
+
+			if (friendName == null) {
 				continue;
 			}
-			
+
 			friend = World.getInstance().getPlayer(friendName);
-			
-			if ((friend == null) || !friend.isOnline())
-			{
+
+			if ((friend == null) || !friend.isOnline()) {
 				// (Currently: Offline)
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CURRENTLY_OFFLINE);
 				sm.addString(friendName);
-			}
-			else
-			{
+			} else {
 				// (Currently: Online)
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CURRENTLY_ONLINE);
 				sm.addString(friendName);
 			}
-			
+
 			activeChar.sendPacket(sm);
 		}
-		
+
 		// =========================
 		activeChar.sendPacket(SystemMessageId.EMPTY3);
 	}

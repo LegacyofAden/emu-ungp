@@ -18,70 +18,59 @@
  */
 package org.l2junity.gameserver.model.shuttle;
 
+import org.l2junity.gameserver.model.Location;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.l2junity.gameserver.model.Location;
 
 /**
  * @author UnAfraid
  */
-public class L2ShuttleStop
-{
+public class L2ShuttleStop {
 	private final int _id;
 	private boolean _isOpen = true;
 	private final List<Location> _dimensions = new ArrayList<>(3);
 	private long _lastDoorStatusChanges = System.currentTimeMillis();
-	
-	public L2ShuttleStop(int id)
-	{
+
+	public L2ShuttleStop(int id) {
 		_id = id;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public boolean isDoorOpen()
-	{
+
+	public boolean isDoorOpen() {
 		return _isOpen;
 	}
-	
-	public void addDimension(Location loc)
-	{
+
+	public void addDimension(Location loc) {
 		_dimensions.add(loc);
 	}
-	
-	public List<Location> getDimensions()
-	{
+
+	public List<Location> getDimensions() {
 		return _dimensions;
 	}
-	
-	public void openDoor()
-	{
-		if (_isOpen)
-		{
+
+	public void openDoor() {
+		if (_isOpen) {
 			return;
 		}
-		
+
 		_isOpen = true;
 		_lastDoorStatusChanges = System.currentTimeMillis();
 	}
-	
-	public void closeDoor()
-	{
-		if (!_isOpen)
-		{
+
+	public void closeDoor() {
+		if (!_isOpen) {
 			return;
 		}
-		
+
 		_isOpen = false;
 		_lastDoorStatusChanges = System.currentTimeMillis();
 	}
-	
-	public boolean hasDoorChanged()
-	{
+
+	public boolean hasDoorChanged() {
 		return (System.currentTimeMillis() - _lastDoorStatusChanges) <= 1000;
 	}
 }

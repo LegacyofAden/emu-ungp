@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv.adenadistribution;
 
-import java.util.Objects;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.AdenaDistributionRequest;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -28,31 +26,28 @@ import org.l2junity.gameserver.network.client.send.adenadistribution.ExDivideAde
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
+import java.util.Objects;
+
 /**
  * @author Sdw
  */
-public class RequestDivideAdenaCancel implements IClientIncomingPacket
-{
+public class RequestDivideAdenaCancel implements IClientIncomingPacket {
 	private boolean _cancel;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_cancel = packet.readC() == 0;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (_cancel)
-		{
+
+		if (_cancel) {
 			final AdenaDistributionRequest request = player.getRequest(AdenaDistributionRequest.class);
 			request.getPlayers().stream().filter(Objects::nonNull).forEach(p ->
 			{

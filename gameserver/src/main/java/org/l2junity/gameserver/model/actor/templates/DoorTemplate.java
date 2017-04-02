@@ -24,10 +24,10 @@ import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 
 /**
  * Doors template.
+ *
  * @author JIV
  */
-public class DoorTemplate extends L2CharTemplate implements IIdentifiable
-{
+public class DoorTemplate extends L2CharTemplate implements IIdentifiable {
 	private final int _doorId;
 	private final int _nodeX[];
 	private final int _nodeY[];
@@ -45,10 +45,10 @@ public class DoorTemplate extends L2CharTemplate implements IIdentifiable
 	// -1 close, 0 nothing, 1 open
 	private final byte _masterDoorClose;
 	private final byte _masterDoorOpen;
-	
+
 	private final boolean _isTargetable;
 	private final boolean _default_status;
-	
+
 	private int _openTime;
 	private int _randomTime;
 	private final int _closeTime;
@@ -58,51 +58,48 @@ public class DoorTemplate extends L2CharTemplate implements IIdentifiable
 	private final boolean _isAttackableDoor;
 	private final boolean _stealth;
 	private final boolean _isReversed;
-	
-	public DoorTemplate(StatsSet set)
-	{
+
+	public DoorTemplate(StatsSet set) {
 		super(set);
 		_doorId = set.getInt("id");
 		_name = set.getString("name");
-		
+
 		// position
 		_posX = set.getInt("x");
 		_posY = set.getInt("y");
 		_posZ = set.getInt("z");
 		_height = set.getInt("height", 150);
 		_nodeZ = set.getInt("nodeZ");
-		
+
 		_nodeX = new int[4]; // 4 * x
 		_nodeY = new int[4]; // 4 * y
-		for (int i = 0; i < 4; i++)
-		{
+		for (int i = 0; i < 4; i++) {
 			_nodeX[i] = set.getInt("nodeX_" + i);
 			_nodeY[i] = set.getInt("nodeY_" + i);
 		}
-		
+
 		// optional
 		_emmiter = set.getInt("emmiterId", 0);
 		_showHp = set.getBoolean("showHp", true);
 		_isWall = set.getBoolean("isWall", false);
 		_groupName = set.getString("group", null);
-		
+
 		_childDoorId = set.getInt("childId", -1);
 		// true if door is opening
 		String masterevent = set.getString("masterClose", "act_nothing");
 		_masterDoorClose = (byte) (masterevent.equals("act_open") ? 1 : masterevent.equals("act_close") ? -1 : 0);
-		
+
 		masterevent = set.getString("masterOpen", "act_nothing");
 		_masterDoorOpen = (byte) (masterevent.equals("act_open") ? 1 : masterevent.equals("act_close") ? -1 : 0);
-		
+
 		_isTargetable = set.getBoolean("targetable", true);
 		_default_status = set.getString("default", "close").equals("open");
 		_closeTime = set.getInt("closeTime", -1);
 		_level = set.getInt("level", 0);
-		
+
 		_openType = set.getEnum("openMethod", DoorOpenType.class, DoorOpenType.NONE);
 		_checkCollision = set.getBoolean("isCheckCollision", true);
-		if (_openType == DoorOpenType.BY_TIME)
-		{
+		if (_openType == DoorOpenType.BY_TIME) {
 			_openTime = set.getInt("openTime");
 			_randomTime = set.getInt("randomTime", -1);
 		}
@@ -110,144 +107,118 @@ public class DoorTemplate extends L2CharTemplate implements IIdentifiable
 		_stealth = set.getBoolean("stealth", false);
 		_isReversed = set.getBoolean("isReversed", false);
 	}
-	
+
 	/**
 	 * Gets the door ID.
+	 *
 	 * @return the door ID
 	 */
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _doorId;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public int[] getNodeX()
-	{
+
+	public int[] getNodeX() {
 		return _nodeX;
 	}
-	
-	public int[] getNodeY()
-	{
+
+	public int[] getNodeY() {
 		return _nodeY;
 	}
-	
-	public int getNodeZ()
-	{
+
+	public int getNodeZ() {
 		return _nodeZ;
 	}
-	
-	public int getHeight()
-	{
+
+	public int getHeight() {
 		return _height;
 	}
-	
-	public int getX()
-	{
+
+	public int getX() {
 		return _posX;
 	}
-	
-	public int getY()
-	{
+
+	public int getY() {
 		return _posY;
 	}
-	
-	public int getZ()
-	{
+
+	public int getZ() {
 		return _posZ;
 	}
-	
-	public int getEmmiter()
-	{
+
+	public int getEmmiter() {
 		return _emmiter;
 	}
-	
-	public int getChildDoorId()
-	{
+
+	public int getChildDoorId() {
 		return _childDoorId;
 	}
-	
-	public String getGroupName()
-	{
+
+	public String getGroupName() {
 		return _groupName;
 	}
-	
-	public boolean isShowHp()
-	{
+
+	public boolean isShowHp() {
 		return _showHp;
 	}
-	
-	public boolean isWall()
-	{
+
+	public boolean isWall() {
 		return _isWall;
 	}
-	
-	public byte getMasterDoorOpen()
-	{
+
+	public byte getMasterDoorOpen() {
 		return _masterDoorOpen;
 	}
-	
-	public byte getMasterDoorClose()
-	{
+
+	public byte getMasterDoorClose() {
 		return _masterDoorClose;
 	}
-	
-	public boolean isTargetable()
-	{
+
+	public boolean isTargetable() {
 		return _isTargetable;
 	}
-	
-	public boolean isOpenByDefault()
-	{
+
+	public boolean isOpenByDefault() {
 		return _default_status;
 	}
-	
-	public int getOpenTime()
-	{
+
+	public int getOpenTime() {
 		return _openTime;
 	}
-	
-	public int getRandomTime()
-	{
+
+	public int getRandomTime() {
 		return _randomTime;
 	}
-	
-	public int getCloseTime()
-	{
+
+	public int getCloseTime() {
 		return _closeTime;
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return _level;
 	}
-	
-	public DoorOpenType getOpenType()
-	{
+
+	public DoorOpenType getOpenType() {
 		return _openType;
 	}
-	
-	public boolean isCheckCollision()
-	{
+
+	public boolean isCheckCollision() {
 		return _checkCollision;
 	}
-	
-	public boolean isAttackable()
-	{
+
+	public boolean isAttackable() {
 		return _isAttackableDoor;
 	}
-	
-	public boolean isStealth()
-	{
+
+	public boolean isStealth() {
 		return _stealth;
 	}
-	
-	public boolean isReversed()
-	{
+
+	public boolean isReversed() {
 		return _isReversed;
 	}
 }

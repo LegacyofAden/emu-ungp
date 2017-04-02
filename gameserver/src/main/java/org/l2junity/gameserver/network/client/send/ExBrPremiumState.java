@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExBrPremiumState implements IClientOutgoingPacket
-{
+public class ExBrPremiumState implements IClientOutgoingPacket {
 	private final PlayerInstance _player;
-	
-	public ExBrPremiumState(PlayerInstance player)
-	{
+
+	public ExBrPremiumState(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BR_PREMIUM_STATE.writeId(packet);
-		
+
 		packet.writeD(_player.getObjectId());
 		packet.writeC(_player.isPremium() ? 0x01 : 0x00);
 		return true;

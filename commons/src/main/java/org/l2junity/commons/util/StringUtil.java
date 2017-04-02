@@ -21,93 +21,87 @@ package org.l2junity.commons.util;
 /**
  * @author lord_rex
  */
-public final class StringUtil
-{
+public final class StringUtil {
 	private static final char[] ILLEGAL_CHARACTERS =
-	{
-		'/',
-		'\n',
-		'\r',
-		'\t',
-		'\0',
-		'\f',
-		'`',
-		'?',
-		'*',
-		'\\',
-		'<',
-		'>',
-		'|',
-		'\"',
-		':'
-	};
+			{
+					'/',
+					'\n',
+					'\r',
+					'\t',
+					'\0',
+					'\f',
+					'`',
+					'?',
+					'*',
+					'\\',
+					'<',
+					'>',
+					'|',
+					'\"',
+					':'
+			};
 	public static final String EMPTY = "";
-	
-	private StringUtil()
-	{
+
+	private StringUtil() {
 		// utility class
 	}
-	
+
 	/**
 	 * Checks whether string is empty.
+	 *
 	 * @param str
 	 * @return {@code true} if the string is empty, otherwise {@code false}
 	 */
-	public static boolean isEmpty(String str)
-	{
+	public static boolean isEmpty(String str) {
 		return (str == null) || str.isEmpty();
 	}
-	
+
 	/**
 	 * Checks whether the string is not empty.
+	 *
 	 * @param str
 	 * @return {@code true} if the string is not empty, otherwise {@code false}
 	 */
-	public static boolean isNotEmpty(String str)
-	{
+	public static boolean isNotEmpty(String str) {
 		return (str != null) && !str.isEmpty();
 	}
-	
+
 	/**
 	 * Replaces most invalid characters for the given string with an underscore.
+	 *
 	 * @param str the string that may contain invalid characters
 	 * @return the string with invalid character replaced by underscores
 	 */
-	public static String replaceIllegalCharacters(String str)
-	{
+	public static String replaceIllegalCharacters(String str) {
 		String valid = str;
-		for (char c : ILLEGAL_CHARACTERS)
-		{
+		for (char c : ILLEGAL_CHARACTERS) {
 			valid = valid.replace(c, '_');
 		}
 		return valid;
 	}
-	
+
 	/**
 	 * Split words with a space.
+	 *
 	 * @param input the string to split
 	 * @return the split string
 	 */
-	public static String splitWords(String input)
-	{
+	public static String splitWords(String input) {
 		return input.replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
 	}
-	
+
 	/**
 	 * @param str - the string whose first letter to capitalize
 	 * @return a string with the first letter of the {@code str} capitalized
 	 */
-	public static String capitalizeFirst(String str)
-	{
-		if ((str == null) || str.isEmpty())
-		{
+	public static String capitalizeFirst(String str) {
+		if ((str == null) || str.isEmpty()) {
 			return str;
 		}
 		final char[] arr = str.toCharArray();
 		final char c = arr[0];
-		
-		if (Character.isLetter(c))
-		{
+
+		if (Character.isLetter(c)) {
 			arr[0] = Character.toUpperCase(c);
 		}
 		return new String(arr);

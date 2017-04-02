@@ -18,36 +18,32 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author Migi, DS
  */
 
-public class ExReplyPostItemList extends AbstractItemPacket
-{
+public class ExReplyPostItemList extends AbstractItemPacket {
 	private final PlayerInstance _activeChar;
 	private final Collection<ItemInstance> _itemList;
-	
-	public ExReplyPostItemList(PlayerInstance activeChar)
-	{
+
+	public ExReplyPostItemList(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 		_itemList = _activeChar.getInventory().getAvailableItems(true, false, false);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_REPLY_POST_ITEM_LIST.writeId(packet);
-		
+
 		packet.writeD(_itemList.size());
-		for (ItemInstance item : _itemList)
-		{
+		for (ItemInstance item : _itemList) {
 			writeItem(packet, item);
 		}
 		return true;

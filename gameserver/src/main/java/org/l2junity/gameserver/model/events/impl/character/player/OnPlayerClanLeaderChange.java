@@ -26,37 +26,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerClanLeaderChange implements IBaseEvent
-{
+public class OnPlayerClanLeaderChange implements IBaseEvent {
 	private final ClanMember _oldLeader;
 	private final ClanMember _newLeader;
 	private final L2Clan _clan;
-	
-	public OnPlayerClanLeaderChange(ClanMember oldLeader, ClanMember newLeader, L2Clan clan)
-	{
+
+	public OnPlayerClanLeaderChange(ClanMember oldLeader, ClanMember newLeader, L2Clan clan) {
 		_oldLeader = oldLeader;
 		_newLeader = newLeader;
 		_clan = clan;
 	}
-	
-	public ClanMember getOldLeader()
-	{
+
+	public ClanMember getOldLeader() {
 		return _oldLeader;
 	}
-	
-	public ClanMember getNewLeader()
-	{
+
+	public ClanMember getNewLeader() {
 		return _newLeader;
 	}
-	
-	public L2Clan getClan()
-	{
+
+	public L2Clan getClan() {
 		return _clan;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CLAN_LEADER_CHANGE;
 	}
 }

@@ -23,39 +23,32 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.entity.Duel;
 
-public class NpcStatus extends CharStatus
-{
-	public NpcStatus(Npc activeChar)
-	{
+public class NpcStatus extends CharStatus {
+	public NpcStatus(Npc activeChar) {
 		super(activeChar);
 	}
-	
+
 	@Override
-	public void reduceHp(double value, Creature attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
-	{
-		if (getActiveChar().isDead())
-		{
+	public void reduceHp(double value, Creature attacker, boolean awake, boolean isDOT, boolean isHpConsumption) {
+		if (getActiveChar().isDead()) {
 			return;
 		}
-		
-		if (attacker != null)
-		{
+
+		if (attacker != null) {
 			final PlayerInstance attackerPlayer = attacker.getActingPlayer();
-			if ((attackerPlayer != null) && attackerPlayer.isInDuel())
-			{
+			if ((attackerPlayer != null) && attackerPlayer.isInDuel()) {
 				attackerPlayer.setDuelState(Duel.DUELSTATE_INTERRUPTED);
 			}
-			
+
 			// Add attackers to npc's attacker list
 			getActiveChar().addAttackerToAttackByList(attacker);
 		}
-		
+
 		super.reduceHp(value, attacker, awake, isDOT, isHpConsumption);
 	}
-	
+
 	@Override
-	public Npc getActiveChar()
-	{
+	public Npc getActiveChar() {
 		return (Npc) super.getActiveChar();
 	}
 }

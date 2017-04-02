@@ -18,6 +18,5 @@
  */
 /**
  * @author UnAfraid
- *
  */
 package org.l2junity.loginserver.network.gameserver.recv;

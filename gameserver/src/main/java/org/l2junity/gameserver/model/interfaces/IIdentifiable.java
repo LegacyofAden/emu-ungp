@@ -20,9 +20,9 @@ package org.l2junity.gameserver.model.interfaces;
 
 /**
  * Identifiable objects interface.
+ *
  * @author Zoey76
  */
-public interface IIdentifiable
-{
+public interface IIdentifiable {
 	int getId();
 }

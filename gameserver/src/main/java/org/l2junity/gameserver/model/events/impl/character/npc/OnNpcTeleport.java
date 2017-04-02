@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Zealar
  */
-public class OnNpcTeleport implements IBaseEvent
-{
+public class OnNpcTeleport implements IBaseEvent {
 	private final Npc _npc;
-	
-	public OnNpcTeleport(Npc npc)
-	{
+
+	public OnNpcTeleport(Npc npc) {
 		_npc = npc;
 	}
-	
-	public Npc getNpc()
-	{
+
+	public Npc getNpc() {
 		return _npc;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_TELEPORT;
 	}
 }

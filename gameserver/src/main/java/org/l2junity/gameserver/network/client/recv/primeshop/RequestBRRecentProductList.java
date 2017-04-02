@@ -25,17 +25,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik, UnAfraid
  */
-public final class RequestBRRecentProductList implements IClientIncomingPacket
-{
+public final class RequestBRRecentProductList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// L2PcInstance player = client.getActiveChar();
 		// TODO: Implement it.
 	}

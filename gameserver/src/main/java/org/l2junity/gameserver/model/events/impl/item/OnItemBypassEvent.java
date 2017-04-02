@@ -26,38 +26,32 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnItemBypassEvent implements IBaseEvent
-{
+public class OnItemBypassEvent implements IBaseEvent {
 	private final ItemInstance _item;
 	private final PlayerInstance _activeChar;
 	private final String _event;
-	
-	public OnItemBypassEvent(ItemInstance item, PlayerInstance activeChar, String event)
-	{
+
+	public OnItemBypassEvent(ItemInstance item, PlayerInstance activeChar, String event) {
 		_item = item;
 		_activeChar = activeChar;
 		_event = event;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public String getEvent()
-	{
+
+	public String getEvent() {
 		return _event;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_ITEM_BYPASS_EVENT;
 	}
-	
+
 }

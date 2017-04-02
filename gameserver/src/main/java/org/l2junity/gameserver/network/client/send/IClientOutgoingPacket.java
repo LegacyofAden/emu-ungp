@@ -30,117 +30,107 @@ import org.slf4j.LoggerFactory;
 /**
  * @author KenM
  */
-public interface IClientOutgoingPacket extends IOutgoingPacket
-{
+public interface IClientOutgoingPacket extends IOutgoingPacket {
 	Logger _log = LoggerFactory.getLogger(IClientOutgoingPacket.class);
-	
+
 	int[] PAPERDOLL_ORDER = new int[]
-	{
-		Inventory.PAPERDOLL_UNDER,
-		Inventory.PAPERDOLL_REAR,
-		Inventory.PAPERDOLL_LEAR,
-		Inventory.PAPERDOLL_NECK,
-		Inventory.PAPERDOLL_RFINGER,
-		Inventory.PAPERDOLL_LFINGER,
-		Inventory.PAPERDOLL_HEAD,
-		Inventory.PAPERDOLL_RHAND,
-		Inventory.PAPERDOLL_LHAND,
-		Inventory.PAPERDOLL_GLOVES,
-		Inventory.PAPERDOLL_CHEST,
-		Inventory.PAPERDOLL_LEGS,
-		Inventory.PAPERDOLL_FEET,
-		Inventory.PAPERDOLL_CLOAK,
-		Inventory.PAPERDOLL_RHAND,
-		Inventory.PAPERDOLL_HAIR,
-		Inventory.PAPERDOLL_HAIR2,
-		Inventory.PAPERDOLL_RBRACELET,
-		Inventory.PAPERDOLL_LBRACELET,
-		Inventory.PAPERDOLL_DECO1,
-		Inventory.PAPERDOLL_DECO2,
-		Inventory.PAPERDOLL_DECO3,
-		Inventory.PAPERDOLL_DECO4,
-		Inventory.PAPERDOLL_DECO5,
-		Inventory.PAPERDOLL_DECO6,
-		Inventory.PAPERDOLL_BELT,
-		Inventory.PAPERDOLL_BROOCH,
-		Inventory.PAPERDOLL_BROOCH_JEWEL1,
-		Inventory.PAPERDOLL_BROOCH_JEWEL2,
-		Inventory.PAPERDOLL_BROOCH_JEWEL3,
-		Inventory.PAPERDOLL_BROOCH_JEWEL4,
-		Inventory.PAPERDOLL_BROOCH_JEWEL5,
-		Inventory.PAPERDOLL_BROOCH_JEWEL6
-	
-	};
-	
+			{
+					Inventory.PAPERDOLL_UNDER,
+					Inventory.PAPERDOLL_REAR,
+					Inventory.PAPERDOLL_LEAR,
+					Inventory.PAPERDOLL_NECK,
+					Inventory.PAPERDOLL_RFINGER,
+					Inventory.PAPERDOLL_LFINGER,
+					Inventory.PAPERDOLL_HEAD,
+					Inventory.PAPERDOLL_RHAND,
+					Inventory.PAPERDOLL_LHAND,
+					Inventory.PAPERDOLL_GLOVES,
+					Inventory.PAPERDOLL_CHEST,
+					Inventory.PAPERDOLL_LEGS,
+					Inventory.PAPERDOLL_FEET,
+					Inventory.PAPERDOLL_CLOAK,
+					Inventory.PAPERDOLL_RHAND,
+					Inventory.PAPERDOLL_HAIR,
+					Inventory.PAPERDOLL_HAIR2,
+					Inventory.PAPERDOLL_RBRACELET,
+					Inventory.PAPERDOLL_LBRACELET,
+					Inventory.PAPERDOLL_DECO1,
+					Inventory.PAPERDOLL_DECO2,
+					Inventory.PAPERDOLL_DECO3,
+					Inventory.PAPERDOLL_DECO4,
+					Inventory.PAPERDOLL_DECO5,
+					Inventory.PAPERDOLL_DECO6,
+					Inventory.PAPERDOLL_BELT,
+					Inventory.PAPERDOLL_BROOCH,
+					Inventory.PAPERDOLL_BROOCH_JEWEL1,
+					Inventory.PAPERDOLL_BROOCH_JEWEL2,
+					Inventory.PAPERDOLL_BROOCH_JEWEL3,
+					Inventory.PAPERDOLL_BROOCH_JEWEL4,
+					Inventory.PAPERDOLL_BROOCH_JEWEL5,
+					Inventory.PAPERDOLL_BROOCH_JEWEL6
+
+			};
+
 	int[] PAPERDOLL_ORDER_AUGMENT = new int[]
-	{
-		Inventory.PAPERDOLL_RHAND,
-		Inventory.PAPERDOLL_LHAND,
-		Inventory.PAPERDOLL_RHAND
-	};
-	
+			{
+					Inventory.PAPERDOLL_RHAND,
+					Inventory.PAPERDOLL_LHAND,
+					Inventory.PAPERDOLL_RHAND
+			};
+
 	int[] PAPERDOLL_ORDER_VISUAL_ID = new int[]
-	{
-		Inventory.PAPERDOLL_RHAND,
-		Inventory.PAPERDOLL_LHAND,
-		Inventory.PAPERDOLL_RHAND,
-		Inventory.PAPERDOLL_GLOVES,
-		Inventory.PAPERDOLL_CHEST,
-		Inventory.PAPERDOLL_LEGS,
-		Inventory.PAPERDOLL_FEET,
-		Inventory.PAPERDOLL_HAIR,
-		Inventory.PAPERDOLL_HAIR2
-	};
-	
-	default int[] getPaperdollOrder()
-	{
+			{
+					Inventory.PAPERDOLL_RHAND,
+					Inventory.PAPERDOLL_LHAND,
+					Inventory.PAPERDOLL_RHAND,
+					Inventory.PAPERDOLL_GLOVES,
+					Inventory.PAPERDOLL_CHEST,
+					Inventory.PAPERDOLL_LEGS,
+					Inventory.PAPERDOLL_FEET,
+					Inventory.PAPERDOLL_HAIR,
+					Inventory.PAPERDOLL_HAIR2
+			};
+
+	default int[] getPaperdollOrder() {
 		return PAPERDOLL_ORDER;
 	}
-	
-	default int[] getPaperdollOrderAugument()
-	{
+
+	default int[] getPaperdollOrderAugument() {
 		return PAPERDOLL_ORDER_AUGMENT;
 	}
-	
-	default int[] getPaperdollOrderVisualId()
-	{
+
+	default int[] getPaperdollOrderVisualId() {
 		return PAPERDOLL_ORDER_VISUAL_ID;
 	}
-	
+
 	/**
 	 * @param masks
 	 * @param type
 	 * @return {@code true} if the mask contains the current update component type
 	 */
-	static boolean containsMask(int masks, IUpdateTypeComponent type)
-	{
+	static boolean containsMask(int masks, IUpdateTypeComponent type) {
 		return (masks & type.getMask()) == type.getMask();
 	}
-	
+
 	/**
 	 * Sends this packet to the target player, useful for lambda operations like <br>
 	 * {@code L2World.getInstance().getPlayers().forEach(packet::sendTo)}
+	 *
 	 * @param player
 	 */
-	default void sendTo(WorldObject player)
-	{
+	default void sendTo(WorldObject player) {
 		player.sendPacket(this);
 	}
-	
-	default void runImpl(PlayerInstance player)
-	{
-		
+
+	default void runImpl(PlayerInstance player) {
+
 	}
-	
-	default void writeOptionalD(PacketWriter packet, int value)
-	{
-		if (value >= Short.MAX_VALUE)
-		{
+
+	default void writeOptionalD(PacketWriter packet, int value) {
+		if (value >= Short.MAX_VALUE) {
 			packet.writeH(Short.MAX_VALUE);
 			packet.writeD(value);
-		}
-		else
-		{
+		} else {
 			packet.writeH(value);
 		}
 	}

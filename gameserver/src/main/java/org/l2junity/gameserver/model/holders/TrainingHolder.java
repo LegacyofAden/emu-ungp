@@ -18,17 +18,16 @@
  */
 package org.l2junity.gameserver.model.holders;
 
+import org.l2junity.core.configs.TrainingCampConfig;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
-
-import org.l2junity.gameserver.config.TrainingCampConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * @author Sdw
  */
-public class TrainingHolder implements Serializable
-{
+public class TrainingHolder implements Serializable {
 	private static final long serialVersionUID = 372541022666487591L;
 	private final int _objectId;
 	private final int _classIndex;
@@ -36,77 +35,63 @@ public class TrainingHolder implements Serializable
 	private final long _startTime;
 	private long _endTime = -1;
 	private static final long TRAINING_DIVIDER = TimeUnit.SECONDS.toMinutes(TrainingCampConfig.MAX_DURATION);
-	
-	public TrainingHolder(int objectId, int classIndex, int level, long startTime)
-	{
+
+	public TrainingHolder(int objectId, int classIndex, int level, long startTime) {
 		_objectId = objectId;
 		_classIndex = classIndex;
 		_level = level;
 		_startTime = startTime;
 	}
-	
-	public long getEndTime()
-	{
+
+	public long getEndTime() {
 		return _endTime;
 	}
-	
-	public void setEndTime(long _endTime)
-	{
+
+	public void setEndTime(long _endTime) {
 		this._endTime = _endTime;
 	}
-	
-	public int getObjectId()
-	{
+
+	public int getObjectId() {
 		return _objectId;
 	}
-	
-	public int getClassIndex()
-	{
+
+	public int getClassIndex() {
 		return _classIndex;
 	}
-	
-	public int getLevel()
-	{
+
+	public int getLevel() {
 		return _level;
 	}
-	
-	public long getStartTime()
-	{
+
+	public long getStartTime() {
 		return _startTime;
 	}
-	
-	public boolean isTraining()
-	{
+
+	public boolean isTraining() {
 		return _endTime == -1;
 	}
-	
-	public boolean isValid(PlayerInstance player)
-	{
+
+	public boolean isValid(PlayerInstance player) {
 		return TrainingCampConfig.ENABLE && (player.getObjectId() == _objectId) && (player.getClassIndex() == _classIndex);
 	}
-	
-	public long getTime(long time, TimeUnit unit)
-	{
+
+	public long getTime(long time, TimeUnit unit) {
 		return unit.convert(time - _startTime, TimeUnit.MILLISECONDS);
 	}
-	
-	public long getReminaingTime()
-	{
+
+	public long getReminaingTime() {
 		return TimeUnit.SECONDS.toMinutes(TrainingCampConfig.MAX_DURATION - getTime(System.currentTimeMillis(), TimeUnit.SECONDS));
 	}
-	
-	public long getReminaingTime(long time)
-	{
+
+	public long getReminaingTime(long time) {
 		return TimeUnit.SECONDS.toMinutes(TrainingCampConfig.MAX_DURATION - time);
 	}
-	
-	public long getTrainingTime(TimeUnit unit)
-	{
+
+	public long getTrainingTime(TimeUnit unit) {
 		return Math.min(unit.convert(TrainingCampConfig.MAX_DURATION, TimeUnit.SECONDS), unit.convert(_endTime - _startTime, TimeUnit.MILLISECONDS));
 	}
-	
-	public static long getTrainingDivider()
-	{
+
+	public static long getTrainingDivider() {
 		return TRAINING_DIVIDER;
 	}
 }

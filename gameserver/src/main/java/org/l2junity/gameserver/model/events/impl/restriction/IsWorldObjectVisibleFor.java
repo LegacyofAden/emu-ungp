@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author lord_rex
  */
-public final class IsWorldObjectVisibleFor implements IBaseEvent
-{
+public final class IsWorldObjectVisibleFor implements IBaseEvent {
 	private final WorldObject _worldObject;
 	private final PlayerInstance _observer;
-	
-	public IsWorldObjectVisibleFor(WorldObject worldObject, PlayerInstance observer)
-	{
+
+	public IsWorldObjectVisibleFor(WorldObject worldObject, PlayerInstance observer) {
 		_worldObject = worldObject;
 		_observer = observer;
 	}
-	
-	public WorldObject getWorldObject()
-	{
+
+	public WorldObject getWorldObject() {
 		return _worldObject;
 	}
-	
-	public PlayerInstance getObserver()
-	{
+
+	public PlayerInstance getObserver() {
 		return _observer;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.IS_WORLD_OBJECT_VISIBLE_FOR;
 	}
 }

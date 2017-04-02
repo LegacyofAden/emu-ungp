@@ -18,90 +18,63 @@
  */
 package org.l2junity.loginserver.network.client.crypt;
 
-import java.security.GeneralSecurityException;
-import java.security.KeyPairGenerator;
-import java.security.spec.RSAKeyGenParameterSpec;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.core.startup.StartupComponent;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
-import org.l2junity.commons.util.Rnd;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.KeyPairGenerator;
+import java.security.spec.RSAKeyGenParameterSpec;
 
 /**
  * Manages the keys and key pairs required for network communication.
+ *
  * @author NosBit
  */
-public class KeyManager
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(KeyManager.class);
-	
-	private final KeyGenerator _blowfishKeyGenerator;
-	private final ScrambledRSAKeyPair[] _scrambledRSAKeyPairs = new ScrambledRSAKeyPair[50];
-	
-	protected KeyManager() throws GeneralSecurityException
-	{
-		_blowfishKeyGenerator = KeyGenerator.getInstance("Blowfish");
-		
-		final KeyPairGenerator rsaKeyPairGenerator = KeyPairGenerator.getInstance("RSA");
-		final RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(1024, RSAKeyGenParameterSpec.F4);
-		rsaKeyPairGenerator.initialize(spec);
-		
-		for (int i = 0; i < _scrambledRSAKeyPairs.length; i++)
-		{
-			_scrambledRSAKeyPairs[i] = new ScrambledRSAKeyPair(rsaKeyPairGenerator.generateKeyPair());
+@Slf4j
+@StartupComponent("Service")
+public class KeyManager {
+	@Getter(lazy = true)
+	private static final KeyManager instance = new KeyManager();
+
+	private KeyGenerator _blowfishKeyGenerator;
+	private ScrambledRSAKeyPair[] _scrambledRSAKeyPairs = new ScrambledRSAKeyPair[50];
+
+	protected KeyManager() {
+		try {
+			_blowfishKeyGenerator = KeyGenerator.getInstance("Blowfish");
+
+			final KeyPairGenerator rsaKeyPairGenerator = KeyPairGenerator.getInstance("RSA");
+			final RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(1024, RSAKeyGenParameterSpec.F4);
+			rsaKeyPairGenerator.initialize(spec);
+
+			for (int i = 0; i < _scrambledRSAKeyPairs.length; i++) {
+				_scrambledRSAKeyPairs[i] = new ScrambledRSAKeyPair(rsaKeyPairGenerator.generateKeyPair());
+			}
+
+			log.info("Cached {} RSA key pairs.", _scrambledRSAKeyPairs.length);
+		} catch (Exception e) {
+			log.error("Error while initializing KeyManager", e);
 		}
-		
-		LOGGER.info("Cached {} RSA key pairs.", _scrambledRSAKeyPairs.length);
 	}
-	
+
 	/**
 	 * Generates a Blowfish key.
+	 *
 	 * @return the blowfish {@code SecretKey}
 	 */
-	public SecretKey generateBlowfishKey()
-	{
+	public SecretKey generateBlowfishKey() {
 		return _blowfishKeyGenerator.generateKey();
 	}
-	
+
 	/**
 	 * Gets a random pre-cached {@code ScrambledRSAKeyPair}.
+	 *
 	 * @return the {@code ScrambledRSAKeyPair}
 	 */
-	public ScrambledRSAKeyPair getRandomScrambledRSAKeyPair()
-	{
+	public ScrambledRSAKeyPair getRandomScrambledRSAKeyPair() {
 		return _scrambledRSAKeyPairs[Rnd.nextInt(_scrambledRSAKeyPairs.length)];
-	}
-	
-	/**
-	 * Gets the single instance of {@code KeyGen}.
-	 * @return the instance
-	 */
-	public static KeyManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final KeyManager _instance;
-		
-		static
-		{
-			KeyManager instance = null;
-			try
-			{
-				instance = new KeyManager();
-			}
-			catch (GeneralSecurityException e)
-			{
-				e.printStackTrace();
-			}
-			finally
-			{
-				_instance = instance;
-			}
-		}
 	}
 }

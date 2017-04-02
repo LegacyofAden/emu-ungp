@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class PledgeStatusChanged implements IClientOutgoingPacket
-{
+public final class PledgeStatusChanged implements IClientOutgoingPacket {
 	private final L2Clan _clan;
-	
-	public PledgeStatusChanged(L2Clan clan)
-	{
+
+	public PledgeStatusChanged(L2Clan clan) {
 		_clan = clan;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_STATUS_CHANGED.writeId(packet);
-		
+
 		packet.writeD(0x00);
 		packet.writeD(_clan.getLeaderId());
 		packet.writeD(_clan.getId());

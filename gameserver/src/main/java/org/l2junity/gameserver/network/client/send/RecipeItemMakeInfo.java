@@ -24,51 +24,44 @@ import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class RecipeItemMakeInfo implements IClientOutgoingPacket
-{
+public class RecipeItemMakeInfo implements IClientOutgoingPacket {
 	private final int _id;
 	private final PlayerInstance _activeChar;
 	private final Boolean _success;
 	private final long _offeringMaximumAdena;
-	
-	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success, long offeringMaximumAdena)
-	{
+
+	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success, long offeringMaximumAdena) {
 		_id = id;
 		_activeChar = player;
 		_success = success;
 		_offeringMaximumAdena = offeringMaximumAdena;
 	}
-	
-	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success)
-	{
+
+	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success) {
 		_id = id;
 		_activeChar = player;
 		_success = success;
 		_offeringMaximumAdena = 0;
 	}
-	
-	public RecipeItemMakeInfo(int id, PlayerInstance player, long offeringMaximumAdena)
-	{
+
+	public RecipeItemMakeInfo(int id, PlayerInstance player, long offeringMaximumAdena) {
 		_id = id;
 		_activeChar = player;
 		_success = null;
 		_offeringMaximumAdena = offeringMaximumAdena;
 	}
-	
-	public RecipeItemMakeInfo(int id, PlayerInstance player)
-	{
+
+	public RecipeItemMakeInfo(int id, PlayerInstance player) {
 		_id = id;
 		_activeChar = player;
 		_success = null;
 		_offeringMaximumAdena = 0;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		final RecipeHolder recipe = RecipeData.getInstance().getRecipe(_id);
-		if (recipe != null)
-		{
+		if (recipe != null) {
 			OutgoingPackets.RECIPE_ITEM_MAKE_INFO.writeId(packet);
 			packet.writeD(_id);
 			packet.writeD(recipe.isDwarvenRecipe() ? 0 : 1); // 0 = Dwarven - 1 = Common

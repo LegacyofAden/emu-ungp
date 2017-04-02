@@ -26,24 +26,20 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Tempy, Zoey76
  */
-public final class RequestHennaItemList implements IClientIncomingPacket
-{
+public final class RequestHennaItemList implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _unknown;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_unknown = packet.readD(); // TODO: Identify.
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar != null)
-		{
+		if (activeChar != null) {
 			activeChar.sendPacket(new HennaEquipList(activeChar));
 		}
 	}

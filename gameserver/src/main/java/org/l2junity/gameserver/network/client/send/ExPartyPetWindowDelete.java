@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class ExPartyPetWindowDelete implements IClientOutgoingPacket
-{
+public class ExPartyPetWindowDelete implements IClientOutgoingPacket {
 	private final Summon _summon;
-	
-	public ExPartyPetWindowDelete(Summon summon)
-	{
+
+	public ExPartyPetWindowDelete(Summon summon) {
 		_summon = summon;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PARTY_PET_WINDOW_DELETE.writeId(packet);
-		
+
 		packet.writeD(_summon.getObjectId());
 		packet.writeC(_summon.getSummonType());
 		packet.writeD(_summon.getOwner().getObjectId());

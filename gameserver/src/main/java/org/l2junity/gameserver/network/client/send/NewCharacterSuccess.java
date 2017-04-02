@@ -18,59 +18,54 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class NewCharacterSuccess implements IClientOutgoingPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public final class NewCharacterSuccess implements IClientOutgoingPacket {
 	private final List<L2PcTemplate> _chars = new ArrayList<>();
-	
-	public void addChar(L2PcTemplate template)
-	{
+
+	public void addChar(L2PcTemplate template) {
 		_chars.add(template);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.NEW_CHARACTER_SUCCESS.writeId(packet);
-		
+
 		packet.writeD(_chars.size());
-		for (L2PcTemplate chr : _chars)
-		{
-			if (chr == null)
-			{
+		for (L2PcTemplate chr : _chars) {
+			if (chr == null) {
 				continue;
 			}
-			
+
 			// TODO: Unhardcode these
 			packet.writeD(chr.getRace().ordinal());
 			packet.writeD(chr.getClassId().getId());
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseSTR());
 			packet.writeD(1);
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseDEX());
 			packet.writeD(1);
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseCON());
 			packet.writeD(1);
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseINT());
 			packet.writeD(1);
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseWIT());
 			packet.writeD(1);
-			
+
 			packet.writeD(99);
 			packet.writeD(chr.getBaseMEN());
 			packet.writeD(1);

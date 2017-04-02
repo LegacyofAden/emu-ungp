@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class ExRestartClient implements IClientOutgoingPacket
-{
+public class ExRestartClient implements IClientOutgoingPacket {
 	public static final ExRestartClient STATIC_PACKET = new ExRestartClient();
-	
-	private ExRestartClient()
-	{
+
+	private ExRestartClient() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESTART_CLIENT.writeId(packet);
-		
+
 		return true;
 	}
 }

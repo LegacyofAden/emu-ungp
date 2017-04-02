@@ -18,40 +18,33 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class RecipeShopSellList implements IClientOutgoingPacket
-{
+import java.util.Map.Entry;
+
+public class RecipeShopSellList implements IClientOutgoingPacket {
 	private final PlayerInstance _buyer, _manufacturer;
-	
-	public RecipeShopSellList(PlayerInstance buyer, PlayerInstance manufacturer)
-	{
+
+	public RecipeShopSellList(PlayerInstance buyer, PlayerInstance manufacturer) {
 		_buyer = buyer;
 		_manufacturer = manufacturer;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RECIPE_SHOP_SELL_LIST.writeId(packet);
-		
+
 		packet.writeD(_manufacturer.getObjectId());
 		packet.writeD((int) _manufacturer.getCurrentMp());// Creator's MP
 		packet.writeD(_manufacturer.getMaxMp());// Creator's MP
 		packet.writeQ(_buyer.getAdena());// Buyer Adena
-		if (!_manufacturer.hasManufactureShop())
-		{
+		if (!_manufacturer.hasManufactureShop()) {
 			packet.writeD(0x00);
-		}
-		else
-		{
+		} else {
 			packet.writeD(_manufacturer.getManufactureItems().size());
-			for (Entry<Integer, Long> item : _manufacturer.getManufactureItems().entrySet())
-			{
+			for (Entry<Integer, Long> item : _manufacturer.getManufactureItems().entrySet()) {
 				packet.writeD(item.getKey());
 				packet.writeD(0x00); // CanCreate?
 				packet.writeQ(item.getValue());

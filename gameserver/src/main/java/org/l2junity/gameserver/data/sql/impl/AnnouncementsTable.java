@@ -18,6 +18,18 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.enums.ChatType;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.announce.Announcement;
+import org.l2junity.gameserver.model.announce.AnnouncementType;
+import org.l2junity.gameserver.model.announce.AutoAnnouncement;
+import org.l2junity.gameserver.model.announce.IAnnouncement;
+import org.l2junity.gameserver.network.client.send.CreatureSay;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -25,152 +37,108 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.model.announce.Announcement;
-import org.l2junity.gameserver.model.announce.AnnouncementType;
-import org.l2junity.gameserver.model.announce.AutoAnnouncement;
-import org.l2junity.gameserver.model.announce.IAnnouncement;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Loads announcements from database.
+ *
  * @author UnAfraid
  */
-public final class AnnouncementsTable
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(AnnouncementsTable.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class AnnouncementsTable {
+	@Getter(lazy = true)
+	private static final AnnouncementsTable instance = new AnnouncementsTable();
+
 	private final Map<Integer, IAnnouncement> _announcements = new ConcurrentSkipListMap<>();
-	
-	protected AnnouncementsTable()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
+
+	protected AnnouncementsTable() {
 		_announcements.clear();
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement st = con.createStatement();
-			ResultSet rset = st.executeQuery("SELECT * FROM announcements"))
-		{
-			while (rset.next())
-			{
+			 Statement st = con.createStatement();
+			 ResultSet rset = st.executeQuery("SELECT * FROM announcements")) {
+			while (rset.next()) {
 				final AnnouncementType type = AnnouncementType.findById(rset.getInt("type"));
 				final Announcement announce;
-				switch (type)
-				{
+				switch (type) {
 					case NORMAL:
-					case CRITICAL:
-					{
+					case CRITICAL: {
 						announce = new Announcement(rset);
 						break;
 					}
 					case AUTO_NORMAL:
-					case AUTO_CRITICAL:
-					{
+					case AUTO_CRITICAL: {
 						announce = new AutoAnnouncement(rset);
 						break;
 					}
-					default:
-					{
+					default: {
 						continue;
 					}
 				}
 				_announcements.put(announce.getId(), announce);
 			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed loading announcements: {}", e);
+		} catch (Exception e) {
+			log.error("Failed loading announcements: {}", e);
 		}
 	}
-	
+
 	/**
 	 * Sending all announcements to the player
+	 *
 	 * @param player
 	 */
-	public void showAnnouncements(PlayerInstance player)
-	{
+	public void showAnnouncements(PlayerInstance player) {
 		sendAnnouncements(player, AnnouncementType.NORMAL);
 		sendAnnouncements(player, AnnouncementType.CRITICAL);
 		sendAnnouncements(player, AnnouncementType.EVENT);
 	}
-	
+
 	/**
 	 * Sends all announcements to the player by the specified type
+	 *
 	 * @param player
 	 * @param type
 	 */
-	public void sendAnnouncements(PlayerInstance player, AnnouncementType type)
-	{
-		for (IAnnouncement announce : _announcements.values())
-		{
-			if (announce.isValid() && (announce.getType() == type))
-			{
+	public void sendAnnouncements(PlayerInstance player, AnnouncementType type) {
+		for (IAnnouncement announce : _announcements.values()) {
+			if (announce.isValid() && (announce.getType() == type)) {
 				player.sendPacket(new CreatureSay(0, type == AnnouncementType.CRITICAL ? ChatType.CRITICAL_ANNOUNCE : ChatType.ANNOUNCEMENT, player.getName(), announce.getContent()));
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds announcement
+	 *
 	 * @param announce
 	 */
-	public void addAnnouncement(IAnnouncement announce)
-	{
-		if (announce.storeMe())
-		{
+	public void addAnnouncement(IAnnouncement announce) {
+		if (announce.storeMe()) {
 			_announcements.put(announce.getId(), announce);
 		}
 	}
-	
+
 	/**
 	 * Removes announcement by id
+	 *
 	 * @param id
 	 * @return {@code true} if announcement exists and was deleted successfully, {@code false} otherwise.
 	 */
-	public boolean deleteAnnouncement(int id)
-	{
+	public boolean deleteAnnouncement(int id) {
 		final IAnnouncement announce = _announcements.remove(id);
 		return (announce != null) && announce.deleteMe();
 	}
-	
+
 	/**
 	 * @param id
 	 * @return {@link IAnnouncement} by id
 	 */
-	public IAnnouncement getAnnounce(int id)
-	{
+	public IAnnouncement getAnnounce(int id) {
 		return _announcements.get(id);
 	}
-	
+
 	/**
 	 * @return {@link Collection} containing all announcements
 	 */
-	public Collection<IAnnouncement> getAllAnnouncements()
-	{
+	public Collection<IAnnouncement> getAllAnnouncements() {
 		return _announcements.values();
-	}
-	
-	/**
-	 * @return Single instance of {@link AnnouncementsTable}
-	 */
-	@InstanceGetter
-	public static AnnouncementsTable getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final AnnouncementsTable INSTANCE = new AnnouncementsTable();
 	}
 }

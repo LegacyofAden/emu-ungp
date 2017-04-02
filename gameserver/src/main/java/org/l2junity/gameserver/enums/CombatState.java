@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author NB4L1
  */
-public enum CombatState
-{
+public enum CombatState {
 	ENEMY,
 	FRIEND,
 	NEUTRAL;

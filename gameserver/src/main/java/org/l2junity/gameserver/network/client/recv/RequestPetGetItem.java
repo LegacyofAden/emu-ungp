@@ -31,55 +31,47 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestPetGetItem implements IClientIncomingPacket
-{
+public final class RequestPetGetItem implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		World world = World.getInstance();
 		ItemInstance item = (ItemInstance) world.findObject(_objectId);
-		if ((item == null) || (client.getActiveChar() == null) || !client.getActiveChar().hasPet())
-		{
+		if ((item == null) || (client.getActiveChar() == null) || !client.getActiveChar().hasPet()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final Castle castle = CastleManager.getInstance().getCastle(item);
-		if ((castle != null) && (SiegeGuardManager.getInstance().getSiegeGuardByItem(castle.getResidenceId(), item.getId()) != null))
-		{
+		if ((castle != null) && (SiegeGuardManager.getInstance().getSiegeGuardByItem(castle.getResidenceId(), item.getId()) != null)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (FortSiegeManager.getInstance().isCombat(item.getId()))
-		{
+
+		if (FortSiegeManager.getInstance().isCombat(item.getId())) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final L2PetInstance pet = client.getActiveChar().getPet();
-		if (pet.isDead() || pet.isControlBlocked())
-		{
+		if (pet.isDead() || pet.isControlBlocked()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (pet.isUncontrollable())
-		{
+
+		if (pet.isUncontrollable()) {
 			client.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
 			return;
 		}
-		
+
 		pet.getAI().setIntention(CtrlIntention.AI_INTENTION_PICK_UP, item);
 	}
-	
+
 }

@@ -26,50 +26,43 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author St3eT
  */
-public class OnNpcMenuSelect implements IBaseEvent
-{
+public class OnNpcMenuSelect implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Npc _npc;
 	private final int _ask;
 	private final int _reply;
-	
+
 	/**
 	 * @param activeChar
 	 * @param npc
 	 * @param ask
 	 * @param reply
 	 */
-	public OnNpcMenuSelect(PlayerInstance activeChar, Npc npc, int ask, int reply)
-	{
+	public OnNpcMenuSelect(PlayerInstance activeChar, Npc npc, int ask, int reply) {
 		_activeChar = activeChar;
 		_npc = npc;
 		_ask = ask;
 		_reply = reply;
 	}
-	
-	public PlayerInstance getTalker()
-	{
+
+	public PlayerInstance getTalker() {
 		return _activeChar;
 	}
-	
-	public Npc getNpc()
-	{
+
+	public Npc getNpc() {
 		return _npc;
 	}
-	
-	public int getAsk()
-	{
+
+	public int getAsk() {
 		return _ask;
 	}
-	
-	public int getReply()
-	{
+
+	public int getReply() {
 		return _reply;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_MENU_SELECT;
 	}
 }

@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.CursedWeapon;
 import org.l2junity.gameserver.model.Location;
@@ -30,45 +27,41 @@ import org.l2junity.gameserver.network.client.send.ExCursedWeaponLocation;
 import org.l2junity.gameserver.network.client.send.ExCursedWeaponLocation.CursedWeaponInfo;
 import org.l2junity.network.PacketReader;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Format: (ch)
+ *
  * @author -Wooden-
  */
-public final class RequestCursedWeaponLocation implements IClientIncomingPacket
-{
+public final class RequestCursedWeaponLocation implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final List<CursedWeaponInfo> list = new LinkedList<>();
-		for (CursedWeapon cw : CursedWeaponsManager.getInstance().getCursedWeapons())
-		{
-			if (!cw.isActive())
-			{
+		for (CursedWeapon cw : CursedWeaponsManager.getInstance().getCursedWeapons()) {
+			if (!cw.isActive()) {
 				continue;
 			}
-			
+
 			Location pos = cw.getWorldPosition();
-			if (pos != null)
-			{
+			if (pos != null) {
 				list.add(new CursedWeaponInfo(pos, cw.getItemId(), cw.isActivated() ? 1 : 0));
 			}
 		}
-		
+
 		// send the ExCursedWeaponLocation
-		if (!list.isEmpty())
-		{
+		if (!list.isEmpty()) {
 			client.sendPacket(new ExCursedWeaponLocation(list));
 		}
 	}

@@ -20,31 +20,31 @@ package org.l2junity.loginserver.model.enums;
 
 /**
  * An {@code enum} representing the age limit such as None, Fifteen and Eighteen.
+ *
  * @author NosBit
  */
-public enum AgeLimit
-{
+public enum AgeLimit {
 	NONE(0),
 	FIFTEEN(15),
 	EIGHTEEN(18);
-	
+
 	private final int _age;
-	
+
 	/**
 	 * Creates an age limit instance.
+	 *
 	 * @param age the age
 	 */
-	AgeLimit(int age)
-	{
+	AgeLimit(int age) {
 		_age = age;
 	}
-	
+
 	/**
 	 * Gets the age.
+	 *
 	 * @return the age
 	 */
-	public int getAge()
-	{
+	public int getAge() {
 		return _age;
 	}
 }

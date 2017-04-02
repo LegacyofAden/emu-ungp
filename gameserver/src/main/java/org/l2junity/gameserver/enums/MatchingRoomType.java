@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum MatchingRoomType
-{
+public enum MatchingRoomType {
 	PARTY,
 	COMMAND_CHANNEL
 }

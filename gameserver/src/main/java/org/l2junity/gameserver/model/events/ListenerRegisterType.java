@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.events;
 /**
  * @author UnAfraid
  */
-public enum ListenerRegisterType
-{
+public enum ListenerRegisterType {
 	NPC,
 	ZONE,
 	ITEM,

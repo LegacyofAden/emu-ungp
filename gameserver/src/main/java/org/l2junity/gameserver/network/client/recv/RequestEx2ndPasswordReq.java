@@ -26,47 +26,39 @@ import org.l2junity.network.PacketReader;
 
 /**
  * (ch)cS{S} c: change pass? S: current password S: new password
+ *
  * @author mrTJO
  */
-public class RequestEx2ndPasswordReq implements IClientIncomingPacket
-{
+public class RequestEx2ndPasswordReq implements IClientIncomingPacket {
 	private int _changePass;
 	private String _password, _newPassword;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_changePass = packet.readC();
 		_password = packet.readS();
-		if (_changePass == 2)
-		{
+		if (_changePass == 2) {
 			_newPassword = packet.readS();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!SecondaryAuthData.getInstance().isEnabled())
-		{
+	public void run(L2GameClient client) {
+		if (!SecondaryAuthData.getInstance().isEnabled()) {
 			return;
 		}
-		
+
 		SecondaryPasswordAuth secondAuth = client.getSecondaryAuth();
 		boolean success = false;
-		
-		if ((_changePass == 0) && !secondAuth.passwordExist())
-		{
+
+		if ((_changePass == 0) && !secondAuth.passwordExist()) {
 			success = secondAuth.savePassword(_password);
-		}
-		else if ((_changePass == 2) && secondAuth.passwordExist())
-		{
+		} else if ((_changePass == 2) && secondAuth.passwordExist()) {
 			success = secondAuth.changePassword(_password, _newPassword);
 		}
-		
-		if (success)
-		{
+
+		if (success) {
 			client.sendPacket(new Ex2ndPasswordAck(_changePass, Ex2ndPasswordAck.SUCCESS));
 		}
 	}

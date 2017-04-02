@@ -26,16 +26,15 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Instance item condition
+ *
  * @author malyelfik
  */
-public final class ConditionItem extends Condition
-{
+public final class ConditionItem extends Condition {
 	private final int _itemId;
 	private final long _count;
 	private final boolean _take;
-	
-	public ConditionItem(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+
+	public ConditionItem(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 		// Load params
 		_itemId = parameters.getInt("id");
@@ -44,18 +43,15 @@ public final class ConditionItem extends Condition
 		// Set message
 		setSystemMessage(SystemMessageId.C1_S_ITEM_REQUIREMENT_IS_NOT_SUFFICIENT_AND_CANNOT_BE_ENTERED, (msg, player) -> msg.addCharName(player));
 	}
-	
+
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc)
-	{
+	protected boolean test(PlayerInstance player, Npc npc) {
 		return player.getInventory().getInventoryItemCount(_itemId, -1) >= _count;
 	}
-	
+
 	@Override
-	protected void onSuccess(PlayerInstance player)
-	{
-		if (_take)
-		{
+	protected void onSuccess(PlayerInstance player) {
+		if (_take) {
 			player.destroyItemByItemId("InstanceConditionDestroy", _itemId, _count, null, true);
 		}
 	}

@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.EnchantItemHPBonusData;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
@@ -30,32 +28,27 @@ import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
 
+import java.util.OptionalDouble;
+
 /**
  * @author UnAfraid
  */
-public class MaxHpFinalizer implements IStatsFunction
-{
+public class MaxHpFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
-		if (creature.isPet())
-		{
+		if (creature.isPet()) {
 			final L2PetInstance pet = (L2PetInstance) creature;
 			baseValue = pet.getPetLevelData().getPetMaxHP();
-		}
-		else if (creature.isPlayer())
-		{
+		} else if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
-			if (player != null)
-			{
+			if (player != null) {
 				baseValue = player.getTemplate().getBaseHpMax(player.getLevel());
-				
+
 				// Apply enchanted item's bonus HP
-				for (ItemInstance item : player.getInventory().getPaperdollItems(ItemInstance::isEnchanted))
-				{
+				for (ItemInstance item : player.getInventory().getPaperdollItems(ItemInstance::isEnchanted)) {
 					baseValue += EnchantItemHPBonusData.getInstance().getHPBonus(item);
 				}
 			}

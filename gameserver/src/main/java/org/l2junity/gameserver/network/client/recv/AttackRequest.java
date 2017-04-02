@@ -27,8 +27,7 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.network.PacketReader;
 
-public final class AttackRequest implements IClientIncomingPacket
-{
+public final class AttackRequest implements IClientIncomingPacket {
 	// cddddc
 	private int _objectId;
 	@SuppressWarnings("unused")
@@ -39,10 +38,9 @@ public final class AttackRequest implements IClientIncomingPacket
 	private int _originZ;
 	@SuppressWarnings("unused")
 	private int _attackId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		_originX = packet.readD();
 		_originY = packet.readD();
@@ -50,63 +48,48 @@ public final class AttackRequest implements IClientIncomingPacket
 		_attackId = packet.readC(); // 0 for simple click 1 for shift-click
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		// avoid using expensive operations if not needed
 		final WorldObject target;
-		if (activeChar.getTargetId() == _objectId)
-		{
+		if (activeChar.getTargetId() == _objectId) {
 			target = activeChar.getTarget();
-		}
-		else
-		{
+		} else {
 			target = World.getInstance().findObject(_objectId);
 		}
-		
-		if (target == null)
-		{
+
+		if (target == null) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((!target.isTargetable() || activeChar.isTargetingDisabled()) && !activeChar.canOverrideCond(PcCondOverride.TARGET_ALL))
-		{
+
+		if ((!target.isTargetable() || activeChar.isTargetingDisabled()) && !activeChar.canOverrideCond(PcCondOverride.TARGET_ALL)) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		// Players can't attack objects in the other instances
-		else if (target.getInstanceWorld() != activeChar.getInstanceWorld())
-		{
+		else if (target.getInstanceWorld() != activeChar.getInstanceWorld()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 		// Only GMs can directly attack invisible characters
-		else if (!target.isVisibleFor(activeChar))
-		{
+		else if (!target.isVisibleFor(activeChar)) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.getTarget() != target)
-		{
+
+		if (activeChar.getTarget() != target) {
 			target.onAction(activeChar);
-		}
-		else
-		{
-			if ((target.getObjectId() != activeChar.getObjectId()) && (activeChar.getPrivateStoreType() == PrivateStoreType.NONE) && (activeChar.getActiveRequester() == null))
-			{
+		} else {
+			if ((target.getObjectId() != activeChar.getObjectId()) && (activeChar.getPrivateStoreType() == PrivateStoreType.NONE) && (activeChar.getActiveRequester() == null)) {
 				target.onForcedAttack(activeChar);
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			}
 		}

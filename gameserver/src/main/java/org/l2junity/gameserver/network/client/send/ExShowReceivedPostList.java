@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.entity.Message;
@@ -27,39 +25,33 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Migi, DS
  */
-public class ExShowReceivedPostList implements IClientOutgoingPacket
-{
+public class ExShowReceivedPostList implements IClientOutgoingPacket {
 	private final List<Message> _inbox;
-	
+
 	private static final int MESSAGE_FEE = 100;
 	private static final int MESSAGE_FEE_PER_SLOT = 1000;
-	
-	public ExShowReceivedPostList(int objectId)
-	{
+
+	public ExShowReceivedPostList(int objectId) {
 		_inbox = MailManager.getInstance().getInbox(objectId);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_RECEIVED_POST_LIST.writeId(packet);
-		
+
 		packet.writeD((int) (System.currentTimeMillis() / 1000));
-		if ((_inbox != null) && (_inbox.size() > 0))
-		{
+		if ((_inbox != null) && (_inbox.size() > 0)) {
 			packet.writeD(_inbox.size());
-			for (Message msg : _inbox)
-			{
+			for (Message msg : _inbox) {
 				packet.writeD(msg.getMailType().ordinal());
-				if (msg.getMailType() == MailType.COMMISSION_ITEM_SOLD)
-				{
+				if (msg.getMailType() == MailType.COMMISSION_ITEM_SOLD) {
 					packet.writeD(SystemMessageId.THE_ITEM_YOU_REGISTERED_HAS_BEEN_SOLD.getId());
-				}
-				else if (msg.getMailType() == MailType.COMMISSION_ITEM_RETURNED)
-				{
+				} else if (msg.getMailType() == MailType.COMMISSION_ITEM_RETURNED) {
 					packet.writeD(SystemMessageId.THE_REGISTRATION_PERIOD_FOR_THE_ITEM_YOU_REGISTERED_HAS_EXPIRED.getId());
 				}
 				packet.writeD(msg.getId());
@@ -73,9 +65,7 @@ public class ExShowReceivedPostList implements IClientOutgoingPacket
 				packet.writeD(msg.isReturned() ? 0x01 : 0x00);
 				packet.writeD(0x00); // SysString in some case it seems
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0x00);
 		}
 		packet.writeD(MESSAGE_FEE);

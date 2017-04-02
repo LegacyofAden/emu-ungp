@@ -24,15 +24,13 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class TelAuthStarted implements IOutgoingPacket
-{
+public class TelAuthStarted implements IOutgoingPacket {
 	/*
 	 * (non-Javadoc)
 	 * @see com.l2jserver.commons.network.IOutgoingPacket#write(com.l2jserver.commons.network.PacketWriter)
 	 */
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x0F);
 		packet.writeD(0); // Unused by client
 		return true;

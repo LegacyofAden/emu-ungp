@@ -24,38 +24,34 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * NpcQuestHtmlMessage server packet implementation.
+ *
  * @author HorridoJoho
  */
-public final class NpcQuestHtmlMessage extends AbstractHtmlPacket
-{
+public final class NpcQuestHtmlMessage extends AbstractHtmlPacket {
 	private final int _questId;
-	
-	public NpcQuestHtmlMessage(int npcObjId, int questId)
-	{
+
+	public NpcQuestHtmlMessage(int npcObjId, int questId) {
 		super(npcObjId);
 		_questId = questId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_NPC_QUEST_HTML_MESSAGE.writeId(packet);
-		
+
 		packet.writeD(getNpcObjId());
 		packet.writeS(getHtml());
 		packet.writeD(_questId);
 		return true;
 	}
-	
+
 	@Override
-	protected String getChatName()
-	{
+	protected String getChatName() {
 		return "Quest HTML"; // TODO confirm me please...
 	}
-	
+
 	@Override
-	public HtmlActionScope getScope()
-	{
+	public HtmlActionScope getScope() {
 		return HtmlActionScope.NPC_QUEST_HTML;
 	}
 }

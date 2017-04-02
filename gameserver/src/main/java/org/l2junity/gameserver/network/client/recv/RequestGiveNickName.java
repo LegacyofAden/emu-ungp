@@ -25,68 +25,53 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public class RequestGiveNickName implements IClientIncomingPacket
-{
+public class RequestGiveNickName implements IClientIncomingPacket {
 	private String _target;
 	private String _title;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_target = packet.readS();
 		_title = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		// Noblesse can bestow a title to themselves
-		if (activeChar.isNoble() && _target.equalsIgnoreCase(activeChar.getName()))
-		{
+		if (activeChar.isNoble() && _target.equalsIgnoreCase(activeChar.getName())) {
 			activeChar.setTitle(_title);
 			client.sendPacket(SystemMessageId.YOUR_TITLE_HAS_BEEN_CHANGED);
 			activeChar.broadcastTitleInfo();
-		}
-		else
-		{
+		} else {
 			// Can the player change/give a title?
-			if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_GIVE_TITLE))
-			{
+			if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_GIVE_TITLE)) {
 				client.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 				return;
 			}
-			
-			if (activeChar.getClan().getLevel() < 3)
-			{
+
+			if (activeChar.getClan().getLevel() < 3) {
 				client.sendPacket(SystemMessageId.A_PLAYER_CAN_ONLY_BE_GRANTED_A_TITLE_IF_THE_CLAN_IS_LEVEL_3_OR_ABOVE);
 				return;
 			}
-			
+
 			ClanMember member1 = activeChar.getClan().getClanMember(_target);
-			if (member1 != null)
-			{
+			if (member1 != null) {
 				PlayerInstance member = member1.getPlayerInstance();
-				if (member != null)
-				{
+				if (member != null) {
 					// is target from the same clan?
 					member.setTitle(_title);
 					member.sendPacket(SystemMessageId.YOUR_TITLE_HAS_BEEN_CHANGED);
 					member.broadcastTitleInfo();
-				}
-				else
-				{
+				} else {
 					client.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 				}
-			}
-			else
-			{
+			} else {
 				client.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
 			}
 		}

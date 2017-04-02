@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv.adenadistribution;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -32,107 +29,88 @@ import org.l2junity.gameserver.network.client.send.adenadistribution.ExDivideAde
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * @author Sdw
  */
-public class RequestDivideAdena implements IClientIncomingPacket
-{
+public class RequestDivideAdena implements IClientIncomingPacket {
 	private int _adenaObjId;
 	private long _adenaCount;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_adenaObjId = packet.readD();
 		_adenaCount = packet.readQ();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final AdenaDistributionRequest request = player.getRequest(AdenaDistributionRequest.class);
-		
-		if (request == null)
-		{
+
+		if (request == null) {
 			return;
-		}
-		else if (request.getDistributor() != player)
-		{
+		} else if (request.getDistributor() != player) {
+			cancelDistribution(request);
+			return;
+		} else if (request.getAdenaObjectId() != _adenaObjId) {
 			cancelDistribution(request);
 			return;
 		}
-		else if (request.getAdenaObjectId() != _adenaObjId)
-		{
-			cancelDistribution(request);
-			return;
-		}
-		
+
 		final Party party = player.getParty();
-		
-		if (party == null)
-		{
+
+		if (party == null) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_PROCEED_AS_YOU_ARE_NOT_IN_AN_ALLIANCE_OR_PARTY);
 			cancelDistribution(request);
 			return;
 		}
-		
+
 		final CommandChannel commandChannel = party.getCommandChannel();
-		
-		if ((commandChannel != null) && !commandChannel.isLeader(player))
-		{
+
+		if ((commandChannel != null) && !commandChannel.isLeader(player)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_PROCEED_AS_YOU_ARE_NOT_AN_ALLIANCE_LEADER_OR_PARTY_LEADER);
 			cancelDistribution(request);
 			return;
-		}
-		else if (!party.isLeader(player))
-		{
+		} else if (!party.isLeader(player)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_PROCEED_AS_YOU_ARE_NOT_A_PARTY_LEADER);
 			cancelDistribution(request);
 			return;
 		}
-		
+
 		final List<PlayerInstance> targets = commandChannel != null ? commandChannel.getMembers() : party.getMembers();
-		
-		if (player.getAdena() < targets.size())
-		{
+
+		if (player.getAdena() < targets.size()) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_PROCEED_AS_THERE_IS_INSUFFICIENT_ADENA);
 			cancelDistribution(request);
 			return;
 		}
-		
-		if (player.getAdena() < request.getAdenaCount())
-		{
+
+		if (player.getAdena() < request.getAdenaCount()) {
 			player.sendPacket(SystemMessageId.THE_ADENA_IN_POSSESSION_HAS_BEEN_DECREASED_ADENA_DISTRIBUTION_HAS_BEEN_CANCELLED);
 			cancelDistribution(request);
 			return;
-		}
-		else if (targets.size() < request.getPlayers().size())
-		{
+		} else if (targets.size() < request.getPlayers().size()) {
 			player.sendPacket(SystemMessageId.THE_DISTRIBUTION_PARTICIPANTS_HAVE_CHANGED_ADENA_DISTRIBUTION_HAS_BEEN_CANCELLED);
 			cancelDistribution(request);
 			return;
-		}
-		else if (player.getAdena() < _adenaCount)
-		{
+		} else if (player.getAdena() < _adenaCount) {
 			player.sendPacket(SystemMessageId.DISTRIBUTION_CANNOT_PROCEED_AS_THERE_IS_INSUFFICIENT_ADENA_FOR_DISTRIBUTION);
 			cancelDistribution(request);
 			return;
 		}
-		
+
 		final long memberAdenaGet = (long) Math.floor(_adenaCount / targets.size());
-		if (player.reduceAdena("Adena Distribution", memberAdenaGet * targets.size(), player, false))
-		{
-			for (PlayerInstance target : targets)
-			{
-				if ((target == null))
-				{
+		if (player.reduceAdena("Adena Distribution", memberAdenaGet * targets.size(), player, false)) {
+			for (PlayerInstance target : targets) {
+				if ((target == null)) {
 					// TODO : handle that case here + regive adena OR filter with Objects::nonNull on memberCount ?
 					// those sys msg exists and bother me ADENA_WAS_NOT_DISTRIBUTED_TO_S1 / YOU_DID_NOT_RECEIVE_ADENA_DISTRIBUTION
 					continue;
@@ -141,15 +119,12 @@ public class RequestDivideAdena implements IClientIncomingPacket
 				target.sendPacket(new ExDivideAdenaDone(party.isLeader(target), (commandChannel != null) && commandChannel.isLeader(target), _adenaCount, memberAdenaGet, targets.size(), player.getName()));
 				target.removeRequest(AdenaDistributionRequest.class);
 			}
-		}
-		else
-		{
+		} else {
 			cancelDistribution(request);
 		}
 	}
-	
-	private void cancelDistribution(AdenaDistributionRequest request)
-	{
+
+	private void cancelDistribution(AdenaDistributionRequest request) {
 		request.getPlayers().stream().filter(Objects::nonNull).forEach(p ->
 		{
 			p.sendPacket(SystemMessageId.ADENA_DISTRIBUTION_HAS_BEEN_CANCELLED);

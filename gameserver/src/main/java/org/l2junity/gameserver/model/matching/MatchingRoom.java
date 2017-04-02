@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.matching;
 
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.gameserver.enums.MatchingMemberType;
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.enums.UserInfoType;
@@ -30,11 +26,14 @@ import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Sdw
  */
-public abstract class MatchingRoom implements IIdentifiable
-{
+public abstract class MatchingRoom implements IIdentifiable {
 	private final int _id;
 	private String _title;
 	private int _loot;
@@ -43,9 +42,8 @@ public abstract class MatchingRoom implements IIdentifiable
 	private int _maxCount;
 	private volatile Set<PlayerInstance> _members;
 	private PlayerInstance _leader;
-	
-	public MatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, PlayerInstance leader)
-	{
+
+	public MatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, PlayerInstance leader) {
 		_id = MatchingRoomManager.getInstance().addMatchingRoom(this);
 		_title = title;
 		_loot = loot;
@@ -53,162 +51,133 @@ public abstract class MatchingRoom implements IIdentifiable
 		_maxLvl = maxlvl;
 		_maxCount = maxmem;
 		_leader = leader;
-		
+
 		addMember(_leader);
 		onRoomCreation(leader);
 	}
-	
-	public Set<PlayerInstance> getMembers()
-	{
-		if (_members == null)
-		{
-			synchronized (this)
-			{
-				if (_members == null)
-				{
+
+	public Set<PlayerInstance> getMembers() {
+		if (_members == null) {
+			synchronized (this) {
+				if (_members == null) {
 					_members = ConcurrentHashMap.newKeySet(1);
 				}
 			}
 		}
-		
+
 		return _members;
 	}
-	
-	public void addMember(PlayerInstance player)
-	{
-		if ((player.getLevel() < _minLvl) || (player.getLevel() > _maxLvl) || ((_members != null) && (_members.size() >= _maxCount)))
-		{
+
+	public void addMember(PlayerInstance player) {
+		if ((player.getLevel() < _minLvl) || (player.getLevel() > _maxLvl) || ((_members != null) && (_members.size() >= _maxCount))) {
 			notifyInvalidCondition(player);
 			return;
 		}
-		
+
 		getMembers().add(player);
 		MatchingRoomManager.getInstance().removeFromWaitingList(player);
 		notifyNewMember(player);
 		player.setMatchingRoom(this);
 		player.broadcastUserInfo(UserInfoType.CLAN);
 	}
-	
-	public void deleteMember(PlayerInstance player, boolean kicked)
-	{
+
+	public void deleteMember(PlayerInstance player, boolean kicked) {
 		boolean leaderChanged = false;
-		
-		if (player == _leader)
-		{
-			if (getMembers().isEmpty())
-			{
+
+		if (player == _leader) {
+			if (getMembers().isEmpty()) {
 				MatchingRoomManager.getInstance().removeMatchingRoom(this);
-			}
-			else
-			{
+			} else {
 				Iterator<PlayerInstance> iter = getMembers().iterator();
-				if (iter.hasNext())
-				{
+				if (iter.hasNext()) {
 					_leader = iter.next();
 					iter.remove();
 					leaderChanged = true;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			getMembers().remove(player);
 		}
-		
+
 		player.setMatchingRoom(null);
 		player.broadcastUserInfo(UserInfoType.CLAN);
 		MatchingRoomManager.getInstance().addToWaitingList(player);
-		
+
 		notifyRemovedMember(player, kicked, leaderChanged);
 	}
-	
+
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
-	public int getLootType()
-	{
+
+	public int getLootType() {
 		return _loot;
 	}
-	
-	public int getMinLvl()
-	{
+
+	public int getMinLvl() {
 		return _minLvl;
 	}
-	
-	public int getMaxLvl()
-	{
+
+	public int getMaxLvl() {
 		return _maxLvl;
 	}
-	
-	public int getLocation()
-	{
+
+	public int getLocation() {
 		return MapRegionManager.getInstance().getBBs(_leader.getLocation());
 	}
-	
-	public int getMembersCount()
-	{
+
+	public int getMembersCount() {
 		return _members == null ? 0 : _members.size();
 	}
-	
-	public int getMaxMembers()
-	{
+
+	public int getMaxMembers() {
 		return _maxCount;
 	}
-	
-	public String getTitle()
-	{
+
+	public String getTitle() {
 		return _title;
 	}
-	
-	public PlayerInstance getLeader()
-	{
+
+	public PlayerInstance getLeader() {
 		return _leader;
 	}
-	
-	public boolean isLeader(PlayerInstance player)
-	{
+
+	public boolean isLeader(PlayerInstance player) {
 		return player == _leader;
 	}
-	
-	public void setMinLvl(int minLvl)
-	{
+
+	public void setMinLvl(int minLvl) {
 		_minLvl = minLvl;
 	}
-	
-	public void setMaxLvl(int maxLvl)
-	{
+
+	public void setMaxLvl(int maxLvl) {
 		_maxLvl = maxLvl;
 	}
-	
-	public void setLootType(int loot)
-	{
+
+	public void setLootType(int loot) {
 		_loot = loot;
 	}
-	
-	public void setMaxMembers(int maxCount)
-	{
+
+	public void setMaxMembers(int maxCount) {
 		_maxCount = maxCount;
 	}
-	
-	public void setTitle(String title)
-	{
+
+	public void setTitle(String title) {
 		_title = title;
 	}
-	
+
 	protected abstract void onRoomCreation(PlayerInstance player);
-	
+
 	protected abstract void notifyInvalidCondition(PlayerInstance player);
-	
+
 	protected abstract void notifyNewMember(PlayerInstance player);
-	
+
 	protected abstract void notifyRemovedMember(PlayerInstance player, boolean kicked, boolean leaderChanged);
-	
+
 	public abstract void disbandRoom();
-	
+
 	public abstract MatchingRoomType getRoomType();
-	
+
 	public abstract MatchingMemberType getMemberType(PlayerInstance player);
 }

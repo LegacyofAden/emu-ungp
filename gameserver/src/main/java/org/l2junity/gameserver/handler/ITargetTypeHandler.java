@@ -25,12 +25,10 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Nik
  */
-public interface ITargetTypeHandler
-{
+public interface ITargetTypeHandler {
 	WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage);
-	
-	default boolean isGround()
-	{
+
+	default boolean isGround() {
 		return false;
 	}
 }

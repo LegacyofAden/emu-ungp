@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum Sex
-{
+public enum Sex {
 	MALE,
 	FEMALE,
 	ETC;

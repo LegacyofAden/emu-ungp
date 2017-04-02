@@ -28,35 +28,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeRecruitApplyInfo implements IClientIncomingPacket
-{
+public class RequestPledgeRecruitApplyInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		ClanEntryStatus status = ClanEntryStatus.DEFAULT;
-		
-		if ((activeChar.getClan() != null) && activeChar.isClanLeader() && ClanEntryManager.getInstance().isClanRegistred(activeChar.getClanId()))
-		{
+
+		if ((activeChar.getClan() != null) && activeChar.isClanLeader() && ClanEntryManager.getInstance().isClanRegistred(activeChar.getClanId())) {
 			status = ClanEntryStatus.ORDERED;
-		}
-		else if ((activeChar.getClan() == null) && (ClanEntryManager.getInstance().isPlayerRegistred(activeChar.getObjectId())))
-		{
+		} else if ((activeChar.getClan() == null) && (ClanEntryManager.getInstance().isPlayerRegistred(activeChar.getObjectId()))) {
 			status = ClanEntryStatus.WAITING;
 		}
-		
+
 		activeChar.sendPacket(new ExPledgeRecruitApplyInfo(status));
 	}
-	
+
 }

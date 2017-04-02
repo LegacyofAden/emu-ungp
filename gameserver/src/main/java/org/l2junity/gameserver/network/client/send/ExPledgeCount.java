@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExPledgeCount implements IClientOutgoingPacket
-{
+public class ExPledgeCount implements IClientOutgoingPacket {
 	private final int _count;
-	
-	public ExPledgeCount(L2Clan clan)
-	{
+
+	public ExPledgeCount(L2Clan clan) {
 		_count = clan.getOnlineMembersCount();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_COUNT.writeId(packet);
-		
+
 		packet.writeD(_count);
 		return true;
 	}

@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class ExClosePartyRoom implements IClientOutgoingPacket
-{
+public class ExClosePartyRoom implements IClientOutgoingPacket {
 	public static final ExClosePartyRoom STATIC_PACKET = new ExClosePartyRoom();
-	
-	private ExClosePartyRoom()
-	{
+
+	private ExClosePartyRoom() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CLOSE_PARTY_ROOM.writeId(packet);
-		
+
 		return true;
 	}
 }

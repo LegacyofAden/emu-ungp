@@ -21,24 +21,19 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum SkillConditionPercentType
-{
-	MORE
-	{
+public enum SkillConditionPercentType {
+	MORE {
 		@Override
-		public boolean test(int x1, int x2)
-		{
+		public boolean test(int x1, int x2) {
 			return x1 >= x2;
 		}
 	},
-	LESS
-	{
+	LESS {
 		@Override
-		public boolean test(int x1, int x2)
-		{
+		public boolean test(int x1, int x2) {
 			return x1 <= x2;
 		}
 	};
-	
+
 	public abstract boolean test(int x1, int x2);
 }

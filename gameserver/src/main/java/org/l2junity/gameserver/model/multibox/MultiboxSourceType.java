@@ -25,44 +25,35 @@ import org.slf4j.LoggerFactory;
 /**
  * @author UnAfraid
  */
-public enum MultiboxSourceType
-{
-	IP
-	{
+public enum MultiboxSourceType {
+	IP {
 		@Override
-		public int generateHash(L2GameClient client)
-		{
+		public int generateHash(L2GameClient client) {
 			return generateHash(client.getIP());
 		}
 	},
-	HWID
-	{
+	HWID {
 		@Override
-		public int generateHash(L2GameClient client)
-		{
+		public int generateHash(L2GameClient client) {
 			return generateHash(client.getHWID());
 		}
 	};
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MultiboxSourceType.class);
-	
-	public int generateHash(String value)
-	{
+
+	public int generateHash(String value) {
 		return value == null ? 0 : value.hashCode();
 	}
-	
+
 	public abstract int generateHash(L2GameClient client);
-	
+
 	/**
 	 * @param name
 	 * @return
 	 */
-	public static MultiboxSourceType getByName(String name)
-	{
-		for (MultiboxSourceType type : values())
-		{
-			if (type.name().equalsIgnoreCase(name))
-			{
+	public static MultiboxSourceType getByName(String name) {
+		for (MultiboxSourceType type : values()) {
+			if (type.name().equalsIgnoreCase(name)) {
 				return type;
 			}
 		}

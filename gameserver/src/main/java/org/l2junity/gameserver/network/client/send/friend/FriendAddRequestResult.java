@@ -26,8 +26,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class FriendAddRequestResult implements IClientOutgoingPacket
-{
+public class FriendAddRequestResult implements IClientOutgoingPacket {
 	private final int _result;
 	private final int _charId;
 	private final String _charName;
@@ -35,9 +34,8 @@ public class FriendAddRequestResult implements IClientOutgoingPacket
 	private final int _charObjectId;
 	private final int _charLevel;
 	private final int _charClassId;
-	
-	public FriendAddRequestResult(PlayerInstance activeChar, int result)
-	{
+
+	public FriendAddRequestResult(PlayerInstance activeChar, int result) {
 		_result = result;
 		_charId = activeChar.getObjectId();
 		_charName = activeChar.getName();
@@ -46,12 +44,11 @@ public class FriendAddRequestResult implements IClientOutgoingPacket
 		_charLevel = activeChar.getLevel();
 		_charClassId = activeChar.getActiveClass();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.FRIEND_ADD_REQUEST_RESULT.writeId(packet);
-		
+
 		packet.writeD(_result);
 		packet.writeD(_charId);
 		packet.writeS(_charName);

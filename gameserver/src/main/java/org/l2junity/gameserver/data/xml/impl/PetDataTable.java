@@ -18,105 +18,80 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.MountType;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.PetData;
 import org.l2junity.gameserver.model.PetLevelData;
 import org.l2junity.gameserver.model.StatsSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class parse and hold all pet parameters.<br>
  * TODO: load and use all pet parameters.
+ *
  * @author Zoey76 (rework)
  */
-public final class PetDataTable implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(PetDataTable.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class PetDataTable implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final PetDataTable instance = new PetDataTable();
+
 	private final Map<Integer, PetData> _pets = new HashMap<>();
-	
-	/**
-	 * Instantiates a new pet data table.
-	 */
-	protected PetDataTable()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private PetDataTable() {
 		_pets.clear();
 		parseDatapackDirectory("data/stats/pets", false);
-		LOGGER.info("Loaded {} Pets.", _pets.size());
+		log.info("Loaded {} Pets.", _pets.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		NamedNodeMap attrs;
 		Node n = doc.getFirstChild();
-		for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-		{
-			if (d.getNodeName().equals("pet"))
-			{
+		for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+			if (d.getNodeName().equals("pet")) {
 				int npcId = parseInteger(d.getAttributes(), "id");
 				int itemId = parseInteger(d.getAttributes(), "itemId");
 				// index ignored for now
 				PetData data = new PetData(npcId, itemId);
-				for (Node p = d.getFirstChild(); p != null; p = p.getNextSibling())
-				{
-					if (p.getNodeName().equals("set"))
-					{
+				for (Node p = d.getFirstChild(); p != null; p = p.getNextSibling()) {
+					if (p.getNodeName().equals("set")) {
 						attrs = p.getAttributes();
 						String type = attrs.getNamedItem("name").getNodeValue();
-						if ("syncLevel".equals(type))
-						{
+						if ("syncLevel".equals(type)) {
 							data.setSyncLevel(parseInteger(attrs, "val") == 1);
 						}
 						// evolve ignored
-					}
-					else if (p.getNodeName().equals("stats"))
-					{
-						for (Node s = p.getFirstChild(); s != null; s = s.getNextSibling())
-						{
-							if (s.getNodeName().equals("stat"))
-							{
+					} else if (p.getNodeName().equals("stats")) {
+						for (Node s = p.getFirstChild(); s != null; s = s.getNextSibling()) {
+							if (s.getNodeName().equals("stat")) {
 								final int level = Integer.parseInt(s.getAttributes().getNamedItem("level").getNodeValue());
 								final StatsSet set = new StatsSet();
-								for (Node bean = s.getFirstChild(); bean != null; bean = bean.getNextSibling())
-								{
-									if (bean.getNodeName().equals("set"))
-									{
+								for (Node bean = s.getFirstChild(); bean != null; bean = bean.getNextSibling()) {
+									if (bean.getNodeName().equals("set")) {
 										attrs = bean.getAttributes();
-										if (attrs.getNamedItem("name").getNodeValue().equals("speed_on_ride"))
-										{
+										if (attrs.getNamedItem("name").getNodeValue().equals("speed_on_ride")) {
 											set.set("walkSpeedOnRide", attrs.getNamedItem("walk").getNodeValue());
 											set.set("runSpeedOnRide", attrs.getNamedItem("run").getNodeValue());
 											set.set("slowSwimSpeedOnRide", attrs.getNamedItem("slowSwim").getNodeValue());
 											set.set("fastSwimSpeedOnRide", attrs.getNamedItem("fastSwim").getNodeValue());
-											if (attrs.getNamedItem("slowFly") != null)
-											{
+											if (attrs.getNamedItem("slowFly") != null) {
 												set.set("slowFlySpeedOnRide", attrs.getNamedItem("slowFly").getNodeValue());
 											}
-											if (attrs.getNamedItem("fastFly") != null)
-											{
+											if (attrs.getNamedItem("fastFly") != null) {
 												set.set("fastFlySpeedOnRide", attrs.getNamedItem("fastFly").getNodeValue());
 											}
-										}
-										else
-										{
+										} else {
 											set.set(attrs.getNamedItem("name").getNodeValue(), attrs.getNamedItem("val").getNodeValue());
 										}
 									}
@@ -130,90 +105,69 @@ public final class PetDataTable implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getPetCount()
-	{
+
+	public int getPetCount() {
 		return _pets.size();
 	}
-	
+
 	/**
 	 * @param itemId
 	 * @return
 	 */
-	public PetData getPetDataByItemId(int itemId)
-	{
-		for (PetData data : _pets.values())
-		{
-			if (data.getItemId() == itemId)
-			{
+	public PetData getPetDataByItemId(int itemId) {
+		for (PetData data : _pets.values()) {
+			if (data.getItemId() == itemId) {
 				return data;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets the pet level data.
-	 * @param petId the pet Id.
+	 *
+	 * @param petId    the pet Id.
 	 * @param petLevel the pet level.
 	 * @return the pet's parameters for the given Id and level.
 	 */
-	public PetLevelData getPetLevelData(int petId, int petLevel)
-	{
+	public PetLevelData getPetLevelData(int petId, int petLevel) {
 		final PetData pd = getPetData(petId);
-		if (pd != null)
-		{
+		if (pd != null) {
 			return pd.getPetLevelData(petLevel);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets the pet data.
+	 *
 	 * @param petId the pet Id.
 	 * @return the pet data
 	 */
-	public PetData getPetData(int petId)
-	{
-		if (!_pets.containsKey(petId))
-		{
-			LOGGER.info("Missing pet data for npcid: {}", petId);
+	public PetData getPetData(int petId) {
+		if (!_pets.containsKey(petId)) {
+			log.info("Missing pet data for npcid: {}", petId);
 		}
 		return _pets.get(petId);
 	}
-	
+
 	/**
 	 * Gets the pet items by npc.
+	 *
 	 * @param npcId the NPC ID to get its summoning item
 	 * @return summoning item for the given NPC ID
 	 */
-	public int getPetItemsByNpc(int npcId)
-	{
+	public int getPetItemsByNpc(int npcId) {
 		return _pets.get(npcId).getItemId();
 	}
-	
+
 	/**
 	 * Checks if is mountable.
+	 *
 	 * @param npcId the NPC Id to verify.
 	 * @return {@code true} if the given Id is from a mountable pet, {@code false} otherwise.
 	 */
-	public static boolean isMountable(int npcId)
-	{
+	public static boolean isMountable(int npcId) {
 		return MountType.findByNpcId(npcId) != MountType.NONE;
-	}
-	
-	/**
-	 * Gets the single instance of PetDataTable.
-	 * @return this class unique instance.
-	 */
-	@InstanceGetter
-	public static PetDataTable getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final PetDataTable _instance = new PetDataTable();
 	}
 }

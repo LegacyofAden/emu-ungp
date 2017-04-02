@@ -26,51 +26,43 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) d
+ *
  * @author -Wooden-, Tryskell
  */
-public final class AnswerJoinPartyRoom implements IClientIncomingPacket
-{
+public final class AnswerJoinPartyRoom implements IClientIncomingPacket {
 	private boolean _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_answer = packet.readD() == 1;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		PlayerInstance partner = player.getActiveRequester();
-		if (partner == null)
-		{
+		if (partner == null) {
 			player.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 			player.setActiveRequester(null);
 			return;
 		}
-		
-		if (_answer && !partner.isRequestExpired())
-		{
+
+		if (_answer && !partner.isRequestExpired()) {
 			final MatchingRoom room = partner.getMatchingRoom();
-			if (room == null)
-			{
+			if (room == null) {
 				return;
 			}
-			
+
 			room.addMember(player);
-		}
-		else
-		{
+		} else {
 			partner.sendPacket(SystemMessageId.THE_RECIPIENT_OF_YOUR_INVITATION_DID_NOT_ACCEPT_THE_PARTY_MATCHING_INVITATION);
 		}
-		
+
 		// reset transaction timers
 		player.setActiveRequester(null);
 		partner.onTransactionResponse();

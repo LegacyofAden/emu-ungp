@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.ai;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
@@ -32,141 +32,114 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author mkizub
  */
-public class DoorAI extends CharacterAI
-{
-	public DoorAI(DoorInstance door)
-	{
+public class DoorAI extends CharacterAI {
+	public DoorAI(DoorInstance door) {
 		super(door);
 	}
-	
+
 	@Override
-	protected void onIntentionIdle()
-	{
+	protected void onIntentionIdle() {
 	}
-	
+
 	@Override
-	protected void onIntentionActive()
-	{
+	protected void onIntentionActive() {
 	}
-	
+
 	@Override
-	protected void onIntentionRest()
-	{
+	protected void onIntentionRest() {
 	}
-	
+
 	@Override
-	protected void onIntentionAttack(Creature target)
-	{
+	protected void onIntentionAttack(Creature target) {
 	}
-	
+
 	@Override
-	protected void onIntentionCast(Skill skill, WorldObject target, ItemInstance item, boolean forceUse, boolean dontMove)
-	{
+	protected void onIntentionCast(Skill skill, WorldObject target, ItemInstance item, boolean forceUse, boolean dontMove) {
 	}
-	
+
 	@Override
-	protected void onIntentionMoveTo(ILocational destination)
-	{
+	protected void onIntentionMoveTo(ILocational destination) {
 	}
-	
+
 	@Override
-	protected void onIntentionFollow(Creature target)
-	{
+	protected void onIntentionFollow(Creature target) {
 	}
-	
+
 	@Override
-	protected void onIntentionPickUp(WorldObject item)
-	{
+	protected void onIntentionPickUp(WorldObject item) {
 	}
-	
+
 	@Override
-	protected void onIntentionInteract(WorldObject object)
-	{
+	protected void onIntentionInteract(WorldObject object) {
 	}
-	
+
 	@Override
-	protected void onEvtThink()
-	{
+	protected void onEvtThink() {
 	}
-	
+
 	@Override
-	protected void onEvtAttacked(Creature attacker)
-	{
-		ThreadPool.execute(new onEventAttackedDoorTask((DoorInstance) _actor, attacker));
+	protected void onEvtAttacked(Creature attacker) {
+		ThreadPool.getInstance().executeGeneral(new onEventAttackedDoorTask((DoorInstance) _actor, attacker));
 	}
-	
+
 	@Override
-	protected void onEvtAggression(Creature target, int aggro)
-	{
+	protected void onEvtAggression(Creature target, int aggro) {
 	}
-	
+
 	@Override
-	protected void onEvtActionBlocked(Creature attacker)
-	{
+	protected void onEvtActionBlocked(Creature attacker) {
 	}
-	
+
 	@Override
-	protected void onEvtRooted(Creature attacker)
-	{
+	protected void onEvtRooted(Creature attacker) {
 	}
-	
+
 	@Override
-	protected void onEvtReadyToAct()
-	{
+	protected void onEvtReadyToAct() {
 	}
-	
+
 	@Override
-	protected void onEvtArrived()
-	{
+	protected void onEvtArrived() {
 	}
-	
+
 	@Override
-	protected void onEvtArrivedRevalidate()
-	{
+	protected void onEvtArrivedRevalidate() {
 	}
-	
+
 	@Override
-	protected void onEvtArrivedBlocked(Location blocked_at_loc)
-	{
+	protected void onEvtArrivedBlocked(Location blocked_at_loc) {
 	}
-	
+
 	@Override
-	protected void onEvtForgetObject(WorldObject object)
-	{
+	protected void onEvtForgetObject(WorldObject object) {
 	}
-	
+
 	@Override
-	protected void onEvtCancel()
-	{
+	protected void onEvtCancel() {
 	}
-	
+
 	@Override
-	protected void onEvtDead()
-	{
+	protected void onEvtDead() {
 	}
-	
-	private class onEventAttackedDoorTask implements Runnable
-	{
+
+	private class onEventAttackedDoorTask implements Runnable {
 		private final DoorInstance _door;
 		private final Creature _attacker;
-		
-		public onEventAttackedDoorTask(DoorInstance door, Creature attacker)
-		{
+
+		public onEventAttackedDoorTask(DoorInstance door, Creature attacker) {
 			_door = door;
 			_attacker = attacker;
 		}
-		
+
 		@Override
-		public void run()
-		{
+		public void run() {
 			World.getInstance().forEachVisibleObject(_door, L2DefenderInstance.class, guard ->
 			{
-				if (_actor.isInRadius3d(guard, guard.getTemplate().getClanHelpRange()))
-				{
+				if (_actor.isInRadius3d(guard, guard.getTemplate().getClanHelpRange())) {
 					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);
 				}
 			});
 		}
 	}
-	
+
 }

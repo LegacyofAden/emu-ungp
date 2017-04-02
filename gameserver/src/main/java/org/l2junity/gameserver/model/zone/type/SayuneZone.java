@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.tasks.player.FlyMoveStartTask;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -27,53 +27,42 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 /**
  * @author UnAfraid
  */
-public class SayuneZone extends ZoneType
-{
+public class SayuneZone extends ZoneType {
 	private int _mapId = -1;
-	
-	public SayuneZone(int id)
-	{
+
+	public SayuneZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		switch (name)
-		{
-			case "mapId":
-			{
+	public void setParameter(String name, String value) {
+		switch (name) {
+			case "mapId": {
 				_mapId = Integer.parseInt(value);
 				break;
 			}
-			default:
-			{
+			default: {
 				super.setParameter(name, value);
 			}
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer() && !character.getActingPlayer().isMounted() && !character.isTransformed() && character.getActingPlayer().isAwakenedClass())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer() && !character.getActingPlayer().isMounted() && !character.isTransformed() && character.getActingPlayer().isAwakenedClass()) {
 			character.setInsideZone(ZoneId.SAYUNE, true);
-			ThreadPool.execute(new FlyMoveStartTask(this, character.getActingPlayer()));
+			ThreadPool.getInstance().executeGeneral(new FlyMoveStartTask(this, character.getActingPlayer()));
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
 			character.setInsideZone(ZoneId.SAYUNE, false);
 		}
 	}
-	
-	public int getMapId()
-	{
+
+	public int getMapId() {
 		return _mapId;
 	}
 }

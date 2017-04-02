@@ -23,14 +23,12 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Sdw
  */
-public enum Position
-{
+public enum Position {
 	FRONT,
 	SIDE,
 	BACK;
-	
-	public static Position getPosition(Creature effector, Creature effected)
-	{
+
+	public static Position getPosition(Creature effector, Creature effected) {
 		return effector.isInFrontOf(effected) ? FRONT : (effector.isBehind(effected) ? BACK : SIDE);
 	}
 }

@@ -27,60 +27,50 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * Tax zone type.
+ *
  * @author malyelfik
  */
-public class TaxZone extends ZoneType
-{
+public class TaxZone extends ZoneType {
 	private int _domainId;
 	private Castle _castle;
-	
-	public TaxZone(int id)
-	{
+
+	public TaxZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		if (name.equalsIgnoreCase("domainId"))
-		{
+	public void setParameter(String name, String value) {
+		if (name.equalsIgnoreCase("domainId")) {
 			_domainId = Integer.parseInt(value);
-		}
-		else
-		{
+		} else {
 			super.setParameter(name, value);
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.setInsideZone(ZoneId.TAX, true);
-		if (character.isNpc())
-		{
+		if (character.isNpc()) {
 			((Npc) character).setTaxZone(this);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		character.setInsideZone(ZoneId.TAX, false);
-		if (character.isNpc())
-		{
+		if (character.isNpc()) {
 			((Npc) character).setTaxZone(null);
 		}
 	}
-	
+
 	/**
 	 * Gets castle associated with tax zone.<br>
+	 *
 	 * @return instance of {@link Castle} if found otherwise {@code null}
 	 */
-	public Castle getCastle()
-	{
+	public Castle getCastle() {
 		// Lazy loading is used because zone is loaded before residence
-		if (_castle == null)
-		{
+		if (_castle == null) {
 			_castle = CastleManager.getInstance().getCastleById(_domainId);
 		}
 		return _castle;

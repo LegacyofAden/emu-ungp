@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.NpcConfig;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.NpcConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
@@ -41,110 +39,89 @@ import org.l2junity.gameserver.model.zone.type.ClanHallZone;
 import org.l2junity.gameserver.model.zone.type.FortZone;
 import org.l2junity.gameserver.model.zone.type.MotherTreeZone;
 
+import java.util.OptionalDouble;
+
 /**
  * @author UnAfraid
  */
-public class RegenMPFinalizer implements IStatsFunction
-{
+public class RegenMPFinalizer implements IStatsFunction {
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
-		
+
 		double baseValue = creature.getStat().getValue(DoubleStat.REGENERATE_MP_RATE_ADD, creature.isPlayer() ? creature.getActingPlayer().getTemplate().getBaseMpRegen(creature.getLevel()) : creature.getTemplate().getBaseMpReg());
 		baseValue *= creature.isRaid() ? NpcConfig.RAID_MP_REGEN_MULTIPLIER : PlayerConfig.MP_REGEN_MULTIPLIER;
-		
-		if (creature.isPlayer())
-		{
+
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
-			
-			if (player.isInsideZone(ZoneId.CLAN_HALL) && (player.getClan() != null) && (player.getClan().getHideoutId() > 0))
-			{
+
+			if (player.isInsideZone(ZoneId.CLAN_HALL) && (player.getClan() != null) && (player.getClan().getHideoutId() > 0)) {
 				ClanHallZone zone = ZoneManager.getInstance().getZone(player, ClanHallZone.class);
 				int posChIndex = zone == null ? -1 : zone.getResidenceId();
 				int clanHallIndex = player.getClan().getHideoutId();
-				if ((clanHallIndex > 0) && (clanHallIndex == posChIndex))
-				{
+				if ((clanHallIndex > 0) && (clanHallIndex == posChIndex)) {
 					final AbstractResidence residense = ClanHallData.getInstance().getClanHallById(player.getClan().getHideoutId());
-					if (residense != null)
-					{
+					if (residense != null) {
 						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.MP_REGEN);
-						if (func != null)
-						{
+						if (func != null) {
 							baseValue *= func.getValue();
 						}
 					}
 				}
 			}
-			
-			if (player.isInsideZone(ZoneId.CASTLE) && (player.getClan() != null) && (player.getClan().getCastleId() > 0))
-			{
+
+			if (player.isInsideZone(ZoneId.CASTLE) && (player.getClan() != null) && (player.getClan().getCastleId() > 0)) {
 				CastleZone zone = ZoneManager.getInstance().getZone(player, CastleZone.class);
 				int posCastleIndex = zone == null ? -1 : zone.getResidenceId();
 				int castleIndex = player.getClan().getCastleId();
-				if ((castleIndex > 0) && (castleIndex == posCastleIndex))
-				{
+				if ((castleIndex > 0) && (castleIndex == posCastleIndex)) {
 					final AbstractResidence residense = CastleManager.getInstance().getCastleById(player.getClan().getCastleId());
-					if (residense != null)
-					{
+					if (residense != null) {
 						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.MP_REGEN);
-						if (func != null)
-						{
+						if (func != null) {
 							baseValue *= func.getValue();
 						}
 					}
 				}
 			}
-			
-			if (player.isInsideZone(ZoneId.FORT) && (player.getClan() != null) && (player.getClan().getFortId() > 0))
-			{
+
+			if (player.isInsideZone(ZoneId.FORT) && (player.getClan() != null) && (player.getClan().getFortId() > 0)) {
 				FortZone zone = ZoneManager.getInstance().getZone(player, FortZone.class);
 				int posFortIndex = zone == null ? -1 : zone.getResidenceId();
 				int fortIndex = player.getClan().getFortId();
-				if ((fortIndex > 0) && (fortIndex == posFortIndex))
-				{
+				if ((fortIndex > 0) && (fortIndex == posFortIndex)) {
 					final AbstractResidence residense = FortManager.getInstance().getFortById(player.getClan().getFortId());
-					if (residense != null)
-					{
+					if (residense != null) {
 						final ResidenceFunction func = residense.getFunction(ResidenceFunctionType.MP_REGEN);
-						if (func != null)
-						{
+						if (func != null) {
 							baseValue *= func.getValue();
 						}
 					}
 				}
 			}
-			
+
 			// Mother Tree effect is calculated at last'
-			if (player.isInsideZone(ZoneId.MOTHER_TREE))
-			{
+			if (player.isInsideZone(ZoneId.MOTHER_TREE)) {
 				MotherTreeZone zone = ZoneManager.getInstance().getZone(player, MotherTreeZone.class);
 				int mpBonus = zone == null ? 0 : zone.getMpRegenBonus();
 				baseValue += mpBonus;
 			}
-			
+
 			// Calculate Movement bonus
-			if (player.isSitting())
-			{
+			if (player.isSitting()) {
 				baseValue *= 1.5; // Sitting
-			}
-			else if (!player.isMoving())
-			{
+			} else if (!player.isMoving()) {
 				baseValue *= 1.1; // Staying
-			}
-			else if (player.isRunning())
-			{
+			} else if (player.isRunning()) {
 				baseValue *= 0.7; // Running
 			}
-			
+
 			// Add MEN bonus
 			baseValue *= creature.getLevelMod() * BaseStats.MEN.calcBonus(creature);
-		}
-		else if (creature.isPet())
-		{
+		} else if (creature.isPet()) {
 			baseValue = ((L2PetInstance) creature).getPetLevelData().getPetRegenMP() * NpcConfig.PET_MP_REGEN_MULTIPLIER;
 		}
-		
+
 		return DoubleStat.defaultValue(creature, stat, baseValue);
 	}
 }

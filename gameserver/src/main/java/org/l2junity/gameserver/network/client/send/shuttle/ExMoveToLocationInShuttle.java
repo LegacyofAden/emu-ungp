@@ -26,15 +26,13 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExMoveToLocationInShuttle implements IClientOutgoingPacket
-{
+public class ExMoveToLocationInShuttle implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _airShipId;
 	private final int _targetX, _targetY, _targetZ;
 	private final int _fromX, _fromY, _fromZ;
-	
-	public ExMoveToLocationInShuttle(PlayerInstance player, int fromX, int fromY, int fromZ)
-	{
+
+	public ExMoveToLocationInShuttle(PlayerInstance player, int fromX, int fromY, int fromZ) {
 		_charObjId = player.getObjectId();
 		_airShipId = player.getShuttle().getObjectId();
 		_targetX = (int) player.getInVehiclePosition().getX();
@@ -44,12 +42,11 @@ public class ExMoveToLocationInShuttle implements IClientOutgoingPacket
 		_fromY = fromY;
 		_fromZ = fromZ;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MOVE_TO_LOCATION_IN_SUTTLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_airShipId);
 		packet.writeD(_targetX);

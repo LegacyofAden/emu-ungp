@@ -29,38 +29,33 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.9.4.3 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class Logout implements IClientIncomingPacket
-{
+public final class Logout implements IClientIncomingPacket {
 	protected static final Logger LOG_ACCOUNTING = LoggerFactory.getLogger("accounting");
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			client.closeNow();
 			return;
 		}
-		
-		if (!player.canLogout())
-		{
+
+		if (!player.canLogout()) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		LOG_ACCOUNTING.info("Logged out, {}", client);
-		
-		if (!OfflineTradeUtil.enteredOfflineMode(player))
-		{
+
+		if (!OfflineTradeUtil.enteredOfflineMode(player)) {
 			Disconnection.of(client, player).defaultSequence(false);
 		}
 	}

@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author mochitto
  */
-public class ExNevitAdventEffect implements IClientOutgoingPacket
-{
+public class ExNevitAdventEffect implements IClientOutgoingPacket {
 	private final int _timeLeft;
-	
-	public ExNevitAdventEffect(int timeLeft)
-	{
+
+	public ExNevitAdventEffect(int timeLeft) {
 		_timeLeft = timeLeft;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_CHANNELING_EFFECT.writeId(packet);
-		
+
 		packet.writeD(_timeLeft);
 		return true;
 	}

@@ -23,20 +23,17 @@ import org.l2junity.util.network.BaseSendablePacket;
 /**
  * @author UnAfraid
  */
-public class ChangePassword extends BaseSendablePacket
-{
-	public ChangePassword(String accountName, String characterName, String oldPass, String newPass)
-	{
+public class ChangePassword extends BaseSendablePacket {
+	public ChangePassword(String accountName, String characterName, String oldPass, String newPass) {
 		writeC(0x0B);
 		writeS(accountName);
 		writeS(characterName);
 		writeS(oldPass);
 		writeS(newPass);
 	}
-	
+
 	@Override
-	public byte[] getContent()
-	{
+	public byte[] getContent() {
 		return getBytes();
 	}
 }

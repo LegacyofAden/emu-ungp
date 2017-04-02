@@ -24,97 +24,95 @@ import java.util.StringJoiner;
 /**
  * @author NosBit
  */
-public class Account
-{
+public class Account {
 	private final long _id;
 	private final String _name;
 	private String _password;
 	private short _lastServerId;
 	private final Instant _createdAt;
-	
+
 	/**
 	 * Creates an account instance.
-	 * @param id the id
-	 * @param name the name
-	 * @param password the password
+	 *
+	 * @param id           the id
+	 * @param name         the name
+	 * @param password     the password
 	 * @param lastServerId the last server id
-	 * @param createdAt the created at
+	 * @param createdAt    the created at
 	 */
-	public Account(long id, String name, String password, short lastServerId, Instant createdAt)
-	{
+	public Account(long id, String name, String password, short lastServerId, Instant createdAt) {
 		_id = id;
 		_name = name;
 		_password = password;
 		_lastServerId = lastServerId;
 		_createdAt = createdAt;
 	}
-	
+
 	/**
 	 * Gets the id
+	 *
 	 * @return the id
 	 */
-	public long getId()
-	{
+	public long getId() {
 		return _id;
 	}
-	
+
 	/**
 	 * Gets the name.
+	 *
 	 * @return the name
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Gets the password.
+	 *
 	 * @return the password
 	 */
-	public String getPassword()
-	{
+	public String getPassword() {
 		return _password;
 	}
-	
+
 	/**
 	 * Sets the password.
+	 *
 	 * @param password the password to set
 	 */
-	public void setPassword(String password)
-	{
+	public void setPassword(String password) {
 		_password = password;
 	}
-	
+
 	/**
 	 * Gets the last server id.
+	 *
 	 * @return the last server id
 	 */
-	public short getLastServerId()
-	{
+	public short getLastServerId() {
 		return _lastServerId;
 	}
-	
+
 	/**
 	 * Sets the last server id.
+	 *
 	 * @param lastServerId the last server id to set
 	 */
-	public void setLastServerId(short lastServerId)
-	{
+	public void setLastServerId(short lastServerId) {
 		_lastServerId = lastServerId;
 	}
-	
+
 	/**
 	 * Gets the created at.
+	 *
 	 * @return the created at
 	 */
-	public Instant getCreatedAt()
-	{
+	public Instant getCreatedAt() {
 		return _createdAt;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		final StringJoiner sj = new StringJoiner(", ", "Account[", "]");
 		sj.add("id: " + _id);
 		sj.add("name: " + _name);

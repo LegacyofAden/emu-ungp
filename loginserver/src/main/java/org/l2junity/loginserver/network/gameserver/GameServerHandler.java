@@ -18,33 +18,28 @@
  */
 package org.l2junity.loginserver.network.gameserver;
 
+import io.netty.channel.ChannelHandlerContext;
 import org.l2junity.network.ChannelInboundHandler;
 import org.l2junity.network.IIncomingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.channel.ChannelHandlerContext;
-
 /**
  * @author NosBit
  */
-public class GameServerHandler extends ChannelInboundHandler<GameServerHandler>
-{
+public class GameServerHandler extends ChannelInboundHandler<GameServerHandler> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameServerHandler.class);
-	
-	protected GameServerHandler()
-	{
+
+	protected GameServerHandler() {
 	}
-	
+
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, IIncomingPacket<GameServerHandler> msg) throws Exception
-	{
+	protected void channelRead0(ChannelHandlerContext ctx, IIncomingPacket<GameServerHandler> msg) throws Exception {
 		msg.run(this);
 	}
-	
+
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-	{
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		// Close the connection when an exception is raised.
 		LOGGER.warn("Unexpected exception from downstream.", cause);
 		ctx.close();

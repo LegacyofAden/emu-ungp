@@ -22,20 +22,17 @@ import org.l2junity.gameserver.enums.CharacterDeleteFailType;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class CharDeleteFail implements IClientOutgoingPacket
-{
+public class CharDeleteFail implements IClientOutgoingPacket {
 	private final int _error;
-	
-	public CharDeleteFail(CharacterDeleteFailType type)
-	{
+
+	public CharDeleteFail(CharacterDeleteFailType type) {
 		_error = type.ordinal();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_DELETE_FAIL.writeId(packet);
-		
+
 		packet.writeD(_error);
 		return true;
 	}

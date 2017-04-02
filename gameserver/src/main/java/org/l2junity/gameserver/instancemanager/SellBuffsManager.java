@@ -18,20 +18,16 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.cache.HtmCache;
-import org.l2junity.gameserver.config.SellBuffConfig;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.SellBuffConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.model.items.L2Item;
@@ -41,87 +37,77 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.ExPrivateStoreSetWholeMsg;
 import org.l2junity.gameserver.util.HtmlUtil;
 import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Sell Buffs Manager
+ *
  * @author St3eT
  */
-public final class SellBuffsManager implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(SellBuffsManager.class);
+@Slf4j
+@StartupComponent("Service")
+public final class SellBuffsManager implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final SellBuffsManager instance = new SellBuffsManager();
+
 	private static final List<Integer> ALLOWED_BUFFS = new ArrayList<>();
-	private static final String htmlFolder = "data/html/mods/SellBuffs/";
-	
-	protected SellBuffsManager()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
-		if (SellBuffConfig.SELLBUFF_ENABLED)
-		{
+	private static final String htmlFolder = "mods/SellBuffs/";
+
+	private SellBuffsManager() {
+		if (SellBuffConfig.SELLBUFF_ENABLED) {
 			ALLOWED_BUFFS.clear();
 			parseDatapackFile("data/sellBuffData.xml");
-			LOGGER.info(": Loaded " + ALLOWED_BUFFS.size() + " allowed buffs.");
+			log.info(": Loaded {} allowed buffs.", ALLOWED_BUFFS.size());
 		}
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		final NodeList node = doc.getDocumentElement().getElementsByTagName("skill");
-		for (int i = 0; i < node.getLength(); ++i)
-		{
+		for (int i = 0; i < node.getLength(); ++i) {
 			final Element elem = (Element) node.item(i);
 			final int skillId = Integer.parseInt(elem.getAttribute("id"));
-			
-			if (!ALLOWED_BUFFS.contains(skillId))
-			{
+
+			if (!ALLOWED_BUFFS.contains(skillId)) {
 				ALLOWED_BUFFS.add(skillId);
 			}
 		}
 	}
-	
-	public void sendSellMenu(PlayerInstance player)
-	{
-		final String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), htmlFolder + (player.isSellingBuffs() ? "BuffMenu_already.html" : "BuffMenu.html"));
+
+	public void sendSellMenu(PlayerInstance player) {
+		final String html = HtmRepository.getInstance().getCustomHtm(htmlFolder + (player.isSellingBuffs() ? "BuffMenu_already.html" : "BuffMenu.html"));
 		CommunityBoardHandler.separateAndSend(html, player);
 	}
-	
-	public void sendBuffChoiceMenu(PlayerInstance player, int index)
-	{
-		String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), htmlFolder + "BuffChoice.html");
+
+	public void sendBuffChoiceMenu(PlayerInstance player, int index) {
+		String html = HtmRepository.getInstance().getCustomHtm(htmlFolder + "BuffChoice.html");
 		html = html.replace("%list%", buildSkillMenu(player, index));
 		CommunityBoardHandler.separateAndSend(html, player);
 	}
-	
-	public void sendBuffEditMenu(PlayerInstance player)
-	{
-		String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), htmlFolder + "BuffChoice.html");
+
+	public void sendBuffEditMenu(PlayerInstance player) {
+		String html = HtmRepository.getInstance().getCustomHtm(htmlFolder + "BuffChoice.html");
 		html = html.replace("%list%", buildEditMenu(player));
 		CommunityBoardHandler.separateAndSend(html, player);
 	}
-	
-	public void sendBuffMenu(PlayerInstance player, PlayerInstance seller, int index)
-	{
-		if (!seller.isSellingBuffs() || seller.getSellingBuffs().isEmpty())
-		{
+
+	public void sendBuffMenu(PlayerInstance player, PlayerInstance seller, int index) {
+		if (!seller.isSellingBuffs() || seller.getSellingBuffs().isEmpty()) {
 			return;
 		}
-		
-		String html = HtmCache.getInstance().getHtm(player.getHtmlPrefix(), htmlFolder + "BuffBuyMenu.html");
+
+		String html = HtmRepository.getInstance().getCustomHtm(htmlFolder + "BuffBuyMenu.html");
 		html = html.replace("%list%", buildBuffMenu(player, seller, index));
 		CommunityBoardHandler.separateAndSend(html, player);
 	}
-	
-	public void startSellBuffs(PlayerInstance player, String title)
-	{
+
+	public void startSellBuffs(PlayerInstance player, String title) {
 		player.sitDown();
 		player.setIsSellingBuffs(true);
 		player.setPrivateStoreType(PrivateStoreType.PACKAGE_SELL);
@@ -131,54 +117,47 @@ public final class SellBuffsManager implements IGameXmlReader
 		player.broadcastPacket(new ExPrivateStoreSetWholeMsg(player));
 		sendSellMenu(player);
 	}
-	
-	public void stopSellBuffs(PlayerInstance player)
-	{
+
+	public void stopSellBuffs(PlayerInstance player) {
 		player.setIsSellingBuffs(false);
 		player.setPrivateStoreType(PrivateStoreType.NONE);
 		player.standUp();
 		player.broadcastUserInfo();
 		sendSellMenu(player);
 	}
-	
-	private String buildBuffMenu(PlayerInstance player, PlayerInstance seller, int index)
-	{
+
+	private String buildBuffMenu(PlayerInstance player, PlayerInstance seller, int index) {
 		final int ceiling = index + 10;
 		int nextIndex = -1;
 		int previousIndex = -1;
 		int emptyFields = 0;
 		final StringBuilder sb = new StringBuilder();
 		final List<SellBuffHolder> sellList = new ArrayList<>();
-		
+
 		int count = 0;
-		for (SellBuffHolder holder : seller.getSellingBuffs())
-		{
+		for (SellBuffHolder holder : seller.getSellingBuffs()) {
 			count++;
-			if ((count > index) && (count <= ceiling))
-			{
+			if ((count > index) && (count <= ceiling)) {
 				sellList.add(holder);
 			}
 		}
-		
-		if (count > 10)
-		{
-			if (count > (index + 10))
-			{
+
+		if (count > 10) {
+			if (count > (index + 10)) {
 				nextIndex = index + 10;
 			}
 		}
-		
-		if (index >= 10)
-		{
+
+		if (index >= 10) {
 			previousIndex = index - 10;
 		}
-		
+
 		emptyFields = ceiling - sellList.size();
-		
+
 		sb.append("<br>");
 		sb.append(HtmlUtil.getMpGauge(250, (long) seller.getCurrentMp(), seller.getMaxMp(), false));
 		sb.append("<br>");
-		
+
 		sb.append("<table border=0 cellpadding=0 cellspacing=0 background=\"L2UI_CH3.refinewnd_back_Pattern\">");
 		sb.append("<tr><td><br><br><br></td></tr>");
 		sb.append("<tr>");
@@ -191,18 +170,16 @@ public final class SellBuffsManager implements IGameXmlReader
 		sb.append("<td> <button action=\"\" value=\"Action\" width=100 height=23 back=\"L2UI_CT1.OlympiadWnd_DF_Watch_Down\" fore=\"L2UI_CT1.OlympiadWnd_DF_Watch\"> </td>"); // Action
 		sb.append("<td fixwidth=\"20\"></td>");
 		sb.append("</tr>");
-		
-		for (SellBuffHolder holder : sellList)
-		{
+
+		for (SellBuffHolder holder : sellList) {
 			final Skill skill = seller.getKnownSkill(holder.getSkillId());
-			if (skill == null)
-			{
+			if (skill == null) {
 				emptyFields++;
 				continue;
 			}
-			
+
 			final L2Item item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
-			
+
 			sb.append("<tr>");
 			sb.append("<td fixwidth=\"20\"></td>");
 			sb.append("<td align=center><img src=\"" + skill.getIcon() + "\" width=\"32\" height=\"32\"></td>");
@@ -214,9 +191,8 @@ public final class SellBuffsManager implements IGameXmlReader
 			sb.append("</tr>");
 			sb.append("<tr><td><br><br></td></tr>");
 		}
-		
-		for (int i = 0; i < emptyFields; i++)
-		{
+
+		for (int i = 0; i < emptyFields; i++) {
 			sb.append("<tr>");
 			sb.append("<td fixwidth=\"20\"></td>");
 			sb.append("<td align=center></td>");
@@ -228,30 +204,27 @@ public final class SellBuffsManager implements IGameXmlReader
 			sb.append("</tr>");
 			sb.append("<tr><td><br><br></td></tr>");
 		}
-		
+
 		sb.append("</table>");
-		
+
 		sb.append("<table width=\"250\" border=\"0\">");
 		sb.append("<tr>");
-		
-		if (previousIndex > -1)
-		{
+
+		if (previousIndex > -1) {
 			sb.append("<td align=left><button value=\"Previous Page\" action=\"bypass -h sellbuffbuymenu " + seller.getObjectId() + " " + previousIndex + "\" width=\"100\" height=\"30\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 		}
-		
-		if (nextIndex > -1)
-		{
+
+		if (nextIndex > -1) {
 			sb.append("<td align=right><button value=\"Next Page\" action=\"bypass -h sellbuffbuymenu " + seller.getObjectId() + " " + nextIndex + "\" width=\"100\" height=\"30\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 		}
 		sb.append("</tr>");
 		sb.append("</table>");
 		return sb.toString();
 	}
-	
-	private String buildEditMenu(PlayerInstance player)
-	{
+
+	private String buildEditMenu(PlayerInstance player) {
 		final StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("<table border=0 cellpadding=0 cellspacing=0 background=\"L2UI_CH3.refinewnd_back_Pattern\">");
 		sb.append("<tr><td><br><br><br></td></tr>");
 		sb.append("<tr>");
@@ -265,23 +238,18 @@ public final class SellBuffsManager implements IGameXmlReader
 		sb.append("<td> <button action=\"\" value=\"Remove\" width=85 height=23 back=\"L2UI_CT1.OlympiadWnd_DF_Watch_Down\" fore=\"L2UI_CT1.OlympiadWnd_DF_Watch\"> </td>"); // Remove Buff
 		sb.append("<td fixwidth=\"20\"></td>");
 		sb.append("</tr>");
-		
-		if (player.getSellingBuffs().isEmpty())
-		{
+
+		if (player.getSellingBuffs().isEmpty()) {
 			sb.append("</table>");
 			sb.append("<br><br><br>");
 			sb.append("You don't have added any buffs yet!");
-		}
-		else
-		{
-			for (SellBuffHolder holder : player.getSellingBuffs())
-			{
+		} else {
+			for (SellBuffHolder holder : player.getSellingBuffs()) {
 				final Skill skill = player.getKnownSkill(holder.getSkillId());
-				if (skill == null)
-				{
+				if (skill == null) {
 					continue;
 				}
-				
+
 				sb.append("<tr>");
 				sb.append("<td fixwidth=\"20\"></td>");
 				sb.append("<td align=center><img src=\"" + skill.getIcon() + "\" width=\"32\" height=\"32\"></td>"); // Icon
@@ -296,45 +264,38 @@ public final class SellBuffsManager implements IGameXmlReader
 			}
 			sb.append("</table>");
 		}
-		
+
 		return sb.toString();
 	}
-	
-	private String buildSkillMenu(PlayerInstance player, int index)
-	{
+
+	private String buildSkillMenu(PlayerInstance player, int index) {
 		final int ceiling = index + 10;
 		int nextIndex = -1;
 		int previousIndex = -1;
 		final StringBuilder sb = new StringBuilder();
 		final List<Skill> skillList = new ArrayList<>();
-		
+
 		int count = 0;
-		for (Skill skill : player.getAllSkills())
-		{
-			if (ALLOWED_BUFFS.contains(skill.getId()) && !isInSellList(player, skill))
-			{
+		for (Skill skill : player.getAllSkills()) {
+			if (ALLOWED_BUFFS.contains(skill.getId()) && !isInSellList(player, skill)) {
 				count++;
-				
-				if ((count > index) && (count <= ceiling))
-				{
+
+				if ((count > index) && (count <= ceiling)) {
 					skillList.add(skill);
 				}
 			}
 		}
-		
-		if (count > 10)
-		{
-			if (count > (index + 10))
-			{
+
+		if (count > 10) {
+			if (count > (index + 10)) {
 				nextIndex = index + 10;
 			}
 		}
-		
-		if (index >= 10)
-		{
+
+		if (index >= 10) {
 			previousIndex = index - 10;
 		}
-		
+
 		sb.append("<table border=0 cellpadding=0 cellspacing=0 background=\"L2UI_CH3.refinewnd_back_Pattern\">");
 		sb.append("<tr><td><br><br><br></td></tr>");
 		sb.append("<tr>");
@@ -346,17 +307,13 @@ public final class SellBuffsManager implements IGameXmlReader
 		sb.append("<td> <button action=\"\" value=\"Action\" width=125 height=23 back=\"L2UI_CT1.OlympiadWnd_DF_Watch_Down\" fore=\"L2UI_CT1.OlympiadWnd_DF_Watch\"> </td>"); // Action
 		sb.append("<td fixwidth=\"20\"></td>");
 		sb.append("</tr>");
-		
-		if (skillList.isEmpty())
-		{
+
+		if (skillList.isEmpty()) {
 			sb.append("</table>");
 			sb.append("<br><br><br>");
 			sb.append("At this moment you cant add any buffs!");
-		}
-		else
-		{
-			for (Skill skill : skillList)
-			{
+		} else {
+			for (Skill skill : skillList) {
 				sb.append("<tr>");
 				sb.append("<td fixwidth=\"20\"></td>");
 				sb.append("<td align=center><img src=\"" + skill.getIcon() + "\" width=\"32\" height=\"32\"></td>");
@@ -369,91 +326,55 @@ public final class SellBuffsManager implements IGameXmlReader
 			}
 			sb.append("</table>");
 		}
-		
+
 		sb.append("<table width=\"250\" border=\"0\">");
 		sb.append("<tr>");
-		
-		if (previousIndex > -1)
-		{
+
+		if (previousIndex > -1) {
 			sb.append("<td align=left><button value=\"Previous Page\" action=\"bypass -h sellbuffadd " + previousIndex + "\" width=\"100\" height=\"30\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 		}
-		
-		if (nextIndex > -1)
-		{
+
+		if (nextIndex > -1) {
 			sb.append("<td align=right><button value=\"Next Page\" action=\"bypass -h sellbuffadd " + nextIndex + "\" width=\"100\" height=\"30\" back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td>");
 		}
 		sb.append("</tr>");
 		sb.append("</table>");
 		return sb.toString();
 	}
-	
-	public boolean isInSellList(PlayerInstance player, Skill skill)
-	{
+
+	public boolean isInSellList(PlayerInstance player, Skill skill) {
 		return player.getSellingBuffs().stream().filter(h -> (h.getSkillId() == skill.getId())).findFirst().orElse(null) != null;
 	}
-	
-	public boolean canStartSellBuffs(PlayerInstance player)
-	{
-		if (player.isAlikeDead())
-		{
+
+	public boolean canStartSellBuffs(PlayerInstance player) {
+		if (player.isAlikeDead()) {
 			player.sendMessage("You can't sell buffs in fake death!");
 			return false;
-		}
-		else if (player.isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(player))
-		{
+		} else if (player.isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(player)) {
 			player.sendMessage("You can't sell buffs with Olympiad status!");
 			return false;
-		}
-		else if (CeremonyOfChaosManager.getInstance().isRegistered(player))
-		{
+		} else if (CeremonyOfChaosManager.getInstance().isRegistered(player)) {
 			player.sendMessage("You can't sell buffs with Ceremony of Chaos status!");
 			return false;
-		}
-		else if (player.isCursedWeaponEquipped() || (player.getReputation() < 0))
-		{
+		} else if (player.isCursedWeaponEquipped() || (player.getReputation() < 0)) {
 			player.sendMessage("You can't sell buffs in Chaotic state!");
 			return false;
-		}
-		else if (player.isInDuel())
-		{
+		} else if (player.isInDuel()) {
 			player.sendMessage("You can't sell buffs in Duel state!");
 			return false;
-		}
-		else if (player.isFishing())
-		{
+		} else if (player.isFishing()) {
 			player.sendMessage("You can't sell buffs while fishing.");
 			return false;
-		}
-		else if (player.isMounted() || player.isFlyingMounted() || player.isFlying())
-		{
+		} else if (player.isMounted() || player.isFlyingMounted() || player.isFlying()) {
 			player.sendMessage("You can't sell buffs in Mounth state!");
 			return false;
-		}
-		else if (player.isTransformed())
-		{
+		} else if (player.isTransformed()) {
 			player.sendMessage("You can't sell buffs in Transform state!");
 			return false;
-		}
-		else if (player.isInsideZone(ZoneId.NO_STORE) || !player.isInsideZone(ZoneId.PEACE) || player.isJailed())
-		{
+		} else if (player.isInsideZone(ZoneId.NO_STORE) || !player.isInsideZone(ZoneId.PEACE) || player.isJailed()) {
 			player.sendMessage("You can't sell buffs here!");
 			return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * Gets the single instance of {@code SellBuffsManager}.
-	 * @return single instance of {@code SellBuffsManager}
-	 */
-	@InstanceGetter
-	public static final SellBuffsManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final SellBuffsManager _instance = new SellBuffsManager();
 	}
 }

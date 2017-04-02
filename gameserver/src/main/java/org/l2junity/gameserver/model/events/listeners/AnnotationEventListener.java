@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.events.listeners;
 
-import java.lang.reflect.Method;
-
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
@@ -27,41 +25,36 @@ import org.l2junity.gameserver.model.events.returns.AbstractEventReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
+
 /**
  * Annotation event listener provides dynamically attached callback to any method operation with or without any return object.
+ *
  * @author UnAfraid
  */
-public class AnnotationEventListener extends AbstractEventListener
-{
+public class AnnotationEventListener extends AbstractEventListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationEventListener.class);
 	private final Method _callback;
-	
-	public AnnotationEventListener(ListenersContainer container, EventType type, Method callback, Object owner, int priority)
-	{
+
+	public AnnotationEventListener(ListenersContainer container, EventType type, Method callback, Object owner, int priority) {
 		super(container, type, owner);
 		_callback = callback;
 		setPriority(priority);
 	}
-	
+
 	@Override
-	public <R extends AbstractEventReturn> R executeEvent(IBaseEvent event, Class<R> returnBackClass)
-	{
+	public <R extends AbstractEventReturn> R executeEvent(IBaseEvent event, Class<R> returnBackClass) {
 		final Method method = _callback;
-		try
-		{
-			if (!method.isAccessible())
-			{
+		try {
+			if (!method.isAccessible()) {
 				method.setAccessible(true);
 			}
-			
+
 			final Object result = method.invoke(getOwner(), event);
-			if (method.getReturnType() == returnBackClass)
-			{
+			if (method.getReturnType() == returnBackClass) {
 				return returnBackClass.cast(result);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Error while invoking {} on {}", method.getName(), getOwner(), e);
 		}
 		return null;

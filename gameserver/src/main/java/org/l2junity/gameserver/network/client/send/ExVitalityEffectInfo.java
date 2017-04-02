@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -26,24 +26,21 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExVitalityEffectInfo implements IClientOutgoingPacket
-{
+public class ExVitalityEffectInfo implements IClientOutgoingPacket {
 	private final int _vitalityBonus;
 	private final int _vitalityItemsRemaining;
 	private final int _points;
-	
-	public ExVitalityEffectInfo(PlayerInstance cha)
-	{
+
+	public ExVitalityEffectInfo(PlayerInstance cha) {
 		_points = cha.getVitalityPoints();
 		_vitalityBonus = (int) cha.getStat().getVitalityExpBonus() * 100;
 		_vitalityItemsRemaining = cha.getVitalityItemsUsed() - RatesConfig.VITALITY_MAX_ITEMS_ALLOWED;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_VITALITY_EFFECT_INFO.writeId(packet);
-		
+
 		packet.writeD(_points);
 		packet.writeD(_vitalityBonus); // Vitality Bonus
 		packet.writeH(0x00); // Vitality additional bonus in %

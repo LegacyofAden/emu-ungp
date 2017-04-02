@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.concurrent.ScheduledFuture;
-
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.util.MinionList;
+
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * This class manages all Monsters. L2MonsterInstance:
@@ -35,18 +35,17 @@ import org.l2junity.gameserver.util.MinionList;
  * <li>L2GrandBossInstance</li>
  * </ul>
  */
-public class L2MonsterInstance extends Attackable
-{
+public class L2MonsterInstance extends Attackable {
 	private boolean _isAgressive = false;
 	protected boolean _enableMinions = true;
-	
+
 	private L2MonsterInstance _master = null;
 	private volatile MinionList _minionList = null;
-	
+
 	protected ScheduledFuture<?> _maintenanceTask = null;
-	
+
 	private static final int MONSTER_MAINTENANCE_INTERVAL = 1000;
-	
+
 	/**
 	 * Constructor of L2MonsterInstance (use L2Character and L2NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
@@ -55,203 +54,170 @@ public class L2MonsterInstance extends Attackable
 	 * <li>Set the name of the L2MonsterInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
+	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2MonsterInstance(L2NpcTemplate template)
-	{
+	public L2MonsterInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2MonsterInstance);
 		setAutoAttackable(true);
 		_isAgressive = getTemplate().isAggressive();
 	}
-	
+
 	/**
 	 * Return True if the attacker is not another L2MonsterInstance.
 	 */
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		// Check if the L2MonsterInstance target is aggressive
-		if (NpcConfig.GUARD_ATTACK_AGGRO_MOB && isAggressive() && (attacker instanceof L2GuardInstance))
-		{
+		if (NpcConfig.GUARD_ATTACK_AGGRO_MOB && isAggressive() && (attacker instanceof L2GuardInstance)) {
 			return true;
 		}
-		
-		if (attacker.isMonster())
-		{
+
+		if (attacker.isMonster()) {
 			return false;
 		}
-		
+
 		// Anything considers monsters friendly except Players, Attackables (Guards, Friendly NPC), Traps and EffectPoints.
-		if (!attacker.isPlayable() && !attacker.isAttackable() && !(attacker instanceof L2TrapInstance) && !(attacker instanceof L2EffectPointInstance))
-		{
+		if (!attacker.isPlayable() && !attacker.isAttackable() && !(attacker instanceof L2TrapInstance) && !(attacker instanceof L2EffectPointInstance)) {
 			return false;
 		}
-		
+
 		return super.isAutoAttackable(attacker);
 	}
-	
+
 	/**
 	 * Return True if the L2MonsterInstance is Aggressive (aggroRange > 0).
 	 */
 	@Override
-	public boolean isAggressive()
-	{
+	public boolean isAggressive() {
 		return _isAgressive;
 	}
-	
-	public void setIsAgressive(boolean isAgressive)
-	{
+
+	public void setIsAgressive(boolean isAgressive) {
 		_isAgressive = isAgressive;
 	}
-	
+
 	@Override
-	public void onSpawn()
-	{
-		if (!isTeleporting())
-		{
-			if (getLeader() != null)
-			{
+	public void onSpawn() {
+		if (!isTeleporting()) {
+			if (getLeader() != null) {
 				setRandomWalking(false);
 				setIsRaidMinion(getLeader().isRaid());
 				getLeader().getMinionList().onMinionSpawn(this);
 			}
-			
+
 			// delete spawned minions before dynamic minions spawned by script
-			if (hasMinions())
-			{
+			if (hasMinions()) {
 				getMinionList().onMasterSpawn();
 			}
-			
+
 			startMaintenanceTask();
 		}
-		
+
 		// dynamic script-based minions spawned here, after all preparations.
 		super.onSpawn();
 	}
-	
+
 	@Override
-	public void onTeleported()
-	{
+	public void onTeleported() {
 		super.onTeleported();
-		
-		if (hasMinions())
-		{
+
+		if (hasMinions()) {
 			getMinionList().onMasterTeleported();
 		}
 	}
-	
-	protected int getMaintenanceInterval()
-	{
+
+	protected int getMaintenanceInterval() {
 		return MONSTER_MAINTENANCE_INTERVAL;
 	}
-	
-	protected void startMaintenanceTask()
-	{
+
+	protected void startMaintenanceTask() {
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
-		if (!super.doDie(killer))
-		{
+	public boolean doDie(Creature killer) {
+		if (!super.doDie(killer)) {
 			return false;
 		}
-		
-		if (_maintenanceTask != null)
-		{
+
+		if (_maintenanceTask != null) {
 			_maintenanceTask.cancel(false); // doesn't do it?
 			_maintenanceTask = null;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
-		if (_maintenanceTask != null)
-		{
+	public boolean deleteMe() {
+		if (_maintenanceTask != null) {
 			_maintenanceTask.cancel(false);
 			_maintenanceTask = null;
 		}
-		
-		if (hasMinions())
-		{
+
+		if (hasMinions()) {
 			getMinionList().onMasterDie(true);
 		}
-		
-		if (getLeader() != null)
-		{
+
+		if (getLeader() != null) {
 			getLeader().getMinionList().onMinionDie(this, 0);
 		}
-		
+
 		return super.deleteMe();
 	}
-	
+
 	@Override
-	public L2MonsterInstance getLeader()
-	{
+	public L2MonsterInstance getLeader() {
 		return _master;
 	}
-	
-	public void setLeader(L2MonsterInstance leader)
-	{
+
+	public void setLeader(L2MonsterInstance leader) {
 		_master = leader;
 	}
-	
-	public void enableMinions(boolean b)
-	{
+
+	public void enableMinions(boolean b) {
 		_enableMinions = b;
 	}
-	
-	public boolean hasMinions()
-	{
+
+	public boolean hasMinions() {
 		return _minionList != null;
 	}
-	
-	public MinionList getMinionList()
-	{
-		if (_minionList == null)
-		{
-			synchronized (this)
-			{
-				if (_minionList == null)
-				{
+
+	public MinionList getMinionList() {
+		if (_minionList == null) {
+			synchronized (this) {
+				if (_minionList == null) {
 					_minionList = new MinionList(this);
 				}
 			}
 		}
 		return _minionList;
 	}
-	
+
 	@Override
-	public boolean isMonster()
-	{
+	public boolean isMonster() {
 		return true;
 	}
-	
+
 	@Override
-	public L2MonsterInstance asMonster()
-	{
+	public L2MonsterInstance asMonster() {
 		return this;
 	}
-	
+
 	/**
 	 * @return true if this L2MonsterInstance (or its master) is registered in WalkingManager
 	 */
 	@Override
-	public boolean isWalker()
-	{
+	public boolean isWalker() {
 		return ((getLeader() == null) ? super.isWalker() : getLeader().isWalker());
 	}
-	
+
 	/**
 	 * @return {@code true} if this L2MonsterInstance is not raid minion, master state otherwise.
 	 */
 	@Override
-	public boolean giveRaidCurse()
-	{
+	public boolean giveRaidCurse() {
 		return (isRaidMinion() && (getLeader() != null)) ? getLeader().giveRaidCurse() : super.giveRaidCurse();
 	}
 }

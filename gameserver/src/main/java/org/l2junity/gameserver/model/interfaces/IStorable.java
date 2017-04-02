@@ -21,7 +21,6 @@ package org.l2junity.gameserver.model.interfaces;
 /**
  * @author UnAfraid
  */
-public interface IStorable
-{
+public interface IStorable {
 	boolean storeMe();
 }

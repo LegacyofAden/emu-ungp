@@ -28,10 +28,10 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 /**
  * This class manages all Castle Siege Artefacts.<BR>
  * <BR>
+ *
  * @version $Revision: 1.11.2.1.2.7 $ $Date: 2005/04/06 16:13:40 $
  */
-public final class L2ArtefactInstance extends Npc
-{
+public final class L2ArtefactInstance extends Npc {
 	/**
 	 * Constructor of L2ArtefactInstance (use L2Character and L2NpcInstance constructor).<BR>
 	 * <BR>
@@ -41,50 +41,44 @@ public final class L2ArtefactInstance extends Npc
 	 * <li>Set the name of the L2ArtefactInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li><BR>
 	 * <BR>
+	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2ArtefactInstance(L2NpcTemplate template)
-	{
+	public L2ArtefactInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ArtefactInstance);
 	}
-	
+
 	@Override
-	public void onSpawn()
-	{
+	public void onSpawn() {
 		super.onSpawn();
 		getCastle().registerArtefact(this);
 	}
-	
+
 	/**
 	 * Return False.
 	 */
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return false;
 	}
-	
+
 	@Override
-	public boolean canBeAttacked()
-	{
+	public boolean canBeAttacked() {
 		return false;
 	}
-	
+
 	@Override
-	public void onForcedAttack(PlayerInstance player)
-	{
+	public void onForcedAttack(PlayerInstance player) {
 		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-	
+
 	@Override
-	public void reduceCurrentHp(double damage, Creature attacker, Skill skill)
-	{
+	public void reduceCurrentHp(double damage, Creature attacker, Skill skill) {
 	}
-	
+
 	@Override
-	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect)
-	{
+	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect) {
 	}
 }

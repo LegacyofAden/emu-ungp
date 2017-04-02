@@ -18,65 +18,44 @@
  */
 package org.l2junity.gameserver.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
 import org.l2junity.commons.scripting.ScriptEngineManager;
-import org.l2junity.gameserver.loader.LoadGroup;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 /**
  * @author NosBit
  */
-public final class SkillConditionHandler
-{
+@StartupComponent("Scripts")
+public final class SkillConditionHandler {
+	@Getter(lazy = true)
+	private static final SkillConditionHandler instance = new SkillConditionHandler();
+
 	private final Map<String, Function<StatsSet, ISkillCondition>> _skillConditionHandlerFactories = new HashMap<>();
-	
-	public void registerHandler(String name, Function<StatsSet, ISkillCondition> handlerFactory)
-	{
+
+	public void registerHandler(String name, Function<StatsSet, ISkillCondition> handlerFactory) {
 		_skillConditionHandlerFactories.put(name, handlerFactory);
 	}
-	
-	public Function<StatsSet, ISkillCondition> getHandlerFactory(String name)
-	{
+
+	public Function<StatsSet, ISkillCondition> getHandlerFactory(String name) {
 		return _skillConditionHandlerFactories.get(name);
 	}
-	
-	public int size()
-	{
+
+	public int size() {
 		return _skillConditionHandlerFactories.size();
 	}
-	
-	protected SkillConditionHandler()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
-		try
-		{
+
+	private SkillConditionHandler() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.SKILL_CONDITION_HANDLER_FILE);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Error("Problems while running SkillMasterHandler", e);
 		}
-	}
-	
-	@InstanceGetter
-	public static SkillConditionHandler getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final SkillConditionHandler _instance = new SkillConditionHandler();
 	}
 }

@@ -27,41 +27,34 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExUserInfoFishing implements IClientOutgoingPacket
-{
+public class ExUserInfoFishing implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final boolean _isFishing;
 	private final ILocational _baitLocation;
-	
-	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing, ILocational baitLocation)
-	{
+
+	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing, ILocational baitLocation) {
 		_activeChar = activeChar;
 		_isFishing = isFishing;
 		_baitLocation = baitLocation;
 	}
-	
-	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing)
-	{
+
+	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing) {
 		_activeChar = activeChar;
 		_isFishing = isFishing;
 		_baitLocation = null;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_USER_INFO_FISHING.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeC(_isFishing ? 1 : 0);
-		if (_baitLocation == null)
-		{
+		if (_baitLocation == null) {
 			packet.writeD(0);
 			packet.writeD(0);
 			packet.writeD(0);
-		}
-		else
-		{
+		} else {
 			packet.writeD((int) _baitLocation.getX());
 			packet.writeD((int) _baitLocation.getY());
 			packet.writeD((int) _baitLocation.getZ());

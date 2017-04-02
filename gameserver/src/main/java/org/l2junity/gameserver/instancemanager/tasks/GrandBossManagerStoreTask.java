@@ -23,12 +23,10 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 /**
  * @author xban1x
  */
-public class GrandBossManagerStoreTask implements Runnable
-{
+public class GrandBossManagerStoreTask implements Runnable {
 	@Override
-	public void run()
-	{
+	public void run() {
 		GrandBossManager.getInstance().storeMe();
 	}
-	
+
 }

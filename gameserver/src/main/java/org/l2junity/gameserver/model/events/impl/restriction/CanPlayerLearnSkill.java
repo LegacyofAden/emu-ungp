@@ -26,51 +26,43 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Nik
  */
-public final class CanPlayerLearnSkill implements IBaseEvent
-{
+public final class CanPlayerLearnSkill implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _skillId;
 	private final int _skillLevel;
 	private final AcquireSkillType _skillType;
 	private final int _subType;
-	
-	public CanPlayerLearnSkill(PlayerInstance activeChar, int skillId, int skillLevel, AcquireSkillType skillType, int subType)
-	{
+
+	public CanPlayerLearnSkill(PlayerInstance activeChar, int skillId, int skillLevel, AcquireSkillType skillType, int subType) {
 		_activeChar = activeChar;
 		_skillId = skillId;
 		_skillLevel = skillLevel;
 		_skillType = skillType;
 		_subType = subType;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getSkillId()
-	{
+
+	public int getSkillId() {
 		return _skillId;
 	}
-	
-	public int getSkillLevel()
-	{
+
+	public int getSkillLevel() {
 		return _skillLevel;
 	}
-	
-	public AcquireSkillType getSkillType()
-	{
+
+	public AcquireSkillType getSkillType() {
 		return _skillType;
 	}
-	
-	public int getSubType()
-	{
+
+	public int getSubType() {
 		return _subType;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_LEARN_SKILL;
 	}
 }

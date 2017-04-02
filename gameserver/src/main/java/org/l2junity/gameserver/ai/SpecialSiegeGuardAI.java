@@ -18,37 +18,32 @@
  */
 package org.l2junity.gameserver.ai;
 
+import org.l2junity.gameserver.model.actor.Creature;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.l2junity.gameserver.model.actor.Creature;
 
 /**
  * @author BiggBoss
  */
-public final class SpecialSiegeGuardAI extends SiegeGuardAI
-{
+public final class SpecialSiegeGuardAI extends SiegeGuardAI {
 	private final List<Integer> _allied;
-	
-	public SpecialSiegeGuardAI(Creature creature)
-	{
+
+	public SpecialSiegeGuardAI(Creature creature) {
 		super(creature);
 		_allied = new ArrayList<>();
 	}
-	
-	public List<Integer> getAlly()
-	{
+
+	public List<Integer> getAlly() {
 		return _allied;
 	}
-	
+
 	@Override
-	protected boolean autoAttackCondition(Creature target)
-	{
-		if (_allied.contains(target.getObjectId()))
-		{
+	protected boolean autoAttackCondition(Creature target) {
+		if (_allied.contains(target.getObjectId())) {
 			return false;
 		}
-		
+
 		return super.autoAttackCondition(target);
 	}
 }

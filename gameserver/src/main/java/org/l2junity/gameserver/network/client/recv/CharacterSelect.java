@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.GameServer;
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
 import org.l2junity.gameserver.instancemanager.MultiboxManager;
@@ -41,17 +40,12 @@ import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This class ...
- * @version $Revision: 1.5.2.1.2.5 $ $Date: 2005/03/27 15:29:30 $
- */
-public class CharacterSelect implements IClientIncomingPacket
-{
+public class CharacterSelect implements IClientIncomingPacket {
 	protected static final Logger _logAccounting = LoggerFactory.getLogger("accounting");
-	
+
 	// cd
 	private int _charSlot;
-	
+
 	@SuppressWarnings("unused")
 	private int _unk1; // new in C4
 	@SuppressWarnings("unused")
@@ -60,10 +54,9 @@ public class CharacterSelect implements IClientIncomingPacket
 	private int _unk3; // new in C4
 	@SuppressWarnings("unused")
 	private int _unk4; // new in C4
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_charSlot = packet.readD();
 		_unk1 = packet.readH();
 		_unk2 = packet.readD();
@@ -71,92 +64,72 @@ public class CharacterSelect implements IClientIncomingPacket
 		_unk4 = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterSelect"))
-		{
+	public void run(L2GameClient client) {
+		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterSelect")) {
 			return;
 		}
-		
-		if (SecondaryAuthData.getInstance().isEnabled() && !client.getSecondaryAuth().isAuthed())
-		{
+
+		if (SecondaryAuthData.getInstance().isEnabled() && !client.getSecondaryAuth().isAuthed()) {
 			client.getSecondaryAuth().openDialog();
 			return;
 		}
-		
+
 		// We should always be able to acquire the lock
 		// But if we can't lock then nothing should be done (i.e. repeated packet)
-		if (client.getActiveCharLock().tryLock())
-		{
-			try
-			{
+		if (client.getActiveCharLock().tryLock()) {
+			try {
 				// should always be null
 				// but if not then this is repeated packet and nothing should be done here
-				if (client.getActiveChar() == null)
-				{
+				if (client.getActiveChar() == null) {
 					final CharSelectInfoPackage info = client.getCharSelection(_charSlot);
-					if (info == null)
-					{
+					if (info == null) {
 						return;
 					}
-					
+
 					// Banned?
-					if (PunishmentManager.getInstance().hasPunishment(info.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(client.getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(client.getConnectionAddress().getHostAddress(), PunishmentAffect.IP, PunishmentType.BAN))
-					{
+					if (PunishmentManager.getInstance().hasPunishment(info.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(client.getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(client.getConnectionAddress().getHostAddress(), PunishmentAffect.IP, PunishmentType.BAN)) {
 						client.close(ServerClose.STATIC_PACKET);
 						return;
 					}
-					
+
 					// Selected character is banned (compatibility with previous versions).
-					if (info.getAccessLevel() < 0)
-					{
+					if (info.getAccessLevel() < 0) {
 						client.close(ServerClose.STATIC_PACKET);
 						return;
 					}
-					
-					if (!MultiboxManager.getInstance().registerClient(GameServer.getInstance(), client))
-					{
+
+					if (!MultiboxManager.getInstance().registerClient(GameServer.getInstance(), client)) {
 						MultiboxManager.getInstance().sendDefaultRestrictionMessage(GameServer.getInstance(), client);
 						return;
 					}
-					
-					// The L2PcInstance must be created here, so that it can be attached to the L2GameClient
-					if (GeneralConfig.DEBUG)
-					{
-						_log.debug("selected slot:" + _charSlot);
-					}
-					
+
 					// load up character from disk
 					final PlayerInstance cha = client.load(_charSlot);
-					if (cha == null)
-					{
+					if (cha == null) {
 						return; // handled in L2GameClient
 					}
-					
+
 					CharNameTable.getInstance().addName(cha);
-					
+
 					cha.setClient(client);
 					client.setActiveChar(cha);
 					cha.setOnlineStatus(true, true);
-					
+
 					final TerminateReturn terminate = EventDispatcher.getInstance().notifyEvent(new OnPlayerSelect(cha, cha.getObjectId(), cha.getName(), client), Containers.Players(), TerminateReturn.class);
-					if ((terminate != null) && terminate.terminate())
-					{
+					if ((terminate != null) && terminate.terminate()) {
 						Disconnection.of(cha).defaultSequence(false);
 						return;
 					}
-					
+
 					client.setConnectionState(ConnectionState.IN_GAME);
 					client.sendPacket(new CharSelected(cha, client.getSessionId().playOkID1));
 				}
-			}
-			finally
-			{
+			} finally {
 				client.getActiveCharLock().unlock();
 			}
-			
+
 			_logAccounting.info("Logged in, {}", client);
 		}
 	}

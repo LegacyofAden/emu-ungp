@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.TimeStamp;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,38 +25,36 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Skill Cool Time server packet implementation.
+ *
  * @author KenM, Zoey76
  */
-public class SkillCoolTime implements IClientOutgoingPacket
-{
+public class SkillCoolTime implements IClientOutgoingPacket {
 	private final List<TimeStamp> _skillReuseTimeStamps = new ArrayList<>();
-	
-	public SkillCoolTime(PlayerInstance player)
-	{
+
+	public SkillCoolTime(PlayerInstance player) {
 		final Map<Long, TimeStamp> skillReuseTimeStamps = player.getSkillReuseTimeStamps();
-		if (skillReuseTimeStamps != null)
-		{
-			for (TimeStamp ts : skillReuseTimeStamps.values())
-			{
+		if (skillReuseTimeStamps != null) {
+			for (TimeStamp ts : skillReuseTimeStamps.values()) {
 				final Skill skill = SkillData.getInstance().getSkill(ts.getSkillId(), ts.getSkillLvl(), ts.getSkillSubLvl());
-				if (ts.hasNotPassed() && !skill.isNotBroadcastable())
-				{
+				if (ts.hasNotPassed() && !skill.isNotBroadcastable()) {
 					_skillReuseTimeStamps.add(ts);
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SKILL_COOL_TIME.writeId(packet);
-		
+
 		packet.writeD(_skillReuseTimeStamps.size());
-		for (TimeStamp ts : _skillReuseTimeStamps)
-		{
+		for (TimeStamp ts : _skillReuseTimeStamps) {
 			packet.writeD(ts.getSkillId());
 			packet.writeD(0x00); // ?
 			packet.writeD((int) ts.getReuse() / 1000);

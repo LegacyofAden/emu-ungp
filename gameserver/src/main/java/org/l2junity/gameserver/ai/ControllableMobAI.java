@@ -18,12 +18,6 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.MobGroup;
 import org.l2junity.gameserver.model.MobGroupTable;
@@ -38,59 +32,58 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
+
 /**
  * AI for controllable mobs
+ *
  * @author littlecrow
  */
-public final class ControllableMobAI extends AttackableAI
-{
+public final class ControllableMobAI extends AttackableAI {
 	public static final int AI_IDLE = 1;
 	public static final int AI_NORMAL = 2;
 	public static final int AI_FORCEATTACK = 3;
 	public static final int AI_FOLLOW = 4;
 	public static final int AI_CAST = 5;
 	public static final int AI_ATTACK_GROUP = 6;
-	
+
 	private int _alternateAI;
-	
+
 	private boolean _isThinking; // to prevent thinking recursively
 	private boolean _isNotMoving;
-	
+
 	private Creature _forcedTarget;
 	private MobGroup _targetGroup;
-	
-	protected void thinkFollow()
-	{
+
+	protected void thinkFollow() {
 		Attackable me = (Attackable) _actor;
-		
-		if (!Util.checkIfInRange(MobGroupTable.FOLLOW_RANGE, me, getForcedTarget(), true))
-		{
+
+		if (!Util.checkIfInRange(MobGroupTable.FOLLOW_RANGE, me, getForcedTarget(), true)) {
 			int signX = (Rnd.nextInt(2) == 0) ? -1 : 1;
 			int signY = (Rnd.nextInt(2) == 0) ? -1 : 1;
 			int randX = Rnd.nextInt(MobGroupTable.FOLLOW_RANGE);
 			int randY = Rnd.nextInt(MobGroupTable.FOLLOW_RANGE);
-			
+
 			moveTo(getForcedTarget().getX() + (signX * randX), getForcedTarget().getY() + (signY * randY), getForcedTarget().getZ());
 		}
 	}
-	
+
 	@Override
-	protected void onEvtThink()
-	{
-		if (isThinking())
-		{
+	protected void onEvtThink() {
+		if (isThinking()) {
 			return;
 		}
-		
+
 		setThinking(true);
-		
-		try
-		{
-			switch (getAlternateAI())
-			{
+
+		try {
+			switch (getAlternateAI()) {
 				case AI_IDLE:
-					if (getIntention() != CtrlIntention.AI_INTENTION_ACTIVE)
-					{
+					if (getIntention() != CtrlIntention.AI_INTENTION_ACTIVE) {
 						setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 					}
 					break;
@@ -107,429 +100,352 @@ public final class ControllableMobAI extends AttackableAI
 					thinkAttackGroup();
 					break;
 				default:
-					if (getIntention() == AI_INTENTION_ACTIVE)
-					{
+					if (getIntention() == AI_INTENTION_ACTIVE) {
 						thinkActive();
-					}
-					else if (getIntention() == AI_INTENTION_ATTACK)
-					{
+					} else if (getIntention() == AI_INTENTION_ATTACK) {
 						thinkAttack();
 					}
 					break;
 			}
-		}
-		finally
-		{
+		} finally {
 			setThinking(false);
 		}
 	}
-	
+
 	@Override
-	protected void thinkCast()
-	{
+	protected void thinkCast() {
 		WorldObject target = _skill.getTarget(_actor, _forceUse, _dontMove, false);
-		if ((target == null) || !target.isCreature() || ((Creature) target).isAlikeDead())
-		{
+		if ((target == null) || !target.isCreature() || ((Creature) target).isAlikeDead()) {
 			target = _skill.getTarget(_actor, findNextRndTarget(), _forceUse, _dontMove, false);
 		}
-		
-		if (target == null)
-		{
+
+		if (target == null) {
 			return;
 		}
-		
+
 		setTarget(target);
-		
-		if (!_actor.isMuted())
-		{
+
+		if (!_actor.isMuted()) {
 			int max_range = 0;
 			// check distant skills
-			
-			for (Skill sk : _actor.getAllSkills())
-			{
-				if (Util.checkIfInRange(sk.getCastRange(), _actor, target, true) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk)))
-				{
+
+			for (Skill sk : _actor.getAllSkills()) {
+				if (Util.checkIfInRange(sk.getCastRange(), _actor, target, true) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk))) {
 					_actor.doCast(sk);
 					return;
 				}
-				
+
 				max_range = Math.max(max_range, sk.getCastRange());
 			}
-			
-			if (!isNotMoving())
-			{
+
+			if (!isNotMoving()) {
 				moveToPawn(target, max_range);
 			}
-			
+
 			return;
 		}
 	}
-	
-	protected void thinkAttackGroup()
-	{
+
+	protected void thinkAttackGroup() {
 		Creature target = getForcedTarget();
-		if ((target == null) || target.isAlikeDead())
-		{
+		if ((target == null) || target.isAlikeDead()) {
 			// try to get next group target
 			setForcedTarget(findNextGroupTarget());
 			clientStopMoving(null);
 		}
-		
-		if (target == null)
-		{
+
+		if (target == null) {
 			return;
 		}
-		
+
 		setTarget(target);
 		// as a response, we put the target in a forcedattack mode
 		L2ControllableMobInstance theTarget = (L2ControllableMobInstance) target;
 		ControllableMobAI ctrlAi = (ControllableMobAI) theTarget.getAI();
 		ctrlAi.forceAttack(_actor);
-		
+
 		double dist2 = _actor.distance2d(target);
 		int range = _actor.getPhysicalAttackRange() + _actor.getTemplate().getCollisionRadius() + target.getTemplate().getCollisionRadius();
 		int max_range = range;
-		
-		if (!_actor.isMuted() && (dist2 > (range + 20)))
-		{
+
+		if (!_actor.isMuted() && (dist2 > (range + 20))) {
 			// check distant skills
-			for (Skill sk : _actor.getAllSkills())
-			{
+			for (Skill sk : _actor.getAllSkills()) {
 				int castRange = sk.getCastRange();
-				
-				if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk)))
-				{
+
+				if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk))) {
 					_actor.doCast(sk);
 					return;
 				}
-				
+
 				max_range = Math.max(max_range, castRange);
 			}
-			
-			if (!isNotMoving())
-			{
+
+			if (!isNotMoving()) {
 				moveToPawn(target, range);
 			}
-			
+
 			return;
 		}
 		_actor.doAutoAttack(target);
 	}
-	
-	protected void thinkForceAttack()
-	{
-		if ((getForcedTarget() == null) || getForcedTarget().isAlikeDead())
-		{
+
+	protected void thinkForceAttack() {
+		if ((getForcedTarget() == null) || getForcedTarget().isAlikeDead()) {
 			clientStopMoving(null);
 			setIntention(AI_INTENTION_ACTIVE);
 			setAlternateAI(AI_IDLE);
 		}
-		
+
 		setTarget(getForcedTarget());
 		double dist2 = _actor.distance2d(getForcedTarget());
 		int range = _actor.getPhysicalAttackRange() + _actor.getTemplate().getCollisionRadius() + getForcedTarget().getTemplate().getCollisionRadius();
 		int max_range = range;
-		
-		if (!_actor.isMuted() && (dist2 > (range + 20)))
-		{
+
+		if (!_actor.isMuted() && (dist2 > (range + 20))) {
 			// check distant skills
-			for (Skill sk : _actor.getAllSkills())
-			{
+			for (Skill sk : _actor.getAllSkills()) {
 				int castRange = sk.getCastRange();
-				
-				if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk)))
-				{
+
+				if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk))) {
 					_actor.doCast(sk);
 					return;
 				}
-				
+
 				max_range = Math.max(max_range, castRange);
 			}
-			
-			if (!isNotMoving())
-			{
+
+			if (!isNotMoving()) {
 				moveToPawn(getForcedTarget(), _actor.getPhysicalAttackRange()/* range */);
 			}
-			
+
 			return;
 		}
-		
+
 		_actor.doAutoAttack(getForcedTarget());
 	}
-	
+
 	@Override
-	protected void thinkAttack()
-	{
+	protected void thinkAttack() {
 		Creature target = getForcedTarget();
-		if ((target == null) || target.isAlikeDead())
-		{
-			if (target != null)
-			{
+		if ((target == null) || target.isAlikeDead()) {
+			if (target != null) {
 				// stop hating
 				Attackable npc = (Attackable) _actor;
 				npc.stopHating(target);
 			}
-			
+
 			setIntention(AI_INTENTION_ACTIVE);
-		}
-		else
-		{
+		} else {
 			// notify aggression
 			final Creature finalTarget = target;
-			if (((Npc) _actor).getTemplate().getClans() != null)
-			{
+			if (((Npc) _actor).getTemplate().getClans() != null) {
 				World.getInstance().forEachVisibleObject(_actor, Npc.class, npc ->
 				{
-					if (!npc.isInMyClan((Npc) _actor))
-					{
+					if (!npc.isInMyClan((Npc) _actor)) {
 						return;
 					}
-					
-					if (_actor.isInRadius3d(npc, npc.getTemplate().getClanHelpRange()))
-					{
+
+					if (_actor.isInRadius3d(npc, npc.getTemplate().getClanHelpRange())) {
 						npc.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, finalTarget, 1);
 					}
 				});
 			}
-			
+
 			setTarget(target);
 			double dist2 = _actor.distance2d(target);
 			int range = _actor.getPhysicalAttackRange() + _actor.getTemplate().getCollisionRadius() + target.getTemplate().getCollisionRadius();
 			int max_range = range;
-			
-			if (!_actor.isMuted() && (dist2 > (range + 20)))
-			{
+
+			if (!_actor.isMuted() && (dist2 > (range + 20))) {
 				// check distant skills
-				for (Skill sk : _actor.getAllSkills())
-				{
+				for (Skill sk : _actor.getAllSkills()) {
 					int castRange = sk.getCastRange();
-					
-					if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk)))
-					{
+
+					if ((castRange >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() > _actor.getStat().getMpConsume(sk))) {
 						_actor.doCast(sk);
 						return;
 					}
-					
+
 					max_range = Math.max(max_range, castRange);
 				}
-				
+
 				moveToPawn(target, range);
 				return;
 			}
-			
+
 			// Force mobs to attack anybody if confused.
 			Creature hated;
-			
-			if (_actor.isConfused())
-			{
+
+			if (_actor.isConfused()) {
 				hated = findNextRndTarget();
-			}
-			else
-			{
+			} else {
 				hated = target;
 			}
-			
-			if (hated == null)
-			{
+
+			if (hated == null) {
 				setIntention(AI_INTENTION_ACTIVE);
 				return;
 			}
-			
-			if (hated != target)
-			{
+
+			if (hated != target) {
 				target = hated;
 			}
-			
-			if (!_actor.isMuted() && (Rnd.nextInt(5) == 3))
-			{
-				for (Skill sk : _actor.getAllSkills())
-				{
+
+			if (!_actor.isMuted() && (Rnd.nextInt(5) == 3)) {
+				for (Skill sk : _actor.getAllSkills()) {
 					int castRange = sk.getCastRange();
-					
-					if (((castRange * castRange) >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() < _actor.getStat().getMpConsume(sk)))
-					{
+
+					if (((castRange * castRange) >= dist2) && !_actor.isSkillDisabled(sk) && (_actor.getCurrentMp() < _actor.getStat().getMpConsume(sk))) {
 						_actor.doCast(sk);
 						return;
 					}
 				}
 			}
-			
+
 			_actor.doAutoAttack(target);
 		}
 	}
-	
+
 	@Override
-	protected void thinkActive()
-	{
+	protected void thinkActive() {
 		Creature hated;
-		
-		if (_actor.isConfused())
-		{
+
+		if (_actor.isConfused()) {
 			hated = findNextRndTarget();
-		}
-		else
-		{
+		} else {
 			final WorldObject target = _actor.getTarget();
 			hated = (target != null) && target.isCreature() ? (Creature) target : null;
 		}
-		
-		if (hated != null)
-		{
+
+		if (hated != null) {
 			_actor.setRunning();
 			setIntention(CtrlIntention.AI_INTENTION_ATTACK, hated);
 		}
 	}
-	
-	private boolean checkAutoAttackCondition(Creature target)
-	{
-		if ((target == null) || !_actor.isAttackable())
-		{
+
+	private boolean checkAutoAttackCondition(Creature target) {
+		if ((target == null) || !_actor.isAttackable()) {
 			return false;
 		}
 		Attackable me = (Attackable) _actor;
-		
-		if (target.isNpc() || target.isDoor())
-		{
+
+		if (target.isNpc() || target.isDoor()) {
 			return false;
 		}
-		
-		if (target.isAlikeDead() || !me.isInRadius2d(target, me.getAggroRange()) || (Math.abs(_actor.getZ() - target.getZ()) > 100))
-		{
+
+		if (target.isAlikeDead() || !me.isInRadius2d(target, me.getAggroRange()) || (Math.abs(_actor.getZ() - target.getZ()) > 100)) {
 			return false;
 		}
-		
+
 		// Check if the target isn't invulnerable
-		if (target.isInvul())
-		{
+		if (target.isInvul()) {
 			return false;
 		}
-		
+
 		// Spawn protection (only against mobs)
-		if (target.isPlayer() && ((PlayerInstance) target).isSpawnProtected())
-		{
+		if (target.isPlayer() && ((PlayerInstance) target).isSpawnProtected()) {
 			return false;
 		}
-		
+
 		// Check if the target is a L2Playable
-		if (target.isPlayable())
-		{
+		if (target.isPlayable()) {
 			// Check if the target isn't in silent move mode
-			if (((Playable) target).isSilentMovingAffected())
-			{
+			if (((Playable) target).isSilentMovingAffected()) {
 				return false;
 			}
 		}
-		
-		if (target.isNpc())
-		{
+
+		if (target.isNpc()) {
 			return false;
 		}
-		
+
 		return me.isAggressive();
 	}
-	
-	private Creature findNextRndTarget()
-	{
+
+	private Creature findNextRndTarget() {
 		final List<Creature> potentialTarget = new ArrayList<>();
 		World.getInstance().forEachVisibleObject(_actor, Creature.class, target ->
 		{
-			if (Util.checkIfInShortRange(((Attackable) _actor).getAggroRange(), _actor, target, true) && checkAutoAttackCondition(target))
-			{
+			if (Util.checkIfInShortRange(((Attackable) _actor).getAggroRange(), _actor, target, true) && checkAutoAttackCondition(target)) {
 				potentialTarget.add(target);
 			}
 		});
-		
+
 		return !potentialTarget.isEmpty() ? potentialTarget.get(Rnd.nextInt(potentialTarget.size())) : null;
 	}
-	
-	private L2ControllableMobInstance findNextGroupTarget()
-	{
+
+	private L2ControllableMobInstance findNextGroupTarget() {
 		return getGroupTarget().getRandomMob();
 	}
-	
-	public ControllableMobAI(L2ControllableMobInstance controllableMob)
-	{
+
+	public ControllableMobAI(L2ControllableMobInstance controllableMob) {
 		super(controllableMob);
 		setAlternateAI(AI_IDLE);
 	}
-	
-	public int getAlternateAI()
-	{
+
+	public int getAlternateAI() {
 		return _alternateAI;
 	}
-	
-	public void setAlternateAI(int _alternateai)
-	{
+
+	public void setAlternateAI(int _alternateai) {
 		_alternateAI = _alternateai;
 	}
-	
-	public void forceAttack(Creature target)
-	{
+
+	public void forceAttack(Creature target) {
 		setAlternateAI(AI_FORCEATTACK);
 		setForcedTarget(target);
 	}
-	
-	public void forceAttackGroup(MobGroup group)
-	{
+
+	public void forceAttackGroup(MobGroup group) {
 		setForcedTarget(null);
 		setGroupTarget(group);
 		setAlternateAI(AI_ATTACK_GROUP);
 	}
-	
-	public void stop()
-	{
+
+	public void stop() {
 		setAlternateAI(AI_IDLE);
 		clientStopMoving(null);
 	}
-	
-	public void move(double x, double y, double z)
-	{
+
+	public void move(double x, double y, double z) {
 		moveTo(x, y, z);
 	}
-	
-	public void follow(Creature target)
-	{
+
+	public void follow(Creature target) {
 		setAlternateAI(AI_FOLLOW);
 		setForcedTarget(target);
 	}
-	
-	public boolean isThinking()
-	{
+
+	public boolean isThinking() {
 		return _isThinking;
 	}
-	
-	public boolean isNotMoving()
-	{
+
+	public boolean isNotMoving() {
 		return _isNotMoving;
 	}
-	
-	public void setNotMoving(boolean isNotMoving)
-	{
+
+	public void setNotMoving(boolean isNotMoving) {
 		_isNotMoving = isNotMoving;
 	}
-	
-	public void setThinking(boolean isThinking)
-	{
+
+	public void setThinking(boolean isThinking) {
 		_isThinking = isThinking;
 	}
-	
-	private Creature getForcedTarget()
-	{
+
+	private Creature getForcedTarget() {
 		return _forcedTarget;
 	}
-	
-	private MobGroup getGroupTarget()
-	{
+
+	private MobGroup getGroupTarget() {
 		return _targetGroup;
 	}
-	
-	private void setForcedTarget(Creature forcedTarget)
-	{
+
+	private void setForcedTarget(Creature forcedTarget) {
 		_forcedTarget = forcedTarget;
 	}
-	
-	private void setGroupTarget(MobGroup targetGroup)
-	{
+
+	private void setGroupTarget(MobGroup targetGroup) {
 		_targetGroup = targetGroup;
 	}
 }

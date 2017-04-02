@@ -25,20 +25,17 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 
 /**
  * Returns the initial value plus the function value, if the condition are met.
+ *
  * @author Zoey76
  */
-public class FuncMul extends AbstractFunction
-{
-	public FuncMul(DoubleStat stat, int order, Object owner, double value, Condition applayCond)
-	{
+public class FuncMul extends AbstractFunction {
+	public FuncMul(DoubleStat stat, int order, Object owner, double value, Condition applayCond) {
 		super(stat, order, owner, value, applayCond);
 	}
-	
+
 	@Override
-	public double calc(Creature effector, Creature effected, Skill skill, double initVal)
-	{
-		if ((getApplayCond() == null) || getApplayCond().test(effector, effected, skill))
-		{
+	public double calc(Creature effector, Creature effected, Skill skill, double initVal) {
+		if ((getApplayCond() == null) || getApplayCond().test(effector, effected, skill)) {
 			return initVal * getValue();
 		}
 		return initVal;

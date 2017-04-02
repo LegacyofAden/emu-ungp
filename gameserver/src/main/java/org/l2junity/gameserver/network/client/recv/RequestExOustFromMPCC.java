@@ -27,47 +27,40 @@ import org.l2junity.network.PacketReader;
 
 /**
  * D0 0F 00 5A 00 77 00 65 00 72 00 67 00 00 00
+ *
  * @author -Wooden-
  */
-public final class RequestExOustFromMPCC implements IClientIncomingPacket
-{
+public final class RequestExOustFromMPCC implements IClientIncomingPacket {
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance target = World.getInstance().getPlayer(_name);
 		PlayerInstance activeChar = client.getActiveChar();
-		
-		if ((target != null) && target.isInParty() && activeChar.isInParty() && activeChar.getParty().isInCommandChannel() && target.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar) && activeChar.getParty().getCommandChannel().equals(target.getParty().getCommandChannel()))
-		{
-			if (activeChar.equals(target))
-			{
+
+		if ((target != null) && target.isInParty() && activeChar.isInParty() && activeChar.getParty().isInCommandChannel() && target.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar) && activeChar.getParty().getCommandChannel().equals(target.getParty().getCommandChannel())) {
+			if (activeChar.equals(target)) {
 				return;
 			}
-			
+
 			target.getParty().getCommandChannel().removeParty(target.getParty());
-			
+
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_WERE_DISMISSED_FROM_THE_COMMAND_CHANNEL);
 			target.getParty().broadcastPacket(sm);
-			
+
 			// check if CC has not been canceled
-			if (activeChar.getParty().isInCommandChannel())
-			{
+			if (activeChar.getParty().isInCommandChannel()) {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.C1_S_PARTY_HAS_BEEN_DISMISSED_FROM_THE_COMMAND_CHANNEL);
 				sm.addString(target.getParty().getLeader().getName());
 				activeChar.getParty().getCommandChannel().broadcastPacket(sm);
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.YOUR_TARGET_CANNOT_BE_FOUND);
 		}
 	}

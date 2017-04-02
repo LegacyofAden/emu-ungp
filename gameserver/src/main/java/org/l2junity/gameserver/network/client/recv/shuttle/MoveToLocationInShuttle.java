@@ -31,8 +31,7 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public final class MoveToLocationInShuttle implements IClientIncomingPacket
-{
+public final class MoveToLocationInShuttle implements IClientIncomingPacket {
 	private int _boatId;
 	private int _targetX;
 	private int _targetY;
@@ -40,10 +39,9 @@ public final class MoveToLocationInShuttle implements IClientIncomingPacket
 	private int _originX;
 	private int _originY;
 	private int _originZ;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_boatId = packet.readD(); // objectId of boat
 		_targetX = packet.readD();
 		_targetY = packet.readD();
@@ -53,34 +51,29 @@ public final class MoveToLocationInShuttle implements IClientIncomingPacket
 		_originZ = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ))
-		{
+
+		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ)) {
 			activeChar.sendPacket(new ExStopMoveInShuttle(activeChar, _boatId));
 			return;
 		}
-		
-		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW))
-		{
+
+		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW)) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.isSitting() || activeChar.isMovementDisabled())
-		{
+
+		if (activeChar.isSitting() || activeChar.isMovementDisabled()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		activeChar.setInVehiclePosition(new Location(_targetX, _targetY, _targetZ));
 		activeChar.broadcastPacket(new ExMoveToLocationInShuttle(activeChar, _originX, _originY, _originZ));
 	}

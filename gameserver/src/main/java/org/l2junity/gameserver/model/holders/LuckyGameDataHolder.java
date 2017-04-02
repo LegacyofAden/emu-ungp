@@ -18,16 +18,15 @@
  */
 package org.l2junity.gameserver.model.holders;
 
+import org.l2junity.gameserver.model.StatsSet;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.l2junity.gameserver.model.StatsSet;
 
 /**
  * @author Sdw
  */
-public class LuckyGameDataHolder
-{
+public class LuckyGameDataHolder {
 	final private int _index;
 	final private int _turningPoints;
 	final private List<ItemChanceHolder> _commonRewards = new ArrayList<>();
@@ -35,70 +34,57 @@ public class LuckyGameDataHolder
 	final private List<ItemChanceHolder> _modifyRewards = new ArrayList<>();
 	private int _minModifyRewardGame;
 	private int _maxModifyRewardGame;
-	
-	public LuckyGameDataHolder(StatsSet params)
-	{
+
+	public LuckyGameDataHolder(StatsSet params) {
 		_index = params.getInt("index");
 		_turningPoints = params.getInt("turning_point");
 	}
-	
-	public void addCommonReward(ItemChanceHolder item)
-	{
+
+	public void addCommonReward(ItemChanceHolder item) {
 		_commonRewards.add(item);
 	}
-	
-	public void addUniqueReward(ItemPointHolder item)
-	{
+
+	public void addUniqueReward(ItemPointHolder item) {
 		_uniqueRewards.add(item);
 	}
-	
-	public void addModifyReward(ItemChanceHolder item)
-	{
+
+	public void addModifyReward(ItemChanceHolder item) {
 		_modifyRewards.add(item);
 	}
-	
-	public List<ItemChanceHolder> getCommonReward()
-	{
+
+	public List<ItemChanceHolder> getCommonReward() {
 		return _commonRewards;
 	}
-	
-	public List<ItemPointHolder> getUniqueReward()
-	{
+
+	public List<ItemPointHolder> getUniqueReward() {
 		return _uniqueRewards;
 	}
-	
-	public List<ItemChanceHolder> getModifyReward()
-	{
+
+	public List<ItemChanceHolder> getModifyReward() {
 		return _modifyRewards;
 	}
-	
-	public void setMinModifyRewardGame(int minModifyRewardGame)
-	{
+
+	public void setMinModifyRewardGame(int minModifyRewardGame) {
 		_minModifyRewardGame = minModifyRewardGame;
 	}
-	
-	public void setMaxModifyRewardGame(int maxModifyRewardGame)
-	{
+
+	public void setMaxModifyRewardGame(int maxModifyRewardGame) {
 		_maxModifyRewardGame = maxModifyRewardGame;
 	}
-	
-	public int getMinModifyRewardGame()
-	{
+
+	public int getMinModifyRewardGame() {
 		return _minModifyRewardGame;
 	}
-	
-	public int getMaxModifyRewardGame()
-	{
+
+	public int getMaxModifyRewardGame() {
 		return _maxModifyRewardGame;
 	}
-	
-	public int getIndex()
-	{
+
+	public int getIndex() {
 		return _index;
 	}
-	
-	public int getTurningPoints()
-	{
+
+	public int getTurningPoints() {
 		return _turningPoints;
 	}
 }

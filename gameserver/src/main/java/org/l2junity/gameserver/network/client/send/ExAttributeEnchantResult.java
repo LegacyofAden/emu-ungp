@@ -22,8 +22,7 @@ import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExAttributeEnchantResult implements IClientOutgoingPacket
-{
+public class ExAttributeEnchantResult implements IClientOutgoingPacket {
 	private final int _result;
 	private final int _isWeapon;
 	private final int _type;
@@ -31,9 +30,8 @@ public class ExAttributeEnchantResult implements IClientOutgoingPacket
 	private final int _after;
 	private final int _successCount;
 	private final int _failedCount;
-	
-	public ExAttributeEnchantResult(int result, boolean isWeapon, AttributeType type, int before, int after, int successCount, int failedCount)
-	{
+
+	public ExAttributeEnchantResult(int result, boolean isWeapon, AttributeType type, int before, int after, int successCount, int failedCount) {
 		_result = result;
 		_isWeapon = isWeapon ? 1 : 0;
 		_type = type.getClientId();
@@ -42,12 +40,11 @@ public class ExAttributeEnchantResult implements IClientOutgoingPacket
 		_successCount = successCount;
 		_failedCount = failedCount;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ATTRIBUTE_ENCHANT_RESULT.writeId(packet);
-		
+
 		packet.writeD(_result);
 		packet.writeC(_isWeapon);
 		packet.writeH(_type);

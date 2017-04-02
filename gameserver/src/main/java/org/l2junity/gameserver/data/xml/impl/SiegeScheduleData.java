@@ -18,74 +18,58 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.SiegeScheduleDate;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.util.Util;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.SiegeScheduleDate;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 /**
  * @author UnAfraid
  */
-public class SiegeScheduleData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(SiegeScheduleData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class SiegeScheduleData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final SiegeScheduleData instance = new SiegeScheduleData();
+
 	private final List<SiegeScheduleDate> _scheduleData = new ArrayList<>();
-	
-	protected SiegeScheduleData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private SiegeScheduleData() {
 		_scheduleData.clear();
 		parseDatapackFile("config/SiegeSchedule.xml");
-		LOGGER.info("Loaded: {} siege schedulers.", _scheduleData.size());
-		if (_scheduleData.isEmpty())
-		{
+		log.info("Loaded: {} siege schedulers.", _scheduleData.size());
+		if (_scheduleData.isEmpty()) {
 			_scheduleData.add(new SiegeScheduleDate(new StatsSet()));
-			LOGGER.info("Emergency Load: {} default siege schedulers.", _scheduleData.size());
+			log.info("Emergency Load: {} default siege schedulers.", _scheduleData.size());
 		}
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node cd = n.getFirstChild(); cd != null; cd = cd.getNextSibling())
-				{
-					switch (cd.getNodeName())
-					{
-						case "schedule":
-						{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node cd = n.getFirstChild(); cd != null; cd = cd.getNextSibling()) {
+					switch (cd.getNodeName()) {
+						case "schedule": {
 							final StatsSet set = new StatsSet();
 							final NamedNodeMap attrs = cd.getAttributes();
-							for (int i = 0; i < attrs.getLength(); i++)
-							{
+							for (int i = 0; i < attrs.getLength(); i++) {
 								Node node = attrs.item(i);
 								String key = node.getNodeName();
 								String val = node.getNodeValue();
-								if ("day".equals(key))
-								{
-									if (!Util.isDigit(val))
-									{
+								if ("day".equals(key)) {
+									if (!Util.isDigit(val)) {
 										val = Integer.toString(getValueForField(val));
 									}
 								}
@@ -99,33 +83,17 @@ public class SiegeScheduleData implements IGameXmlReader
 			}
 		}
 	}
-	
-	private int getValueForField(String field)
-	{
-		try
-		{
+
+	private int getValueForField(String field) {
+		try {
 			return Calendar.class.getField(field).getInt(Calendar.class);
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("", e);
+		} catch (Exception e) {
+			log.warn("", e);
 			return -1;
 		}
 	}
-	
-	public List<SiegeScheduleDate> getScheduleDates()
-	{
+
+	public List<SiegeScheduleDate> getScheduleDates() {
 		return _scheduleData;
-	}
-	
-	@InstanceGetter
-	public static final SiegeScheduleData getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final SiegeScheduleData INSTANCE = new SiegeScheduleData();
 	}
 }

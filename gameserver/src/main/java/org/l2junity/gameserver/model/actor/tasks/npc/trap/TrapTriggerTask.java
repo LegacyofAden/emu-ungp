@@ -18,34 +18,29 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.npc.trap;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Trap trigger task.
+ *
  * @author Zoey76
  */
-public class TrapTriggerTask implements Runnable
-{
+public class TrapTriggerTask implements Runnable {
 	private final L2TrapInstance _trap;
-	
-	public TrapTriggerTask(L2TrapInstance trap)
-	{
+
+	public TrapTriggerTask(L2TrapInstance trap) {
 		_trap = trap;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		try
-		{
+	public void run() {
+		try {
 			_trap.doCast(_trap.getSkill());
-			ThreadPool.schedule(new TrapUnsummonTask(_trap), _trap.getSkill().getHitTime() + 300, TimeUnit.MILLISECONDS);
-		}
-		catch (Exception e)
-		{
+			ThreadPool.getInstance().scheduleGeneral(new TrapUnsummonTask(_trap), _trap.getSkill().getHitTime() + 300, TimeUnit.MILLISECONDS);
+		} catch (Exception e) {
 			_trap.unSummon();
 		}
 	}

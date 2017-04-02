@@ -25,54 +25,44 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class ExBookmarkPacket implements IClientIncomingPacket
-{
+public class ExBookmarkPacket implements IClientIncomingPacket {
 	private IIncomingPacket<L2GameClient> _exBookmarkPacket;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		int subId = packet.readD();
-		
-		switch (subId)
-		{
-			case 0:
-			{
+
+		switch (subId) {
+			case 0: {
 				_exBookmarkPacket = new RequestBookMarkSlotInfo();
 				break;
 			}
-			case 1:
-			{
+			case 1: {
 				_exBookmarkPacket = new RequestSaveBookMarkSlot();
 				break;
 			}
-			case 2:
-			{
+			case 2: {
 				_exBookmarkPacket = new RequestModifyBookMarkSlot();
 				break;
 			}
-			case 3:
-			{
+			case 3: {
 				_exBookmarkPacket = new RequestDeleteBookMarkSlot();
 				break;
 			}
-			case 4:
-			{
+			case 4: {
 				_exBookmarkPacket = new RequestTeleportBookMark();
 				break;
 			}
-			case 5:
-			{
+			case 5: {
 				_exBookmarkPacket = new RequestChangeBookMarkSlot();
 				break;
 			}
 		}
 		return (_exBookmarkPacket != null) && _exBookmarkPacket.read(client, packet);
 	}
-	
+
 	@Override
-	public void run(L2GameClient client) throws Exception
-	{
+	public void run(L2GameClient client) throws Exception {
 		_exBookmarkPacket.run(client);
 	}
 }

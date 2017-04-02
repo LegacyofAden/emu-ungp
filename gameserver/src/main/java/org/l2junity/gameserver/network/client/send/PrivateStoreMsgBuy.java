@@ -22,25 +22,21 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PrivateStoreMsgBuy implements IClientOutgoingPacket
-{
+public class PrivateStoreMsgBuy implements IClientOutgoingPacket {
 	private final int _objId;
 	private String _storeMsg;
-	
-	public PrivateStoreMsgBuy(PlayerInstance player)
-	{
+
+	public PrivateStoreMsgBuy(PlayerInstance player) {
 		_objId = player.getObjectId();
-		if (player.getBuyList() != null)
-		{
+		if (player.getBuyList() != null) {
 			_storeMsg = player.getBuyList().getTitle();
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PRIVATE_STORE_BUY_MSG.writeId(packet);
-		
+
 		packet.writeD(_objId);
 		packet.writeS(_storeMsg);
 		return true;

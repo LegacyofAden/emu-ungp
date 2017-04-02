@@ -26,19 +26,16 @@ import org.l2junity.gameserver.taskmanager.TaskManager.ExecutedTask;
 /**
  * @author Layane
  */
-public final class TaskRestart extends Task
-{
+public final class TaskRestart extends Task {
 	public static final String NAME = "restart";
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return NAME;
 	}
-	
+
 	@Override
-	public void onTimeElapsed(ExecutedTask task)
-	{
-		ShutdownManager.start(TerminationStatus.MANUAL_RESTART, Integer.parseInt(task.getParams()[2]), 1, "Task");
+	public void onTimeElapsed(ExecutedTask task) {
+		ShutdownManager.getInstance().start(TerminationStatus.MANUAL_RESTART, Integer.parseInt(task.getParams()[2]), 1, "Task");
 	}
 }

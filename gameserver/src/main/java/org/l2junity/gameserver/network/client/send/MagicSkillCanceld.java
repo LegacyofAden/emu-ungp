@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class MagicSkillCanceld implements IClientOutgoingPacket
-{
+public final class MagicSkillCanceld implements IClientOutgoingPacket {
 	private final int _objectId;
-	
-	public MagicSkillCanceld(int objectId)
-	{
+
+	public MagicSkillCanceld(int objectId) {
 		_objectId = objectId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MAGIC_SKILL_CANCELED.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		return true;
 	}

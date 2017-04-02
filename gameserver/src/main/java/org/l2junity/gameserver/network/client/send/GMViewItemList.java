@@ -18,52 +18,45 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class GMViewItemList extends AbstractItemPacket
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class GMViewItemList extends AbstractItemPacket {
 	private final List<ItemInstance> _items = new ArrayList<>();
 	private final int _limit;
 	private final String _playerName;
-	
-	public GMViewItemList(PlayerInstance cha)
-	{
+
+	public GMViewItemList(PlayerInstance cha) {
 		_playerName = cha.getName();
 		_limit = cha.getInventoryLimit();
-		for (ItemInstance item : cha.getInventory().getItems())
-		{
+		for (ItemInstance item : cha.getInventory().getItems()) {
 			_items.add(item);
 		}
 	}
-	
-	public GMViewItemList(L2PetInstance cha)
-	{
+
+	public GMViewItemList(L2PetInstance cha) {
 		_playerName = cha.getName();
 		_limit = cha.getInventoryLimit();
-		for (ItemInstance item : cha.getInventory().getItems())
-		{
+		for (ItemInstance item : cha.getInventory().getItems()) {
 			_items.add(item);
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GM_VIEW_ITEM_LIST.writeId(packet);
-		
+
 		packet.writeS(_playerName);
 		packet.writeD(_limit); // inventory limit
 		packet.writeH(0x01); // show window ??
 		packet.writeH(_items.size());
-		for (ItemInstance item : _items)
-		{
+		for (ItemInstance item : _items) {
 			writeItem(packet, item);
 		}
 		return true;

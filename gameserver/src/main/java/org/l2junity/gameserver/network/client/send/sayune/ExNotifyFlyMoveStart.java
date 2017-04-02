@@ -25,19 +25,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExNotifyFlyMoveStart implements IClientOutgoingPacket
-{
+public class ExNotifyFlyMoveStart implements IClientOutgoingPacket {
 	public static final ExNotifyFlyMoveStart STATIC_PACKET = new ExNotifyFlyMoveStart();
-	
-	private ExNotifyFlyMoveStart()
-	{
+
+	private ExNotifyFlyMoveStart() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_NOTIFY_FLY_MOVE_START.writeId(packet);
-		
+
 		return true;
 	}
 }

@@ -30,10 +30,10 @@ package org.l2junity.gameserver.enums;
  * ---------------------------------------------------------------------- <BR>
  * All other are considered with no basic property aka NONE. <BR>
  * <BR>
+ *
  * @author Nik
  */
-public enum BasicProperty
-{
+public enum BasicProperty {
 	NONE,
 	PHYSICAL,
 	MAGIC;

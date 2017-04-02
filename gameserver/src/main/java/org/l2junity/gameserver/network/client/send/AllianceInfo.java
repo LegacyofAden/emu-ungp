@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.ClanInfo;
 import org.l2junity.gameserver.model.L2Clan;
@@ -27,55 +25,53 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.recv.RequestAllyInfo;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * Sent in response to {@link RequestAllyInfo}, if applicable.<BR>
+ *
  * @author afk5min
  */
-public class AllianceInfo implements IClientOutgoingPacket
-{
+public class AllianceInfo implements IClientOutgoingPacket {
 	private final String _name;
 	private final int _total;
 	private final int _online;
 	private final String _leaderC;
 	private final String _leaderP;
 	private final ClanInfo[] _allies;
-	
-	public AllianceInfo(int allianceId)
-	{
+
+	public AllianceInfo(int allianceId) {
 		final L2Clan leader = ClanTable.getInstance().getClan(allianceId);
 		_name = leader.getAllyName();
 		_leaderC = leader.getName();
 		_leaderP = leader.getLeaderName();
-		
+
 		final Collection<L2Clan> allies = ClanTable.getInstance().getClanAllies(allianceId);
 		_allies = new ClanInfo[allies.size()];
 		int idx = 0, total = 0, online = 0;
-		for (final L2Clan clan : allies)
-		{
+		for (final L2Clan clan : allies) {
 			final ClanInfo ci = new ClanInfo(clan);
 			_allies[idx++] = ci;
 			total += ci.getTotal();
 			online += ci.getOnline();
 		}
-		
+
 		_total = total;
 		_online = online;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ALLIANCE_INFO.writeId(packet);
-		
+
 		packet.writeS(_name);
 		packet.writeD(_total);
 		packet.writeD(_online);
 		packet.writeS(_leaderC);
 		packet.writeS(_leaderP);
-		
+
 		packet.writeD(_allies.length);
-		for (final ClanInfo aci : _allies)
-		{
+		for (final ClanInfo aci : _allies) {
 			packet.writeS(aci.getClan().getName());
 			packet.writeD(0x00);
 			packet.writeD(aci.getClan().getLevel());
@@ -85,34 +81,28 @@ public class AllianceInfo implements IClientOutgoingPacket
 		}
 		return true;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public int getTotal()
-	{
+
+	public int getTotal() {
 		return _total;
 	}
-	
-	public int getOnline()
-	{
+
+	public int getOnline() {
 		return _online;
 	}
-	
-	public String getLeaderC()
-	{
+
+	public String getLeaderC() {
 		return _leaderC;
 	}
-	
-	public String getLeaderP()
-	{
+
+	public String getLeaderP() {
 		return _leaderP;
 	}
-	
-	public ClanInfo[] getAllies()
-	{
+
+	public ClanInfo[] getAllies() {
 		return _allies;
 	}
 }

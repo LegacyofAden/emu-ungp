@@ -18,42 +18,38 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This packet shows the mouse click particle for 30 seconds on every location.
+ *
  * @author NosBit
  */
-public final class ExShowTrace implements IClientOutgoingPacket
-{
+public final class ExShowTrace implements IClientOutgoingPacket {
 	private final List<Location> _locations = new ArrayList<>();
-	
-	public void addLocation(double x, double y, double z)
-	{
+
+	public void addLocation(double x, double y, double z) {
 		_locations.add(new Location(x, y, z));
 	}
-	
-	public void addLocation(ILocational loc)
-	{
+
+	public void addLocation(ILocational loc) {
 		addLocation(loc.getX(), loc.getY(), loc.getZ());
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_TRACE.writeId(packet);
-		
+
 		packet.writeH(0); // type broken in H5
 		packet.writeD(0); // time broken in H5
 		packet.writeH(_locations.size());
-		for (Location loc : _locations)
-		{
+		for (Location loc : _locations) {
 			packet.writeD((int) loc.getX());
 			packet.writeD((int) loc.getY());
 			packet.writeD((int) loc.getZ());

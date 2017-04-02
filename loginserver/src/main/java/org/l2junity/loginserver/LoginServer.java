@@ -19,67 +19,22 @@
 package org.l2junity.loginserver;
 
 
-
-import org.l2junity.loginserver.manager.GameServerManager;
-import org.l2junity.loginserver.network.client.ClientNetworkManager;
-import org.l2junity.loginserver.network.client.crypt.KeyManager;
-import org.l2junity.loginserver.network.gameserver.GameServerNetworkManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import org.l2junity.core.startup.StartupLevel;
+import org.l2junity.core.startup.StartupManager;
 
 /**
- * @author NosBit
+ * @author ANZO
  */
-public class LoginServer
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoginServer.class);
-	
-	private LoginServer()
-	{
-		try
-		{
-			printSection("Config");
-			Config.load();
-			
-			printSection("Database");
-			DatabaseFactory.getInstance();
+public class LoginServer {
+	@Getter
+	private static LoginServer instance;
 
-			printSection("Data");
-			GameServerManager.getInstance();
-			
-			printSection("Network");
-			KeyManager.getInstance();
-			GameServerNetworkManager.getInstance().start();
-			ClientNetworkManager.getInstance().start();
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Error while initializing: ", e);
-		}
+	private LoginServer() throws Exception {
+		StartupManager.getInstance().startup(StartupLevel.class);
+	}
 
-		try
-		{
-			GameServerNetworkManager.getInstance().getChannelFuture().channel().closeFuture().sync();
-			ClientNetworkManager.getInstance().getChannelFuture().channel().closeFuture().sync();
-		}
-		catch (InterruptedException e)
-		{
-			LOGGER.warn("", e);
-		}
-	}
-	
-	public static void printSection(String s)
-	{
-		s = "=[ " + s + " ]";
-		while (s.length() < 65 - LoginServer.class.getSimpleName().length())
-		{
-			s = "-" + s;
-		}
-		LOGGER.info(s);
-	}
-	
-	public static void main(String[] args)
-	{
-		new LoginServer();
+	public static void main(String[] args) throws Exception {
+		instance = new LoginServer();
 	}
 }

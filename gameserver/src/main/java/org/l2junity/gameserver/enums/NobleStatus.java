@@ -21,30 +21,25 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum NobleStatus
-{
+public enum NobleStatus {
 	NONE(0),
 	NOBLESS(1),
 	EXALTED_1(2),
 	EXALTED_2(2),
 	EXALTED_3(2);
-	
+
 	private int _clientId;
-	
-	private NobleStatus(int clientId)
-	{
+
+	private NobleStatus(int clientId) {
 		_clientId = clientId;
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
-	
-	public static NobleStatus valueOf(int status)
-	{
-		if ((status < 0) || (status >= values().length))
-		{
+
+	public static NobleStatus valueOf(int status) {
+		if ((status < 0) || (status >= values().length)) {
 			return NONE;
 		}
 		return values()[status];

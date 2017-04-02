@@ -27,28 +27,24 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch)
+ *
  * @author -Wooden-
  */
-public final class RequestPledgePowerGradeList implements IClientIncomingPacket
-{
+public final class RequestPledgePowerGradeList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = player.getClan();
-		if (clan != null)
-		{
+		if (clan != null) {
 			RankPrivs[] privs = clan.getAllRankPrivs();
 			player.sendPacket(new PledgePowerGradeList(privs));
 		}

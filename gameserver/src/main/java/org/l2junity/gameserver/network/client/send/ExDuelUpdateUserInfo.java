@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public class ExDuelUpdateUserInfo implements IClientOutgoingPacket
-{
+public class ExDuelUpdateUserInfo implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public ExDuelUpdateUserInfo(PlayerInstance cha)
-	{
+
+	public ExDuelUpdateUserInfo(PlayerInstance cha) {
 		_activeChar = cha;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_DUEL_UPDATE_USER_INFO.writeId(packet);
-		
+
 		packet.writeS(_activeChar.getName());
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_activeChar.getClassId().getId());

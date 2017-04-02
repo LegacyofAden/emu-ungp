@@ -32,46 +32,41 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.11.2.1.2.4 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestRestart implements IClientIncomingPacket
-{
+public final class RequestRestart implements IClientIncomingPacket {
 	protected static final Logger LOG_ACCOUNTING = LoggerFactory.getLogger("accounting");
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!player.canLogout())
-		{
+
+		if (!player.canLogout()) {
 			client.sendPacket(RestartResponse.FALSE);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		LOG_ACCOUNTING.info("Logged out, {}", client);
-		
-		if (!OfflineTradeUtil.enteredOfflineMode(player))
-		{
+
+		if (!OfflineTradeUtil.enteredOfflineMode(player)) {
 			Disconnection.of(client, player).storeMe().deleteMe();
 		}
-		
+
 		// return the client to the authed status
 		client.setConnectionState(ConnectionState.AUTHENTICATED);
-		
+
 		client.sendPacket(RestartResponse.TRUE);
-		
+
 		// send char list
 		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
 		client.sendPacket(cl);

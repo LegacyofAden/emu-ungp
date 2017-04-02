@@ -23,13 +23,12 @@ import java.sql.SQLException;
 /**
  * @author UnAfraid
  */
-public interface IDatabaseMigration
-{
+public interface IDatabaseMigration {
 	String getName();
-	
+
 	boolean onUp() throws SQLException;
-	
+
 	boolean onDown() throws SQLException;
-	
+
 	boolean isReversable();
 }

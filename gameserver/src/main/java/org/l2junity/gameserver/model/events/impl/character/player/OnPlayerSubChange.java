@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author malyelfik
  */
-public final class OnPlayerSubChange implements IBaseEvent
-{
+public final class OnPlayerSubChange implements IBaseEvent {
 	private final PlayerInstance _activeChar;
-	
-	public OnPlayerSubChange(PlayerInstance activeChar)
-	{
+
+	public OnPlayerSubChange(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
-	public final PlayerInstance getActiveChar()
-	{
+
+	public final PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_SUB_CHANGE;
 	}
 }

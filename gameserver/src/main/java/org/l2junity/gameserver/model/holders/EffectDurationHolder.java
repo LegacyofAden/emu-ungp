@@ -22,50 +22,50 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Effect duration holder.
+ *
  * @author Zoey76
  */
-public class EffectDurationHolder
-{
+public class EffectDurationHolder {
 	private final int _skillId;
 	private final int _skillLvl;
 	private final int _duration;
-	
+
 	/**
 	 * Effect duration holder constructor.
-	 * @param skill the skill to get the data
+	 *
+	 * @param skill    the skill to get the data
 	 * @param duration the effect duration
 	 */
-	public EffectDurationHolder(Skill skill, int duration)
-	{
+	public EffectDurationHolder(Skill skill, int duration) {
 		_skillId = skill.getDisplayId();
 		_skillLvl = skill.getDisplayLevel();
 		_duration = duration;
 	}
-	
+
 	/**
 	 * Get the effect's skill Id.
+	 *
 	 * @return the skill Id
 	 */
-	public int getSkillId()
-	{
+	public int getSkillId() {
 		return _skillId;
 	}
-	
+
 	/**
 	 * Get the effect's skill level.
+	 *
 	 * @return the skill level
 	 */
-	public int getSkillLvl()
-	{
+	public int getSkillLvl() {
 		return _skillLvl;
 	}
-	
+
 	/**
 	 * Get the effect's duration.
+	 *
 	 * @return the duration in <b>seconds</b>
 	 */
-	public int getDuration()
-	{
+	public int getDuration() {
 		return _duration;
 	}
 }

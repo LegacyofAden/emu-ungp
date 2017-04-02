@@ -24,28 +24,24 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 /**
  * @author Nik
  */
-public class LocationReturn extends TerminateReturn
-{
+public class LocationReturn extends TerminateReturn {
 	private final boolean _overrideLocation;
 	private double _x;
 	private double _y;
 	private double _z;
 	private int _heading;
 	private Instance _instance;
-	
-	public LocationReturn(boolean terminate, boolean overrideLocation)
-	{
+
+	public LocationReturn(boolean terminate, boolean overrideLocation) {
 		super(terminate, false, false);
 		_overrideLocation = overrideLocation;
 	}
-	
-	public LocationReturn(boolean terminate, boolean overrideLocation, ILocational targetLocation, Instance instance)
-	{
+
+	public LocationReturn(boolean terminate, boolean overrideLocation, ILocational targetLocation, Instance instance) {
 		super(terminate, false, false);
 		_overrideLocation = overrideLocation;
-		
-		if (targetLocation != null)
-		{
+
+		if (targetLocation != null) {
 			setX(targetLocation.getX());
 			setY(targetLocation.getY());
 			setZ(targetLocation.getZ());
@@ -53,59 +49,48 @@ public class LocationReturn extends TerminateReturn
 			setInstance(instance);
 		}
 	}
-	
-	public void setX(double x)
-	{
+
+	public void setX(double x) {
 		_x = x;
 	}
-	
-	public void setY(double y)
-	{
+
+	public void setY(double y) {
 		_y = y;
 	}
-	
-	public void setZ(double z)
-	{
+
+	public void setZ(double z) {
 		_z = z;
 	}
-	
-	public void setHeading(int heading)
-	{
+
+	public void setHeading(int heading) {
 		_heading = heading;
 	}
-	
-	public void setInstance(Instance instance)
-	{
+
+	public void setInstance(Instance instance) {
 		_instance = instance;
 	}
-	
-	public boolean overrideLocation()
-	{
+
+	public boolean overrideLocation() {
 		return _overrideLocation;
 	}
-	
-	public double getX()
-	{
+
+	public double getX() {
 		return _x;
 	}
-	
-	public double getY()
-	{
+
+	public double getY() {
 		return _y;
 	}
-	
-	public double getZ()
-	{
+
+	public double getZ() {
 		return _z;
 	}
-	
-	public int getHeading()
-	{
+
+	public int getHeading() {
 		return _heading;
 	}
-	
-	public Instance getInstance()
-	{
+
+	public Instance getInstance() {
 		return _instance;
 	}
 }

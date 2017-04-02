@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.List;
-import java.util.function.Function;
-
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
 import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
 import org.l2junity.gameserver.handler.OneDayRewardHandler;
@@ -28,11 +25,13 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 
+import java.util.List;
+import java.util.function.Function;
+
 /**
  * @author Sdw
  */
-public class OneDayRewardDataHolder
-{
+public class OneDayRewardDataHolder {
 	private final int _id;
 	private final int _rewardId;
 	private final List<ItemHolder> _rewardsItems;
@@ -44,11 +43,10 @@ public class OneDayRewardDataHolder
 	private final boolean _isDualClassOnly;
 	private final boolean _isDisplayedWhenNotAvailable;
 	private final AbstractOneDayRewardHandler _handler;
-	
-	public OneDayRewardDataHolder(StatsSet set)
-	{
+
+	public OneDayRewardDataHolder(StatsSet set) {
 		final Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> handler = OneDayRewardHandler.getInstance().getHandler(set.getString("handler"));
-		
+
 		_id = set.getInt("id");
 		_rewardId = set.getInt("reward_id");
 		_requiredCompletions = set.getInt("requiredCompletion", 0);
@@ -61,114 +59,92 @@ public class OneDayRewardDataHolder
 		_isDisplayedWhenNotAvailable = set.getBoolean("isDisplayedWhenNotAvailable", true);
 		_handler = handler != null ? handler.apply(this) : null;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public int getRewardId()
-	{
+
+	public int getRewardId() {
 		return _rewardId;
 	}
-	
-	public List<ClassId> getClassRestriction()
-	{
+
+	public List<ClassId> getClassRestriction() {
 		return _classRestriction;
 	}
-	
-	public List<ItemHolder> getRewards()
-	{
+
+	public List<ItemHolder> getRewards() {
 		return _rewardsItems;
 	}
-	
-	public int getRequiredCompletions()
-	{
+
+	public int getRequiredCompletions() {
 		return _requiredCompletions;
 	}
-	
-	public StatsSet getParams()
-	{
+
+	public StatsSet getParams() {
 		return _params;
 	}
-	
-	public boolean isOneTime()
-	{
+
+	public boolean isOneTime() {
 		return _isOneTime;
 	}
-	
-	public boolean isMainClassOnly()
-	{
+
+	public boolean isMainClassOnly() {
 		return _isMainClassOnly;
 	}
-	
-	public boolean isDualClassOnly()
-	{
+
+	public boolean isDualClassOnly() {
 		return _isDualClassOnly;
 	}
-	
-	public boolean isDisplayedWhenNotAvailable()
-	{
+
+	public boolean isDisplayedWhenNotAvailable() {
 		return _isDisplayedWhenNotAvailable;
 	}
-	
-	public boolean isDisplayable(PlayerInstance player)
-	{
+
+	public boolean isDisplayable(PlayerInstance player) {
 		// Check if its main class only
-		if (isMainClassOnly() && (player.isSubClassActive() || player.isDualClassActive()))
-		{
+		if (isMainClassOnly() && (player.isSubClassActive() || player.isDualClassActive())) {
 			return false;
 		}
-		
+
 		// Check if its dual class only.
-		if (isDualClassOnly() && !player.isDualClassActive())
-		{
+		if (isDualClassOnly() && !player.isDualClassActive()) {
 			return false;
 		}
-		
+
 		// Check for specific class restrictions
-		if (!_classRestriction.isEmpty() && !_classRestriction.contains(player.getClassId()))
-		{
+		if (!_classRestriction.isEmpty() && !_classRestriction.contains(player.getClassId())) {
 			return false;
 		}
-		
+
 		final int status = getStatus(player);
-		if (!isDisplayedWhenNotAvailable() && (status == OneDayRewardStatus.NOT_AVAILABLE.getClientId()))
-		{
+		if (!isDisplayedWhenNotAvailable() && (status == OneDayRewardStatus.NOT_AVAILABLE.getClientId())) {
 			return false;
 		}
-		
+
 		// Show only if its repeatable, recently completed or incompleted that has met the checks above.
 		return (!isOneTime() || getRecentlyCompleted(player) || (status != OneDayRewardStatus.COMPLETED.getClientId()));
 	}
-	
-	public void requestReward(PlayerInstance player)
-	{
-		if ((_handler != null) && isDisplayable(player))
-		{
+
+	public void requestReward(PlayerInstance player) {
+		if ((_handler != null) && isDisplayable(player)) {
 			_handler.requestReward(player);
 		}
 	}
-	
-	public int getStatus(PlayerInstance player)
-	{
+
+	public int getStatus(PlayerInstance player) {
 		return _handler != null ? _handler.getStatus(player) : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
-	
-	public int getProgress(PlayerInstance player)
-	{
+
+	public int getProgress(PlayerInstance player) {
 		return _handler != null ? _handler.getProgress(player) : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
-	
-	public boolean getRecentlyCompleted(PlayerInstance player)
-	{
+
+	public boolean getRecentlyCompleted(PlayerInstance player) {
 		return (_handler != null) && _handler.getRecentlyCompleted(player);
 	}
-	
-	public void reset()
-	{
-		if (_handler != null)
-		{
+
+	public void reset() {
+		if (_handler != null) {
 			_handler.reset();
 		}
 	}

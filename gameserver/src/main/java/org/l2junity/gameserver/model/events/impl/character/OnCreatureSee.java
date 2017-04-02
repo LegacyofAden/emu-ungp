@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnCreatureSee implements IBaseEvent
-{
+public class OnCreatureSee implements IBaseEvent {
 	private final Creature _seer;
 	private final Creature _seen;
-	
-	public OnCreatureSee(Creature seer, Creature seen)
-	{
+
+	public OnCreatureSee(Creature seer, Creature seen) {
 		_seer = seer;
 		_seen = seen;
 	}
-	
-	public final Creature getSeer()
-	{
+
+	public final Creature getSeer() {
 		return _seer;
 	}
-	
-	public final Creature getSeen()
-	{
+
+	public final Creature getSeen() {
 		return _seen;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_SEE;
 	}
 }

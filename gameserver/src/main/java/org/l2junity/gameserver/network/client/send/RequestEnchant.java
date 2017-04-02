@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author nBd
  */
-public class RequestEnchant implements IClientOutgoingPacket
-{
+public class RequestEnchant implements IClientOutgoingPacket {
 	private final int _result;
-	
-	public RequestEnchant(int result)
-	{
+
+	public RequestEnchant(int result) {
 		_result = result;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PRIVATE_STORE_WHOLE_MSG.writeId(packet);
-		
+
 		packet.writeD(_result);
 		return true;
 	}

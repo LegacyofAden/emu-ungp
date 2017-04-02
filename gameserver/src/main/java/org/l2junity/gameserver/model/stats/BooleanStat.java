@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.stats;
 /**
  * @author Sdw
  */
-public enum BooleanStat
-{
+public enum BooleanStat {
 	ABNORMAL_SHIELD,
 	ATTACK_BEHIND,
 	ATTACK_MUTED,

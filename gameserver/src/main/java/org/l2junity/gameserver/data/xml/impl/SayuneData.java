@@ -18,55 +18,46 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.SayuneEntry;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.SayuneEntry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 /**
  * @author UnAfraid
  */
-public class SayuneData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(SayuneData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class SayuneData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final SayuneData instance = new SayuneData();
+
 	private final Map<Integer, SayuneEntry> _maps = new HashMap<>();
-	
-	protected SayuneData()
-	{
+
+	private SayuneData() {
+		reload();
 	}
-	
-	@Reload("sayune")
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private void reload() {
 		parseDatapackFile("data/SayuneData.xml");
-		LOGGER.info("Loaded: {} maps.", _maps.size());
+		log.info("Loaded: {} maps.", _maps.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("map".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("map".equalsIgnoreCase(d.getNodeName())) {
 						final int id = parseInteger(d.getAttributes(), "id");
 						final SayuneEntry map = new SayuneEntry(id);
 						parseEntries(map, d);
@@ -76,47 +67,27 @@ public class SayuneData implements IGameXmlReader
 			}
 		}
 	}
-	
-	private void parseEntries(SayuneEntry lastEntry, Node n)
-	{
+
+	private void parseEntries(SayuneEntry lastEntry, Node n) {
 		NamedNodeMap attrs;
-		for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-		{
-			if ("selector".equals(d.getNodeName()) || "choice".equals(d.getNodeName()) || "loc".equals(d.getNodeName()))
-			{
+		for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+			if ("selector".equals(d.getNodeName()) || "choice".equals(d.getNodeName()) || "loc".equals(d.getNodeName())) {
 				attrs = d.getAttributes();
 				final int id = parseInteger(attrs, "id");
 				final int x = parseInteger(attrs, "x");
 				final int y = parseInteger(attrs, "y");
 				final int z = parseInteger(attrs, "z");
-				
+
 				parseEntries(lastEntry.addInnerEntry(new SayuneEntry("selector".equals(d.getNodeName()), id, x, y, z)), d);
 			}
 		}
 	}
-	
-	public SayuneEntry getMap(int id)
-	{
+
+	public SayuneEntry getMap(int id) {
 		return _maps.get(id);
 	}
-	
-	public Collection<SayuneEntry> getMaps()
-	{
+
+	public Collection<SayuneEntry> getMaps() {
 		return _maps.values();
-	}
-	
-	/**
-	 * Gets the single instance of SayuneData.
-	 * @return single instance of SayuneData
-	 */
-	@InstanceGetter
-	public static final SayuneData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final SayuneData _instance = new SayuneData();
 	}
 }

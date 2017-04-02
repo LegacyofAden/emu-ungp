@@ -25,36 +25,32 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) dd
+ *
  * @author -Wooden-
  */
-public final class RequestPledgeWarList implements IClientIncomingPacket
-{
+public final class RequestPledgeWarList implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _page;
 	private int _tab;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_page = packet.readD();
 		_tab = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.getClan() == null)
-		{
+
+		if (activeChar.getClan() == null) {
 			return;
 		}
-		
+
 		activeChar.sendPacket(new PledgeReceiveWarList(activeChar.getClan(), _tab));
 	}
 }

@@ -18,30 +18,29 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding;
 
-import java.util.List;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.config.GeoDataConfig;
+import org.l2junity.core.configs.GeoDataConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.geodata.pathfinding.cellnodes.CellPathFinding;
 import org.l2junity.gameserver.geodata.pathfinding.empty.EmptyPathFinding;
 import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoNode;
 import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoPathFinding;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.instancezone.Instance;
+
+import java.util.List;
 
 /**
  * @author -Nemesiss-
  */
-public abstract class PathFinding
-{
-	private static final class SingletonHolder
-	{
-		static
-		{
-			switch (GeoDataConfig.PATHFINDING)
-			{
+@StartupComponent("Service")
+public abstract class PathFinding {
+	public static PathFinding getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+
+	private static final class SingletonHolder {
+		static {
+			switch (GeoDataConfig.PATHFINDING) {
 				case 1:
 					INSTANCE = new GeoPathFinding();
 					break;
@@ -53,25 +52,19 @@ public abstract class PathFinding
 					break;
 			}
 		}
+
 		protected static final PathFinding INSTANCE;
 	}
-	
-	@Load(group = LoadGroup.class)
+
 	public abstract void load();
-	
-	@InstanceGetter
-	public static PathFinding getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
+
 	public abstract boolean pathNodesExist(short regionoffset);
-	
+
 	public abstract List<AbstractNodeLoc> findPath(double x, double y, double z, double tx, double ty, double tz, Instance instance, boolean playable);
-	
+
 	// @formatter:off
 	/*
-	public List<AbstractNodeLoc> search(AbstractNode start, AbstractNode end, int instanceId)
+    public List<AbstractNodeLoc> search(AbstractNode start, AbstractNode end, int instanceId)
 	{
 		// The simplest grid-based pathfinding.
 		// Drawback is not having higher cost for diagonal movement (means funny routes)
@@ -173,69 +166,64 @@ public abstract class PathFinding
 	}
 	 */
 	// @formatter:on
-	
+
 	/**
 	 * Convert geodata position to pathnode position
+	 *
 	 * @param geo_pos
 	 * @return pathnode position
 	 */
-	public short getNodePos(int geo_pos)
-	{
+	public short getNodePos(int geo_pos) {
 		return (short) (geo_pos >> 3); // OK?
 	}
-	
+
 	/**
 	 * Convert node position to pathnode block position
+	 *
 	 * @param node_pos
 	 * @return pathnode block position (0...255)
 	 */
-	public short getNodeBlock(int node_pos)
-	{
+	public short getNodeBlock(int node_pos) {
 		return (short) (node_pos % 256);
 	}
-	
-	public byte getRegionX(int node_pos)
-	{
+
+	public byte getRegionX(int node_pos) {
 		return (byte) ((node_pos >> 8) + World.TILE_X_MIN);
 	}
-	
-	public byte getRegionY(int node_pos)
-	{
+
+	public byte getRegionY(int node_pos) {
 		return (byte) ((node_pos >> 8) + World.TILE_Y_MIN);
 	}
-	
-	public short getRegionOffset(byte rx, byte ry)
-	{
+
+	public short getRegionOffset(byte rx, byte ry) {
 		return (short) ((rx << 5) + ry);
 	}
-	
+
 	/**
 	 * Convert pathnode x to World x position
+	 *
 	 * @param node_x rx
 	 * @return
 	 */
-	public int calculateWorldX(short node_x)
-	{
+	public int calculateWorldX(short node_x) {
 		return World.MAP_MIN_X + (node_x * 128) + 48;
 	}
-	
+
 	/**
 	 * Convert pathnode y to World y position
+	 *
 	 * @param node_y
 	 * @return
 	 */
-	public int calculateWorldY(short node_y)
-	{
+	public int calculateWorldY(short node_y) {
 		return World.MAP_MIN_Y + (node_y * 128) + 48;
 	}
-	
-	public String[] getStat()
-	{
+
+	public String[] getStat() {
 		return null;
 	}
-	
-	public GeoNode[] readNeighbors(GeoNode n, int idx)
-	{
+
+	public GeoNode[] readNeighbors(GeoNode n, int idx) {
 		// bleah... I have to vomit every time I visit that damn geoengine/pathfinding...
 		return null;
 	}

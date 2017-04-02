@@ -23,21 +23,19 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Trigger packet
+ *
  * @author KenM
  */
-public class ExRequestHackShield implements IClientOutgoingPacket
-{
+public class ExRequestHackShield implements IClientOutgoingPacket {
 	public static final ExRequestHackShield STATIC_PACKET = new ExRequestHackShield();
-	
-	private ExRequestHackShield()
-	{
+
+	private ExRequestHackShield() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_REQUEST_HACK_SHIELD.writeId(packet);
-		
+
 		return true;
 	}
 }

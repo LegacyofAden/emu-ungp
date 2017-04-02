@@ -18,47 +18,35 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.ServerConfig;
+import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.KeyPacket;
 import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This class ...
- * @version $Revision: 1.5.2.8.2.8 $ $Date: 2005/04/02 10:43:04 $
- */
-public final class ProtocolVersion implements IClientIncomingPacket
-{
+public final class ProtocolVersion implements IClientIncomingPacket {
 	private static final Logger _logAccounting = LoggerFactory.getLogger("accounting");
-	
+
 	private int _version;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_version = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// this packet is never encrypted
-		if (_version == -2)
-		{
+		if (_version == -2) {
 			// this is just a ping attempt from the new C2 client
 			client.closeNow();
-		}
-		else if (!ServerConfig.PROTOCOL_LIST.contains(_version))
-		{
+		} else if (!GameserverConfig.PROTOCOL_LIST.contains(_version)) {
 			_logAccounting.warn("Wrong protocol version {}, {}", _version, client);
 			client.setProtocolOk(false);
 			client.close(new KeyPacket(client.enableCrypt(), 0));
-		}
-		else
-		{
+		} else {
 			client.sendPacket(new KeyPacket(client.enableCrypt(), 1));
 			client.setProtocolOk(true);
 		}

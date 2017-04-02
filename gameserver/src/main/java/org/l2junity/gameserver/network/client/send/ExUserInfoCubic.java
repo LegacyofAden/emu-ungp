@@ -25,25 +25,22 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExUserInfoCubic implements IClientOutgoingPacket
-{
+public class ExUserInfoCubic implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public ExUserInfoCubic(PlayerInstance cha)
-	{
+
+	public ExUserInfoCubic(PlayerInstance cha) {
 		_activeChar = cha;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_USER_INFO_CUBIC.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeH(_activeChar.getCubics().size());
-		
+
 		_activeChar.getCubics().keySet().forEach(packet::writeH);
-		
+
 		packet.writeD(_activeChar.getAgathionId());
 		return true;
 	}

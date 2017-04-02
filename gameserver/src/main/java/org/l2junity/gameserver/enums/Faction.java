@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum Faction
-{
+public enum Faction {
 	BLACKBIRD_PLEDGE,
 	MOTHERTREE_GUARDIAN,
 	GIANT_CHASER,

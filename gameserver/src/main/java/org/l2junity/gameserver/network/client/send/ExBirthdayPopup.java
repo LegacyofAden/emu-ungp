@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  **/
-public class ExBirthdayPopup implements IClientOutgoingPacket
-{
+public class ExBirthdayPopup implements IClientOutgoingPacket {
 	public static final ExBirthdayPopup STATIC_PACKET = new ExBirthdayPopup();
-	
-	private ExBirthdayPopup()
-	{
+
+	private ExBirthdayPopup() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_NOTIFY_BIRTH_DAY.writeId(packet);
-		
+
 		return true;
 	}
 }

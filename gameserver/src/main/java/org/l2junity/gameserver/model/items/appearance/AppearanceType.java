@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.items.appearance;
 /**
  * @author UnAfraid
  */
-public enum AppearanceType
-{
+public enum AppearanceType {
 	NONE,
 	NORMAL,
 	BLESSED,

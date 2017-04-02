@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author nBd
  */
-public class ExPutEnchantTargetItemResult implements IClientOutgoingPacket
-{
+public class ExPutEnchantTargetItemResult implements IClientOutgoingPacket {
 	private final int _result;
-	
-	public ExPutEnchantTargetItemResult(int result)
-	{
+
+	public ExPutEnchantTargetItemResult(int result) {
 		_result = result;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PUT_ENCHANT_TARGET_ITEM_RESULT.writeId(packet);
-		
+
 		packet.writeD(_result);
 		return true;
 	}

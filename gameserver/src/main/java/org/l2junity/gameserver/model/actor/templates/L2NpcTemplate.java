@@ -18,21 +18,9 @@
  */
 package org.l2junity.gameserver.model.actor.templates;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
-import org.l2junity.gameserver.enums.AISkillScope;
-import org.l2junity.gameserver.enums.AIType;
-import org.l2junity.gameserver.enums.MpRewardAffectType;
-import org.l2junity.gameserver.enums.MpRewardType;
-import org.l2junity.gameserver.enums.Race;
-import org.l2junity.gameserver.enums.Sex;
+import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.drops.DropListScope;
@@ -41,12 +29,14 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.*;
+
 /**
  * NPC template.
+ *
  * @author NosBit
  */
-public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
-{
+public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable {
 	private int _id;
 	private int _displayId;
 	private byte _level;
@@ -106,21 +96,20 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	private MpRewardType _mpRewardType;
 	private int _mpRewardTicks;
 	private MpRewardAffectType _mpRewardAffectType;
-	
+
 	private List<Integer> _extendDrop;
-	
+
 	/**
 	 * Constructor of L2Character.
+	 *
 	 * @param set The StatsSet object to transfer data to the method
 	 */
-	public L2NpcTemplate(StatsSet set)
-	{
+	public L2NpcTemplate(StatsSet set) {
 		super(set);
 	}
-	
+
 	@Override
-	public void set(StatsSet set)
-	{
+	public void set(StatsSet set) {
 		super.set(set);
 		_id = set.getInt("id");
 		_displayId = set.getInt("displayId", _id);
@@ -132,16 +121,16 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 		_usingServerSideTitle = set.getBoolean("usingServerSideTitle", false);
 		setRace(set.getEnum("race", Race.class, Race.NONE));
 		_sex = set.getEnum("sex", Sex.class, Sex.ETC);
-		
+
 		_chestId = set.getInt("chestId", 0);
 		_rhandId = set.getInt("rhandId", 0);
 		_lhandId = set.getInt("lhandId", 0);
 		_weaponEnchant = set.getInt("weaponEnchant", 0);
-		
+
 		_expRate = set.getDouble("expRate", 0);
 		_sp = set.getDouble("sp", 0);
 		_raidPoints = set.getDouble("raidPoints", 0);
-		
+
 		_unique = set.getBoolean("unique", false);
 		_attackable = set.getBoolean("attackable", true);
 		_targetable = set.getBoolean("targetable", true);
@@ -158,523 +147,431 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 		_canBeSown = set.getBoolean("canBeSown", false);
 		_canBeCrt = set.getBoolean("ex_crt_effect", true);
 		_isDeathPenalty = set.getBoolean("isDeathPenalty", false);
-		
+
 		_corpseTime = set.getInt("corpseTime", NpcConfig.DEFAULT_CORPSE_TIME);
-		
+
 		_aiType = set.getEnum("aiType", AIType.class, AIType.FIGHTER);
 		_aggroRange = set.getInt("aggroRange", 0);
 		_clanHelpRange = set.getInt("clanHelpRange", 0);
 		_dodge = set.getInt("dodge", 0);
 		_isChaos = set.getBoolean("isChaos", false);
 		_isAggressive = set.getBoolean("isAggressive", false);
-		
+
 		_soulShot = set.getInt("soulShot", 0);
 		_spiritShot = set.getInt("spiritShot", 0);
 		_soulShotChance = set.getInt("shotShotChance", 0);
 		_spiritShotChance = set.getInt("spiritShotChance", 0);
-		
+
 		_minSkillChance = set.getInt("minSkillChance", 7);
 		_maxSkillChance = set.getInt("maxSkillChance", 15);
-		
+
 		_hitTimeFactor = set.getInt("hit_time", 100) / 100d;
 		_hitTimeFactorSkill = set.getInt("hit_time_skill", 100) / 100d;
-		
+
 		_collisionRadiusGrown = set.getDouble("collisionRadiusGrown", 0);
 		_collisionHeightGrown = set.getDouble("collisionHeightGrown", 0);
-		
+
 		_mpRewardValue = set.getInt("mpRewardValue", 0);
 		_mpRewardType = set.getEnum("mpRewardType", MpRewardType.class, MpRewardType.DIFF);
 		_mpRewardTicks = set.getInt("mpRewardTicks", 0);
 		_mpRewardAffectType = set.getEnum("mpRewardAffectType", MpRewardAffectType.class, MpRewardAffectType.SOLO);
-		
+
 		_extendDrop = set.getList("extend_drop", Integer.class);
 	}
-	
+
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
-	public int getDisplayId()
-	{
+
+	public int getDisplayId() {
 		return _displayId;
 	}
-	
-	public byte getLevel()
-	{
+
+	public byte getLevel() {
 		return _level;
 	}
-	
-	public String getType()
-	{
+
+	public String getType() {
 		return _type;
 	}
-	
-	public boolean isType(String type)
-	{
+
+	public boolean isType(String type) {
 		return getType().equalsIgnoreCase(type);
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return _name;
 	}
-	
-	public boolean isUsingServerSideName()
-	{
+
+	public boolean isUsingServerSideName() {
 		return _usingServerSideName;
 	}
-	
-	public String getTitle()
-	{
+
+	public String getTitle() {
 		return _title;
 	}
-	
-	public boolean isUsingServerSideTitle()
-	{
+
+	public boolean isUsingServerSideTitle() {
 		return _usingServerSideTitle;
 	}
-	
-	public StatsSet getParameters()
-	{
+
+	public StatsSet getParameters() {
 		return _parameters;
 	}
-	
-	public void setParameters(StatsSet set)
-	{
+
+	public void setParameters(StatsSet set) {
 		_parameters = set;
 	}
-	
-	public Sex getSex()
-	{
+
+	public Sex getSex() {
 		return _sex;
 	}
-	
-	public int getChestId()
-	{
+
+	public int getChestId() {
 		return _chestId;
 	}
-	
-	public int getRHandId()
-	{
+
+	public int getRHandId() {
 		return _rhandId;
 	}
-	
-	public int getLHandId()
-	{
+
+	public int getLHandId() {
 		return _lhandId;
 	}
-	
-	public int getWeaponEnchant()
-	{
+
+	public int getWeaponEnchant() {
 		return _weaponEnchant;
 	}
-	
-	public double getExpRate()
-	{
+
+	public double getExpRate() {
 		return _expRate;
 	}
-	
-	public double getSP()
-	{
+
+	public double getSP() {
 		return _sp;
 	}
-	
-	public double getRaidPoints()
-	{
+
+	public double getRaidPoints() {
 		return _raidPoints;
 	}
-	
-	public boolean isUnique()
-	{
+
+	public boolean isUnique() {
 		return _unique;
 	}
-	
-	public boolean isAttackable()
-	{
+
+	public boolean isAttackable() {
 		return _attackable;
 	}
-	
-	public boolean isTargetable()
-	{
+
+	public boolean isTargetable() {
 		return _targetable;
 	}
-	
-	public boolean isTalkable()
-	{
+
+	public boolean isTalkable() {
 		return _talkable;
 	}
-	
-	public boolean isUndying()
-	{
+
+	public boolean isUndying() {
 		return _undying;
 	}
-	
-	public boolean isShowName()
-	{
+
+	public boolean isShowName() {
 		return _showName;
 	}
-	
-	public boolean isRandomWalkEnabled()
-	{
+
+	public boolean isRandomWalkEnabled() {
 		return _randomWalk;
 	}
-	
-	public boolean isRandomAnimationEnabled()
-	{
+
+	public boolean isRandomAnimationEnabled() {
 		return _randomAnimation;
 	}
-	
-	public boolean isFlying()
-	{
+
+	public boolean isFlying() {
 		return _flying;
 	}
-	
-	public boolean canMove()
-	{
+
+	public boolean canMove() {
 		return _canMove;
 	}
-	
-	public boolean isNoSleepMode()
-	{
+
+	public boolean isNoSleepMode() {
 		return _noSleepMode;
 	}
-	
-	public boolean isPassableDoor()
-	{
+
+	public boolean isPassableDoor() {
 		return _passableDoor;
 	}
-	
-	public boolean hasSummoner()
-	{
+
+	public boolean hasSummoner() {
 		return _hasSummoner;
 	}
-	
-	public boolean canBeSown()
-	{
+
+	public boolean canBeSown() {
 		return _canBeSown;
 	}
-	
-	public boolean canBeCrt()
-	{
+
+	public boolean canBeCrt() {
 		return _canBeCrt;
 	}
-	
-	public boolean isDeathPenalty()
-	{
+
+	public boolean isDeathPenalty() {
 		return _isDeathPenalty;
 	}
-	
-	public int getCorpseTime()
-	{
+
+	public int getCorpseTime() {
 		return _corpseTime;
 	}
-	
-	public AIType getAIType()
-	{
+
+	public AIType getAIType() {
 		return _aiType;
 	}
-	
-	public int getAggroRange()
-	{
+
+	public int getAggroRange() {
 		return _aggroRange;
 	}
-	
-	public int getClanHelpRange()
-	{
+
+	public int getClanHelpRange() {
 		return _clanHelpRange;
 	}
-	
-	public int getDodge()
-	{
+
+	public int getDodge() {
 		return _dodge;
 	}
-	
-	public boolean isChaos()
-	{
+
+	public boolean isChaos() {
 		return _isChaos;
 	}
-	
-	public boolean isAggressive()
-	{
+
+	public boolean isAggressive() {
 		return _isAggressive;
 	}
-	
-	public int getSoulShot()
-	{
+
+	public int getSoulShot() {
 		return _soulShot;
 	}
-	
-	public int getSpiritShot()
-	{
+
+	public int getSpiritShot() {
 		return _spiritShot;
 	}
-	
-	public int getSoulShotChance()
-	{
+
+	public int getSoulShotChance() {
 		return _soulShotChance;
 	}
-	
-	public int getSpiritShotChance()
-	{
+
+	public int getSpiritShotChance() {
 		return _spiritShotChance;
 	}
-	
-	public int getMinSkillChance()
-	{
+
+	public int getMinSkillChance() {
 		return _minSkillChance;
 	}
-	
-	public int getMaxSkillChance()
-	{
+
+	public int getMaxSkillChance() {
 		return _maxSkillChance;
 	}
-	
-	public double getHitTimeFactor()
-	{
+
+	public double getHitTimeFactor() {
 		return _hitTimeFactor;
 	}
-	
-	public double getHitTimeFactorSkill()
-	{
+
+	public double getHitTimeFactorSkill() {
 		return _hitTimeFactorSkill;
 	}
-	
+
 	@Override
-	public Map<Integer, Skill> getSkills()
-	{
+	public Map<Integer, Skill> getSkills() {
 		return _skills;
 	}
-	
-	public void setSkills(Map<Integer, Skill> skills)
-	{
+
+	public void setSkills(Map<Integer, Skill> skills) {
 		_skills = skills != null ? Collections.unmodifiableMap(skills) : Collections.emptyMap();
 	}
-	
-	public List<Skill> getAISkills(AISkillScope aiSkillScope)
-	{
+
+	public List<Skill> getAISkills(AISkillScope aiSkillScope) {
 		return _aiSkillLists.getOrDefault(aiSkillScope, Collections.emptyList());
 	}
-	
-	public void setAISkillLists(Map<AISkillScope, List<Skill>> aiSkillLists)
-	{
+
+	public void setAISkillLists(Map<AISkillScope, List<Skill>> aiSkillLists) {
 		_aiSkillLists = aiSkillLists != null ? Collections.unmodifiableMap(aiSkillLists) : Collections.emptyMap();
 	}
-	
-	public Set<Integer> getClans()
-	{
+
+	public Set<Integer> getClans() {
 		return _clans;
 	}
-	
-	public int getMpRewardValue()
-	{
+
+	public int getMpRewardValue() {
 		return _mpRewardValue;
 	}
-	
-	public MpRewardType getMpRewardType()
-	{
+
+	public MpRewardType getMpRewardType() {
 		return _mpRewardType;
 	}
-	
-	public int getMpRewardTicks()
-	{
+
+	public int getMpRewardTicks() {
 		return _mpRewardTicks;
 	}
-	
-	public MpRewardAffectType getMpRewardAffectType()
-	{
+
+	public MpRewardAffectType getMpRewardAffectType() {
 		return _mpRewardAffectType;
 	}
-	
+
 	/**
 	 * @param clans A sorted array of clan ids
 	 */
-	public void setClans(Set<Integer> clans)
-	{
+	public void setClans(Set<Integer> clans) {
 		_clans = clans != null ? Collections.unmodifiableSet(clans) : null;
 	}
-	
+
 	/**
-	 * @param clanName clan name to check if it belongs to this NPC template clans.
+	 * @param clanName  clan name to check if it belongs to this NPC template clans.
 	 * @param clanNames clan names to check if they belong to this NPC template clans.
 	 * @return {@code true} if at least one of the clan names belong to this NPC template clans, {@code false} otherwise.
 	 */
-	public boolean isClan(String clanName, String... clanNames)
-	{
+	public boolean isClan(String clanName, String... clanNames) {
 		// Using local variable for the sake of reloading since it can be turned to null.
 		final Set<Integer> clans = _clans;
-		
-		if (clans == null)
-		{
+
+		if (clans == null) {
 			return false;
 		}
-		
+
 		int clanId = NpcData.getInstance().getClanId("ALL");
-		if (clans.contains(clanId))
-		{
+		if (clans.contains(clanId)) {
 			return true;
 		}
-		
+
 		clanId = NpcData.getInstance().getClanId(clanName);
-		if (clans.contains(clanId))
-		{
+		if (clans.contains(clanId)) {
 			return true;
 		}
-		
-		for (String name : clanNames)
-		{
+
+		for (String name : clanNames) {
 			clanId = NpcData.getInstance().getClanId(name);
-			if (clans.contains(clanId))
-			{
+			if (clans.contains(clanId)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param clans A set of clan names to check if they belong to this NPC template clans.
 	 * @return {@code true} if at least one of the clan names belong to this NPC template clans, {@code false} otherwise.
 	 */
-	public boolean isClan(Set<Integer> clans)
-	{
+	public boolean isClan(Set<Integer> clans) {
 		// Using local variable for the sake of reloading since it can be turned to null.
 		final Set<Integer> clanSet = _clans;
-		
-		if ((clanSet == null) || (clans == null))
-		{
+
+		if ((clanSet == null) || (clans == null)) {
 			return false;
 		}
-		
+
 		int clanId = NpcData.getInstance().getClanId("ALL");
-		if (clanSet.contains(clanId))
-		{
+		if (clanSet.contains(clanId)) {
 			return true;
 		}
-		
-		for (Integer id : clans)
-		{
-			if (clanSet.contains(id))
-			{
+
+		for (Integer id : clans) {
+			if (clanSet.contains(id)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public Set<Integer> getIgnoreClanNpcIds()
-	{
+
+	public Set<Integer> getIgnoreClanNpcIds() {
 		return _ignoreClanNpcIds;
 	}
-	
+
 	/**
 	 * @param ignoreClanNpcIds the ignore clan npc ids
 	 */
-	public void setIgnoreClanNpcIds(Set<Integer> ignoreClanNpcIds)
-	{
+	public void setIgnoreClanNpcIds(Set<Integer> ignoreClanNpcIds) {
 		_ignoreClanNpcIds = ignoreClanNpcIds != null ? Collections.unmodifiableSet(ignoreClanNpcIds) : null;
 	}
-	
-	public Map<DropListScope, List<IDropItem>> getDropLists()
-	{
+
+	public Map<DropListScope, List<IDropItem>> getDropLists() {
 		return _dropLists;
 	}
-	
-	public void setDropLists(Map<DropListScope, List<IDropItem>> dropLists)
-	{
+
+	public void setDropLists(Map<DropListScope, List<IDropItem>> dropLists) {
 		_dropLists = dropLists != null ? Collections.unmodifiableMap(dropLists) : null;
 	}
-	
-	public List<IDropItem> getDropList(DropListScope dropListScope)
-	{
+
+	public List<IDropItem> getDropList(DropListScope dropListScope) {
 		Map<DropListScope, List<IDropItem>> dropLists = _dropLists;
 		return dropLists != null ? dropLists.get(dropListScope) : null;
 	}
-	
-	public Collection<ItemHolder> calculateDrops(DropListScope dropListScope, Creature victim, Creature killer)
-	{
+
+	public Collection<ItemHolder> calculateDrops(DropListScope dropListScope, Creature victim, Creature killer) {
 		List<IDropItem> dropList = getDropList(dropListScope);
-		if (dropList == null)
-		{
+		if (dropList == null) {
 			return null;
 		}
-		
+
 		Collection<ItemHolder> calculatedDrops = null;
-		for (IDropItem dropItem : dropList)
-		{
+		for (IDropItem dropItem : dropList) {
 			final Collection<ItemHolder> drops = dropItem.calculateDrops(victim, killer);
-			if ((drops == null) || drops.isEmpty())
-			{
+			if ((drops == null) || drops.isEmpty()) {
 				continue;
 			}
-			
-			if (calculatedDrops == null)
-			{
+
+			if (calculatedDrops == null) {
 				calculatedDrops = new LinkedList<>();
 			}
-			
+
 			calculatedDrops.addAll(drops);
 		}
-		
+
 		return calculatedDrops;
 	}
-	
-	public double getCollisionRadiusGrown()
-	{
+
+	public double getCollisionRadiusGrown() {
 		return _collisionRadiusGrown;
 	}
-	
-	public double getCollisionHeightGrown()
-	{
+
+	public double getCollisionHeightGrown() {
 		return _collisionHeightGrown;
 	}
-	
-	public static boolean isAssignableTo(Class<?> sub, Class<?> clazz)
-	{
+
+	public static boolean isAssignableTo(Class<?> sub, Class<?> clazz) {
 		// If clazz represents an interface
-		if (clazz.isInterface())
-		{
+		if (clazz.isInterface()) {
 			// check if obj implements the clazz interface
 			Class<?>[] interfaces = sub.getInterfaces();
-			for (Class<?> interface1 : interfaces)
-			{
-				if (clazz.getName().equals(interface1.getName()))
-				{
+			for (Class<?> interface1 : interfaces) {
+				if (clazz.getName().equals(interface1.getName())) {
 					return true;
 				}
 			}
-		}
-		else
-		{
-			do
-			{
-				if (sub.getName().equals(clazz.getName()))
-				{
+		} else {
+			do {
+				if (sub.getName().equals(clazz.getName())) {
 					return true;
 				}
-				
+
 				sub = sub.getSuperclass();
 			}
 			while (sub != null);
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks if obj can be assigned to the Class represented by clazz.<br>
 	 * This is true if, and only if, obj is the same class represented by clazz, or a subclass of it or obj implements the interface represented by clazz.
+	 *
 	 * @param obj
 	 * @param clazz
 	 * @return {@code true} if the object can be assigned to the class, {@code false} otherwise
 	 */
-	public static boolean isAssignableTo(Object obj, Class<?> clazz)
-	{
+	public static boolean isAssignableTo(Object obj, Class<?> clazz) {
 		return L2NpcTemplate.isAssignableTo(obj.getClass(), clazz);
 	}
-	
-	public List<Integer> getExtendDrop()
-	{
+
+	public List<Integer> getExtendDrop() {
 		return _extendDrop == null ? Collections.emptyList() : _extendDrop;
 	}
 }

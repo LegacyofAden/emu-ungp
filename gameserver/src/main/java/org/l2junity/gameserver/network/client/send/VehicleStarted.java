@@ -25,26 +25,23 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Kerberos
  */
-public class VehicleStarted implements IClientOutgoingPacket
-{
+public class VehicleStarted implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _state;
-	
+
 	/**
 	 * @param boat
 	 * @param state
 	 */
-	public VehicleStarted(Creature boat, int state)
-	{
+	public VehicleStarted(Creature boat, int state) {
 		_objectId = boat.getObjectId();
 		_state = state;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VEHICLE_START.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_state);
 		return true;

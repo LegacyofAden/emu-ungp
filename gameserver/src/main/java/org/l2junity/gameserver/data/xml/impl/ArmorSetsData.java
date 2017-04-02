@@ -18,113 +18,89 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.ArmorSet;
 import org.l2junity.gameserver.model.holders.ArmorsetSkillHolder;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.stats.BaseStats;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Stream;
+
 /**
  * Loads armor set bonuses.
+ *
  * @author godson, Luno, UnAfraid
  */
-public final class ArmorSetsData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArmorSetsData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = ItemTable.class)
+public final class ArmorSetsData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ArmorSetsData instance = new ArmorSetsData();
+
 	private final Map<Integer, ArmorSet> _armorSets = new HashMap<>();
 	private final Map<Integer, List<ArmorSet>> _armorSetItems = new HashMap<>();
-	
-	protected ArmorSetsData()
-	{
+
+	private ArmorSetsData() {
+		reload();
 	}
-	
-	@Reload("sets")
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ItemTable.class))
-	private void load() throws Exception
-	{
+
+	private void reload() {
 		_armorSets.clear();
 		parseDatapackDirectory("data/stats/armorsets", false);
-		LOGGER.info("Loaded {} Armor sets.", _armorSets.size());
+		log.info("Loaded {} Armor sets.", _armorSets.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node setNode = n.getFirstChild(); setNode != null; setNode = setNode.getNextSibling())
-				{
-					if ("set".equalsIgnoreCase(setNode.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node setNode = n.getFirstChild(); setNode != null; setNode = setNode.getNextSibling()) {
+					if ("set".equalsIgnoreCase(setNode.getNodeName())) {
 						final int id = parseInteger(setNode.getAttributes(), "id");
 						final int minimumPieces = parseInteger(setNode.getAttributes(), "minimumPieces", 0);
 						final boolean isVisual = parseBoolean(setNode.getAttributes(), "visual", false);
 						final ArmorSet set = new ArmorSet(id, minimumPieces, isVisual);
 						_armorSets.put(id, set);
-						for (Node innerSetNode = setNode.getFirstChild(); innerSetNode != null; innerSetNode = innerSetNode.getNextSibling())
-						{
-							switch (innerSetNode.getNodeName())
-							{
-								case "requiredItems":
-								{
+						for (Node innerSetNode = setNode.getFirstChild(); innerSetNode != null; innerSetNode = innerSetNode.getNextSibling()) {
+							switch (innerSetNode.getNodeName()) {
+								case "requiredItems": {
 									forEach(innerSetNode, b -> "item".equals(b.getNodeName()), node ->
 									{
 										final NamedNodeMap attrs = node.getAttributes();
 										final int itemId = parseInteger(attrs, "id");
 										final L2Item item = ItemTable.getInstance().getTemplate(itemId);
-										if (item == null)
-										{
-											LOGGER.warn("Attempting to register non existing required item: {} to a set: {}", itemId, path);
-										}
-										else if (!set.addRequiredItem(itemId))
-										{
-											LOGGER.warn("Attempting to register duplicate required item {} to a set: {}", item, path);
+										if (item == null) {
+											log.warn("Attempting to register non existing required item: {} to a set: {}", itemId, path);
+										} else if (!set.addRequiredItem(itemId)) {
+											log.warn("Attempting to register duplicate required item {} to a set: {}", item, path);
 										}
 									});
 									break;
 								}
-								case "optionalItems":
-								{
+								case "optionalItems": {
 									forEach(innerSetNode, b -> "item".equals(b.getNodeName()), node ->
 									{
 										final NamedNodeMap attrs = node.getAttributes();
 										final int itemId = parseInteger(attrs, "id");
 										final L2Item item = ItemTable.getInstance().getTemplate(itemId);
-										if (item == null)
-										{
-											LOGGER.warn("Attempting to register non existing optional item: {} to a set: {}", itemId, path);
-										}
-										else if (!set.addOptionalItem(itemId))
-										{
-											LOGGER.warn("Attempting to register duplicate optional item {} to a set: {}", item, path);
+										if (item == null) {
+											log.warn("Attempting to register non existing optional item: {} to a set: {}", itemId, path);
+										} else if (!set.addOptionalItem(itemId)) {
+											log.warn("Attempting to register duplicate optional item {} to a set: {}", item, path);
 										}
 									});
 									break;
 								}
-								case "skills":
-								{
+								case "skills": {
 									forEach(innerSetNode, b -> "skill".equals(b.getNodeName()), node ->
 									{
 										final NamedNodeMap attrs = node.getAttributes();
@@ -137,8 +113,7 @@ public final class ArmorSetsData implements IGameXmlReader
 									});
 									break;
 								}
-								case "stats":
-								{
+								case "stats": {
 									forEach(innerSetNode, b -> "stat".equals(b.getNodeName()), node ->
 									{
 										final NamedNodeMap attrs = node.getAttributes();
@@ -148,49 +123,31 @@ public final class ArmorSetsData implements IGameXmlReader
 								}
 							}
 						}
-						
+
 						Stream.concat(set.getRequiredItems().stream(), set.getOptionalItems().stream()).forEach(itemHolder -> _armorSetItems.computeIfAbsent(itemHolder, key -> new ArrayList<>()).add(set));
 					}
 				}
 			}
 		}
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _armorSets.size();
 	}
-	
+
 	/**
 	 * @param setId the set id that is attached to a set
 	 * @return the armor set associated to the given item id
 	 */
-	public ArmorSet getSet(int setId)
-	{
+	public ArmorSet getSet(int setId) {
 		return _armorSets.get(setId);
 	}
-	
+
 	/**
 	 * @param itemId the item id that is attached to a set
 	 * @return the armor set associated to the given item id
 	 */
-	public List<ArmorSet> getSets(int itemId)
-	{
+	public List<ArmorSet> getSets(int itemId) {
 		return _armorSetItems.getOrDefault(itemId, Collections.emptyList());
-	}
-	
-	/**
-	 * Gets the single instance of ArmorSetsData
-	 * @return single instance of ArmorSetsData
-	 */
-	@InstanceGetter
-	public static ArmorSetsData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ArmorSetsData _instance = new ArmorSetsData();
 	}
 }

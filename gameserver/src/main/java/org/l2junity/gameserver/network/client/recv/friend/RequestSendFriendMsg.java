@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv.friend;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -31,49 +31,43 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Recieve Private (Friend) Message - 0xCC Format: c SS S: Message S: Receiving Player
+ *
  * @author Tempy
  */
-public final class RequestSendFriendMsg implements IClientIncomingPacket
-{
+public final class RequestSendFriendMsg implements IClientIncomingPacket {
 	private static Logger _logChat = LoggerFactory.getLogger("chat");
-	
+
 	private String _message;
 	private String _reciever;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_message = packet.readS();
 		_reciever = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((_message == null) || _message.isEmpty() || (_message.length() > 300))
-		{
+
+		if ((_message == null) || _message.isEmpty() || (_message.length() > 300)) {
 			return;
 		}
-		
+
 		final PlayerInstance targetPlayer = World.getInstance().getPlayer(_reciever);
-		if ((targetPlayer == null) || !targetPlayer.getFriendList().contains(activeChar.getObjectId()))
-		{
+		if ((targetPlayer == null) || !targetPlayer.getFriendList().contains(activeChar.getObjectId())) {
 			activeChar.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 			return;
 		}
-		
-		if (GeneralConfig.LOG_CHAT)
-		{
+
+		if (GeneralConfig.LOG_CHAT) {
 			_logChat.info("PRIV_MSG [{} to {}] {}", activeChar, targetPlayer, _message);
 		}
-		
+
 		targetPlayer.sendPacket(new L2FriendSay(activeChar.getName(), _reciever, _message));
 	}
 }

@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send.primeshop;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
@@ -27,33 +25,31 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author UnAfraid
  */
-public class ExBRProductList implements IClientOutgoingPacket
-{
+public class ExBRProductList implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _type;
 	private final Collection<PrimeShopGroup> _primeList;
-	
-	public ExBRProductList(PlayerInstance activeChar, int type, Collection<PrimeShopGroup> items)
-	{
+
+	public ExBRProductList(PlayerInstance activeChar, int type, Collection<PrimeShopGroup> items) {
 		_activeChar = activeChar;
 		_type = type;
 		_primeList = items;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BR_PRODUCT_LIST.writeId(packet);
-		
+
 		packet.writeQ(_activeChar.getAdena()); // Adena
 		packet.writeQ(0x00); // Hero coins
 		packet.writeC(_type); // Type 0 - Home, 1 - History, 2 - Favorites
 		packet.writeD(_primeList.size());
-		for (PrimeShopGroup brItem : _primeList)
-		{
+		for (PrimeShopGroup brItem : _primeList) {
 			packet.writeD(brItem.getBrId());
 			packet.writeC(brItem.getCat());
 			packet.writeC(brItem.getPaymentType()); // Payment Type: 0 - Prime Points, 1 - Adena, 2 - Hero Coins
@@ -77,8 +73,7 @@ public class ExBRProductList implements IClientOutgoingPacket
 			packet.writeD(brItem.getRestrictionDay());
 			packet.writeD(brItem.getAvailableCount());
 			packet.writeC(brItem.getItems().size());
-			for (PrimeShopItem item : brItem.getItems())
-			{
+			for (PrimeShopItem item : brItem.getItems()) {
 				packet.writeD(item.getId());
 				packet.writeD((int) item.getCount());
 				packet.writeD(item.getWeight());

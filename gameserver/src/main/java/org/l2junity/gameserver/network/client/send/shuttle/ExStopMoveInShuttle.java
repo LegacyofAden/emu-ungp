@@ -27,26 +27,23 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExStopMoveInShuttle implements IClientOutgoingPacket
-{
+public class ExStopMoveInShuttle implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _boatId;
 	private final Location _pos;
 	private final int _heading;
-	
-	public ExStopMoveInShuttle(PlayerInstance player, int boatId)
-	{
+
+	public ExStopMoveInShuttle(PlayerInstance player, int boatId) {
 		_charObjId = player.getObjectId();
 		_boatId = boatId;
 		_pos = player.getInVehiclePosition();
 		_heading = player.getHeading();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_STOP_MOVE_IN_SHUTTLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_boatId);
 		packet.writeD((int) _pos.getX());

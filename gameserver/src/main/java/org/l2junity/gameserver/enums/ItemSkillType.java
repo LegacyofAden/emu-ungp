@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum ItemSkillType
-{
+public enum ItemSkillType {
 	NORMAL,
 	ON_ENCHANT,
 	ON_EQUIP,

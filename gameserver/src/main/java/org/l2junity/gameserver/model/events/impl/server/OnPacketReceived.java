@@ -26,35 +26,29 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 /**
  * @author UnAfraid
  */
-public class OnPacketReceived implements IBaseEvent
-{
+public class OnPacketReceived implements IBaseEvent {
 	private final L2GameClient _client;
 	private final byte[] _data;
-	
-	public OnPacketReceived(L2GameClient client, byte[] data)
-	{
+
+	public OnPacketReceived(L2GameClient client, byte[] data) {
 		_client = client;
 		_data = data;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _client.getActiveChar();
 	}
-	
-	public L2GameClient getClient()
-	{
+
+	public L2GameClient getClient() {
 		return _client;
 	}
-	
-	public byte[] getData()
-	{
+
+	public byte[] getData() {
 		return _data;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PACKET_RECEIVED;
 	}
 }

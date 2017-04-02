@@ -24,15 +24,13 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class ExNotifyPremiumItem implements IClientOutgoingPacket
-{
+public class ExNotifyPremiumItem implements IClientOutgoingPacket {
 	public static final ExNotifyPremiumItem STATIC_PACKET = new ExNotifyPremiumItem();
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_NOTIFY_PREMIUM_ITEM.writeId(packet);
-		
+
 		return true;
 	}
 }

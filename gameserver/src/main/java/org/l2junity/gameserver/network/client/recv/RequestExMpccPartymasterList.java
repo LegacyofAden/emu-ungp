@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,29 +26,28 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExMPCCPartymasterList;
 import org.l2junity.network.PacketReader;
 
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author Sdw
  */
-public class RequestExMpccPartymasterList implements IClientIncomingPacket
-{
+public class RequestExMpccPartymasterList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final MatchingRoom room = activeChar.getMatchingRoom();
-		if ((room != null) && (room.getRoomType() == MatchingRoomType.COMMAND_CHANNEL))
-		{
+		if ((room != null) && (room.getRoomType() == MatchingRoomType.COMMAND_CHANNEL)) {
 			final Set<String> leadersName = room.getMembers().stream().map(PlayerInstance::getParty).filter(Objects::nonNull).map(Party::getLeader).map(PlayerInstance::getName).collect(Collectors.toSet());
 			activeChar.sendPacket(new ExMPCCPartymasterList(leadersName));
 		}

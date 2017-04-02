@@ -22,29 +22,26 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class TargetUnselected implements IClientOutgoingPacket
-{
+public class TargetUnselected implements IClientOutgoingPacket {
 	private final int _targetObjId;
 	private final int _x;
 	private final int _y;
 	private final int _z;
-	
+
 	/**
 	 * @param character
 	 */
-	public TargetUnselected(Creature character)
-	{
+	public TargetUnselected(Creature character) {
 		_targetObjId = character.getObjectId();
 		_x = (int) character.getX();
 		_y = (int) character.getY();
 		_z = (int) character.getZ();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TARGET_UNSELECTED.writeId(packet);
-		
+
 		packet.writeD(_targetObjId);
 		packet.writeD(_x);
 		packet.writeD(_y);

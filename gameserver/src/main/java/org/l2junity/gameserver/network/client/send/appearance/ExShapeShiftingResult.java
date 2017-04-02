@@ -25,31 +25,28 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExShapeShiftingResult implements IClientOutgoingPacket
-{
+public class ExShapeShiftingResult implements IClientOutgoingPacket {
 	public static int RESULT_FAILED = 0x00;
 	public static int RESULT_SUCCESS = 0x01;
 	public static int RESULT_CLOSE = 0x02;
-	
+
 	public static ExShapeShiftingResult FAILED = new ExShapeShiftingResult(RESULT_FAILED, 0, 0);
 	public static ExShapeShiftingResult CLOSE = new ExShapeShiftingResult(RESULT_CLOSE, 0, 0);
-	
+
 	private final int _result;
 	private final int _targetItemId;
 	private final int _extractItemId;
-	
-	public ExShapeShiftingResult(int result, int targetItemId, int extractItemId)
-	{
+
+	public ExShapeShiftingResult(int result, int targetItemId, int extractItemId) {
 		_result = result;
 		_targetItemId = targetItemId;
 		_extractItemId = extractItemId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHAPE_SHIFTING_RESULT.writeId(packet);
-		
+
 		packet.writeD(_result);
 		packet.writeD(_targetItemId);
 		packet.writeD(_extractItemId);

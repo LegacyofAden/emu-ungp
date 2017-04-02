@@ -18,12 +18,9 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.FishingData;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.geodata.GeoData;
@@ -52,101 +49,86 @@ import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author bit
  */
-public class Fishing
-{
+public class Fishing {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(Fishing.class);
 	private volatile ILocational _baitLocation = new Location(0, 0, 0);
-	
+
 	private final PlayerInstance _player;
 	private ScheduledFuture<?> _reelInTask;
 	private ScheduledFuture<?> _startFishingTask;
 	private boolean _isFishing = false;
-	
-	public Fishing(PlayerInstance player)
-	{
+
+	public Fishing(PlayerInstance player) {
 		_player = player;
 	}
-	
-	public synchronized boolean isFishing()
-	{
+
+	public synchronized boolean isFishing() {
 		return _isFishing;
 	}
-	
-	public boolean isAtValidLocation()
-	{
+
+	public boolean isAtValidLocation() {
 		// TODO: implement checking direction
 		return _player.isInsideZone(ZoneId.FISHING);
 	}
-	
-	public boolean canFish()
-	{
+
+	public boolean canFish() {
 		return !_player.isDead() && !_player.isAlikeDead() && !_player.hasBlockActions();
 	}
-	
-	private FishingBaitData getCurrentBaitData()
-	{
+
+	private FishingBaitData getCurrentBaitData() {
 		ItemInstance bait = _player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
 		return bait != null ? FishingData.getInstance().getBaitData(bait.getId()) : null;
 	}
-	
-	private void cancelTasks()
-	{
-		if (_reelInTask != null)
-		{
+
+	private void cancelTasks() {
+		if (_reelInTask != null) {
 			_reelInTask.cancel(false);
 			_reelInTask = null;
 		}
-		
-		if (_startFishingTask != null)
-		{
+
+		if (_startFishingTask != null) {
 			_startFishingTask.cancel(false);
 			_startFishingTask = null;
 		}
 	}
-	
-	public synchronized void startFishing()
-	{
-		if (isFishing())
-		{
+
+	public synchronized void startFishing() {
+		if (isFishing()) {
 			return;
 		}
 		_isFishing = true;
 		castLine();
 	}
-	
-	private void castLine()
-	{
-		if (!GeneralConfig.ALLOWFISHING && !_player.canOverrideCond(PcCondOverride.ZONE_CONDITIONS))
-		{
+
+	private void castLine() {
+		if (!GeneralConfig.ALLOWFISHING && !_player.canOverrideCond(PcCondOverride.ZONE_CONDITIONS)) {
 			_player.sendMessage("Fishing is disabled.");
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
+
 		cancelTasks();
-		
-		if (!canFish())
-		{
-			if (isFishing())
-			{
+
+		if (!canFish()) {
+			if (isFishing()) {
 				_player.sendPacket(SystemMessageId.YOUR_ATTEMPT_AT_FISHING_HAS_BEEN_CANCELLED);
 			}
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
+
 		final int minPlayerLevel = FishingData.getInstance().getMinPlayerLevel();
-		if (_player.getLevel() < minPlayerLevel)
-		{
-			if (minPlayerLevel == 85)
-			{
+		if (_player.getLevel() < minPlayerLevel) {
+			if (minPlayerLevel == 85) {
 				_player.sendPacket(SystemMessageId.FISHING_IS_AVAILABLE_TO_CHARACTERS_LV_85_OR_ABOVE);
-			}
-			else
+			} else
 			// In case of custom fishing level requirement set in config.
 			{
 				_player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_FISHING_LEVEL_REQUIREMENTS);
@@ -155,75 +137,65 @@ public class Fishing
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
+
 		final ItemInstance rod = _player.getActiveWeaponInstance();
-		if ((rod == null) || (rod.getItemType() != WeaponType.FISHINGROD))
-		{
+		if ((rod == null) || (rod.getItemType() != WeaponType.FISHINGROD)) {
 			_player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_FISHING_POLE_EQUIPPED);
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
+
 		final FishingBaitData baitData = getCurrentBaitData();
-		if (baitData == null)
-		{
+		if (baitData == null) {
 			_player.sendPacket(SystemMessageId.YOU_MUST_PUT_BAIT_ON_YOUR_HOOK_BEFORE_YOU_CAN_FISH);
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
-		if (_player.isTransformed() || _player.isInBoat())
-		{
+
+		if (_player.isTransformed() || _player.isInBoat()) {
 			_player.sendPacket(SystemMessageId.YOU_CANNOT_FISH_WHEN_TRANSFORMED_OR_WHILE_RIDING_AS_A_PASSENGER_OF_A_BOAT_IT_S_AGAINST_THE_RULES);
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
-		if (_player.isCrafting() || _player.isInStoreMode())
-		{
+
+		if (_player.isCrafting() || _player.isInStoreMode()) {
 			_player.sendPacket(SystemMessageId.YOU_CANNOT_FISH_WHILE_USING_A_RECIPE_BOOK_PRIVATE_WORKSHOP_OR_PRIVATE_STORE);
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
-		if (_player.isInsideZone(ZoneId.WATER) || _player.isInWater())
-		{
+
+		if (_player.isInsideZone(ZoneId.WATER) || _player.isInWater()) {
 			_player.sendPacket(SystemMessageId.YOU_CANNOT_FISH_WHILE_UNDER_WATER);
 			_player.sendPacket(ActionFailed.STATIC_PACKET);
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
+
 		_baitLocation = calculateBaitLocation();
-		if (!isAtValidLocation() || (_baitLocation == null))
-		{
-			if (isFishing())
-			{
+		if (!isAtValidLocation() || (_baitLocation == null)) {
+			if (isFishing()) {
 				_player.sendPacket(SystemMessageId.YOUR_ATTEMPT_AT_FISHING_HAS_BEEN_CANCELLED);
 				_player.sendPacket(ActionFailed.STATIC_PACKET);
-			}
-			else
-			{
+			} else {
 				_player.sendPacket(SystemMessageId.YOU_CAN_T_FISH_HERE_YOUR_CHARACTER_IS_NOT_FACING_WATER_OR_YOU_ARE_NOT_IN_A_FISHING_GROUND);
 				_player.sendPacket(ActionFailed.STATIC_PACKET);
 			}
 			stopFishing(FishingEndType.ERROR);
 			return;
 		}
-		
-		if (!_player.isChargedShot(ShotType.FISH_SOULSHOTS))
-		{
+
+		if (!_player.isChargedShot(ShotType.FISH_SOULSHOTS)) {
 			_player.rechargeShots(false, false, true);
 		}
-		
-		_reelInTask = ThreadPool.schedule(() ->
+
+		_reelInTask = ThreadPool.getInstance().scheduleGeneral(() ->
 		{
 			_player.getFishing().reelInWithReward();
-			_startFishingTask = ThreadPool.schedule(() -> _player.getFishing().castLine(), Rnd.get(FishingData.getInstance().getFishingTimeWaitMin(), FishingData.getInstance().getFishingTimeWaitMax()), TimeUnit.MILLISECONDS);
+			_startFishingTask = ThreadPool.getInstance().scheduleGeneral(() -> _player.getFishing().castLine(), Rnd.get(FishingData.getInstance().getFishingTimeWaitMin(), FishingData.getInstance().getFishingTimeWaitMax()), TimeUnit.MILLISECONDS);
 		}, Rnd.get(FishingData.getInstance().getFishingTimeMin(), FishingData.getInstance().getFishingTimeMax()), TimeUnit.MILLISECONDS);
 		_player.stopMove(null);
 		_player.broadcastPacket(new ExFishingStart(_player, -1, baitData.getLevel(), _baitLocation));
@@ -231,63 +203,50 @@ public class Fishing
 		_player.sendPacket(new PlaySound("SF_P_01"));
 		_player.sendPacket(SystemMessageId.YOU_CAST_YOUR_LINE_AND_START_TO_FISH);
 	}
-	
-	public void reelInWithReward()
-	{
+
+	public void reelInWithReward() {
 		// Fish may or may not eat the hook. If it does - it consumes fishing bait and fishing shot.
 		// Then player may or may not catch the fish. Using fishing shots increases chance to win.
 		final FishingBaitData baitData = getCurrentBaitData();
-		if (baitData == null)
-		{
+		if (baitData == null) {
 			reelIn(FishingEndReason.LOSE, false);
 			LOGGER.warn("Player {} is fishing with unhandled bait: {}", _player, _player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND));
 			return;
 		}
-		
+
 		double chance = baitData.getChance();
-		if (_player.isChargedShot(ShotType.FISH_SOULSHOTS))
-		{
+		if (_player.isChargedShot(ShotType.FISH_SOULSHOTS)) {
 			chance *= 1.25; // +25 % chance to win
 			_player.setChargedShot(ShotType.FISH_SOULSHOTS, false);
 		}
-		
-		if (Rnd.get(0, 100) <= chance)
-		{
+
+		if (Rnd.get(0, 100) <= chance) {
 			reelIn(FishingEndReason.WIN, true);
-		}
-		else
-		{
+		} else {
 			reelIn(FishingEndReason.LOSE, true);
 		}
 	}
-	
-	private void reelIn(FishingEndReason reason, boolean consumeBait)
-	{
-		if (!isFishing())
-		{
+
+	private void reelIn(FishingEndReason reason, boolean consumeBait) {
+		if (!isFishing()) {
 			return;
 		}
-		
+
 		cancelTasks();
-		
-		try
-		{
+
+		try {
 			final ItemInstance bait = _player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
-			if (consumeBait)
-			{
-				if ((bait == null) || !_player.getInventory().updateItemCount(null, bait, -1, _player, null))
-				{
+			if (consumeBait) {
+				if ((bait == null) || !_player.getInventory().updateItemCount(null, bait, -1, _player, null)) {
 					reason = FishingEndReason.LOSE; // no bait - no reward
 					return;
 				}
 			}
-			
-			if ((reason == FishingEndReason.WIN) && (bait != null))
-			{
+
+			if ((reason == FishingEndReason.WIN) && (bait != null)) {
 				FishingBaitData baitData = FishingData.getInstance().getBaitData(bait.getId());
 				final int numRewards = baitData.getRewards().size();
-				if (numRewards > 0)
-				{
+				if (numRewards > 0) {
 					// TODO: verify, totally guessed
 					FishingData fishingData = FishingData.getInstance();
 					int lvlModifier = _player.getLevel() * _player.getLevel();
@@ -297,63 +256,48 @@ public class Fishing
 					final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_EARNED_S1);
 					msg.addItemName(fishId);
 					_player.sendPacket(msg);
-				}
-				else
-				{
+				} else {
 					LOGGER.warn("Could not find fishing rewards for bait ", bait.getId());
 				}
-			}
-			else if (reason == FishingEndReason.LOSE)
-			{
+			} else if (reason == FishingEndReason.LOSE) {
 				_player.sendPacket(SystemMessageId.THE_BAIT_HAS_BEEN_LOST_BECAUSE_THE_FISH_GOT_AWAY);
 			}
-			
-			if (consumeBait)
-			{
+
+			if (consumeBait) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerFishing(_player, reason), _player);
 			}
-		}
-		finally
-		{
+		} finally {
 			_player.broadcastPacket(new ExFishingEnd(_player, reason));
 			_player.sendPacket(new ExUserInfoFishing(_player, false));
 		}
 	}
-	
-	public void stopFishing()
-	{
+
+	public void stopFishing() {
 		stopFishing(FishingEndType.PLAYER_STOP);
 	}
-	
-	public synchronized void stopFishing(FishingEndType endType)
-	{
-		if (isFishing())
-		{
+
+	public synchronized void stopFishing(FishingEndType endType) {
+		if (isFishing()) {
 			reelIn(FishingEndReason.STOP, false);
 			_isFishing = false;
-			switch (endType)
-			{
-				case PLAYER_STOP:
-				{
+			switch (endType) {
+				case PLAYER_STOP: {
 					_player.sendPacket(SystemMessageId.YOU_REEL_YOUR_LINE_IN_AND_STOP_FISHING);
 					break;
 				}
-				case PLAYER_CANCEL:
-				{
+				case PLAYER_CANCEL: {
 					_player.sendPacket(SystemMessageId.YOUR_ATTEMPT_AT_FISHING_HAS_BEEN_CANCELLED);
 					break;
 				}
 			}
 		}
 	}
-	
-	public ILocational getBaitLocation()
-	{
+
+	public ILocational getBaitLocation() {
 		return _baitLocation;
 	}
-	
-	private Location calculateBaitLocation()
-	{
+
+	private Location calculateBaitLocation() {
 		// calculate a position in front of the player with a random distance
 		int distMin = FishingData.getInstance().getBaitDistanceMin();
 		int distMax = FishingData.getInstance().getBaitDistanceMax();
@@ -364,121 +308,98 @@ public class Fishing
 		final double cos = Math.cos(radian);
 		double baitX = _player.getX() + (cos * distance);
 		double baitY = _player.getY() + (sin * distance);
-		
+
 		// search for fishing and water zone
 		FishingZone fishingZone = null;
 		WaterZone waterZone = null;
-		for (final ZoneType zone : ZoneManager.getInstance().getZones(baitX, baitY))
-		{
-			if (zone instanceof FishingZone)
-			{
+		for (final ZoneType zone : ZoneManager.getInstance().getZones(baitX, baitY)) {
+			if (zone instanceof FishingZone) {
 				fishingZone = (FishingZone) zone;
-			}
-			else if (zone instanceof WaterZone)
-			{
+			} else if (zone instanceof WaterZone) {
 				waterZone = (WaterZone) zone;
 			}
-			
-			if ((fishingZone != null) && (waterZone != null))
-			{
+
+			if ((fishingZone != null) && (waterZone != null)) {
 				break;
 			}
 		}
-		
+
 		double baitZ = computeBaitZ(_player, baitX, baitY, fishingZone, waterZone);
-		if (Double.isNaN(baitZ))
-		{
-			for (distance = distMax; distance >= distMin; --distance)
-			{
+		if (Double.isNaN(baitZ)) {
+			for (distance = distMax; distance >= distMin; --distance) {
 				baitX = _player.getX() + (cos * distance);
 				baitY = _player.getY() + (sin * distance);
-				
+
 				// search for fishing and water zone again
 				fishingZone = null;
 				waterZone = null;
-				for (final ZoneType zone : ZoneManager.getInstance().getZones(baitX, baitY))
-				{
-					if (zone instanceof FishingZone)
-					{
+				for (final ZoneType zone : ZoneManager.getInstance().getZones(baitX, baitY)) {
+					if (zone instanceof FishingZone) {
 						fishingZone = (FishingZone) zone;
-					}
-					else if (zone instanceof WaterZone)
-					{
+					} else if (zone instanceof WaterZone) {
 						waterZone = (WaterZone) zone;
 					}
-					
-					if ((fishingZone != null) && (waterZone != null))
-					{
+
+					if ((fishingZone != null) && (waterZone != null)) {
 						break;
 					}
 				}
-				
+
 				baitZ = computeBaitZ(_player, baitX, baitY, fishingZone, waterZone);
-				if (!Double.isNaN(baitZ))
-				{
+				if (!Double.isNaN(baitZ)) {
 					break;
 				}
 			}
-			
-			if (Double.isNaN(baitZ))
-			{
-				if (_player.isGM())
-				{
+
+			if (Double.isNaN(baitZ)) {
+				if (_player.isGM()) {
 					baitZ = _player.getZ();
-				}
-				else
-				{
+				} else {
 					_player.sendPacket(SystemMessageId.YOU_CAN_T_FISH_HERE_YOUR_CHARACTER_IS_NOT_FACING_WATER_OR_YOU_ARE_NOT_IN_A_FISHING_GROUND);
 					return null;
 				}
 			}
 		}
-		
+
 		return new Location(baitX, baitY, baitZ);
 	}
-	
+
 	/**
 	 * Computes the Z of the bait.
-	 * @param player the player
-	 * @param baitX the bait x
-	 * @param baitY the bait y
+	 *
+	 * @param player      the player
+	 * @param baitX       the bait x
+	 * @param baitY       the bait y
 	 * @param fishingZone the fishing zone
-	 * @param waterZone the water zone
+	 * @param waterZone   the water zone
 	 * @return the bait z or {@link Double#NaN} when you cannot fish here
 	 */
-	private static double computeBaitZ(final PlayerInstance player, final double baitX, final double baitY, final FishingZone fishingZone, final WaterZone waterZone)
-	{
-		if ((fishingZone == null))
-		{
+	private static double computeBaitZ(final PlayerInstance player, final double baitX, final double baitY, final FishingZone fishingZone, final WaterZone waterZone) {
+		if ((fishingZone == null)) {
 			return Double.NaN;
 		}
-		
-		if ((waterZone == null))
-		{
+
+		if ((waterZone == null)) {
 			return Double.NaN;
 		}
-		
+
 		// always use water zone, fishing zone high z is high in the air...
 		int baitZ = waterZone.getWaterZ();
-		
-		if (!GeoData.getInstance().canSeeTarget(player.getX(), player.getY(), player.getZ(), baitX, baitY, baitZ))
-		{
+
+		if (!GeoData.getInstance().canSeeTarget(player.getX(), player.getY(), player.getZ(), baitX, baitY, baitZ)) {
 			return Double.NaN;
 		}
-		
-		if (GeoData.getInstance().hasGeo(baitX, baitY))
-		{
-			if (GeoData.getInstance().getHeight(baitX, baitY, baitZ) > baitZ)
-			{
+
+		if (GeoData.getInstance().hasGeo(baitX, baitY)) {
+			if (GeoData.getInstance().getHeight(baitX, baitY, baitZ) > baitZ) {
 				return Double.NaN;
 			}
-			
-			if (GeoData.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ)
-			{
+
+			if (GeoData.getInstance().getHeight(baitX, baitY, player.getZ()) > baitZ) {
 				return Double.NaN;
 			}
 		}
-		
+
 		return baitZ;
 	}
 }

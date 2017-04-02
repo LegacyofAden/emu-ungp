@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ShowCalculator implements IClientOutgoingPacket
-{
+public class ShowCalculator implements IClientOutgoingPacket {
 	private final int _calculatorId;
-	
-	public ShowCalculator(int calculatorId)
-	{
+
+	public ShowCalculator(int calculatorId) {
 		_calculatorId = calculatorId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_CALC.writeId(packet);
-		
+
 		packet.writeD(_calculatorId);
 		return true;
 	}

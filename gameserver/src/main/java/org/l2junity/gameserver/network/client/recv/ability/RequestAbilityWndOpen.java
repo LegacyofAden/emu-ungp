@@ -29,29 +29,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestAbilityWndOpen implements IClientIncomingPacket
-{
+public class RequestAbilityWndOpen implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((activeChar.getLevel() < 99) || !activeChar.isNoble())
-		{
+
+		if ((activeChar.getLevel() < 99) || !activeChar.isNoble()) {
 			activeChar.sendPacket(SystemMessageId.ABILITIES_CAN_BE_USED_BY_NOBLESSE_EXALTED_LV_99_OR_ABOVE);
 			return;
 		}
-		
+
 		activeChar.sendPacket(ExShowAPListWnd.STATIC_PACKET);
 		activeChar.sendPacket(new ExAcquireAPSkillList(activeChar));
 	}

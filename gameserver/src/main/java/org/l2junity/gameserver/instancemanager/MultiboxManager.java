@@ -18,17 +18,12 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.GameServer;
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.xml.impl.MultiboxData;
-import org.l2junity.gameserver.loader.ClientAccessLoadGroup;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
@@ -39,219 +34,182 @@ import org.l2junity.gameserver.model.multibox.MultiboxSettings;
 import org.l2junity.gameserver.model.multibox.MultiboxSourceType;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author UnAfraid
  */
-public class MultiboxManager
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(MultiboxManager.class);
-	
+@Slf4j
+@StartupComponent("Service")
+public class MultiboxManager {
+	@Getter(lazy = true)
+	private static final MultiboxManager instance = new MultiboxManager();
+
 	private final Map<Object, MultiboxHolder> _holders = new ConcurrentHashMap<>();
-	
-	protected MultiboxManager()
-	{
+
+	private MultiboxManager() {
 		Containers.Global().addListener(new ConsumerEventListener(Containers.Global(), EventType.ON_PLAYER_LOGOUT, event -> onPlayerLogout((OnPlayerLogout) event), this));
-	}
-	
-	@Load(group = ClientAccessLoadGroup.class)
-	private void load()
-	{
 		registerManager(GameServer.getInstance());
 	}
-	
+
 	/**
 	 * @param obj
 	 */
-	public void registerManager(Object obj)
-	{
+	public void registerManager(Object obj) {
 		final MultiboxSettings settings = MultiboxData.getInstance().getSettings(obj.getClass().getSimpleName());
-		if (settings != null)
-		{
+		if (settings != null) {
 			_holders.put(obj, new MultiboxHolder(settings));
-		}
-		else
-		{
-			LOGGER.warn("Attempt to register manager ({}) with non-existent settings:", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		} else {
+			log.warn("Attempt to register manager ({}) with non-existent settings:", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		}
 	}
-	
+
 	/**
 	 * @param obj
 	 */
-	public void unregisterManager(Object obj)
-	{
+	public void unregisterManager(Object obj) {
 		_holders.remove(obj);
 	}
-	
+
 	/**
 	 * @param obj
 	 */
-	public void clearManager(Object obj)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public void clearManager(Object obj) {
+		if (_holders.containsKey(obj)) {
 			_holders.get(obj).clear();
-		}
-		else
-		{
-			LOGGER.warn("Attempt to clear non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		} else {
+			log.warn("Attempt to clear non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		}
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 * @return {@code true} if player does not excess maximum amount of dual boxes, {@code false} otherwise.
 	 */
-	public boolean canRegisterClient(Object obj, L2GameClient client)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public boolean canRegisterClient(Object obj, L2GameClient client) {
+		if (_holders.containsKey(obj)) {
 			return _holders.get(obj).canAddClient(client);
 		}
-		LOGGER.warn("Attempt to check for registered client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to check for registered client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		return false;
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 * @return
 	 */
-	public boolean registerClient(Object obj, L2GameClient client)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public boolean registerClient(Object obj, L2GameClient client) {
+		if (_holders.containsKey(obj)) {
 			return _holders.get(obj).addClient(client);
 		}
-		LOGGER.warn("Attempt to register client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to register client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		return false;
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 */
-	public void unregisterClient(Object obj, L2GameClient client)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public void unregisterClient(Object obj, L2GameClient client) {
+		if (_holders.containsKey(obj)) {
 			_holders.get(obj).removeClient(client);
-		}
-		else
-		{
-			LOGGER.warn("Attempt to unregister client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		} else {
+			log.warn("Attempt to unregister client on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		}
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 * @return
 	 */
-	public int getCurrentConnections(Object obj, L2GameClient client)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public int getCurrentConnections(Object obj, L2GameClient client) {
+		if (_holders.containsKey(obj)) {
 			return _holders.get(obj).getCurrentConnections(client);
 		}
-		LOGGER.warn("Attempt to get current connections of client ({}) on non-existent manager ({}):", client, obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to get current connections of client ({}) on non-existent manager ({}):", client, obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		return 0;
 	}
-	
+
 	/**
 	 * @param obj
 	 * @return
 	 */
-	public int getMaximumConnectionsLimit(Object obj)
-	{
-		if (_holders.containsKey(obj))
-		{
+	public int getMaximumConnectionsLimit(Object obj) {
+		if (_holders.containsKey(obj)) {
 			return _holders.get(obj).getSettings().getMaxClients();
 		}
-		LOGGER.warn("Attempt to get max connections limit on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		log.warn("Attempt to get max connections limit on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 		return 0;
 	}
-	
-	private void onPlayerLogout(OnPlayerLogout event)
-	{
+
+	private void onPlayerLogout(OnPlayerLogout event) {
 		final PlayerInstance player = event.getActiveChar();
 		final L2GameClient client = event.getClient();
-		if ((player == null) || (client == null))
-		{
-			LOGGER.warn("Player or client is null, {}, {}", player, client);
+		if ((player == null) || (client == null)) {
+			log.warn("Player or client is null, {}, {}", player, client);
 			return;
 		}
-		
-		for (MultiboxHolder holder : _holders.values())
-		{
-			if (holder.getSettings().unregisterOnDisconnected())
-			{
+
+		for (MultiboxHolder holder : _holders.values()) {
+			if (holder.getSettings().unregisterOnDisconnected()) {
 				holder.removeClient(client);
 			}
 			holder.clearDisconnected();
 		}
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 * @return Set of multiboxes of current client.
 	 */
-	public Set<L2GameClient> getMultiboxesOf(Object obj, L2GameClient client)
-	{
-		if (!_holders.containsKey(obj))
-		{
+	public Set<L2GameClient> getMultiboxesOf(Object obj, L2GameClient client) {
+		if (!_holders.containsKey(obj)) {
 			return Collections.emptySet();
 		}
-		
+
 		final MultiboxHolder holder = _holders.get(obj);
 		final MultiboxSourceType type = holder.getSettings().getProtectionType();
-		
+
 		int hash = type.generateHash(client);
-		if ((hash == 0) || !holder.getAllClients().containsKey(hash))
-		{
+		if ((hash == 0) || !holder.getAllClients().containsKey(hash)) {
 			return Collections.emptySet();
 		}
 		return Collections.unmodifiableSet(holder.getAllClients().get(hash));
 	}
-	
+
 	/**
 	 * @param obj
 	 * @param client
 	 */
-	public void sendDefaultRestrictionMessage(Object obj, L2GameClient client)
-	{
+	public void sendDefaultRestrictionMessage(Object obj, L2GameClient client) {
 		final MultiboxHolder holder = _holders.get(obj);
-		if (holder == null)
-		{
-			LOGGER.warn("Attempt to send default restriction message on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
+		if (holder == null) {
+			log.warn("Attempt to send default restriction message on non-existent manager ({}):", obj.getClass().getSimpleName(), new UnsupportedOperationException());
 			return;
 		}
-		
-		final String html = HtmCache.getInstance().getHtm(null, holder.getSettings().getRestrictionHtmlFile());
-		if (html == null)
-		{
-			LOGGER.warn("Restriction html file is missing: {} !", holder.getSettings().getRestrictionHtmlFile());
+
+		final String html = HtmRepository.getInstance().getCustomHtm(holder.getSettings().getRestrictionHtmlFile());
+		if (html == null) {
+			log.warn("Restriction html file is missing: {} !", holder.getSettings().getRestrictionHtmlFile());
 			return;
 		}
-		
+
 		final StringBuilder sb = new StringBuilder();
 		final Set<L2GameClient> clients = getMultiboxesOf(obj, client);
-		if (!clients.isEmpty())
-		{
+		if (!clients.isEmpty()) {
 			sb.append("<table width=\"100%\">");
-			for (L2GameClient multiboxClient : getMultiboxesOf(obj, client))
-			{
-				if (multiboxClient.getActiveChar() != null)
-				{
+			for (L2GameClient multiboxClient : getMultiboxesOf(obj, client)) {
+				if (multiboxClient.getActiveChar() != null) {
 					sb.append("<tr><td>Character: <font color=\"LEVEL\">" + multiboxClient.getActiveChar().getName() + "</font></td></tr>");
-				}
-				else
-				{
+				} else {
 					sb.append("<tr><td>Account: <font color=\"LEVEL\">" + multiboxClient.getAccountName() + "</font></td></tr>");
 				}
 			}
@@ -262,16 +220,5 @@ public class MultiboxManager
 		msg.replace("%type%", holder.getSettings().getProtectionType().name());
 		msg.replace("%clients%", sb.toString());
 		client.sendPacket(msg);
-	}
-	
-	@InstanceGetter
-	public static MultiboxManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final MultiboxManager INSTANCE = new MultiboxManager();
 	}
 }

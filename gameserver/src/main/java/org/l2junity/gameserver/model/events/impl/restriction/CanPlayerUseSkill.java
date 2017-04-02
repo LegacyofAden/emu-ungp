@@ -26,44 +26,37 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author lord_rex
  */
-public final class CanPlayerUseSkill implements IBaseEvent
-{
+public final class CanPlayerUseSkill implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final Skill _skill;
 	private final boolean _ctrlPressed;
 	private final boolean _shiftPressed;
-	
-	public CanPlayerUseSkill(PlayerInstance activeChar, Skill skill, boolean ctrlPressed, boolean shiftPressed)
-	{
+
+	public CanPlayerUseSkill(PlayerInstance activeChar, Skill skill, boolean ctrlPressed, boolean shiftPressed) {
 		_activeChar = activeChar;
 		_skill = skill;
 		_ctrlPressed = ctrlPressed;
 		_shiftPressed = shiftPressed;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill;
 	}
-	
-	public boolean isCtrlPressed()
-	{
+
+	public boolean isCtrlPressed() {
 		return _ctrlPressed;
 	}
-	
-	public boolean isShiftPressed()
-	{
+
+	public boolean isShiftPressed() {
 		return _shiftPressed;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_USE_SKILL;
 	}
 }

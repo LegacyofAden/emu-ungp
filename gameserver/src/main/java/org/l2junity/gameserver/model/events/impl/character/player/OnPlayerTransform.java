@@ -25,30 +25,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerTransform implements IBaseEvent
-{
+public class OnPlayerTransform implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _transformId;
-	
-	public OnPlayerTransform(PlayerInstance activeChar, int transformId)
-	{
+
+	public OnPlayerTransform(PlayerInstance activeChar, int transformId) {
 		_activeChar = activeChar;
 		_transformId = transformId;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getTransformId()
-	{
+
+	public int getTransformId() {
 		return _transformId;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_TRANSFORM;
 	}
 }

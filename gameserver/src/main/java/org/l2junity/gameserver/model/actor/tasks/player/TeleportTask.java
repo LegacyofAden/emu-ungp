@@ -24,22 +24,18 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author UnAfraid
  */
-public class TeleportTask implements Runnable
-{
+public class TeleportTask implements Runnable {
 	private final PlayerInstance _activeChar;
 	private final Location _loc;
-	
-	public TeleportTask(PlayerInstance player, Location loc)
-	{
+
+	public TeleportTask(PlayerInstance player, Location loc) {
 		_activeChar = player;
 		_loc = loc;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if ((_activeChar != null) && _activeChar.isOnline())
-		{
+	public void run() {
+		if ((_activeChar != null) && _activeChar.isOnline()) {
 			_activeChar.teleToLocation(_loc, true);
 		}
 	}

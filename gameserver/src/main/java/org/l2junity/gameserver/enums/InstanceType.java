@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum InstanceType
-{
+public enum InstanceType {
 	L2Object(null),
 	L2ItemInstance(L2Object),
 	L2Character(L2Object),
@@ -90,62 +89,49 @@ public enum InstanceType
 	// Custom
 	L2ClassMasterInstance(L2NpcInstance),
 	L2EventMobInstance(L2Npc);
-	
+
 	private final InstanceType _parent;
 	private final long _typeL;
 	private final long _typeH;
 	private final long _maskL;
 	private final long _maskH;
-	
-	private InstanceType(InstanceType parent)
-	{
+
+	private InstanceType(InstanceType parent) {
 		_parent = parent;
-		
+
 		final int high = ordinal() - (Long.SIZE - 1);
-		if (high < 0)
-		{
+		if (high < 0) {
 			_typeL = 1L << ordinal();
 			_typeH = 0;
-		}
-		else
-		{
+		} else {
 			_typeL = 0;
 			_typeH = 1L << high;
 		}
-		
-		if ((_typeL < 0) || (_typeH < 0))
-		{
+
+		if ((_typeL < 0) || (_typeH < 0)) {
 			throw new Error("Too many instance types, failed to load " + name());
 		}
-		
-		if (parent != null)
-		{
+
+		if (parent != null) {
 			_maskL = _typeL | parent._maskL;
 			_maskH = _typeH | parent._maskH;
-		}
-		else
-		{
+		} else {
 			_maskL = _typeL;
 			_maskH = _typeH;
 		}
 	}
-	
-	public final InstanceType getParent()
-	{
+
+	public final InstanceType getParent() {
 		return _parent;
 	}
-	
-	public final boolean isType(InstanceType it)
-	{
+
+	public final boolean isType(InstanceType it) {
 		return ((_maskL & it._typeL) > 0) || ((_maskH & it._typeH) > 0);
 	}
-	
-	public final boolean isTypes(InstanceType... it)
-	{
-		for (InstanceType i : it)
-		{
-			if (isType(i))
-			{
+
+	public final boolean isTypes(InstanceType... it) {
+		for (InstanceType i : it) {
+			if (isType(i)) {
 				return true;
 			}
 		}

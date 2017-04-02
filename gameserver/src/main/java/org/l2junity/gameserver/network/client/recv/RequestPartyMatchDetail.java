@@ -27,41 +27,35 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik
  */
-public final class RequestPartyMatchDetail implements IClientIncomingPacket
-{
+public final class RequestPartyMatchDetail implements IClientIncomingPacket {
 	private int _roomId;
 	private int _location;
 	private int _level;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomId = packet.readD();
 		_location = packet.readD();
 		_level = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isInMatchingRoom())
-		{
+
+		if (activeChar.isInMatchingRoom()) {
 			return;
 		}
-		
+
 		final MatchingRoom room = _roomId > 0 ? MatchingRoomManager.getInstance().getPartyMathchingRoom(_roomId) : MatchingRoomManager.getInstance().getPartyMathchingRoom(_location, _level);
-		
-		if (room != null)
-		{
+
+		if (room != null) {
 			room.addMember(activeChar);
 		}
 	}
-	
+
 }

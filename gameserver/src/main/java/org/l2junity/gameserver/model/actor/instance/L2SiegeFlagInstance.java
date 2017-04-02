@@ -33,113 +33,89 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class L2SiegeFlagInstance extends Npc
-{
+public class L2SiegeFlagInstance extends Npc {
 	private final L2Clan _clan;
 	private Siegable _siege;
 	private long _nextTalkTime;
-	
-	public L2SiegeFlagInstance(PlayerInstance player, L2NpcTemplate template, boolean advanced)
-	{
+
+	public L2SiegeFlagInstance(PlayerInstance player, L2NpcTemplate template, boolean advanced) {
 		super(template);
 		setInstanceType(InstanceType.L2SiegeFlagInstance);
-		
+
 		_clan = player.getClan();
 		_siege = SiegeManager.getInstance().getSiege(player.getX(), player.getY(), player.getZ());
-		if (_siege == null)
-		{
+		if (_siege == null) {
 			_siege = FortSiegeManager.getInstance().getSiege(player.getX(), player.getY(), player.getZ());
 		}
-		if ((_clan == null) || (_siege == null))
-		{
+		if ((_clan == null) || (_siege == null)) {
 			throw new NullPointerException(getClass().getSimpleName() + ": Initialization failed.");
 		}
-		
+
 		SiegeClan sc = _siege.getAttackerClan(_clan);
-		if (sc == null)
-		{
+		if (sc == null) {
 			throw new NullPointerException(getClass().getSimpleName() + ": Cannot find siege clan.");
 		}
-		
+
 		sc.addFlag(this);
 		getStatus();
 		setIsInvul(false);
 	}
-	
+
 	@Override
-	public boolean canBeAttacked()
-	{
+	public boolean canBeAttacked() {
 		return !isInvul();
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		return !isInvul();
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
-		if (!super.doDie(killer))
-		{
+	public boolean doDie(Creature killer) {
+		if (!super.doDie(killer)) {
 			return false;
 		}
-		if ((_siege != null) && (_clan != null))
-		{
+		if ((_siege != null) && (_clan != null)) {
 			SiegeClan sc = _siege.getAttackerClan(_clan);
-			if (sc != null)
-			{
+			if (sc != null) {
 				sc.removeFlag(this);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void onForcedAttack(PlayerInstance player)
-	{
+	public void onForcedAttack(PlayerInstance player) {
 		onAction(player);
 	}
-	
+
 	@Override
-	public void onAction(PlayerInstance player, boolean interact)
-	{
-		if ((player == null) || !canTarget(player))
-		{
+	public void onAction(PlayerInstance player, boolean interact) {
+		if ((player == null) || !canTarget(player)) {
 			return;
 		}
-		
+
 		// Check if the L2PcInstance already target the L2NpcInstance
-		if (this != player.getTarget())
-		{
+		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-		}
-		else if (interact)
-		{
-			if (isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100))
-			{
+		} else if (interact) {
+			if (isAutoAttackable(player) && (Math.abs(player.getZ() - getZ()) < 100)) {
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, this);
-			}
-			else
-			{
+			} else {
 				// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 				player.sendPacket(ActionFailed.STATIC_PACKET);
 			}
 		}
 	}
-	
+
 	@Override
-	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect)
-	{
+	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect) {
 		super.reduceCurrentHp(value, attacker, skill, isDOT, directlyToHp, critical, reflect);
-		if (System.currentTimeMillis() > _nextTalkTime)
-		{
-			if (((getCastle() != null) && getCastle().getSiege().isInProgress()) || ((getFort() != null) && getFort().getSiege().isInProgress()))
-			{
-				if (_clan != null)
-				{
+		if (System.currentTimeMillis() > _nextTalkTime) {
+			if (((getCastle() != null) && getCastle().getSiege().isInProgress()) || ((getFort() != null) && getFort().getSiege().isInProgress())) {
+				if (_clan != null) {
 					// send warning to owners of headquarters that theirs base is under attack
 					_clan.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.YOUR_BASE_IS_BEING_ATTACKED));
 					_nextTalkTime = System.currentTimeMillis() + 20000;

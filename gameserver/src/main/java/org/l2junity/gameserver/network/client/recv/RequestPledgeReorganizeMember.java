@@ -27,71 +27,62 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) dSdS
+ *
  * @author -Wooden-
  */
-public final class RequestPledgeReorganizeMember implements IClientIncomingPacket
-{
+public final class RequestPledgeReorganizeMember implements IClientIncomingPacket {
 	private int _isMemberSelected;
 	private String _memberName;
 	private int _newPledgeType;
 	private String _selectedMember;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_isMemberSelected = packet.readD();
 		_memberName = packet.readS();
 		_newPledgeType = packet.readD();
 		_selectedMember = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (_isMemberSelected == 0)
-		{
+	public void run(L2GameClient client) {
+		if (_isMemberSelected == 0) {
 			return;
 		}
-		
+
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
-		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_MANAGE_RANKS))
-		{
+
+		if (!activeChar.hasClanPrivilege(ClanPrivilege.CL_MANAGE_RANKS)) {
 			return;
 		}
-		
+
 		final ClanMember member1 = clan.getClanMember(_memberName);
-		if ((member1 == null) || (member1.getObjectId() == clan.getLeaderId()))
-		{
+		if ((member1 == null) || (member1.getObjectId() == clan.getLeaderId())) {
 			return;
 		}
-		
+
 		final ClanMember member2 = clan.getClanMember(_selectedMember);
-		if ((member2 == null) || (member2.getObjectId() == clan.getLeaderId()))
-		{
+		if ((member2 == null) || (member2.getObjectId() == clan.getLeaderId())) {
 			return;
 		}
-		
+
 		final int oldPledgeType = member1.getPledgeType();
-		if (oldPledgeType == _newPledgeType)
-		{
+		if (oldPledgeType == _newPledgeType) {
 			return;
 		}
-		
+
 		member1.setPledgeType(_newPledgeType);
 		member2.setPledgeType(oldPledgeType);
 		clan.broadcastClanStatus();
 	}
-	
+
 }

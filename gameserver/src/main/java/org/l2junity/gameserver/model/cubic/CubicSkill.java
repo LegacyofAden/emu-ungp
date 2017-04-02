@@ -18,19 +18,18 @@
  */
 package org.l2junity.gameserver.model.cubic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.cubic.conditions.ICubicCondition;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class CubicSkill extends SkillHolder implements ICubicConditionHolder
-{
+public class CubicSkill extends SkillHolder implements ICubicConditionHolder {
 	private static final long serialVersionUID = 6172112107327204476L;
 	private final int _triggerRate;
 	private final int _successRate;
@@ -38,9 +37,8 @@ public class CubicSkill extends SkillHolder implements ICubicConditionHolder
 	private final CubicSkillTargetType _targetType;
 	private final List<ICubicCondition> _conditions = new ArrayList<>();
 	private final boolean _targetDebuff;
-	
-	public CubicSkill(StatsSet set)
-	{
+
+	public CubicSkill(StatsSet set) {
 		super(set.getInt("id"), set.getInt("level"));
 		_triggerRate = set.getInt("triggerRate", 100);
 		_successRate = set.getInt("successRate", 100);
@@ -48,47 +46,39 @@ public class CubicSkill extends SkillHolder implements ICubicConditionHolder
 		_targetType = set.getEnum("target", CubicSkillTargetType.class, CubicSkillTargetType.TARGET);
 		_targetDebuff = set.getBoolean("targetDebuff", false);
 	}
-	
-	public int getTriggerRate()
-	{
+
+	public int getTriggerRate() {
 		return _triggerRate;
 	}
-	
-	public int getSuccessRate()
-	{
+
+	public int getSuccessRate() {
 		return _successRate;
 	}
-	
-	public boolean canUseOnStaticObjects()
-	{
+
+	public boolean canUseOnStaticObjects() {
 		return _canUseOnStaticObjects;
 	}
-	
-	public CubicSkillTargetType getTargetType()
-	{
+
+	public CubicSkillTargetType getTargetType() {
 		return _targetType;
 	}
-	
-	public boolean isTargetingDebuff()
-	{
+
+	public boolean isTargetingDebuff() {
 		return _targetDebuff;
 	}
-	
+
 	@Override
-	public boolean validateConditions(CubicInstance cubic, Creature owner, Creature target)
-	{
+	public boolean validateConditions(CubicInstance cubic, Creature owner, Creature target) {
 		return (!_targetDebuff || (_targetDebuff && (target.getEffectList().getDebuffCount() > 0))) && (_conditions.isEmpty() || _conditions.stream().allMatch(condition -> condition.test(cubic, owner, target)));
 	}
-	
+
 	@Override
-	public void addCondition(ICubicCondition condition)
-	{
+	public void addCondition(ICubicCondition condition) {
 		_conditions.add(condition);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "Cubic skill id: " + getSkillId() + " level: " + getSkillLevel() + " triggerRate: " + _triggerRate + " successRate: " + _successRate + " canUseOnStaticObjects: " + _canUseOnStaticObjects + " targetType: " + _targetType + " isTargetingDebuff: " + _targetDebuff + System.lineSeparator();
 	}
 }

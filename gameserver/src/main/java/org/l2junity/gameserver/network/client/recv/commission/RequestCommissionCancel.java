@@ -24,18 +24,16 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This Packet doesn't seem to be doing anything.
+ *
  * @author NosBit
  */
-public class RequestCommissionCancel implements IClientIncomingPacket
-{
+public class RequestCommissionCancel implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 	}
 }

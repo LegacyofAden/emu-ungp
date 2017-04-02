@@ -21,36 +21,30 @@ package org.l2junity.gameserver.model.itemcontainer;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class PcWarehouse extends Warehouse
-{
+public class PcWarehouse extends Warehouse {
 	private final PlayerInstance _owner;
-	
-	public PcWarehouse(PlayerInstance owner)
-	{
+
+	public PcWarehouse(PlayerInstance owner) {
 		_owner = owner;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "Warehouse";
 	}
-	
+
 	@Override
-	public PlayerInstance getOwner()
-	{
+	public PlayerInstance getOwner() {
 		return _owner;
 	}
-	
+
 	@Override
-	public ItemLocation getBaseLocation()
-	{
+	public ItemLocation getBaseLocation() {
 		return ItemLocation.WAREHOUSE;
 	}
-	
+
 	@Override
-	public boolean validateCapacity(long slots)
-	{
+	public boolean validateCapacity(long slots) {
 		return ((_items.size() + slots) <= _owner.getWareHouseLimit());
 	}
 }

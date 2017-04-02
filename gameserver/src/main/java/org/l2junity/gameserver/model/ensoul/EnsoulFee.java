@@ -24,40 +24,33 @@ import org.l2junity.gameserver.model.items.type.CrystalType;
 /**
  * @author UnAfraid
  */
-public class EnsoulFee
-{
+public class EnsoulFee {
 	private final CrystalType _type;
-	
+
 	private final ItemHolder[] _ensoulFee = new ItemHolder[3];
 	private final ItemHolder[] _resoulFees = new ItemHolder[3];
-	
-	public EnsoulFee(CrystalType type)
-	{
+
+	public EnsoulFee(CrystalType type) {
 		_type = type;
 	}
-	
-	public CrystalType getCrystalType()
-	{
+
+	public CrystalType getCrystalType() {
 		return _type;
 	}
-	
-	public void setEnsoul(int index, ItemHolder item)
-	{
+
+	public void setEnsoul(int index, ItemHolder item) {
 		_ensoulFee[index] = item;
 	}
-	
-	public void setResoul(int index, ItemHolder item)
-	{
+
+	public void setResoul(int index, ItemHolder item) {
 		_resoulFees[index] = item;
 	}
-	
-	public ItemHolder getEnsoul(int index)
-	{
+
+	public ItemHolder getEnsoul(int index) {
 		return _ensoulFee[index];
 	}
-	
-	public ItemHolder getResoul(int index)
-	{
+
+	public ItemHolder getResoul(int index) {
 		return _resoulFees[index];
 	}
 }

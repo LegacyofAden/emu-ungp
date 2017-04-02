@@ -27,28 +27,25 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.4.2.1.2.2 $ $Date: 2005/03/27 15:29:29 $
  */
-public final class CharacterRestore implements IClientIncomingPacket
-{
+public final class CharacterRestore implements IClientIncomingPacket {
 	// cd
 	private int _charSlot;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_charSlot = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterRestore"))
-		{
+	public void run(L2GameClient client) {
+		if (!client.getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterRestore")) {
 			return;
 		}
-		
+
 		client.restore(_charSlot);
 		CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1, 0);
 		client.sendPacket(cl);

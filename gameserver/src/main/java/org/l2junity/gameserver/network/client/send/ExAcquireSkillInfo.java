@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
@@ -29,11 +25,14 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * @author UnAfraid
  */
-public class ExAcquireSkillInfo implements IClientOutgoingPacket
-{
+public class ExAcquireSkillInfo implements IClientOutgoingPacket {
 	private final int _id;
 	private final int _level;
 	private final int _dualClassLevel;
@@ -41,15 +40,15 @@ public class ExAcquireSkillInfo implements IClientOutgoingPacket
 	private final int _minLevel;
 	private final List<ItemHolder> _itemReq;
 	private final List<Skill> _skillRem;
-	
+
 	/**
 	 * Special constructor for Alternate Skill Learning system.<br>
 	 * Sets a custom amount of SP.
+	 *
 	 * @param player
 	 * @param skillLearn the skill learn.
 	 */
-	public ExAcquireSkillInfo(PlayerInstance player, SkillLearn skillLearn)
-	{
+	public ExAcquireSkillInfo(PlayerInstance player, SkillLearn skillLearn) {
 		_id = skillLearn.getSkillId();
 		_level = skillLearn.getSkillLevel();
 		_dualClassLevel = skillLearn.getDualClassLevel();
@@ -58,27 +57,24 @@ public class ExAcquireSkillInfo implements IClientOutgoingPacket
 		_itemReq = skillLearn.getRequiredItems();
 		_skillRem = skillLearn.getRemoveSkills().stream().map(player::getKnownSkill).filter(Objects::nonNull).collect(Collectors.toList());
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ACQUIRE_SKILL_INFO.writeId(packet);
-		
+
 		packet.writeD(_id);
 		packet.writeD(_level);
 		packet.writeQ(_spCost);
 		packet.writeH(_minLevel);
 		packet.writeH(_dualClassLevel);
 		packet.writeD(_itemReq.size());
-		for (ItemHolder holder : _itemReq)
-		{
+		for (ItemHolder holder : _itemReq) {
 			packet.writeD(holder.getId());
 			packet.writeQ(holder.getCount());
 		}
-		
+
 		packet.writeD(_skillRem.size());
-		for (Skill skill : _skillRem)
-		{
+		for (Skill skill : _skillRem) {
 			packet.writeD(skill.getId());
 			packet.writeD(skill.getLevel());
 		}

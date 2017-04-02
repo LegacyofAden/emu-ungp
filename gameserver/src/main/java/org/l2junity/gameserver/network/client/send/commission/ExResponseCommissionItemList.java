@@ -18,33 +18,29 @@
  */
 package org.l2junity.gameserver.network.client.send.commission;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.AbstractItemPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author NosBit
  */
-public class ExResponseCommissionItemList extends AbstractItemPacket
-{
+public class ExResponseCommissionItemList extends AbstractItemPacket {
 	private final Collection<ItemInstance> _items;
-	
-	public ExResponseCommissionItemList(Collection<ItemInstance> items)
-	{
+
+	public ExResponseCommissionItemList(Collection<ItemInstance> items) {
 		_items = items;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RESPONSE_COMMISSION_ITEM_LIST.writeId(packet);
-		
+
 		packet.writeD(_items.size());
-		for (ItemInstance itemInstance : _items)
-		{
+		for (ItemInstance itemInstance : _items) {
 			writeItem(packet, itemInstance);
 		}
 		return true;

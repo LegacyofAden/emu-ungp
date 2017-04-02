@@ -18,78 +18,67 @@
  */
 package org.l2junity.gameserver.model;
 
+import org.l2junity.gameserver.model.interfaces.ILocational;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import org.l2junity.gameserver.model.interfaces.ILocational;
 
 /**
  * @author UnAfraid
  */
-public class SayuneEntry implements ILocational
-{
+public class SayuneEntry implements ILocational {
 	private boolean _isSelector = false;
 	private final int _id;
 	private double _x;
 	private double _y;
 	private double _z;
 	private final List<SayuneEntry> _innerEntries = new LinkedList<>();
-	
-	public SayuneEntry(int id)
-	{
+
+	public SayuneEntry(int id) {
 		_id = id;
 	}
-	
-	public SayuneEntry(boolean isSelector, int id, double x, double y, double z)
-	{
+
+	public SayuneEntry(boolean isSelector, int id, double x, double y, double z) {
 		_isSelector = isSelector;
 		_id = id;
 		_x = x;
 		_y = y;
 		_z = z;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
+
 	@Override
-	public double getX()
-	{
+	public double getX() {
 		return _x;
 	}
-	
+
 	@Override
-	public double getY()
-	{
+	public double getY() {
 		return _y;
 	}
-	
+
 	@Override
-	public double getZ()
-	{
+	public double getZ() {
 		return _z;
 	}
-	
+
 	@Override
-	public int getHeading()
-	{
+	public int getHeading() {
 		return 0;
 	}
-	
-	public boolean isSelector()
-	{
+
+	public boolean isSelector() {
 		return _isSelector;
 	}
-	
-	public List<SayuneEntry> getInnerEntries()
-	{
+
+	public List<SayuneEntry> getInnerEntries() {
 		return _innerEntries;
 	}
-	
-	public SayuneEntry addInnerEntry(SayuneEntry innerEntry)
-	{
+
+	public SayuneEntry addInnerEntry(SayuneEntry innerEntry) {
 		_innerEntries.add(innerEntry);
 		return innerEntry;
 	}

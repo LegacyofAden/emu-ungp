@@ -22,36 +22,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Effect time task finish the effect when the abnormal time is reached.
+ *
  * @author Zoey76
  */
-public class BuffTimeTask implements Runnable
-{
+public class BuffTimeTask implements Runnable {
 	private final AtomicInteger _time = new AtomicInteger();
 	private final BuffInfo _info;
-	
+
 	/**
 	 * EffectTimeTask constructor.
+	 *
 	 * @param info the buff info
 	 */
-	public BuffTimeTask(BuffInfo info)
-	{
+	public BuffTimeTask(BuffInfo info) {
 		_info = info;
 	}
-	
+
 	/**
 	 * Gets the elapsed time.
+	 *
 	 * @return the tick count
 	 */
-	public int getElapsedTime()
-	{
+	public int getElapsedTime() {
 		return _time.get();
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_time.incrementAndGet() > _info.getAbnormalTime())
-		{
+	public void run() {
+		if (_time.incrementAndGet() > _info.getAbnormalTime()) {
 			_info.getEffected().getEffectList().stopSkillEffects(false, _info.getSkill().getId());
 		}
 	}

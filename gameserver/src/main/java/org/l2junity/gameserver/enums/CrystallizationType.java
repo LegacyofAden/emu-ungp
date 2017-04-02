@@ -25,25 +25,20 @@ import org.l2junity.gameserver.model.items.Weapon;
 /**
  * @author Nik
  */
-public enum CrystallizationType
-{
+public enum CrystallizationType {
 	NONE,
 	WEAPON,
 	ARMOR,
 	ACCCESORY;
-	
-	public static CrystallizationType getByItem(L2Item item)
-	{
-		if (item instanceof Weapon)
-		{
+
+	public static CrystallizationType getByItem(L2Item item) {
+		if (item instanceof Weapon) {
 			return WEAPON;
 		}
-		if (item instanceof Armor)
-		{
+		if (item instanceof Armor) {
 			return ARMOR;
 		}
-		switch (item.getBodyPart())
-		{
+		switch (item.getBodyPart()) {
 			case L2Item.SLOT_R_EAR:
 			case L2Item.SLOT_L_EAR:
 			case L2Item.SLOT_R_FINGER:
@@ -51,12 +46,11 @@ public enum CrystallizationType
 			case L2Item.SLOT_NECK:
 			case L2Item.SLOT_HAIR:
 			case L2Item.SLOT_HAIR2:
-			case L2Item.SLOT_HAIRALL:
-			{
+			case L2Item.SLOT_HAIRALL: {
 				return ACCCESORY;
 			}
 		}
-		
+
 		return NONE;
 	}
 }

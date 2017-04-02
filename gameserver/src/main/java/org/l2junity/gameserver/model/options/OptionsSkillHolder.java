@@ -23,32 +23,28 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 /**
  * @author UnAfraid
  */
-public class OptionsSkillHolder extends SkillHolder
-{
+public class OptionsSkillHolder extends SkillHolder {
 	private static final long serialVersionUID = 7684788619832085612L;
 	private final OptionsSkillType _type;
 	private final double _chance;
-	
+
 	/**
 	 * @param skillId
 	 * @param skillLvl
 	 * @param type
 	 * @param chance
 	 */
-	public OptionsSkillHolder(int skillId, int skillLvl, double chance, OptionsSkillType type)
-	{
+	public OptionsSkillHolder(int skillId, int skillLvl, double chance, OptionsSkillType type) {
 		super(skillId, skillLvl);
 		_chance = chance;
 		_type = type;
 	}
-	
-	public OptionsSkillType getSkillType()
-	{
+
+	public OptionsSkillType getSkillType() {
 		return _type;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
 }

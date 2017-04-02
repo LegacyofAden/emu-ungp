@@ -24,63 +24,52 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author UnAfraid
  */
-public class Hit
-{
+public class Hit {
 	private final int _targetId;
 	private final int _damage;
 	private final int _ssGrade;
 	private int _flags = 0;
-	
-	public Hit(WorldObject target, int damage, boolean miss, boolean crit, byte shld, boolean soulshot, int ssGrade)
-	{
+
+	public Hit(WorldObject target, int damage, boolean miss, boolean crit, byte shld, boolean soulshot, int ssGrade) {
 		_targetId = target.getObjectId();
 		_damage = damage;
 		_ssGrade = ssGrade;
-		
-		if (miss)
-		{
+
+		if (miss) {
 			addMask(AttackType.MISSED);
 			return;
 		}
-		
-		if (crit)
-		{
+
+		if (crit) {
 			addMask(AttackType.CRITICAL);
 		}
-		
-		if (soulshot)
-		{
+
+		if (soulshot) {
 			addMask(AttackType.SHOT_USED);
 		}
-		
-		if ((target.isCreature() && ((Creature) target).isHpBlocked()) || (shld > 0))
-		{
+
+		if ((target.isCreature() && ((Creature) target).isHpBlocked()) || (shld > 0)) {
 			addMask(AttackType.BLOCKED);
 		}
 	}
-	
-	private void addMask(AttackType type)
-	{
+
+	private void addMask(AttackType type) {
 		_flags |= type.getMask();
 	}
-	
-	public int getTargetId()
-	{
+
+	public int getTargetId() {
 		return _targetId;
 	}
-	
-	public int getDamage()
-	{
+
+	public int getDamage() {
 		return _damage;
 	}
-	
-	public int getFlags()
-	{
+
+	public int getFlags() {
 		return _flags;
 	}
-	
-	public int getGrade()
-	{
+
+	public int getGrade() {
 		return _ssGrade;
 	}
 }

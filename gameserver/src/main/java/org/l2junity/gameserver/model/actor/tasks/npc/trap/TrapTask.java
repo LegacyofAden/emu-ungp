@@ -27,52 +27,41 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Trap task.
+ *
  * @author Zoey76
  */
-public class TrapTask implements Runnable
-{
+public class TrapTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger(TrapTask.class);
 	private static final int TICK = 1000; // 1s
 	private final L2TrapInstance _trap;
-	
-	public TrapTask(L2TrapInstance trap)
-	{
+
+	public TrapTask(L2TrapInstance trap) {
 		_trap = trap;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		try
-		{
-			if (!_trap.isTriggered())
-			{
-				if (_trap.getLifeTime() > 0)
-				{
+	public void run() {
+		try {
+			if (!_trap.isTriggered()) {
+				if (_trap.getLifeTime() > 0) {
 					_trap.setRemainingTime(_trap.getRemainingTime() - TICK);
-					if (_trap.getRemainingTime() < (_trap.getLifeTime() - 15000))
-					{
+					if (_trap.getRemainingTime() < (_trap.getLifeTime() - 15000)) {
 						_trap.broadcastPacket(new SocialAction(_trap.getObjectId(), 2));
 					}
-					if (_trap.getRemainingTime() <= 0)
-					{
+					if (_trap.getRemainingTime() <= 0) {
 						_trap.triggerTrap(_trap);
 						return;
 					}
 				}
-				
-				for (Creature target : World.getInstance().getVisibleObjects(_trap, Creature.class))
-				{
-					if (_trap.checkTarget(target))
-					{
+
+				for (Creature target : World.getInstance().getVisibleObjects(_trap, Creature.class)) {
+					if (_trap.checkTarget(target)) {
 						_trap.triggerTrap(target);
 						break;
 					}
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.error(TrapTask.class.getSimpleName() + ": " + e.getMessage());
 			_trap.unSummon();
 		}

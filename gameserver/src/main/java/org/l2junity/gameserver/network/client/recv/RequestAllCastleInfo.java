@@ -25,17 +25,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestAllCastleInfo implements IClientIncomingPacket
-{
+public class RequestAllCastleInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		client.sendPacket(ExShowCastleInfo.STATIC_PACKET);
 	}
 }

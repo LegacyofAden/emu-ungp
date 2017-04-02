@@ -18,64 +18,51 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.base.ClassInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Loads the the list of classes and its info.
+ *
  * @author Zoey76
  */
-public final class ClassListData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClassListData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class ClassListData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ClassListData instance = new ClassListData();
+
 	private final Map<ClassId, ClassInfo> _classData = new HashMap<>();
-	
-	/**
-	 * Instantiates a new class list data.
-	 */
-	protected ClassListData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private ClassListData() {
 		_classData.clear();
 		parseDatapackFile("data/stats/chars/classList.xml");
-		LOGGER.info("Loaded {} Class data.", _classData.size());
+		log.info("Loaded {} Class data.", _classData.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		NamedNodeMap attrs;
 		Node attr;
 		ClassId classId;
 		String className;
 		ClassId parentClassId;
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equals(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equals(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
 					attrs = d.getAttributes();
-					if ("class".equals(d.getNodeName()))
-					{
+					if ("class".equals(d.getNodeName())) {
 						attr = attrs.getNamedItem("classId");
 						classId = ClassId.getClassId(parseInteger(attr));
 						attr = attrs.getNamedItem("name");
@@ -88,54 +75,38 @@ public final class ClassListData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _classData.size();
 	}
-	
+
 	/**
 	 * Gets the class list.
+	 *
 	 * @return the complete class list.
 	 */
-	public Map<ClassId, ClassInfo> getClassList()
-	{
+	public Map<ClassId, ClassInfo> getClassList() {
 		return _classData;
 	}
-	
+
 	/**
 	 * Gets the class info.
+	 *
 	 * @param classId the class Id.
 	 * @return the class info related to the given {@code classId}.
 	 */
-	public ClassInfo getClass(ClassId classId)
-	{
+	public ClassInfo getClass(ClassId classId) {
 		return _classData.get(classId);
 	}
-	
+
 	/**
 	 * Gets the class info.
+	 *
 	 * @param classId the class Id as integer.
 	 * @return the class info related to the given {@code classId}.
 	 */
-	public ClassInfo getClass(int classId)
-	{
+	public ClassInfo getClass(int classId) {
 		final ClassId id = ClassId.getClassId(classId);
 		return (id != null) ? _classData.get(id) : null;
-	}
-	
-	/**
-	 * Gets the single instance of ClassListData.
-	 * @return single instance of ClassListData
-	 */
-	@InstanceGetter
-	public static ClassListData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ClassListData _instance = new ClassListData();
 	}
 }

@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * Creature races enumerated.
+ *
  * @author Zealar
  */
-public enum Race
-{
+public enum Race {
 	HUMAN,
 	ELF,
 	DARK_ELF,

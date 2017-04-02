@@ -18,278 +18,213 @@
  */
 package org.l2junity.commons.scripting;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.ServiceLoader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.scripting.java.JavaScriptingEngine;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.BasePathProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.l2junity.core.startup.StartupComponent;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Caches script engines and provides functionality for executing and managing scripts.
+ *
  * @author KenM, HorridoJoho
  */
-public final class ScriptEngineManager
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ScriptEngineManager.class);
-	
+@Slf4j
+@StartupComponent("Scripts")
+public final class ScriptEngineManager {
+	@Getter(lazy = true)
+	private static final ScriptEngineManager instance = new ScriptEngineManager();
+
 	private static final Path CONFIG_FILE = BasePathProvider.resolvePath(Paths.get("config", "ScriptEngines.properties"));
 	private static final Pattern ENV_PATTERN = Pattern.compile("\\%([a-zA-Z0-9.\\-_]*)\\%");
-	
+
 	private final Map<String, IExecutionContext> _extEngines = new HashMap<>();
 	private IExecutionContext _currentExecutionContext = null;
-	
-	protected ScriptEngineManager()
-	{
-		if (Files.notExists(CONFIG_FILE))
-		{
-			LOGGER.info("Configuration not found, disabled!");
+
+	protected ScriptEngineManager() {
+		if (Files.notExists(CONFIG_FILE)) {
+			log.info("Configuration not found, disabled!");
 			return;
 		}
-		
+
 		// register engines
 		final Properties props = loadProperties();
-		
+
 		// Default java engine implementation
 		registerEngine(new JavaScriptingEngine(), props);
-		
+
 		// Load external script engines
 		ServiceLoader.load(IScriptingEngine.class).forEach(engine -> registerEngine(engine, props));
 	}
-	
-	private static Properties loadProperties()
-	{
+
+	private static Properties loadProperties() {
 		final Properties properties = new Properties();
-		try (final InputStream is = Files.newInputStream(CONFIG_FILE))
-		{
+		try (final InputStream is = Files.newInputStream(CONFIG_FILE)) {
 			properties.load(is);
+		} catch (Exception e) {
+			log.warn("Couldn't load ScriptEngines.properties!", e);
 		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Couldn't load ScriptEngines.properties!", e);
-		}
-		
+
 		return properties;
 	}
-	
-	private void registerEngine(final IScriptingEngine engine, final Properties props)
-	{
+
+	private void registerEngine(final IScriptingEngine engine, final Properties props) {
 		maybeSetProperties("language." + engine.getLanguageName() + ".", props, engine);
 		final IExecutionContext context = engine.createExecutionContext();
-		for (String commonExtension : engine.getCommonFileExtensions())
-		{
+		for (String commonExtension : engine.getCommonFileExtensions()) {
 			_extEngines.put(commonExtension, context);
 		}
-		
-		LOGGER.info(engine.getEngineName() + " " + engine.getEngineVersion() + " (" + engine.getLanguageName() + " " + engine.getLanguageVersion() + ")");
+
+		log.info(engine.getEngineName() + " " + engine.getEngineVersion() + " (" + engine.getLanguageName() + " " + engine.getLanguageVersion() + ")");
 	}
-	
-	private static void maybeSetProperties(final String propPrefix, final Properties props, final IScriptingEngine engine)
-	{
-		if (props == null)
-		{
+
+	private static void maybeSetProperties(final String propPrefix, final Properties props, final IScriptingEngine engine) {
+		if (props == null) {
 			return;
 		}
-		
-		for (final Entry<Object, Object> prop : props.entrySet())
-		{
+
+		for (final Entry<Object, Object> prop : props.entrySet()) {
 			String key = (String) prop.getKey();
 			String value = (String) prop.getValue();
-			
-			if (key.startsWith(propPrefix))
-			{
+
+			if (key.startsWith(propPrefix)) {
 				key = key.substring(propPrefix.length());
-				if (value.contains("%"))
-				{
+				if (value.contains("%")) {
 					final Matcher matcher = ENV_PATTERN.matcher(value);
-					while (matcher.find())
-					{
+					while (matcher.find()) {
 						value = value.replace("%" + matcher.group(1) + "%", System.getProperty(matcher.group(1)));
 					}
 				}
-				
+
 				engine.setProperty(key, value);
 			}
 		}
 	}
-	
-	private IExecutionContext getEngineByExtension(String ext)
-	{
+
+	private IExecutionContext getEngineByExtension(String ext) {
 		return _extEngines.get(ext);
 	}
-	
-	private static String getFileExtension(final Path p)
-	{
+
+	private static String getFileExtension(final Path p) {
 		final String name = p.getFileName().toString();
 		final int lastDotIdx = name.lastIndexOf('.');
-		if (lastDotIdx == -1)
-		{
+		if (lastDotIdx == -1) {
 			return null;
 		}
-		
+
 		final String extension = name.substring(lastDotIdx + 1);
-		if (extension.isEmpty())
-		{
+		if (extension.isEmpty()) {
 			return null;
 		}
-		
+
 		return extension;
 	}
-	
-	private static void checkExistingFile(final String messagePre, final Path filePath) throws Exception
-	{
-		if (!Files.exists(filePath))
-		{
+
+	private static void checkExistingFile(final String messagePre, final Path filePath) throws Exception {
+		if (!Files.exists(filePath)) {
 			throw new Exception(messagePre + ": " + filePath + " does not exists!");
-		}
-		else if (!Files.isRegularFile(filePath))
-		{
+		} else if (!Files.isRegularFile(filePath)) {
 			throw new Exception(messagePre + ": " + filePath + " is not a file!");
 		}
 	}
-	
-	public void executeScriptList(final Path scriptFolder, final String... doNotLoad) throws Exception
-	{
+
+	public void executeScriptList(final Path scriptFolder, final String... doNotLoad) throws Exception {
 		final Map<IExecutionContext, List<Path>> files = new LinkedHashMap<>();
 		processDirectory(scriptFolder, files, doNotLoad);
-		
-		for (Entry<IExecutionContext, List<Path>> entry : files.entrySet())
-		{
+
+		for (Entry<IExecutionContext, List<Path>> entry : files.entrySet()) {
 			_currentExecutionContext = entry.getKey();
-			try
-			{
+			try {
 				Map<Path, Throwable> invocationErrors = entry.getKey().executeScripts(entry.getValue());
-				for (Entry<Path, Throwable> entry2 : invocationErrors.entrySet())
-				{
-					LOGGER.warn(entry2.getKey() + " failed execution!", entry2.getValue());
+				for (Entry<Path, Throwable> entry2 : invocationErrors.entrySet()) {
+					log.warn(entry2.getKey() + " failed execution!", entry2.getValue());
 				}
-			}
-			finally
-			{
+			} finally {
 				_currentExecutionContext = null;
 			}
 		}
 	}
-	
-	private void processDirectory(final Path dir, final Map<IExecutionContext, List<Path>> files, final String... doNotLoad)
-	{
-		try
-		{
-			Files.walkFileTree(dir, new SimpleFileVisitor<Path>()
-			{
+
+	private void processDirectory(final Path dir, final Map<IExecutionContext, List<Path>> files, final String... doNotLoad) {
+		try {
+			Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
-				{
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 					processFile(file, files, doNotLoad);
 					return super.visitFile(file, attrs);
 				}
 			});
-		}
-		catch (final IOException e)
-		{
-			LOGGER.warn("Couldn't load directory: " + dir, e);
+		} catch (final IOException e) {
+			log.warn("Couldn't load directory: " + dir, e);
 		}
 	}
-	
-	protected void processFile(final Path path, final Map<IExecutionContext, List<Path>> files, final String... doNotLoad)
-	{
-		if (ArrayUtil.contains(doNotLoad, path.getFileName().toString()))
-		{
+
+	protected void processFile(final Path path, final Map<IExecutionContext, List<Path>> files, final String... doNotLoad) {
+		if (ArrayUtil.contains(doNotLoad, path.getFileName().toString())) {
 			return;
 		}
-		
-		try
-		{
+
+		try {
 			checkExistingFile("ScriptFile", path);
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn(e.getMessage());
+		} catch (Exception e) {
+			log.warn(e.getMessage());
 			return;
 		}
-		
+
 		final Path sourceFile = path.toAbsolutePath();
 		final String ext = getFileExtension(sourceFile);
-		if (ext == null)
-		{
-			LOGGER.warn(sourceFile + " does not have an extension to determine the script engine!");
+		if (ext == null) {
+			log.warn(sourceFile + " does not have an extension to determine the script engine!");
 			return;
 		}
-		
+
 		final IExecutionContext engine = getEngineByExtension(ext);
-		if (engine == null)
-		{
+		if (engine == null) {
 			return;
 		}
-		
+
 		files.computeIfAbsent(engine, k -> new LinkedList<>()).add(sourceFile);
 	}
-	
-	public void executeScript(final Path scriptFolder, Path sourceFile) throws Exception
-	{
+
+	public void executeScript(final Path scriptFolder, Path sourceFile) throws Exception {
 		Objects.requireNonNull(sourceFile);
-		
-		if (!sourceFile.isAbsolute())
-		{
+
+		if (!sourceFile.isAbsolute()) {
 			sourceFile = scriptFolder.resolve(sourceFile);
 		}
-		
+
 		// throws exception if not exists or not file
 		checkExistingFile("ScriptFile", sourceFile);
-		
+
 		sourceFile = sourceFile.toAbsolutePath();
 		String ext = getFileExtension(sourceFile);
 		Objects.requireNonNull(sourceFile, "ScriptFile: " + sourceFile + " does not have an extension to determine the script engine!");
-		
+
 		IExecutionContext engine = getEngineByExtension(ext);
 		Objects.requireNonNull(engine, "ScriptEngine: No engine registered for extension " + ext + "!");
-		
+
 		_currentExecutionContext = engine;
-		try
-		{
+		try {
 			Entry<Path, Throwable> error = engine.executeScript(sourceFile);
-			if (error != null)
-			{
+			if (error != null) {
 				throw new Exception("ScriptEngine: " + error.getKey() + " failed execution!", error.getValue());
 			}
-		}
-		finally
-		{
+		} finally {
 			_currentExecutionContext = null;
 		}
 	}
-	
-	public Path getCurrentLoadingScript()
-	{
+
+	public Path getCurrentLoadingScript() {
 		return _currentExecutionContext != null ? _currentExecutionContext.getCurrentExecutingScript() : null;
-	}
-	
-	public static ScriptEngineManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
 	}
 }

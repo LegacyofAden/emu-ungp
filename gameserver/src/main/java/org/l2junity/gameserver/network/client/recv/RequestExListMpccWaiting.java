@@ -26,28 +26,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestExListMpccWaiting implements IClientIncomingPacket
-{
+public class RequestExListMpccWaiting implements IClientIncomingPacket {
 	private int _page, _location, _level;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_page = packet.readD();
 		_location = packet.readD();
 		_level = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		activeChar.sendPacket(new ExListMpccWaiting(_page, _location, _level));
 	}
 }

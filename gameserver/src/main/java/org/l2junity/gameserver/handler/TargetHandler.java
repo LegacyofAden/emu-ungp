@@ -18,94 +18,67 @@
  */
 package org.l2junity.gameserver.handler;
 
+import lombok.Getter;
+import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.scripting.GameScriptsLoader;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.scripting.ScriptEngineManager;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.scripting.GameScriptsLoader;
 
 /**
  * @author Nik
  */
-public final class TargetHandler
-{
+@StartupComponent("Scripts")
+public final class TargetHandler {
+	@Getter(lazy = true)
+	private static final TargetHandler instance = new TargetHandler();
+
 	private final Map<String, ITargetTypeHandler> _targetTypeHandlers = new HashMap<>();
 	private final Map<String, IAffectScopeHandler> _affectScopeHandlers = new HashMap<>();
 	private final Map<String, IAffectObjectHandler> _affectObjectHandlers = new HashMap<>();
-	
-	public void registerTargetTypeHandler(String name, ITargetTypeHandler handler)
-	{
+
+	public void registerTargetTypeHandler(String name, ITargetTypeHandler handler) {
 		_targetTypeHandlers.put(name, handler);
 	}
-	
-	public ITargetTypeHandler getTargetTypeHandler(String name)
-	{
+
+	public ITargetTypeHandler getTargetTypeHandler(String name) {
 		return _targetTypeHandlers.get(name);
 	}
-	
-	public void registerAffectScopeHandler(String name, IAffectScopeHandler handler)
-	{
+
+	public void registerAffectScopeHandler(String name, IAffectScopeHandler handler) {
 		_affectScopeHandlers.put(name, handler);
 	}
-	
-	public IAffectScopeHandler getAffectScopeHandler(String name)
-	{
+
+	public IAffectScopeHandler getAffectScopeHandler(String name) {
 		return _affectScopeHandlers.get(name);
 	}
-	
-	public void registerAffectObjectHandler(String name, IAffectObjectHandler handler)
-	{
+
+	public void registerAffectObjectHandler(String name, IAffectObjectHandler handler) {
 		_affectObjectHandlers.put(name, handler);
 	}
-	
-	public IAffectObjectHandler getAffectObjectHandler(String name)
-	{
+
+	public IAffectObjectHandler getAffectObjectHandler(String name) {
 		return _affectObjectHandlers.get(name);
 	}
-	
-	public int getTargetTypeHandlersSize()
-	{
+
+	public int getTargetTypeHandlersSize() {
 		return _targetTypeHandlers.size();
 	}
-	
-	public int getAffectScopeHandlersSize()
-	{
+
+	public int getAffectScopeHandlersSize() {
 		return _affectScopeHandlers.size();
 	}
-	
-	public int getAffectObjectHandlersSize()
-	{
+
+	public int getAffectObjectHandlersSize() {
 		return _affectObjectHandlers.size();
 	}
-	
-	protected TargetHandler()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
-		try
-		{
+
+	private TargetHandler() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.TARGET_MASTER_HANDLER_FILE);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Error("Problems while running TargetMansterHandler", e);
 		}
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final TargetHandler INSTANCE = new TargetHandler();
-	}
-	
-	@InstanceGetter
-	public static TargetHandler getInstance()
-	{
-		return SingletonHolder.INSTANCE;
 	}
 }

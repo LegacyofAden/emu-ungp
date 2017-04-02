@@ -18,59 +18,51 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.adenadistribution.ExDivideAdenaCancel;
+
+import java.util.List;
 
 /**
  * @author Sdw
  */
-public class AdenaDistributionRequest extends AbstractRequest
-{
+public class AdenaDistributionRequest extends AbstractRequest {
 	private final PlayerInstance _distributor;
 	private final List<PlayerInstance> _players;
 	private final int _adenaObjectId;
 	private final long _adenaCount;
-	
-	public AdenaDistributionRequest(PlayerInstance activeChar, PlayerInstance distributor, List<PlayerInstance> players, int adenaObjectId, long adenaCount)
-	{
+
+	public AdenaDistributionRequest(PlayerInstance activeChar, PlayerInstance distributor, List<PlayerInstance> players, int adenaObjectId, long adenaCount) {
 		super(activeChar);
 		_distributor = distributor;
 		_adenaObjectId = adenaObjectId;
 		_players = players;
 		_adenaCount = adenaCount;
 	}
-	
-	public PlayerInstance getDistributor()
-	{
+
+	public PlayerInstance getDistributor() {
 		return _distributor;
 	}
-	
-	public List<PlayerInstance> getPlayers()
-	{
+
+	public List<PlayerInstance> getPlayers() {
 		return _players;
 	}
-	
-	public int getAdenaObjectId()
-	{
+
+	public int getAdenaObjectId() {
 		return _adenaObjectId;
 	}
-	
-	public long getAdenaCount()
-	{
+
+	public long getAdenaCount() {
 		return _adenaCount;
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return objectId == _adenaObjectId;
 	}
-	
+
 	@Override
-	public void onTimeout()
-	{
+	public void onTimeout() {
 		super.onTimeout();
 		_players.forEach(p ->
 		{

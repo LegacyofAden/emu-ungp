@@ -18,26 +18,25 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * This class manages all RaidBoss.<br>
  * In a group mob, there are one master called RaidBoss and several slaves called Minions.
  */
-public class L2RaidBossInstance extends L2MonsterInstance
-{
+public class L2RaidBossInstance extends L2MonsterInstance {
 	private static final int RAIDBOSS_MAINTENANCE_INTERVAL = 30000; // 30 sec
-	
+
 	private boolean _useRaidCurse = true;
-	
+
 	/**
 	 * Constructor of L2RaidBossInstance (use L2Character and L2NpcInstance constructor).<br>
 	 * <B><U>Actions</U>:</B>
@@ -46,81 +45,69 @@ public class L2RaidBossInstance extends L2MonsterInstance
 	 * <li>Set the name of the L2RaidBossInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
+	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2RaidBossInstance(L2NpcTemplate template)
-	{
+	public L2RaidBossInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2RaidBossInstance);
 		setIsRaid(true);
 		setLethalable(false);
 	}
-	
+
 	@Override
-	public void onSpawn()
-	{
+	public void onSpawn() {
 		super.onSpawn();
 		setRandomWalking(false);
 		broadcastPacket(new PlaySound(1, getParameters().getString("RaidSpawnMusic", "Rm01_A"), 0, 0, 0, 0, 0));
 	}
-	
+
 	@Override
-	protected int getMaintenanceInterval()
-	{
+	protected int getMaintenanceInterval() {
 		return RAIDBOSS_MAINTENANCE_INTERVAL;
 	}
-	
+
 	/**
 	 * Spawn all minions at a regular interval Also if boss is too far from home location at the time of this check, teleport it home.
 	 */
 	@Override
-	protected void startMaintenanceTask()
-	{
-		_maintenanceTask = ThreadPool.scheduleAtFixedRate(() -> checkAndReturnToSpawn(), 60000, getMaintenanceInterval() + Rnd.get(5000), TimeUnit.MILLISECONDS);
+	protected void startMaintenanceTask() {
+		_maintenanceTask = ThreadPool.getInstance().scheduleGeneralAtFixedRate(this::checkAndReturnToSpawn, 60000, getMaintenanceInterval() + Rnd.get(5000), TimeUnit.MILLISECONDS);
 	}
-	
-	protected void checkAndReturnToSpawn()
-	{
-		if (isDead() || isMovementDisabled() || !canReturnToSpawnPoint())
-		{
+
+	protected void checkAndReturnToSpawn() {
+		if (isDead() || isMovementDisabled() || !canReturnToSpawnPoint()) {
 			return;
 		}
-		
+
 		final L2Spawn spawn = getSpawn();
-		if (spawn == null)
-		{
+		if (spawn == null) {
 			return;
 		}
-		
-		if (!isInCombat() && !isMovementDisabled())
-		{
-			if (!isInRadius3d(spawn, Math.max(NpcConfig.MAX_DRIFT_RANGE, 200)))
-			{
+
+		if (!isInCombat() && !isMovementDisabled()) {
+			if (!isInRadius3d(spawn, Math.max(NpcConfig.MAX_DRIFT_RANGE, 200))) {
 				teleToLocation(spawn);
 			}
 		}
 	}
-	
+
 	@Override
-	public int getVitalityPoints(int level, double exp, boolean isBoss)
-	{
+	public int getVitalityPoints(int level, double exp, boolean isBoss) {
 		return -super.getVitalityPoints(level, exp, isBoss);
 	}
-	
+
 	@Override
-	public boolean useVitalityRate()
-	{
+	public boolean useVitalityRate() {
 		return false;
 	}
-	
-	public void setUseRaidCurse(boolean val)
-	{
+
+	public void setUseRaidCurse(boolean val) {
 		_useRaidCurse = val;
 	}
-	
+
 	@Override
-	public boolean giveRaidCurse()
-	{
+	public boolean giveRaidCurse() {
 		return _useRaidCurse;
 	}
 }

@@ -27,27 +27,23 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestMenteeWaitingList implements IClientIncomingPacket
-{
+public class RequestMenteeWaitingList implements IClientIncomingPacket {
 	private int _page;
 	private int _minLevel;
 	private int _maxLevel;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_page = packet.readD();
 		_minLevel = packet.readD();
 		_maxLevel = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		client.sendPacket(new ListMenteeWaiting(_page, _minLevel, _maxLevel));

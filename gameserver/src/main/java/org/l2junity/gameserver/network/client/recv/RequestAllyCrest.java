@@ -24,24 +24,22 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.4 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestAllyCrest implements IClientIncomingPacket
-{
+public final class RequestAllyCrest implements IClientIncomingPacket {
 	private int _crestId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_crestId = packet.readD();
 		packet.readD(); // Ally ID
 		packet.readD(); // Server ID
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		client.sendPacket(new AllyCrest(_crestId));
 	}
 }

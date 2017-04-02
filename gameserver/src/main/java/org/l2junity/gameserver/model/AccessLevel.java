@@ -23,8 +23,7 @@ import org.l2junity.gameserver.data.xml.impl.AdminData;
 /**
  * @author HorridoJoho
  */
-public class AccessLevel
-{
+public class AccessLevel {
 	/**
 	 * The access level<br>
 	 */
@@ -33,9 +32,13 @@ public class AccessLevel
 	 * The access level name<br>
 	 */
 	private String _name = null;
-	/** Child access levels */
+	/**
+	 * Child access levels
+	 */
 	AccessLevel _childsAccessLevel = null;
-	/** Child access levels */
+	/**
+	 * Child access levels
+	 */
 	private int _child = 0;
 	/**
 	 * The name color for the access level<br>
@@ -49,23 +52,36 @@ public class AccessLevel
 	 * Flag to determine if the access level has gm access<br>
 	 */
 	private boolean _isGm = false;
-	/** Flag for peace zone attack */
+	/**
+	 * Flag for peace zone attack
+	 */
 	private boolean _allowPeaceAttack = false;
-	/** Flag for fixed res */
+	/**
+	 * Flag for fixed res
+	 */
 	private boolean _allowFixedRes = false;
-	/** Flag for transactions */
+	/**
+	 * Flag for transactions
+	 */
 	private boolean _allowTransaction = false;
-	/** Flag for AltG commands */
+	/**
+	 * Flag for AltG commands
+	 */
 	private boolean _allowAltG = false;
-	/** Flag to give damage */
+	/**
+	 * Flag to give damage
+	 */
 	private boolean _giveDamage = false;
-	/** Flag to take aggro */
+	/**
+	 * Flag to take aggro
+	 */
 	private boolean _takeAggro = false;
-	/** Flag to gain exp in party */
+	/**
+	 * Flag to gain exp in party
+	 */
 	private boolean _gainExp = false;
-	
-	public AccessLevel(StatsSet set)
-	{
+
+	public AccessLevel(StatsSet set) {
 		_accessLevel = set.getInt("level");
 		_name = set.getString("name");
 		_nameColor = Integer.decode("0x" + set.getString("nameColor", "FFFFFF"));
@@ -80,9 +96,8 @@ public class AccessLevel
 		_takeAggro = set.getBoolean("takeAggro", true);
 		_gainExp = set.getBoolean("gainExp", true);
 	}
-	
-	public AccessLevel()
-	{
+
+	public AccessLevel() {
 		_accessLevel = 0;
 		_name = "User";
 		_nameColor = Integer.decode("0xFFFFFF");
@@ -97,141 +112,139 @@ public class AccessLevel
 		_takeAggro = true;
 		_gainExp = true;
 	}
-	
+
 	/**
 	 * Returns the access level<br>
 	 * <br>
+	 *
 	 * @return int: access level<br>
 	 */
-	public int getLevel()
-	{
+	public int getLevel() {
 		return _accessLevel;
 	}
-	
+
 	/**
 	 * Returns the access level name<br>
 	 * <br>
+	 *
 	 * @return String: access level name<br>
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Returns the name color of the access level<br>
 	 * <br>
+	 *
 	 * @return int: the name color for the access level<br>
 	 */
-	public int getNameColor()
-	{
+	public int getNameColor() {
 		return _nameColor;
 	}
-	
+
 	/**
 	 * Returns the title color color of the access level<br>
 	 * <br>
+	 *
 	 * @return int: the title color for the access level<br>
 	 */
-	public int getTitleColor()
-	{
+	public int getTitleColor() {
 		return _titleColor;
 	}
-	
+
 	/**
 	 * Retuns if the access level has gm access or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if access level have gm access, otherwise false<br>
 	 */
-	public boolean isGm()
-	{
+	public boolean isGm() {
 		return _isGm;
 	}
-	
+
 	/**
 	 * Returns if the access level is allowed to attack in peace zone or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if the access level is allowed to attack in peace zone, otherwise false<br>
 	 */
-	public boolean allowPeaceAttack()
-	{
+	public boolean allowPeaceAttack() {
 		return _allowPeaceAttack;
 	}
-	
+
 	/**
 	 * Retruns if the access level is allowed to use fixed res or not<br>
 	 * <br>
+	 *
 	 * @return true if the access level is allowed to use fixed res, otherwise false<br>
 	 */
-	public boolean allowFixedRes()
-	{
+	public boolean allowFixedRes() {
 		return _allowFixedRes;
 	}
-	
+
 	/**
 	 * Returns if the access level is allowed to perform transactions or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if access level is allowed to perform transactions, otherwise false<br>
 	 */
-	public boolean allowTransaction()
-	{
+	public boolean allowTransaction() {
 		return _allowTransaction;
 	}
-	
+
 	/**
 	 * Returns if the access level is allowed to use AltG commands or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if access level is allowed to use AltG commands, otherwise false<br>
 	 */
-	public boolean allowAltG()
-	{
+	public boolean allowAltG() {
 		return _allowAltG;
 	}
-	
+
 	/**
 	 * Returns if the access level can give damage or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if the access level can give damage, otherwise false<br>
 	 */
-	public boolean canGiveDamage()
-	{
+	public boolean canGiveDamage() {
 		return _giveDamage;
 	}
-	
+
 	/**
 	 * Returns if the access level can take aggro or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if the access level can take aggro, otherwise false<br>
 	 */
-	public boolean canTakeAggro()
-	{
+	public boolean canTakeAggro() {
 		return _takeAggro;
 	}
-	
+
 	/**
 	 * Returns if the access level can gain exp or not<br>
 	 * <br>
+	 *
 	 * @return boolean: true if the access level can gain exp, otherwise false<br>
 	 */
-	public boolean canGainExp()
-	{
+	public boolean canGainExp() {
 		return _gainExp;
 	}
-	
+
 	/**
 	 * Returns if the access level contains allowedAccess as child<br>
+	 *
 	 * @param accessLevel as AccessLevel<br>
 	 * @return boolean: true if a child access level is equals to allowedAccess, otherwise false<br>
 	 */
-	public boolean hasChildAccess(AccessLevel accessLevel)
-	{
-		if (_childsAccessLevel == null)
-		{
-			if (_child <= 0)
-			{
+	public boolean hasChildAccess(AccessLevel accessLevel) {
+		if (_childsAccessLevel == null) {
+			if (_child <= 0) {
 				return false;
 			}
-			
+
 			_childsAccessLevel = AdminData.getInstance().getAccessLevel(_child);
 		}
 		return (_childsAccessLevel != null) && ((_childsAccessLevel.getLevel() == accessLevel.getLevel()) || _childsAccessLevel.hasChildAccess(accessLevel));

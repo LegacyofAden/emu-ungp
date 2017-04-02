@@ -22,27 +22,23 @@ import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ManagePledgePower implements IClientOutgoingPacket
-{
+public class ManagePledgePower implements IClientOutgoingPacket {
 	private final int _action;
 	private final L2Clan _clan;
 	private final int _rank;
-	
-	public ManagePledgePower(L2Clan clan, int action, int rank)
-	{
+
+	public ManagePledgePower(L2Clan clan, int action, int rank) {
 		_clan = clan;
 		_action = action;
 		_rank = rank;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		// TODO: Verify this!
-		if (_action == 1)
-		{
+		if (_action == 1) {
 			OutgoingPackets.MANAGE_PLEDGE_POWER.writeId(packet);
-			
+
 			packet.writeD(_rank);
 			packet.writeD(_action);
 			packet.writeD(_clan.getRankPrivs(_rank).getBitmask());

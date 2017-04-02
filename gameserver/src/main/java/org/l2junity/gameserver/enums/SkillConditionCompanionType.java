@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum SkillConditionCompanionType
-{
+public enum SkillConditionCompanionType {
 	PET,
 	MY_SUMMON
 }

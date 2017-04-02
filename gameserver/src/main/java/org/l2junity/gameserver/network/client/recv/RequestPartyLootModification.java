@@ -27,38 +27,32 @@ import org.l2junity.network.PacketReader;
 /**
  * @author JIV
  */
-public class RequestPartyLootModification implements IClientIncomingPacket
-{
+public class RequestPartyLootModification implements IClientIncomingPacket {
 	private int _partyDistributionTypeId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_partyDistributionTypeId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final PartyDistributionType partyDistributionType = PartyDistributionType.findById(_partyDistributionTypeId);
-		if (partyDistributionType == null)
-		{
+		if (partyDistributionType == null) {
 			return;
 		}
-		
+
 		final Party party = activeChar.getParty();
-		if ((party == null) || !party.isLeader(activeChar) || (partyDistributionType == party.getDistributionType()))
-		{
+		if ((party == null) || !party.isLeader(activeChar) || (partyDistributionType == party.getDistributionType())) {
 			return;
 		}
 		party.requestLootChange(partyDistributionType);
 	}
-	
+
 }

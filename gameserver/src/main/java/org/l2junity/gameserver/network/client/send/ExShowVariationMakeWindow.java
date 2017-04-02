@@ -23,21 +23,19 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Trigger packet
+ *
  * @author KenM
  */
-public class ExShowVariationMakeWindow implements IClientOutgoingPacket
-{
+public class ExShowVariationMakeWindow implements IClientOutgoingPacket {
 	public static final ExShowVariationMakeWindow STATIC_PACKET = new ExShowVariationMakeWindow();
-	
-	private ExShowVariationMakeWindow()
-	{
+
+	private ExShowVariationMakeWindow() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_VARIATION_MAKE_WINDOW.writeId(packet);
-		
+
 		return true;
 	}
 }

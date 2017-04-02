@@ -24,8 +24,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExMagicAttackInfo implements IClientOutgoingPacket
-{
+public class ExMagicAttackInfo implements IClientOutgoingPacket {
 	// TODO: Enum
 	public final static int CRITICAL = 1;
 	public final static int CRITICAL_HEAL = 2;
@@ -35,23 +34,21 @@ public class ExMagicAttackInfo implements IClientOutgoingPacket
 	public final static int RESISTED = 6;
 	public final static int IMMUNE = 7;
 	public final static int IMMUNE2 = 8;
-	
+
 	private final int _caster;
 	private final int _target;
 	private final int _type;
-	
-	public ExMagicAttackInfo(int caster, int target, int type)
-	{
+
+	public ExMagicAttackInfo(int caster, int target, int type) {
 		_caster = caster;
 		_target = target;
 		_type = type;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MAGIC_ATTACK_INFO.writeId(packet);
-		
+
 		packet.writeD(_caster);
 		packet.writeD(_target);
 		packet.writeD(_type);

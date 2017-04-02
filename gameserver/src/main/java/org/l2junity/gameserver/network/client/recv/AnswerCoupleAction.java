@@ -31,43 +31,36 @@ import org.l2junity.network.PacketReader;
 /**
  * @author JIV
  */
-public class AnswerCoupleAction implements IClientIncomingPacket
-{
+public class AnswerCoupleAction implements IClientIncomingPacket {
 	private int _charObjId;
 	private int _actionId;
 	private int _answer;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_actionId = packet.readD();
 		_answer = packet.readD();
 		_charObjId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
 		final PlayerInstance target = World.getInstance().getPlayer(_charObjId);
-		if ((activeChar == null) || (target == null))
-		{
+		if ((activeChar == null) || (target == null)) {
 			return;
 		}
-		if ((target.getMultiSocialTarget() != activeChar.getObjectId()) || (target.getMultiSociaAction() != _actionId))
-		{
+		if ((target.getMultiSocialTarget() != activeChar.getObjectId()) || (target.getMultiSociaAction() != _actionId)) {
 			return;
 		}
 		if (_answer == 0) // cancel
 		{
 			target.sendPacket(SystemMessageId.THE_COUPLE_ACTION_WAS_DENIED);
-		}
-		else if (_answer == 1) // approve
+		} else if (_answer == 1) // approve
 		{
 			final int distance = (int) activeChar.distance3d(target);
-			if ((distance > 125) || (distance < 15) || (activeChar.getObjectId() == target.getObjectId()))
-			{
+			if ((distance > 125) || (distance < 15) || (activeChar.getObjectId() == target.getObjectId())) {
 				client.sendPacket(SystemMessageId.THE_REQUEST_CANNOT_BE_COMPLETED_BECAUSE_THE_TARGET_DOES_NOT_MEET_LOCATION_REQUIREMENTS);
 				target.sendPacket(SystemMessageId.THE_REQUEST_CANNOT_BE_COMPLETED_BECAUSE_THE_TARGET_DOES_NOT_MEET_LOCATION_REQUIREMENTS);
 				return;
@@ -80,8 +73,7 @@ public class AnswerCoupleAction implements IClientIncomingPacket
 			target.broadcastPacket(new ExRotation(target.getObjectId(), heading));
 			activeChar.broadcastPacket(new SocialAction(activeChar.getObjectId(), _actionId));
 			target.broadcastPacket(new SocialAction(_charObjId, _actionId));
-		}
-		else if (_answer == -1) // refused
+		} else if (_answer == -1) // refused
 		{
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_SET_TO_REFUSE_COUPLE_ACTIONS_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION);
 			sm.addPcName(activeChar);

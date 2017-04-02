@@ -24,18 +24,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class AuthGameGuard implements IOutgoingPacket
-{
+public class AuthGameGuard implements IOutgoingPacket {
 	private final int _connectionId;
-	
-	public AuthGameGuard(int connectionId)
-	{
+
+	public AuthGameGuard(int connectionId) {
 		_connectionId = connectionId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x0B);
 		packet.writeD(_connectionId);
 		packet.writeD(0x00);

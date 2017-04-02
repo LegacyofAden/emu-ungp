@@ -25,147 +25,120 @@ import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class PetStat extends PlayableStat
-{
-	public PetStat(L2PetInstance activeChar)
-	{
+public class PetStat extends PlayableStat {
+	public PetStat(L2PetInstance activeChar) {
 		super(activeChar);
 	}
-	
-	public boolean addExp(int value)
-	{
-		if (getActiveChar().isUncontrollable() || !super.addExp(value))
-		{
+
+	public boolean addExp(int value) {
+		if (getActiveChar().isUncontrollable() || !super.addExp(value)) {
 			return false;
 		}
-		
+
 		getActiveChar().updateAndBroadcastStatus(1);
 		return true;
 	}
-	
-	public boolean addExpAndSp(double addToExp, double addToSp)
-	{
+
+	public boolean addExpAndSp(double addToExp, double addToSp) {
 		final long finalExp = Math.round(addToExp);
-		if (getActiveChar().isUncontrollable() || !addExp(finalExp))
-		{
+		if (getActiveChar().isUncontrollable() || !addExp(finalExp)) {
 			return false;
 		}
-		
+
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_PET_GAINED_S1_XP);
 		sm.addLong(finalExp);
 		getActiveChar().updateAndBroadcastStatus(1);
 		getActiveChar().sendPacket(sm);
 		return true;
 	}
-	
+
 	@Override
-	public final boolean addLevel(byte value)
-	{
-		if ((getLevel() + value) > (getMaxLevel() - 1))
-		{
+	public final boolean addLevel(byte value) {
+		if ((getLevel() + value) > (getMaxLevel() - 1)) {
 			return false;
 		}
-		
+
 		boolean levelIncreased = super.addLevel(value);
-		
+
 		getActiveChar().broadcastStatusUpdate();
-		if (levelIncreased)
-		{
+		if (levelIncreased) {
 			getActiveChar().broadcastPacket(new SocialAction(getActiveChar().getObjectId(), SocialAction.LEVEL_UP));
 		}
 		// Send a Server->Client packet PetInfo to the L2PcInstance
 		getActiveChar().updateAndBroadcastStatus(1);
-		
-		if (getActiveChar().getControlItem() != null)
-		{
+
+		if (getActiveChar().getControlItem() != null) {
 			getActiveChar().getControlItem().setEnchantLevel(getLevel());
 		}
-		
+
 		return levelIncreased;
 	}
-	
+
 	@Override
-	public final long getExpForLevel(int level)
-	{
-		try
-		{
+	public final long getExpForLevel(int level) {
+		try {
 			return PetDataTable.getInstance().getPetLevelData(getActiveChar().getId(), level).getPetMaxExp();
-		}
-		catch (NullPointerException e)
-		{
-			if (getActiveChar() != null)
-			{
+		} catch (NullPointerException e) {
+			if (getActiveChar() != null) {
 				_log.warn("Pet objectId:" + getActiveChar().getObjectId() + ", NpcId:" + getActiveChar().getId() + ", level:" + level + " is missing data from pets_stats table!");
 			}
 			throw e;
 		}
 	}
-	
+
 	@Override
-	public L2PetInstance getActiveChar()
-	{
+	public L2PetInstance getActiveChar() {
 		return (L2PetInstance) super.getActiveChar();
 	}
-	
-	public final int getFeedBattle()
-	{
+
+	public final int getFeedBattle() {
 		return getActiveChar().getPetLevelData().getPetFeedBattle();
 	}
-	
-	public final int getFeedNormal()
-	{
+
+	public final int getFeedNormal() {
 		return getActiveChar().getPetLevelData().getPetFeedNormal();
 	}
-	
+
 	@Override
-	public void setLevel(byte value)
-	{
+	public void setLevel(byte value) {
 		getActiveChar().setPetData(PetDataTable.getInstance().getPetLevelData(getActiveChar().getTemplate().getId(), value));
-		if (getActiveChar().getPetLevelData() == null)
-		{
+		if (getActiveChar().getPetLevelData() == null) {
 			throw new IllegalArgumentException("No pet data for npc: " + getActiveChar().getTemplate().getId() + " level: " + value);
 		}
 		getActiveChar().stopFeed();
 		super.setLevel(value);
-		
+
 		getActiveChar().startFeed();
-		
-		if (getActiveChar().getControlItem() != null)
-		{
+
+		if (getActiveChar().getControlItem() != null) {
 			getActiveChar().getControlItem().setEnchantLevel(getLevel());
 		}
 	}
-	
-	public final int getMaxFeed()
-	{
+
+	public final int getMaxFeed() {
 		return getActiveChar().getPetLevelData().getPetMaxFeed();
 	}
-	
+
 	@Override
-	public int getPAtkSpd()
-	{
+	public int getPAtkSpd() {
 		int val = super.getPAtkSpd();
-		if (getActiveChar().isHungry())
-		{
+		if (getActiveChar().isHungry()) {
 			val /= 2;
 		}
 		return val;
 	}
-	
+
 	@Override
-	public int getMAtkSpd()
-	{
+	public int getMAtkSpd() {
 		int val = super.getMAtkSpd();
-		if (getActiveChar().isHungry())
-		{
+		if (getActiveChar().isHungry()) {
 			val /= 2;
 		}
 		return val;
 	}
-	
+
 	@Override
-	public int getMaxLevel()
-	{
+	public int getMaxLevel() {
 		return ExperienceData.getInstance().getMaxPetLevel();
 	}
 }

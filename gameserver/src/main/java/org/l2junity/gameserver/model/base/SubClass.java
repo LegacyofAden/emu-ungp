@@ -18,18 +18,18 @@
  */
 package org.l2junity.gameserver.model.base;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 
 /**
  * Character Sub-Class Definition <BR>
  * Used to store key information about a character's sub-class.
+ *
  * @author Tempy
  */
-public final class SubClass
-{
+public final class SubClass {
 	private static final byte _maxLevel = PlayerConfig.MAX_SUBCLASS_LEVEL < ExperienceData.getInstance().getMaxLevel() ? PlayerConfig.MAX_SUBCLASS_LEVEL : (byte) (ExperienceData.getInstance().getMaxLevel() - 1);
-	
+
 	private ClassId _class;
 	private long _exp = ExperienceData.getInstance().getExpForLevel(PlayerConfig.BASE_SUBCLASS_LEVEL);
 	private long _sp = 0;
@@ -37,124 +37,101 @@ public final class SubClass
 	private int _classIndex = 1;
 	private int _vitalityPoints = 0;
 	private boolean _dualClass = false;
-	
-	public SubClass()
-	{
+
+	public SubClass() {
 		// Used for specifying ALL attributes of a sub class directly,
 		// using the preset default values.
 	}
-	
-	public ClassId getClassDefinition()
-	{
+
+	public ClassId getClassDefinition() {
 		return _class;
 	}
-	
-	public int getClassId()
-	{
+
+	public int getClassId() {
 		return _class.ordinal();
 	}
-	
-	public long getExp()
-	{
+
+	public long getExp() {
 		return _exp;
 	}
-	
-	public long getSp()
-	{
+
+	public long getSp() {
 		return _sp;
 	}
-	
-	public byte getLevel()
-	{
+
+	public byte getLevel() {
 		return _level;
 	}
-	
-	public int getVitalityPoints()
-	{
+
+	public int getVitalityPoints() {
 		return _vitalityPoints;
 	}
-	
-	public void setVitalityPoints(int value)
-	{
+
+	public void setVitalityPoints(int value) {
 		_vitalityPoints = value;
 	}
-	
+
 	/**
 	 * First Sub-Class is index 1.
+	 *
 	 * @return int _classIndex
 	 */
-	public int getClassIndex()
-	{
+	public int getClassIndex() {
 		return _classIndex;
 	}
-	
-	public void setClassId(int classId)
-	{
+
+	public void setClassId(int classId) {
 		_class = ClassId.getClassId(classId);
 	}
-	
-	public void setExp(long expValue)
-	{
-		if (!_dualClass && (expValue > (ExperienceData.getInstance().getExpForLevel(_maxLevel + 1) - 1)))
-		{
+
+	public void setExp(long expValue) {
+		if (!_dualClass && (expValue > (ExperienceData.getInstance().getExpForLevel(_maxLevel + 1) - 1))) {
 			expValue = ExperienceData.getInstance().getExpForLevel(_maxLevel + 1) - 1;
 		}
-		
+
 		_exp = expValue;
 	}
-	
-	public void setSp(long spValue)
-	{
+
+	public void setSp(long spValue) {
 		_sp = spValue;
 	}
-	
-	public void setClassIndex(int classIndex)
-	{
+
+	public void setClassIndex(int classIndex) {
 		_classIndex = classIndex;
 	}
-	
-	public boolean isDualClass()
-	{
+
+	public boolean isDualClass() {
 		return _dualClass;
 	}
-	
-	public void setIsDualClass(boolean dualClass)
-	{
+
+	public void setIsDualClass(boolean dualClass) {
 		_dualClass = dualClass;
 	}
-	
-	public void setLevel(byte levelValue)
-	{
-		if (!_dualClass && (levelValue > _maxLevel))
-		{
+
+	public void setLevel(byte levelValue) {
+		if (!_dualClass && (levelValue > _maxLevel)) {
 			levelValue = _maxLevel;
-		}
-		else if (levelValue < PlayerConfig.BASE_SUBCLASS_LEVEL)
-		{
+		} else if (levelValue < PlayerConfig.BASE_SUBCLASS_LEVEL) {
 			levelValue = PlayerConfig.BASE_SUBCLASS_LEVEL;
 		}
-		
+
 		_level = levelValue;
 	}
-	
-	public void incLevel()
-	{
-		if (!_dualClass && (getLevel() == _maxLevel))
-		{
+
+	public void incLevel() {
+		if (!_dualClass && (getLevel() == _maxLevel)) {
 			return;
 		}
-		
+
 		_level++;
 		setExp(ExperienceData.getInstance().getExpForLevel(getLevel()));
 	}
-	
-	public void decLevel()
-	{
-		if (getLevel() == PlayerConfig.BASE_SUBCLASS_LEVEL)
-		{
+
+	public void decLevel() {
+		if (getLevel() == PlayerConfig.BASE_SUBCLASS_LEVEL) {
 			return;
 		}
-		
+
 		_level--;
 		setExp(ExperienceData.getInstance().getExpForLevel(getLevel()));
 	}

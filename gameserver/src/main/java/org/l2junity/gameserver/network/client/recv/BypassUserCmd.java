@@ -26,38 +26,31 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.1.2.1.2.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public class BypassUserCmd implements IClientIncomingPacket
-{
+public class BypassUserCmd implements IClientIncomingPacket {
 	private int _command;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_command = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final IUserCommandHandler handler = UserCommandHandler.getInstance().getHandler(_command);
-		if (handler == null)
-		{
-			if (player.isGM())
-			{
+		if (handler == null) {
+			if (player.isGM()) {
 				player.sendMessage("User commandID " + _command + " not implemented yet.");
 			}
-		}
-		else
-		{
+		} else {
 			handler.useUserCommand(_command, client.getActiveChar());
 		}
 	}

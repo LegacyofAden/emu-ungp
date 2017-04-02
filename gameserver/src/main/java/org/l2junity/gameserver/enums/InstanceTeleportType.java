@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author malyelfik
  */
-public enum InstanceTeleportType
-{
+public enum InstanceTeleportType {
 	NONE,
 	FIXED,
 	RANDOM,

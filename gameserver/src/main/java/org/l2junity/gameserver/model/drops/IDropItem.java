@@ -18,18 +18,18 @@
  */
 package org.l2junity.gameserver.model.drops;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.holders.ItemHolder;
+
+import java.util.Collection;
 
 /**
  * @author NosBit
  */
-public interface IDropItem
-{
+public interface IDropItem {
 	/**
 	 * Calculates drops of this drop item.
+	 *
 	 * @param victim the victim
 	 * @param killer the killer
 	 * @return {@code null} or empty collection if there are no drops, a collection containing all items to drop otherwise

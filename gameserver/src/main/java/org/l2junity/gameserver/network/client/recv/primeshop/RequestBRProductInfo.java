@@ -27,23 +27,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik, UnAfraid
  */
-public final class RequestBRProductInfo implements IClientIncomingPacket
-{
+public final class RequestBRProductInfo implements IClientIncomingPacket {
 	private int _brId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_brId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			PrimeShopData.getInstance().showProductInfo(player, _brId);
 		}
 	}

@@ -18,37 +18,33 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.model.PremiumItem;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * @author Gnacik
  */
-public class ExGetPremiumItemList implements IClientOutgoingPacket
-{
+public class ExGetPremiumItemList implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
+
 	private final Map<Integer, PremiumItem> _map;
-	
-	public ExGetPremiumItemList(PlayerInstance activeChar)
-	{
+
+	public ExGetPremiumItemList(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 		_map = _activeChar.getPremiumItemList();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_GET_PREMIUM_ITEM_LIST.writeId(packet);
-		
+
 		packet.writeD(_map.size());
-		for (Entry<Integer, PremiumItem> entry : _map.entrySet())
-		{
+		for (Entry<Integer, PremiumItem> entry : _map.entrySet()) {
 			PremiumItem item = entry.getValue();
 			packet.writeQ(entry.getKey());
 			packet.writeD(item.getItemId());

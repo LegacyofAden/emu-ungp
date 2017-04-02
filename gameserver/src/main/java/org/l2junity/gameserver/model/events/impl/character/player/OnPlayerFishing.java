@@ -26,30 +26,25 @@ import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingE
 /**
  * @author UnAfraid
  */
-public class OnPlayerFishing implements IBaseEvent
-{
+public class OnPlayerFishing implements IBaseEvent {
 	private final PlayerInstance _player;
 	private final FishingEndReason _reason;
-	
-	public OnPlayerFishing(PlayerInstance player, FishingEndReason reason)
-	{
+
+	public OnPlayerFishing(PlayerInstance player, FishingEndReason reason) {
 		_player = player;
 		_reason = reason;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _player;
 	}
-	
-	public FishingEndReason getReason()
-	{
+
+	public FishingEndReason getReason() {
 		return _reason;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_FISHING;
 	}
 }

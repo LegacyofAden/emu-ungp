@@ -18,78 +18,65 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+
 import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-
 /**
  * @author UnAfraid
  */
-public abstract class AbstractRequest
-{
+public abstract class AbstractRequest {
 	private final PlayerInstance _activeChar;
 	private volatile long _timestamp = 0;
 	private volatile boolean _isProcessing;
 	private ScheduledFuture<?> _timeOutTask;
-	
-	public AbstractRequest(PlayerInstance activeChar)
-	{
+
+	public AbstractRequest(PlayerInstance activeChar) {
 		Objects.requireNonNull(activeChar);
 		_activeChar = activeChar;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public long getTimestamp()
-	{
+
+	public long getTimestamp() {
 		return _timestamp;
 	}
-	
-	public void setTimestamp(long timestamp)
-	{
+
+	public void setTimestamp(long timestamp) {
 		_timestamp = timestamp;
 	}
-	
-	public void scheduleTimeout(long delay)
-	{
-		_timeOutTask = ThreadPool.schedule(this::onTimeout, delay, TimeUnit.MILLISECONDS);
+
+	public void scheduleTimeout(long delay) {
+		_timeOutTask = ThreadPool.getInstance().scheduleGeneral(this::onTimeout, delay, TimeUnit.MILLISECONDS);
 	}
-	
-	public boolean isTimeout()
-	{
+
+	public boolean isTimeout() {
 		return (_timeOutTask != null) && !_timeOutTask.isDone();
 	}
-	
-	public boolean isProcessing()
-	{
+
+	public boolean isProcessing() {
 		return _isProcessing;
 	}
-	
-	public boolean setProcessing(boolean isProcessing)
-	{
+
+	public boolean setProcessing(boolean isProcessing) {
 		return _isProcessing = isProcessing;
 	}
-	
-	public boolean canWorkWith(AbstractRequest request)
-	{
+
+	public boolean canWorkWith(AbstractRequest request) {
 		return true;
 	}
-	
-	public boolean isItemRequest()
-	{
+
+	public boolean isItemRequest() {
 		return false;
 	}
-	
+
 	public abstract boolean isUsing(int objectId);
-	
-	public void onTimeout()
-	{
-		
+
+	public void onTimeout() {
 	}
 }

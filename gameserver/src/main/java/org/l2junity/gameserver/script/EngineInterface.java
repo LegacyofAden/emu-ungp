@@ -21,9 +21,8 @@ package org.l2junity.gameserver.script;
 /**
  * @author Luis Arias
  */
-public interface EngineInterface
-{
+public interface EngineInterface {
 	void addEventDrop(int[] items, int[] count, double chance, DateRange range);
-	
+
 	void onPlayerLogin(String message, DateRange range);
 }

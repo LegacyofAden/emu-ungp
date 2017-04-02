@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author malyelfik
  */
-public enum ResidenceType
-{
+public enum ResidenceType {
 	CASTLE,
 	FORTRESS,
 	CLANHALL

@@ -21,12 +21,10 @@ package org.l2junity.commons.util;
 /**
  * @author Pere
  */
-public class XmlReaderException extends Exception
-{
+public class XmlReaderException extends Exception {
 	private static final long serialVersionUID = 652001071858094916L;
-	
-	public XmlReaderException(Exception e)
-	{
+
+	public XmlReaderException(Exception e) {
 		super(e);
 	}
 }

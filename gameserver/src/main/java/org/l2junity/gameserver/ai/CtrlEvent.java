@@ -21,8 +21,7 @@ package org.l2junity.gameserver.ai;
 /**
  * This class contains an enum of each possibles events that can happen on an AI character.
  */
-public enum CtrlEvent
-{
+public enum CtrlEvent {
 	/**
 	 * Something has changed, usually a previous step has being completed or maybe was completed, the AI must thing on next action.
 	 */
@@ -33,13 +32,21 @@ public enum CtrlEvent
 	 * this event if they already attack someone, or change target and so on.
 	 */
 	EVT_ATTACKED,
-	/** Increase/decrease aggression towards a target, or reduce global aggression if target is null */
+	/**
+	 * Increase/decrease aggression towards a target, or reduce global aggression if target is null
+	 */
 	EVT_AGGRESSION,
-	/** Actor is in stun state */
+	/**
+	 * Actor is in stun state
+	 */
 	EVT_ACTION_BLOCKED,
-	/** Actor is in rooted state (cannot move) */
+	/**
+	 * Actor is in rooted state (cannot move)
+	 */
 	EVT_ROOTED,
-	/** Actor evaded hit **/
+	/**
+	 * Actor evaded hit
+	 **/
 	EVT_EVADED,
 	/**
 	 * An event that previous action was completed. The action may be an attempt to physically/magically hit an enemy, or an action that discarded attack attempt has finished.
@@ -53,9 +60,13 @@ public enum CtrlEvent
 	 * The actor arrived to an intermediate point, and needs to revalidate destination. This is sent when follow/move to pawn if destination is far away.
 	 */
 	EVT_ARRIVED_REVALIDATE,
-	/** The actor cannot move anymore. */
+	/**
+	 * The actor cannot move anymore.
+	 */
 	EVT_ARRIVED_BLOCKED,
-	/** Forgets an object (if it's used as attack target, follow target and so on */
+	/**
+	 * Forgets an object (if it's used as attack target, follow target and so on
+	 */
 	EVT_FORGET_OBJECT,
 	/**
 	 * Attempt to cancel current step execution, but not change the intention.<br>
@@ -65,18 +76,32 @@ public enum CtrlEvent
 	 * attempt to cancel a cast/bow attack and so on.
 	 */
 	EVT_CANCEL,
-	/** The character is dead */
+	/**
+	 * The character is dead
+	 */
 	EVT_DEAD,
-	/** The character looks like dead */
+	/**
+	 * The character looks like dead
+	 */
 	EVT_FAKE_DEATH,
-	/** The character attack anyone randomly **/
+	/**
+	 * The character attack anyone randomly
+	 **/
 	EVT_CONFUSED,
-	/** The character cannot cast spells anymore **/
+	/**
+	 * The character cannot cast spells anymore
+	 **/
 	EVT_MUTED,
-	/** The character flee in random directions **/
+	/**
+	 * The character flee in random directions
+	 **/
 	EVT_AFRAID,
-	/** The character finish casting **/
+	/**
+	 * The character finish casting
+	 **/
 	EVT_FINISH_CASTING,
-	/** The character betrayed its master */
+	/**
+	 * The character betrayed its master
+	 */
 	EVT_BETRAYED
 }

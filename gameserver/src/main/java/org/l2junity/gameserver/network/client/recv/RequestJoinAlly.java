@@ -30,57 +30,48 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestJoinAlly implements IClientIncomingPacket
-{
+public final class RequestJoinAlly implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final PlayerInstance target = World.getInstance().getPlayer(_objectId);
-		
-		if (target == null)
-		{
+
+		if (target == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return;
 		}
-		
+
 		final L2Clan clan = activeChar.getClan();
-		
-		if (clan == null)
-		{
+
+		if (clan == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_A_CLAN_MEMBER_AND_CANNOT_PERFORM_THIS_ACTION);
 			return;
 		}
-		
+
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerInviteToAlly(activeChar, target), activeChar, BooleanReturn.class);
-		if ((term != null) && !term.getValue())
-		{
+		if ((term != null) && !term.getValue()) {
 			return;
 		}
-		
-		if (!clan.checkAllyJoinCondition(activeChar, target))
-		{
+
+		if (!clan.checkAllyJoinCondition(activeChar, target)) {
 			return;
 		}
-		if (!activeChar.getRequest().setRequest(target, this))
-		{
+		if (!activeChar.getRequest().setRequest(target, this)) {
 			return;
 		}
-		
+
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_LEADER_S2_HAS_REQUESTED_AN_ALLIANCE);
 		sm.addString(activeChar.getClan().getAllyName());
 		sm.addString(activeChar.getName());

@@ -18,14 +18,13 @@
  */
 package org.l2junity.gameserver.model.eventengine.drop;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.holders.ItemHolder;
+
+import java.util.Collection;
 
 /**
  * @author UnAfraid
  */
-public interface IEventDrop
-{
+public interface IEventDrop {
 	public Collection<ItemHolder> calculateDrops();
 }

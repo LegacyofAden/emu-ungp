@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author UnAfraid
  */
-public class OnPlayerMenteeLeft implements IBaseEvent
-{
+public class OnPlayerMenteeLeft implements IBaseEvent {
 	private final Mentee _mentor;
 	private final PlayerInstance _mentee;
-	
-	public OnPlayerMenteeLeft(Mentee mentor, PlayerInstance mentee)
-	{
+
+	public OnPlayerMenteeLeft(Mentee mentor, PlayerInstance mentee) {
 		_mentor = mentor;
 		_mentee = mentee;
 	}
-	
-	public Mentee getMentor()
-	{
+
+	public Mentee getMentor() {
 		return _mentor;
 	}
-	
-	public PlayerInstance getMentee()
-	{
+
+	public PlayerInstance getMentee() {
 		return _mentee;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_MENTEE_LEFT;
 	}
 }

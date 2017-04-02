@@ -23,50 +23,41 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author xban1x
  */
-public final class DamageDoneInfo
-{
+public final class DamageDoneInfo {
 	private final PlayerInstance _attacker;
 	private int _damage = 0;
-	
-	public DamageDoneInfo(PlayerInstance attacker)
-	{
+
+	public DamageDoneInfo(PlayerInstance attacker) {
 		_attacker = attacker;
 	}
-	
-	public PlayerInstance getAttacker()
-	{
+
+	public PlayerInstance getAttacker() {
 		return _attacker;
 	}
-	
-	public void addDamage(int damage)
-	{
+
+	public void addDamage(int damage) {
 		_damage += damage;
 	}
-	
-	public int getDamage()
-	{
+
+	public int getDamage() {
 		return _damage;
 	}
-	
+
 	@Override
-	public final boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
+	public final boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		
-		if (obj instanceof DamageDoneInfo)
-		{
+
+		if (obj instanceof DamageDoneInfo) {
 			return (((DamageDoneInfo) obj).getAttacker() == _attacker);
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public final int hashCode()
-	{
+	public final int hashCode() {
 		return _attacker.getObjectId();
 	}
 }

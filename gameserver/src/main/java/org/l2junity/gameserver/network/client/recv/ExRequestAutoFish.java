@@ -25,32 +25,25 @@ import org.l2junity.network.PacketReader;
 /**
  * @author St3eT
  */
-public final class ExRequestAutoFish implements IClientIncomingPacket
-{
+public final class ExRequestAutoFish implements IClientIncomingPacket {
 	private boolean _start;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_start = packet.readC() != 0;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (_start)
-		{
+
+		if (_start) {
 			activeChar.getFishing().startFishing();
-		}
-		else
-		{
+		} else {
 			activeChar.getFishing().stopFishing();
 		}
 	}

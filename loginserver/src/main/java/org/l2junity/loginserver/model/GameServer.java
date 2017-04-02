@@ -18,34 +18,32 @@
  */
 package org.l2junity.loginserver.model;
 
-import java.util.Set;
-
 import org.l2junity.loginserver.model.enums.AgeLimit;
 import org.l2junity.loginserver.model.enums.ServerType;
+
+import java.util.Set;
 
 /**
  * @author NosBit
  */
-public class GameServer
-{
+public class GameServer {
 	private final short _id;
 	private final String _name;
 	private final boolean _showing;
 	private final AgeLimit _ageLimit;
 	private final Set<ServerType> _serverTypes;
-	
+
 	/**
 	 * Creates a new game server instance.
-	 * @param id the id
-	 * @param name the name
-	 * @param showing the showing
-	 * @param ageLimit the age limit
+	 *
+	 * @param id          the id
+	 * @param name        the name
+	 * @param showing     the showing
+	 * @param ageLimit    the age limit
 	 * @param serverTypes the server types
 	 */
-	public GameServer(short id, String name, boolean showing, AgeLimit ageLimit, Set<ServerType> serverTypes)
-	{
-		if ((id < 0) && (id > 0xFF))
-		{
+	public GameServer(short id, String name, boolean showing, AgeLimit ageLimit, Set<ServerType> serverTypes) {
+		if ((id < 0) && (id > 0xFF)) {
 			throw new IllegalStateException("GameServer id should be between 0 and 255");
 		}
 		_id = id;
@@ -54,96 +52,91 @@ public class GameServer
 		_ageLimit = ageLimit;
 		_serverTypes = serverTypes;
 	}
-	
+
 	/**
 	 * Gets the id.
+	 *
 	 * @return the id
 	 */
-	public short getId()
-	{
+	public short getId() {
 		return _id;
 	}
-	
+
 	/**
 	 * Gets the name.
+	 *
 	 * @return the name
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Checks if is showing.
+	 *
 	 * @return the showing
 	 */
-	public boolean isShowing()
-	{
+	public boolean isShowing() {
 		return _showing;
 	}
-	
+
 	/**
 	 * Gets the age limit.
+	 *
 	 * @return the age limit
 	 */
-	public AgeLimit getAgeLimit()
-	{
+	public AgeLimit getAgeLimit() {
 		return _ageLimit;
 	}
-	
+
 	/**
 	 * Gets the server types.
+	 *
 	 * @return the server types
 	 */
-	public Set<ServerType> getServerTypes()
-	{
+	public Set<ServerType> getServerTypes() {
 		return _serverTypes;
 	}
-	
+
 	/**
 	 * Gets the server types mask.
+	 *
 	 * @return the server types mask
 	 */
-	public int getServerTypesMask()
-	{
+	public int getServerTypesMask() {
 		return _serverTypes.stream().mapToInt(ServerType::getMask).reduce((r, e) -> r | e).orElse(0);
 	}
-	
+
 	@Override
-	public boolean equals(Object o)
-	{
-		if (this == o)
-		{
+	public boolean equals(Object o) {
+		if (this == o) {
 			return true;
 		}
-		if ((o == null) || (getClass() != o.getClass()))
-		{
+		if ((o == null) || (getClass() != o.getClass())) {
 			return false;
 		}
-		
+
 		GameServer that = (GameServer) o;
-		
+
 		return _id == that._id;
-		
+
 	}
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return _id;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		//@formatter:off
 		return "GameServer{" +
-			"id=" + _id +
-			", name='" + _name + '\'' +
-			", showing=" + _showing +
-			", ageLimit=" + _ageLimit +
-			", serverTypes=" + _serverTypes +
-			'}';
+				"id=" + _id +
+				", name='" + _name + '\'' +
+				", showing=" + _showing +
+				", ageLimit=" + _ageLimit +
+				", serverTypes=" + _serverTypes +
+				'}';
 		//@formatter:on
 	}
 }

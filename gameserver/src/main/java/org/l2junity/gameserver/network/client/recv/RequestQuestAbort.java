@@ -30,34 +30,29 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestQuestAbort implements IClientIncomingPacket
-{
+public final class RequestQuestAbort implements IClientIncomingPacket {
 	private int _questId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_questId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final Quest qe = QuestManager.getInstance().getQuest(_questId);
-		if (qe != null)
-		{
+		if (qe != null) {
 			final QuestState qs = activeChar.getQuestState(qe.getName());
-			if (qs != null)
-			{
+			if (qs != null) {
 				// Exit quest
 				qs.exitQuest(QuestType.REPEATABLE);
 				// Notify listeners

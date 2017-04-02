@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum EventState
-{
+public enum EventState {
 	STARTED,
 	FINISHED,
 }

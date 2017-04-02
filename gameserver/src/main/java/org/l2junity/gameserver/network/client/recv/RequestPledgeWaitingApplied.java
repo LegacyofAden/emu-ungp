@@ -18,37 +18,32 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.OptionalInt;
-
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExPledgeWaitingListApplied;
 import org.l2junity.network.PacketReader;
 
+import java.util.OptionalInt;
+
 /**
  * @author Sdw
  */
-public class RequestPledgeWaitingApplied implements IClientIncomingPacket
-{
+public class RequestPledgeWaitingApplied implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || (activeChar.getClan() != null))
-		{
+		if ((activeChar == null) || (activeChar.getClan() != null)) {
 			return;
 		}
-		
+
 		final OptionalInt clanId = ClanEntryManager.getInstance().getClanIdForPlayerApplication(activeChar.getObjectId());
-		if (clanId.isPresent())
-		{
+		if (clanId.isPresent()) {
 			activeChar.sendPacket(new ExPledgeWaitingListApplied(clanId.getAsInt(), activeChar.getObjectId()));
 		}
 	}

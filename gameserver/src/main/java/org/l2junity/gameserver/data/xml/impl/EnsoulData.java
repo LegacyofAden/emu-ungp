@@ -18,137 +18,116 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.ensoul.EnsoulFee;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
 import org.l2junity.gameserver.model.ensoul.EnsoulStone;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.items.type.CrystalType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author UnAfraid
  */
-public class EnsoulData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(EnsoulData.class);
+@Slf4j
+@StartupComponent("Data")
+public class EnsoulData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final EnsoulData instance = new EnsoulData();
+
 	private final Map<CrystalType, EnsoulFee> _ensoulFees = new EnumMap<>(CrystalType.class);
 	private final Map<Integer, EnsoulOption> _ensoulOptions = new HashMap<>();
 	private final Map<Integer, EnsoulStone> _ensoulStones = new HashMap<>();
-	
-	protected EnsoulData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private EnsoulData() {
 		parseDatapackDirectory("data/stats/ensoul", true);
-		LOGGER.info("Loaded: {} fees", _ensoulFees.size());
-		LOGGER.info("Loaded: {} options", _ensoulOptions.size());
-		LOGGER.info("Loaded: {} stones", _ensoulStones.size());
+		log.info("Loaded: {} fees", _ensoulFees.size());
+		log.info("Loaded: {} options", _ensoulOptions.size());
+		log.info("Loaded: {} stones", _ensoulStones.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, IXmlReader::isNode, ensoulNode ->
 		{
-			switch (ensoulNode.getNodeName())
-			{
-				case "fee":
-				{
+			switch (ensoulNode.getNodeName()) {
+				case "fee": {
 					parseFees(ensoulNode);
 					break;
 				}
-				case "option":
-				{
+				case "option": {
 					parseOptions(ensoulNode);
 					break;
 				}
-				case "stone":
-				{
+				case "stone": {
 					parseStones(ensoulNode);
 					break;
 				}
 			}
 		}));
 	}
-	
-	private void parseFees(Node ensoulNode)
-	{
+
+	private void parseFees(Node ensoulNode) {
 		final CrystalType type = parseEnum(ensoulNode.getAttributes(), CrystalType.class, "crystalType");
 		final EnsoulFee fee = new EnsoulFee(type);
 		forEach(ensoulNode, IXmlReader::isNode, feeNode ->
 		{
-			switch (feeNode.getNodeName())
-			{
-				case "first":
-				{
+			switch (feeNode.getNodeName()) {
+				case "first": {
 					parseFee(feeNode, fee, 0);
 					break;
 				}
-				case "secondary":
-				{
+				case "secondary": {
 					parseFee(feeNode, fee, 1);
 					break;
 				}
-				case "third":
-				{
+				case "third": {
 					parseFee(feeNode, fee, 2);
 					break;
 				}
-				case "reFirst":
-				{
+				case "reFirst": {
 					parseReFee(feeNode, fee, 0);
 					break;
 				}
-				case "reSecondary":
-				{
+				case "reSecondary": {
 					parseReFee(feeNode, fee, 1);
 					break;
 				}
-				case "reThird":
-				{
+				case "reThird": {
 					parseReFee(feeNode, fee, 2);
 					break;
 				}
 			}
 		});
 	}
-	
-	private void parseFee(Node ensoulNode, EnsoulFee fee, int index)
-	{
+
+	private void parseFee(Node ensoulNode, EnsoulFee fee, int index) {
 		final NamedNodeMap attrs = ensoulNode.getAttributes();
 		final int id = parseInteger(attrs, "itemId");
 		final int count = parseInteger(attrs, "count");
 		fee.setEnsoul(index, new ItemHolder(id, count));
 		_ensoulFees.put(fee.getCrystalType(), fee);
 	}
-	
-	private void parseReFee(Node ensoulNode, EnsoulFee fee, int index)
-	{
+
+	private void parseReFee(Node ensoulNode, EnsoulFee fee, int index) {
 		final NamedNodeMap attrs = ensoulNode.getAttributes();
 		final int id = parseInteger(attrs, "itemId");
 		final int count = parseInteger(attrs, "count");
 		fee.setResoul(index, new ItemHolder(id, count));
 	}
-	
-	private void parseOptions(Node ensoulNode)
-	{
+
+	private void parseOptions(Node ensoulNode) {
 		final NamedNodeMap attrs = ensoulNode.getAttributes();
 		final int id = parseInteger(attrs, "id");
 		final String name = parseString(attrs, "name");
@@ -158,9 +137,8 @@ public class EnsoulData implements IGameXmlReader
 		final EnsoulOption option = new EnsoulOption(id, name, desc, skillId, skillLevel);
 		_ensoulOptions.put(option.getId(), option);
 	}
-	
-	private void parseStones(Node ensoulNode)
-	{
+
+	private void parseStones(Node ensoulNode) {
 		final NamedNodeMap attrs = ensoulNode.getAttributes();
 		final int id = parseInteger(attrs, "id");
 		final int slotType = parseInteger(attrs, "slotType");
@@ -168,46 +146,26 @@ public class EnsoulData implements IGameXmlReader
 		forEach(ensoulNode, "option", optionNode -> stone.addOption(parseInteger(optionNode.getAttributes(), "id")));
 		_ensoulStones.put(stone.getId(), stone);
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _ensoulFees.size() + _ensoulOptions.size() + _ensoulStones.size();
 	}
-	
-	public ItemHolder getEnsoulFee(CrystalType type, int index)
-	{
+
+	public ItemHolder getEnsoulFee(CrystalType type, int index) {
 		final EnsoulFee fee = _ensoulFees.get(type);
 		return fee != null ? fee.getEnsoul(index) : null;
 	}
-	
-	public ItemHolder getResoulFee(CrystalType type, int index)
-	{
+
+	public ItemHolder getResoulFee(CrystalType type, int index) {
 		final EnsoulFee fee = _ensoulFees.get(type);
 		return fee != null ? fee.getResoul(index) : null;
 	}
-	
-	public EnsoulOption getOption(int id)
-	{
+
+	public EnsoulOption getOption(int id) {
 		return _ensoulOptions.get(id);
 	}
-	
-	public EnsoulStone getStone(int id)
-	{
+
+	public EnsoulStone getStone(int id) {
 		return _ensoulStones.get(id);
-	}
-	
-	/**
-	 * Gets the single instance of EnsoulData.
-	 * @return single instance of EnsoulData
-	 */
-	@InstanceGetter
-	public static final EnsoulData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final EnsoulData _instance = new EnsoulData();
 	}
 }

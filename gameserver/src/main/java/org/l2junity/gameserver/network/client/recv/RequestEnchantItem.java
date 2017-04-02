@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.List;
-
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
@@ -35,102 +33,91 @@ import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class RequestEnchantItem implements IClientIncomingPacket
-{
+import java.util.List;
+
+public final class RequestEnchantItem implements IClientIncomingPacket {
 	protected static final Logger _logEnchant = LoggerFactory.getLogger("enchant.items");
-	
+
 	private int _objectId;
 	private int _supportId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		_supportId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final EnchantItemRequest request = activeChar.getRequest(EnchantItemRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			return;
 		}
-		
+
 		request.setEnchantingItem(_objectId);
 		request.setProcessing(true);
-		
-		if (!activeChar.isOnline() || client.isDetached())
-		{
+
+		if (!activeChar.isOnline() || client.isDetached()) {
 			activeChar.removeRequest(request.getClass());
 			return;
 		}
-		
-		if (activeChar.isProcessingTransaction() || activeChar.isInStoreMode())
-		{
+
+		if (activeChar.isProcessingTransaction() || activeChar.isInStoreMode()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_ENCHANT_WHILE_OPERATING_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP);
 			activeChar.removeRequest(request.getClass());
 			return;
 		}
-		
+
 		final ItemInstance item = request.getEnchantingItem();
 		final ItemInstance scroll = request.getEnchantingScroll();
 		final ItemInstance support = request.getSupportItem();
-		if ((item == null) || (scroll == null))
-		{
+		if ((item == null) || (scroll == null)) {
 			activeChar.removeRequest(request.getClass());
 			return;
 		}
-		
+
 		final List<ItemSkillHolder> scrollSkills = scroll.getItem().getSkills(ItemSkillType.NORMAL);
-		
-		if (!scrollSkills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item)))
-		{
+
+		if (!scrollSkills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item))) {
 			activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
 			activeChar.removeRequest(request.getClass());
 			client.sendPacket(new EnchantResult(EnchantResult.ERROR, 0, 0));
 			return;
 		}
-		
+
 		// fast auto-enchant cheat check
-		if ((request.getTimestamp() == 0) || ((System.currentTimeMillis() - request.getTimestamp()) < 2000))
-		{
+		if ((request.getTimestamp() == 0) || ((System.currentTimeMillis() - request.getTimestamp()) < 2000)) {
 			Util.handleIllegalPlayerAction(activeChar, "Player " + activeChar.getName() + " use autoenchant program ", GeneralConfig.DEFAULT_PUNISH);
 			activeChar.removeRequest(request.getClass());
 			client.sendPacket(new EnchantResult(EnchantResult.ERROR, 0, 0));
 			return;
 		}
-		
+
 		// template for support item, if exist
-		if (support != null)
-		{
-			if (support.getObjectId() != _supportId)
-			{
+		if (support != null) {
+			if (support.getObjectId() != _supportId) {
 				activeChar.removeRequest(request.getClass());
 				return;
 			}
-			
+
 			final List<ItemSkillHolder> supportSkills = support.getItem().getSkills(ItemSkillType.NORMAL);
-			
-			if (!supportSkills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item)))
-			{
+
+			if (!supportSkills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item))) {
 				activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
 				activeChar.removeRequest(request.getClass());
 				client.sendPacket(new EnchantResult(EnchantResult.ERROR, 0, 0));
 				return;
 			}
-			
+
 			supportSkills.forEach(skill -> skill.getSkill().applyEffects(activeChar, activeChar, support));
 		}
-		
+
 		scrollSkills.forEach(skill -> skill.getSkill().applyEffects(activeChar, activeChar, scroll));
 	}
 }

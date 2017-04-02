@@ -22,35 +22,27 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Task dedicated to update player's current pvp status.
+ *
  * @author UnAfraid
  */
-public class PvPFlagTask implements Runnable
-{
+public class PvPFlagTask implements Runnable {
 	private final PlayerInstance _player;
-	
-	public PvPFlagTask(PlayerInstance player)
-	{
+
+	public PvPFlagTask(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_player == null)
-		{
+	public void run() {
+		if (_player == null) {
 			return;
 		}
-		
-		if (System.currentTimeMillis() > _player.getPvpFlagLasts())
-		{
+
+		if (System.currentTimeMillis() > _player.getPvpFlagLasts()) {
 			_player.stopPvPFlag();
-		}
-		else if (System.currentTimeMillis() > (_player.getPvpFlagLasts() - 20000))
-		{
+		} else if (System.currentTimeMillis() > (_player.getPvpFlagLasts() - 20000)) {
 			_player.updatePvPFlag(2);
-		}
-		else
-		{
+		} else {
 			_player.updatePvPFlag(1);
 		}
 	}

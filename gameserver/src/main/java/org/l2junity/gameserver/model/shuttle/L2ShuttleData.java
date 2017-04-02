@@ -18,67 +18,57 @@
  */
 package org.l2junity.gameserver.model.shuttle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public final class L2ShuttleData
-{
+public final class L2ShuttleData {
 	private final int _id;
 	private final Location _loc;
 	private final List<Integer> _doors = new ArrayList<>(2);
 	private final List<L2ShuttleStop> _stops = new ArrayList<>(2);
 	private final List<VehiclePathPoint[]> _routes = new ArrayList<>(2);
-	
-	public L2ShuttleData(StatsSet set)
-	{
+
+	public L2ShuttleData(StatsSet set) {
 		_id = set.getInt("id");
 		_loc = new Location(set);
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return _id;
 	}
-	
-	public Location getLocation()
-	{
+
+	public Location getLocation() {
 		return _loc;
 	}
-	
-	public void addDoor(int id)
-	{
+
+	public void addDoor(int id) {
 		_doors.add(id);
 	}
-	
-	public List<Integer> getDoors()
-	{
+
+	public List<Integer> getDoors() {
 		return _doors;
 	}
-	
-	public void addStop(L2ShuttleStop stop)
-	{
+
+	public void addStop(L2ShuttleStop stop) {
 		_stops.add(stop);
 	}
-	
-	public List<L2ShuttleStop> getStops()
-	{
+
+	public List<L2ShuttleStop> getStops() {
 		return _stops;
 	}
-	
-	public void addRoute(VehiclePathPoint[] route)
-	{
+
+	public void addRoute(VehiclePathPoint[] route) {
 		_routes.add(route);
 	}
-	
-	public List<VehiclePathPoint[]> getRoutes()
-	{
+
+	public List<VehiclePathPoint[]> getRoutes() {
 		return _routes;
 	}
 }

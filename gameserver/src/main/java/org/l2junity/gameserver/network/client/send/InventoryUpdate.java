@@ -18,37 +18,32 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.ItemInfo;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Advi, UnAfraid
  */
-public class InventoryUpdate extends AbstractInventoryUpdate
-{
-	public InventoryUpdate()
-	{
+public class InventoryUpdate extends AbstractInventoryUpdate {
+	public InventoryUpdate() {
 	}
-	
-	public InventoryUpdate(ItemInstance item)
-	{
+
+	public InventoryUpdate(ItemInstance item) {
 		super(item);
 	}
-	
-	public InventoryUpdate(List<ItemInfo> items)
-	{
+
+	public InventoryUpdate(List<ItemInfo> items) {
 		super(items);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.INVENTORY_UPDATE.writeId(packet);
-		
+
 		writeItems(packet);
 		return true;
 	}

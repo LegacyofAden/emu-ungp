@@ -22,38 +22,36 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class DropItem implements IClientOutgoingPacket
-{
+public class DropItem implements IClientOutgoingPacket {
 	private final ItemInstance _item;
 	private final int _charObjId;
-	
+
 	/**
 	 * Constructor of the DropItem server packet
-	 * @param item : L2ItemInstance designating the item
+	 *
+	 * @param item        : L2ItemInstance designating the item
 	 * @param playerObjId : int designating the player ID who dropped the item
 	 */
-	public DropItem(ItemInstance item, int playerObjId)
-	{
+	public DropItem(ItemInstance item, int playerObjId) {
 		_item = item;
 		_charObjId = playerObjId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.DROP_ITEM.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_item.getObjectId());
 		packet.writeD(_item.getDisplayId());
-		
+
 		packet.writeD((int) _item.getX());
 		packet.writeD((int) _item.getY());
 		packet.writeD((int) _item.getZ());
 		// only show item count if it is a stackable item
 		packet.writeC(_item.isStackable() ? 0x01 : 0x00);
 		packet.writeQ(_item.getCount());
-		
+
 		packet.writeC(0x00);
 		// packet.writeD(0x01); if above C == true (1) then packet.readD()
 		return true;

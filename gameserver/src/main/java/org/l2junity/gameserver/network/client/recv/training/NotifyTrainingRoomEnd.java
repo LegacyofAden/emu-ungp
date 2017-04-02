@@ -29,32 +29,26 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class NotifyTrainingRoomEnd implements IClientIncomingPacket
-{
+public class NotifyTrainingRoomEnd implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// Nothing to read
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final TrainingHolder holder = activeChar.getAccountVariables().getObject(AccountVariables.TRAINING_CAMP, TrainingHolder.class);
-		if (holder == null)
-		{
+		if (holder == null) {
 			return;
 		}
-		
-		if (holder.isTraining())
-		{
+
+		if (holder.isTraining()) {
 			activeChar.teleToLocation(activeChar.getLastLocation());
 			activeChar.sendPacket(ExTrainingZone_Leaving.STATIC_PACKET);
 			holder.setEndTime(System.currentTimeMillis());

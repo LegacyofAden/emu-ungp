@@ -24,32 +24,28 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
 /**
  * An instantly executed event when L2Character kills L2Character.
+ *
  * @author UnAfraid
  */
-public class OnCreatureKilled implements IBaseEvent
-{
+public class OnCreatureKilled implements IBaseEvent {
 	private final Creature _attacker;
 	private final Creature _target;
-	
-	public OnCreatureKilled(Creature attacker, Creature target)
-	{
+
+	public OnCreatureKilled(Creature attacker, Creature target) {
 		_attacker = attacker;
 		_target = target;
 	}
-	
-	public final Creature getAttacker()
-	{
+
+	public final Creature getAttacker() {
 		return _attacker;
 	}
-	
-	public final Creature getTarget()
-	{
+
+	public final Creature getTarget() {
 		return _target;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_KILLED;
 	}
 }

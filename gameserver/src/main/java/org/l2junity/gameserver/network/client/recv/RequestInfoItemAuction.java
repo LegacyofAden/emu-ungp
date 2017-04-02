@@ -29,43 +29,36 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Forsaiken
  */
-public final class RequestInfoItemAuction implements IClientIncomingPacket
-{
+public final class RequestInfoItemAuction implements IClientIncomingPacket {
 	private int _instanceId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_instanceId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (!client.getFloodProtectors().getItemAuction().tryPerformAction("RequestInfoItemAuction"))
-		{
+
+		if (!client.getFloodProtectors().getItemAuction().tryPerformAction("RequestInfoItemAuction")) {
 			return;
 		}
-		
+
 		final ItemAuctionInstance instance = ItemAuctionManager.getInstance().getManagerInstance(_instanceId);
-		if (instance == null)
-		{
+		if (instance == null) {
 			return;
 		}
-		
+
 		final ItemAuction auction = instance.getCurrentAuction();
-		if (auction == null)
-		{
+		if (auction == null) {
 			return;
 		}
-		
+
 		activeChar.updateLastItemAuctionRequest();
 		client.sendPacket(new ExItemAuctionInfoPacket(true, auction, instance.getNextAuction()));
 	}

@@ -18,31 +18,28 @@
  */
 package org.l2junity.loginserver.network.client.send;
 
-import javax.crypto.SecretKey;
-
 import org.l2junity.loginserver.network.client.crypt.ScrambledRSAKeyPair;
 import org.l2junity.network.IOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import javax.crypto.SecretKey;
+
 /**
  * @author NosBit
  */
-public class Init implements IOutgoingPacket
-{
+public class Init implements IOutgoingPacket {
 	private final int _connectionId;
 	private final byte[] _publicKey;
 	private final byte[] _blowfishKey;
-	
-	public Init(int connectionId, ScrambledRSAKeyPair scrambledRSAKeyPair, SecretKey blowfishKey)
-	{
+
+	public Init(int connectionId, ScrambledRSAKeyPair scrambledRSAKeyPair, SecretKey blowfishKey) {
 		_connectionId = connectionId;
 		_publicKey = scrambledRSAKeyPair.getScrambledModulus();
 		_blowfishKey = blowfishKey.getEncoded();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		packet.writeC(0x00);
 		packet.writeD(_connectionId); // connection id
 		packet.writeD(0x0000C621); // protocol revision

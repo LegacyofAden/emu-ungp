@@ -18,27 +18,29 @@
  */
 package org.l2junity.loginserver.network.gameserver;
 
-import org.l2junity.loginserver.Config;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.LoginServerConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.loginserver.network.EventLoopGroupManager;
 import org.l2junity.network.NetworkManager;
 
 /**
  * @author NosBit
  */
-public class GameServerNetworkManager extends NetworkManager
-{
-	protected GameServerNetworkManager()
-	{
-		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new GameServerInitializer(), Config.GAME_SERVER_LOGIN_HOST, Config.GAME_SERVER_LOGIN_PORT);
-	}
-	
-	public static GameServerNetworkManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final GameServerNetworkManager _instance = new GameServerNetworkManager();
+@Slf4j
+@StartupComponent("Network")
+public class GameServerNetworkManager extends NetworkManager {
+	@Getter(lazy = true)
+	private static final GameServerNetworkManager instance = new GameServerNetworkManager();
+
+	private GameServerNetworkManager() {
+		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new GameServerInitializer(), LoginServerConfig.GAME_SERVER_LOGIN_HOST, LoginServerConfig.GAME_SERVER_LOGIN_PORT);
+		try {
+			start();
+			getChannelFuture().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
+			log.error("Error while starting GameServerNetworkManager", e);
+		}
 	}
 }

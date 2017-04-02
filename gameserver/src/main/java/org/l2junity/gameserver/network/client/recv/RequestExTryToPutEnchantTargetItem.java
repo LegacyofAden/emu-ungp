@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
@@ -31,54 +29,49 @@ import org.l2junity.gameserver.network.client.send.ExPutEnchantTargetItemResult;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
+import java.util.List;
+
 /**
  * @author KenM
  */
-public class RequestExTryToPutEnchantTargetItem implements IClientIncomingPacket
-{
+public class RequestExTryToPutEnchantTargetItem implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final EnchantItemRequest request = activeChar.getRequest(EnchantItemRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			return;
 		}
-		
+
 		request.setEnchantingItem(_objectId);
-		
+
 		final ItemInstance item = request.getEnchantingItem();
 		final ItemInstance scroll = request.getEnchantingScroll();
-		if ((item == null) || (scroll == null))
-		{
+		if ((item == null) || (scroll == null)) {
 			return;
 		}
-		
+
 		final List<ItemSkillHolder> skills = scroll.getItem().getSkills(ItemSkillType.NORMAL);
-		
-		if (!skills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item)))
-		{
+
+		if (!skills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item))) {
 			activeChar.sendPacket(SystemMessageId.DOES_NOT_FIT_STRENGTHENING_CONDITIONS_OF_THE_SCROLL);
 			request.setEnchantingItem(0);
 			activeChar.sendPacket(new ExPutEnchantTargetItemResult(0));
 			return;
 		}
-		
+
 		request.setTimestamp(System.currentTimeMillis());
 		client.sendPacket(new ExPutEnchantTargetItemResult(_objectId));
 	}

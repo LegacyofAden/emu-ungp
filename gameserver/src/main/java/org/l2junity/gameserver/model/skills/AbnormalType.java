@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Abnormal type enumerate.
+ *
  * @author Zoey76
  */
-public enum AbnormalType
-{
+public enum AbnormalType {
 	NONE(-1),
 	BLOCK_ESCAPE(-1),
 	BODY_DESTRUCTION(-1),
@@ -573,45 +573,40 @@ public enum AbnormalType
 	CLAN_TEAMWORK(643), // TODO: name
 	ABNORMAL_ITEM2(-1), // TODO: name, id
 	WYNN_GLOOM(-1); // TODO: name, id
-	
+
 	private int _clientId;
-	
+
 	protected static final Logger LOGGER = LoggerFactory.getLogger(AbnormalType.class);
-	
-	AbnormalType(int clientId)
-	{
+
+	AbnormalType(int clientId) {
 		_clientId = clientId;
 	}
-	
+
 	/**
 	 * Get the enumerate for the given String.
+	 *
 	 * @param type the abnormal type to get
 	 * @return the abnormal type
 	 */
-	public static AbnormalType getAbnormalType(String type)
-	{
-		try
-		{
+	public static AbnormalType getAbnormalType(String type) {
+		try {
 			return Enum.valueOf(AbnormalType.class, type);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Unknown AbnormalType requested : " + type);
 			return NONE;
 		}
 	}
-	
-	public int getClientId()
-	{
+
+	public int getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * Verify if this enumerate is default.
+	 *
 	 * @return {@code true} if this enumerate is none, {@code false} otherwise
 	 */
-	public boolean isNone()
-	{
+	public boolean isNone() {
 		return this == NONE;
 	}
 }

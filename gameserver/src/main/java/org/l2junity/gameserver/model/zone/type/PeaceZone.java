@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -26,50 +26,41 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * A Peace Zone
+ *
  * @author durgus
  */
-public class PeaceZone extends ZoneType
-{
-	public PeaceZone(int id)
-	{
+public class PeaceZone extends ZoneType {
+	public PeaceZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character.isPlayer())
-		{
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
 			PlayerInstance player = character.getActingPlayer();
 			// PVP possible during siege, now for siege participants only
 			// Could also check if this town is in siege, or if any siege is going on
-			if ((player.getSiegeState() != 0) && (GeneralConfig.PEACE_ZONE_MODE == 1))
-			{
+			if ((player.getSiegeState() != 0) && (GeneralConfig.PEACE_ZONE_MODE == 1)) {
 				return;
 			}
 		}
-		
-		if (GeneralConfig.PEACE_ZONE_MODE != 2)
-		{
+
+		if (GeneralConfig.PEACE_ZONE_MODE != 2) {
 			character.setInsideZone(ZoneId.PEACE, true);
 		}
-		
-		if (!getAllowStore())
-		{
+
+		if (!getAllowStore()) {
 			character.setInsideZone(ZoneId.NO_STORE, true);
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (GeneralConfig.PEACE_ZONE_MODE != 2)
-		{
+	protected void onExit(Creature character) {
+		if (GeneralConfig.PEACE_ZONE_MODE != 2) {
 			character.setInsideZone(ZoneId.PEACE, false);
 		}
-		
-		if (!getAllowStore())
-		{
+
+		if (!getAllowStore()) {
 			character.setInsideZone(ZoneId.NO_STORE, false);
 		}
 	}

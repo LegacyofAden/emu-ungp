@@ -18,69 +18,46 @@
  */
 package org.l2junity.gameserver.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.scripting.ScriptEngineManager;
-import org.l2junity.gameserver.loader.LoadGroup;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 /**
  * @author BiggBoss, UnAfraid
  */
-public final class EffectHandler
-{
+@Slf4j
+@StartupComponent(value = "Scripts", dependency = TargetHandler.class)
+public final class EffectHandler {
+	@Getter(lazy = true)
+	private static final EffectHandler instance = new EffectHandler();
+
 	private final Map<String, Function<StatsSet, AbstractEffect>> _effectHandlerFactories = new HashMap<>();
-	
-	public void registerHandler(String name, Function<StatsSet, AbstractEffect> handlerFactory)
-	{
+
+	public void registerHandler(String name, Function<StatsSet, AbstractEffect> handlerFactory) {
 		_effectHandlerFactories.put(name, handlerFactory);
 	}
-	
-	public Function<StatsSet, AbstractEffect> getHandlerFactory(String name)
-	{
+
+	public Function<StatsSet, AbstractEffect> getHandlerFactory(String name) {
 		return _effectHandlerFactories.get(name);
 	}
-	
-	public int size()
-	{
+
+	public int size() {
 		return _effectHandlerFactories.size();
 	}
-	
-	protected EffectHandler()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies =
-	{
-		@Dependency(clazz = TargetHandler.class)
-	})
-	private void load()
-	{
-		try
-		{
+
+	private EffectHandler() {
+		try {
 			ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.EFFECT_MASTER_HANDLER_FILE);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Error("Problems while running EffectMansterHandler", e);
 		}
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final EffectHandler INSTANCE = new EffectHandler();
-	}
-	
-	@InstanceGetter
-	public static EffectHandler getInstance()
-	{
-		return SingletonHolder.INSTANCE;
 	}
 }

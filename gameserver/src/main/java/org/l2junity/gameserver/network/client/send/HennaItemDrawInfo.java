@@ -27,22 +27,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Zoey76
  */
-public class HennaItemDrawInfo implements IClientOutgoingPacket
-{
+public class HennaItemDrawInfo implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final Henna _henna;
-	
-	public HennaItemDrawInfo(Henna henna, PlayerInstance player)
-	{
+
+	public HennaItemDrawInfo(Henna henna, PlayerInstance player) {
 		_henna = henna;
 		_activeChar = player;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.HENNA_ITEM_INFO.writeId(packet);
-		
+
 		packet.writeD(_henna.getDyeId()); // symbol Id
 		packet.writeD(_henna.getDyeItemId()); // item id of dye
 		packet.writeQ(_henna.getWearCount()); // total amount of dye require

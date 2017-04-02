@@ -33,57 +33,49 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestJoinPledgeByName implements IClientIncomingPacket
-{
+public class RequestJoinPledgeByName implements IClientIncomingPacket {
 	private String _charName;
 	private int _pledgeType;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_charName = packet.readS();
 		_pledgeType = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
+
 		final PlayerInstance target = World.getInstance().getPlayer(_charName);
-		if (target == null)
-		{
+		if (target == null) {
 			return;
 		}
-		
+
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerInviteToClan(activeChar, target), activeChar, BooleanReturn.class);
-		if ((term != null) && !term.getValue())
-		{
+		if ((term != null) && !term.getValue()) {
 			activeChar.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return;
 		}
-		
-		if (!clan.checkClanJoinCondition(activeChar, target, _pledgeType))
-		{
+
+		if (!clan.checkClanJoinCondition(activeChar, target, _pledgeType)) {
 			return;
 		}
-		
+
 		final ClanInvitationRequest request = new ClanInvitationRequest(activeChar, target, _pledgeType);
 		request.scheduleTimeout(30 * 1000);
 		activeChar.addRequest(request);
 		target.addRequest(request);
-		
+
 		final String pledgeName = activeChar.getClan().getName();
 		final String subPledgeName = (activeChar.getClan().getSubPledge(_pledgeType) != null ? activeChar.getClan().getSubPledge(_pledgeType).getName() : null);
 		target.sendPacket(new AskJoinPledge(activeChar.getObjectId(), subPledgeName, _pledgeType, pledgeName));

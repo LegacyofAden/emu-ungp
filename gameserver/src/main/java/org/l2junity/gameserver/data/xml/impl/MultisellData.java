@@ -18,172 +18,134 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.DirectoryStream.Filter;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
-import org.l2junity.gameserver.config.GeneralConfig;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.SpecialItemType;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.model.holders.ItemChanceHolder;
-import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.l2junity.gameserver.model.holders.MultisellEntryHolder;
-import org.l2junity.gameserver.model.holders.MultisellListHolder;
-import org.l2junity.gameserver.model.holders.PreparedMultisellListHolder;
+import org.l2junity.gameserver.model.holders.*;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.network.client.send.MultiSellList;
 import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-public final class MultisellData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(MultisellData.class);
-	
+import java.nio.file.DirectoryStream.Filter;
+import java.nio.file.Path;
+import java.util.*;
+
+@Slf4j
+@StartupComponent(value = "Data", dependency = ItemTable.class)
+public final class MultisellData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final MultisellData instance = new MultisellData();
+
 	public static final int PAGE_SIZE = 40;
-	
+
 	private final Map<Integer, MultisellListHolder> _multisells = new HashMap<>();
-	
-	protected MultisellData()
-	{
+
+	private MultisellData() {
+		reload();
 	}
-	
-	@Reload("multisell")
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = ItemTable.class))
-	private void load() throws Exception
-	{
+
+	private void reload() {
 		_multisells.clear();
 		parseDatapackDirectory("data/multisell", false);
-		if (GeneralConfig.CUSTOM_MULTISELL_LOAD)
-		{
+		if (GeneralConfig.CUSTOM_MULTISELL_LOAD) {
 			parseDatapackDirectory("data/multisell/custom", false);
 		}
-		
-		LOGGER.info("Loaded {} multisell lists.", _multisells.size());
+
+		log.info("Loaded {} multisell lists.", _multisells.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		try
-		{
+	public void parseDocument(Document doc, Path path) {
+		try {
 			forEach(doc, "list", listNode ->
 			{
 				final StatsSet set = new StatsSet(parseAttributes(listNode));
 				final String filename = path.getFileName().toString();
 				final int listId = Integer.parseInt(filename.substring(0, filename.length() - 4));
 				final List<MultisellEntryHolder> entries = new ArrayList<>(listNode.getChildNodes().getLength());
-				
+
 				forEach(listNode, itemNode ->
 				{
-					if ("item".equalsIgnoreCase(itemNode.getNodeName()))
-					{
+					if ("item".equalsIgnoreCase(itemNode.getNodeName())) {
 						final List<ItemHolder> ingredients = new ArrayList<>(1);
 						final List<ItemChanceHolder> products = new ArrayList<>(1);
 						final MultisellEntryHolder entry = new MultisellEntryHolder(ingredients, products);
-						
-						for (Node d = itemNode.getFirstChild(); d != null; d = d.getNextSibling())
-						{
-							if ("ingredient".equalsIgnoreCase(d.getNodeName()))
-							{
+
+						for (Node d = itemNode.getFirstChild(); d != null; d = d.getNextSibling()) {
+							if ("ingredient".equalsIgnoreCase(d.getNodeName())) {
 								final int id = parseInteger(d.getAttributes(), "id");
 								final long count = parseLong(d.getAttributes(), "count");
 								final ItemHolder ingredient = new ItemHolder(id, count);
-								
-								if (itemExists(ingredient))
-								{
+
+								if (itemExists(ingredient)) {
 									ingredients.add(ingredient);
+								} else {
+									log.warn("Invalid ingredient id or count for itemId: {}, count: {} in list: {}", ingredient.getId(), ingredient.getCount(), listId);
 								}
-								else
-								{
-									LOGGER.warn("Invalid ingredient id or count for itemId: {}, count: {} in list: {}", ingredient.getId(), ingredient.getCount(), listId);
-									continue;
-								}
-							}
-							else if ("production".equalsIgnoreCase(d.getNodeName()))
-							{
+							} else if ("production".equalsIgnoreCase(d.getNodeName())) {
 								final int id = parseInteger(d.getAttributes(), "id");
 								final long count = parseLong(d.getAttributes(), "count");
 								final double chance = parseDouble(d.getAttributes(), "chance", Double.NaN);
 								final ItemChanceHolder product = new ItemChanceHolder(id, chance, count);
-								
-								if (itemExists(product))
-								{
+
+								if (itemExists(product)) {
 									// Check chance only of items that have set chance. Items without chance (NaN) are used for displaying purposes.
-									if ((!Double.isNaN(chance) && (chance < 0)) || (chance > 100))
-									{
-										LOGGER.warn("Invalid chance for itemId: {}, count: {}, chance: {} in list: {}", product.getId(), product.getCount(), chance, listId);
+									if ((!Double.isNaN(chance) && (chance < 0)) || (chance > 100)) {
+										log.warn("Invalid chance for itemId: {}, count: {}, chance: {} in list: {}", product.getId(), product.getCount(), chance, listId);
 										continue;
 									}
-									
+
 									products.add(product);
-								}
-								else
-								{
-									LOGGER.warn("Invalid product id or count for itemId: {}, count: {} in list: {}", product.getId(), product.getCount(), listId);
-									continue;
+								} else {
+									log.warn("Invalid product id or count for itemId: {}, count: {} in list: {}", product.getId(), product.getCount(), listId);
 								}
 							}
 						}
-						
+
 						final double totalChance = products.stream().filter(i -> !Double.isNaN(i.getChance())).mapToDouble(ItemChanceHolder::getChance).sum();
-						if (totalChance > 100)
-						{
-							LOGGER.warn("Products' total chance of {}% exceeds 100% for list: {} at entry {}.", totalChance, listId, entries.size() + 1);
+						if (totalChance > 100) {
+							log.warn("Products' total chance of {}% exceeds 100% for list: {} at entry {}.", totalChance, listId, entries.size() + 1);
 						}
-						
+
 						entries.add(entry);
-					}
-					else if ("npcs".equalsIgnoreCase(itemNode.getNodeName()))
-					{
+					} else if ("npcs".equalsIgnoreCase(itemNode.getNodeName())) {
 						// Initialize NPCs with the size of child nodes.
 						final Set<Integer> allowNpc = new HashSet<>(itemNode.getChildNodes().getLength());
 						forEach(itemNode, n -> "npc".equalsIgnoreCase(n.getNodeName()) && Util.isDigit(n.getTextContent()), n -> allowNpc.add(Integer.parseInt(n.getTextContent())));
-						
+
 						// Add npcs to stats set.
 						set.set("allowNpc", allowNpc);
 					}
 				});
-				
+
 				set.set("listId", listId);
 				set.set("entries", entries);
-				
+
 				_multisells.put(listId, new MultisellListHolder(set));
 			});
-		}
-		catch (Exception e)
-		{
-			LOGGER.error("Error in file: {}", path, e);
+		} catch (Exception e) {
+			log.error("Error in file: {}", path, e);
 		}
 	}
-	
-	public int getMultisellCount()
-	{
+
+	public int getMultisellCount() {
 		return _multisells.size();
 	}
-	
+
 	@Override
-	public Filter<Path> getCurrentFileFilter()
-	{
+	public Filter<Path> getCurrentFileFilter() {
 		return NUMERIC_XML_FILTER;
 	}
-	
+
 	/**
 	 * This will generate the multisell list for the items.<br>
 	 * There exist various parameters in multisells that affect the way they will appear:
@@ -206,6 +168,7 @@ public final class MultisellData implements IGameXmlReader
 	 * <li>
 	 * <li>Additional product and ingredient multipliers.</li>
 	 * </ol>
+	 *
 	 * @param listId
 	 * @param player
 	 * @param npc
@@ -213,70 +176,49 @@ public final class MultisellData implements IGameXmlReader
 	 * @param ingredientMultiplier
 	 * @param productMultiplier
 	 */
-	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly, double ingredientMultiplier, double productMultiplier)
-	{
+	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly, double ingredientMultiplier, double productMultiplier) {
 		final MultisellListHolder template = _multisells.get(listId);
-		if (template == null)
-		{
-			LOGGER.warn("Can't find list id: {} requested by player: {}, npcId: {}", listId, player.getName(), (npc != null ? npc.getId() : 0));
+		if (template == null) {
+			log.warn("Can't find list id: {} requested by player: {}, npcId: {}", listId, player.getName(), (npc != null ? npc.getId() : 0));
 			return;
 		}
-		
-		if (((npc != null) && !template.isNpcAllowed(npc.getId())) || ((npc == null) && template.isNpcOnly()))
-		{
-			if (player.isGM())
-			{
+
+		if (((npc != null) && !template.isNpcAllowed(npc.getId())) || ((npc == null) && template.isNpcOnly())) {
+			if (player.isGM()) {
 				player.sendMessage("Multisell " + listId + " is restricted. Under current conditions cannot be used. Only GMs are allowed to use it.");
-			}
-			else
-			{
-				LOGGER.warn("Player {} attempted to open multisell {} from npc {} which is not allowed!", player, listId, npc);
+			} else {
+				log.warn("Player {} attempted to open multisell {} from npc {} which is not allowed!", player, listId, npc);
 				return;
 			}
 		}
-		
+
 		// Check if ingredient/product multipliers are set, if not, set them to the template value.
 		ingredientMultiplier = (Double.isNaN(ingredientMultiplier) ? template.getIngredientMultiplier() : ingredientMultiplier);
 		productMultiplier = (Double.isNaN(productMultiplier) ? template.getProductMultiplier() : productMultiplier);
-		
+
 		final PreparedMultisellListHolder list = new PreparedMultisellListHolder(template, inventoryOnly, player.getInventory(), npc, ingredientMultiplier, productMultiplier);
 		int index = 0;
-		do
-		{
+		do {
 			// send list at least once even if size = 0
 			player.sendPacket(new MultiSellList(list, index));
 			index += PAGE_SIZE;
 		}
 		while (index < list.getEntries().size());
-		
+
 		player.setMultiSell(list);
 	}
-	
-	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly)
-	{
+
+	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly) {
 		separateAndSend(listId, player, npc, inventoryOnly, Double.NaN, Double.NaN);
 	}
-	
-	private final boolean itemExists(ItemHolder holder)
-	{
+
+	private final boolean itemExists(ItemHolder holder) {
 		final SpecialItemType specialItem = SpecialItemType.getByClientId(holder.getId());
-		if (specialItem != null)
-		{
+		if (specialItem != null) {
 			return true;
 		}
-		
+
 		final L2Item template = ItemTable.getInstance().getTemplate(holder.getId());
 		return (template != null) && (template.isStackable() ? (holder.getCount() >= 1) : (holder.getCount() == 1));
-	}
-	
-	@InstanceGetter
-	public static MultisellData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final MultisellData _instance = new MultisellData();
 	}
 }

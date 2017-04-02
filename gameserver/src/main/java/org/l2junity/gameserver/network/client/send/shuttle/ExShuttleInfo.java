@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send.shuttle;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleStop;
@@ -27,25 +25,24 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class ExShuttleInfo implements IClientOutgoingPacket
-{
+public class ExShuttleInfo implements IClientOutgoingPacket {
 	private final L2ShuttleInstance _shuttle;
 	private final List<L2ShuttleStop> _stops;
-	
-	public ExShuttleInfo(L2ShuttleInstance shuttle)
-	{
+
+	public ExShuttleInfo(L2ShuttleInstance shuttle) {
 		_shuttle = shuttle;
 		_stops = shuttle.getStops();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHUTTLE_INFO.writeId(packet);
-		
+
 		packet.writeD(_shuttle.getObjectId());
 		packet.writeD((int) _shuttle.getX());
 		packet.writeD((int) _shuttle.getY());
@@ -53,11 +50,9 @@ public class ExShuttleInfo implements IClientOutgoingPacket
 		packet.writeD(_shuttle.getHeading());
 		packet.writeD(_shuttle.getId());
 		packet.writeD(_stops.size());
-		for (L2ShuttleStop stop : _stops)
-		{
+		for (L2ShuttleStop stop : _stops) {
 			packet.writeD(stop.getId());
-			for (Location loc : stop.getDimensions())
-			{
+			for (Location loc : stop.getDimensions()) {
 				packet.writeD((int) loc.getX());
 				packet.writeD((int) loc.getY());
 				packet.writeD((int) loc.getZ());

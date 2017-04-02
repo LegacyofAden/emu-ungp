@@ -18,86 +18,55 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.io.IOException;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.util.XmlReaderException;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
 /**
  * @author NosBit
  */
-public class SecondaryAuthData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(SecondaryAuthData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class SecondaryAuthData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final SecondaryAuthData instance = new SecondaryAuthData();
+
 	private final Set<String> _forbiddenPasswords = new HashSet<>();
 	private boolean _enabled = false;
 	private int _maxAttempts = 5;
 	private int _banTime = 480;
 	private String _recoveryLink = "";
-	
-	protected SecondaryAuthData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
+
+	private SecondaryAuthData() {
 		_forbiddenPasswords.clear();
-		try
-		{
-			parseDatapackFile("config/SecondaryAuth.xml");
-		}
-		catch (XmlReaderException | IOException e)
-		{
-			LOGGER.error("Error loading forbidden passwords.", e);
-		}
-		LOGGER.info("Loaded {} forbidden passwords.", _forbiddenPasswords.size());
+		parseDatapackFile("config/SecondaryAuth.xml");
+		log.info("Loaded {} forbidden passwords.", _forbiddenPasswords.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		try
-		{
-			for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling())
-			{
-				if ("list".equalsIgnoreCase(node.getNodeName()))
-				{
-					for (Node list_node = node.getFirstChild(); list_node != null; list_node = list_node.getNextSibling())
-					{
-						if ("enabled".equalsIgnoreCase(list_node.getNodeName()))
-						{
+	public void parseDocument(Document doc, Path path) {
+		try {
+			for (Node node = doc.getFirstChild(); node != null; node = node.getNextSibling()) {
+				if ("list".equalsIgnoreCase(node.getNodeName())) {
+					for (Node list_node = node.getFirstChild(); list_node != null; list_node = list_node.getNextSibling()) {
+						if ("enabled".equalsIgnoreCase(list_node.getNodeName())) {
 							_enabled = Boolean.parseBoolean(list_node.getTextContent());
-						}
-						else if ("maxAttempts".equalsIgnoreCase(list_node.getNodeName()))
-						{
+						} else if ("maxAttempts".equalsIgnoreCase(list_node.getNodeName())) {
 							_maxAttempts = Integer.parseInt(list_node.getTextContent());
-						}
-						else if ("banTime".equalsIgnoreCase(list_node.getNodeName()))
-						{
+						} else if ("banTime".equalsIgnoreCase(list_node.getNodeName())) {
 							_banTime = Integer.parseInt(list_node.getTextContent());
-						}
-						else if ("recoveryLink".equalsIgnoreCase(list_node.getNodeName()))
-						{
+						} else if ("recoveryLink".equalsIgnoreCase(list_node.getNodeName())) {
 							_recoveryLink = list_node.getTextContent();
-						}
-						else if ("forbiddenPasswords".equalsIgnoreCase(list_node.getNodeName()))
-						{
-							for (Node forbiddenPasswords_node = list_node.getFirstChild(); forbiddenPasswords_node != null; forbiddenPasswords_node = forbiddenPasswords_node.getNextSibling())
-							{
-								if ("password".equalsIgnoreCase(forbiddenPasswords_node.getNodeName()))
-								{
+						} else if ("forbiddenPasswords".equalsIgnoreCase(list_node.getNodeName())) {
+							for (Node forbiddenPasswords_node = list_node.getFirstChild(); forbiddenPasswords_node != null; forbiddenPasswords_node = forbiddenPasswords_node.getNextSibling()) {
+								if ("password".equalsIgnoreCase(forbiddenPasswords_node.getNodeName())) {
 									_forbiddenPasswords.add(forbiddenPasswords_node.getTextContent());
 								}
 							}
@@ -105,51 +74,32 @@ public class SecondaryAuthData implements IGameXmlReader
 					}
 				}
 			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed to load secondary auth data from xml.", e);
+		} catch (Exception e) {
+			log.warn("Failed to load secondary auth data from xml.", e);
 		}
 	}
-	
-	public boolean isEnabled()
-	{
+
+	public boolean isEnabled() {
 		return _enabled;
 	}
-	
-	public int getMaxAttempts()
-	{
+
+	public int getMaxAttempts() {
 		return _maxAttempts;
 	}
-	
-	public int getBanTime()
-	{
+
+	public int getBanTime() {
 		return _banTime;
 	}
-	
-	public String getRecoveryLink()
-	{
+
+	public String getRecoveryLink() {
 		return _recoveryLink;
 	}
-	
-	public Set<String> getForbiddenPasswords()
-	{
+
+	public Set<String> getForbiddenPasswords() {
 		return _forbiddenPasswords;
 	}
-	
-	public boolean isForbiddenPassword(String password)
-	{
+
+	public boolean isForbiddenPassword(String password) {
 		return _forbiddenPasswords.contains(password);
-	}
-	
-	@InstanceGetter
-	public static SecondaryAuthData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final SecondaryAuthData _instance = new SecondaryAuthData();
 	}
 }

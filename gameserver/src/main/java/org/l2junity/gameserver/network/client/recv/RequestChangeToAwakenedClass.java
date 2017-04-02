@@ -28,32 +28,25 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestChangeToAwakenedClass implements IClientIncomingPacket
-{
+public class RequestChangeToAwakenedClass implements IClientIncomingPacket {
 	private boolean _change;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_change = packet.readD() == 1;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (_change)
-		{
+
+		if (_change) {
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerChangeToAwakenedClass(player), player);
-		}
-		else
-		{
+		} else {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 	}

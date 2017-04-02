@@ -23,8 +23,7 @@ import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public abstract class AbstractNpcInfo implements IClientOutgoingPacket
-{
+public abstract class AbstractNpcInfo implements IClientOutgoingPacket {
 	protected int _x, _y, _z, _heading;
 	protected int _idTemplate;
 	protected boolean _isAttackable, _isSummoned;
@@ -33,14 +32,13 @@ public abstract class AbstractNpcInfo implements IClientOutgoingPacket
 	protected final int _swimRunSpd, _swimWalkSpd;
 	protected final int _flyRunSpd, _flyWalkSpd;
 	protected double _moveMultiplier;
-	
+
 	protected int _rhand, _lhand, _chest, _enchantEffect;
 	protected double _collisionHeight, _collisionRadius;
 	protected String _name = "";
 	protected String _title = "";
-	
-	public AbstractNpcInfo(Creature cha)
-	{
+
+	public AbstractNpcInfo(Creature cha) {
 		_isSummoned = cha.isShowSummonAnimation();
 		_x = (int) cha.getX();
 		_y = (int) cha.getY();
@@ -56,15 +54,13 @@ public abstract class AbstractNpcInfo implements IClientOutgoingPacket
 		_flyRunSpd = cha.isFlying() ? _runSpd : 0;
 		_flyWalkSpd = cha.isFlying() ? _walkSpd : 0;
 	}
-	
-	public static class TrapInfo extends AbstractNpcInfo
-	{
+
+	public static class TrapInfo extends AbstractNpcInfo {
 		private final L2TrapInstance _trap;
-		
-		public TrapInfo(L2TrapInstance cha, Creature attacker)
-		{
+
+		public TrapInfo(L2TrapInstance cha, Creature attacker) {
 			super(cha);
-			
+
 			_trap = cha;
 			_idTemplate = cha.getTemplate().getDisplayId();
 			_isAttackable = cha.isAutoAttackable(attacker);
@@ -72,18 +68,16 @@ public abstract class AbstractNpcInfo implements IClientOutgoingPacket
 			_lhand = 0;
 			_collisionHeight = _trap.getTemplate().getfCollisionHeight();
 			_collisionRadius = _trap.getTemplate().getfCollisionRadius();
-			if (cha.getTemplate().isUsingServerSideName())
-			{
+			if (cha.getTemplate().isUsingServerSideName()) {
 				_name = cha.getName();
 			}
 			_title = cha.getOwner() != null ? cha.getOwner().getName() : "";
 		}
-		
+
 		@Override
-		public boolean write(PacketWriter packet)
-		{
+		public boolean write(PacketWriter packet) {
 			OutgoingPackets.NPC_INFO.writeId(packet);
-			
+
 			packet.writeD(_trap.getObjectId());
 			packet.writeD(_idTemplate + 1000000); // npctype id
 			packet.writeD(_isAttackable ? 1 : 0);
@@ -119,19 +113,19 @@ public abstract class AbstractNpcInfo implements IClientOutgoingPacket
 			packet.writeD(-1); // High Five NPCString ID
 			packet.writeS(_title);
 			packet.writeD(0x00); // title color 0 = client default
-			
+
 			packet.writeD(_trap.getPvpFlag());
 			packet.writeD(_trap.getReputation());
-			
+
 			packet.writeD(0); // was AVE and was adding stealth
 			packet.writeD(0x00); // clan id
 			packet.writeD(0x00); // crest id
 			packet.writeD(0000); // C2
 			packet.writeD(0000); // C2
 			packet.writeC(0000); // C2
-			
+
 			packet.writeC(_trap.getTeam().getId());
-			
+
 			packet.writeF(_collisionRadius);
 			packet.writeF(_collisionHeight);
 			packet.writeD(0x00); // C4

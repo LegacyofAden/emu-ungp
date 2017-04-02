@@ -25,37 +25,31 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author St3eT
  */
-public final class OnPlayerPressTutorialMark implements IBaseEvent
-{
+public final class OnPlayerPressTutorialMark implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _questId;
 	private final int _cond;
-	
-	public OnPlayerPressTutorialMark(PlayerInstance activeChar, int questId, int cond)
-	{
+
+	public OnPlayerPressTutorialMark(PlayerInstance activeChar, int questId, int cond) {
 		_activeChar = activeChar;
 		_questId = questId;
 		_cond = cond;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getQuestId()
-	{
+
+	public int getQuestId() {
 		return _questId;
 	}
-	
-	public int getCond()
-	{
+
+	public int getCond() {
 		return _cond;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_PRESS_TUTORIAL_MARK;
 	}
 }

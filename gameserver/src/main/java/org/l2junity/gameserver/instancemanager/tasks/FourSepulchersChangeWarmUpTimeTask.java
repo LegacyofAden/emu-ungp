@@ -18,48 +18,43 @@
  */
 package org.l2junity.gameserver.instancemanager.tasks;
 
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
+
 import java.util.Calendar;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
-
 /**
  * Four Sepulchers change warm up time task.
+ *
  * @author xban1x
  */
-public final class FourSepulchersChangeWarmUpTimeTask implements Runnable
-{
+public final class FourSepulchersChangeWarmUpTimeTask implements Runnable {
 	@Override
-	public void run()
-	{
+	public void run() {
 		final FourSepulchersManager manager = FourSepulchersManager.getInstance();
 		manager.setIsEntryTime(true);
 		manager.setIsWarmUpTime(false);
 		manager.setIsAttackTime(false);
 		manager.setIsCoolDownTime(false);
-		
+
 		long interval = 0;
 		// searching time when warmup time will be ended:
 		// counting difference between time when warmup time ends and
 		// current time
 		// and then launching change time task
-		if (manager.isFirstTimeRun())
-		{
+		if (manager.isFirstTimeRun()) {
 			interval = manager.getWarmUpTimeEnd() - Calendar.getInstance().getTimeInMillis();
-		}
-		else
-		{
+		} else {
 			interval = GeneralConfig.FS_TIME_WARMUP * 60000L;
 		}
-		
-		manager.setChangeAttackTimeTask(ThreadPool.schedule(new FourSepulchersChangeAttackTimeTask(), interval, TimeUnit.MILLISECONDS));
+
+		manager.setChangeAttackTimeTask(ThreadPool.getInstance().scheduleGeneral(new FourSepulchersChangeAttackTimeTask(), interval, TimeUnit.MILLISECONDS));
 		final ScheduledFuture<?> changeWarmUpTimeTask = manager.getChangeWarmUpTimeTask();
-		
-		if (changeWarmUpTimeTask != null)
-		{
+
+		if (changeWarmUpTimeTask != null) {
 			changeWarmUpTimeTask.cancel(true);
 			manager.setChangeWarmUpTimeTask(null);
 		}

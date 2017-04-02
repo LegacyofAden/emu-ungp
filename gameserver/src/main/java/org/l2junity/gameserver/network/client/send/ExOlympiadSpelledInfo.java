@@ -18,43 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author godson
  */
-public class ExOlympiadSpelledInfo implements IClientOutgoingPacket
-{
+public class ExOlympiadSpelledInfo implements IClientOutgoingPacket {
 	private final int _playerId;
 	private final List<BuffInfo> _effects = new ArrayList<>();
-	
-	public ExOlympiadSpelledInfo(PlayerInstance player)
-	{
+
+	public ExOlympiadSpelledInfo(PlayerInstance player) {
 		_playerId = player.getObjectId();
 	}
-	
-	public void addSkill(BuffInfo info)
-	{
+
+	public void addSkill(BuffInfo info) {
 		_effects.add(info);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_OLYMPIAD_SPELLED_INFO.writeId(packet);
-		
+
 		packet.writeD(_playerId);
 		packet.writeD(_effects.size());
-		for (BuffInfo info : _effects)
-		{
-			if ((info != null) && info.isInUse())
-			{
+		for (BuffInfo info : _effects) {
+			if ((info != null) && info.isInUse()) {
 				packet.writeD(info.getSkill().getDisplayId());
 				packet.writeH(info.getSkill().getDisplayLevel());
 				packet.writeH(0x00); // Sub level

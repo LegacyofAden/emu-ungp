@@ -25,26 +25,24 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionPlayerIsOnSide.
+ *
  * @author St3eT
  */
-public class ConditionPlayerIsOnSide extends Condition
-{
+public class ConditionPlayerIsOnSide extends Condition {
 	private final CastleSide _side;
-	
+
 	/**
 	 * Instantiates a new condition player race.
+	 *
 	 * @param side the allowed Castle side.
 	 */
-	public ConditionPlayerIsOnSide(CastleSide side)
-	{
+	public ConditionPlayerIsOnSide(CastleSide side) {
 		_side = side;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if ((effector == null) || !effector.isPlayer())
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if ((effector == null) || !effector.isPlayer()) {
 			return false;
 		}
 		return effector.getActingPlayer().getPlayerSide() == _side;

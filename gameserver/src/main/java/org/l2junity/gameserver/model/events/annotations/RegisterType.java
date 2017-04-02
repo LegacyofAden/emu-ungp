@@ -18,19 +18,18 @@
  */
 package org.l2junity.gameserver.model.events.annotations;
 
+import org.l2junity.gameserver.model.events.ListenerRegisterType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.l2junity.gameserver.model.events.ListenerRegisterType;
 
 /**
  * @author UnAfraid
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RegisterType
-{
+public @interface RegisterType {
 	ListenerRegisterType value();
 }

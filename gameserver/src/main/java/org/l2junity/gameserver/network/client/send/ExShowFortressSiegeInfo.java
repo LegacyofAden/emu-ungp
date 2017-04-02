@@ -18,51 +18,46 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.model.FortSiegeSpawn;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * TODO: Rewrite!!!
+ *
  * @author KenM
  */
-public class ExShowFortressSiegeInfo implements IClientOutgoingPacket
-{
+public class ExShowFortressSiegeInfo implements IClientOutgoingPacket {
 	private final int _fortId;
 	private final int _size;
 	private final int _csize;
 	private final int _csize2;
-	
+
 	/**
 	 * @param fort
 	 */
-	public ExShowFortressSiegeInfo(Fort fort)
-	{
+	public ExShowFortressSiegeInfo(Fort fort) {
 		_fortId = fort.getResidenceId();
 		_size = fort.getFortSize();
 		List<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(_fortId);
 		_csize = ((commanders == null) ? 0 : commanders.size());
 		_csize2 = fort.getSiege().getCommanders().size();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_FORTRESS_SIEGE_INFO.writeId(packet);
-		
+
 		packet.writeD(_fortId); // Fortress Id
 		packet.writeD(_size); // Total Barracks Count
-		if (_csize > 0)
-		{
-			switch (_csize)
-			{
+		if (_csize > 0) {
+			switch (_csize) {
 				case 3:
-					switch (_csize2)
-					{
+					switch (_csize2) {
 						case 0:
 							packet.writeD(0x03);
 							break;
@@ -99,11 +94,8 @@ public class ExShowFortressSiegeInfo implements IClientOutgoingPacket
 					}
 					break;
 			}
-		}
-		else
-		{
-			for (int i = 0; i < _size; i++)
-			{
+		} else {
+			for (int i = 0; i < _size; i++) {
 				packet.writeD(0x00);
 			}
 		}

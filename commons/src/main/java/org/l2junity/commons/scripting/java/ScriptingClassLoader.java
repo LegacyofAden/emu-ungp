@@ -24,35 +24,29 @@ import org.slf4j.LoggerFactory;
 /**
  * @author HorridoJoho
  */
-public final class ScriptingClassLoader extends ClassLoader
-{
+public final class ScriptingClassLoader extends ClassLoader {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ScriptingClassLoader.class);
-	
+
 	private Iterable<ScriptingOutputFileObject> _compiledClasses;
-	
-	ScriptingClassLoader(final ClassLoader parent, final Iterable<ScriptingOutputFileObject> compiledClasses)
-	{
+
+	ScriptingClassLoader(final ClassLoader parent, final Iterable<ScriptingOutputFileObject> compiledClasses) {
 		super(parent);
 		_compiledClasses = compiledClasses;
 	}
-	
-	void removeCompiledClasses()
-	{
+
+	void removeCompiledClasses() {
 		_compiledClasses = null;
 	}
-	
+
 	@Override
-	protected Class<?> findClass(final String name) throws ClassNotFoundException
-	{
-		for (final ScriptingOutputFileObject compiledClass : _compiledClasses)
-		{
-			if (compiledClass.getJavaName().equals(name))
-			{
+	protected Class<?> findClass(final String name) throws ClassNotFoundException {
+		for (final ScriptingOutputFileObject compiledClass : _compiledClasses) {
+			if (compiledClass.getJavaName().equals(name)) {
 				final byte[] classBytes = compiledClass.getJavaData();
 				return defineClass(name, classBytes, 0, classBytes.length);
 			}
 		}
-		
+
 		return super.findClass(name);
 	}
 }

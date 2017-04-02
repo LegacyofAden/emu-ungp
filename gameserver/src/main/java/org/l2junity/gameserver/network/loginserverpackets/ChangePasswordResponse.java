@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.util.network.BaseRecievePacket;
 
-public class ChangePasswordResponse extends BaseRecievePacket
-{
-	
-	public ChangePasswordResponse(byte[] decrypt)
-	{
+public class ChangePasswordResponse extends BaseRecievePacket {
+
+	public ChangePasswordResponse(byte[] decrypt) {
 		super(decrypt);
 		// boolean isSuccessful = readC() > 0;
 		String character = readS();
 		String msgToSend = readS();
-		
+
 		PlayerInstance player = World.getInstance().getPlayer(character);
-		
-		if (player != null)
-		{
+
+		if (player != null) {
 			player.sendMessage(msgToSend);
 		}
 	}

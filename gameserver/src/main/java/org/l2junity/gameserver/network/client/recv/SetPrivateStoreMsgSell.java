@@ -18,45 +18,36 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PrivateStoreMsgSell;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 
-/**
- * This class ...
- * @version $Revision: 1.2.4.2 $ $Date: 2005/03/27 15:29:30 $
- */
-public class SetPrivateStoreMsgSell implements IClientIncomingPacket
-{
+public class SetPrivateStoreMsgSell implements IClientIncomingPacket {
 	private static final int MAX_MSG_LENGTH = 29;
-	
+
 	private String _storeMsg;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_storeMsg = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((player == null) || (player.getSellList() == null))
-		{
+		if ((player == null) || (player.getSellList() == null)) {
 			return;
 		}
-		
-		if ((_storeMsg != null) && (_storeMsg.length() > MAX_MSG_LENGTH))
-		{
+
+		if ((_storeMsg != null) && (_storeMsg.length() > MAX_MSG_LENGTH)) {
 			Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to overflow private store sell message", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
+
 		player.getSellList().setTitle(_storeMsg);
 		client.sendPacket(new PrivateStoreMsgSell(player));
 	}

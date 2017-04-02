@@ -18,17 +18,8 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.data.xml.impl.PetDataTable;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
@@ -43,141 +34,120 @@ import org.l2junity.gameserver.network.client.send.PetItemList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Nyaran
  */
-public class CharSummonTable
-{
+public class CharSummonTable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CharSummonTable.class);
 	private static final Map<Integer, Integer> _pets = new ConcurrentHashMap<>();
 	private static final Map<Integer, Set<Integer>> _servitors = new ConcurrentHashMap<>();
-	
+
 	// SQL
 	private static final String INIT_PET = "SELECT ownerId, item_obj_id FROM pets WHERE restore = 'true'";
 	private static final String INIT_SUMMONS = "SELECT ownerId, summonId FROM character_summons";
 	private static final String LOAD_SUMMON = "SELECT summonSkillId, summonId, curHp, curMp, time FROM character_summons WHERE ownerId = ?";
 	private static final String REMOVE_SUMMON = "DELETE FROM character_summons WHERE ownerId = ? and summonId = ?";
 	private static final String SAVE_SUMMON = "REPLACE INTO character_summons (ownerId,summonId,summonSkillId,curHp,curMp,time) VALUES (?,?,?,?,?,?)";
-	
-	public Map<Integer, Integer> getPets()
-	{
+
+	public Map<Integer, Integer> getPets() {
 		return _pets;
 	}
-	
-	public Map<Integer, Set<Integer>> getServitors()
-	{
+
+	public Map<Integer, Set<Integer>> getServitors() {
 		return _servitors;
 	}
-	
-	protected CharSummonTable()
-	{
+
+	protected CharSummonTable() {
 		init();
 	}
-	
-	private void init()
-	{
-		if (PlayerConfig.RESTORE_SERVITOR_ON_RECONNECT)
-		{
+
+	private void init() {
+		if (PlayerConfig.RESTORE_SERVITOR_ON_RECONNECT) {
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				Statement s = con.createStatement();
-				ResultSet rs = s.executeQuery(INIT_SUMMONS))
-			{
-				while (rs.next())
-				{
+				 Statement s = con.createStatement();
+				 ResultSet rs = s.executeQuery(INIT_SUMMONS)) {
+				while (rs.next()) {
 					_servitors.computeIfAbsent(rs.getInt("ownerId"), k -> ConcurrentHashMap.newKeySet()).add(rs.getInt("summonId"));
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOGGER.warn("Error while loading saved servitor: " + e);
 			}
 		}
-		
-		if (PlayerConfig.RESTORE_PET_ON_RECONNECT)
-		{
+
+		if (PlayerConfig.RESTORE_PET_ON_RECONNECT) {
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
-				Statement s = con.createStatement();
-				ResultSet rs = s.executeQuery(INIT_PET))
-			{
-				while (rs.next())
-				{
+				 Statement s = con.createStatement();
+				 ResultSet rs = s.executeQuery(INIT_PET)) {
+				while (rs.next()) {
 					_pets.put(rs.getInt("ownerId"), rs.getInt("item_obj_id"));
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOGGER.warn("Error while loading saved pet: " + e);
 			}
 		}
 	}
-	
-	public void removeServitor(PlayerInstance activeChar, int summonObjectId)
-	{
+
+	public void removeServitor(PlayerInstance activeChar, int summonObjectId) {
 		_servitors.computeIfPresent(activeChar.getObjectId(), (k, v) ->
 		{
 			v.remove(summonObjectId);
 			return !v.isEmpty() ? v : null;
 		});
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement(REMOVE_SUMMON))
-		{
+			 PreparedStatement ps = con.prepareStatement(REMOVE_SUMMON)) {
 			ps.setInt(1, activeChar.getObjectId());
 			ps.setInt(2, summonObjectId);
 			ps.execute();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Summon cannot be removed: " + e);
 		}
 	}
-	
-	public void restorePet(PlayerInstance activeChar)
-	{
+
+	public void restorePet(PlayerInstance activeChar) {
 		final ItemInstance item = activeChar.getInventory().getItemByObjectId(_pets.get(activeChar.getObjectId()));
-		if (item == null)
-		{
+		if (item == null) {
 			LOGGER.warn("Null pet summoning item for: " + activeChar);
 			return;
 		}
 		final PetData petData = PetDataTable.getInstance().getPetDataByItemId(item.getId());
-		if (petData == null)
-		{
+		if (petData == null) {
 			LOGGER.warn("Null pet data for: " + activeChar + " and summoning item: " + item);
 			return;
 		}
 		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(petData.getNpcId());
-		if (npcTemplate == null)
-		{
+		if (npcTemplate == null) {
 			LOGGER.warn("Null pet NPC template for: " + activeChar + " and pet Id:" + petData.getNpcId());
 			return;
 		}
-		
+
 		final L2PetInstance pet = L2PetInstance.spawnPet(npcTemplate, activeChar, item);
-		if (pet == null)
-		{
+		if (pet == null) {
 			LOGGER.warn("Null pet instance for: " + activeChar + " and pet NPC template:" + npcTemplate);
 			return;
 		}
-		
+
 		pet.setShowSummonAnimation(true);
 		pet.setTitle(activeChar.getName());
-		
-		if (!pet.isRespawned())
-		{
+
+		if (!pet.isRespawned()) {
 			pet.setCurrentHp(pet.getMaxHp());
 			pet.setCurrentMp(pet.getMaxMp());
 			pet.getStat().setExp(pet.getExpForThisLevel());
 			pet.setCurrentFed(pet.getMaxFed());
 		}
-		
+
 		pet.setRunning();
-		
-		if (!pet.isRespawned())
-		{
+
+		if (!pet.isRespawned()) {
 			pet.storeMe();
 		}
-		
+
 		item.setEnchantLevel(pet.getLevel());
 		activeChar.setPet(pet);
 		pet.spawnMe(activeChar.getX() + 50, activeChar.getY() + 100, activeChar.getZ());
@@ -186,35 +156,29 @@ public class CharSummonTable
 		pet.getOwner().sendPacket(new PetItemList(pet.getInventory().getItems()));
 		pet.broadcastStatusUpdate();
 	}
-	
-	public void restoreServitor(PlayerInstance activeChar)
-	{
+
+	public void restoreServitor(PlayerInstance activeChar) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement(LOAD_SUMMON))
-		{
+			 PreparedStatement ps = con.prepareStatement(LOAD_SUMMON)) {
 			ps.setInt(1, activeChar.getObjectId());
-			try (ResultSet rs = ps.executeQuery())
-			{
+			try (ResultSet rs = ps.executeQuery()) {
 				Skill skill;
-				while (rs.next())
-				{
+				while (rs.next()) {
 					int summonObjId = rs.getInt("summonId");
 					int skillId = rs.getInt("summonSkillId");
 					int curHp = rs.getInt("curHp");
 					int curMp = rs.getInt("curMp");
 					int time = rs.getInt("time");
-					
+
 					skill = SkillData.getInstance().getSkill(skillId, activeChar.getSkillLevel(skillId));
-					if (skill == null)
-					{
+					if (skill == null) {
 						removeServitor(activeChar, summonObjId);
 						return;
 					}
-					
+
 					skill.applyEffects(activeChar, activeChar);
-					
-					if (activeChar.hasServitors())
-					{
+
+					if (activeChar.hasServitors()) {
 						final L2ServitorInstance summon = activeChar.getServitors().values().stream().map(s -> ((L2ServitorInstance) s)).filter(s -> s.getReferenceSkill() == skillId).findAny().orElse(null);
 						summon.setCurrentHp(curHp);
 						summon.setCurrentMp(curMp);
@@ -222,25 +186,20 @@ public class CharSummonTable
 					}
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Servitor cannot be restored: " + e);
 		}
 	}
-	
-	public void saveSummon(L2ServitorInstance summon)
-	{
-		if (summon == null)
-		{
+
+	public void saveSummon(L2ServitorInstance summon) {
+		if (summon == null) {
 			return;
 		}
-		
+
 		_servitors.computeIfAbsent(summon.getOwner().getObjectId(), k -> ConcurrentHashMap.newKeySet()).add(summon.getObjectId());
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement ps = con.prepareStatement(SAVE_SUMMON))
-		{
+			 PreparedStatement ps = con.prepareStatement(SAVE_SUMMON)) {
 			ps.setInt(1, summon.getOwner().getObjectId());
 			ps.setInt(2, summon.getObjectId());
 			ps.setInt(3, summon.getReferenceSkill());
@@ -248,20 +207,16 @@ public class CharSummonTable
 			ps.setInt(5, (int) Math.round(summon.getCurrentMp()));
 			ps.setInt(6, summon.getLifeTimeRemaining());
 			ps.execute();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Failed to store summon: {} from {}, error: {}", summon, summon.getOwner(), e);
 		}
 	}
-	
-	public static CharSummonTable getInstance()
-	{
+
+	public static CharSummonTable getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final CharSummonTable _instance = new CharSummonTable();
 	}
 }

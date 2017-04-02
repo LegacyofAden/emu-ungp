@@ -18,58 +18,51 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExListPartyMatchingWaitingRoom;
 import org.l2junity.network.PacketReader;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Gnacik
  */
-public class RequestListPartyMatchingWaitingRoom implements IClientIncomingPacket
-{
+public class RequestListPartyMatchingWaitingRoom implements IClientIncomingPacket {
 	private int _page;
 	private int _minLevel;
 	private int _maxLevel;
 	private List<ClassId> _classId; // 1 - waitlist 0 - room waitlist
 	private String _query;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_page = packet.readD();
 		_minLevel = packet.readD();
 		_maxLevel = packet.readD();
 		final int size = packet.readD();
-		
-		if ((size > 0) && (size < 128))
-		{
+
+		if ((size > 0) && (size < 128)) {
 			_classId = new LinkedList<>();
-			for (int i = 0; i < size; i++)
-			{
+			for (int i = 0; i < size; i++) {
 				_classId.add(ClassId.getClassId(packet.readD()));
 			}
 		}
-		if (packet.getReadableBytes() > 0)
-		{
+		if (packet.getReadableBytes() > 0) {
 			_query = packet.readS();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new ExListPartyMatchingWaitingRoom(activeChar, _page, _minLevel, _maxLevel, _classId, _query));
 	}
 }

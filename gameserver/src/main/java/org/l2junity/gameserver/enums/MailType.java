@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum MailType
-{
+public enum MailType {
 	REGULAR,
 	NEWS_INFORMER,
 	NPC,

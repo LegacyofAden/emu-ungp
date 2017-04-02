@@ -27,32 +27,27 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestFlyMove implements IClientIncomingPacket
-{
+public class RequestFlyMove implements IClientIncomingPacket {
 	private int _locationId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_locationId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final SayuneRequest request = activeChar.getRequest(SayuneRequest.class);
-		if (request == null)
-		{
+		if (request == null) {
 			return;
 		}
-		
+
 		request.move(activeChar, _locationId);
 	}
 }

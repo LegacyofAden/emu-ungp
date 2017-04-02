@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum TryMixCubeResultType
-{
+public enum TryMixCubeResultType {
 	NORMAL,
 	BONUS,
 	EXTRA,

@@ -18,90 +18,77 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.npc;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+
 /**
  * @author Nik
  */
-public class RandomAnimationTask implements Runnable
-{
+public class RandomAnimationTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger(RandomAnimationTask.class);
 	private final Npc _npc;
 	private boolean _stopTask;
-	
-	public RandomAnimationTask(Npc npc)
-	{
+
+	public RandomAnimationTask(Npc npc) {
 		_npc = npc;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_stopTask)
-		{
+	public void run() {
+		if (_stopTask) {
 			return;
 		}
-		
-		try
-		{
-			if (!_npc.isInActiveRegion())
-			{
+
+		try {
+			if (!_npc.isInActiveRegion()) {
 				return;
 			}
-			
+
 			// Cancel further animation timers until intention is changed to ACTIVE again.
-			if (_npc.isAttackable() && (_npc.getAI().getIntention() != AI_INTENTION_ACTIVE))
-			{
+			if (_npc.isAttackable() && (_npc.getAI().getIntention() != AI_INTENTION_ACTIVE)) {
 				return;
 			}
-			
-			if (!_npc.isDead() && !_npc.hasBlockActions())
-			{
+
+			if (!_npc.isDead() && !_npc.hasBlockActions()) {
 				_npc.onRandomAnimation(Rnd.get(2, 3));
 			}
-			
+
 			startRandomAnimationTimer();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.error("Execution of RandomAnimationTask has failed.", e);
 		}
 	}
-	
+
 	/**
 	 * Create a RandomAnimation Task that will be launched after the calculated delay.
 	 */
-	public void startRandomAnimationTimer()
-	{
-		if (!_npc.hasRandomAnimation() || _stopTask)
-		{
+	public void startRandomAnimationTimer() {
+		if (!_npc.hasRandomAnimation() || _stopTask) {
 			return;
 		}
-		
+
 		int minWait = _npc.isAttackable() ? GeneralConfig.MIN_MONSTER_ANIMATION : GeneralConfig.MIN_NPC_ANIMATION;
 		int maxWait = _npc.isAttackable() ? GeneralConfig.MAX_MONSTER_ANIMATION : GeneralConfig.MAX_NPC_ANIMATION;
-		
+
 		// Calculate the delay before the next animation
 		int interval = Rnd.get(minWait, maxWait) * 1000;
-		
+
 		// Create a RandomAnimation Task that will be launched after the calculated delay
-		ThreadPool.schedule(this, interval, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(this, interval, TimeUnit.MILLISECONDS);
 	}
-	
+
 	/**
 	 * Stops the task from continuing and blocks it from continuing ever again. You need to create new task if you want to start it again.
 	 */
-	public void stopRandomAnimationTimer()
-	{
+	public void stopRandomAnimationTimer() {
 		_stopTask = true;
 	}
 }

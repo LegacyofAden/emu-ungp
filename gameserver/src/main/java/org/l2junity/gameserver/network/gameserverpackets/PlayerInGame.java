@@ -18,35 +18,30 @@
  */
 package org.l2junity.gameserver.network.gameserverpackets;
 
-import java.util.List;
-
 import org.l2junity.util.network.BaseSendablePacket;
+
+import java.util.List;
 
 /**
  * @author -Wooden-
  */
-public class PlayerInGame extends BaseSendablePacket
-{
-	public PlayerInGame(String player)
-	{
+public class PlayerInGame extends BaseSendablePacket {
+	public PlayerInGame(String player) {
 		writeC(0x02);
 		writeH(1);
 		writeS(player);
 	}
-	
-	public PlayerInGame(List<String> players)
-	{
+
+	public PlayerInGame(List<String> players) {
 		writeC(0x02);
 		writeH(players.size());
-		for (String pc : players)
-		{
+		for (String pc : players) {
 			writeS(pc);
 		}
 	}
-	
+
 	@Override
-	public byte[] getContent()
-	{
+	public byte[] getContent() {
 		return getBytes();
 	}
 }

@@ -18,64 +18,56 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.awt.Polygon;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.geodata.GeoData;
+
+import java.awt.*;
 
 /**
  * @author UnAfraid
  */
-public class Territory extends Polygon
-{
+public class Territory extends Polygon {
 	private static final long serialVersionUID = 7132757127831184920L;
 	private int _minZ;
 	private int _maxZ;
-	
-	public Territory()
-	{
+
+	public Territory() {
 		_minZ = 999999;
 		_maxZ = -999999;
 	}
-	
-	public void addPoint(int x, int y, int minZ, int maxZ)
-	{
+
+	public void addPoint(int x, int y, int minZ, int maxZ) {
 		super.addPoint(x, y);
-		
-		if (minZ < _minZ)
-		{
+
+		if (minZ < _minZ) {
 			_minZ = minZ;
 		}
-		if (maxZ > _maxZ)
-		{
+		if (maxZ > _maxZ) {
 			_maxZ = maxZ;
 		}
 	}
-	
-	public boolean isInside(double x, double y, double z)
-	{
+
+	public boolean isInside(double x, double y, double z) {
 		return super.contains(x, y) && (z >= _minZ) && (z <= _maxZ);
 	}
-	
-	public Location getRandomPoint()
-	{
+
+	public Location getRandomPoint() {
 		int x, y;
-		
+
 		int minX = getBounds().x;
 		int maxX = getBounds().x + getBounds().width;
 		int minY = getBounds().y;
 		int maxY = getBounds().y + getBounds().height;
-		
+
 		x = Rnd.get(minX, maxX);
 		y = Rnd.get(minY, maxY);
-		
+
 		int antiBlocker = 0;
-		while (!contains(x, y) && (antiBlocker++ < 1000))
-		{
+		while (!contains(x, y) && (antiBlocker++ < 1000)) {
 			x = Rnd.get(minX, maxX);
 			y = Rnd.get(minY, maxY);
 		}
-		
+
 		return new Location(x, y, GeoData.getInstance().getHeight(x, y, _minZ));
 	}
 }

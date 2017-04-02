@@ -21,8 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class PlaySound implements IClientOutgoingPacket
-{
+public class PlaySound implements IClientOutgoingPacket {
 	private final int _unknown1;
 	private final String _soundFile;
 	private final int _unknown3;
@@ -31,9 +30,8 @@ public class PlaySound implements IClientOutgoingPacket
 	private final int _y;
 	private final int _z;
 	private final int _unknown8;
-	
-	public PlaySound(String soundFile)
-	{
+
+	public PlaySound(String soundFile) {
 		_unknown1 = 0;
 		_soundFile = soundFile;
 		_unknown3 = 0;
@@ -43,9 +41,8 @@ public class PlaySound implements IClientOutgoingPacket
 		_z = 0;
 		_unknown8 = 0;
 	}
-	
-	public PlaySound(int unknown1, String soundFile, int unknown3, int unknown4, double x, double y, double z)
-	{
+
+	public PlaySound(int unknown1, String soundFile, int unknown3, int unknown4, double x, double y, double z) {
 		_unknown1 = unknown1;
 		_soundFile = soundFile;
 		_unknown3 = unknown3;
@@ -55,17 +52,15 @@ public class PlaySound implements IClientOutgoingPacket
 		_z = (int) z;
 		_unknown8 = 0;
 	}
-	
-	public String getSoundName()
-	{
+
+	public String getSoundName() {
 		return _soundFile;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLAY_SOUND.writeId(packet);
-		
+
 		packet.writeD(_unknown1); // unknown 0 for quest and ship;
 		packet.writeS(_soundFile);
 		packet.writeD(_unknown3); // unknown 0 for quest; 1 for ship;

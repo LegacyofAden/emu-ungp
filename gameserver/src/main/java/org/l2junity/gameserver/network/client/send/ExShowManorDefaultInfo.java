@@ -18,36 +18,32 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author l3x
  */
-public final class ExShowManorDefaultInfo implements IClientOutgoingPacket
-{
+public final class ExShowManorDefaultInfo implements IClientOutgoingPacket {
 	private final List<L2Seed> _crops;
 	private final boolean _hideButtons;
-	
-	public ExShowManorDefaultInfo(boolean hideButtons)
-	{
+
+	public ExShowManorDefaultInfo(boolean hideButtons) {
 		_crops = CastleManorManager.getInstance().getCrops();
 		_hideButtons = hideButtons;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_MANOR_DEFAULT_INFO.writeId(packet);
-		
+
 		packet.writeC(_hideButtons ? 0x01 : 0x00); // Hide "Seed Purchase" and "Crop Sales" buttons
 		packet.writeD(_crops.size());
-		for (L2Seed crop : _crops)
-		{
+		for (L2Seed crop : _crops) {
 			packet.writeD(crop.getCropId()); // crop Id
 			packet.writeD(crop.getLevel()); // level
 			packet.writeD((int) crop.getSeedReferencePrice()); // seed price

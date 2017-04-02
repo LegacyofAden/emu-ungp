@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author St3eT
  */
-public enum SiegeGuardType
-{
+public enum SiegeGuardType {
 	SWORD,
 	POLE,
 	BOW,

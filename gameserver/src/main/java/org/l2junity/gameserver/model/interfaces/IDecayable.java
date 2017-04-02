@@ -21,7 +21,6 @@ package org.l2junity.gameserver.model.interfaces;
 /**
  * @author xban1x
  */
-public interface IDecayable
-{
+public interface IDecayable {
 	boolean decayMe();
 }

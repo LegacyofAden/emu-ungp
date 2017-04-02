@@ -29,8 +29,7 @@ import org.l2junity.gameserver.model.items.type.WeaponType;
 /**
  * @author Sdw
  */
-public class AppearanceHolder
-{
+public class AppearanceHolder {
 	private final int _visualId;
 	private final WeaponType _weaponType;
 	private final ArmorType _armorType;
@@ -38,9 +37,8 @@ public class AppearanceHolder
 	private final AppearanceMagicType _magicType;
 	private final AppearanceTargetType _targetType;
 	private final Integer _bodyPart;
-	
-	public AppearanceHolder(StatsSet set)
-	{
+
+	public AppearanceHolder(StatsSet set) {
 		_visualId = set.getInt("id", 0);
 		_weaponType = set.getEnum("weaponType", WeaponType.class, WeaponType.NONE);
 		_armorType = set.getEnum("armorType", ArmorType.class, ArmorType.NONE);
@@ -49,39 +47,32 @@ public class AppearanceHolder
 		_targetType = set.getEnum("targetType", AppearanceTargetType.class, AppearanceTargetType.NONE);
 		_bodyPart = ItemTable._slots.get(set.getString("bodyPart", "none"));
 	}
-	
-	public WeaponType getWeaponType()
-	{
+
+	public WeaponType getWeaponType() {
 		return _weaponType;
 	}
-	
-	public ArmorType getArmorType()
-	{
+
+	public ArmorType getArmorType() {
 		return _armorType;
 	}
-	
-	public AppearanceHandType getHandType()
-	{
+
+	public AppearanceHandType getHandType() {
 		return _handType;
 	}
-	
-	public AppearanceMagicType getMagicType()
-	{
+
+	public AppearanceMagicType getMagicType() {
 		return _magicType;
 	}
-	
-	public AppearanceTargetType getTargetType()
-	{
+
+	public AppearanceTargetType getTargetType() {
 		return _targetType;
 	}
-	
-	public int getBodyPart()
-	{
+
+	public int getBodyPart() {
 		return _bodyPart;
 	}
-	
-	public int getVisualId()
-	{
+
+	public int getVisualId() {
 		return _visualId;
 	}
 }

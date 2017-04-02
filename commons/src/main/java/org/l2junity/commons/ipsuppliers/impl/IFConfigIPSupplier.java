@@ -18,24 +18,21 @@
  */
 package org.l2junity.commons.ipsuppliers.impl;
 
-import java.io.IOException;
-
 import org.l2junity.commons.ipsuppliers.IRealIPSupplier;
+
+import java.io.IOException;
 
 /**
  * @author UnAfraid
  */
-public class IFConfigIPSupplier implements IRealIPSupplier
-{
+public class IFConfigIPSupplier implements IRealIPSupplier {
 	@Override
-	public String getIP() throws IOException
-	{
+	public String getIP() throws IOException {
 		return defaultIPObtainMethod("https://v4.ifconfig.co/ip");
 	}
-	
+
 	@Override
-	public int getPriority()
-	{
+	public int getPriority() {
 		return 1;
 	}
 }

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.stat;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.actor.Playable;
@@ -31,198 +31,162 @@ import org.l2junity.gameserver.network.client.send.ExNewSkillToLearnByLevelUp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlayableStat extends CharStat
-{
+public class PlayableStat extends CharStat {
 	protected static final Logger _log = LoggerFactory.getLogger(PlayableStat.class);
-	
-	public PlayableStat(Playable activeChar)
-	{
+
+	public PlayableStat(Playable activeChar) {
 		super(activeChar);
 	}
-	
-	public boolean addExp(long value)
-	{
+
+	public boolean addExp(long value) {
 		final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnPlayableExpChanged(getActiveChar(), getExp(), getExp() + value), getActiveChar(), TerminateReturn.class);
-		if ((term != null) && term.terminate())
-		{
+		if ((term != null) && term.terminate()) {
 			return false;
 		}
-		
-		if (((getExp() + value) < 0) || ((value > 0) && (getExp() == (getExpForLevel(getMaxLevel()) - 1))))
-		{
+
+		if (((getExp() + value) < 0) || ((value > 0) && (getExp() == (getExpForLevel(getMaxLevel()) - 1)))) {
 			return true;
 		}
-		
-		if ((getExp() + value) >= getExpForLevel(getMaxLevel()))
-		{
+
+		if ((getExp() + value) >= getExpForLevel(getMaxLevel())) {
 			value = getExpForLevel(getMaxLevel()) - 1 - getExp();
 		}
-		
+
 		final int oldLevel = getLevel();
 		setExp(getExp() + value);
-		
+
 		byte level = 1;
-		
-		for (byte tmp = level; tmp <= getMaxLevel(); tmp++)
-		{
-			if (getExp() >= getExpForLevel(tmp))
-			{
+
+		for (byte tmp = level; tmp <= getMaxLevel(); tmp++) {
+			if (getExp() >= getExpForLevel(tmp)) {
 				continue;
 			}
 			level = --tmp;
 			break;
 		}
-		
-		if ((level != getLevel()) && (level >= 1))
-		{
+
+		if ((level != getLevel()) && (level >= 1)) {
 			addLevel((byte) (level - getLevel()));
 		}
-		
-		if ((getLevel() > oldLevel) && getActiveChar().isPlayer())
-		{
+
+		if ((getLevel() > oldLevel) && getActiveChar().isPlayer()) {
 			final PlayerInstance activeChar = getActiveChar().getActingPlayer();
-			if (SkillTreesData.getInstance().hasAvailableSkills(activeChar, activeChar.getClassId()))
-			{
+			if (SkillTreesData.getInstance().hasAvailableSkills(activeChar, activeChar.getClassId())) {
 				getActiveChar().sendPacket(ExNewSkillToLearnByLevelUp.STATIC_PACKET);
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public boolean removeExp(long value)
-	{
-		if ((getExp() - value) < 0)
-		{
+
+	public boolean removeExp(long value) {
+		if ((getExp() - value) < 0) {
 			value = getExp() - 1;
 		}
-		
+
 		setExp(getExp() - value);
-		
+
 		byte level = 1;
-		
-		for (byte tmp = level; tmp <= getMaxLevel(); tmp++)
-		{
-			if (getExp() >= getExpForLevel(tmp))
-			{
+
+		for (byte tmp = level; tmp <= getMaxLevel(); tmp++) {
+			if (getExp() >= getExpForLevel(tmp)) {
 				continue;
 			}
 			level = --tmp;
 			break;
 		}
-		if ((level != getLevel()) && (level >= 1))
-		{
+		if ((level != getLevel()) && (level >= 1)) {
 			addLevel((byte) (level - getLevel()));
 		}
 		return true;
 	}
-	
-	public boolean removeExpAndSp(long removeExp, long removeSp)
-	{
+
+	public boolean removeExpAndSp(long removeExp, long removeSp) {
 		final boolean expRemoved = (removeExp > 0) && removeExp(removeExp);
 		final boolean spRemoved = (removeSp > 0) && removeSp(removeSp);
 		return expRemoved || spRemoved;
 	}
-	
-	public boolean addLevel(byte value)
-	{
-		if ((getLevel() + value) > (getMaxLevel() - 1))
-		{
-			if (getLevel() < (getMaxLevel() - 1))
-			{
+
+	public boolean addLevel(byte value) {
+		if ((getLevel() + value) > (getMaxLevel() - 1)) {
+			if (getLevel() < (getMaxLevel() - 1)) {
 				value = (byte) (getMaxLevel() - 1 - getLevel());
-			}
-			else
-			{
+			} else {
 				return false;
 			}
 		}
-		
+
 		boolean levelIncreased = ((getLevel() + value) > getLevel());
 		value += getLevel();
 		setLevel(value);
-		
+
 		// Sync up exp with current level
-		if ((getExp() >= getExpForLevel(getLevel() + 1)) || (getExpForLevel(getLevel()) > getExp()))
-		{
+		if ((getExp() >= getExpForLevel(getLevel() + 1)) || (getExpForLevel(getLevel()) > getExp())) {
 			setExp(getExpForLevel(getLevel()));
 		}
-		
-		if (!levelIncreased && (getActiveChar() instanceof PlayerInstance) && !getActiveChar().isGM() && PlayerConfig.DECREASE_SKILL_LEVEL)
-		{
+
+		if (!levelIncreased && (getActiveChar() instanceof PlayerInstance) && !getActiveChar().isGM() && PlayerConfig.DECREASE_SKILL_LEVEL) {
 			((PlayerInstance) getActiveChar()).checkPlayerSkills();
 		}
-		
-		if (!levelIncreased)
-		{
+
+		if (!levelIncreased) {
 			return false;
 		}
-		
+
 		getActiveChar().getStatus().setCurrentHp(getActiveChar().getStat().getMaxHp());
 		getActiveChar().getStatus().setCurrentMp(getActiveChar().getStat().getMaxMp());
-		
+
 		return true;
 	}
-	
-	public boolean addSp(long value)
-	{
-		if (value < 0)
-		{
+
+	public boolean addSp(long value) {
+		if (value < 0) {
 			_log.warn("wrong usage");
 			return false;
 		}
 		long currentSp = getSp();
-		if (currentSp >= PlayerConfig.MAX_SP)
-		{
+		if (currentSp >= PlayerConfig.MAX_SP) {
 			return false;
 		}
-		
-		if (currentSp > (PlayerConfig.MAX_SP - value))
-		{
+
+		if (currentSp > (PlayerConfig.MAX_SP - value)) {
 			value = PlayerConfig.MAX_SP - currentSp;
 		}
-		
+
 		setSp(currentSp + value);
 		return true;
 	}
-	
-	public boolean removeSp(long value)
-	{
+
+	public boolean removeSp(long value) {
 		long currentSp = getSp();
-		if (currentSp < value)
-		{
+		if (currentSp < value) {
 			value = currentSp;
 		}
 		setSp(getSp() - value);
 		return true;
 	}
-	
-	public long getExpForLevel(int level)
-	{
+
+	public long getExpForLevel(int level) {
 		return level;
 	}
-	
+
 	@Override
-	public Playable getActiveChar()
-	{
+	public Playable getActiveChar() {
 		return (Playable) super.getActiveChar();
 	}
-	
-	public int getMaxLevel()
-	{
+
+	public int getMaxLevel() {
 		return ExperienceData.getInstance().getMaxLevel();
 	}
-	
+
 	@Override
-	public int getPhysicalAttackRadius()
-	{
+	public int getPhysicalAttackRadius() {
 		final Weapon weapon = getActiveChar().getActiveWeaponItem();
 		return weapon != null ? weapon.getBaseAttackRadius() : super.getPhysicalAttackRadius();
 	}
-	
+
 	@Override
-	public int getPhysicalAttackAngle()
-	{
+	public int getPhysicalAttackAngle() {
 		final Weapon weapon = getActiveChar().getActiveWeaponItem();
 		return weapon != null ? weapon.getBaseAttackAngle() : super.getPhysicalAttackAngle();
 	}

@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class SendTradeRequest implements IClientOutgoingPacket
-{
+public class SendTradeRequest implements IClientOutgoingPacket {
 	private final int _senderId;
-	
-	public SendTradeRequest(int senderId)
-	{
+
+	public SendTradeRequest(int senderId) {
 		_senderId = senderId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TRADE_REQUEST.writeId(packet);
-		
+
 		packet.writeD(_senderId);
 		return true;
 	}

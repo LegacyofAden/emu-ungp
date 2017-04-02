@@ -26,40 +26,33 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * A PVP Zone
+ *
  * @author durgus
  */
-public class ArenaZone extends ZoneType
-{
-	public ArenaZone(int id)
-	{
+public class ArenaZone extends ZoneType {
+	public ArenaZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (character instanceof PlayerInstance)
-		{
-			if (!character.isInsideZone(ZoneId.PVP))
-			{
+	protected void onEnter(Creature character) {
+		if (character instanceof PlayerInstance) {
+			if (!character.isInsideZone(ZoneId.PVP)) {
 				character.sendPacket(SystemMessageId.YOU_HAVE_ENTERED_A_COMBAT_ZONE);
 			}
 		}
-		
+
 		character.setInsideZone(ZoneId.PVP, true);
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
-		if (character instanceof PlayerInstance)
-		{
-			if (!character.isInsideZone(ZoneId.PVP))
-			{
+	protected void onExit(Creature character) {
+		if (character instanceof PlayerInstance) {
+			if (!character.isInsideZone(ZoneId.PVP)) {
 				character.sendPacket(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 			}
 		}
-		
+
 		character.setInsideZone(ZoneId.PVP, false);
 	}
 }

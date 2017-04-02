@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -31,49 +29,43 @@ import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
 
+import java.util.OptionalDouble;
+
 /**
  * @author UnAfraid
  */
-public class PDefenseFinalizer implements IStatsFunction
-{
+public class PDefenseFinalizer implements IStatsFunction {
 	private static final int[] SLOTS =
-	{
-		Inventory.PAPERDOLL_CHEST,
-		Inventory.PAPERDOLL_LEGS,
-		Inventory.PAPERDOLL_HEAD,
-		Inventory.PAPERDOLL_FEET,
-		Inventory.PAPERDOLL_GLOVES,
-		Inventory.PAPERDOLL_UNDER,
-		Inventory.PAPERDOLL_CLOAK
-	};
-	
+			{
+					Inventory.PAPERDOLL_CHEST,
+					Inventory.PAPERDOLL_LEGS,
+					Inventory.PAPERDOLL_HEAD,
+					Inventory.PAPERDOLL_FEET,
+					Inventory.PAPERDOLL_GLOVES,
+					Inventory.PAPERDOLL_UNDER,
+					Inventory.PAPERDOLL_CLOAK
+			};
+
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
-		if (creature.isPet())
-		{
+		if (creature.isPet()) {
 			final L2PetInstance pet = (L2PetInstance) creature;
 			baseValue = pet.getPetLevelData().getPetPDef();
 		}
 		baseValue += calcEnchantedItemBonus(creature, stat);
-		
+
 		final Inventory inv = creature.getInventory();
-		if (inv != null)
-		{
-			for (ItemInstance item : inv.getPaperdollItems())
-			{
+		if (inv != null) {
+			for (ItemInstance item : inv.getPaperdollItems()) {
 				baseValue += item.getItem().getStats(stat, 0);
 			}
-			
-			if (creature.isPlayer())
-			{
+
+			if (creature.isPlayer()) {
 				final PlayerInstance player = creature.getActingPlayer();
-				for (int slot : SLOTS)
-				{
-					if (!inv.isPaperdollSlotEmpty(slot) || ((slot == Inventory.PAPERDOLL_LEGS) && !inv.isPaperdollSlotEmpty(Inventory.PAPERDOLL_CHEST) && (inv.getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)))
-					{
+				for (int slot : SLOTS) {
+					if (!inv.isPaperdollSlotEmpty(slot) || ((slot == Inventory.PAPERDOLL_LEGS) && !inv.isPaperdollSlotEmpty(Inventory.PAPERDOLL_CHEST) && (inv.getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR))) {
 						final int defaultStatValue = player.getTemplate().getBaseDefBySlot(slot);
 						baseValue -= creature.getTransformation().map(transform -> transform.getBaseDefBySlot(player, slot)).orElse(defaultStatValue);
 					}
@@ -81,20 +73,17 @@ public class PDefenseFinalizer implements IStatsFunction
 			}
 			baseValue *= BaseStats.CHA.calcBonus(creature);
 		}
-		if (creature.isRaid())
-		{
+		if (creature.isRaid()) {
 			baseValue *= NpcConfig.RAID_PDEFENCE_MULTIPLIER;
 		}
-		if (creature.getLevel() > 0)
-		{
+		if (creature.getLevel() > 0) {
 			baseValue *= creature.getLevelMod();
 		}
-		
+
 		return defaultValue(creature, stat, baseValue);
 	}
-	
-	private double defaultValue(Creature creature, DoubleStat stat, double baseValue)
-	{
+
+	private double defaultValue(Creature creature, DoubleStat stat, double baseValue) {
 		final double mul = Math.max(creature.getStat().getMul(stat), 0.5);
 		final double add = creature.getStat().getAdd(stat);
 		return (baseValue * mul) + add + creature.getStat().getMoveTypeValue(stat, creature.getMoveType());

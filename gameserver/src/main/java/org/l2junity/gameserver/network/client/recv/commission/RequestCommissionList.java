@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv.commission;
 
-import java.util.function.Predicate;
-
 import org.l2junity.gameserver.instancemanager.CommissionManager;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.commission.CommissionItemType;
@@ -31,20 +29,20 @@ import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.commission.ExCloseCommission;
 import org.l2junity.network.PacketReader;
 
+import java.util.function.Predicate;
+
 /**
  * @author NosBit
  */
-public class RequestCommissionList implements IClientIncomingPacket
-{
+public class RequestCommissionList implements IClientIncomingPacket {
 	private int _treeViewDepth;
 	private int _itemType;
 	private int _type;
 	private int _grade;
 	private String _query;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_treeViewDepth = packet.readD();
 		_itemType = packet.readD();
 		_type = packet.readD();
@@ -52,43 +50,36 @@ public class RequestCommissionList implements IClientIncomingPacket
 		_query = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!CommissionManager.isPlayerAllowedToInteract(player))
-		{
+
+		if (!CommissionManager.isPlayerAllowedToInteract(player)) {
 			client.sendPacket(ExCloseCommission.STATIC_PACKET);
 			return;
 		}
-		
+
 		Predicate<L2Item> filter = i -> true;
-		switch (_treeViewDepth)
-		{
+		switch (_treeViewDepth) {
 			case 1:
 				final CommissionTreeType commissionTreeType = CommissionTreeType.findByClientId(_itemType);
-				if (commissionTreeType != null)
-				{
+				if (commissionTreeType != null) {
 					filter = filter.and(i -> commissionTreeType.getCommissionItemTypes().contains(i.getCommissionItemType()));
 				}
 				break;
 			case 2:
 				final CommissionItemType commissionItemType = CommissionItemType.findByClientId(_itemType);
-				if (commissionItemType != null)
-				{
+				if (commissionItemType != null) {
 					filter = filter.and(i -> i.getCommissionItemType() == commissionItemType);
 				}
 				break;
 		}
-		
-		switch (_type)
-		{
+
+		switch (_type) {
 			case 0: // General
 				filter = filter.and(i -> true); // TODO: condition
 				break;
@@ -96,9 +87,8 @@ public class RequestCommissionList implements IClientIncomingPacket
 				filter = filter.and(i -> true); // TODO: condition
 				break;
 		}
-		
-		switch (_grade)
-		{
+
+		switch (_grade) {
 			case 0:
 				filter = filter.and(i -> i.getCrystalType() == CrystalType.NONE);
 				break;
@@ -130,9 +120,9 @@ public class RequestCommissionList implements IClientIncomingPacket
 				filter = filter.and(i -> i.getCrystalType() == CrystalType.R99);
 				break;
 		}
-		
+
 		filter = filter.and(i -> _query.isEmpty() || i.getName().toLowerCase().contains(_query.toLowerCase()));
-		
+
 		CommissionManager.getInstance().showAuctions(player, filter);
 	}
 }

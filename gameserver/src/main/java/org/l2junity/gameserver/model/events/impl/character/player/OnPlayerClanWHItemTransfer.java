@@ -27,51 +27,43 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerClanWHItemTransfer implements IBaseEvent
-{
+public class OnPlayerClanWHItemTransfer implements IBaseEvent {
 	private final String _process;
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final long _count;
 	private final ItemContainer _container;
-	
-	public OnPlayerClanWHItemTransfer(String process, PlayerInstance activeChar, ItemInstance item, long count, ItemContainer container)
-	{
+
+	public OnPlayerClanWHItemTransfer(String process, PlayerInstance activeChar, ItemInstance item, long count, ItemContainer container) {
 		_process = process;
 		_activeChar = activeChar;
 		_item = item;
 		_count = count;
 		_container = container;
 	}
-	
-	public String getProcess()
-	{
+
+	public String getProcess() {
 		return _process;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public long getCount()
-	{
+
+	public long getCount() {
 		return _count;
 	}
-	
-	public ItemContainer getContainer()
-	{
+
+	public ItemContainer getContainer() {
 		return _container;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CLAN_WH_ITEM_TRANSFER;
 	}
 }

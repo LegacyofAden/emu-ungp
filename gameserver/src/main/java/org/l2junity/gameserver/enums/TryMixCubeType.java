@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum TryMixCubeType
-{
+public enum TryMixCubeType {
 	SUCCESS_NORMAL,
 	SUCCESS_RANDOM,
 	FAIL_ITEM_NUM,

@@ -24,27 +24,23 @@ import org.l2junity.gameserver.model.cubic.CubicInstance;
 /**
  * @author UnAfraid
  */
-public class HealthCondition implements ICubicCondition
-{
+public class HealthCondition implements ICubicCondition {
 	private final int _min;
 	private final int _max;
-	
-	public HealthCondition(int min, int max)
-	{
+
+	public HealthCondition(int min, int max) {
 		_min = min;
 		_max = max;
 	}
-	
+
 	@Override
-	public boolean test(CubicInstance cubic, Creature owner, Creature target)
-	{
+	public boolean test(CubicInstance cubic, Creature owner, Creature target) {
 		final double hpPer = target.getCurrentHpPercent();
 		return (hpPer > _min) && (hpPer < _max);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getClass().getSimpleName() + " min: " + _min + " max: " + _max;
 	}
 }

@@ -30,10 +30,10 @@ import org.l2junity.network.PacketReader;
 
 /**
  * format: ddddddd X:%d Y:%d Z:%d OriginX:%d OriginY:%d OriginZ:%d
+ *
  * @author GodKratos
  */
-public class MoveToLocationInAirShip implements IClientIncomingPacket
-{
+public class MoveToLocationInAirShip implements IClientIncomingPacket {
 	private int _shipId;
 	private int _targetX;
 	private int _targetY;
@@ -41,10 +41,9 @@ public class MoveToLocationInAirShip implements IClientIncomingPacket
 	private int _originX;
 	private int _originY;
 	private int _originZ;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_shipId = packet.readD();
 		_targetX = packet.readD();
 		_targetY = packet.readD();
@@ -54,47 +53,40 @@ public class MoveToLocationInAirShip implements IClientIncomingPacket
 		_originZ = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ))
-		{
+
+		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ)) {
 			activeChar.sendPacket(new StopMoveInVehicle(activeChar, _shipId));
 			return;
 		}
-		
-		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW))
-		{
+
+		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW)) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.isSitting() || activeChar.isMovementDisabled())
-		{
+
+		if (activeChar.isSitting() || activeChar.isMovementDisabled()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (!activeChar.isInAirShip())
-		{
+
+		if (!activeChar.isInAirShip()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final L2AirShipInstance airShip = activeChar.getAirShip();
-		if (airShip.getObjectId() != _shipId)
-		{
+		if (airShip.getObjectId() != _shipId) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		activeChar.setInVehiclePosition(new Location(_targetX, _targetY, _targetZ));
 		activeChar.broadcastPacket(new ExMoveToLocationInAirShip(activeChar));
 	}

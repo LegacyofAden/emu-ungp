@@ -27,22 +27,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExPledgeWaitingListApplied implements IClientOutgoingPacket
-{
+public class ExPledgeWaitingListApplied implements IClientOutgoingPacket {
 	private final PledgeApplicantInfo _pledgePlayerRecruitInfo;
 	private final PledgeRecruitInfo _pledgeRecruitInfo;
-	
-	public ExPledgeWaitingListApplied(int clanId, int playerId)
-	{
+
+	public ExPledgeWaitingListApplied(int clanId, int playerId) {
 		_pledgePlayerRecruitInfo = ClanEntryManager.getInstance().getPlayerApplication(clanId, playerId);
 		_pledgeRecruitInfo = ClanEntryManager.getInstance().getClanById(clanId);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_WAITING_LIST_APPLIED.writeId(packet);
-		
+
 		packet.writeD(_pledgeRecruitInfo.getClan().getId());
 		packet.writeS(_pledgeRecruitInfo.getClan().getName());
 		packet.writeS(_pledgeRecruitInfo.getClan().getLeaderName());

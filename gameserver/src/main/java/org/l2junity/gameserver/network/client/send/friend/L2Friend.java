@@ -27,31 +27,29 @@ import org.l2junity.network.PacketWriter;
 /**
  * Support for "Chat with Friends" dialog. <br />
  * Add new friend or delete.
+ *
  * @author JIV
  */
-public class L2Friend implements IClientOutgoingPacket
-{
+public class L2Friend implements IClientOutgoingPacket {
 	private final boolean _action, _online;
 	private final int _objid;
 	private final String _name;
-	
+
 	/**
 	 * @param action - true for adding, false for remove
 	 * @param objId
 	 */
-	public L2Friend(boolean action, int objId)
-	{
+	public L2Friend(boolean action, int objId) {
 		_action = action;
 		_objid = objId;
 		_name = CharNameTable.getInstance().getNameById(objId);
 		_online = World.getInstance().getPlayer(objId) != null;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.L2_FRIEND.writeId(packet);
-		
+
 		packet.writeD(_action ? 1 : 3); // 1-add 3-remove
 		packet.writeD(_objid);
 		packet.writeS(_name);

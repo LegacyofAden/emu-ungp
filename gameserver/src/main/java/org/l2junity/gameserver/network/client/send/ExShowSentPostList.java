@@ -18,36 +18,31 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Migi, DS
  */
-public class ExShowSentPostList implements IClientOutgoingPacket
-{
+public class ExShowSentPostList implements IClientOutgoingPacket {
 	private final List<Message> _outbox;
-	
-	public ExShowSentPostList(int objectId)
-	{
+
+	public ExShowSentPostList(int objectId) {
 		_outbox = MailManager.getInstance().getOutbox(objectId);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_SENT_POST_LIST.writeId(packet);
-		
+
 		packet.writeD((int) (System.currentTimeMillis() / 1000));
-		if ((_outbox != null) && (_outbox.size() > 0))
-		{
+		if ((_outbox != null) && (_outbox.size() > 0)) {
 			packet.writeD(_outbox.size());
-			for (Message msg : _outbox)
-			{
+			for (Message msg : _outbox) {
 				packet.writeD(msg.getId());
 				packet.writeS(msg.getSubject());
 				packet.writeS(msg.getReceiverName());
@@ -58,9 +53,7 @@ public class ExShowSentPostList implements IClientOutgoingPacket
 				packet.writeD(msg.hasAttachments() ? 0x01 : 0x00);
 				packet.writeD(0x00);
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0x00);
 		}
 		return true;

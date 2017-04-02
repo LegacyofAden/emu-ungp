@@ -24,17 +24,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author zabbix Lets drink to code!
  */
-public final class DummyPacket implements IClientIncomingPacket
-{
+public final class DummyPacket implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return false;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		
+	public void run(L2GameClient client) {
+
 	}
 }

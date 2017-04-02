@@ -29,35 +29,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeSignInForOpenJoiningMethod implements IClientIncomingPacket
-{
+public class RequestPledgeSignInForOpenJoiningMethod implements IClientIncomingPacket {
 	private int _clanId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_clanId = packet.readD();
 		packet.readD(); // Find out oO
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final PledgeRecruitInfo pledgeRecruitInfo = ClanEntryManager.getInstance().getClanById(_clanId);
-		if (pledgeRecruitInfo == null)
-		{
+		if (pledgeRecruitInfo == null) {
 			return;
 		}
-		
-		if (pledgeRecruitInfo.getRecruitType() == 1)
-		{
+
+		if (pledgeRecruitInfo.getRecruitType() == 1) {
 			pledgeRecruitInfo.getClan().addClanMember(activeChar);
 			activeChar.sendPacket(new JoinPledge(_clanId));
 			activeChar.sendPacket(new UserInfo(activeChar));

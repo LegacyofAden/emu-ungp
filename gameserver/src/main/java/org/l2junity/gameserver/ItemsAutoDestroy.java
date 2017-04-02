@@ -18,97 +18,68 @@
  */
 package org.l2junity.gameserver;
 
+import lombok.Getter;
+import org.l2junity.commons.threading.AbstractPeriodicTaskManager;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.enums.ItemLocation;
+import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
+@StartupComponent("Service")
+public final class ItemsAutoDestroy extends AbstractPeriodicTaskManager {
+	@Getter(lazy = true)
+	private static final ItemsAutoDestroy instance = new ItemsAutoDestroy();
 
-public final class ItemsAutoDestroy
-{
 	private final List<ItemInstance> _items = new LinkedList<>();
-	
-	protected ItemsAutoDestroy()
-	{
+
+	private ItemsAutoDestroy() {
+		super(5000);
 	}
-	
-	@Load(group = LoadGroup.class)
-	public void load()
-	{
-		if ((GeneralConfig.AUTODESTROY_ITEM_AFTER > 0) || (GeneralConfig.HERB_AUTO_DESTROY_TIME > 0))
-		{
-			ThreadPool.scheduleAtFixedRate(this::removeItems, 5_000, 5_000, TimeUnit.MILLISECONDS);
-		}
-	}
-	
-	public synchronized void addItem(ItemInstance item)
-	{
+
+	public synchronized void addItem(ItemInstance item) {
 		item.setDropTime(System.currentTimeMillis());
 		_items.add(item);
 	}
-	
-	public synchronized void removeItems()
-	{
-		if (_items.isEmpty())
-		{
+
+	@Override
+	public void run() {
+		if (GeneralConfig.AUTODESTROY_ITEM_AFTER == 0 && GeneralConfig.HERB_AUTO_DESTROY_TIME == 0) {
 			return;
 		}
-		
+
+		if (_items.isEmpty()) {
+			return;
+		}
+
 		long curtime = System.currentTimeMillis();
 		Iterator<ItemInstance> itemIterator = _items.iterator();
-		while (itemIterator.hasNext())
-		{
+		while (itemIterator.hasNext()) {
 			final ItemInstance item = itemIterator.next();
-			if ((item.getDropTime() == 0) || (item.getItemLocation() != ItemLocation.VOID))
-			{
+			if ((item.getDropTime() == 0) || (item.getItemLocation() != ItemLocation.VOID)) {
 				itemIterator.remove();
-			}
-			else
-			{
+			} else {
 				final long autoDestroyTime;
-				if (item.getItem().getAutoDestroyTime() > 0)
-				{
+				if (item.getItem().getAutoDestroyTime() > 0) {
 					autoDestroyTime = item.getItem().getAutoDestroyTime();
-				}
-				else if (item.getItem().hasExImmediateEffect())
-				{
+				} else if (item.getItem().hasExImmediateEffect()) {
 					autoDestroyTime = GeneralConfig.HERB_AUTO_DESTROY_TIME;
-				}
-				else
-				{
+				} else {
 					autoDestroyTime = ((GeneralConfig.AUTODESTROY_ITEM_AFTER == 0) ? 3600000 : GeneralConfig.AUTODESTROY_ITEM_AFTER * 1000);
 				}
-				
-				if ((curtime - item.getDropTime()) > autoDestroyTime)
-				{
+
+				if ((curtime - item.getDropTime()) > autoDestroyTime) {
 					item.decayMe();
 					itemIterator.remove();
-					if (GeneralConfig.SAVE_DROPPED_ITEM)
-					{
+					if (GeneralConfig.SAVE_DROPPED_ITEM) {
 						ItemsOnGroundManager.getInstance().removeObject(item);
 					}
 				}
-				
 			}
 		}
-	}
-	
-	@InstanceGetter
-	public static ItemsAutoDestroy getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ItemsAutoDestroy INSTANCE = new ItemsAutoDestroy();
 	}
 }

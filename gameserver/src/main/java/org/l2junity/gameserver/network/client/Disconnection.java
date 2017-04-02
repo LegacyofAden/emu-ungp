@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.network.client;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogout;
@@ -29,165 +27,133 @@ import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author NB4L1
  */
-public final class Disconnection
-{
+public final class Disconnection {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Disconnection.class);
-	
-	public static L2GameClient getClient(L2GameClient client, PlayerInstance activeChar)
-	{
-		if (client != null)
-		{
+
+	public static L2GameClient getClient(L2GameClient client, PlayerInstance activeChar) {
+		if (client != null) {
 			return client;
 		}
-		
-		if (activeChar != null)
-		{
+
+		if (activeChar != null) {
 			return activeChar.getClient();
 		}
-		
+
 		return null;
 	}
-	
-	public static PlayerInstance getActiveChar(L2GameClient client, PlayerInstance activeChar)
-	{
-		if (activeChar != null)
-		{
+
+	public static PlayerInstance getActiveChar(L2GameClient client, PlayerInstance activeChar) {
+		if (activeChar != null) {
 			return activeChar;
 		}
-		
-		if (client != null)
-		{
+
+		if (client != null) {
 			return client.getActiveChar();
 		}
-		
+
 		return null;
 	}
-	
+
 	private final L2GameClient _client;
 	private final PlayerInstance _activeChar;
-	
-	private Disconnection(L2GameClient client)
-	{
+
+	private Disconnection(L2GameClient client) {
 		this(client, null);
 	}
-	
-	public static Disconnection of(L2GameClient client)
-	{
+
+	public static Disconnection of(L2GameClient client) {
 		return new Disconnection(client);
 	}
-	
-	private Disconnection(PlayerInstance activeChar)
-	{
+
+	private Disconnection(PlayerInstance activeChar) {
 		this(null, activeChar);
 	}
-	
-	public static Disconnection of(PlayerInstance activeChar)
-	{
+
+	public static Disconnection of(PlayerInstance activeChar) {
 		return new Disconnection(activeChar);
 	}
-	
-	private Disconnection(L2GameClient client, PlayerInstance activeChar)
-	{
+
+	private Disconnection(L2GameClient client, PlayerInstance activeChar) {
 		_client = getClient(client, activeChar);
 		_activeChar = getActiveChar(client, activeChar);
-		
-		if (_client != null)
-		{
+
+		if (_client != null) {
 			_client.setActiveChar(null);
 		}
-		
-		if (_activeChar != null)
-		{
+
+		if (_activeChar != null) {
 			_activeChar.setClient(null);
 		}
 	}
-	
-	public static Disconnection of(L2GameClient client, PlayerInstance activeChar)
-	{
+
+	public static Disconnection of(L2GameClient client, PlayerInstance activeChar) {
 		return new Disconnection(client, activeChar);
 	}
-	
-	public Disconnection storeMe()
-	{
-		try
-		{
-			if (_activeChar != null)
-			{
+
+	public Disconnection storeMe() {
+		try {
+			if (_activeChar != null) {
 				_activeChar.storeMe();
 			}
-		}
-		catch (final RuntimeException e)
-		{
+		} catch (final RuntimeException e) {
 			LOGGER.warn("", e);
 		}
-		
+
 		return this;
 	}
-	
-	public Disconnection deleteMe()
-	{
-		try
-		{
-			if (_activeChar != null)
-			{
+
+	public Disconnection deleteMe() {
+		try {
+			if (_activeChar != null) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerLogout(_activeChar, _client), _activeChar);
 				_activeChar.deleteMe();
 			}
-		}
-		catch (final RuntimeException e)
-		{
+		} catch (final RuntimeException e) {
 			LOGGER.warn("", e);
 		}
-		
+
 		return this;
 	}
-	
-	public Disconnection close(boolean toLoginScreen)
-	{
-		if (_client != null)
-		{
+
+	public Disconnection close(boolean toLoginScreen) {
+		if (_client != null) {
 			_client.close(toLoginScreen);
 		}
-		
+
 		return this;
 	}
-	
-	public Disconnection close(IClientOutgoingPacket packet)
-	{
-		if (_client != null)
-		{
+
+	public Disconnection close(IClientOutgoingPacket packet) {
+		if (_client != null) {
 			_client.close(packet);
 		}
-		
+
 		return this;
 	}
-	
-	public void defaultSequence(boolean toLoginScreen)
-	{
+
+	public void defaultSequence(boolean toLoginScreen) {
 		defaultSequence();
 		close(toLoginScreen);
 	}
-	
-	public void defaultSequence(IClientOutgoingPacket packet)
-	{
+
+	public void defaultSequence(IClientOutgoingPacket packet) {
 		defaultSequence();
 		close(packet);
 	}
-	
-	private void defaultSequence()
-	{
+
+	private void defaultSequence() {
 		storeMe();
 		deleteMe();
 	}
-	
-	public void onDisconnection()
-	{
-		if (_activeChar != null)
-		{
-			ThreadPool.schedule(() -> defaultSequence(), _activeChar.canLogout() ? 0 : AttackStanceTaskManager.COMBAT_TIME, TimeUnit.MILLISECONDS);
+
+	public void onDisconnection() {
+		if (_activeChar != null) {
+			ThreadPool.getInstance().scheduleGeneral(this::defaultSequence, _activeChar.canLogout() ? 0 : AttackStanceTaskManager.COMBAT_TIME, TimeUnit.MILLISECONDS);
 		}
 	}
 }

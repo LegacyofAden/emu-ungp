@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 /**
  * @author malyelfik
  */
-public final class OnInstanceDestroy implements IBaseEvent
-{
+public final class OnInstanceDestroy implements IBaseEvent {
 	private final Instance _instance;
-	
-	public OnInstanceDestroy(Instance instance)
-	{
+
+	public OnInstanceDestroy(Instance instance) {
 		_instance = instance;
 	}
-	
-	public Instance getInstanceWorld()
-	{
+
+	public Instance getInstanceWorld() {
 		return _instance;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_INSTANCE_DESTROY;
 	}
 }

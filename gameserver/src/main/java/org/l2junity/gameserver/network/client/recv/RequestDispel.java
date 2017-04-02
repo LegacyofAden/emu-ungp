@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,67 +30,53 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestDispel implements IClientIncomingPacket
-{
+public class RequestDispel implements IClientIncomingPacket {
 	private int _objectId;
 	private int _skillId;
 	private int _skillLevel;
 	private int _skillSubLevel;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		_skillId = packet.readD();
 		_skillLevel = packet.readH();
 		_skillSubLevel = packet.readH();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
-		if ((_skillId <= 0) || (_skillLevel <= 0))
-		{
+	public void run(L2GameClient client) {
+		if ((_skillId <= 0) || (_skillLevel <= 0)) {
 			return;
 		}
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		final Skill skill = SkillData.getInstance().getSkill(_skillId, _skillLevel, _skillSubLevel);
-		if (skill == null)
-		{
+		if (skill == null) {
 			return;
 		}
-		if (!skill.canBeDispelled() || skill.isStayAfterDeath() || skill.isDebuff())
-		{
+		if (!skill.canBeDispelled() || skill.isStayAfterDeath() || skill.isDebuff()) {
 			return;
 		}
-		if (skill.getAbnormalType() == AbnormalType.TRANSFORM)
-		{
+		if (skill.getAbnormalType() == AbnormalType.TRANSFORM) {
 			return;
 		}
-		if (skill.isDance() && !PlayerConfig.DANCE_CANCEL_BUFF)
-		{
+		if (skill.isDance() && !PlayerConfig.DANCE_CANCEL_BUFF) {
 			return;
 		}
-		if (activeChar.getObjectId() == _objectId)
-		{
+		if (activeChar.getObjectId() == _objectId) {
 			activeChar.stopSkillEffects(true, _skillId);
-		}
-		else
-		{
+		} else {
 			final Summon pet = activeChar.getPet();
-			if ((pet != null) && (pet.getObjectId() == _objectId))
-			{
+			if ((pet != null) && (pet.getObjectId() == _objectId)) {
 				pet.stopSkillEffects(true, _skillId);
 			}
-			
+
 			final Summon servitor = activeChar.getServitor(_objectId);
-			if (servitor != null)
-			{
+			if (servitor != null) {
 				servitor.stopSkillEffects(true, _skillId);
 			}
 		}

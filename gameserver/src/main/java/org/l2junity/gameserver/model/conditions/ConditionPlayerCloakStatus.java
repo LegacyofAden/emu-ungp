@@ -25,22 +25,20 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * The Class ConditionPlayerCloakStatus.
  */
-public class ConditionPlayerCloakStatus extends Condition
-{
+public class ConditionPlayerCloakStatus extends Condition {
 	private final boolean _val;
-	
+
 	/**
 	 * Instantiates a new condition player cloak status.
+	 *
 	 * @param val the val
 	 */
-	public ConditionPlayerCloakStatus(boolean val)
-	{
+	public ConditionPlayerCloakStatus(boolean val) {
 		_val = val;
 	}
-	
+
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
 		return (effector.getActingPlayer() != null) && (effector.getActingPlayer().getInventory().canEquipCloak() == _val);
 	}
 }

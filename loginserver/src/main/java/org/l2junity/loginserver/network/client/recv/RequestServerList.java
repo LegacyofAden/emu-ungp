@@ -28,28 +28,22 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestServerList implements IIncomingPacket<ClientHandler>
-{
+public class RequestServerList implements IIncomingPacket<ClientHandler> {
 	private long _loginSessionId;
-	
+
 	@Override
-	public boolean read(ClientHandler client, PacketReader packet)
-	{
+	public boolean read(ClientHandler client, PacketReader packet) {
 		_loginSessionId = packet.readQ();
 		// packet.readC() // hardcoded as 5
 		return true;
 	}
-	
+
 	@Override
-	public void run(ClientHandler client)
-	{
-		if (client.getLoginSessionId() == _loginSessionId)
-		{
+	public void run(ClientHandler client) {
+		if (client.getLoginSessionId() == _loginSessionId) {
 			client.setConnectionState(ConnectionState.AUTHED_SERVER_LIST);
 			client.sendPacket(new ServerList(client));
-		}
-		else
-		{
+		} else {
 			client.close(LoginFail2.ACCESS_FAILED_PLEASE_TRY_AGAIN_LATER);
 		}
 	}

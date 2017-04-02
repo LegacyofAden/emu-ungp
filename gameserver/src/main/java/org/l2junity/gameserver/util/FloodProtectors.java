@@ -18,15 +18,15 @@
  */
 package org.l2junity.gameserver.util;
 
-import org.l2junity.gameserver.config.FloodRelatedConfig;
+import org.l2junity.core.configs.FloodProtectorConfig;
 import org.l2junity.gameserver.network.client.L2GameClient;
 
 /**
  * Collection of flood protectors for single player.
+ *
  * @author fordfrog
  */
-public final class FloodProtectors
-{
+public final class FloodProtectors {
 	/**
 	 * Use-item flood protector.
 	 */
@@ -91,172 +91,171 @@ public final class FloodProtectors
 	 * Item Auction
 	 */
 	private final FloodProtectorAction _itemAuction;
-	
+
 	/**
 	 * Creates new instance of FloodProtectors.
+	 *
 	 * @param client game client for which the collection of flood protectors is being created.
 	 */
-	public FloodProtectors(final L2GameClient client)
-	{
+	public FloodProtectors(final L2GameClient client) {
 		super();
-		_useItem = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_USE_ITEM);
-		_rollDice = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_ROLL_DICE);
-		_firework = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_FIREWORK);
-		_itemPetSummon = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_ITEM_PET_SUMMON);
-		_heroVoice = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_HERO_VOICE);
-		_globalChat = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_GLOBAL_CHAT);
-		_subclass = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_SUBCLASS);
-		_dropItem = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_DROP_ITEM);
-		_serverBypass = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_SERVER_BYPASS);
-		_multiSell = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_MULTISELL);
-		_transaction = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_TRANSACTION);
-		_manufacture = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_MANUFACTURE);
-		_manor = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_MANOR);
-		_sendMail = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_SENDMAIL);
-		_characterSelect = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_CHARACTER_SELECT);
-		_itemAuction = new FloodProtectorAction(client, FloodRelatedConfig.FLOOD_PROTECTOR_ITEM_AUCTION);
+		_useItem = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_USE_ITEM);
+		_rollDice = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_ROLL_DICE);
+		_firework = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_FIREWORK);
+		_itemPetSummon = new FloodProtectorAction(client, org.l2junity.core.configs.FloodProtectorConfig.FLOOD_PROTECTOR_ITEM_PET_SUMMON);
+		_heroVoice = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_HERO_VOICE);
+		_globalChat = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_GLOBAL_CHAT);
+		_subclass = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_SUBCLASS);
+		_dropItem = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_DROP_ITEM);
+		_serverBypass = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_SERVER_BYPASS);
+		_multiSell = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_MULTISELL);
+		_transaction = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_TRANSACTION);
+		_manufacture = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_MANUFACTURE);
+		_manor = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_MANOR);
+		_sendMail = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_SENDMAIL);
+		_characterSelect = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_CHARACTER_SELECT);
+		_itemAuction = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_ITEM_AUCTION);
 	}
-	
+
 	/**
 	 * Returns {@link #_useItem}.
+	 *
 	 * @return {@link #_useItem}
 	 */
-	public FloodProtectorAction getUseItem()
-	{
+	public FloodProtectorAction getUseItem() {
 		return _useItem;
 	}
-	
+
 	/**
 	 * Returns {@link #_rollDice}.
+	 *
 	 * @return {@link #_rollDice}
 	 */
-	public FloodProtectorAction getRollDice()
-	{
+	public FloodProtectorAction getRollDice() {
 		return _rollDice;
 	}
-	
+
 	/**
 	 * Returns {@link #_firework}.
+	 *
 	 * @return {@link #_firework}
 	 */
-	public FloodProtectorAction getFirework()
-	{
+	public FloodProtectorAction getFirework() {
 		return _firework;
 	}
-	
+
 	/**
 	 * Returns {@link #_itemPetSummon}.
+	 *
 	 * @return {@link #_itemPetSummon}
 	 */
-	public FloodProtectorAction getItemPetSummon()
-	{
+	public FloodProtectorAction getItemPetSummon() {
 		return _itemPetSummon;
 	}
-	
+
 	/**
 	 * Returns {@link #_heroVoice}.
+	 *
 	 * @return {@link #_heroVoice}
 	 */
-	public FloodProtectorAction getHeroVoice()
-	{
+	public FloodProtectorAction getHeroVoice() {
 		return _heroVoice;
 	}
-	
+
 	/**
 	 * Returns {@link #_globalChat}.
+	 *
 	 * @return {@link #_globalChat}
 	 */
-	public FloodProtectorAction getGlobalChat()
-	{
+	public FloodProtectorAction getGlobalChat() {
 		return _globalChat;
 	}
-	
+
 	/**
 	 * Returns {@link #_subclass}.
+	 *
 	 * @return {@link #_subclass}
 	 */
-	public FloodProtectorAction getSubclass()
-	{
+	public FloodProtectorAction getSubclass() {
 		return _subclass;
 	}
-	
+
 	/**
 	 * Returns {@link #_dropItem}.
+	 *
 	 * @return {@link #_dropItem}
 	 */
-	public FloodProtectorAction getDropItem()
-	{
+	public FloodProtectorAction getDropItem() {
 		return _dropItem;
 	}
-	
+
 	/**
 	 * Returns {@link #_serverBypass}.
+	 *
 	 * @return {@link #_serverBypass}
 	 */
-	public FloodProtectorAction getServerBypass()
-	{
+	public FloodProtectorAction getServerBypass() {
 		return _serverBypass;
 	}
-	
+
 	/**
 	 * @return {@link #_multiSell}
 	 */
-	public FloodProtectorAction getMultiSell()
-	{
+	public FloodProtectorAction getMultiSell() {
 		return _multiSell;
 	}
-	
+
 	/**
 	 * Returns {@link #_transaction}.
+	 *
 	 * @return {@link #_transaction}
 	 */
-	public FloodProtectorAction getTransaction()
-	{
+	public FloodProtectorAction getTransaction() {
 		return _transaction;
 	}
-	
+
 	/**
 	 * Returns {@link #_manufacture}.
+	 *
 	 * @return {@link #_manufacture}
 	 */
-	public FloodProtectorAction getManufacture()
-	{
+	public FloodProtectorAction getManufacture() {
 		return _manufacture;
 	}
-	
+
 	/**
 	 * Returns {@link #_manor}.
+	 *
 	 * @return {@link #_manor}
 	 */
-	public FloodProtectorAction getManor()
-	{
+	public FloodProtectorAction getManor() {
 		return _manor;
 	}
-	
+
 	/**
 	 * Returns {@link #_sendMail}.
+	 *
 	 * @return {@link #_sendMail}
 	 */
-	public FloodProtectorAction getSendMail()
-	{
+	public FloodProtectorAction getSendMail() {
 		return _sendMail;
 	}
-	
+
 	/**
 	 * Returns {@link #_characterSelect}.
+	 *
 	 * @return {@link #_characterSelect}
 	 */
-	public FloodProtectorAction getCharacterSelect()
-	{
+	public FloodProtectorAction getCharacterSelect() {
 		return _characterSelect;
 	}
-	
+
 	/**
 	 * Returns {@link #_itemAuction}.
+	 *
 	 * @return {@link #_itemAuction}
 	 */
-	public FloodProtectorAction getItemAuction()
-	{
+	public FloodProtectorAction getItemAuction() {
 		return _itemAuction;
 	}
 }

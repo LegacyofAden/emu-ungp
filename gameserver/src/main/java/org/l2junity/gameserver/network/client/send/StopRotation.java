@@ -21,22 +21,19 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class StopRotation implements IClientOutgoingPacket
-{
+public class StopRotation implements IClientOutgoingPacket {
 	private final int _charObjId, _degree, _speed;
-	
-	public StopRotation(int objectId, int degree, int speed)
-	{
+
+	public StopRotation(int objectId, int degree, int speed) {
 		_charObjId = objectId;
 		_degree = degree;
 		_speed = speed;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.FINISH_ROTATING.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_degree);
 		packet.writeD(_speed);

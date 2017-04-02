@@ -26,17 +26,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public final class FlyToLocation implements IClientOutgoingPacket
-{
+public final class FlyToLocation implements IClientOutgoingPacket {
 	private final int _destX, _destY, _destZ;
 	private final int _chaObjId, _chaX, _chaY, _chaZ;
 	private final FlyType _type;
 	private int _flySpeed;
 	private int _flyDelay;
 	private int _animationSpeed;
-	
-	public enum FlyType
-	{
+
+	public enum FlyType {
 		THROW_UP,
 		THROW_HORIZONTAL,
 		DUMMY,
@@ -48,9 +46,8 @@ public final class FlyToLocation implements IClientOutgoingPacket
 		WARP_BACK,
 		WARP_FORWARD
 	}
-	
-	public FlyToLocation(Creature cha, double destX, double destY, double destZ, FlyType type)
-	{
+
+	public FlyToLocation(Creature cha, double destX, double destY, double destZ, FlyType type) {
 		_chaObjId = cha.getObjectId();
 		_chaX = (int) cha.getX();
 		_chaY = (int) cha.getY();
@@ -60,9 +57,8 @@ public final class FlyToLocation implements IClientOutgoingPacket
 		_destZ = (int) destZ;
 		_type = type;
 	}
-	
-	public FlyToLocation(Creature cha, double destX, double destY, double destZ, FlyType type, int flySpeed, int flyDelay, int animationSpeed)
-	{
+
+	public FlyToLocation(Creature cha, double destX, double destY, double destZ, FlyType type, int flySpeed, int flyDelay, int animationSpeed) {
 		_chaObjId = cha.getObjectId();
 		_chaX = (int) cha.getX();
 		_chaY = (int) cha.getY();
@@ -75,22 +71,19 @@ public final class FlyToLocation implements IClientOutgoingPacket
 		_flyDelay = flyDelay;
 		_animationSpeed = animationSpeed;
 	}
-	
-	public FlyToLocation(Creature cha, ILocational dest, FlyType type)
-	{
+
+	public FlyToLocation(Creature cha, ILocational dest, FlyType type) {
 		this(cha, dest.getX(), dest.getY(), dest.getZ(), type);
 	}
-	
-	public FlyToLocation(Creature cha, ILocational dest, FlyType type, int flySpeed, int flyDelay, int animationSpeed)
-	{
+
+	public FlyToLocation(Creature cha, ILocational dest, FlyType type, int flySpeed, int flyDelay, int animationSpeed) {
 		this(cha, dest.getX(), dest.getY(), dest.getZ(), type, flySpeed, flyDelay, animationSpeed);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.FLY_TO_LOCATION.writeId(packet);
-		
+
 		packet.writeD(_chaObjId);
 		packet.writeD(_destX);
 		packet.writeD(_destY);

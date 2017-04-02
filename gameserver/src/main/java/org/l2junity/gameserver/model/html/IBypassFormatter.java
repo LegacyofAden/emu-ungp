@@ -21,7 +21,6 @@ package org.l2junity.gameserver.model.html;
 /**
  * @author UnAfraid
  */
-public interface IBypassFormatter
-{
+public interface IBypassFormatter {
 	String formatBypass(String bypass, int page);
 }

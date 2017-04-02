@@ -26,22 +26,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExTeleportToLocationActivate implements IClientOutgoingPacket
-{
+public class ExTeleportToLocationActivate implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final Location _loc;
-	
-	public ExTeleportToLocationActivate(Creature character)
-	{
+
+	public ExTeleportToLocationActivate(Creature character) {
 		_objectId = character.getObjectId();
 		_loc = character.getLocation();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_TELEPORT_TO_LOCATION_ACTIVATE.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD((int) _loc.getX());
 		packet.writeD((int) _loc.getY());

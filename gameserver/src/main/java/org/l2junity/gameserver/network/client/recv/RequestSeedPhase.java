@@ -26,20 +26,16 @@ import org.l2junity.network.PacketReader;
 /**
  * RequestSeedPhase client packet
  */
-public class RequestSeedPhase implements IClientIncomingPacket
-{
+public class RequestSeedPhase implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		activeChar.sendPacket(ExShowSeedMapInfo.STATIC_PACKET);

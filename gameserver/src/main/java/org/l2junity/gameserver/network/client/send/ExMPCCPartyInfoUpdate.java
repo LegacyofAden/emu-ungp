@@ -25,28 +25,25 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author chris_00
  */
-public class ExMPCCPartyInfoUpdate implements IClientOutgoingPacket
-{
+public class ExMPCCPartyInfoUpdate implements IClientOutgoingPacket {
 	private final int _mode, _LeaderOID, _memberCount;
 	private final String _name;
-	
+
 	/**
 	 * @param party
-	 * @param mode 0 = Remove, 1 = Add
+	 * @param mode  0 = Remove, 1 = Add
 	 */
-	public ExMPCCPartyInfoUpdate(Party party, int mode)
-	{
+	public ExMPCCPartyInfoUpdate(Party party, int mode) {
 		_name = party.getLeader().getName();
 		_LeaderOID = party.getLeaderObjectId();
 		_memberCount = party.getMemberCount();
 		_mode = mode;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_MPCCPARTY_INFO_UPDATE.writeId(packet);
-		
+
 		packet.writeS(_name);
 		packet.writeD(_LeaderOID);
 		packet.writeD(_memberCount);

@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author devScarlet, mrTJO
  */
-public class ExPlayScene implements IClientOutgoingPacket
-{
+public class ExPlayScene implements IClientOutgoingPacket {
 	public static final ExPlayScene STATIC_PACKET = new ExPlayScene();
-	
-	private ExPlayScene()
-	{
+
+	private ExPlayScene() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLAY_SCENE.writeId(packet);
-		
+
 		return true;
 	}
 }

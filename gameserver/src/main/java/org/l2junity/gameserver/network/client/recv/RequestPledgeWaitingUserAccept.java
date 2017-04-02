@@ -31,35 +31,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeWaitingUserAccept implements IClientIncomingPacket
-{
+public class RequestPledgeWaitingUserAccept implements IClientIncomingPacket {
 	private boolean _acceptRequest;
 	private int _playerId;
 	private int _clanId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_acceptRequest = packet.readD() == 1;
 		_playerId = packet.readD();
 		_clanId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || (activeChar.getClan() == null))
-		{
+		if ((activeChar == null) || (activeChar.getClan() == null)) {
 			return;
 		}
-		
-		if (_acceptRequest)
-		{
+
+		if (_acceptRequest) {
 			final PlayerInstance player = World.getInstance().getPlayer(_playerId);
-			if (player != null)
-			{
+			if (player != null) {
 				final L2Clan clan = activeChar.getClan();
 				clan.addClanMember(player);
 				player.sendPacket(new JoinPledge(_clanId));
@@ -67,12 +61,10 @@ public class RequestPledgeWaitingUserAccept implements IClientIncomingPacket
 				ui.addComponentType(UserInfoType.CLAN);
 				player.sendPacket(ui);
 				player.broadcastInfo();
-				
+
 				ClanEntryManager.getInstance().removePlayerApplication(clan.getId(), _playerId);
 			}
-		}
-		else
-		{
+		} else {
 			ClanEntryManager.getInstance().removePlayerApplication(activeChar.getClanId(), _playerId);
 		}
 	}

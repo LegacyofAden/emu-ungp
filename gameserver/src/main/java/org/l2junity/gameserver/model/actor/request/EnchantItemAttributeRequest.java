@@ -25,46 +25,45 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public final class EnchantItemAttributeRequest extends AbstractRequest
-{
+public final class EnchantItemAttributeRequest extends AbstractRequest {
 	public static final int[] WEAPON_VALUES =
-	{
-		0, // Level 1
-		25, // Level 2
-		75, // Level 3
-		150, // Level 4
-		175, // Level 5
-		225, // Level 6
-		300, // Level 7
-		325, // Level 8
-		375, // Level 9
-		450, // Level 10
-		475, // Level 11
-		525, // Level 12
-		600, // Level 13
-		Integer.MAX_VALUE
-		// TODO: Higher stones
-	};
-	
+			{
+					0, // Level 1
+					25, // Level 2
+					75, // Level 3
+					150, // Level 4
+					175, // Level 5
+					225, // Level 6
+					300, // Level 7
+					325, // Level 8
+					375, // Level 9
+					450, // Level 10
+					475, // Level 11
+					525, // Level 12
+					600, // Level 13
+					Integer.MAX_VALUE
+					// TODO: Higher stones
+			};
+
 	public static final int[] ARMOR_VALUES =
-	{
-		0, // Level 1
-		12, // Level 2
-		30, // Level 3
-		60, // Level 4
-		72, // Level 5
-		90, // Level 6
-		120, // Level 7
-		132, // Level 8
-		150, // Level 9
-		180, // Level 10
-		192, // Level 11
-		210, // Level 12
-		240, // Level 13
-		Integer.MAX_VALUE
-		// TODO: Higher stones
-	};
-	
+			{
+					0, // Level 1
+					12, // Level 2
+					30, // Level 3
+					60, // Level 4
+					72, // Level 5
+					90, // Level 6
+					120, // Level 7
+					132, // Level 8
+					150, // Level 9
+					180, // Level 10
+					192, // Level 11
+					210, // Level 12
+					240, // Level 13
+					Integer.MAX_VALUE
+					// TODO: Higher stones
+			};
+
 	private volatile int _enchantingItemObjectId;
 	private volatile int _enchantingStoneObjectId;
 	final AttributeType _weaponAttribute;
@@ -72,9 +71,8 @@ public final class EnchantItemAttributeRequest extends AbstractRequest
 	final int _maxLevel;
 	final int _minValue;
 	final int _maxValue;
-	
-	public EnchantItemAttributeRequest(PlayerInstance activeChar, int enchantingStoneObjectId, AttributeType weaponAttribute, AttributeType armorAttribute, int maxLevel, int minValue, int maxValue)
-	{
+
+	public EnchantItemAttributeRequest(PlayerInstance activeChar, int enchantingStoneObjectId, AttributeType weaponAttribute, AttributeType armorAttribute, int maxLevel, int minValue, int maxValue) {
 		super(activeChar);
 		_enchantingStoneObjectId = enchantingStoneObjectId;
 		_weaponAttribute = weaponAttribute;
@@ -83,72 +81,59 @@ public final class EnchantItemAttributeRequest extends AbstractRequest
 		_minValue = minValue;
 		_maxValue = maxValue;
 	}
-	
-	public ItemInstance getEnchantingItem()
-	{
+
+	public ItemInstance getEnchantingItem() {
 		return getActiveChar().getInventory().getItemByObjectId(_enchantingItemObjectId);
 	}
-	
-	public void setEnchantingItem(int objectId)
-	{
+
+	public void setEnchantingItem(int objectId) {
 		_enchantingItemObjectId = objectId;
 	}
-	
-	public ItemInstance getEnchantingStone()
-	{
+
+	public ItemInstance getEnchantingStone() {
 		return getActiveChar().getInventory().getItemByObjectId(_enchantingStoneObjectId);
 	}
-	
-	public void setEnchantingStone(int objectId)
-	{
+
+	public void setEnchantingStone(int objectId) {
 		_enchantingStoneObjectId = objectId;
 	}
-	
-	public AttributeType getWeaponAttribute()
-	{
+
+	public AttributeType getWeaponAttribute() {
 		return _weaponAttribute;
 	}
-	
-	public AttributeType getArmorAttribute()
-	{
+
+	public AttributeType getArmorAttribute() {
 		return _armorAttribute;
 	}
-	
-	public int getMaxLevel()
-	{
+
+	public int getMaxLevel() {
 		return _maxLevel;
 	}
-	
-	public int getLimit(boolean isWeapon)
-	{
+
+	public int getLimit(boolean isWeapon) {
 		return isWeapon ? WEAPON_VALUES[_maxLevel] : ARMOR_VALUES[_maxLevel];
 	}
-	
-	public int getMinValue()
-	{
+
+	public int getMinValue() {
 		return _minValue;
 	}
-	
-	public int getMaxValue()
-	{
+
+	public int getMaxValue() {
 		return _minValue;
 	}
-	
+
 	@Override
-	public boolean isItemRequest()
-	{
+	public boolean isItemRequest() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean canWorkWith(AbstractRequest request)
-	{
+	public boolean canWorkWith(AbstractRequest request) {
 		return !request.isItemRequest();
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return (objectId > 0) && ((objectId == _enchantingItemObjectId) || (objectId == _enchantingStoneObjectId));
 	}
 }

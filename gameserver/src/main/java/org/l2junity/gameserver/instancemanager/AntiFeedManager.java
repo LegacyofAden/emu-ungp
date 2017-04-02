@@ -18,99 +18,85 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.l2junity.gameserver.config.L2JModsConfig;
+import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 
-public final class AntiFeedManager
-{
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public final class AntiFeedManager {
 	private final Map<Integer, Long> _lastDeathTimes = new ConcurrentHashMap<>();
-	
-	protected AntiFeedManager()
-	{
+
+	protected AntiFeedManager() {
 	}
-	
+
 	/**
 	 * Set time of the last player's death to current
+	 *
 	 * @param objectId Player's objectId
 	 */
-	public final void updateTimeOfDeath(int objectId)
-	{
+	public final void updateTimeOfDeath(int objectId) {
 		_lastDeathTimes.put(objectId, System.currentTimeMillis());
 	}
-	
+
 	/**
 	 * Check if current kill should be counted as non-feeded.
+	 *
 	 * @param attacker Attacker character
-	 * @param target Target character
+	 * @param target   Target character
 	 * @return True if kill is non-feeded.
 	 */
-	public final boolean check(Creature attacker, Creature target)
-	{
-		if (!L2JModsConfig.L2JMOD_ANTIFEED_ENABLE)
-		{
+	public final boolean check(Creature attacker, Creature target) {
+		if (!L2JModsConfig.L2JMOD_ANTIFEED_ENABLE) {
 			return true;
-		}
-		else if ((target == null) || (attacker == null))
-		{
+		} else if ((target == null) || (attacker == null)) {
 			return false;
 		}
-		
+
 		final PlayerInstance targetPlayer = target.getActingPlayer();
 		final PlayerInstance attackerPlayer = attacker.getActingPlayer();
-		if ((targetPlayer == null) || (attackerPlayer == null))
-		{
+		if ((targetPlayer == null) || (attackerPlayer == null)) {
 			return false;
 		}
-		
+
 		final L2GameClient targetClient = targetPlayer.getClient();
 		final L2GameClient attackerClient = attackerPlayer.getClient();
-		if ((targetClient == null) || (attackerClient == null))
-		{
+		if ((targetClient == null) || (attackerClient == null)) {
 			return false;
 		}
-		
+
 		// Unable to check ip address
-		if (targetPlayer.isOfflineShop() || attackerPlayer.isOfflineShop())
-		{
+		if (targetPlayer.isOfflineShop() || attackerPlayer.isOfflineShop()) {
 			return false;
 		}
-		
+
 		// Same HWID
-		if (L2JModsConfig.L2JMOD_ANTIFEED_USE_HWID && attackerPlayer.hasSameHWID(targetPlayer))
-		{
+		if (L2JModsConfig.L2JMOD_ANTIFEED_USE_HWID && attackerPlayer.hasSameHWID(targetPlayer)) {
 			return false;
 		}
-		
+
 		// Same IP Address
-		if (L2JModsConfig.L2JMOD_ANTIFEED_USE_IP && attackerPlayer.hasSameIP(targetPlayer))
-		{
+		if (L2JModsConfig.L2JMOD_ANTIFEED_USE_IP && attackerPlayer.hasSameIP(targetPlayer)) {
 			return false;
 		}
-		
-		if (L2JModsConfig.L2JMOD_ANTIFEED_INTERVAL > 0)
-		{
+
+		if (L2JModsConfig.L2JMOD_ANTIFEED_INTERVAL > 0) {
 			final long deathTimeDifference = System.currentTimeMillis() - _lastDeathTimes.getOrDefault(targetPlayer.getObjectId(), System.currentTimeMillis());
-			if (deathTimeDifference > L2JModsConfig.L2JMOD_ANTIFEED_INTERVAL)
-			{
+			if (deathTimeDifference > L2JModsConfig.L2JMOD_ANTIFEED_INTERVAL) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public static AntiFeedManager getInstance()
-	{
+
+	public static AntiFeedManager getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final AntiFeedManager INSTANCE = new AntiFeedManager();
 	}
 }

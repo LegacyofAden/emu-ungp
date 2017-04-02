@@ -24,31 +24,30 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * The Class ConditionPlayerPledgeClass.
+ *
  * @author MrPoke
  */
-public final class ConditionPlayerPledgeClass extends Condition
-{
-	
+public final class ConditionPlayerPledgeClass extends Condition {
+
 	private final int _pledgeClass;
-	
+
 	/**
 	 * Instantiates a new condition player pledge class.
+	 *
 	 * @param pledgeClass the pledge class
 	 */
-	public ConditionPlayerPledgeClass(int pledgeClass)
-	{
+	public ConditionPlayerPledgeClass(int pledgeClass) {
 		_pledgeClass = pledgeClass;
 	}
-	
+
 	/**
 	 * Test impl.
+	 *
 	 * @return true, if successful
 	 */
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item)
-	{
-		if ((effector.getActingPlayer() == null) || (effector.getActingPlayer().getClan() == null))
-		{
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+		if ((effector.getActingPlayer() == null) || (effector.getActingPlayer().getClan() == null)) {
 			return false;
 		}
 		return (_pledgeClass == -1) ? effector.getActingPlayer().isClanLeader() : (effector.getActingPlayer().getPledgeClass() >= _pledgeClass);

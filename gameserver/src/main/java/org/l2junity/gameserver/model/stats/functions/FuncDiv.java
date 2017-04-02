@@ -25,26 +25,20 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 
 /**
  * Returns the initial value divided the function value, if the condition are met.
+ *
  * @author Zoey76
  */
-public class FuncDiv extends AbstractFunction
-{
-	public FuncDiv(DoubleStat stat, int order, Object owner, double value, Condition applayCond)
-	{
+public class FuncDiv extends AbstractFunction {
+	public FuncDiv(DoubleStat stat, int order, Object owner, double value, Condition applayCond) {
 		super(stat, order, owner, value, applayCond);
 	}
-	
+
 	@Override
-	public double calc(Creature effector, Creature effected, Skill skill, double initVal)
-	{
-		if ((getApplayCond() == null) || getApplayCond().test(effector, effected, skill))
-		{
-			try
-			{
+	public double calc(Creature effector, Creature effected, Skill skill, double initVal) {
+		if ((getApplayCond() == null) || getApplayCond().test(effector, effected, skill)) {
+			try {
 				return initVal / getValue();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOG.warn(FuncDiv.class.getSimpleName() + ": Division by zero: " + getValue() + "!");
 			}
 		}

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum SayuneType
-{
+public enum SayuneType {
 	START_LOC,
 	MULTI_WAY_LOC,
 	ONE_WAY_LOC

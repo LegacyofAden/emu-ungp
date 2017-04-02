@@ -25,17 +25,14 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestAllAgitInfo implements IClientIncomingPacket
-{
+public class RequestAllAgitInfo implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		client.sendPacket(ExShowAgitInfo.STATIC_PACKET);
 	}
 }

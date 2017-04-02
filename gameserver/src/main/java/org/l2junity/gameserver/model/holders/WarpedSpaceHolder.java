@@ -23,24 +23,20 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Sdw
  */
-public class WarpedSpaceHolder
-{
+public class WarpedSpaceHolder {
 	private final Creature _creature;
 	private final int _range;
-	
-	public WarpedSpaceHolder(Creature creature, int range)
-	{
+
+	public WarpedSpaceHolder(Creature creature, int range) {
 		_creature = creature;
 		_range = range;
 	}
-	
-	public Creature getCreature()
-	{
+
+	public Creature getCreature() {
 		return _creature;
 	}
-	
-	public int getRange()
-	{
+
+	public int getRange() {
 		return _range;
 	}
 }

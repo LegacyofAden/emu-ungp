@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
@@ -31,8 +31,7 @@ import org.l2junity.gameserver.network.client.send.StopMoveInVehicle;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
 
-public final class RequestMoveToLocationInVehicle implements IClientIncomingPacket
-{
+public final class RequestMoveToLocationInVehicle implements IClientIncomingPacket {
 	private int _boatId;
 	private int _targetX;
 	private int _targetY;
@@ -40,10 +39,9 @@ public final class RequestMoveToLocationInVehicle implements IClientIncomingPack
 	private int _originX;
 	private int _originY;
 	private int _originZ;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_boatId = packet.readD(); // objectId of boat
 		_targetX = packet.readD();
 		_targetY = packet.readD();
@@ -53,76 +51,63 @@ public final class RequestMoveToLocationInVehicle implements IClientIncomingPack
 		_originZ = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM() && (activeChar.getNotMoveUntil() > System.currentTimeMillis()))
-		{
+
+		if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM() && (activeChar.getNotMoveUntil() > System.currentTimeMillis())) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_MOVE_WHILE_SPEAKING_TO_AN_NPC_ONE_MOMENT_PLEASE);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ))
-		{
+
+		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ)) {
 			client.sendPacket(new StopMoveInVehicle(activeChar, _boatId));
 			return;
 		}
-		
-		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW))
-		{
+
+		if (activeChar.isAttackingNow() && (activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getItemType() == WeaponType.BOW)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.isSitting() || activeChar.isMovementDisabled())
-		{
+
+		if (activeChar.isSitting() || activeChar.isMovementDisabled()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.hasSummon())
-		{
+
+		if (activeChar.hasSummon()) {
 			client.sendPacket(SystemMessageId.YOU_SHOULD_RELEASE_YOUR_PET_OR_SERVITOR_SO_THAT_IT_DOES_NOT_FALL_OFF_OF_THE_BOAT_AND_DROWN);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.isTransformed())
-		{
+
+		if (activeChar.isTransformed()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_POLYMORPH_WHILE_RIDING_A_BOAT);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		final L2BoatInstance boat;
-		if (activeChar.isInBoat())
-		{
+		if (activeChar.isInBoat()) {
 			boat = activeChar.getBoat();
-			if (boat.getObjectId() != _boatId)
-			{
+			if (boat.getObjectId() != _boatId) {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-		}
-		else
-		{
+		} else {
 			boat = BoatManager.getInstance().getBoat(_boatId);
-			if ((boat == null) || !boat.isInRadius3d(activeChar, 300))
-			{
+			if ((boat == null) || !boat.isInRadius3d(activeChar, 300)) {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
 			activeChar.setVehicle(boat);
 		}
-		
+
 		final Location pos = new Location(_targetX, _targetY, _targetZ);
 		final Location originPos = new Location(_originX, _originY, _originZ);
 		activeChar.setInVehiclePosition(pos);

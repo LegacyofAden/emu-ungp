@@ -27,30 +27,26 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Task dedicated to verify client's game guard.
+ *
  * @author UnAfraid
  */
-public class GameGuardCheckTask implements Runnable
-{
+public class GameGuardCheckTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger(GameGuardCheckTask.class);
-	
+
 	private final PlayerInstance _player;
-	
-	public GameGuardCheckTask(PlayerInstance player)
-	{
+
+	public GameGuardCheckTask(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if ((_player != null))
-		{
+	public void run() {
+		if ((_player != null)) {
 			L2GameClient client = _player.getClient();
-			if ((client != null) && !client.isAuthedGG() && _player.isOnline())
-			{
+			if ((client != null) && !client.isAuthedGG() && _player.isOnline()) {
 				AdminData.getInstance().broadcastMessageToGMs("Client " + client + " failed to reply GameGuard query and is being kicked!");
 				_log.info("Client " + client + " failed to reply GameGuard query and is being kicked!");
-				
+
 				client.close(LeaveWorld.STATIC_PACKET);
 			}
 		}

@@ -18,34 +18,31 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Map.Entry;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.loader.LoadGroup;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.variables.AbstractVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.sql.*;
+import java.util.Map.Entry;
 
 /**
  * Global Variables Manager.
+ *
  * @author xban1x
  */
-public final class GlobalVariablesManager extends AbstractVariables
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalVariablesManager.class);
-	
+@Slf4j
+@StartupComponent("Service")
+public final class GlobalVariablesManager extends AbstractVariables {
+	@Getter(lazy = true)
+	private static final GlobalVariablesManager instance = new GlobalVariablesManager();
+
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM global_variables";
 	private static final String DELETE_QUERY = "DELETE FROM global_variables";
 	private static final String INSERT_QUERY = "INSERT INTO global_variables (var, value) VALUES (?, ?)";
-	
+
 	// Variables
 	public static final String RECORD_ONLINE_PLAYERS_VAR = "RecordOnlinePlayers";
 	public static final String VENOM_STATUS_VAR = "VenomStatus";
@@ -58,109 +55,69 @@ public final class GlobalVariablesManager extends AbstractVariables
 	public static final String SEED_BUFFS_LIST_VAR = "SeedBuffsList";
 	public static final String SAILREN_RESPAWN_VAR = "SailrenRespawn";
 	public static final String QUEEN_SHYEED_RESPAWN_VAR = "QueenShyeedRespawn";
-	
-	protected GlobalVariablesManager()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
+
+	protected GlobalVariablesManager() {
 		restoreMe();
 	}
-	
+
 	@Override
-	public boolean restoreMe()
-	{
+	public boolean restoreMe() {
 		// Restore previous variables.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement st = con.createStatement();
-			ResultSet rset = st.executeQuery(SELECT_QUERY))
-		{
-			while (rset.next())
-			{
+			 Statement st = con.createStatement();
+			 ResultSet rset = st.executeQuery(SELECT_QUERY)) {
+			while (rset.next()) {
 				set(rset.getString("var"), rset.getString("value"));
 			}
-		}
-		catch (SQLException e)
-		{
-			LOGGER.warn("Couldn't restore global variables", e);
+		} catch (SQLException e) {
+			log.warn("Couldn't restore global variables", e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
-		LOGGER.info("Loaded {} variables.", getSet().size());
+		log.info("Loaded {} variables.", getSet().size());
 		return true;
 	}
-	
+
 	@Override
-	public boolean storeMe()
-	{
+	public boolean storeMe() {
 		// No changes, nothing to store.
-		if (!hasChanges())
-		{
+		if (!hasChanges()) {
 			return false;
 		}
-		
+
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement del = con.createStatement();
-			PreparedStatement st = con.prepareStatement(INSERT_QUERY))
-		{
+			 Statement del = con.createStatement();
+			 PreparedStatement st = con.prepareStatement(INSERT_QUERY)) {
 			// Clear previous entries.
 			del.execute(DELETE_QUERY);
-			
+
 			// Insert all variables.
-			for (Entry<String, Object> entry : getSet().entrySet())
-			{
+			for (Entry<String, Object> entry : getSet().entrySet()) {
 				st.setString(1, entry.getKey());
 				st.setString(2, String.valueOf(entry.getValue()));
 				st.addBatch();
 			}
 			st.executeBatch();
-		}
-		catch (SQLException e)
-		{
-			LOGGER.warn("Couldn't save global variables to database.", e);
+		} catch (SQLException e) {
+			log.warn("Couldn't save global variables to database.", e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
-		LOGGER.info("Stored {} variables.", getSet().size());
+		log.info("Stored {} variables.", getSet().size());
 		return true;
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
+	public boolean deleteMe() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement del = con.createStatement())
-		{
+			 Statement del = con.createStatement()) {
 			del.execute(DELETE_QUERY);
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Couldn't delete global variables to database.", e);
+		} catch (Exception e) {
+			log.warn("Couldn't delete global variables to database.", e);
 			return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * Gets the single instance of {@code GlobalVariablesManager}.
-	 * @return single instance of {@code GlobalVariablesManager}
-	 */
-	@InstanceGetter
-	public static GlobalVariablesManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final GlobalVariablesManager INSTANCE = new GlobalVariablesManager();
 	}
 }

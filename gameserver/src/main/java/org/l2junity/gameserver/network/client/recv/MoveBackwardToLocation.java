@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.Arrays;
-
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.config.PlayerConfig;
 import org.l2junity.gameserver.enums.AdminTeleportType;
 import org.l2junity.gameserver.enums.SayuneType;
 import org.l2junity.gameserver.model.Location;
@@ -31,24 +29,22 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMoveRequest;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.FlyToLocation;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.FlyToLocation.FlyType;
-import org.l2junity.gameserver.network.client.send.MagicSkillLaunched;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.StopMove;
 import org.l2junity.gameserver.network.client.send.sayune.ExFlyMove;
 import org.l2junity.gameserver.network.client.send.sayune.ExFlyMoveBroadcast;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.network.PacketReader;
 
+import java.util.Arrays;
+
 /**
  * This class ...
+ *
  * @version $Revision: 1.11.2.4.2.4 $ $Date: 2005/03/27 15:29:30 $
  */
-public class MoveBackwardToLocation implements IClientIncomingPacket
-{
+public class MoveBackwardToLocation implements IClientIncomingPacket {
 	// cdddddd
 	private int _targetX;
 	private int _targetY;
@@ -58,16 +54,15 @@ public class MoveBackwardToLocation implements IClientIncomingPacket
 	private int _originZ;
 	@SuppressWarnings("unused")
 	private int _moveMovement;
-	
+
 	// For geodata
 	private int _curX;
 	private int _curY;
 	@SuppressWarnings("unused")
 	private int _curZ;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_targetX = packet.readD();
 		_targetY = packet.readD();
 		_targetZ = packet.readD();
@@ -77,40 +72,34 @@ public class MoveBackwardToLocation implements IClientIncomingPacket
 		_moveMovement = packet.readD(); // is 0 if cursor keys are used 1 if mouse is used
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isInTraingCamp())
-		{
+
+		if (activeChar.isInTraingCamp()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (activeChar.isSpawnProtected())
-		{
+
+		if (activeChar.isSpawnProtected()) {
 			activeChar.onActionRequest();
 		}
-		
-		if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM() && (activeChar.getNotMoveUntil() > System.currentTimeMillis()))
-		{
+
+		if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM() && (activeChar.getNotMoveUntil() > System.currentTimeMillis())) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_MOVE_WHILE_SPEAKING_TO_AN_NPC_ONE_MOMENT_PLEASE);
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ))
-		{
+
+		if ((_targetX == _originX) && (_targetY == _originY) && (_targetZ == _originZ)) {
 			activeChar.sendPacket(new StopMove(activeChar));
 			return;
 		}
-		
+
 		// Correcting targetZ from floor level to head level (?)
 		// Client is giving floor level as targetZ but that floor level doesn't
 		// match our current geodata and teleport coords as good as head level!
@@ -118,37 +107,32 @@ public class MoveBackwardToLocation implements IClientIncomingPacket
 		// sort of incompatibility fix.
 		// Validate position packets sends head level.
 		_targetZ += activeChar.getTemplate().getCollisionHeight();
-		
+
 		final TerminateReturn terminate = EventDispatcher.getInstance().notifyEvent(new OnPlayerMoveRequest(activeChar, new Location(_targetX, _targetY, _targetZ)), activeChar, TerminateReturn.class);
-		if ((terminate != null) && terminate.terminate())
-		{
+		if ((terminate != null) && terminate.terminate()) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		_curX = (int) activeChar.getX();
 		_curY = (int) activeChar.getY();
 		_curZ = (int) activeChar.getZ();
-		
-		switch (activeChar.getTeleMode())
-		{
-			case DEMONIC:
-			{
+
+		switch (activeChar.getTeleMode()) {
+			case DEMONIC: {
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				activeChar.teleToLocation(new Location(_targetX, _targetY, _targetZ));
 				activeChar.setTeleMode(AdminTeleportType.NORMAL);
 				break;
 			}
-			case SAYUNE:
-			{
+			case SAYUNE: {
 				activeChar.sendPacket(new ExFlyMove(activeChar, SayuneType.ONE_WAY_LOC, -1, Arrays.asList(new SayuneEntry(false, -1, _targetX, _targetY, _targetZ))));
 				activeChar.setXYZ(_targetX, _targetY, _targetZ);
 				Broadcast.toKnownPlayers(activeChar, new ExFlyMoveBroadcast(activeChar, SayuneType.ONE_WAY_LOC, -1, new Location(_targetX, _targetY, _targetZ)));
 				activeChar.setTeleMode(AdminTeleportType.NORMAL);
 				break;
 			}
-			case CHARGE:
-			{
+			case CHARGE: {
 				activeChar.setXYZ(_targetX, _targetY, _targetZ);
 				Broadcast.toSelfAndKnownPlayers(activeChar, new MagicSkillUse(activeChar, 30012, 10, 500, 0));
 				Broadcast.toSelfAndKnownPlayers(activeChar, new FlyToLocation(activeChar, _targetX, _targetY, _targetZ, FlyType.CHARGE));
@@ -156,8 +140,7 @@ public class MoveBackwardToLocation implements IClientIncomingPacket
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				break;
 			}
-			default:
-			{
+			default: {
 				double dx = _targetX - _curX;
 				double dy = _targetY - _curY;
 				// Can't move if character is confused, or trying to move a huge distance

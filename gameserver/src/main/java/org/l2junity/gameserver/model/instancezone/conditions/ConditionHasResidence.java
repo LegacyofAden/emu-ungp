@@ -27,29 +27,25 @@ import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 
 /**
  * Instance residence condition
+ *
  * @author malyelfik
  */
-public final class ConditionHasResidence extends Condition
-{
-	public ConditionHasResidence(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionHasResidence extends Condition {
+	public ConditionHasResidence(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 	}
-	
+
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc)
-	{
+	protected boolean test(PlayerInstance player, Npc npc) {
 		final L2Clan clan = player.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return false;
 		}
-		
+
 		final StatsSet params = getParameters();
 		final int id = params.getInt("id");
 		boolean test = false;
-		switch (params.getEnum("type", ResidenceType.class))
-		{
+		switch (params.getEnum("type", ResidenceType.class)) {
 			case CASTLE:
 				test = clan.getCastleId() == id;
 				break;

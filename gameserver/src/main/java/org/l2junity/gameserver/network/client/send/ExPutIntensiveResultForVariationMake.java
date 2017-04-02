@@ -21,28 +21,25 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExPutIntensiveResultForVariationMake implements IClientOutgoingPacket
-{
+public class ExPutIntensiveResultForVariationMake implements IClientOutgoingPacket {
 	private final int _refinerItemObjId;
 	private final int _lifestoneItemId;
 	private final int _gemstoneItemId;
 	private final long _gemstoneCount;
 	private final int _unk2;
-	
-	public ExPutIntensiveResultForVariationMake(int refinerItemObjId, int lifeStoneId, int gemstoneItemId, long gemstoneCount)
-	{
+
+	public ExPutIntensiveResultForVariationMake(int refinerItemObjId, int lifeStoneId, int gemstoneItemId, long gemstoneCount) {
 		_refinerItemObjId = refinerItemObjId;
 		_lifestoneItemId = lifeStoneId;
 		_gemstoneItemId = gemstoneItemId;
 		_gemstoneCount = gemstoneCount;
 		_unk2 = 1;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PUT_INTENSIVE_RESULT_FOR_VARIATION_MAKE.writeId(packet);
-		
+
 		packet.writeD(_refinerItemObjId);
 		packet.writeD(_lifestoneItemId);
 		packet.writeD(_gemstoneItemId);

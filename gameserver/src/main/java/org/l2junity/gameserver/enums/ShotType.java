@@ -21,22 +21,19 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum ShotType
-{
+public enum ShotType {
 	SOULSHOTS,
 	SPIRITSHOTS,
 	BLESSED_SPIRITSHOTS,
 	FISH_SOULSHOTS;
-	
+
 	private final int _mask;
-	
-	private ShotType()
-	{
+
+	private ShotType() {
 		_mask = (1 << ordinal());
 	}
-	
-	public int getMask()
-	{
+
+	public int getMask() {
 		return _mask;
 	}
 }

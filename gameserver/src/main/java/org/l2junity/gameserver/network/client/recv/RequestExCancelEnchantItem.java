@@ -27,23 +27,19 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class RequestExCancelEnchantItem implements IClientIncomingPacket
-{
+public class RequestExCancelEnchantItem implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new EnchantResult(2, 0, 0));
 		activeChar.removeRequest(EnchantItemRequest.class);
 	}

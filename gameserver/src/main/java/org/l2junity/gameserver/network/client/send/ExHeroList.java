@@ -18,34 +18,30 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+
 /**
  * @author -Wooden-, KenM, godson
  */
-public class ExHeroList implements IClientOutgoingPacket
-{
+public class ExHeroList implements IClientOutgoingPacket {
 	private final Map<Integer, StatsSet> _heroList;
-	
-	public ExHeroList()
-	{
+
+	public ExHeroList() {
 		_heroList = Hero.getInstance().getHeroes();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_HERO_LIST.writeId(packet);
-		
+
 		packet.writeD(_heroList.size());
-		for (Integer heroId : _heroList.keySet())
-		{
+		for (Integer heroId : _heroList.keySet()) {
 			StatsSet hero = _heroList.get(heroId);
 			packet.writeS(hero.getString(Olympiad.CHAR_NAME));
 			packet.writeD(hero.getInt(Olympiad.CLASS_ID));

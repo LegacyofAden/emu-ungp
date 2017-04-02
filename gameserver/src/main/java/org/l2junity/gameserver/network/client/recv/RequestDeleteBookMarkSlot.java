@@ -26,26 +26,22 @@ import org.l2junity.network.PacketReader;
  * @author ShanSoft
  * @structure: chdd
  */
-public final class RequestDeleteBookMarkSlot implements IClientIncomingPacket
-{
+public final class RequestDeleteBookMarkSlot implements IClientIncomingPacket {
 	private int _id;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_id = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		activeChar.teleportBookmarkDelete(_id);
 	}
 }

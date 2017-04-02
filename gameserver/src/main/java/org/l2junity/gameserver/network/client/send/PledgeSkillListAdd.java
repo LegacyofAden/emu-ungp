@@ -24,22 +24,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class PledgeSkillListAdd implements IClientOutgoingPacket
-{
+public class PledgeSkillListAdd implements IClientOutgoingPacket {
 	private final int _id;
 	private final int _lvl;
-	
-	public PledgeSkillListAdd(int id, int lvl)
-	{
+
+	public PledgeSkillListAdd(int id, int lvl) {
 		_id = id;
 		_lvl = lvl;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_SKILL_LIST_ADD.writeId(packet);
-		
+
 		packet.writeD(_id);
 		packet.writeD(_lvl);
 		return true;

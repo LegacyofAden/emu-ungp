@@ -28,26 +28,21 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik, UnAfraid
  */
-public final class RequestBRProductList implements IClientIncomingPacket
-{
+public final class RequestBRProductList implements IClientIncomingPacket {
 	private int _type;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_type = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
-			
-			switch (_type)
-			{
+		if (player != null) {
+
+			switch (_type) {
 				case 0: // Home page
 				{
 					player.sendPacket(new ExBRProductList(player, 0, PrimeShopData.getInstance().getPrimeItems().values()));
@@ -61,8 +56,7 @@ public final class RequestBRProductList implements IClientIncomingPacket
 				{
 					break;
 				}
-				default:
-				{
+				default: {
 					_log.warn(player + " send unhandled product list type: " + _type);
 					break;
 				}

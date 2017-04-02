@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.l2junity.gameserver.ai.ShuttleAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
@@ -32,63 +29,54 @@ import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleGetOff;
 import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleGetOn;
 import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleInfo;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author UnAfraid
  */
-public class L2ShuttleInstance extends Vehicle
-{
+public class L2ShuttleInstance extends Vehicle {
 	private L2ShuttleData _shuttleData;
-	
-	public L2ShuttleInstance(L2CharTemplate template)
-	{
+
+	public L2ShuttleInstance(L2CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ShuttleInstance);
 		setAI(new ShuttleAI(this));
 	}
-	
-	public List<L2ShuttleStop> getStops()
-	{
+
+	public List<L2ShuttleStop> getStops() {
 		return _shuttleData.getStops();
 	}
-	
-	public void closeDoor(int id)
-	{
-		for (L2ShuttleStop stop : getStops())
-		{
-			if (stop.getId() == id)
-			{
+
+	public void closeDoor(int id) {
+		for (L2ShuttleStop stop : getStops()) {
+			if (stop.getId() == id) {
 				stop.closeDoor();
 				break;
 			}
 		}
 	}
-	
-	public void openDoor(int id)
-	{
-		for (L2ShuttleStop stop : getStops())
-		{
-			if (stop.getId() == id)
-			{
+
+	public void openDoor(int id) {
+		for (L2ShuttleStop stop : getStops()) {
+			if (stop.getId() == id) {
 				stop.openDoor();
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _shuttleData.getId();
 	}
-	
+
 	@Override
-	public boolean addPassenger(PlayerInstance player)
-	{
-		if (!super.addPassenger(player))
-		{
+	public boolean addPassenger(PlayerInstance player) {
+		if (!super.addPassenger(player)) {
 			return false;
 		}
-		
+
 		player.setVehicle(this);
 		player.setInVehiclePosition(new Location(0, 0, 0));
 		player.broadcastPacket(new ExShuttleGetOn(player, this));
@@ -96,58 +84,47 @@ public class L2ShuttleInstance extends Vehicle
 		player.revalidateZone(true);
 		return true;
 	}
-	
-	public void removePassenger(PlayerInstance player, int x, int y, int z)
-	{
+
+	public void removePassenger(PlayerInstance player, int x, int y, int z) {
 		oustPlayer(player);
-		if (player.isOnline())
-		{
+		if (player.isOnline()) {
 			player.broadcastPacket(new ExShuttleGetOff(player, this, x, y, z));
 			player.setXYZ(x, y, z);
 			player.revalidateZone(true);
-		}
-		else
-		{
+		} else {
 			player.setXYZInvisible(x, y, z);
 		}
 	}
-	
+
 	@Override
-	public void oustPlayers()
-	{
+	public void oustPlayers() {
 		PlayerInstance player;
-		
+
 		// Use iterator because oustPlayer will try to remove player from _passengers
 		final Iterator<PlayerInstance> iter = _passengers.iterator();
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			player = iter.next();
 			iter.remove();
-			if (player != null)
-			{
+			if (player != null) {
 				oustPlayer(player);
 			}
 		}
 	}
-	
+
 	@Override
-	public void sendInfo(PlayerInstance activeChar)
-	{
+	public void sendInfo(PlayerInstance activeChar) {
 		activeChar.sendPacket(new ExShuttleInfo(this));
 	}
-	
-	public void broadcastShuttleInfo()
-	{
+
+	public void broadcastShuttleInfo() {
 		broadcastPacket(new ExShuttleInfo(this));
 	}
-	
-	public void setData(L2ShuttleData data)
-	{
+
+	public void setData(L2ShuttleData data) {
 		_shuttleData = data;
 	}
-	
-	public L2ShuttleData getShuttleData()
-	{
+
+	public L2ShuttleData getShuttleData() {
 		return _shuttleData;
 	}
 }

@@ -28,44 +28,35 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: (ch) S
+ *
  * @author -Wooden-, Tryskell
  */
-public class RequestAskJoinPartyRoom implements IClientIncomingPacket
-{
+public class RequestAskJoinPartyRoom implements IClientIncomingPacket {
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		// Send PartyRoom invite request (with activeChar) name to the target
 		final PlayerInstance target = World.getInstance().getPlayer(_name);
-		if (target != null)
-		{
-			if (!target.isProcessingRequest())
-			{
+		if (target != null) {
+			if (!target.isProcessingRequest()) {
 				player.onTransactionRequest(target);
 				target.sendPacket(new ExAskJoinPartyRoom(player));
-			}
-			else
-			{
+			} else {
 				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ON_ANOTHER_TASK_PLEASE_TRY_AGAIN_LATER).addPcName(target));
 			}
-		}
-		else
-		{
+		} else {
 			player.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 		}
 	}

@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExAdenaInvenCount implements IClientOutgoingPacket
-{
+public class ExAdenaInvenCount implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public ExAdenaInvenCount(PlayerInstance cha)
-	{
+
+	public ExAdenaInvenCount(PlayerInstance cha) {
 		_activeChar = cha;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ADENA_INVEN_COUNT.writeId(packet);
-		
+
 		packet.writeQ(_activeChar.getAdena());
 		packet.writeH(_activeChar.getInventory().getSize());
 		return true;

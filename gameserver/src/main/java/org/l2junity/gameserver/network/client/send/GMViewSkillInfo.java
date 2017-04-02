@@ -19,36 +19,32 @@
 
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class GMViewSkillInfo implements IClientOutgoingPacket
-{
+import java.util.Collection;
+
+public class GMViewSkillInfo implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final Collection<Skill> _skills;
-	
-	public GMViewSkillInfo(PlayerInstance cha)
-	{
+
+	public GMViewSkillInfo(PlayerInstance cha) {
 		_activeChar = cha;
 		_skills = _activeChar.getSkillList();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.GM_VIEW_SKILL_INFO.writeId(packet);
-		
+
 		packet.writeS(_activeChar.getName());
 		packet.writeD(_skills.size());
-		
+
 		boolean isDisabled = (_activeChar.getClan() != null) && (_activeChar.getClan().getReputationScore() < 0);
-		
-		for (Skill skill : _skills)
-		{
+
+		for (Skill skill : _skills) {
 			packet.writeD(skill.isPassive() ? 1 : 0);
 			packet.writeH(skill.getDisplayLevel());
 			packet.writeH(skill.getSubLevel());

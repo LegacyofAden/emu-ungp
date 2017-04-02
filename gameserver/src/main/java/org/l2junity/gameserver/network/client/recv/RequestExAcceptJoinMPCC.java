@@ -27,54 +27,45 @@ import org.l2junity.network.PacketReader;
 
 /**
  * format: (ch) d
+ *
  * @author -Wooden-
  */
-public final class RequestExAcceptJoinMPCC implements IClientIncomingPacket
-{
+public final class RequestExAcceptJoinMPCC implements IClientIncomingPacket {
 	private int _response;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_response = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			PlayerInstance requestor = player.getActiveRequester();
 			SystemMessage sm;
-			if (requestor == null)
-			{
+			if (requestor == null) {
 				return;
 			}
-			
-			if (_response == 1)
-			{
+
+			if (_response == 1) {
 				boolean newCc = false;
-				if (!requestor.getParty().isInCommandChannel())
-				{
+				if (!requestor.getParty().isInCommandChannel()) {
 					new CommandChannel(requestor); // Create new CC
 					sm = SystemMessage.getSystemMessage(SystemMessageId.THE_COMMAND_CHANNEL_HAS_BEEN_FORMED);
 					requestor.sendPacket(sm);
 					newCc = true;
 				}
 				requestor.getParty().getCommandChannel().addParty(player.getParty());
-				if (!newCc)
-				{
+				if (!newCc) {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_JOINED_THE_COMMAND_CHANNEL);
 					player.sendPacket(sm);
 				}
-			}
-			else
-			{
+			} else {
 				requestor.sendMessage("The player declined to join your Command Channel.");
 			}
-			
+
 			player.setActiveRequester(null);
 			requestor.onTransactionResponse();
 		}

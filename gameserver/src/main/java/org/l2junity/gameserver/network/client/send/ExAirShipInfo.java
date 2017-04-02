@@ -22,14 +22,12 @@ import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExAirShipInfo implements IClientOutgoingPacket
-{
+public class ExAirShipInfo implements IClientOutgoingPacket {
 	// store some parameters, because they can be changed during broadcast
 	private final L2AirShipInstance _ship;
 	private final int _x, _y, _z, _heading, _moveSpeed, _rotationSpeed, _captain, _helm;
-	
-	public ExAirShipInfo(L2AirShipInstance ship)
-	{
+
+	public ExAirShipInfo(L2AirShipInstance ship) {
 		_ship = ship;
 		_x = (int) ship.getX();
 		_y = (int) ship.getY();
@@ -40,24 +38,22 @@ public class ExAirShipInfo implements IClientOutgoingPacket
 		_captain = ship.getCaptainId();
 		_helm = ship.getHelmObjectId();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_AIR_SHIP_INFO.writeId(packet);
-		
+
 		packet.writeD(_ship.getObjectId());
 		packet.writeD(_x);
 		packet.writeD(_y);
 		packet.writeD(_z);
 		packet.writeD(_heading);
-		
+
 		packet.writeD(_captain);
 		packet.writeD(_moveSpeed);
 		packet.writeD(_rotationSpeed);
 		packet.writeD(_helm);
-		if (_helm != 0)
-		{
+		if (_helm != 0) {
 			// TODO: unhardcode these!
 			packet.writeD(0x16e); // Controller X
 			packet.writeD(0x00); // Controller Y
@@ -65,9 +61,7 @@ public class ExAirShipInfo implements IClientOutgoingPacket
 			packet.writeD(0x15c); // Captain X
 			packet.writeD(0x00); // Captain Y
 			packet.writeD(0x69); // Captain Z
-		}
-		else
-		{
+		} else {
 			packet.writeD(0x00);
 			packet.writeD(0x00);
 			packet.writeD(0x00);
@@ -75,7 +69,7 @@ public class ExAirShipInfo implements IClientOutgoingPacket
 			packet.writeD(0x00);
 			packet.writeD(0x00);
 		}
-		
+
 		packet.writeD(_ship.getFuel());
 		packet.writeD(_ship.getMaxFuel());
 		return true;

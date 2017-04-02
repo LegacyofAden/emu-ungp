@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class PledgeReceivePowerInfo implements IClientOutgoingPacket
-{
+public class PledgeReceivePowerInfo implements IClientOutgoingPacket {
 	private final ClanMember _member;
-	
-	public PledgeReceivePowerInfo(ClanMember member)
-	{
+
+	public PledgeReceivePowerInfo(ClanMember member) {
 		_member = member;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_RECEIVE_POWER_INFO.writeId(packet);
-		
+
 		packet.writeD(_member.getPowerGrade()); // power grade
 		packet.writeS(_member.getName());
 		packet.writeD(_member.getClan().getRankPrivs(_member.getPowerGrade()).getBitmask()); // privileges

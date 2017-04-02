@@ -24,29 +24,25 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Task dedicated to make damage to the player while drowning.
+ *
  * @author UnAfraid
  */
-public class WaterTask implements Runnable
-{
+public class WaterTask implements Runnable {
 	private final PlayerInstance _player;
-	
-	public WaterTask(PlayerInstance player)
-	{
+
+	public WaterTask(PlayerInstance player) {
 		_player = player;
 	}
-	
+
 	@Override
-	public void run()
-	{
-		if (_player != null)
-		{
+	public void run() {
+		if (_player != null) {
 			double reduceHp = _player.getMaxHp() / 100.0;
-			
-			if (reduceHp < 1)
-			{
+
+			if (reduceHp < 1) {
 				reduceHp = 1;
 			}
-			
+
 			_player.reduceCurrentHp(reduceHp, _player, null, false, true, false, false);
 			// reduced hp, becouse not rest
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_TAKEN_S1_DAMAGE_BECAUSE_YOU_WERE_UNABLE_TO_BREATHE);

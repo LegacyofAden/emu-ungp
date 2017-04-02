@@ -26,10 +26,8 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik, UnAfraid
  */
-public class ExBRBuyProduct implements IClientOutgoingPacket
-{
-	public enum ExBrProductReplyType implements IIdentifiable
-	{
+public class ExBRBuyProduct implements IClientOutgoingPacket {
+	public enum ExBrProductReplyType implements IIdentifiable {
 		SUCCESS(1),
 		LACK_OF_POINT(-1),
 		INVALID_PRODUCT(-2),
@@ -46,31 +44,27 @@ public class ExBRBuyProduct implements IClientOutgoingPacket
 		NOT_TIME_OF_DAY(-13),
 		SOLD_OUT(-14);
 		private final int _id;
-		
-		ExBrProductReplyType(int id)
-		{
+
+		ExBrProductReplyType(int id) {
 			_id = id;
 		}
-		
+
 		@Override
-		public int getId()
-		{
+		public int getId() {
 			return _id;
 		}
 	}
-	
+
 	private final int _reply;
-	
-	public ExBRBuyProduct(final ExBrProductReplyType type)
-	{
+
+	public ExBRBuyProduct(final ExBrProductReplyType type) {
 		_reply = type.getId();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_BR_BUY_PRODUCT.writeId(packet);
-		
+
 		packet.writeD(_reply);
 		return true;
 	}

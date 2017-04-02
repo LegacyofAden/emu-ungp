@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.cubic.CubicInstance;
 /**
  * @author UnAfraid
  */
-public interface ICubicCondition
-{
+public interface ICubicCondition {
 	public boolean test(CubicInstance cubic, Creature owner, Creature target);
 }

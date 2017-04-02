@@ -27,39 +27,33 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExCuriousHouseMemberUpdate implements IClientOutgoingPacket
-{
+public class ExCuriousHouseMemberUpdate implements IClientOutgoingPacket {
 	public final int _objId;
 	public final int _maxHp;
 	public final int _maxCp;
 	public final int _currentHp;
 	public final int _currentCp;
-	
-	public ExCuriousHouseMemberUpdate(CeremonyOfChaosMember member)
-	{
+
+	public ExCuriousHouseMemberUpdate(CeremonyOfChaosMember member) {
 		_objId = member.getObjectId();
 		final PlayerInstance player = member.getPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			_maxHp = player.getMaxHp();
 			_maxCp = player.getMaxCp();
 			_currentHp = (int) player.getCurrentHp();
 			_currentCp = (int) player.getCurrentCp();
-		}
-		else
-		{
+		} else {
 			_maxHp = 0;
 			_maxCp = 0;
 			_currentHp = 0;
 			_currentCp = 0;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CURIOUS_HOUSE_MEMBER_UPDATE.writeId(packet);
-		
+
 		packet.writeD(_objId);
 		packet.writeD(_maxHp);
 		packet.writeD(_maxCp);

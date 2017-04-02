@@ -22,31 +22,26 @@ import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExAirShipTeleportList implements IClientOutgoingPacket
-{
+public class ExAirShipTeleportList implements IClientOutgoingPacket {
 	private final int _dockId;
 	private final VehiclePathPoint[][] _teleports;
 	private final int[] _fuelConsumption;
-	
-	public ExAirShipTeleportList(int dockId, VehiclePathPoint[][] teleports, int[] fuelConsumption)
-	{
+
+	public ExAirShipTeleportList(int dockId, VehiclePathPoint[][] teleports, int[] fuelConsumption) {
 		_dockId = dockId;
 		_teleports = teleports;
 		_fuelConsumption = fuelConsumption;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_AIR_SHIP_TELEPORT_LIST.writeId(packet);
-		
+
 		packet.writeD(_dockId);
-		if (_teleports != null)
-		{
+		if (_teleports != null) {
 			packet.writeD(_teleports.length);
-			
-			for (int i = 0; i < _teleports.length; i++)
-			{
+
+			for (int i = 0; i < _teleports.length; i++) {
 				packet.writeD(i - 1);
 				packet.writeD(_fuelConsumption[i]);
 				final VehiclePathPoint[] path = _teleports[i];
@@ -55,9 +50,7 @@ public class ExAirShipTeleportList implements IClientOutgoingPacket
 				packet.writeD((int) dst.getY());
 				packet.writeD((int) dst.getZ());
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0);
 		}
 		return true;

@@ -27,96 +27,78 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 
 /**
  * another type of zone where your speed is changed
+ *
  * @author kerberos
  */
-public class SwampZone extends ZoneType
-{
+public class SwampZone extends ZoneType {
 	private double _move_bonus;
-	
+
 	private int _castleId;
 	private Castle _castle;
-	
-	public SwampZone(int id)
-	{
+
+	public SwampZone(int id) {
 		super(id);
-		
+
 		// Setup default speed reduce (in %)
 		_move_bonus = 0.5;
-		
+
 		// no castle by default
 		_castleId = 0;
 		_castle = null;
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		if (name.equals("move_bonus"))
-		{
+	public void setParameter(String name, String value) {
+		if (name.equals("move_bonus")) {
 			_move_bonus = Double.parseDouble(value);
-		}
-		else if (name.equals("castleId"))
-		{
+		} else if (name.equals("castleId")) {
 			_castleId = Integer.parseInt(value);
-		}
-		else
-		{
+		} else {
 			super.setParameter(name, value);
 		}
 	}
-	
-	private Castle getCastle()
-	{
-		if ((_castleId > 0) && (_castle == null))
-		{
+
+	private Castle getCastle() {
+		if ((_castleId > 0) && (_castle == null)) {
 			_castle = CastleManager.getInstance().getCastleById(_castleId);
 		}
-		
+
 		return _castle;
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
-		if (getCastle() != null)
-		{
+	protected void onEnter(Creature character) {
+		if (getCastle() != null) {
 			// castle zones active only during siege
-			if (!getCastle().getSiege().isInProgress() || !isEnabled())
-			{
+			if (!getCastle().getSiege().isInProgress() || !isEnabled()) {
 				return;
 			}
-			
+
 			// defenders not affected
 			final PlayerInstance player = character.getActingPlayer();
-			if ((player != null) && player.isInSiege() && (player.getSiegeState() == 2))
-			{
+			if ((player != null) && player.isInSiege() && (player.getSiegeState() == 2)) {
 				return;
 			}
 		}
-		
+
 		character.setInsideZone(ZoneId.SWAMP, true);
-		if (character.isPlayer())
-		{
+		if (character.isPlayer()) {
 			character.getActingPlayer().broadcastUserInfo();
 		}
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		// don't broadcast info if not needed
-		if (character.isInsideZone(ZoneId.SWAMP))
-		{
+		if (character.isInsideZone(ZoneId.SWAMP)) {
 			character.setInsideZone(ZoneId.SWAMP, false);
-			if (character.isPlayer())
-			{
+			if (character.isPlayer()) {
 				character.getActingPlayer().broadcastUserInfo();
 			}
 		}
 	}
-	
-	public double getMoveBonus()
-	{
+
+	public double getMoveBonus() {
 		return _move_bonus;
 	}
 }

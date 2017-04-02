@@ -18,34 +18,30 @@
  */
 package org.l2junity.gameserver.taskmanager;
 
-import java.util.concurrent.ScheduledFuture;
-
 import org.l2junity.gameserver.taskmanager.TaskManager.ExecutedTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ScheduledFuture;
+
 /**
  * @author Layane
  */
-public abstract class Task
-{
+public abstract class Task {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	
-	public void initializate()
-	{
+
+	public void initializate() {
 	}
-	
-	public ScheduledFuture<?> launchSpecial(ExecutedTask instance)
-	{
+
+	public ScheduledFuture<?> launchSpecial(ExecutedTask instance) {
 		return null;
 	}
-	
+
 	public abstract String getName();
-	
+
 	public abstract void onTimeElapsed(ExecutedTask task);
-	
-	public void onDestroy()
-	{
-		
+
+	public void onDestroy() {
+
 	}
 }

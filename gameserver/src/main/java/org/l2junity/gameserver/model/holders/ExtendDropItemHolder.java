@@ -21,34 +21,29 @@ package org.l2junity.gameserver.model.holders;
 /**
  * @author Sdw
  */
-public class ExtendDropItemHolder extends ItemHolder
-{
+public class ExtendDropItemHolder extends ItemHolder {
 	private static final long serialVersionUID = -2700972537356675373L;
 	private final long _maxCount;
 	private final double _chance;
 	private final double _additionalChance;
-	
-	public ExtendDropItemHolder(int id, long count, long maxCount, double chance, double additionalChance)
-	{
+
+	public ExtendDropItemHolder(int id, long count, long maxCount, double chance, double additionalChance) {
 		super(id, count);
-		
+
 		_maxCount = maxCount;
 		_chance = chance;
 		_additionalChance = additionalChance;
 	}
-	
-	public long getMaxCount()
-	{
+
+	public long getMaxCount() {
 		return _maxCount;
 	}
-	
-	public double getChance()
-	{
+
+	public double getChance() {
 		return _chance;
 	}
-	
-	public double getAdditionalChance()
-	{
+
+	public double getAdditionalChance() {
 		return _additionalChance;
 	}
 }

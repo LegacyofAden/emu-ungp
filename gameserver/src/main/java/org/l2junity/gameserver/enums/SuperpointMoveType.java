@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum SuperpointMoveType
-{
+public enum SuperpointMoveType {
 	MoveSuperPoint_FollowRail,
 	MoveSuperPoint_Random,
 	MoveSuperPoint_StopRail // Custom

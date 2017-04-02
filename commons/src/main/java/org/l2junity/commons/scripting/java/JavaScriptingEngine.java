@@ -18,122 +18,101 @@
  */
 package org.l2junity.commons.scripting.java;
 
+import org.l2junity.commons.scripting.AbstractScriptingEngine;
+import org.l2junity.commons.scripting.IExecutionContext;
+
+import javax.lang.model.SourceVersion;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ServiceLoader;
 
-import javax.lang.model.SourceVersion;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-
-import org.l2junity.commons.scripting.AbstractScriptingEngine;
-import org.l2junity.commons.scripting.IExecutionContext;
-
 /**
  * @author HorridoJoho
  */
-public final class JavaScriptingEngine extends AbstractScriptingEngine
-{
+public final class JavaScriptingEngine extends AbstractScriptingEngine {
 	private volatile JavaCompiler _compiler;
-	
-	public JavaScriptingEngine()
-	{
+
+	public JavaScriptingEngine() {
 		super("L2J Java Engine", "1.0", "java");
 	}
-	
-	private void determineCompilerOrThrow()
-	{
+
+	private void determineCompilerOrThrow() {
 		final String preferedCompiler = getProperty("preferedCompiler");
 		LinkedList<JavaCompiler> allCompilers = null;
-		
+
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		if (compiler != null)
-		{
-			if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler))
-			{
+		if (compiler != null) {
+			if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler)) {
 				_compiler = compiler;
 				return;
 			}
-			
+
 			allCompilers = new LinkedList<>();
 			allCompilers.add(compiler);
 		}
-		
+
 		final ServiceLoader<JavaCompiler> thirdPartyCompilers = ServiceLoader.load(JavaCompiler.class);
 		Iterator<JavaCompiler> compilersIterator = thirdPartyCompilers.iterator();
-		while (compilersIterator.hasNext())
-		{
+		while (compilersIterator.hasNext()) {
 			compiler = compilersIterator.next();
-			if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler))
-			{
+			if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler)) {
 				_compiler = compiler;
 				return;
 			}
-			
-			if (allCompilers == null)
-			{
+
+			if (allCompilers == null) {
 				allCompilers = new LinkedList<>();
 			}
 			allCompilers.add(compilersIterator.next());
 		}
-		
-		if (allCompilers != null)
-		{
+
+		if (allCompilers != null) {
 			compilersIterator = allCompilers.iterator();
-			while (compilersIterator.hasNext())
-			{
+			while (compilersIterator.hasNext()) {
 				compiler = compilersIterator.next();
-				if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler))
-				{
+				if ((preferedCompiler == null) || compiler.getClass().getName().equals(preferedCompiler)) {
 					break;
 				}
 			}
 		}
-		
-		if (compiler == null)
-		{
+
+		if (compiler == null) {
 			throw new IllegalStateException("No javax.tools.JavaCompiler service installed!");
 		}
-		
+
 		_compiler = compiler;
 	}
-	
-	private void ensureCompilerOrThrow()
-	{
-		if (_compiler == null)
-		{
-			synchronized (this)
-			{
-				if (_compiler == null)
-				{
+
+	private void ensureCompilerOrThrow() {
+		if (_compiler == null) {
+			synchronized (this) {
+				if (_compiler == null) {
 					determineCompilerOrThrow();
 				}
 			}
 		}
 	}
-	
-	JavaCompiler getCompiler()
-	{
+
+	JavaCompiler getCompiler() {
 		return _compiler;
 	}
-	
+
 	@Override
-	public IExecutionContext createExecutionContext()
-	{
+	public IExecutionContext createExecutionContext() {
 		ensureCompilerOrThrow();
 		return new JavaExecutionContext(this);
 	}
-	
+
 	@Override
-	public String getLanguageName()
-	{
+	public String getLanguageName() {
 		return "Java";
 	}
-	
+
 	@Override
-	public String getLanguageVersion()
-	{
+	public String getLanguageVersion() {
 		ensureCompilerOrThrow();
 		return _compiler.getClass().getSimpleName() + " " + Arrays.deepToString(_compiler.getSourceVersions().toArray(new SourceVersion[0])).replace("RELEASE_", "");
 	}

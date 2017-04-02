@@ -18,15 +18,7 @@
  */
 package org.l2junity.gameserver.model.quest;
 
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.sql.impl.AnnouncementsTable;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
@@ -42,217 +34,175 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Parent class for long time events.<br>
  * Maintains config reading, spawn of NPC's, adding of event's drop.
+ *
  * @author GKR
  */
-public class LongTimeEvent extends Quest
-{
+public class LongTimeEvent extends Quest {
 	protected Logger _log = LoggerFactory.getLogger(getClass());
 	protected String _eventName;
-	
+
 	// Messages
 	protected String _onEnterMsg = "Event is in process";
 	protected String _endMsg = "Event ends!";
-	
+
 	protected DateRange _eventPeriod = null;
 	protected DateRange _dropPeriod;
-	
+
 	// NPC's to spawm and their spawn points
 	protected final List<NpcSpawn> _spawnList = new ArrayList<>();
-	
+
 	// Drop data for event
 	protected final List<GeneralDropItem> _dropList = new ArrayList<>();
-	
-	protected class NpcSpawn
-	{
+
+	protected class NpcSpawn {
 		protected final Location loc;
 		protected final int npcId;
-		
-		protected NpcSpawn(int pNpcId, Location spawnLoc)
-		{
+
+		protected NpcSpawn(int pNpcId, Location spawnLoc) {
 			loc = spawnLoc;
 			npcId = pNpcId;
 		}
 	}
-	
-	public LongTimeEvent()
-	{
+
+	public LongTimeEvent() {
 		super(-1);
 		loadConfig();
-		
-		if (_eventPeriod != null)
-		{
-			if (_eventPeriod.isWithinRange(new Date()))
-			{
+
+		if (_eventPeriod != null) {
+			if (_eventPeriod.isWithinRange(new Date())) {
 				startEvent();
 				_log.info("Event " + _eventName + " active till " + _eventPeriod.getEndDate());
-			}
-			else if (_eventPeriod.getStartDate().after(new Date()))
-			{
+			} else if (_eventPeriod.getStartDate().after(new Date())) {
 				long delay = _eventPeriod.getStartDate().getTime() - System.currentTimeMillis();
-				ThreadPool.schedule(new ScheduleStart(), delay, TimeUnit.MILLISECONDS);
+				ThreadPool.getInstance().scheduleGeneral(new ScheduleStart(), delay, TimeUnit.MILLISECONDS);
 				_log.info("Event " + _eventName + " will be started at " + _eventPeriod.getEndDate());
-			}
-			else
-			{
+			} else {
 				_log.info("Event " + _eventName + " has passed... Ignored");
 			}
 		}
 	}
-	
+
 	/**
 	 * Load event configuration file
 	 */
-	private void loadConfig()
-	{
-		new IGameXmlReader()
-		{
-			protected void load()
-			{
-				try
-				{
+	private void loadConfig() {
+		new IGameXmlReader() {
+			protected void load() {
+				try {
 					parseDatapackFile("data/scripts/events/" + getScriptName() + "/config.xml");
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					LOGGER.error("Failed loading " + getScriptName() + " event config.", e);
 				}
 			}
-			
+
 			@Override
-			public void parseDocument(Document doc, Path path)
-			{
-				if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase("event"))
-				{
+			public void parseDocument(Document doc, Path path) {
+				if (!doc.getDocumentElement().getNodeName().equalsIgnoreCase("event")) {
 					throw new NullPointerException("WARNING!!! " + getScriptName() + " event: bad config file!");
 				}
 				_eventName = doc.getDocumentElement().getAttributes().getNamedItem("name").getNodeValue();
 				String period = doc.getDocumentElement().getAttributes().getNamedItem("active").getNodeValue();
 				_eventPeriod = DateRange.parse(period, new SimpleDateFormat("dd MM yyyy", Locale.US));
-				
-				if (doc.getDocumentElement().getAttributes().getNamedItem("dropPeriod") != null)
-				{
+
+				if (doc.getDocumentElement().getAttributes().getNamedItem("dropPeriod") != null) {
 					String dropPeriod = doc.getDocumentElement().getAttributes().getNamedItem("dropPeriod").getNodeValue();
 					_dropPeriod = DateRange.parse(dropPeriod, new SimpleDateFormat("dd MM yyyy", Locale.US));
 					// Check if drop period is within range of event period
-					if (!_eventPeriod.isWithinRange(_dropPeriod.getStartDate()) || !_eventPeriod.isWithinRange(_dropPeriod.getEndDate()))
-					{
+					if (!_eventPeriod.isWithinRange(_dropPeriod.getStartDate()) || !_eventPeriod.isWithinRange(_dropPeriod.getEndDate())) {
 						_dropPeriod = _eventPeriod;
 					}
-				}
-				else
-				{
+				} else {
 					_dropPeriod = _eventPeriod; // Drop period, if not specified, assumes all event period.
 				}
-				
-				if (_eventPeriod == null)
-				{
+
+				if (_eventPeriod == null) {
 					throw new NullPointerException("WARNING!!! " + getScriptName() + " event: illegal event period");
 				}
-				
+
 				Date today = new Date();
-				
-				if (_eventPeriod.getStartDate().after(today) || _eventPeriod.isWithinRange(today))
-				{
+
+				if (_eventPeriod.getStartDate().after(today) || _eventPeriod.isWithinRange(today)) {
 					Node first = doc.getDocumentElement().getFirstChild();
-					for (Node n = first; n != null; n = n.getNextSibling())
-					{
+					for (Node n = first; n != null; n = n.getNextSibling()) {
 						// Loading droplist
-						if (n.getNodeName().equalsIgnoreCase("droplist"))
-						{
-							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-							{
-								if (d.getNodeName().equalsIgnoreCase("add"))
-								{
-									try
-									{
+						if (n.getNodeName().equalsIgnoreCase("droplist")) {
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+								if (d.getNodeName().equalsIgnoreCase("add")) {
+									try {
 										int itemId = Integer.parseInt(d.getAttributes().getNamedItem("item").getNodeValue());
 										int minCount = Integer.parseInt(d.getAttributes().getNamedItem("min").getNodeValue());
 										int maxCount = Integer.parseInt(d.getAttributes().getNamedItem("max").getNodeValue());
 										String chance = d.getAttributes().getNamedItem("chance").getNodeValue();
 										int finalChance = 0;
-										
-										if (!chance.isEmpty() && chance.endsWith("%"))
-										{
+
+										if (!chance.isEmpty() && chance.endsWith("%")) {
 											finalChance = Integer.parseInt(chance.substring(0, chance.length() - 1)) * 10000;
 										}
-										
-										if (ItemTable.getInstance().getTemplate(itemId) == null)
-										{
+
+										if (ItemTable.getInstance().getTemplate(itemId) == null) {
 											_log.warn(getScriptName() + " event: " + itemId + " is wrong item id, item was not added in droplist");
 											continue;
 										}
-										
-										if (minCount > maxCount)
-										{
+
+										if (minCount > maxCount) {
 											_log.warn(getScriptName() + " event: item " + itemId + " - min greater than max, item was not added in droplist");
 											continue;
 										}
-										
-										if ((finalChance < 10000) || (finalChance > 1000000))
-										{
+
+										if ((finalChance < 10000) || (finalChance > 1000000)) {
 											_log.warn(getScriptName() + " event: item " + itemId + " - incorrect drop chance, item was not added in droplist");
 											continue;
 										}
-										
+
 										_dropList.add(new GeneralDropItem(itemId, minCount, maxCount, finalChance));
-									}
-									catch (NumberFormatException nfe)
-									{
+									} catch (NumberFormatException nfe) {
 										_log.warn("Wrong number format in config.xml droplist block for " + getScriptName() + " event");
 									}
 								}
 							}
-						}
-						else if (n.getNodeName().equalsIgnoreCase("spawnlist"))
-						{
+						} else if (n.getNodeName().equalsIgnoreCase("spawnlist")) {
 							// Loading spawnlist
-							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-							{
-								if (d.getNodeName().equalsIgnoreCase("add"))
-								{
-									try
-									{
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+								if (d.getNodeName().equalsIgnoreCase("add")) {
+									try {
 										int npcId = Integer.parseInt(d.getAttributes().getNamedItem("npc").getNodeValue());
 										int xPos = Integer.parseInt(d.getAttributes().getNamedItem("x").getNodeValue());
 										int yPos = Integer.parseInt(d.getAttributes().getNamedItem("y").getNodeValue());
 										int zPos = Integer.parseInt(d.getAttributes().getNamedItem("z").getNodeValue());
 										int heading = d.getAttributes().getNamedItem("heading").getNodeValue() != null ? Integer.parseInt(d.getAttributes().getNamedItem("heading").getNodeValue()) : 0;
-										
-										if (NpcData.getInstance().getTemplate(npcId) == null)
-										{
+
+										if (NpcData.getInstance().getTemplate(npcId) == null) {
 											_log.warn(getScriptName() + " event: " + npcId + " is wrong NPC id, NPC was not added in spawnlist");
 											continue;
 										}
-										
+
 										_spawnList.add(new NpcSpawn(npcId, new Location(xPos, yPos, zPos, heading)));
-									}
-									catch (NumberFormatException nfe)
-									{
+									} catch (NumberFormatException nfe) {
 										_log.warn("Wrong number format in config.xml spawnlist block for " + getScriptName() + " event");
 									}
 								}
 							}
-						}
-						else if (n.getNodeName().equalsIgnoreCase("messages"))
-						{
+						} else if (n.getNodeName().equalsIgnoreCase("messages")) {
 							// Loading Messages
-							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-							{
-								if (d.getNodeName().equalsIgnoreCase("add"))
-								{
+							for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+								if (d.getNodeName().equalsIgnoreCase("add")) {
 									String msgType = d.getAttributes().getNamedItem("type").getNodeValue();
 									String msgText = d.getAttributes().getNamedItem("text").getNodeValue();
-									if ((msgType != null) && (msgText != null))
-									{
-										if (msgType.equalsIgnoreCase("onEnd"))
-										{
+									if ((msgType != null) && (msgText != null)) {
+										if (msgType.equalsIgnoreCase("onEnd")) {
 											_endMsg = msgText;
-										}
-										else if (msgType.equalsIgnoreCase("onEnter"))
-										{
+										} else if (msgType.equalsIgnoreCase("onEnter")) {
 											_onEnterMsg = msgText;
 										}
 									}
@@ -263,81 +213,69 @@ public class LongTimeEvent extends Quest
 				}
 			}
 		}.load();
-		
+
 	}
-	
+
 	/**
 	 * Maintenance event start - adds global drop, spawns event NPC's, shows start announcement.
 	 */
-	protected void startEvent()
-	{
+	protected void startEvent() {
 		// Add drop
-		if (_dropList != null)
-		{
-			for (GeneralDropItem drop : _dropList)
-			{
+		if (_dropList != null) {
+			for (GeneralDropItem drop : _dropList) {
 				EventDroplist.getInstance().addGlobalDrop(drop.getItemId(), drop.getMin(), drop.getMax(), (int) drop.getChance(), _dropPeriod);
 			}
 		}
-		
+
 		// Add spawns
 		Long millisToEventEnd = _eventPeriod.getEndDate().getTime() - System.currentTimeMillis();
-		if (_spawnList != null)
-		{
-			for (NpcSpawn spawn : _spawnList)
-			{
+		if (_spawnList != null) {
+			for (NpcSpawn spawn : _spawnList) {
 				addSpawn(spawn.npcId, spawn.loc.getX(), spawn.loc.getY(), spawn.loc.getZ(), spawn.loc.getHeading(), false, millisToEventEnd, false);
 			}
 		}
-		
+
 		// Send message on begin
 		Broadcast.toAllOnlinePlayers(_onEnterMsg);
-		
+
 		// Add announce for entering players
 		AnnouncementsTable.getInstance().addAnnouncement(new EventAnnouncement(_eventPeriod, _onEnterMsg));
-		
+
 		// Schedule event end (now only for message sending)
-		ThreadPool.schedule(new ScheduleEnd(), millisToEventEnd, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new ScheduleEnd(), millisToEventEnd, TimeUnit.MILLISECONDS);
 	}
-	
+
 	/**
 	 * @return event period
 	 */
-	public DateRange getEventPeriod()
-	{
+	public DateRange getEventPeriod() {
 		return _eventPeriod;
 	}
-	
+
 	/**
 	 * @return {@code true} if now is event period
 	 */
-	public boolean isEventPeriod()
-	{
+	public boolean isEventPeriod() {
 		return _eventPeriod.isWithinRange(new Date());
 	}
-	
+
 	/**
 	 * @return {@code true} if now is drop period
 	 */
-	public boolean isDropPeriod()
-	{
+	public boolean isDropPeriod() {
 		return _dropPeriod.isWithinRange(new Date());
 	}
-	
-	protected class ScheduleStart implements Runnable
-	{
+
+	protected class ScheduleStart implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			startEvent();
 		}
 	}
-	
-	protected class ScheduleEnd implements Runnable
-	{
+
+	protected class ScheduleEnd implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			// Send message on end
 			Broadcast.toAllOnlinePlayers(_endMsg);
 		}

@@ -20,10 +20,10 @@ package org.l2junity.gameserver.enums;
 
 /**
  * An enum representing all attribute types.
+ *
  * @author NosBit
  */
-public enum AttributeType
-{
+public enum AttributeType {
 	NONE(-2),
 	FIRE(0),
 	WATER(1),
@@ -31,70 +31,65 @@ public enum AttributeType
 	EARTH(3),
 	HOLY(4),
 	DARK(5);
-	
+
 	public static final AttributeType[] ATTRIBUTE_TYPES =
-	{
-		FIRE,
-		WATER,
-		WIND,
-		EARTH,
-		HOLY,
-		DARK
-	};
-	
+			{
+					FIRE,
+					WATER,
+					WIND,
+					EARTH,
+					HOLY,
+					DARK
+			};
+
 	private final byte _clientId;
-	
-	AttributeType(int clientId)
-	{
+
+	AttributeType(int clientId) {
 		_clientId = (byte) clientId;
 	}
-	
+
 	/**
 	 * Gets the client id.
+	 *
 	 * @return the client id
 	 */
-	public byte getClientId()
-	{
+	public byte getClientId() {
 		return _clientId;
 	}
-	
+
 	/**
 	 * Gets the opposite.
+	 *
 	 * @return the opposite
 	 */
-	public AttributeType getOpposite()
-	{
+	public AttributeType getOpposite() {
 		return ATTRIBUTE_TYPES[((getClientId() % 2) == 0) ? (getClientId() + 1) : (getClientId() - 1)];
 	}
-	
+
 	/**
 	 * Finds an attribute type by its name.
+	 *
 	 * @param attributeName the attribute name
 	 * @return An {@code AttributeType} if attribute type was found, {@code null} otherwise
 	 */
-	public static AttributeType findByName(String attributeName)
-	{
-		for (AttributeType attributeType : values())
-		{
-			if (attributeType.name().equalsIgnoreCase(attributeName))
-			{
+	public static AttributeType findByName(String attributeName) {
+		for (AttributeType attributeType : values()) {
+			if (attributeType.name().equalsIgnoreCase(attributeName)) {
 				return attributeType;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Finds an attribute type by its client id.
+	 *
 	 * @param clientId the client id
 	 * @return An {@code AttributeType} if attribute type was found, {@code null} otherwise
 	 */
-	public static AttributeType findByClientId(int clientId)
-	{
-		for (AttributeType attributeType : values())
-		{
-			if (attributeType.getClientId() == clientId)
-			{
+	public static AttributeType findByClientId(int clientId) {
+		for (AttributeType attributeType : values()) {
+			if (attributeType.getClientId() == clientId) {
 				return attributeType;
 			}
 		}

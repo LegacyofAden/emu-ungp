@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExUserInfoInvenWeight implements IClientOutgoingPacket
-{
+public class ExUserInfoInvenWeight implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
-	
-	public ExUserInfoInvenWeight(PlayerInstance cha)
-	{
+
+	public ExUserInfoInvenWeight(PlayerInstance cha) {
 		_activeChar = cha;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_USER_INFO_INVEN_WEIGHT.writeId(packet);
-		
+
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeD(_activeChar.getCurrentLoad());
 		packet.writeD(_activeChar.getMaxLoad());

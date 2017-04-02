@@ -22,24 +22,21 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExGetOffAirShip implements IClientOutgoingPacket
-{
+public class ExGetOffAirShip implements IClientOutgoingPacket {
 	private final int _playerId, _airShipId, _x, _y, _z;
-	
-	public ExGetOffAirShip(Creature player, Creature ship, double x, double y, double z)
-	{
+
+	public ExGetOffAirShip(Creature player, Creature ship, double x, double y, double z) {
 		_playerId = player.getObjectId();
 		_airShipId = ship.getObjectId();
 		_x = (int) x;
 		_y = (int) y;
 		_z = (int) z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_GET_OFF_AIR_SHIP.writeId(packet);
-		
+
 		packet.writeD(_playerId);
 		packet.writeD(_airShipId);
 		packet.writeD(_x);

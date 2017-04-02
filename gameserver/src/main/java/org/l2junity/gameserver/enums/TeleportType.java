@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author UnAfraid
  */
-public enum TeleportType
-{
+public enum TeleportType {
 	NORMAL,
 	NOBLES_TOKEN,
 	NOBLES_ADENA,

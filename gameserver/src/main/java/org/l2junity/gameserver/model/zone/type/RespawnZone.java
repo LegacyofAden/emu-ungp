@@ -18,49 +18,43 @@
  */
 package org.l2junity.gameserver.model.zone.type;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.zone.L2ZoneRespawn;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Respawn zone implementation.
+ *
  * @author Nyaran
  */
-public class RespawnZone extends L2ZoneRespawn
-{
+public class RespawnZone extends L2ZoneRespawn {
 	private final Map<Race, String> _raceRespawnPoint = new HashMap<>();
-	
-	public RespawnZone(int id)
-	{
+
+	public RespawnZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 	}
-	
-	public void addRaceRespawnPoint(String race, String point)
-	{
+
+	public void addRaceRespawnPoint(String race, String point) {
 		_raceRespawnPoint.put(Race.valueOf(race), point);
 	}
-	
-	public Map<Race, String> getAllRespawnPoints()
-	{
+
+	public Map<Race, String> getAllRespawnPoints() {
 		return _raceRespawnPoint;
 	}
-	
-	public String getRespawnPoint(PlayerInstance activeChar)
-	{
+
+	public String getRespawnPoint(PlayerInstance activeChar) {
 		return _raceRespawnPoint.get(activeChar.getRace());
 	}
 }

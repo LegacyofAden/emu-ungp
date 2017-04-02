@@ -25,26 +25,23 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExShowBeautyMenu implements IClientOutgoingPacket
-{
+public class ExShowBeautyMenu implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _type;
-	
+
 	// TODO: Enum
 	public final static int MODIFY_APPEARANCE = 0;
 	public final static int RESTORE_APPEARANCE = 1;
-	
-	public ExShowBeautyMenu(PlayerInstance activeChar, int type)
-	{
+
+	public ExShowBeautyMenu(PlayerInstance activeChar, int type) {
 		_activeChar = activeChar;
 		_type = type;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_BEAUTY_MENU.writeId(packet);
-		
+
 		packet.writeD(_type);
 		packet.writeD(_activeChar.getVisualHair());
 		packet.writeD(_activeChar.getVisualHairColor());

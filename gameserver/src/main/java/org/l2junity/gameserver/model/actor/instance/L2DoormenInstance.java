@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.InstanceType;
@@ -30,74 +28,55 @@ import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.StringTokenizer;
+
 /**
  * This class ...
+ *
  * @version $Revision$ $Date$
  */
-public class L2DoormenInstance extends L2NpcInstance
-{
-	public L2DoormenInstance(L2NpcTemplate template)
-	{
+public class L2DoormenInstance extends L2NpcInstance {
+	public L2DoormenInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2DoormenInstance);
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if (attacker.isMonster())
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker.isMonster()) {
 			return true;
 		}
-		
+
 		return super.isAutoAttackable(attacker);
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (command.startsWith("Chat"))
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (command.startsWith("Chat")) {
 			showChatWindow(player);
 			return;
-		}
-		else if (command.startsWith("open_doors"))
-		{
-			if (isOwnerClan(player))
-			{
-				if (isUnderSiege())
-				{
+		} else if (command.startsWith("open_doors")) {
+			if (isOwnerClan(player)) {
+				if (isUnderSiege()) {
 					cannotManageDoors(player);
-				}
-				else
-				{
+				} else {
 					openDoors(player, command);
 				}
 			}
 			return;
-		}
-		else if (command.startsWith("close_doors"))
-		{
-			if (isOwnerClan(player))
-			{
-				if (isUnderSiege())
-				{
+		} else if (command.startsWith("close_doors")) {
+			if (isOwnerClan(player)) {
+				if (isUnderSiege()) {
 					cannotManageDoors(player);
-				}
-				else
-				{
+				} else {
 					closeDoors(player, command);
 				}
 			}
 			return;
-		}
-		else if (command.startsWith("tele"))
-		{
-			if (isOwnerClan(player))
-			{
+		} else if (command.startsWith("tele")) {
+			if (isOwnerClan(player)) {
 				final TeleportHolder holder = TeleportersData.getInstance().getHolder(getId(), TeleportType.OTHER.name());
-				if (holder != null)
-				{
+				if (holder != null) {
 					final int locId = Integer.parseInt(command.substring(5).trim());
 					holder.doTeleport(player, this, locId);
 				}
@@ -106,65 +85,54 @@ public class L2DoormenInstance extends L2NpcInstance
 		}
 		super.onBypassFeedback(player, command);
 	}
-	
+
 	@Override
-	public void showChatWindow(PlayerInstance player)
-	{
+	public void showChatWindow(PlayerInstance player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		
-		if (!isOwnerClan(player))
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-no.htm");
+
+		if (!isOwnerClan(player)) {
+			html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + "-no.htm");
+		} else {
+			html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + ".htm");
 		}
-		else
-		{
-			html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + ".htm");
-		}
-		
+
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		player.sendPacket(html);
 	}
-	
-	protected void openDoors(PlayerInstance player, String command)
-	{
+
+	protected void openDoors(PlayerInstance player, String command) {
 		StringTokenizer st = new StringTokenizer(command.substring(10), ", ");
 		st.nextToken();
-		
-		while (st.hasMoreTokens())
-		{
+
+		while (st.hasMoreTokens()) {
 			DoorData.getInstance().getDoor(Integer.parseInt(st.nextToken())).openMe();
 		}
 	}
-	
-	protected void closeDoors(PlayerInstance player, String command)
-	{
+
+	protected void closeDoors(PlayerInstance player, String command) {
 		StringTokenizer st = new StringTokenizer(command.substring(11), ", ");
 		st.nextToken();
-		
-		while (st.hasMoreTokens())
-		{
+
+		while (st.hasMoreTokens()) {
 			DoorData.getInstance().getDoor(Integer.parseInt(st.nextToken())).closeMe();
 		}
 	}
-	
-	protected void cannotManageDoors(PlayerInstance player)
-	{
+
+	protected void cannotManageDoors(PlayerInstance player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), "data/html/doormen/" + getTemplate().getId() + "-busy.htm");
+		html.setFile(player.getHtmlPrefix(), "doormen/" + getTemplate().getId() + "-busy.htm");
 		player.sendPacket(html);
 	}
-	
-	protected boolean isOwnerClan(PlayerInstance player)
-	{
+
+	protected boolean isOwnerClan(PlayerInstance player) {
 		return true;
 	}
-	
-	protected boolean isUnderSiege()
-	{
+
+	protected boolean isUnderSiege() {
 		return false;
 	}
 }

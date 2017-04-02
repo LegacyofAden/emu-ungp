@@ -23,21 +23,19 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * Opens the CommandChannel Information window
+ *
  * @author chris_00
  */
-public class ExOpenMPCC implements IClientOutgoingPacket
-{
+public class ExOpenMPCC implements IClientOutgoingPacket {
 	public static final ExOpenMPCC STATIC_PACKET = new ExOpenMPCC();
-	
-	private ExOpenMPCC()
-	{
+
+	private ExOpenMPCC() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_OPEN_MPCC.writeId(packet);
-		
+
 		return true;
 	}
 }

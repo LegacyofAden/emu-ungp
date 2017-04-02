@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExPledgeRecruitApplyInfo implements IClientOutgoingPacket
-{
+public class ExPledgeRecruitApplyInfo implements IClientOutgoingPacket {
 	private final ClanEntryStatus _status;
-	
-	public ExPledgeRecruitApplyInfo(ClanEntryStatus status)
-	{
+
+	public ExPledgeRecruitApplyInfo(ClanEntryStatus status) {
 		_status = status;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_RECRUIT_APPLY_INFO.writeId(packet);
-		
+
 		packet.writeD(_status.ordinal());
 		return true;
 	}

@@ -18,70 +18,55 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding;
 
-public abstract class AbstractNode<T extends AbstractNodeLoc>
-{
+public abstract class AbstractNode<T extends AbstractNodeLoc> {
 	private T _loc;
 	private AbstractNode<T> _parent;
-	
-	public AbstractNode(T loc)
-	{
+
+	public AbstractNode(T loc) {
 		_loc = loc;
 	}
-	
-	public void setParent(AbstractNode<T> p)
-	{
+
+	public void setParent(AbstractNode<T> p) {
 		_parent = p;
 	}
-	
-	public AbstractNode<T> getParent()
-	{
+
+	public AbstractNode<T> getParent() {
 		return _parent;
 	}
-	
-	public T getLoc()
-	{
+
+	public T getLoc() {
 		return _loc;
 	}
-	
-	public void setLoc(T l)
-	{
+
+	public void setLoc(T l) {
 		_loc = l;
 	}
-	
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((_loc == null) ? 0 : _loc.hashCode());
 		return result;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
 		}
-		if (obj == null)
-		{
+		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof AbstractNode))
-		{
+		if (!(obj instanceof AbstractNode)) {
 			return false;
 		}
 		final AbstractNode<?> other = (AbstractNode<?>) obj;
-		if (_loc == null)
-		{
-			if (other._loc != null)
-			{
+		if (_loc == null) {
+			if (other._loc != null) {
 				return false;
 			}
-		}
-		else if (!_loc.equals(other._loc))
-		{
+		} else if (!_loc.equals(other._loc)) {
 			return false;
 		}
 		return true;

@@ -18,66 +18,46 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author Sdw
  */
-public class ConvertData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConvertData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class ConvertData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ConvertData instance = new ConvertData();
+
 	private final Map<Integer, Integer> _convertData = new HashMap<>();
-	
-	protected ConvertData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	protected ConvertData() {
 		_convertData.clear();
 		parseDatapackFile("data/ConvertData.xml");
-		LOGGER.info("Loaded {} weapon conversion data.", _convertData.size());
+		log.info("Loaded {} weapon conversion data.", _convertData.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "convert", convertNode ->
 		{
 			_convertData.put(parseInteger(convertNode.getAttributes(), "input_item"), parseInteger(convertNode.getAttributes(), "output_item"));
 		}));
 	}
-	
-	public int getConversionId(int weaponId)
-	{
+
+	public int getConversionId(int weaponId) {
 		return _convertData.getOrDefault(weaponId, 0);
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		return _convertData.size();
-	}
-	
-	@InstanceGetter
-	public static final ConvertData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ConvertData _instance = new ConvertData();
 	}
 }

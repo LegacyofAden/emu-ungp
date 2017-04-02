@@ -26,31 +26,28 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Maktakien
  */
-public class MoveToLocationInVehicle implements IClientOutgoingPacket
-{
+public class MoveToLocationInVehicle implements IClientOutgoingPacket {
 	private final int _charObjId;
 	private final int _boatId;
 	private final Location _destination;
 	private final Location _origin;
-	
+
 	/**
 	 * @param player
 	 * @param destination
 	 * @param origin
 	 */
-	public MoveToLocationInVehicle(PlayerInstance player, Location destination, Location origin)
-	{
+	public MoveToLocationInVehicle(PlayerInstance player, Location destination, Location origin) {
 		_charObjId = player.getObjectId();
 		_boatId = player.getBoat().getObjectId();
 		_destination = destination;
 		_origin = origin;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MOVE_TO_LOCATION_IN_VEHICLE.writeId(packet);
-		
+
 		packet.writeD(_charObjId);
 		packet.writeD(_boatId);
 		packet.writeD((int) _destination.getX());

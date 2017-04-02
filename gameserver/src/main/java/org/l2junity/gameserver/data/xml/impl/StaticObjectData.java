@@ -18,64 +18,53 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 /**
  * This class loads and holds all static object data.
+ *
  * @author UnAfraid
  */
-public final class StaticObjectData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(StaticObjectData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class StaticObjectData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final StaticObjectData instance = new StaticObjectData();
+
 	private final Map<Integer, L2StaticObjectInstance> _staticObjects = new HashMap<>();
-	
+
 	/**
 	 * Instantiates a new static objects.
 	 */
-	protected StaticObjectData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+	private StaticObjectData() {
 		_staticObjects.clear();
 		parseDatapackFile("data/staticObjects.xml");
 		LOGGER.info("Loaded {} static object templates.", _staticObjects.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("object".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("object".equalsIgnoreCase(d.getNodeName())) {
 						final NamedNodeMap attrs = d.getAttributes();
 						final StatsSet set = new StatsSet();
-						for (int i = 0; i < attrs.getLength(); i++)
-						{
+						for (int i = 0; i < attrs.getLength(); i++) {
 							final Node att = attrs.item(i);
 							set.set(att.getNodeName(), att.getNodeValue());
 						}
@@ -85,18 +74,17 @@ public final class StaticObjectData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getObjectCount()
-	{
+
+	public int getObjectCount() {
 		return _staticObjects.size();
 	}
-	
+
 	/**
 	 * Initialize an static object based on the stats set and add it to the map.
+	 *
 	 * @param set the stats set to add.
 	 */
-	private void addObject(StatsSet set)
-	{
+	private void addObject(StatsSet set) {
 		L2StaticObjectInstance obj = new L2StaticObjectInstance(new L2CharTemplate(new StatsSet()), set.getInt("id"));
 		obj.setType(set.getInt("type", 0));
 		obj.setName(set.getString("name"));
@@ -104,28 +92,13 @@ public final class StaticObjectData implements IGameXmlReader
 		obj.spawnMe(set.getInt("x"), set.getInt("y"), set.getInt("z"));
 		_staticObjects.put(obj.getObjectId(), obj);
 	}
-	
+
 	/**
 	 * Gets the static objects.
+	 *
 	 * @return a collection of static objects.
 	 */
-	public Collection<L2StaticObjectInstance> getStaticObjects()
-	{
+	public Collection<L2StaticObjectInstance> getStaticObjects() {
 		return _staticObjects.values();
-	}
-	
-	/**
-	 * Gets the single instance of StaticObjects.
-	 * @return single instance of StaticObjects
-	 */
-	@InstanceGetter
-	public static StaticObjectData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final StaticObjectData _instance = new StaticObjectData();
 	}
 }

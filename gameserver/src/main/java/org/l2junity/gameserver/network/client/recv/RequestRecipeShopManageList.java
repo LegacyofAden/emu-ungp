@@ -28,71 +28,59 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.network.PacketReader;
 
-public final class RequestRecipeShopManageList implements IClientIncomingPacket
-{
+public final class RequestRecipeShopManageList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (player.getCommonRecipeBook().isEmpty() && player.getDwarvenRecipeBook().isEmpty())
-		{
+
+		if (player.getCommonRecipeBook().isEmpty() && player.getDwarvenRecipeBook().isEmpty()) {
 			player.sendPacket(SystemMessageId.NO_RECIPES_HAVE_BEEN_REGISTERED);
 			return;
 		}
-		
-		if (player.isCastingNow())
-		{
+
+		if (player.isCastingNow()) {
 			player.sendPacket(SystemMessageId.A_PRIVATE_STORE_MAY_NOT_BE_OPENED_WHILE_USING_A_SKILL);
 			return;
 		}
-		
-		if (player.isCrafting())
-		{
+
+		if (player.isCrafting()) {
 			player.sendPacket(SystemMessageId.CURRENTLY_CRAFTING_AN_ITEM_PLEASE_WAIT);
 			return;
 		}
-		
-		if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player) || player.isInDuel())
-		{
+
+		if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player) || player.isInDuel()) {
 			client.sendPacket(SystemMessageId.WHILE_YOU_ARE_ENGAGED_IN_COMBAT_YOU_CANNOT_OPERATE_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (player.isInsideZone(ZoneId.NO_STORE))
-		{
+
+		if (player.isInsideZone(ZoneId.NO_STORE)) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_OPEN_A_PRIVATE_WORKSHOP_HERE);
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
-		if (player.isAlikeDead())
-		{
+		if (player.isAlikeDead()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		if (player.getPrivateStoreType() != PrivateStoreType.NONE)
-		{
+		if (player.getPrivateStoreType() != PrivateStoreType.NONE) {
 			player.setPrivateStoreType(PrivateStoreType.NONE);
 			player.broadcastUserInfo();
-			if (player.isSitting())
-			{
+			if (player.isSitting()) {
 				player.standUp();
 			}
 		}
-		
+
 		client.sendPacket(new RecipeShopManageList(player, true));
 	}
 }

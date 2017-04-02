@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.actor.transform;
 /**
  * @author UnAfraid
  */
-public enum TransformType
-{
+public enum TransformType {
 	MODE_CHANGE,
 	NON_COMBAT,
 	CURSED,

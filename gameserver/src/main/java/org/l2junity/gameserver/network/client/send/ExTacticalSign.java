@@ -25,22 +25,19 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExTacticalSign implements IClientOutgoingPacket
-{
+public class ExTacticalSign implements IClientOutgoingPacket {
 	private final Creature _target;
 	private final int _tokenId;
-	
-	public ExTacticalSign(Creature target, int tokenId)
-	{
+
+	public ExTacticalSign(Creature target, int tokenId) {
 		_target = target;
 		_tokenId = tokenId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_TACTICAL_SIGN.writeId(packet);
-		
+
 		packet.writeD(_target.getObjectId());
 		packet.writeD(_tokenId);
 		return true;

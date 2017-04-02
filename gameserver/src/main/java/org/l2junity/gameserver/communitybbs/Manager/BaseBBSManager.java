@@ -18,46 +18,41 @@
  */
 package org.l2junity.gameserver.communitybbs.Manager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.ShowBoard;
 
-public abstract class BaseBBSManager
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class BaseBBSManager {
 	public abstract void parsecmd(String command, PlayerInstance activeChar);
-	
+
 	public abstract void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, PlayerInstance activeChar);
-	
+
 	/**
 	 * @param html
 	 * @param acha
 	 */
-	protected void send1001(String html, PlayerInstance acha)
-	{
-		if (html.length() < 8192)
-		{
+	protected void send1001(String html, PlayerInstance acha) {
+		if (html.length() < 8192) {
 			acha.sendPacket(new ShowBoard(html, "1001"));
 		}
 	}
-	
+
 	/**
 	 * @param acha
 	 */
-	protected void send1002(PlayerInstance acha)
-	{
+	protected void send1002(PlayerInstance acha) {
 		send1002(acha, " ", " ", "0");
 	}
-	
+
 	/**
 	 * @param activeChar
 	 * @param string
 	 * @param string2
 	 * @param string3
 	 */
-	protected void send1002(PlayerInstance activeChar, String string, String string2, String string3)
-	{
+	protected void send1002(PlayerInstance activeChar, String string, String string2, String string3) {
 		final List<String> _arg = new ArrayList<>(20);
 		_arg.add("0");
 		_arg.add("0");

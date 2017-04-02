@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerItemDestroy implements IBaseEvent
-{
+public class OnPlayerItemDestroy implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
-	
-	public OnPlayerItemDestroy(PlayerInstance activeChar, ItemInstance item)
-	{
+
+	public OnPlayerItemDestroy(PlayerInstance activeChar, ItemInstance item) {
 		_activeChar = activeChar;
 		_item = item;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_ITEM_DESTROY;
 	}
 }

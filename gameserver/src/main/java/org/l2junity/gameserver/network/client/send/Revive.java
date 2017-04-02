@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class Revive implements IClientOutgoingPacket
-{
+public final class Revive implements IClientOutgoingPacket {
 	private final int _objectId;
-	
-	public Revive(WorldObject obj)
-	{
+
+	public Revive(WorldObject obj) {
 		_objectId = obj.getObjectId();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.REVIVE.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		return true;
 	}

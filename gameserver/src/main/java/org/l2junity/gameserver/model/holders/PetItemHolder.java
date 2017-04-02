@@ -23,17 +23,14 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class PetItemHolder
-{
+public class PetItemHolder {
 	private final ItemInstance _item;
-	
-	public PetItemHolder(ItemInstance item)
-	{
+
+	public PetItemHolder(ItemInstance item) {
 		_item = item;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
 }

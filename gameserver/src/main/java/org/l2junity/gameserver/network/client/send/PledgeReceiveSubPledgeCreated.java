@@ -26,43 +26,34 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class PledgeReceiveSubPledgeCreated implements IClientOutgoingPacket
-{
+public class PledgeReceiveSubPledgeCreated implements IClientOutgoingPacket {
 	private final SubPledge _subPledge;
 	private final L2Clan _clan;
-	
-	public PledgeReceiveSubPledgeCreated(SubPledge subPledge, L2Clan clan)
-	{
+
+	public PledgeReceiveSubPledgeCreated(SubPledge subPledge, L2Clan clan) {
 		_subPledge = subPledge;
 		_clan = clan;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_RECEIVE_SUB_PLEDGE_CREATED.writeId(packet);
-		
+
 		packet.writeD(0x01);
 		packet.writeD(_subPledge.getId());
 		packet.writeS(_subPledge.getName());
 		packet.writeS(getLeaderName());
 		return true;
 	}
-	
-	private String getLeaderName()
-	{
+
+	private String getLeaderName() {
 		int LeaderId = _subPledge.getLeaderId();
-		if ((_subPledge.getId() == L2Clan.SUBUNIT_ACADEMY) || (LeaderId == 0))
-		{
+		if ((_subPledge.getId() == L2Clan.SUBUNIT_ACADEMY) || (LeaderId == 0)) {
 			return "";
-		}
-		else if (_clan.getClanMember(LeaderId) == null)
-		{
+		} else if (_clan.getClanMember(LeaderId) == null) {
 			_log.warn("SubPledgeLeader: " + LeaderId + " is missing from clan: " + _clan.getName() + "[" + _clan.getId() + "]");
 			return "";
-		}
-		else
-		{
+		} else {
 			return _clan.getClanMember(LeaderId).getName();
 		}
 	}

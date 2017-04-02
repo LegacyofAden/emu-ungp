@@ -18,29 +18,27 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.clan.entry.PledgeRecruitInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class ExPledgeRecruitBoardSearch implements IClientOutgoingPacket
-{
+public class ExPledgeRecruitBoardSearch implements IClientOutgoingPacket {
 	final List<PledgeRecruitInfo> _clanList;
 	final private int _currentPage;
 	final private int _totalNumberOfPage;
 	final private int _clanOnCurrentPage;
 	final private int _startIndex;
 	final private int _endIndex;
-	
+
 	final static int CLAN_PER_PAGE = 12;
-	
-	public ExPledgeRecruitBoardSearch(List<PledgeRecruitInfo> clanList, int currentPage)
-	{
+
+	public ExPledgeRecruitBoardSearch(List<PledgeRecruitInfo> clanList, int currentPage) {
 		_clanList = clanList;
 		_currentPage = currentPage;
 		_totalNumberOfPage = (int) Math.ceil((double) _clanList.size() / CLAN_PER_PAGE);
@@ -48,23 +46,20 @@ public class ExPledgeRecruitBoardSearch implements IClientOutgoingPacket
 		_endIndex = (_startIndex + CLAN_PER_PAGE) > _clanList.size() ? _clanList.size() : _startIndex + CLAN_PER_PAGE;
 		_clanOnCurrentPage = _endIndex - _startIndex;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_RECRUIT_BOARD_SEARCH.writeId(packet);
-		
+
 		packet.writeD(_currentPage);
 		packet.writeD(_totalNumberOfPage);
 		packet.writeD(_clanOnCurrentPage);
-		
-		for (int i = _startIndex; i < _endIndex; i++)
-		{
+
+		for (int i = _startIndex; i < _endIndex; i++) {
 			packet.writeD(_clanList.get(i).getClanId());
 			packet.writeD(_clanList.get(i).getClan().getAllyId());
 		}
-		for (int i = _startIndex; i < _endIndex; i++)
-		{
+		for (int i = _startIndex; i < _endIndex; i++) {
 			final L2Clan clan = _clanList.get(i).getClan();
 			packet.writeD(clan.getAllyCrestId());
 			packet.writeD(clan.getCrestId());

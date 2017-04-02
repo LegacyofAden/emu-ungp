@@ -26,28 +26,26 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * MyTargetSelected server packet implementation.
+ *
  * @author UnAfraid
  */
-public class MyTargetSelected implements IClientOutgoingPacket
-{
+public class MyTargetSelected implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _color;
-	
+
 	/**
 	 * @param player
 	 * @param target
 	 */
-	public MyTargetSelected(PlayerInstance player, Creature target)
-	{
+	public MyTargetSelected(PlayerInstance player, Creature target) {
 		_objectId = (target instanceof L2ControllableAirShipInstance) ? ((L2ControllableAirShipInstance) target).getHelmObjectId() : target.getObjectId();
 		_color = target.isAutoAttackable(player) ? (player.getLevel() - target.getLevel()) : 0;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MY_TARGET_SELECTED.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeH(_color);
 		packet.writeD(0x00);

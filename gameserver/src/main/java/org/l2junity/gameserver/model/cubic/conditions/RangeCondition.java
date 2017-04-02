@@ -24,18 +24,15 @@ import org.l2junity.gameserver.model.cubic.CubicInstance;
 /**
  * @author Sdw
  */
-public class RangeCondition implements ICubicCondition
-{
+public class RangeCondition implements ICubicCondition {
 	private final int _range;
-	
-	public RangeCondition(int range)
-	{
+
+	public RangeCondition(int range) {
 		_range = range;
 	}
-	
+
 	@Override
-	public boolean test(CubicInstance cubic, Creature owner, Creature target)
-	{
+	public boolean test(CubicInstance cubic, Creature owner, Creature target) {
 		return owner.isInRadius3d(target, _range);
 	}
 }

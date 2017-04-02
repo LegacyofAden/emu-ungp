@@ -30,88 +30,75 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestShowResetShopList implements IClientIncomingPacket
-{
+public class RequestShowResetShopList implements IClientIncomingPacket {
 	private int _hairId;
 	private int _faceId;
 	private int _colorId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_hairId = packet.readD();
 		_faceId = packet.readD();
 		_colorId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final BeautyData beautyData = BeautyShopData.getInstance().getBeautyData(player.getRace(), player.getAppearance().getSexType());
 		int requiredAdena = 0;
-		
-		if (_hairId > 0)
-		{
+
+		if (_hairId > 0) {
 			final BeautyItem hair = beautyData.getHairList().get(_hairId);
-			if (hair == null)
-			{
+			if (hair == null) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.FAILURE));
 				return;
 			}
-			
+
 			requiredAdena += hair.getResetAdena();
-			
-			if (_colorId > 0)
-			{
+
+			if (_colorId > 0) {
 				final BeautyItem color = hair.getColors().get(_colorId);
-				if (color == null)
-				{
+				if (color == null) {
 					player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.FAILURE));
 					return;
 				}
-				
+
 				requiredAdena += color.getResetAdena();
 			}
 		}
-		
-		if (_faceId > 0)
-		{
+
+		if (_faceId > 0) {
 			final BeautyItem face = beautyData.getFaceList().get(_faceId);
-			if (face == null)
-			{
+			if (face == null) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.FAILURE));
 				return;
 			}
-			
+
 			requiredAdena += face.getResetAdena();
 		}
-		
-		if ((player.getAdena() < requiredAdena))
-		{
+
+		if ((player.getAdena() < requiredAdena)) {
 			player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.FAILURE));
 			return;
 		}
-		
-		if (requiredAdena > 0)
-		{
-			if (!player.reduceAdena(getClass().getSimpleName(), requiredAdena, null, true))
-			{
+
+		if (requiredAdena > 0) {
+			if (!player.reduceAdena(getClass().getSimpleName(), requiredAdena, null, true)) {
 				player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.FAILURE));
 				return;
 			}
 		}
-		
+
 		player.getVariables().remove(PlayerVariables.VISUAL_HAIR_ID);
 		player.getVariables().remove(PlayerVariables.VISUAL_HAIR_COLOR_ID);
 		player.getVariables().remove(PlayerVariables.VISUAL_FACE_ID);
-		
+
 		player.sendPacket(new ExResponseBeautyRegistReset(player, ExResponseBeautyRegistReset.RESTORE, ExResponseBeautyRegistReset.SUCCESS));
 	}
 }

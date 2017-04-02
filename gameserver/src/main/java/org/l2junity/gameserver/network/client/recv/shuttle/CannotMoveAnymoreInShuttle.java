@@ -28,17 +28,15 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class CannotMoveAnymoreInShuttle implements IClientIncomingPacket
-{
+public class CannotMoveAnymoreInShuttle implements IClientIncomingPacket {
 	private int _x;
 	private int _y;
 	private int _z;
 	private int _heading;
 	private int _boatId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_boatId = packet.readD();
 		_x = packet.readD();
 		_y = packet.readD();
@@ -46,20 +44,16 @@ public class CannotMoveAnymoreInShuttle implements IClientIncomingPacket
 		_heading = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (activeChar.isInShuttle())
-		{
-			if (activeChar.getShuttle().getObjectId() == _boatId)
-			{
+
+		if (activeChar.isInShuttle()) {
+			if (activeChar.getShuttle().getObjectId() == _boatId) {
 				activeChar.setInVehiclePosition(new Location(_x, _y, _z));
 				activeChar.setHeading(_heading);
 				activeChar.broadcastPacket(new ExStopMoveInShuttle(activeChar, _boatId));

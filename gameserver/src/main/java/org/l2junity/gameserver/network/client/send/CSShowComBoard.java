@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class CSShowComBoard implements IClientOutgoingPacket
-{
+public final class CSShowComBoard implements IClientOutgoingPacket {
 	private final byte[] _html;
-	
-	public CSShowComBoard(final byte[] html)
-	{
+
+	public CSShowComBoard(final byte[] html) {
 		_html = html;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_BOARD.writeId(packet);
-		
+
 		packet.writeC(0x01); // c4 1 to show community 00 to hide
 		packet.writeB(_html);
 		return true;

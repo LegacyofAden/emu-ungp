@@ -25,18 +25,16 @@ import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 
 /**
  * Instance no party condition
+ *
  * @author St3eT
  */
-public final class ConditionNoParty extends Condition
-{
-	public ConditionNoParty(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionNoParty extends Condition {
+	public ConditionNoParty(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, true, showMessageAndHtml);
 	}
-	
+
 	@Override
-	public boolean test(PlayerInstance player, Npc npc)
-	{
+	public boolean test(PlayerInstance player, Npc npc) {
 		return !player.isInParty();
 	}
 }

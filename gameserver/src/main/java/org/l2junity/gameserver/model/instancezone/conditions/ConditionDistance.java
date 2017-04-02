@@ -26,19 +26,17 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Distance instance condition
+ *
  * @author malyelfik
  */
-public final class ConditionDistance extends Condition
-{
-	public ConditionDistance(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionDistance extends Condition {
+	public ConditionDistance(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 		setSystemMessage(SystemMessageId.C1_IS_IN_A_LOCATION_WHICH_CANNOT_BE_ENTERED_THEREFORE_IT_CANNOT_BE_PROCESSED, (message, player) -> message.addCharName(player));
 	}
-	
+
 	@Override
-	public boolean test(PlayerInstance player, Npc npc)
-	{
+	public boolean test(PlayerInstance player, Npc npc) {
 		final int distance = getParameters().getInt("distance", 1000);
 		return player.isInRadius3d(npc, distance);
 	}

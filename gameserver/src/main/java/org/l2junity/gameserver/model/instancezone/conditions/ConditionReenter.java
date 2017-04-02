@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.instancezone.conditions;
 
-import java.util.Arrays;
-
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -27,28 +25,28 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Arrays;
+
 /**
  * Instance reenter conditions
+ *
  * @author malyelfik
  */
-public final class ConditionReenter extends Condition
-{
-	
-	public ConditionReenter(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml)
-	{
+public final class ConditionReenter extends Condition {
+
+	public ConditionReenter(InstanceTemplate template, StatsSet parameters, boolean onlyLeader, boolean showMessageAndHtml) {
 		super(template, parameters, onlyLeader, showMessageAndHtml);
 		setSystemMessage(SystemMessageId.C1_MAY_NOT_RE_ENTER_YET, (message, player) -> message.addCharName(player));
 	}
-	
+
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc)
-	{
+	protected boolean test(PlayerInstance player, Npc npc) {
 		final String templateIds = getParameters().getString("instanceId", String.valueOf(getInstanceTemplate().getId()));
 		//@formatter:off
 		return Arrays.stream(templateIds.split(";"))
-			.mapToInt(Integer::parseInt)
-			.mapToLong(templateId -> InstanceManager.getInstance().getInstanceTime(player, templateId))
-			.allMatch(reenterTime -> System.currentTimeMillis() > reenterTime);
+				.mapToInt(Integer::parseInt)
+				.mapToLong(templateId -> InstanceManager.getInstance().getInstanceTime(player, templateId))
+				.allMatch(reenterTime -> System.currentTimeMillis() > reenterTime);
 		//@formatter:on
 	}
 }

@@ -18,29 +18,29 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.config.GeneralConfig;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+
 /**
  * This class load, holds and calculates the hit condition bonuses.
+ *
  * @author Nik
  */
-public final class HitConditionBonusData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(HitConditionBonusData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class HitConditionBonusData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final HitConditionBonusData instance = new HitConditionBonusData();
+
 	private int frontBonus = 0;
 	private int sideBonus = 0;
 	private int backBonus = 0;
@@ -48,141 +48,87 @@ public final class HitConditionBonusData implements IGameXmlReader
 	private int lowBonus = 0;
 	private int darkBonus = 0;
 	private int rainBonus = 0;
-	
-	/**
-	 * Instantiates a new hit condition bonus.
-	 */
-	protected HitConditionBonusData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+
+	private HitConditionBonusData() {
 		parseDatapackFile("data/stats/hitConditionBonus.xml");
-		LOGGER.info("Loaded Hit Condition bonuses.");
-		if (GeneralConfig.DEBUG)
-		{
-			LOGGER.info("Front bonus: {}", frontBonus);
-			LOGGER.info("Side bonus: {}", sideBonus);
-			LOGGER.info("Back bonus: {}", backBonus);
-			LOGGER.info("High bonus: {}", highBonus);
-			LOGGER.info("Low bonus: {}", lowBonus);
-			LOGGER.info("Dark bonus: {}", darkBonus);
-			LOGGER.info("Rain bonus: {}", rainBonus);
-		}
+		log.info("Loaded Hit Condition bonuses.");
 	}
-	
-	public int getLoadedElementsCount()
-	{
+
+	public int getLoadedElementsCount() {
 		// FIXME Tardish way to count "loaded elements"
 		return frontBonus + sideBonus + backBonus + highBonus + lowBonus + darkBonus + rainBonus;
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node d = doc.getFirstChild().getFirstChild(); d != null; d = d.getNextSibling())
-		{
+	public void parseDocument(Document doc, Path path) {
+		for (Node d = doc.getFirstChild().getFirstChild(); d != null; d = d.getNextSibling()) {
 			NamedNodeMap attrs = d.getAttributes();
-			switch (d.getNodeName())
-			{
-				case "front":
-				{
+			switch (d.getNodeName()) {
+				case "front": {
 					frontBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "side":
-				{
+				case "side": {
 					sideBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "back":
-				{
+				case "back": {
 					backBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "high":
-				{
+				case "high": {
 					highBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "low":
-				{
+				case "low": {
 					lowBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "dark":
-				{
+				case "dark": {
 					darkBonus = parseInteger(attrs, "val");
 					break;
 				}
-				case "rain":
-				{
+				case "rain": {
 					rainBonus = parseInteger(attrs, "val");
 					break;
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the condition bonus.
+	 *
 	 * @param attacker the attacking character.
-	 * @param target the attacked character.
+	 * @param target   the attacked character.
 	 * @return the bonus of the attacker against the target.
 	 */
-	public double getConditionBonus(Creature attacker, Creature target)
-	{
+	public double getConditionBonus(Creature attacker, Creature target) {
 		double mod = 100;
 		// Get high or low bonus
-		if ((attacker.getZ() - target.getZ()) > 50)
-		{
+		if ((attacker.getZ() - target.getZ()) > 50) {
 			mod += highBonus;
-		}
-		else if ((attacker.getZ() - target.getZ()) < -50)
-		{
+		} else if ((attacker.getZ() - target.getZ()) < -50) {
 			mod += lowBonus;
 		}
-		
+
 		// Get weather bonus
-		if (GameTimeManager.getInstance().isNight())
-		{
+		if (GameTimeManager.getInstance().isNight()) {
 			mod += darkBonus;
 			// else if () No rain support yet.
 			// chance += hitConditionBonus.rainBonus;
 		}
-		
+
 		// Get side bonus
-		if (attacker.isBehindTarget(true))
-		{
+		if (attacker.isBehindTarget(true)) {
 			mod += backBonus;
-		}
-		else if (attacker.isInFrontOfTarget())
-		{
+		} else if (attacker.isInFrontOfTarget()) {
 			mod += frontBonus;
-		}
-		else
-		{
+		} else {
 			mod += sideBonus;
 		}
-		
+
 		// If (mod / 100) is less than 0, return 0, because we can't lower more than 100%.
 		return Math.max(mod / 100, 0);
-	}
-	
-	/**
-	 * Gets the single instance of HitConditionBonus.
-	 * @return single instance of HitConditionBonus
-	 */
-	@InstanceGetter
-	public static HitConditionBonusData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final HitConditionBonusData _instance = new HitConditionBonusData();
 	}
 }

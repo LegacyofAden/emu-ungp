@@ -26,65 +26,53 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 /**
  * @author littlecrow A special spawn implementation to spawn controllable mob
  */
-public class L2GroupSpawn extends L2Spawn
-{
+public class L2GroupSpawn extends L2Spawn {
 	private static final long serialVersionUID = 4168058788708225067L;
 	private final L2NpcTemplate _template;
-	
-	public L2GroupSpawn(L2NpcTemplate mobTemplate) throws SecurityException, ClassNotFoundException, NoSuchMethodException
-	{
+
+	public L2GroupSpawn(L2NpcTemplate mobTemplate) throws SecurityException, ClassNotFoundException, NoSuchMethodException {
 		super(mobTemplate);
 		_template = mobTemplate;
-		
+
 		setAmount(1);
 	}
-	
-	public Npc doGroupSpawn()
-	{
-		try
-		{
-			if (_template.isType("L2Pet") || _template.isType("L2Minion"))
-			{
+
+	public Npc doGroupSpawn() {
+		try {
+			if (_template.isType("L2Pet") || _template.isType("L2Minion")) {
 				return null;
 			}
-			
+
 			double newlocx = 0;
 			double newlocy = 0;
 			double newlocz = 0;
-			
-			if ((getX() == 0) && (getY() == 0))
-			{
-				if (getLocationId() == 0)
-				{
+
+			if ((getX() == 0) && (getY() == 0)) {
+				if (getLocationId() == 0) {
 					return null;
 				}
-				
+
 				return null;
 			}
-			
+
 			newlocx = getX();
 			newlocy = getY();
 			newlocz = getZ();
-			
+
 			final Npc mob = new L2ControllableMobInstance(_template);
 			mob.setCurrentHpMp(mob.getMaxHp(), mob.getMaxMp());
-			
-			if (getHeading() == -1)
-			{
+
+			if (getHeading() == -1) {
 				mob.setHeading(Rnd.nextInt(61794));
-			}
-			else
-			{
+			} else {
 				mob.setHeading(getHeading());
 			}
-			
+
 			mob.setSpawn(this);
 			mob.spawnMe(newlocx, newlocy, newlocz);
 			return mob;
-			
-		}
-		catch (Exception e)
-		{
+
+		} catch (Exception e) {
 			LOGGER.warn("NPC class not found: " + e.getMessage(), e);
 			return null;
 		}

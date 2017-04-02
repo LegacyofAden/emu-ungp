@@ -47,36 +47,33 @@ import org.l2junity.network.PacketWriter;
  * S = AllyName<BR>
  * S = AllyLeaderName<BR>
  * d = AllyCrestID<BR>
+ *
  * @author KenM
  */
-public final class SiegeDefenderList implements IClientOutgoingPacket
-{
+public final class SiegeDefenderList implements IClientOutgoingPacket {
 	private final Castle _castle;
-	
-	public SiegeDefenderList(Castle castle)
-	{
+
+	public SiegeDefenderList(Castle castle) {
 		_castle = castle;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CASTLE_SIEGE_DEFENDER_LIST.writeId(packet);
-		
+
 		packet.writeD(_castle.getResidenceId());
 		packet.writeD(0x00); // Unknown
 		packet.writeD(0x01); // Unknown
 		packet.writeD(0x00); // Unknown
-		
+
 		final int size = _castle.getSiege().getDefenderWaitingClans().size() + _castle.getSiege().getDefenderClans().size() + (_castle.getOwner() != null ? 1 : 0);
-		
+
 		packet.writeD(size);
 		packet.writeD(size);
-		
+
 		// Add owners
 		final L2Clan ownerClan = _castle.getOwner();
-		if (ownerClan != null)
-		{
+		if (ownerClan != null) {
 			packet.writeD(ownerClan.getId());
 			packet.writeS(ownerClan.getName());
 			packet.writeS(ownerClan.getLeaderName());
@@ -88,16 +85,14 @@ public final class SiegeDefenderList implements IClientOutgoingPacket
 			packet.writeS(""); // AllyLeaderName
 			packet.writeD(ownerClan.getAllyCrestId());
 		}
-		
+
 		// List of confirmed defenders
-		for (SiegeClan siegeClan : _castle.getSiege().getDefenderClans())
-		{
+		for (SiegeClan siegeClan : _castle.getSiege().getDefenderClans()) {
 			final L2Clan defendingClan = ClanTable.getInstance().getClan(siegeClan.getClanId());
-			if ((defendingClan == null) || (defendingClan == _castle.getOwner()))
-			{
+			if ((defendingClan == null) || (defendingClan == _castle.getOwner())) {
 				continue;
 			}
-			
+
 			packet.writeD(defendingClan.getId());
 			packet.writeS(defendingClan.getName());
 			packet.writeS(defendingClan.getLeaderName());
@@ -109,16 +104,14 @@ public final class SiegeDefenderList implements IClientOutgoingPacket
 			packet.writeS(""); // AllyLeaderName
 			packet.writeD(defendingClan.getAllyCrestId());
 		}
-		
+
 		// List of not confirmed defenders
-		for (SiegeClan siegeClan : _castle.getSiege().getDefenderWaitingClans())
-		{
+		for (SiegeClan siegeClan : _castle.getSiege().getDefenderWaitingClans()) {
 			final L2Clan defendingClan = ClanTable.getInstance().getClan(siegeClan.getClanId());
-			if (defendingClan == null)
-			{
+			if (defendingClan == null) {
 				continue;
 			}
-			
+
 			packet.writeD(defendingClan.getId());
 			packet.writeS(defendingClan.getName());
 			packet.writeS(defendingClan.getLeaderName());

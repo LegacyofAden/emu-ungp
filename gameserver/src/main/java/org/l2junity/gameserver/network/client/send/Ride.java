@@ -23,28 +23,25 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class Ride implements IClientOutgoingPacket
-{
+public final class Ride implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final int _mounted;
 	private final int _rideType;
 	private final int _rideNpcId;
 	private final Location _loc;
-	
-	public Ride(PlayerInstance player)
-	{
+
+	public Ride(PlayerInstance player) {
 		_objectId = player.getObjectId();
 		_mounted = player.isMounted() ? 1 : 0;
 		_rideType = player.getMountType().ordinal();
 		_rideNpcId = player.getMountNpcId() + 1000000;
 		_loc = player.getLocation();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.RIDE.writeId(packet);
-		
+
 		packet.writeD(_objectId);
 		packet.writeD(_mounted);
 		packet.writeD(_rideType);

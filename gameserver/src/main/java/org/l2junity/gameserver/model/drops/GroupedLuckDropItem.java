@@ -18,35 +18,27 @@
  */
 package org.l2junity.gameserver.model.drops;
 
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 
 /**
  * @author Sdw
  */
-public class GroupedLuckDropItem extends GroupedGeneralDropItem
-{
+public class GroupedLuckDropItem extends GroupedGeneralDropItem {
 	/**
 	 * @param chance the chance of this drop item.
 	 */
-	public GroupedLuckDropItem(double chance)
-	{
+	public GroupedLuckDropItem(double chance) {
 		super(chance);
 	}
-	
+
 	@Override
-	protected double getChanceMultiplier(Creature killer)
-	{
+	protected double getChanceMultiplier(Creature killer) {
 		return RatesConfig.BASE_LUCK_DROP_CHANCE_MULTIPLIER;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.l2junity.gameserver.model.drops.GroupedGeneralDropItem#getGlobalChanceMultiplier()
-	 */
+
 	@Override
-	protected double getGlobalChanceMultiplier()
-	{
+	protected double getGlobalChanceMultiplier() {
 		return RatesConfig.RATE_LUCK_DROP_CHANCE_MULTIPLIER;
 	}
 }

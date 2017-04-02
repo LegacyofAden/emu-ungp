@@ -27,8 +27,7 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket
-{
+public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket {
 	private final int _pledgeType;
 	private int _hasSponsor;
 	private final String _name;
@@ -38,14 +37,12 @@ public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket
 	private final int _onlineStatus;
 	private final int _race;
 	private final int _sex;
-	
-	public PledgeShowMemberListUpdate(PlayerInstance player)
-	{
+
+	public PledgeShowMemberListUpdate(PlayerInstance player) {
 		this(player.getClan().getClanMember(player.getObjectId()));
 	}
-	
-	public PledgeShowMemberListUpdate(ClanMember member)
-	{
+
+	public PledgeShowMemberListUpdate(ClanMember member) {
 		_name = member.getName();
 		_level = member.getLevel();
 		_classId = member.getClassId();
@@ -54,33 +51,26 @@ public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket
 		_race = member.getRaceOrdinal();
 		_sex = member.getSex() ? 1 : 0;
 		_onlineStatus = member.getOnlineStatus();
-		if (_pledgeType == L2Clan.SUBUNIT_ACADEMY)
-		{
+		if (_pledgeType == L2Clan.SUBUNIT_ACADEMY) {
 			_hasSponsor = member.getSponsor() != 0 ? 1 : 0;
-		}
-		else
-		{
+		} else {
 			_hasSponsor = 0;
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_SHOW_MEMBER_LIST_UPDATE.writeId(packet);
-		
+
 		packet.writeS(_name);
 		packet.writeD(_level);
 		packet.writeD(_classId);
 		packet.writeD(_sex);
 		packet.writeD(_race);
-		if (_onlineStatus > 0)
-		{
+		if (_onlineStatus > 0) {
 			packet.writeD(_objectId);
 			packet.writeD(_pledgeType);
-		}
-		else
-		{
+		} else {
 			// when going offline send as 0
 			packet.writeD(0);
 			packet.writeD(0);

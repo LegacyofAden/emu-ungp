@@ -18,18 +18,8 @@
  */
 package org.l2junity.gameserver.network.client;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import org.l2junity.gameserver.network.client.recv.*;
-import org.l2junity.gameserver.network.client.recv.ability.RequestAbilityList;
-import org.l2junity.gameserver.network.client.recv.ability.RequestAbilityWndClose;
-import org.l2junity.gameserver.network.client.recv.ability.RequestAbilityWndOpen;
-import org.l2junity.gameserver.network.client.recv.ability.RequestAcquireAbilityList;
-import org.l2junity.gameserver.network.client.recv.ability.RequestChangeAbilityPoint;
-import org.l2junity.gameserver.network.client.recv.ability.RequestResetAbilityPoint;
+import org.l2junity.gameserver.network.client.recv.ability.*;
 import org.l2junity.gameserver.network.client.recv.adenadistribution.RequestDivideAdena;
 import org.l2junity.gameserver.network.client.recv.adenadistribution.RequestDivideAdenaCancel;
 import org.l2junity.gameserver.network.client.recv.adenadistribution.RequestDivideAdenaStart;
@@ -43,44 +33,21 @@ import org.l2junity.gameserver.network.client.recv.awakening.RequestCallToChange
 import org.l2junity.gameserver.network.client.recv.ceremonyofchaos.RequestCancelCuriousHouse;
 import org.l2junity.gameserver.network.client.recv.ceremonyofchaos.RequestCuriousHouseHtml;
 import org.l2junity.gameserver.network.client.recv.ceremonyofchaos.RequestJoinCuriousHouse;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionBuyInfo;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionBuyItem;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionCancel;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionDelete;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionInfo;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionList;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionRegister;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionRegisteredItem;
-import org.l2junity.gameserver.network.client.recv.commission.RequestCommissionRegistrableItemList;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantClose;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantPushOne;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantPushTwo;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantRemoveOne;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantRemoveTwo;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantRetryToPutItems;
-import org.l2junity.gameserver.network.client.recv.compound.RequestNewEnchantTry;
+import org.l2junity.gameserver.network.client.recv.commission.*;
+import org.l2junity.gameserver.network.client.recv.compound.*;
 import org.l2junity.gameserver.network.client.recv.crystalization.RequestCrystallizeEstimate;
 import org.l2junity.gameserver.network.client.recv.crystalization.RequestCrystallizeItemCancel;
 import org.l2junity.gameserver.network.client.recv.ensoul.RequestItemEnsoul;
 import org.l2junity.gameserver.network.client.recv.friend.RequestFriendDetailInfo;
 import org.l2junity.gameserver.network.client.recv.luckygame.RequestLuckyGamePlay;
 import org.l2junity.gameserver.network.client.recv.luckygame.RequestLuckyGameStartInfo;
-import org.l2junity.gameserver.network.client.recv.mentoring.ConfirmMenteeAdd;
-import org.l2junity.gameserver.network.client.recv.mentoring.RequestMenteeAdd;
-import org.l2junity.gameserver.network.client.recv.mentoring.RequestMenteeWaitingList;
-import org.l2junity.gameserver.network.client.recv.mentoring.RequestMentorCancel;
-import org.l2junity.gameserver.network.client.recv.mentoring.RequestMentorList;
+import org.l2junity.gameserver.network.client.recv.mentoring.*;
 import org.l2junity.gameserver.network.client.recv.onedayreward.RequestOneDayRewardReceive;
 import org.l2junity.gameserver.network.client.recv.onedayreward.RequestTodoList;
 import org.l2junity.gameserver.network.client.recv.pledgebonus.RequestPledgeBonusOpen;
 import org.l2junity.gameserver.network.client.recv.pledgebonus.RequestPledgeBonusReward;
 import org.l2junity.gameserver.network.client.recv.pledgebonus.RequestPledgeBonusRewardList;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRBuyProduct;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRGamePoint;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRPresentBuyProduct;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRProductInfo;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRProductList;
-import org.l2junity.gameserver.network.client.recv.primeshop.RequestBRRecentProductList;
+import org.l2junity.gameserver.network.client.recv.primeshop.*;
 import org.l2junity.gameserver.network.client.recv.sayune.RequestFlyMove;
 import org.l2junity.gameserver.network.client.recv.sayune.RequestFlyMoveStart;
 import org.l2junity.gameserver.network.client.recv.shuttle.CannotMoveAnymoreInShuttle;
@@ -92,11 +59,15 @@ import org.l2junity.network.IConnectionState;
 import org.l2junity.network.IIncomingPacket;
 import org.l2junity.network.IIncomingPackets;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Supplier;
+
 /**
  * @author Sdw
  */
-public enum ExIncomingPackets implements IIncomingPackets<L2GameClient>
-{
+public enum ExIncomingPackets implements IIncomingPackets<L2GameClient> {
 	REQUEST_GOTO_LOBBY(0x33, RequestGotoLobby::new, ConnectionState.AUTHENTICATED),
 	REQUEST_EX_2ND_PASSWORD_CHECK(0xA6, RequestEx2ndPasswordCheck::new, ConnectionState.AUTHENTICATED),
 	REQUEST_EX_2ND_PASSWORD_VERIFY(0xA7, RequestEx2ndPasswordVerify::new, ConnectionState.AUTHENTICATED),
@@ -383,50 +354,43 @@ public enum ExIncomingPackets implements IIncomingPackets<L2GameClient>
 	REQUEST_QUEUE_TICKET_LOGIN(0x125, null, ConnectionState.IN_GAME),
 	REQUEST_BLOCK_MEMO_INFO(0x126, null, ConnectionState.IN_GAME),
 	REQUEST_TRY_EN_SOUL_EXTRACTION(0x127, null, ConnectionState.IN_GAME);
-	
+
 	public static final ExIncomingPackets[] PACKET_ARRAY;
-	
-	static
-	{
+
+	static {
 		final short maxPacketId = (short) Arrays.stream(values()).mapToInt(IIncomingPackets::getPacketId).max().orElse(0);
 		PACKET_ARRAY = new ExIncomingPackets[maxPacketId + 1];
-		for (ExIncomingPackets incomingPacket : values())
-		{
+		for (ExIncomingPackets incomingPacket : values()) {
 			PACKET_ARRAY[incomingPacket.getPacketId()] = incomingPacket;
 		}
 	}
-	
+
 	private int _packetId;
 	private Supplier<IIncomingPacket<L2GameClient>> _incomingPacketFactory;
 	private Set<IConnectionState> _connectionStates;
-	
-	ExIncomingPackets(int packetId, Supplier<IIncomingPacket<L2GameClient>> incomingPacketFactory, IConnectionState... connectionStates)
-	{
+
+	ExIncomingPackets(int packetId, Supplier<IIncomingPacket<L2GameClient>> incomingPacketFactory, IConnectionState... connectionStates) {
 		// packetId is an unsigned short
-		if (packetId > 0xFFFF)
-		{
+		if (packetId > 0xFFFF) {
 			throw new IllegalArgumentException("packetId must not be bigger than 0xFFFF");
 		}
 		_packetId = packetId;
 		_incomingPacketFactory = incomingPacketFactory != null ? incomingPacketFactory : () -> null;
 		_connectionStates = new HashSet<>(Arrays.asList(connectionStates));
 	}
-	
+
 	@Override
-	public int getPacketId()
-	{
+	public int getPacketId() {
 		return _packetId;
 	}
-	
+
 	@Override
-	public IIncomingPacket<L2GameClient> newIncomingPacket()
-	{
+	public IIncomingPacket<L2GameClient> newIncomingPacket() {
 		return _incomingPacketFactory.get();
 	}
-	
+
 	@Override
-	public Set<IConnectionState> getConnectionStates()
-	{
+	public Set<IConnectionState> getConnectionStates() {
 		return _connectionStates;
 	}
 }

@@ -25,39 +25,34 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An instantly executed event when L2Character is attacked by L2Character.
+ *
  * @author UnAfraid
  */
-public class OnCreatureAttacked implements IBaseEvent
-{
+public class OnCreatureAttacked implements IBaseEvent {
 	private final Creature _attacker;
 	private final Creature _target;
 	private final Skill _skill;
-	
-	public OnCreatureAttacked(Creature attacker, Creature target, Skill skill)
-	{
+
+	public OnCreatureAttacked(Creature attacker, Creature target, Skill skill) {
 		_attacker = attacker;
 		_target = target;
 		_skill = skill;
 	}
-	
-	public final Creature getAttacker()
-	{
+
+	public final Creature getAttacker() {
 		return _attacker;
 	}
-	
-	public final Creature getTarget()
-	{
+
+	public final Creature getTarget() {
 		return _target;
 	}
-	
-	public final Skill getSkill()
-	{
+
+	public final Skill getSkill() {
 		return _skill;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_CREATURE_ATTACKED;
 	}
 }

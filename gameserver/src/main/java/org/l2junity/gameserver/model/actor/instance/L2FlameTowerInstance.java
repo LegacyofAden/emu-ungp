@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -27,58 +25,51 @@ import org.l2junity.gameserver.model.actor.Tower;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.zone.ZoneType;
 
+import java.util.List;
+
 /**
  * Class for Flame Control Tower instance.
+ *
  * @author JIV
  */
-public class L2FlameTowerInstance extends Tower
-{
+public class L2FlameTowerInstance extends Tower {
 	private int _upgradeLevel = 0;
 	private List<Integer> _zoneList;
-	
-	public L2FlameTowerInstance(L2NpcTemplate template)
-	{
+
+	public L2FlameTowerInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FlameTowerInstance);
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
+	public boolean doDie(Creature killer) {
 		enableZones(false);
 		return super.doDie(killer);
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
+	public boolean deleteMe() {
 		enableZones(false);
 		return super.deleteMe();
 	}
-	
-	public final void enableZones(boolean state)
-	{
-		if ((_zoneList != null) && (_upgradeLevel != 0))
-		{
+
+	public final void enableZones(boolean state) {
+		if ((_zoneList != null) && (_upgradeLevel != 0)) {
 			final int maxIndex = _upgradeLevel * 2;
-			for (int i = 0; i < maxIndex; i++)
-			{
+			for (int i = 0; i < maxIndex; i++) {
 				final ZoneType zone = ZoneManager.getInstance().getZoneById(_zoneList.get(i));
-				if (zone != null)
-				{
+				if (zone != null) {
 					zone.setEnabled(state);
 				}
 			}
 		}
 	}
-	
-	public final void setUpgradeLevel(int level)
-	{
+
+	public final void setUpgradeLevel(int level) {
 		_upgradeLevel = level;
 	}
-	
-	public final void setZoneList(List<Integer> list)
-	{
+
+	public final void setZoneList(List<Integer> list) {
 		_zoneList = list;
 		enableZones(true);
 	}

@@ -25,17 +25,14 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExEnchantTwoRemoveFail implements IClientOutgoingPacket
-{
+public class ExEnchantTwoRemoveFail implements IClientOutgoingPacket {
 	public static final ExEnchantTwoRemoveFail STATIC_PACKET = new ExEnchantTwoRemoveFail();
-	
-	private ExEnchantTwoRemoveFail()
-	{
+
+	private ExEnchantTwoRemoveFail() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ENCHANT_TWO_REMOVE_FAIL.writeId(packet);
 		return true;
 	}

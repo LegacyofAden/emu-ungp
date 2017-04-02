@@ -21,21 +21,18 @@ package org.l2junity.gameserver.model.events.returns;
 /**
  * @author lord_rex
  */
-public final class BooleanReturn extends AbstractEventReturn
-{
+public final class BooleanReturn extends AbstractEventReturn {
 	public static final BooleanReturn TRUE = new BooleanReturn(false, false, true);
 	public static final BooleanReturn FALSE = new BooleanReturn(false, false, false);
-	
+
 	private final boolean _value;
-	
-	public BooleanReturn(boolean override, boolean abort, boolean value)
-	{
+
+	public BooleanReturn(boolean override, boolean abort, boolean value) {
 		super(override, abort);
 		_value = value;
 	}
-	
-	public boolean getValue()
-	{
+
+	public boolean getValue() {
 		return _value;
 	}
 }

@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Zoey76
  */
-public enum AIType
-{
+public enum AIType {
 	FIGHTER,
 	MAGE,
 	HEALER,

@@ -22,12 +22,10 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class MoveToLocation implements IClientOutgoingPacket
-{
+public final class MoveToLocation implements IClientOutgoingPacket {
 	private final int _objectId, _x, _y, _z, _destinationX, _destinationY, _destinationZ;
-	
-	public MoveToLocation(Creature cha)
-	{
+
+	public MoveToLocation(Creature cha) {
 		_objectId = cha.getObjectId();
 		_x = (int) cha.getX();
 		_y = (int) cha.getY();
@@ -36,18 +34,17 @@ public final class MoveToLocation implements IClientOutgoingPacket
 		_destinationY = (int) cha.getYdestination();
 		_destinationZ = (int) cha.getZdestination();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.MOVE_TO_LOCATION.writeId(packet);
-		
+
 		packet.writeD(_objectId);
-		
+
 		packet.writeD(_destinationX);
 		packet.writeD(_destinationY);
 		packet.writeD(_destinationZ);
-		
+
 		packet.writeD(_x);
 		packet.writeD(_y);
 		packet.writeD(_z);

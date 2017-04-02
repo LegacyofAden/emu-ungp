@@ -23,26 +23,23 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class CharSelected implements IClientOutgoingPacket
-{
+public class CharSelected implements IClientOutgoingPacket {
 	private final PlayerInstance _activeChar;
 	private final int _sessionId;
-	
+
 	/**
 	 * @param cha
 	 * @param sessionId
 	 */
-	public CharSelected(PlayerInstance cha, int sessionId)
-	{
+	public CharSelected(PlayerInstance cha, int sessionId) {
 		_activeChar = cha;
 		_sessionId = sessionId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_SELECTED.writeId(packet);
-		
+
 		packet.writeS(_activeChar.getName());
 		packet.writeD(_activeChar.getObjectId());
 		packet.writeS(_activeChar.getTitle());
@@ -66,21 +63,21 @@ public class CharSelected implements IClientOutgoingPacket
 		packet.writeD(GameTimeManager.getInstance().getGameTimeInMinutesOfDay());
 		packet.writeD(0x00);
 		packet.writeD(_activeChar.getClassId().getId());
-		
+
 		packet.writeB(new byte[16]);
-		
+
 		packet.writeD(0x00);
 		packet.writeD(0x00);
 		packet.writeD(0x00);
 		packet.writeD(0x00);
-		
+
 		packet.writeD(0x00);
-		
-		packet.writeD(0x00);
-		packet.writeD(0x00);
+
 		packet.writeD(0x00);
 		packet.writeD(0x00);
-		
+		packet.writeD(0x00);
+		packet.writeD(0x00);
+
 		packet.writeB(new byte[28]);
 		packet.writeD(0x00);
 		return true;

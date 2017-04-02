@@ -21,20 +21,17 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class ChooseInventoryItem implements IClientOutgoingPacket
-{
+public final class ChooseInventoryItem implements IClientOutgoingPacket {
 	private final int _itemId;
-	
-	public ChooseInventoryItem(int itemId)
-	{
+
+	public ChooseInventoryItem(int itemId) {
 		_itemId = itemId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHOOSE_INVENTORY_ITEM.writeId(packet);
-		
+
 		packet.writeD(_itemId);
 		return true;
 	}

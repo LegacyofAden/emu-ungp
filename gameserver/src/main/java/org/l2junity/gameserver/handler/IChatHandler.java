@@ -23,21 +23,23 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Interface for chat handlers
+ *
  * @author durgus
  */
-public interface IChatHandler
-{
+public interface IChatHandler {
 	/**
 	 * Handles a specific type of chat messages
+	 *
 	 * @param type
 	 * @param activeChar
 	 * @param target
 	 * @param text
 	 */
 	void handleChat(ChatType type, PlayerInstance activeChar, String target, String text);
-	
+
 	/**
 	 * Returns a list of all chat types registered to this handler
+	 *
 	 * @return
 	 */
 	ChatType[] getChatTypeList();

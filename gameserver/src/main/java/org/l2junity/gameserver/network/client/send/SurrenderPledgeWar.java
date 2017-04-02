@@ -21,22 +21,19 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class SurrenderPledgeWar implements IClientOutgoingPacket
-{
+public final class SurrenderPledgeWar implements IClientOutgoingPacket {
 	private final String _pledgeName;
 	private final String _playerName;
-	
-	public SurrenderPledgeWar(String pledge, String charName)
-	{
+
+	public SurrenderPledgeWar(String pledge, String charName) {
 		_pledgeName = pledge;
 		_playerName = charName;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SURRENDER_PLEDGE_WAR.writeId(packet);
-		
+
 		packet.writeS(_pledgeName);
 		packet.writeS(_playerName);
 		return true;

@@ -18,14 +18,9 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.commons.util.concurrent.ThreadPool;
 import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.ai.DoorAI;
 import org.l2junity.gameserver.data.xml.impl.DoorData;
@@ -54,17 +49,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DoorInstance extends Creature
-{
+import java.util.Collection;
+import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+public final class DoorInstance extends Creature {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoorInstance.class);
 
 	private boolean _open = false;
 	private boolean _isAttackableDoor = false;
 	private int _meshindex = 1;
 	private Future<?> _autoCloseTask;
-	
-	public DoorInstance(DoorTemplate template)
-	{
+
+	public DoorInstance(DoorTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.DoorInstance);
 		setIsInvul(false);
@@ -72,321 +70,258 @@ public final class DoorInstance extends Creature
 		_open = template.isOpenByDefault();
 		_isAttackableDoor = template.isAttackable();
 		super.setTargetable(template.isTargetable());
-		
-		if (isOpenableByTime())
-		{
+
+		if (isOpenableByTime()) {
 			startTimerOpen();
 		}
 	}
-	
+
 	@Override
-	protected CharacterAI initAI()
-	{
+	protected CharacterAI initAI() {
 		return new DoorAI(this);
 	}
-	
+
 	@Override
-	public void moveToLocation(double x, double y, double z, int offset)
-	{
+	public void moveToLocation(double x, double y, double z, int offset) {
 	}
-	
+
 	@Override
-	public void stopMove(Location loc)
-	{
+	public void stopMove(Location loc) {
 	}
-	
+
 	@Override
-	public void doAutoAttack(Creature target)
-	{
+	public void doAutoAttack(Creature target) {
 	}
-	
+
 	@Override
-	public void doCast(Skill skill)
-	{
+	public void doCast(Skill skill) {
 	}
-	
-	private void startTimerOpen()
-	{
+
+	private void startTimerOpen() {
 		int delay = _open ? getTemplate().getOpenTime() : getTemplate().getCloseTime();
-		if (getTemplate().getRandomTime() > 0)
-		{
+		if (getTemplate().getRandomTime() > 0) {
 			delay += Rnd.get(getTemplate().getRandomTime());
 		}
-		ThreadPool.schedule(new TimerOpen(), delay * 1000, TimeUnit.MILLISECONDS);
+		ThreadPool.getInstance().scheduleGeneral(new TimerOpen(), delay * 1000, TimeUnit.MILLISECONDS);
 	}
-	
+
 	@Override
-	public DoorTemplate getTemplate()
-	{
+	public DoorTemplate getTemplate() {
 		return (DoorTemplate) super.getTemplate();
 	}
-	
+
 	@Override
-	public void initCharStat()
-	{
+	public void initCharStat() {
 		setStat(new DoorStat(this));
 	}
-	
+
 	@Override
-	public DoorStat getStat()
-	{
+	public DoorStat getStat() {
 		return (DoorStat) super.getStat();
 	}
-	
+
 	/**
 	 * @return {@code true} if door is open-able by skill.
 	 */
-	public final boolean isOpenableBySkill()
-	{
+	public final boolean isOpenableBySkill() {
 		return (getTemplate().getOpenType()) == DoorOpenType.BY_SKILL;
 	}
-	
+
 	/**
 	 * @return {@code true} if door is open-able by item.
 	 */
-	public final boolean isOpenableByItem()
-	{
+	public final boolean isOpenableByItem() {
 		return (getTemplate().getOpenType()) == DoorOpenType.BY_ITEM;
 	}
-	
+
 	/**
 	 * @return {@code true} if door is open-able by double-click.
 	 */
-	public final boolean isOpenableByClick()
-	{
+	public final boolean isOpenableByClick() {
 		return (getTemplate().getOpenType()) == DoorOpenType.BY_CLICK;
 	}
-	
+
 	/**
 	 * @return {@code true} if door is open-able by time.
 	 */
-	public final boolean isOpenableByTime()
-	{
+	public final boolean isOpenableByTime() {
 		return (getTemplate().getOpenType()) == DoorOpenType.BY_TIME;
 	}
-	
+
 	/**
 	 * @return {@code true} if door is open-able by Field Cycle system.
 	 */
-	public final boolean isOpenableByCycle()
-	{
+	public final boolean isOpenableByCycle() {
 		return (getTemplate().getOpenType()) == DoorOpenType.BY_CYCLE;
 	}
-	
+
 	@Override
-	public final int getLevel()
-	{
+	public final int getLevel() {
 		return getTemplate().getLevel();
 	}
-	
+
 	/**
 	 * Gets the door ID.
+	 *
 	 * @return the door ID
 	 */
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return getTemplate().getId();
 	}
-	
+
 	/**
 	 * @return Returns the open.
 	 */
-	public boolean isOpen()
-	{
+	public boolean isOpen() {
 		return _open;
 	}
-	
+
 	/**
 	 * @param open The open to set.
 	 */
-	public void setOpen(boolean open)
-	{
+	public void setOpen(boolean open) {
 		_open = open;
-		if (getChildId() > 0)
-		{
+		if (getChildId() > 0) {
 			final DoorInstance sibling = getSiblingDoor(getChildId());
-			if (sibling != null)
-			{
+			if (sibling != null) {
 				sibling.notifyChildEvent(open);
-			}
-			else
-			{
+			} else {
 				LOGGER.warn("cannot find child id: {}", getChildId());
 			}
 		}
 	}
-	
-	public boolean getIsAttackableDoor()
-	{
+
+	public boolean getIsAttackableDoor() {
 		return _isAttackableDoor;
 	}
-	
-	public boolean isShowHp()
-	{
+
+	public boolean isShowHp() {
 		return getTemplate().isShowHp();
 	}
-	
-	public void setIsAttackableDoor(boolean val)
-	{
+
+	public void setIsAttackableDoor(boolean val) {
 		_isAttackableDoor = val;
 	}
-	
-	public int getDamage()
-	{
+
+	public int getDamage() {
 		return isShowHp() ? CommonUtil.constrain(6 - (int) Math.ceil((getCurrentHp() / getMaxHp()) * 6), 0, 6) : 0;
 	}
-	
-	public final Castle getCastle()
-	{
+
+	public final Castle getCastle() {
 		return CastleManager.getInstance().getCastle(this);
 	}
-	
-	public final Fort getFort()
-	{
+
+	public final Fort getFort() {
 		return FortManager.getInstance().getFort(this);
 	}
-	
-	public boolean isEnemy()
-	{
-		if ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getZone().isActive() && isShowHp())
-		{
+
+	public boolean isEnemy() {
+		if ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getZone().isActive() && isShowHp()) {
 			return true;
-		}
-		else if ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getZone().isActive() && isShowHp())
-		{
+		} else if ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getZone().isActive() && isShowHp()) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
+	public boolean isAutoAttackable(Creature attacker) {
 		// Doors can`t be attacked by NPCs
-		if (!attacker.isPlayable())
-		{
+		if (!attacker.isPlayable()) {
 			return false;
-		}
-		else if (getIsAttackableDoor())
-		{
+		} else if (getIsAttackableDoor()) {
 			return true;
-		}
-		else if (!isShowHp())
-		{
+		} else if (!isShowHp()) {
 			return false;
 		}
-		
+
 		final PlayerInstance actingPlayer = attacker.getActingPlayer();
-		
+
 		// Attackable only during siege by everyone (not owner)
 		final boolean isCastle = ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getZone().isActive());
 		final boolean isFort = ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getZone().isActive());
-		
-		if (isFort)
-		{
+
+		if (isFort) {
 			L2Clan clan = actingPlayer.getClan();
-			if ((clan != null) && (clan == getFort().getOwnerClan()))
-			{
+			if ((clan != null) && (clan == getFort().getOwnerClan())) {
 				return false;
 			}
-		}
-		else if (isCastle)
-		{
+		} else if (isCastle) {
 			L2Clan clan = actingPlayer.getClan();
-			if ((clan != null) && (clan.getId() == getCastle().getOwnerId()))
-			{
+			if ((clan != null) && (clan.getId() == getCastle().getOwnerId())) {
 				return false;
 			}
 		}
 		return (isCastle || isFort);
 	}
-	
+
 	/**
 	 * Return null.
 	 */
 	@Override
-	public ItemInstance getActiveWeaponInstance()
-	{
+	public ItemInstance getActiveWeaponInstance() {
 		return null;
 	}
-	
+
 	@Override
-	public Weapon getActiveWeaponItem()
-	{
+	public Weapon getActiveWeaponItem() {
 		return null;
 	}
-	
+
 	@Override
-	public ItemInstance getSecondaryWeaponInstance()
-	{
+	public ItemInstance getSecondaryWeaponInstance() {
 		return null;
 	}
-	
+
 	@Override
-	public Weapon getSecondaryWeaponItem()
-	{
+	public Weapon getSecondaryWeaponItem() {
 		return null;
 	}
-	
+
 	@Override
-	public void broadcastStatusUpdate(Creature caster)
-	{
+	public void broadcastStatusUpdate(Creature caster) {
 		final Collection<PlayerInstance> knownPlayers = World.getInstance().getVisibleObjects(this, PlayerInstance.class);
-		if ((knownPlayers == null) || knownPlayers.isEmpty())
-		{
+		if ((knownPlayers == null) || knownPlayers.isEmpty()) {
 			return;
 		}
-		
+
 		final StaticObject su = new StaticObject(this, false);
 		final StaticObject targetableSu = new StaticObject(this, true);
 		final DoorStatusUpdate dsu = new DoorStatusUpdate(this);
 		OnEventTrigger oe = null;
-		if (getEmitter() > 0)
-		{
+		if (getEmitter() > 0) {
 			oe = new OnEventTrigger(getEmitter(), getTemplate().isReversed() ? !isOpen() : isOpen());
 		}
-		
-		for (PlayerInstance player : knownPlayers)
-		{
-			if ((player == null) || !isVisibleFor(player))
-			{
+
+		for (PlayerInstance player : knownPlayers) {
+			if ((player == null) || !isVisibleFor(player)) {
 				continue;
 			}
-			
-			if (player.isGM() || (((getCastle() != null) && (getCastle().getResidenceId() > 0)) || ((getFort() != null) && (getFort().getResidenceId() > 0))))
-			{
+
+			if (player.isGM() || (((getCastle() != null) && (getCastle().getResidenceId() > 0)) || ((getFort() != null) && (getFort().getResidenceId() > 0)))) {
 				player.sendPacket(targetableSu);
-			}
-			else
-			{
+			} else {
 				player.sendPacket(su);
 			}
-			
+
 			player.sendPacket(dsu);
-			if (oe != null)
-			{
+			if (oe != null) {
 				player.sendPacket(oe);
 			}
 		}
 	}
-	
-	public final void openCloseMe(boolean open)
-	{
-		if (open)
-		{
+
+	public final void openCloseMe(boolean open) {
+		if (open) {
 			openMe();
-		}
-		else
-		{
+		} else {
 			closeMe();
 		}
 	}
-	
-	public final void openMe()
-	{
-		if (getGroupName() != null)
-		{
+
+	public final void openMe() {
+		if (getGroupName() != null) {
 			manageGroupOpen(true, getGroupName());
 			return;
 		}
@@ -394,262 +329,213 @@ public final class DoorInstance extends Creature
 		broadcastStatusUpdate();
 		startAutoCloseTask();
 	}
-	
-	public final void closeMe()
-	{
+
+	public final void closeMe() {
 		// remove close task
 		final Future<?> oldTask = _autoCloseTask;
-		if (oldTask != null)
-		{
+		if (oldTask != null) {
 			_autoCloseTask = null;
 			oldTask.cancel(false);
 		}
-		if (getGroupName() != null)
-		{
+		if (getGroupName() != null) {
 			manageGroupOpen(false, getGroupName());
 			return;
 		}
 		setOpen(false);
 		broadcastStatusUpdate();
 	}
-	
-	private void manageGroupOpen(boolean open, String groupName)
-	{
+
+	private void manageGroupOpen(boolean open, String groupName) {
 		final Set<Integer> set = DoorData.getInstance().getDoorsByGroup(groupName);
 		DoorInstance first = null;
-		for (Integer id : set)
-		{
+		for (Integer id : set) {
 			final DoorInstance door = getSiblingDoor(id);
-			if (first == null)
-			{
+			if (first == null) {
 				first = door;
 			}
-			
-			if (door.isOpen() != open)
-			{
+
+			if (door.isOpen() != open) {
 				door.setOpen(open);
 				door.broadcastStatusUpdate();
 			}
 		}
-		if ((first != null) && open)
-		{
+		if ((first != null) && open) {
 			first.startAutoCloseTask(); // only one from group
 		}
 	}
-	
+
 	/**
 	 * Door notify child about open state change
+	 *
 	 * @param open true if opened
 	 */
-	private void notifyChildEvent(boolean open)
-	{
+	private void notifyChildEvent(boolean open) {
 		final byte openThis = open ? getTemplate().getMasterDoorOpen() : getTemplate().getMasterDoorClose();
-		if (openThis == 1)
-		{
+		if (openThis == 1) {
 			openMe();
-		}
-		else if (openThis == -1)
-		{
+		} else if (openThis == -1) {
 			closeMe();
 		}
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getClass().getSimpleName() + "[" + getTemplate().getId() + "](" + getObjectId() + ")";
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return getTemplate().getName();
 	}
-	
-	public int getX(int i)
-	{
+
+	public int getX(int i) {
 		return getTemplate().getNodeX()[i];
 	}
-	
-	public int getY(int i)
-	{
+
+	public int getY(int i) {
 		return getTemplate().getNodeY()[i];
 	}
-	
-	public int getZMin()
-	{
+
+	public int getZMin() {
 		return getTemplate().getNodeZ();
 	}
-	
-	public int getZMax()
-	{
+
+	public int getZMax() {
 		return getTemplate().getNodeZ() + getTemplate().getHeight();
 	}
-	
-	public void setMeshIndex(int mesh)
-	{
+
+	public void setMeshIndex(int mesh) {
 		_meshindex = mesh;
 	}
-	
-	public int getMeshIndex()
-	{
+
+	public int getMeshIndex() {
 		return _meshindex;
 	}
-	
-	public int getEmitter()
-	{
+
+	public int getEmitter() {
 		return getTemplate().getEmmiter();
 	}
-	
-	public boolean isWall()
-	{
+
+	public boolean isWall() {
 		return getTemplate().isWall();
 	}
-	
-	public String getGroupName()
-	{
+
+	public String getGroupName() {
 		return getTemplate().getGroupName();
 	}
-	
-	public int getChildId()
-	{
+
+	public int getChildId() {
 		return getTemplate().getChildDoorId();
 	}
-	
+
 	@Override
-	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect)
-	{
-		if (isWall() && !isInInstance())
-		{
-			if (!attacker.isServitor())
-			{
+	public void reduceCurrentHp(double value, Creature attacker, Skill skill, boolean isDOT, boolean directlyToHp, boolean critical, boolean reflect) {
+		if (isWall() && !isInInstance()) {
+			if (!attacker.isServitor()) {
 				return;
 			}
-			
+
 			final L2ServitorInstance servitor = (L2ServitorInstance) attacker;
-			if (servitor.getTemplate().getRace() != Race.SIEGE_WEAPON)
-			{
+			if (servitor.getTemplate().getRace() != Race.SIEGE_WEAPON) {
 				return;
 			}
 		}
 		super.reduceCurrentHp(value, attacker, skill, isDOT, directlyToHp, critical, reflect);
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
-		if (!super.doDie(killer))
-		{
+	public boolean doDie(Creature killer) {
+		if (!super.doDie(killer)) {
 			return false;
 		}
-		
+
 		final boolean isFort = ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getSiege().isInProgress());
 		final boolean isCastle = ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getSiege().isInProgress());
-		
-		if (isFort || isCastle)
-		{
+
+		if (isFort || isCastle) {
 			broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_CASTLE_GATE_HAS_BEEN_DESTROYED));
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void sendInfo(PlayerInstance activeChar)
-	{
-		if (isVisibleFor(activeChar))
-		{
-			if (getEmitter() > 0)
-			{
+	public void sendInfo(PlayerInstance activeChar) {
+		if (isVisibleFor(activeChar)) {
+			if (getEmitter() > 0) {
 				activeChar.sendPacket(new OnEventTrigger(getEmitter(), getTemplate().isReversed() ? !isOpen() : isOpen()));
 			}
 			activeChar.sendPacket(new StaticObject(this, activeChar.isGM()));
 		}
 	}
-	
+
 	@Override
-	public void setTargetable(boolean targetable)
-	{
+	public void setTargetable(boolean targetable) {
 		super.setTargetable(targetable);
 		broadcastStatusUpdate();
 	}
-	
-	public boolean checkCollision()
-	{
+
+	public boolean checkCollision() {
 		return getTemplate().isCheckCollision();
 	}
-	
+
 	/**
 	 * All doors are stored at DoorTable except instance doors
+	 *
 	 * @param doorId
 	 * @return
 	 */
-	private DoorInstance getSiblingDoor(int doorId)
-	{
+	private DoorInstance getSiblingDoor(int doorId) {
 		final Instance inst = getInstanceWorld();
 		return (inst != null) ? inst.getDoor(doorId) : DoorData.getInstance().getDoor(doorId);
 	}
-	
-	private void startAutoCloseTask()
-	{
-		if ((getTemplate().getCloseTime() < 0) || isOpenableByTime())
-		{
+
+	private void startAutoCloseTask() {
+		if ((getTemplate().getCloseTime() < 0) || isOpenableByTime()) {
 			return;
 		}
-		
+
 		final Future<?> oldTask = _autoCloseTask;
-		if (oldTask != null)
-		{
+		if (oldTask != null) {
 			_autoCloseTask = null;
 			oldTask.cancel(false);
 		}
-		_autoCloseTask = ThreadPool.schedule(new AutoClose(), getTemplate().getCloseTime() * 1000, TimeUnit.MILLISECONDS);
+		_autoCloseTask = ThreadPool.getInstance().scheduleGeneral(new AutoClose(), getTemplate().getCloseTime() * 1000, TimeUnit.MILLISECONDS);
 	}
-	
-	class AutoClose implements Runnable
-	{
+
+	class AutoClose implements Runnable {
 		@Override
-		public void run()
-		{
-			if (isOpen())
-			{
+		public void run() {
+			if (isOpen()) {
 				closeMe();
 			}
 		}
 	}
-	
-	class TimerOpen implements Runnable
-	{
+
+	class TimerOpen implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			boolean open = isOpen();
-			if (open)
-			{
+			if (open) {
 				closeMe();
-			}
-			else
-			{
+			} else {
 				openMe();
 			}
-			
+
 			int delay = open ? getTemplate().getCloseTime() : getTemplate().getOpenTime();
-			if (getTemplate().getRandomTime() > 0)
-			{
+			if (getTemplate().getRandomTime() > 0) {
 				delay += Rnd.get(getTemplate().getRandomTime());
 			}
-			ThreadPool.schedule(this, delay * 1000, TimeUnit.MILLISECONDS);
+			ThreadPool.getInstance().scheduleGeneral(this, delay * 1000, TimeUnit.MILLISECONDS);
 		}
 	}
-	
+
 	@Override
-	public boolean isDoor()
-	{
+	public boolean isDoor() {
 		return true;
 	}
-	
+
 	@Override
-	public DoorInstance asDoor()
-	{
+	public DoorInstance asDoor() {
 		return this;
 	}
 }

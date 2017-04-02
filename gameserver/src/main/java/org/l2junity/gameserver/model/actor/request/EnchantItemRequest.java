@@ -24,63 +24,52 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public final class EnchantItemRequest extends AbstractRequest
-{
+public final class EnchantItemRequest extends AbstractRequest {
 	private volatile int _enchantingItemObjectId;
 	private volatile int _enchantingScrollObjectId;
 	private volatile int _supportItemObjectId;
-	
-	public EnchantItemRequest(PlayerInstance activeChar, int enchantingScrollObjectId)
-	{
+
+	public EnchantItemRequest(PlayerInstance activeChar, int enchantingScrollObjectId) {
 		super(activeChar);
 		_enchantingScrollObjectId = enchantingScrollObjectId;
 	}
-	
-	public ItemInstance getEnchantingItem()
-	{
+
+	public ItemInstance getEnchantingItem() {
 		return getActiveChar().getInventory().getItemByObjectId(_enchantingItemObjectId);
 	}
-	
-	public void setEnchantingItem(int objectId)
-	{
+
+	public void setEnchantingItem(int objectId) {
 		_enchantingItemObjectId = objectId;
 	}
-	
-	public ItemInstance getEnchantingScroll()
-	{
+
+	public ItemInstance getEnchantingScroll() {
 		return getActiveChar().getInventory().getItemByObjectId(_enchantingScrollObjectId);
 	}
-	
-	public void setEnchantingScroll(int objectId)
-	{
+
+	public void setEnchantingScroll(int objectId) {
 		_enchantingScrollObjectId = objectId;
 	}
-	
-	public ItemInstance getSupportItem()
-	{
+
+	public ItemInstance getSupportItem() {
 		return getActiveChar().getInventory().getItemByObjectId(_supportItemObjectId);
 	}
-	
-	public void setSupportItem(int objectId)
-	{
+
+	public void setSupportItem(int objectId) {
 		_supportItemObjectId = objectId;
 	}
-	
+
 	@Override
-	public boolean isItemRequest()
-	{
+	public boolean isItemRequest() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean canWorkWith(AbstractRequest request)
-	{
+	public boolean canWorkWith(AbstractRequest request) {
 		return !request.isItemRequest();
 	}
-	
+
 	@Override
-	public boolean isUsing(int objectId)
-	{
+	public boolean isUsing(int objectId) {
 		return (objectId > 0) && ((objectId == _enchantingItemObjectId) || (objectId == _enchantingScrollObjectId) || (objectId == _supportItemObjectId));
 	}
 }

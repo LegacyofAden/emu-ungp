@@ -30,34 +30,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Gnacik, UnAfraid
  */
-public class RequestMenteeAdd implements IClientIncomingPacket
-{
+public class RequestMenteeAdd implements IClientIncomingPacket {
 	private String _target;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_target = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance mentor = client.getActiveChar();
-		if (mentor == null)
-		{
+		if (mentor == null) {
 			return;
 		}
-		
+
 		final PlayerInstance mentee = World.getInstance().getPlayer(_target);
-		if (mentee == null)
-		{
+		if (mentee == null) {
 			return;
 		}
-		
-		if (ConfirmMenteeAdd.validate(mentor, mentee))
-		{
+
+		if (ConfirmMenteeAdd.validate(mentor, mentee)) {
 			mentor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_OFFERED_TO_BECOME_S1_S_MENTOR).addCharName(mentee));
 			mentee.sendPacket(new ExMentorAdd(mentor));
 		}

@@ -21,9 +21,8 @@ package org.l2junity.gameserver.model.eventengine;
 /**
  * @author UnAfraid
  */
-public interface IConditionalEventScheduler
-{
+public interface IConditionalEventScheduler {
 	public boolean test();
-	
+
 	public void run();
 }

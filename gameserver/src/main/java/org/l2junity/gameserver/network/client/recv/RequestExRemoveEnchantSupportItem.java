@@ -28,35 +28,29 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestExRemoveEnchantSupportItem implements IClientIncomingPacket
-{
+public class RequestExRemoveEnchantSupportItem implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final EnchantItemRequest request = activeChar.getRequest(EnchantItemRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			return;
 		}
-		
+
 		final ItemInstance supportItem = request.getSupportItem();
-		if ((supportItem == null) || (supportItem.getCount() < 1))
-		{
+		if ((supportItem == null) || (supportItem.getCount() < 1)) {
 			request.setSupportItem(PlayerInstance.ID_NONE);
 		}
-		
+
 		request.setTimestamp(System.currentTimeMillis());
 		activeChar.sendPacket(ExRemoveEnchantSupportItemResult.STATIC_PACKET);
 	}

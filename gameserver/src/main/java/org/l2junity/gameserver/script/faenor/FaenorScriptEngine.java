@@ -18,105 +18,67 @@
  */
 package org.l2junity.gameserver.script.faenor;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-
-import javax.script.ScriptContext;
-
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.util.BasePathProvider;
-import org.l2junity.gameserver.config.ServerConfig;
-import org.l2junity.gameserver.loader.LoadGroup;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.script.Parser;
 import org.l2junity.gameserver.script.ParserNotCreatedException;
 import org.l2junity.gameserver.script.ScriptDocument;
 import org.l2junity.gameserver.script.ScriptEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
+
+import javax.script.ScriptContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * @author Luis Arias
  */
-public final class FaenorScriptEngine
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(FaenorScriptEngine.class);
-	
-	protected FaenorScriptEngine()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load()
-	{
-		try
-		{
-			Files.walkFileTree(BasePathProvider.resolveDatapackPath(ServerConfig.DATAPACK_ROOT, Paths.get("data", "faenor")), new SimpleFileVisitor<Path>()
-			{
+@Slf4j
+@StartupComponent("Scripts")
+public final class FaenorScriptEngine {
+	@Getter(lazy = true)
+	private static final FaenorScriptEngine instance = new FaenorScriptEngine();
+
+	private FaenorScriptEngine() {
+		try {
+			Files.walkFileTree(Paths.get("data", "faenor"), new SimpleFileVisitor<Path>() {
 				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
-				{
-					try (final InputStream in = Files.newInputStream(file))
-					{
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					try (final InputStream in = Files.newInputStream(file)) {
 						parseScript(new ScriptDocument(file.getFileName().toString(), in), null);
 					}
 					return super.visitFile(file, attrs);
 				}
 			});
-		}
-		catch (IOException e)
-		{
-			LOGGER.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
 		}
 	}
-	
-	protected void parseScript(ScriptDocument script, ScriptContext context)
-	{
+
+	protected void parseScript(ScriptDocument script, ScriptContext context) {
 		Node node = script.getDocument().getFirstChild();
 		String parserClass = "faenor.Faenor" + node.getNodeName() + "Parser";
-		
+
 		Parser parser = null;
-		try
-		{
+		try {
 			parser = ScriptEngine.createParser(parserClass);
+		} catch (ParserNotCreatedException e) {
+			log.warn("ERROR: No parser registered for Script: {}: ", parserClass, e);
 		}
-		catch (ParserNotCreatedException e)
-		{
-			LOGGER.warn("ERROR: No parser registered for Script: {}: ", parserClass, e);
-		}
-		
-		if (parser == null)
-		{
-			LOGGER.warn("Unknown Script Type: {}", script.getName());
+
+		if (parser == null) {
+			log.warn("Unknown Script Type: {}", script.getName());
 			return;
 		}
-		
-		try
-		{
+
+		try {
 			parser.parseScript(node, context);
-			LOGGER.info("Loaded  {} successfully.", script.getName());
+			log.info("Loaded  {} successfully.", script.getName());
+		} catch (Exception e) {
+			log.warn("Script Parsing Failed: ", e);
 		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Script Parsing Failed: ", e);
-		}
-	}
-	
-	@InstanceGetter
-	public static FaenorScriptEngine getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final FaenorScriptEngine INSTANCE = new FaenorScriptEngine();
 	}
 }

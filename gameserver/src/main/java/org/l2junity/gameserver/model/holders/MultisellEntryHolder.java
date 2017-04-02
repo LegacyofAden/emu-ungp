@@ -18,41 +18,36 @@
  */
 package org.l2junity.gameserver.model.holders;
 
+import org.l2junity.gameserver.datatables.ItemTable;
+import org.l2junity.gameserver.model.items.L2Item;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.model.items.L2Item;
-
 /**
  * @author Nik
  */
-public class MultisellEntryHolder
-{
+public class MultisellEntryHolder {
 	private final boolean _stackable;
 	private final List<ItemHolder> _ingredients;
 	private final List<ItemChanceHolder> _products;
-	
-	public MultisellEntryHolder(List<ItemHolder> ingredients, List<ItemChanceHolder> products)
-	{
+
+	public MultisellEntryHolder(List<ItemHolder> ingredients, List<ItemChanceHolder> products) {
 		_ingredients = Collections.unmodifiableList(ingredients);
 		_products = Collections.unmodifiableList(products);
 		_stackable = products.stream().map(i -> ItemTable.getInstance().getTemplate(i.getId())).filter(Objects::nonNull).allMatch(L2Item::isStackable);
 	}
-	
-	public final List<ItemHolder> getIngredients()
-	{
+
+	public final List<ItemHolder> getIngredients() {
 		return _ingredients;
 	}
-	
-	public final List<ItemChanceHolder> getProducts()
-	{
+
+	public final List<ItemChanceHolder> getProducts() {
 		return _products;
 	}
-	
-	public final boolean isStackable()
-	{
+
+	public final boolean isStackable() {
 		return _stackable;
 	}
 }

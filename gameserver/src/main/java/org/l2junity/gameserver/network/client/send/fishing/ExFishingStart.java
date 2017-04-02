@@ -27,30 +27,27 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class ExFishingStart implements IClientOutgoingPacket
-{
+public class ExFishingStart implements IClientOutgoingPacket {
 	private final PlayerInstance _player;
 	private final int _fishType;
 	private final int _baitType;
 	private final ILocational _baitLocation;
-	
+
 	/**
 	 * @param player
 	 * @param fishType
-	 * @param baitType - 0 = newbie, 1 = normal, 2 = night
+	 * @param baitType     - 0 = newbie, 1 = normal, 2 = night
 	 * @param baitLocation
 	 */
-	public ExFishingStart(PlayerInstance player, int fishType, int baitType, ILocational baitLocation)
-	{
+	public ExFishingStart(PlayerInstance player, int fishType, int baitType, ILocational baitLocation) {
 		_player = player;
 		_fishType = fishType;
 		_baitType = baitType;
 		_baitLocation = baitLocation;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_FISHING_START.writeId(packet);
 		packet.writeD(_player.getObjectId());
 		packet.writeC(_fishType);

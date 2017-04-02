@@ -21,19 +21,16 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class CharCreateOk implements IClientOutgoingPacket
-{
+public class CharCreateOk implements IClientOutgoingPacket {
 	public static final CharCreateOk STATIC_PACKET = new CharCreateOk();
-	
-	private CharCreateOk()
-	{
+
+	private CharCreateOk() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_CREATE_SUCCESS.writeId(packet);
-		
+
 		packet.writeD(0x01);
 		return true;
 	}

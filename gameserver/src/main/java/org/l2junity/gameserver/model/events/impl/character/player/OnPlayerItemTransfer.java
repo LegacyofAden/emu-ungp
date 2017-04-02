@@ -27,37 +27,31 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author UnAfraid
  */
-public class OnPlayerItemTransfer implements IBaseEvent
-{
+public class OnPlayerItemTransfer implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final ItemContainer _container;
-	
-	public OnPlayerItemTransfer(PlayerInstance activeChar, ItemInstance item, ItemContainer container)
-	{
+
+	public OnPlayerItemTransfer(PlayerInstance activeChar, ItemInstance item, ItemContainer container) {
 		_activeChar = activeChar;
 		_item = item;
 		_container = container;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public ItemContainer getContainer()
-	{
+
+	public ItemContainer getContainer() {
 		return _container;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_ITEM_TRANSFER;
 	}
 }

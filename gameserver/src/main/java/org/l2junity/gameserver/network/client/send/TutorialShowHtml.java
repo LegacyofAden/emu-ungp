@@ -24,59 +24,54 @@ import org.l2junity.network.PacketWriter;
 
 /**
  * TutorialShowHtml server packet implementation.
+ *
  * @author HorridoJoho
  */
-public final class TutorialShowHtml extends AbstractHtmlPacket
-{
+public final class TutorialShowHtml extends AbstractHtmlPacket {
 	// TODO: Enum
 	public static final int NORMAL_WINDOW = 1;
 	public static final int LARGE_WINDOW = 2;
-	
+
 	private final int _type;
-	
-	public TutorialShowHtml(String html)
-	{
+
+	public TutorialShowHtml(String html) {
 		super(html);
 		_type = NORMAL_WINDOW;
 	}
-	
+
 	/**
 	 * This constructor is just here to be able to show a tutorial html<br>
 	 * window bound to an npc.
+	 *
 	 * @param npcObjId
 	 * @param html
 	 */
-	public TutorialShowHtml(int npcObjId, String html)
-	{
+	public TutorialShowHtml(int npcObjId, String html) {
 		super(npcObjId, html);
 		_type = NORMAL_WINDOW;
 	}
-	
-	public TutorialShowHtml(int npcObjId, String html, int type)
-	{
+
+	public TutorialShowHtml(int npcObjId, String html, int type) {
 		super(npcObjId, html);
 		_type = type;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TUTORIAL_SHOW_HTML.writeId(packet);
-		
+
 		packet.writeD(_type);
 		packet.writeS(getHtml());
 		return true;
 	}
-	
+
 	@Override
-	protected String getChatName()
-	{
+	protected String getChatName() {
 		return "Tutorial HTML";
 	}
-	
+
 	@Override
-	public HtmlActionScope getScope()
-	{
+	public HtmlActionScope getScope() {
 		return HtmlActionScope.TUTORIAL_HTML;
 	}
 }

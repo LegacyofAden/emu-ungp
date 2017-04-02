@@ -25,19 +25,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExDivideAdenaCancel implements IClientOutgoingPacket
-{
+public class ExDivideAdenaCancel implements IClientOutgoingPacket {
 	public static final ExDivideAdenaCancel STATIC_PACKET = new ExDivideAdenaCancel();
-	
-	private ExDivideAdenaCancel()
-	{
+
+	private ExDivideAdenaCancel() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_DIVIDE_ADENA_CANCEL.writeId(packet);
-		
+
 		packet.writeC(0x00); // TODO: Find me
 		return true;
 	}

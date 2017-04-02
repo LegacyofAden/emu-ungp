@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
 import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
 import org.l2junity.gameserver.model.World;
@@ -29,42 +26,39 @@ import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Gnacik
  */
-public class ListPartyWaiting implements IClientOutgoingPacket
-{
+public class ListPartyWaiting implements IClientOutgoingPacket {
 	private final List<MatchingRoom> _rooms = new LinkedList<>();
 	private final int _size;
-	
+
 	private static final int NUM_PER_PAGE = 64;
-	
-	public ListPartyWaiting(PartyMatchingRoomLevelType type, int location, int page, int requestorLevel)
-	{
+
+	public ListPartyWaiting(PartyMatchingRoomLevelType type, int location, int page, int requestorLevel) {
 		final List<MatchingRoom> rooms = MatchingRoomManager.getInstance().getPartyMathchingRooms(location, type, requestorLevel);
-		
+
 		_size = rooms.size();
 		final int startIndex = (page - 1) * NUM_PER_PAGE;
 		int chunkSize = _size - startIndex;
-		if (chunkSize > NUM_PER_PAGE)
-		{
+		if (chunkSize > NUM_PER_PAGE) {
 			chunkSize = NUM_PER_PAGE;
 		}
-		for (int i = startIndex; i < (startIndex + chunkSize); i++)
-		{
+		for (int i = startIndex; i < (startIndex + chunkSize); i++) {
 			_rooms.add(rooms.get(i));
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.LIST_PARTY_WATING.writeId(packet);
-		
+
 		packet.writeD(_size);
 		packet.writeD(_rooms.size());
-		for (MatchingRoom room : _rooms)
-		{
+		for (MatchingRoom room : _rooms) {
 			packet.writeD(room.getId());
 			packet.writeS(room.getTitle());
 			packet.writeD(room.getLocation());
@@ -73,8 +67,7 @@ public class ListPartyWaiting implements IClientOutgoingPacket
 			packet.writeD(room.getMaxMembers());
 			packet.writeS(room.getLeader().getName());
 			packet.writeD(room.getMembersCount());
-			for (PlayerInstance member : room.getMembers())
-			{
+			for (PlayerInstance member : room.getMembers()) {
 				packet.writeD(member.getClassId().getId());
 				packet.writeS(member.getName());
 			}

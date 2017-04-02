@@ -31,20 +31,19 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Fromat:(ch) dddddc
+ *
  * @author -Wooden-
  */
-public final class RequestExMagicSkillUseGround implements IClientIncomingPacket
-{
+public final class RequestExMagicSkillUseGround implements IClientIncomingPacket {
 	private int _x;
 	private int _y;
 	private int _z;
 	private int _skillId;
 	private boolean _ctrlPressed;
 	private boolean _shiftPressed;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_x = packet.readD();
 		_y = packet.readD();
 		_z = packet.readD();
@@ -53,39 +52,33 @@ public final class RequestExMagicSkillUseGround implements IClientIncomingPacket
 		_shiftPressed = packet.readC() != 0;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// Get the current L2PcInstance of the player
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		// Get the level of the used skill
 		int level = activeChar.getSkillLevel(_skillId);
-		if (level <= 0)
-		{
+		if (level <= 0) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Get the L2Skill template corresponding to the skillID received from the client
 		Skill skill = SkillData.getInstance().getSkill(_skillId, level);
-		
+
 		// Check the validity of the skill
-		if (skill != null)
-		{
+		if (skill != null) {
 			// normally magicskilluse packet turns char client side but for these skills, it doesn't (even with correct target)
 			activeChar.setHeading(Util.calculateHeadingFrom(activeChar.getX(), activeChar.getY(), _x, _y));
 			Broadcast.toKnownPlayers(activeChar, new ValidateLocation(activeChar));
-			
+
 			activeChar.useMagic(skill, new Location(_x, _y, _z), null, _ctrlPressed, _shiftPressed);
-		}
-		else
-		{
+		} else {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			_log.warn("No skill found with id " + _skillId + " and level " + level + " !!");
 		}

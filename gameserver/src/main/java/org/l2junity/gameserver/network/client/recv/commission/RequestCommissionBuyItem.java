@@ -28,33 +28,28 @@ import org.l2junity.network.PacketReader;
 /**
  * @author NosBit
  */
-public class RequestCommissionBuyItem implements IClientIncomingPacket
-{
+public class RequestCommissionBuyItem implements IClientIncomingPacket {
 	private long _commissionId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_commissionId = packet.readQ();
 		// packet.readD(); // CommissionItemType
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (!CommissionManager.isPlayerAllowedToInteract(player))
-		{
+
+		if (!CommissionManager.isPlayerAllowedToInteract(player)) {
 			client.sendPacket(ExCloseCommission.STATIC_PACKET);
 			return;
 		}
-		
+
 		CommissionManager.getInstance().buyItem(player, _commissionId);
 	}
 }

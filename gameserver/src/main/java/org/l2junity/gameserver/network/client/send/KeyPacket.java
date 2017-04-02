@@ -18,34 +18,30 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.HexIDConfig;
+import org.l2junity.core.configs.GameserverConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class KeyPacket implements IClientOutgoingPacket
-{
+public final class KeyPacket implements IClientOutgoingPacket {
 	private final byte[] _key;
 	private final int _result;
-	
-	public KeyPacket(byte[] key, int result)
-	{
+
+	public KeyPacket(byte[] key, int result) {
 		_key = key;
 		_result = result;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.VERSION_CHECK.writeId(packet);
-		
+
 		packet.writeC(_result); // 0 - wrong protocol, 1 - protocol ok
-		for (int i = 0; i < 8; i++)
-		{
+		for (int i = 0; i < 8; i++) {
 			packet.writeC(_key[i]); // key
 		}
 		packet.writeD(0x01);
-		packet.writeD(HexIDConfig.SERVER_ID); // server id
+		packet.writeD(GameserverConfig.SERVER_ID); // server id
 		packet.writeC(0x01);
 		packet.writeD(0x00); // obfuscation key
 		packet.writeC((GeneralConfig.SERVER_LIST_TYPE & 0x400) == 0x400 ? 0x01 : 0x00); // isClassic

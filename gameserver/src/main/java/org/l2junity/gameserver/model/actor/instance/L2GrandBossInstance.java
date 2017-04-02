@@ -23,58 +23,52 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 
 /**
  * This class manages all Grand Bosses.
+ *
  * @version $Revision: 1.0.0.0 $ $Date: 2006/06/16 $
  */
-public final class L2GrandBossInstance extends L2MonsterInstance
-{
+public final class L2GrandBossInstance extends L2MonsterInstance {
 	private static final int BOSS_MAINTENANCE_INTERVAL = 10000;
 	private boolean _useRaidCurse = true;
-	
+
 	/**
 	 * Constructor for L2GrandBossInstance. This represent all grandbosses.
+	 *
 	 * @param template L2NpcTemplate of the instance
 	 */
-	public L2GrandBossInstance(L2NpcTemplate template)
-	{
+	public L2GrandBossInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2GrandBossInstance);
 		setIsRaid(true);
 		setLethalable(false);
 	}
-	
+
 	@Override
-	protected int getMaintenanceInterval()
-	{
+	protected int getMaintenanceInterval() {
 		return BOSS_MAINTENANCE_INTERVAL;
 	}
-	
+
 	@Override
-	public void onSpawn()
-	{
+	public void onSpawn() {
 		setRandomWalking(false);
 		super.onSpawn();
 	}
-	
+
 	@Override
-	public int getVitalityPoints(int level, double exp, boolean isBoss)
-	{
+	public int getVitalityPoints(int level, double exp, boolean isBoss) {
 		return -super.getVitalityPoints(level, exp, isBoss);
 	}
-	
+
 	@Override
-	public boolean useVitalityRate()
-	{
+	public boolean useVitalityRate() {
 		return false;
 	}
-	
-	public void setUseRaidCurse(boolean val)
-	{
+
+	public void setUseRaidCurse(boolean val) {
 		_useRaidCurse = val;
 	}
-	
+
 	@Override
-	public boolean giveRaidCurse()
-	{
+	public boolean giveRaidCurse() {
 		return _useRaidCurse;
 	}
 }

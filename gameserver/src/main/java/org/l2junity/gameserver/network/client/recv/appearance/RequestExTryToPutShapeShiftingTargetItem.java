@@ -34,88 +34,76 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestExTryToPutShapeShiftingTargetItem implements IClientIncomingPacket
-{
+public class RequestExTryToPutShapeShiftingTargetItem implements IClientIncomingPacket {
 	private int _targetItemObjId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_targetItemObjId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		final ShapeShiftingItemRequest request = player.getRequest(ShapeShiftingItemRequest.class);
-		
-		if (player.isInStoreMode() || player.isCrafting() || player.isProcessingRequest() || player.isProcessingTransaction() || (request == null))
-		{
+
+		if (player.isInStoreMode() || player.isCrafting() || player.isProcessingRequest() || player.isProcessingTransaction() || (request == null)) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			client.sendPacket(SystemMessageId.YOU_CANNOT_USE_THIS_SYSTEM_DURING_TRADING_PRIVATE_STORE_AND_WORKSHOP_SETUP);
 			return;
 		}
-		
+
 		final PcInventory inventory = player.getInventory();
 		final ItemInstance targetItem = inventory.getItemByObjectId(_targetItemObjId);
 		ItemInstance stone = request.getAppearanceStone();
-		
-		if ((targetItem == null) || (stone == null))
-		{
+
+		if ((targetItem == null) || (stone == null)) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			player.removeRequest(ShapeShiftingItemRequest.class);
 			return;
 		}
-		
-		if ((stone.getOwnerId() != player.getObjectId()) || (targetItem.getOwnerId() != player.getObjectId()))
-		{
+
+		if ((stone.getOwnerId() != player.getObjectId()) || (targetItem.getOwnerId() != player.getObjectId())) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			player.removeRequest(ShapeShiftingItemRequest.class);
 			return;
 		}
-		
-		if (!targetItem.getItem().isAppearanceable())
-		{
+
+		if (!targetItem.getItem().isAppearanceable()) {
 			client.sendPacket(SystemMessageId.THIS_ITEM_CANNOT_BE_MODIFIED_OR_RESTORED);
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			return;
 		}
-		
-		if ((targetItem.getItemLocation() != ItemLocation.INVENTORY) && (targetItem.getItemLocation() != ItemLocation.PAPERDOLL))
-		{
+
+		if ((targetItem.getItemLocation() != ItemLocation.INVENTORY) && (targetItem.getItemLocation() != ItemLocation.PAPERDOLL)) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			player.removeRequest(ShapeShiftingItemRequest.class);
 			return;
 		}
-		
-		if ((stone = inventory.getItemByObjectId(stone.getObjectId())) == null)
-		{
+
+		if ((stone = inventory.getItemByObjectId(stone.getObjectId())) == null) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			player.removeRequest(ShapeShiftingItemRequest.class);
 			return;
 		}
-		
+
 		final AppearanceStone appearanceStone = AppearanceItemData.getInstance().getStone(stone.getId());
-		if (appearanceStone == null)
-		{
+		if (appearanceStone == null) {
 			client.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			player.removeRequest(ShapeShiftingItemRequest.class);
 			return;
 		}
-		
-		if (!appearanceStone.checkConditions(player, targetItem))
-		{
+
+		if (!appearanceStone.checkConditions(player, targetItem)) {
 			player.sendPacket(ExPutShapeShiftingTargetItemResult.FAILED);
 			return;
 		}
-		
+
 		client.sendPacket(new ExPutShapeShiftingTargetItemResult(ExPutShapeShiftingTargetItemResult.RESULT_SUCCESS, appearanceStone.getCost()));
 	}
 }

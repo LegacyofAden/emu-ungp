@@ -21,12 +21,10 @@ package org.l2junity.commons.scripting.java;
 /**
  * @author HorridoJoho
  */
-public final class JavaCompilerException extends RuntimeException
-{
+public final class JavaCompilerException extends RuntimeException {
 	private static final long serialVersionUID = -8330513514176036095L;
-	
-	public JavaCompilerException(String diagnostics)
-	{
+
+	public JavaCompilerException(String diagnostics) {
 		super(diagnostics);
 	}
 }

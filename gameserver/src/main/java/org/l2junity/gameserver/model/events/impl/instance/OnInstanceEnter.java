@@ -26,30 +26,25 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 /**
  * @author malyelfik
  */
-public final class OnInstanceEnter implements IBaseEvent
-{
+public final class OnInstanceEnter implements IBaseEvent {
 	private final PlayerInstance _player;
 	private final Instance _instance;
-	
-	public OnInstanceEnter(PlayerInstance player, Instance instance)
-	{
+
+	public OnInstanceEnter(PlayerInstance player, Instance instance) {
 		_player = player;
 		_instance = instance;
 	}
-	
-	public PlayerInstance getPlayer()
-	{
+
+	public PlayerInstance getPlayer() {
 		return _player;
 	}
-	
-	public Instance getInstanceWorld()
-	{
+
+	public Instance getInstanceWorld() {
 		return _instance;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_INSTANCE_ENTER;
 	}
 }

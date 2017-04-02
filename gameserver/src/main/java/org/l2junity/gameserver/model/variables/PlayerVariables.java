@@ -18,6 +18,13 @@
  */
 package org.l2junity.gameserver.model.variables;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,32 +33,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
  */
-public class PlayerVariables extends AbstractVariables
-{
+public class PlayerVariables extends AbstractVariables {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PlayerVariables.class);
-	
+
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM character_variables WHERE charId = ?";
 	private static final String DELETE_QUERY = "DELETE FROM character_variables WHERE charId = ?";
 	private static final String INSERT_QUERY = "INSERT INTO character_variables (charId, var, value) VALUES (?, ?, ?)";
-	
+
 	// Public variable names
 	public static final String HAIR_ACCESSORY_VARIABLE_NAME = "HAIR_ACCESSORY_ENABLED";
 	public static final String WORLD_CHAT_VARIABLE_NAME = "WORLD_CHAT_USED";
@@ -82,195 +77,151 @@ public class PlayerVariables extends AbstractVariables
 	public static final String VISUAL_HAIR_COLOR_ID = "visualHairColorId";
 	public static final String FANTASY_RETURN = "FANTASY_RETURN";
 	public static final String MONSTER_RETURN = "MONSTER_RETURN";
-	
+
 	private final int _objectId;
-	
-	public PlayerVariables(int objectId)
-	{
+
+	public PlayerVariables(int objectId) {
 		_objectId = objectId;
 		restoreMe();
 	}
-	
+
 	@Override
-	public boolean restoreMe()
-	{
+	public boolean restoreMe() {
 		// Restore previous variables.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement st = con.prepareStatement(SELECT_QUERY))
-		{
+			 PreparedStatement st = con.prepareStatement(SELECT_QUERY)) {
 			st.setInt(1, _objectId);
-			try (ResultSet rset = st.executeQuery())
-			{
-				while (rset.next())
-				{
+			try (ResultSet rset = st.executeQuery()) {
+				while (rset.next()) {
 					Object deSerializedObject;
-					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("value"))))
-					{
+					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("value")))) {
 						deSerializedObject = objectIn.readObject();
-					}
-					catch (IOException | ClassNotFoundException e)
-					{
+					} catch (IOException | ClassNotFoundException e) {
 						LOGGER.warn("Couldn't restore variable {} for: {}", rset.getString("var"), getPlayer(), e);
 						deSerializedObject = null;
 					}
 					set(rset.getString("var"), deSerializedObject);
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Couldn't restore variables for: {}", getPlayer(), e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean storeMe()
-	{
+	public boolean storeMe() {
 		// No changes, nothing to store.
-		if (!hasChanges())
-		{
+		if (!hasChanges()) {
 			return false;
 		}
-		
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setInt(1, _objectId);
 				st.execute();
 			}
-			
+
 			// Insert all variables.
-			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY)) {
 				st.setInt(1, _objectId);
-				for (Entry<String, Object> entry : getSet().entrySet())
-				{
+				for (Entry<String, Object> entry : getSet().entrySet()) {
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						ObjectOutputStream oos = new ObjectOutputStream(baos);)
-					{
-						
+						 ObjectOutputStream oos = new ObjectOutputStream(baos);) {
+
 						oos.writeObject(entry.getValue());
 						byte[] asBytes = baos.toByteArray();
-						try (ByteArrayInputStream bais = new ByteArrayInputStream(asBytes))
-						{
+						try (ByteArrayInputStream bais = new ByteArrayInputStream(asBytes)) {
 							st.setString(2, entry.getKey());
 							st.setBinaryStream(3, bais, asBytes.length);
 							st.addBatch();
 						}
-					}
-					catch (IOException e)
-					{
+					} catch (IOException e) {
 						LOGGER.warn("Couldn't store variable {} for player {}", entry.getKey(), getPlayer());
 					}
 				}
 				st.executeBatch();
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Couldn't update variables for player: {}", getPlayer(), e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+	public boolean deleteMe() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setInt(1, _objectId);
 				st.execute();
 			}
-			
+
 			// Clear all entries
 			getSet().clear();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Couldn't delete variables for: {}", getPlayer(), e);
 			return false;
 		}
 		return true;
 	}
-	
-	public PlayerInstance getPlayer()
-	{
+
+	public PlayerInstance getPlayer() {
 		return World.getInstance().getPlayer(_objectId);
 	}
-	
-	public void addOneDayReward(int rewardId)
-	{
+
+	public void addOneDayReward(int rewardId) {
 		List<Integer> rewards = getList(ONE_DAY_REWARDS, Integer.class);
-		if (rewards == null)
-		{
+		if (rewards == null) {
 			rewards = new ArrayList<>();
 			set(ONE_DAY_REWARDS, rewards);
 		}
 		rewards.add(rewardId);
 	}
-	
-	public void removeOneDayReward(int rewardId)
-	{
+
+	public void removeOneDayReward(int rewardId) {
 		final List<Integer> rewards = getList(ONE_DAY_REWARDS, Integer.class);
-		if ((rewards != null) && rewards.contains(rewardId))
-		{
+		if ((rewards != null) && rewards.contains(rewardId)) {
 			rewards.remove(rewards.indexOf(rewardId));
 		}
 	}
-	
-	public boolean hasOneDayReward(int rewardId)
-	{
+
+	public boolean hasOneDayReward(int rewardId) {
 		final List<Integer> rewards = getList(ONE_DAY_REWARDS, Integer.class);
 		return ((rewards != null) && rewards.contains(rewardId));
 	}
-	
-	public List<Integer> getOneDayRewards()
-	{
+
+	public List<Integer> getOneDayRewards() {
 		final List<Integer> rewards = getList(ONE_DAY_REWARDS, Integer.class);
 		return rewards != null ? rewards : Collections.emptyList();
 	}
-	
-	public void updateExtendDrop(int dropId, int itemId, long itemCount)
-	{
+
+	public void updateExtendDrop(int dropId, int itemId, long itemCount) {
 		Map<Integer, List<ItemHolder>> drops = getMapOfList(EXTEND_DROP, Integer.class, ItemHolder.class);
-		if (drops == null)
-		{
+		if (drops == null) {
 			drops = new HashMap<>();
 			set(EXTEND_DROP, drops);
 		}
-		
+
 		final List<ItemHolder> itemz = drops.get(dropId);
-		if (itemz != null)
-		{
+		if (itemz != null) {
 			itemz.removeIf(item -> item.getId() == itemId);
 		}
 		drops.computeIfAbsent(dropId, k -> new ArrayList<>()).add(new ItemHolder(itemId, itemCount));
 	}
-	
-	public long getExtendDropCount(int dropId, int itemId)
-	{
+
+	public long getExtendDropCount(int dropId, int itemId) {
 		final Map<Integer, List<ItemHolder>> drops = getMapOfList(EXTEND_DROP, Integer.class, ItemHolder.class);
-		if (drops != null)
-		{
+		if (drops != null) {
 			final List<ItemHolder> itemz = drops.get(dropId);
-			if (itemz != null)
-			{
+			if (itemz != null) {
 				return itemz.stream().filter(drop -> drop.getId() == itemId).mapToLong(ItemHolder::getCount).findFirst().orElse(0);
 			}
 		}

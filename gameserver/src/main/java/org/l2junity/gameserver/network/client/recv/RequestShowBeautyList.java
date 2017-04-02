@@ -26,26 +26,22 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestShowBeautyList implements IClientIncomingPacket
-{
+public class RequestShowBeautyList implements IClientIncomingPacket {
 	private int _type;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_type = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		client.sendPacket(new ExResponseBeautyList(activeChar, _type));
 	}
 }

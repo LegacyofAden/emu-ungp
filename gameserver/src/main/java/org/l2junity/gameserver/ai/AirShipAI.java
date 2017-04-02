@@ -27,51 +27,41 @@ import org.l2junity.gameserver.network.client.send.ExStopMoveAirShip;
 /**
  * @author DS
  */
-public class AirShipAI extends VehicleAI
-{
-	public AirShipAI(L2AirShipInstance airShip)
-	{
+public class AirShipAI extends VehicleAI {
+	public AirShipAI(L2AirShipInstance airShip) {
 		super(airShip);
 	}
-	
+
 	@Override
-	protected void moveTo(double x, double y, double z)
-	{
-		if (!_actor.isMovementDisabled())
-		{
+	protected void moveTo(double x, double y, double z) {
+		if (!_actor.isMovementDisabled()) {
 			_clientMoving = true;
 			_actor.moveToLocation(x, y, z, 0);
 			_actor.broadcastPacket(new ExMoveToLocationAirShip(getActor()));
 		}
 	}
-	
+
 	@Override
-	public void clientStopMoving(Location loc)
-	{
-		if (_actor.isMoving())
-		{
+	public void clientStopMoving(Location loc) {
+		if (_actor.isMoving()) {
 			_actor.stopMove(loc);
 		}
-		
-		if (_clientMoving || (loc != null))
-		{
+
+		if (_clientMoving || (loc != null)) {
 			_clientMoving = false;
 			_actor.broadcastPacket(new ExStopMoveAirShip(getActor()));
 		}
 	}
-	
+
 	@Override
-	public void describeStateToPlayer(PlayerInstance player)
-	{
-		if (_clientMoving)
-		{
+	public void describeStateToPlayer(PlayerInstance player) {
+		if (_clientMoving) {
 			player.sendPacket(new ExMoveToLocationAirShip(getActor()));
 		}
 	}
-	
+
 	@Override
-	public L2AirShipInstance getActor()
-	{
+	public L2AirShipInstance getActor() {
 		return (L2AirShipInstance) _actor;
 	}
 }

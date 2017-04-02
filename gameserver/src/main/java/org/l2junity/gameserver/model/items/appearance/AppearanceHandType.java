@@ -21,8 +21,7 @@ package org.l2junity.gameserver.model.items.appearance;
 /**
  * @author UnAfraid
  */
-public enum AppearanceHandType
-{
+public enum AppearanceHandType {
 	NONE,
 	ONE_HANDED,
 	TWO_HANDED,

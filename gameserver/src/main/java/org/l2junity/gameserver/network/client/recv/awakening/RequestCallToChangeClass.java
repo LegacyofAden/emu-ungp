@@ -29,29 +29,24 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestCallToChangeClass implements IClientIncomingPacket
-{
+public class RequestCallToChangeClass implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// Nothing to read
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if (player.isDead() || player.isInParty() || (player.getLevel() < 85) || !player.isInCategory(CategoryType.FOURTH_CLASS_GROUP))
-		{
+
+		if (player.isDead() || player.isInParty() || (player.getLevel() < 85) || !player.isInCategory(CategoryType.FOURTH_CLASS_GROUP)) {
 			return;
 		}
-		
+
 		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerCallToChangeClass(player), player);
 	}
 }

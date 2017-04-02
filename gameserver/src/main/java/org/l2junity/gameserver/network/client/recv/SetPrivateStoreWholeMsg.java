@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExPrivateStoreSetWholeMsg;
@@ -28,36 +28,31 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM
  */
-public class SetPrivateStoreWholeMsg implements IClientIncomingPacket
-{
+public class SetPrivateStoreWholeMsg implements IClientIncomingPacket {
 	private static final int MAX_MSG_LENGTH = 29;
-	
+
 	private String _msg;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_msg = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((player == null) || (player.getSellList() == null))
-		{
+		if ((player == null) || (player.getSellList() == null)) {
 			return;
 		}
-		
-		if ((_msg != null) && (_msg.length() > MAX_MSG_LENGTH))
-		{
+
+		if ((_msg != null) && (_msg.length() > MAX_MSG_LENGTH)) {
 			Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to overflow private store whole message", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
+
 		player.getSellList().setTitle(_msg);
 		client.sendPacket(new ExPrivateStoreSetWholeMsg(player));
 	}
-	
+
 }

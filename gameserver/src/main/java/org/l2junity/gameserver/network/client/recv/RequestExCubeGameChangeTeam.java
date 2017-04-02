@@ -25,47 +25,42 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format: chdd d: Arena d: Team
+ *
  * @author mrTJO
  */
-public final class RequestExCubeGameChangeTeam implements IClientIncomingPacket
-{
+public final class RequestExCubeGameChangeTeam implements IClientIncomingPacket {
 	private int _arena;
 	private int _team;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// client sends -1,0,1,2 for arena parameter
 		_arena = packet.readD() + 1;
 		_team = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		// do not remove players after start
-		if (HandysBlockCheckerManager.getInstance().arenaIsBeingUsed(_arena))
-		{
+		if (HandysBlockCheckerManager.getInstance().arenaIsBeingUsed(_arena)) {
 			return;
 		}
 		final PlayerInstance player = client.getActiveChar();
-		
-		switch (_team)
-		{
+
+		switch (_team) {
 			case 0:
 			case 1:
 				// Change Player Team
 				HandysBlockCheckerManager.getInstance().changePlayerToTeam(player, _arena, _team);
 				break;
 			case -1:
-			// Remove Player (me)
+				// Remove Player (me)
 			{
 				int team = HandysBlockCheckerManager.getInstance().getHolder(_arena).getPlayerTeam(player);
 				// client sends two times this packet if click on exit
 				// client did not send this packet on restart
-				if (team > -1)
-				{
+				if (team > -1) {
 					HandysBlockCheckerManager.getInstance().removePlayer(player, _arena, team);
 				}
 				break;

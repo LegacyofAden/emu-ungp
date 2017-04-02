@@ -25,20 +25,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author KenM
  */
-public final class ExRpItemLink extends AbstractItemPacket
-{
+public final class ExRpItemLink extends AbstractItemPacket {
 	private final ItemInstance _item;
-	
-	public ExRpItemLink(ItemInstance item)
-	{
+
+	public ExRpItemLink(ItemInstance item) {
 		_item = item;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_RP_ITEM_LINK.writeId(packet);
-		
+
 		writeItem(packet, _item);
 		return true;
 	}

@@ -26,44 +26,37 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Nik
  */
-public class OnPlayerRequestAcquireSkillInfo implements IBaseEvent
-{
+public class OnPlayerRequestAcquireSkillInfo implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final int _skillId;
 	private final int _skillLevel;
 	private final AcquireSkillType _skillType;
-	
-	public OnPlayerRequestAcquireSkillInfo(PlayerInstance activeChar, int skillId, int skillLevel, AcquireSkillType skillType)
-	{
+
+	public OnPlayerRequestAcquireSkillInfo(PlayerInstance activeChar, int skillId, int skillLevel, AcquireSkillType skillType) {
 		_activeChar = activeChar;
 		_skillId = skillId;
 		_skillLevel = skillLevel;
 		_skillType = skillType;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public int getSkillId()
-	{
+
+	public int getSkillId() {
 		return _skillId;
 	}
-	
-	public int getSkillLevel()
-	{
+
+	public int getSkillLevel() {
 		return _skillLevel;
 	}
-	
-	public AcquireSkillType getSkillType()
-	{
+
+	public AcquireSkillType getSkillType() {
 		return _skillType;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_REQUEST_ACQUIRE_SKILL_INFO;
 	}
 }

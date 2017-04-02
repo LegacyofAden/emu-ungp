@@ -18,45 +18,40 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Collection;
+
 /**
  * @author -Wooden-
  */
-public class PledgeReceiveWarList implements IClientOutgoingPacket
-{
+public class PledgeReceiveWarList implements IClientOutgoingPacket {
 	private final L2Clan _clan;
 	private final int _tab;
 	private final Collection<ClanWar> _clanList;
-	
-	public PledgeReceiveWarList(L2Clan clan, int tab)
-	{
+
+	public PledgeReceiveWarList(L2Clan clan, int tab) {
 		_clan = clan;
 		_tab = tab;
 		_clanList = clan.getWarList().values();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.PLEDGE_RECEIVE_WAR_LIST.writeId(packet);
-		
+
 		packet.writeD(_tab); // page
 		packet.writeD(_clanList.size());
-		for (ClanWar clanWar : _clanList)
-		{
+		for (ClanWar clanWar : _clanList) {
 			final L2Clan clan = clanWar.getOpposingClan(_clan);
-			
-			if (clan == null)
-			{
+
+			if (clan == null) {
 				continue;
 			}
-			
+
 			packet.writeS(clan.getName());
 			packet.writeD(clanWar.getState().ordinal()); // type: 0 = Declaration, 1 = Blood Declaration, 2 = In War, 3 = Victory, 4 = Defeat, 5 = Tie, 6 = Error
 			packet.writeD(clanWar.getRemainingTime()); // Time if friends to start remaining

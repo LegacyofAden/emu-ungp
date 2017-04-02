@@ -26,30 +26,26 @@ import org.l2junity.network.PacketReader;
 
 /**
  * format ch c: (id) 0xD0 h: (subid) 0x13
+ *
  * @author -Wooden-
  */
-public final class RequestOlympiadMatchList implements IClientIncomingPacket
-{
+public final class RequestOlympiadMatchList implements IClientIncomingPacket {
 	private static final String COMMAND = "arenalist";
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if ((activeChar == null) || !activeChar.inObserverMode())
-		{
+		if ((activeChar == null) || !activeChar.inObserverMode()) {
 			return;
 		}
-		
+
 		final IBypassHandler handler = BypassHandler.getInstance().getHandler(COMMAND);
-		if (handler != null)
-		{
+		if (handler != null) {
 			handler.useBypass(COMMAND, activeChar, null);
 		}
 	}

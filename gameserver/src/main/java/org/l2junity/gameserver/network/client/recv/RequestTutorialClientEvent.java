@@ -23,30 +23,25 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
-public class RequestTutorialClientEvent implements IClientIncomingPacket
-{
+public class RequestTutorialClientEvent implements IClientIncomingPacket {
 	int _eventId = 0;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_eventId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		// TODO: UNHARDCODE ME!
 		final QuestState qs = player.getQuestState("255_Tutorial");
-		if (qs != null)
-		{
+		if (qs != null) {
 			qs.getQuest().notifyEvent("CE" + _eventId + "", null, player);
 		}
 	}

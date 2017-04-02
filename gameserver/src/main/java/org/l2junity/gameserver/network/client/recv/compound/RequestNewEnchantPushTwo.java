@@ -34,71 +34,59 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestNewEnchantPushTwo implements IClientIncomingPacket
-{
+public class RequestNewEnchantPushTwo implements IClientIncomingPacket {
 	private int _objectId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_objectId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
-		}
-		else if (activeChar.isInStoreMode())
-		{
+		} else if (activeChar.isInStoreMode()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_DO_THAT_WHILE_IN_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP);
 			client.sendPacket(ExEnchantOneFail.STATIC_PACKET);
 			return;
-		}
-		else if (activeChar.isProcessingTransaction() || activeChar.isProcessingRequest())
-		{
+		} else if (activeChar.isProcessingTransaction() || activeChar.isProcessingRequest()) {
 			client.sendPacket(SystemMessageId.YOU_CANNOT_USE_THIS_SYSTEM_DURING_TRADING_PRIVATE_STORE_AND_WORKSHOP_SETUP);
 			client.sendPacket(ExEnchantOneFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		final CompoundRequest request = activeChar.getRequest(CompoundRequest.class);
-		if ((request == null) || request.isProcessing())
-		{
+		if ((request == null) || request.isProcessing()) {
 			client.sendPacket(ExEnchantTwoFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Make sure player owns this item.
 		request.setItemTwo(_objectId);
 		final ItemInstance itemOne = request.getItemOne();
 		final ItemInstance itemTwo = request.getItemTwo();
-		if ((itemOne == null) || (itemTwo == null))
-		{
+		if ((itemOne == null) || (itemTwo == null)) {
 			client.sendPacket(ExEnchantTwoFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		// Lets prevent using same item twice
-		if (itemOne.getObjectId() == itemTwo.getObjectId())
-		{
+		if (itemOne.getObjectId() == itemTwo.getObjectId()) {
 			client.sendPacket(ExEnchantTwoFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		final CombinationItem combinationItem = CombinationItemsData.getInstance().getItemsBySlots(itemOne.getId(), itemTwo.getId());
-		
+
 		// Not implemented or not able to merge!
-		if (combinationItem == null)
-		{
+		if (combinationItem == null) {
 			client.sendPacket(ExEnchantTwoFail.STATIC_PACKET);
 			return;
 		}
-		
+
 		client.sendPacket(ExEnchantTwoOK.STATIC_PACKET);
 	}
 }

@@ -18,27 +18,29 @@
  */
 package org.l2junity.loginserver.network.client;
 
-import org.l2junity.loginserver.Config;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.NetworkConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.loginserver.network.EventLoopGroupManager;
 import org.l2junity.network.NetworkManager;
 
 /**
  * @author NosBit
  */
-public class ClientNetworkManager extends NetworkManager
-{
-	protected ClientNetworkManager()
-	{
-		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new ClientInitializer(), Config.GAME_CLIENT_LOGIN_HOST, Config.GAME_CLIENT_LOGIN_PORT);
-	}
-	
-	public static ClientNetworkManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ClientNetworkManager _instance = new ClientNetworkManager();
+@Slf4j
+@StartupComponent("Network")
+public class ClientNetworkManager extends NetworkManager {
+	@Getter(lazy = true)
+	private static final ClientNetworkManager instance = new ClientNetworkManager();
+
+	private ClientNetworkManager() {
+		super(EventLoopGroupManager.getInstance().getBossGroup(), EventLoopGroupManager.getInstance().getWorkerGroup(), new ClientInitializer(), NetworkConfig.HOST, NetworkConfig.PORT);
+		try {
+			start();
+			getChannelFuture().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
+			log.error("Error while starting ClientNetworkManager", e);
+		}
 	}
 }

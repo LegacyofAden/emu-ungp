@@ -24,20 +24,17 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Gnacik
  */
-public class ExChangeNicknameNColor implements IClientOutgoingPacket
-{
+public class ExChangeNicknameNColor implements IClientOutgoingPacket {
 	private final int _itemId;
-	
-	public ExChangeNicknameNColor(int itemObjectId)
-	{
+
+	public ExChangeNicknameNColor(int itemObjectId) {
 		_itemId = itemObjectId;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CHANGE_NICKNAME_NCOLOR.writeId(packet);
-		
+
 		packet.writeD(_itemId);
 		return true;
 	}

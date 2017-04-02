@@ -18,89 +18,76 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.base.ClassId;
+import org.l2junity.gameserver.model.items.PcItemTemplate;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.gameserver.config.PlayerConfig;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.base.ClassId;
-import org.l2junity.gameserver.model.items.PcItemTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 /**
  * This class holds the Initial Equipment information.<br>
  * What items get each newly created character and if this item is equipped upon creation (<b>Requires the item to be equippable</b>).
+ *
  * @author Zoey76
  */
-public final class InitialEquipmentData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(InitialEquipmentData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public final class InitialEquipmentData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final InitialEquipmentData instance = new InitialEquipmentData();
+
 	private final Map<ClassId, List<PcItemTemplate>> _initialEquipmentList = new HashMap<>();
 	private static final String NORMAL = "data/stats/initialEquipment.xml";
 	private static final String EVENT = "data/stats/initialEquipmentEvent.xml";
-	
+
 	/**
 	 * Instantiates a new initial equipment data.
 	 */
-	protected InitialEquipmentData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
+	private InitialEquipmentData() {
 		_initialEquipmentList.clear();
 		parseDatapackFile(PlayerConfig.INITIAL_EQUIPMENT_EVENT ? EVENT : NORMAL);
-		LOGGER.info("Loaded {} Initial Equipment data.", _initialEquipmentList.size());
+		log.info("Loaded {} Initial Equipment data.", _initialEquipmentList.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("equipment".equalsIgnoreCase(d.getNodeName()))
-					{
+	public void parseDocument(Document doc, Path path) {
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("equipment".equalsIgnoreCase(d.getNodeName())) {
 						parseEquipment(d);
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Parses the equipment.
+	 *
 	 * @param d parse an initial equipment and add it to {@link #_initialEquipmentList}
 	 */
-	private void parseEquipment(Node d)
-	{
+	private void parseEquipment(Node d) {
 		NamedNodeMap attrs = d.getAttributes();
 		final ClassId classId = ClassId.getClassId(Integer.parseInt(attrs.getNamedItem("classId").getNodeValue()));
 		final List<PcItemTemplate> equipList = new ArrayList<>();
-		for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling())
-		{
-			if ("item".equalsIgnoreCase(c.getNodeName()))
-			{
+		for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling()) {
+			if ("item".equalsIgnoreCase(c.getNodeName())) {
 				final StatsSet set = new StatsSet();
 				attrs = c.getAttributes();
-				for (int i = 0; i < attrs.getLength(); i++)
-				{
+				for (int i = 0; i < attrs.getLength(); i++) {
 					Node attr = attrs.item(i);
 					set.set(attr.getNodeName(), attr.getNodeValue());
 				}
@@ -109,44 +96,28 @@ public final class InitialEquipmentData implements IGameXmlReader
 		}
 		_initialEquipmentList.put(classId, equipList);
 	}
-	
-	public int getInitialEquipmentCount()
-	{
+
+	public int getInitialEquipmentCount() {
 		return _initialEquipmentList.size();
 	}
-	
+
 	/**
 	 * Gets the equipment list.
+	 *
 	 * @param cId the class Id for the required initial equipment.
 	 * @return the initial equipment for the given class Id.
 	 */
-	public List<PcItemTemplate> getEquipmentList(ClassId cId)
-	{
+	public List<PcItemTemplate> getEquipmentList(ClassId cId) {
 		return _initialEquipmentList.get(cId);
 	}
-	
+
 	/**
 	 * Gets the equipment list.
+	 *
 	 * @param cId the class Id for the required initial equipment.
 	 * @return the initial equipment for the given class Id.
 	 */
-	public List<PcItemTemplate> getEquipmentList(int cId)
-	{
+	public List<PcItemTemplate> getEquipmentList(int cId) {
 		return _initialEquipmentList.get(ClassId.getClassId(cId));
-	}
-	
-	/**
-	 * Gets the single instance of InitialEquipmentData.
-	 * @return single instance of InitialEquipmentData
-	 */
-	@InstanceGetter
-	public static InitialEquipmentData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final InitialEquipmentData _instance = new InitialEquipmentData();
 	}
 }

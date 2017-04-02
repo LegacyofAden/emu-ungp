@@ -25,18 +25,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Yme
  */
-public final class TradeOtherAdd extends AbstractItemPacket
-{
+public final class TradeOtherAdd extends AbstractItemPacket {
 	private final TradeItem _item;
-	
-	public TradeOtherAdd(TradeItem item)
-	{
+
+	public TradeOtherAdd(TradeItem item) {
 		_item = item;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.TRADE_OTHER_ADD.writeId(packet);
 		packet.writeH(1); // item count
 		writeItem(packet, _item);

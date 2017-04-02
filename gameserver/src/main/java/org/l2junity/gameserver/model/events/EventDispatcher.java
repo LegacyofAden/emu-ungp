@@ -18,59 +18,54 @@
  */
 package org.l2junity.gameserver.model.events;
 
-import java.util.Queue;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
 import org.l2junity.gameserver.model.events.returns.AbstractEventReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Queue;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author UnAfraid
  */
-public final class EventDispatcher
-{
+public final class EventDispatcher {
 	private static final Logger _log = LoggerFactory.getLogger(EventDispatcher.class);
-	
-	protected EventDispatcher()
-	{
+
+	protected EventDispatcher() {
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
 	 * @return
 	 */
-	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event)
-	{
+	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event) {
 		return notifyEvent(event, null, null);
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
 	 * @param callbackClass
 	 * @return
 	 */
-	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, Class<T> callbackClass)
-	{
+	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, Class<T> callbackClass) {
 		return notifyEvent(event, null, callbackClass);
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
 	 * @param container
 	 * @return
 	 */
-	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, ListenersContainer container)
-	{
+	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, ListenersContainer container) {
 		return notifyEvent(event, container, null);
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
@@ -78,79 +73,68 @@ public final class EventDispatcher
 	 * @param callbackClass
 	 * @return
 	 */
-	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, ListenersContainer container, Class<T> callbackClass)
-	{
-		try
-		{
+	public <T extends AbstractEventReturn> T notifyEvent(IBaseEvent event, ListenersContainer container, Class<T> callbackClass) {
+		try {
 			return Containers.Global().hasListener(event.getType()) || ((container != null) && container.hasListener(event.getType())) ? notifyEventImpl(event, container, callbackClass) : null;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(getClass().getSimpleName() + ": Couldn't notify event " + event.getClass().getSimpleName(), e);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Executing current listener notification asynchronously
+	 *
 	 * @param event
 	 * @param containers
 	 */
-	public void notifyEventAsync(IBaseEvent event, ListenersContainer... containers)
-	{
-		if (event == null)
-		{
+	public void notifyEventAsync(IBaseEvent event, ListenersContainer... containers) {
+		if (event == null) {
 			throw new NullPointerException("Event cannot be null!");
 		}
-		
+
 		boolean hasListeners = Containers.Global().hasListener(event.getType());
-		if (!hasListeners)
-		{
-			for (ListenersContainer container : containers)
-			{
-				if (container.hasListener(event.getType()))
-				{
+		if (!hasListeners) {
+			for (ListenersContainer container : containers) {
+				if (container.hasListener(event.getType())) {
 					hasListeners = true;
 					break;
 				}
 			}
 		}
-		
-		if (hasListeners)
-		{
-			ThreadPool.execute(() -> notifyEventToMultipleContainers(event, containers, null));
+
+		if (hasListeners) {
+			ThreadPool.getInstance().executeGeneral(() -> notifyEventToMultipleContainers(event, containers, null));
 		}
 	}
-	
+
 	/**
 	 * Scheduling current listener notification asynchronously after specified delay.
+	 *
 	 * @param event
 	 * @param container
 	 * @param delay
 	 */
-	public void notifyEventAsyncDelayed(IBaseEvent event, ListenersContainer container, long delay)
-	{
-		if (Containers.Global().hasListener(event.getType()) || container.hasListener(event.getType()))
-		{
-			ThreadPool.schedule(() -> notifyEvent(event, container, null), delay, TimeUnit.MILLISECONDS);
+	public void notifyEventAsyncDelayed(IBaseEvent event, ListenersContainer container, long delay) {
+		if (Containers.Global().hasListener(event.getType()) || container.hasListener(event.getType())) {
+			ThreadPool.getInstance().scheduleGeneral(() -> notifyEvent(event, container, null), delay, TimeUnit.MILLISECONDS);
 		}
 	}
-	
+
 	/**
 	 * Scheduling current listener notification asynchronously after specified delay.
+	 *
 	 * @param event
 	 * @param container
 	 * @param delay
 	 * @param unit
 	 */
-	public void notifyEventAsyncDelayed(IBaseEvent event, ListenersContainer container, long delay, TimeUnit unit)
-	{
-		if (Containers.Global().hasListener(event.getType()) || container.hasListener(event.getType()))
-		{
-			ThreadPool.schedule(() -> notifyEvent(event, container, null), delay, unit);
+	public void notifyEventAsyncDelayed(IBaseEvent event, ListenersContainer container, long delay, TimeUnit unit) {
+		if (Containers.Global().hasListener(event.getType()) || container.hasListener(event.getType())) {
+			ThreadPool.getInstance().scheduleGeneral(() -> notifyEvent(event, container, null), delay, unit);
 		}
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
@@ -158,43 +142,34 @@ public final class EventDispatcher
 	 * @param callbackClass
 	 * @return
 	 */
-	private <T extends AbstractEventReturn> T notifyEventToMultipleContainers(IBaseEvent event, ListenersContainer[] containers, Class<T> callbackClass)
-	{
-		try
-		{
-			if (event == null)
-			{
+	private <T extends AbstractEventReturn> T notifyEventToMultipleContainers(IBaseEvent event, ListenersContainer[] containers, Class<T> callbackClass) {
+		try {
+			if (event == null) {
 				throw new NullPointerException("Event cannot be null!");
 			}
-			
+
 			T callback = null;
-			if (containers != null)
-			{
+			if (containers != null) {
 				// Local listeners container first.
-				for (ListenersContainer container : containers)
-				{
-					if ((callback == null) || !callback.abort())
-					{
+				for (ListenersContainer container : containers) {
+					if ((callback == null) || !callback.abort()) {
 						callback = notifyToListeners(container.getListeners(event.getType()), event, callbackClass, callback);
 					}
 				}
 			}
-			
+
 			// Global listener container.
-			if ((callback == null) || !callback.abort())
-			{
+			if ((callback == null) || !callback.abort()) {
 				callback = notifyToListeners(Containers.Global().getListeners(event.getType()), event, callbackClass, callback);
 			}
-			
+
 			return callback;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn(getClass().getSimpleName() + ": Couldn't notify event " + event.getClass().getSimpleName(), e);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param event
@@ -202,29 +177,25 @@ public final class EventDispatcher
 	 * @param callbackClass
 	 * @return {@link AbstractEventReturn} object that may keep data from the first listener, or last that breaks notification.
 	 */
-	private <T extends AbstractEventReturn> T notifyEventImpl(IBaseEvent event, ListenersContainer container, Class<T> callbackClass)
-	{
-		if (event == null)
-		{
+	private <T extends AbstractEventReturn> T notifyEventImpl(IBaseEvent event, ListenersContainer container, Class<T> callbackClass) {
+		if (event == null) {
 			throw new NullPointerException("Event cannot be null!");
 		}
-		
+
 		T callback = null;
 		// Local listener container first.
-		if (container != null)
-		{
+		if (container != null) {
 			callback = notifyToListeners(container.getListeners(event.getType()), event, callbackClass, callback);
 		}
-		
+
 		// Global listener container.
-		if ((callback == null) || !callback.abort())
-		{
+		if ((callback == null) || !callback.abort()) {
 			callback = notifyToListeners(Containers.Global().getListeners(event.getType()), event, callbackClass, callback);
 		}
-		
+
 		return callback;
 	}
-	
+
 	/**
 	 * @param <T>
 	 * @param listeners
@@ -233,42 +204,32 @@ public final class EventDispatcher
 	 * @param callback
 	 * @return
 	 */
-	private <T extends AbstractEventReturn> T notifyToListeners(Queue<AbstractEventListener> listeners, IBaseEvent event, Class<T> returnBackClass, T callback)
-	{
-		for (AbstractEventListener listener : listeners)
-		{
-			try
-			{
+	private <T extends AbstractEventReturn> T notifyToListeners(Queue<AbstractEventListener> listeners, IBaseEvent event, Class<T> returnBackClass, T callback) {
+		for (AbstractEventListener listener : listeners) {
+			try {
 				final T rb = listener.executeEvent(event, returnBackClass);
-				if (rb == null)
-				{
+				if (rb == null) {
 					continue;
-				}
-				else if ((callback == null) || rb.override()) // Let's check if this listener wants to override previous return object or we simply don't have one
+				} else if ((callback == null) || rb.override()) // Let's check if this listener wants to override previous return object or we simply don't have one
 				{
 					callback = rb;
-				}
-				else if (rb.abort()) // This listener wants to abort the notification to others.
+				} else if (rb.abort()) // This listener wants to abort the notification to others.
 				{
 					break;
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				_log.warn(getClass().getSimpleName() + ": Exception during notification of event: " + event.getClass().getSimpleName() + " listener: " + listener.getClass().getSimpleName(), e);
 			}
 		}
-		
+
 		return callback;
 	}
-	
-	public static EventDispatcher getInstance()
-	{
+
+	public static EventDispatcher getInstance() {
 		return SingletonHolder._instance;
 	}
-	
-	private static class SingletonHolder
-	{
+
+	private static class SingletonHolder {
 		protected static final EventDispatcher _instance = new EventDispatcher();
 	}
 }

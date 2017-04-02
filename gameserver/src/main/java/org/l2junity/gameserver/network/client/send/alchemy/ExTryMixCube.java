@@ -18,42 +18,37 @@
  */
 package org.l2junity.gameserver.network.client.send.alchemy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.TryMixCubeType;
 import org.l2junity.gameserver.model.holders.AlchemyResult;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class ExTryMixCube implements IClientOutgoingPacket
-{
+public class ExTryMixCube implements IClientOutgoingPacket {
 	private final TryMixCubeType _type;
 	private final List<AlchemyResult> _items = new ArrayList<>();
-	
-	public ExTryMixCube(TryMixCubeType type)
-	{
+
+	public ExTryMixCube(TryMixCubeType type) {
 		_type = type;
 	}
-	
-	public void addItem(AlchemyResult item)
-	{
+
+	public void addItem(AlchemyResult item) {
 		_items.add(item);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_TRY_MIX_CUBE.writeId(packet);
-		
+
 		packet.writeC(_type.ordinal());
 		packet.writeD(_items.size());
-		for (AlchemyResult holder : _items)
-		{
+		for (AlchemyResult holder : _items) {
 			packet.writeC(holder.getType().ordinal());
 			packet.writeD(holder.getId());
 			packet.writeQ(holder.getCount());

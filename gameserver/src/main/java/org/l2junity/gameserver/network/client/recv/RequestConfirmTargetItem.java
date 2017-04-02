@@ -28,53 +28,46 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format:(ch) d
+ *
  * @author -Wooden-
  */
-public final class RequestConfirmTargetItem extends AbstractRefinePacket
-{
+public final class RequestConfirmTargetItem extends AbstractRefinePacket {
 	private int _itemObjId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_itemObjId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final ItemInstance item = activeChar.getInventory().getItemByObjectId(_itemObjId);
-		if (item == null)
-		{
+		if (item == null) {
 			return;
 		}
-		
-		if (!VariationData.getInstance().hasFeeData(item.getId()))
-		{
+
+		if (!VariationData.getInstance().hasFeeData(item.getId())) {
 			client.sendPacket(SystemMessageId.THIS_IS_NOT_A_SUITABLE_ITEM);
 			return;
 		}
-		
-		if (!isValid(activeChar, item))
-		{
+
+		if (!isValid(activeChar, item)) {
 			// Different system message here
-			if (item.isAugmented())
-			{
+			if (item.isAugmented()) {
 				client.sendPacket(SystemMessageId.ONCE_AN_ITEM_IS_AUGMENTED_IT_CANNOT_BE_AUGMENTED_AGAIN);
 				return;
 			}
-			
+
 			client.sendPacket(SystemMessageId.THIS_IS_NOT_A_SUITABLE_ITEM);
 			return;
 		}
-		
+
 		client.sendPacket(new ExPutItemResultForVariationMake(_itemObjId, item.getId()));
 	}
 }

@@ -18,33 +18,29 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Map;
-
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
 import org.l2junity.gameserver.model.clan.entry.PledgeApplicantInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Map;
+
 /**
  * @author Sdw
  */
-public class ExPledgeWaitingList implements IClientOutgoingPacket
-{
+public class ExPledgeWaitingList implements IClientOutgoingPacket {
 	private final Map<Integer, PledgeApplicantInfo> pledgePlayerRecruitInfos;
-	
-	public ExPledgeWaitingList(int clanId)
-	{
+
+	public ExPledgeWaitingList(int clanId) {
 		pledgePlayerRecruitInfos = ClanEntryManager.getInstance().getApplicantListForClan(clanId);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_PLEDGE_WAITING_LIST.writeId(packet);
-		
+
 		packet.writeD(pledgePlayerRecruitInfos.size());
-		for (PledgeApplicantInfo recruitInfo : pledgePlayerRecruitInfos.values())
-		{
+		for (PledgeApplicantInfo recruitInfo : pledgePlayerRecruitInfos.values()) {
 			packet.writeD(recruitInfo.getPlayerId());
 			packet.writeS(recruitInfo.getPlayerName());
 			packet.writeD(recruitInfo.getClassId());

@@ -28,51 +28,43 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OnNpcSkillSee implements IBaseEvent
-{
+public class OnNpcSkillSee implements IBaseEvent {
 	private final Npc _npc;
 	private final PlayerInstance _caster;
 	private final Skill _skill;
 	private final WorldObject[] _targets;
 	private final boolean _isSummon;
-	
-	public OnNpcSkillSee(Npc npc, PlayerInstance caster, Skill skill, boolean isSummon, WorldObject... targets)
-	{
+
+	public OnNpcSkillSee(Npc npc, PlayerInstance caster, Skill skill, boolean isSummon, WorldObject... targets) {
 		_npc = npc;
 		_caster = caster;
 		_skill = skill;
 		_isSummon = isSummon;
 		_targets = targets;
 	}
-	
-	public Npc getTarget()
-	{
+
+	public Npc getTarget() {
 		return _npc;
 	}
-	
-	public PlayerInstance getCaster()
-	{
+
+	public PlayerInstance getCaster() {
 		return _caster;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill;
 	}
-	
-	public WorldObject[] getTargets()
-	{
+
+	public WorldObject[] getTargets() {
 		return _targets;
 	}
-	
-	public boolean isSummon()
-	{
+
+	public boolean isSummon() {
 		return _isSummon;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_NPC_SKILL_SEE;
 	}
 }

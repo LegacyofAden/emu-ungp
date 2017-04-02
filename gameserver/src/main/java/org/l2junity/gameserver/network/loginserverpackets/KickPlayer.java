@@ -20,26 +20,23 @@ package org.l2junity.gameserver.network.loginserverpackets;
 
 import org.l2junity.util.network.BaseRecievePacket;
 
-public class KickPlayer extends BaseRecievePacket
-{
-	
+public class KickPlayer extends BaseRecievePacket {
+
 	private final String _account;
-	
+
 	/**
 	 * @param decrypt
 	 */
-	public KickPlayer(byte[] decrypt)
-	{
+	public KickPlayer(byte[] decrypt) {
 		super(decrypt);
 		_account = readS();
 	}
-	
+
 	/**
 	 * @return Returns the account.
 	 */
-	public String getAccount()
-	{
+	public String getAccount() {
 		return _account;
 	}
-	
+
 }

@@ -26,25 +26,21 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class ExPCCafeRequestOpenWindowWithoutNPC implements IClientIncomingPacket
-{
+public class ExPCCafeRequestOpenWindowWithoutNPC implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// Nothing to read
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player != null)
-		{
+		if (player != null) {
 			final NpcHtmlMessage html = new NpcHtmlMessage();
-			html.setFile(player.getHtmlPrefix(), "data/html/pccafe.htm");
+			html.setFile(player.getHtmlPrefix(), "pccafe.htm");
 			player.sendPacket(html);
 		}
 	}
-	
+
 }

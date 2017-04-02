@@ -18,12 +18,8 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.config.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
@@ -34,111 +30,88 @@ import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class L2FortCommanderInstance extends L2DefenderInstance
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2FortCommanderInstance.class);
-	
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class L2FortCommanderInstance extends L2DefenderInstance {
 	private boolean _canTalk;
-	
-	public L2FortCommanderInstance(L2NpcTemplate template)
-	{
+
+	public L2FortCommanderInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortCommanderInstance);
 		_canTalk = true;
 	}
-	
+
 	/**
 	 * Return True if a siege is in progress and the L2Character attacker isn't a Defender.
+	 *
 	 * @param attacker The L2Character that the L2CommanderInstance try to attack
 	 */
 	@Override
-	public boolean isAutoAttackable(Creature attacker)
-	{
-		if ((attacker == null) || !(attacker instanceof PlayerInstance))
-		{
+	public boolean isAutoAttackable(Creature attacker) {
+		if ((attacker == null) || !(attacker instanceof PlayerInstance)) {
 			return false;
 		}
-		
+
 		// Attackable during siege by all except defenders
 		return ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getSiege().isInProgress() && !getFort().getSiege().checkIsDefender(attacker.getClan()));
 	}
-	
+
 	@Override
-	public void addDamageHate(Creature attacker, int damage, int aggro)
-	{
-		if (attacker == null)
-		{
+	public void addDamageHate(Creature attacker, int damage, int aggro) {
+		if (attacker == null) {
 			return;
 		}
-		
-		if (!(attacker instanceof L2FortCommanderInstance))
-		{
+
+		if (!(attacker instanceof L2FortCommanderInstance)) {
 			super.addDamageHate(attacker, damage, aggro);
 		}
 	}
-	
+
 	@Override
-	public boolean doDie(Creature killer)
-	{
-		if (!super.doDie(killer))
-		{
+	public boolean doDie(Creature killer) {
+		if (!super.doDie(killer)) {
 			return false;
 		}
-		
-		if (getFort().getSiege().isInProgress())
-		{
+
+		if (getFort().getSiege().isInProgress()) {
 			getFort().getSiege().killedCommander(this);
-			
+
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * This method forces guard to return to home location previously set
 	 */
 	@Override
-	public void returnHome()
-	{
-		if (!isInRadius2d(getSpawn(), 200))
-		{
-			if (GeneralConfig.DEBUG)
-			{
-				LOGGER.info(getObjectId() + ": moving home");
-			}
+	public void returnHome() {
+		if (!isInRadius2d(getSpawn(), 200)) {
 			setisReturningToSpawnPoint(true);
 			clearAggroList();
-			
-			if (hasAI())
-			{
+
+			if (hasAI()) {
 				getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, getSpawn());
 			}
 		}
 	}
-	
+
 	@Override
-	public final void addDamage(Creature attacker, int damage, Skill skill)
-	{
+	public final void addDamage(Creature attacker, int damage, Skill skill) {
 		L2Spawn spawn = getSpawn();
-		if ((spawn != null) && canTalk())
-		{
+		if ((spawn != null) && canTalk()) {
 			List<FortSiegeSpawn> commanders = FortSiegeManager.getInstance().getCommanderSpawnList(getFort().getResidenceId());
-			for (FortSiegeSpawn spawn2 : commanders)
-			{
-				if (spawn2.getId() == spawn.getId())
-				{
+			for (FortSiegeSpawn spawn2 : commanders) {
+				if (spawn2.getId() == spawn.getId()) {
 					NpcStringId npcString = null;
-					switch (spawn2.getMessageId())
-					{
+					switch (spawn2.getMessageId()) {
 						case 1:
 							npcString = NpcStringId.ATTACKING_THE_ENEMY_S_REINFORCEMENTS_IS_NECESSARY_TIME_TO_DIE;
 							break;
 						case 2:
-							if (attacker.isSummon())
-							{
+							if (attacker.isSummon()) {
 								attacker = ((Summon) attacker).getOwner();
 							}
 							npcString = NpcStringId.EVERYONE_CONCENTRATE_YOUR_ATTACKS_ON_S1_SHOW_THE_ENEMY_YOUR_RESOLVE;
@@ -147,45 +120,38 @@ public class L2FortCommanderInstance extends L2DefenderInstance
 							npcString = NpcStringId.FIRE_SPIRIT_UNLEASH_YOUR_POWER_BURN_THE_ENEMY;
 							break;
 					}
-					if (npcString != null)
-					{
+					if (npcString != null) {
 						broadcastSay(ChatType.NPC_SHOUT, npcString, npcString.getParamCount() == 1 ? attacker.getName() : null);
 						setCanTalk(false);
-						ThreadPool.schedule(new ScheduleTalkTask(), 10000, TimeUnit.MILLISECONDS);
+						ThreadPool.getInstance().scheduleGeneral(new ScheduleTalkTask(), 10000, TimeUnit.MILLISECONDS);
 					}
 				}
 			}
 		}
 		super.addDamage(attacker, damage, skill);
 	}
-	
-	private class ScheduleTalkTask implements Runnable
-	{
-		
-		public ScheduleTalkTask()
-		{
+
+	private class ScheduleTalkTask implements Runnable {
+
+		public ScheduleTalkTask() {
 		}
-		
+
 		@Override
-		public void run()
-		{
+		public void run() {
 			setCanTalk(true);
 		}
 	}
-	
-	void setCanTalk(boolean val)
-	{
+
+	void setCanTalk(boolean val) {
 		_canTalk = val;
 	}
-	
-	private boolean canTalk()
-	{
+
+	private boolean canTalk() {
 		return _canTalk;
 	}
-	
+
 	@Override
-	public boolean hasRandomAnimation()
-	{
+	public boolean hasRandomAnimation() {
 		return false;
 	}
 }

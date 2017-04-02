@@ -18,6 +18,10 @@
  */
 package org.l2junity.gameserver.model.variables;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,148 +32,112 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author UnAfraid
  */
-public class AccountVariables extends AbstractVariables
-{
+public class AccountVariables extends AbstractVariables {
 	static final Logger LOGGER = LoggerFactory.getLogger(AccountVariables.class);
-	
+
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM account_gsdata WHERE account_name = ?";
 	private static final String DELETE_QUERY = "DELETE FROM account_gsdata WHERE account_name = ?";
 	private static final String INSERT_QUERY = "INSERT INTO account_gsdata (account_name, var, value) VALUES (?, ?, ?)";
-	
+
 	public static final String PC_CAFE_POINTS = "PC_CAFE_POINTS";
 	public static final String PC_CAFE_POINTS_TODAY = "PC_CAFE_POINTS_TODAY";
 	public static final String PREMIUM_ACCOUNT = "PREMIUM_ACCOUNT";
 	public static final String TRAINING_CAMP = "TRAINING_CAMP";
 	public static final String TRAINING_CAMP_DURATION = "TRAINING_CAMP_DURATION";
-	
+
 	private final String _accountName;
-	
-	public AccountVariables(String accountName)
-	{
+
+	public AccountVariables(String accountName) {
 		_accountName = accountName;
 		restoreMe();
 	}
-	
+
 	@Override
-	public boolean restoreMe()
-	{
+	public boolean restoreMe() {
 		// Restore previous variables.
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			PreparedStatement st = con.prepareStatement(SELECT_QUERY))
-		{
+			 PreparedStatement st = con.prepareStatement(SELECT_QUERY)) {
 			st.setString(1, _accountName);
-			try (ResultSet rset = st.executeQuery())
-			{
-				while (rset.next())
-				{
+			try (ResultSet rset = st.executeQuery()) {
+				while (rset.next()) {
 					Object deSerializedObject;
-					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("value"))))
-					{
+					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("value")))) {
 						deSerializedObject = objectIn.readObject();
-					}
-					catch (IOException | ClassNotFoundException e)
-					{
+					} catch (IOException | ClassNotFoundException e) {
 						LOGGER.warn("Couldn't restore variable {} for: {}", rset.getString("var"), _accountName, e);
 						deSerializedObject = null;
 					}
 					set(rset.getString("var"), deSerializedObject);
 				}
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Couldn't restore variables for: {}", _accountName, e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean storeMe()
-	{
+	public boolean storeMe() {
 		// No changes, nothing to store.
-		if (!hasChanges())
-		{
+		if (!hasChanges()) {
 			return false;
 		}
-		
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setString(1, _accountName);
 				st.execute();
 			}
-			
+
 			// Insert all variables.
-			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(INSERT_QUERY)) {
 				st.setString(1, _accountName);
-				for (Entry<String, Object> entry : getSet().entrySet())
-				{
+				for (Entry<String, Object> entry : getSet().entrySet()) {
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						ObjectOutputStream oos = new ObjectOutputStream(baos);)
-					{
-						
+						 ObjectOutputStream oos = new ObjectOutputStream(baos);) {
+
 						oos.writeObject(entry.getValue());
 						byte[] asBytes = baos.toByteArray();
-						try (ByteArrayInputStream bais = new ByteArrayInputStream(asBytes))
-						{
+						try (ByteArrayInputStream bais = new ByteArrayInputStream(asBytes)) {
 							st.setString(2, entry.getKey());
 							st.setBinaryStream(3, bais, asBytes.length);
 							st.addBatch();
 						}
-					}
-					catch (IOException e)
-					{
+					} catch (IOException e) {
 						LOGGER.warn("Couldn't store variable {} for account {}", entry.getKey(), _accountName);
 					}
 				}
 				st.executeBatch();
 			}
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			LOGGER.warn("Couldn't update variables for: {}", _accountName, e);
 			return false;
-		}
-		finally
-		{
+		} finally {
 			compareAndSetChanges(true, false);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean deleteMe()
-	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection())
-		{
+	public boolean deleteMe() {
+		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			// Clear previous entries.
-			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY))
-			{
+			try (PreparedStatement st = con.prepareStatement(DELETE_QUERY)) {
 				st.setString(1, _accountName);
 				st.execute();
 			}
-			
+
 			// Clear all entries
 			getSet().clear();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.warn("Couldn't delete variables for: {}", _accountName, e);
 			return false;
 		}

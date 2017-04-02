@@ -18,17 +18,10 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
@@ -37,91 +30,73 @@ import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleData;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleEngine;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleStop;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author UnAfraid
  */
-public final class ShuttleData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShuttleData.class);
-	
+@Slf4j
+@StartupComponent(value = "Data", dependency = DoorData.class)
+public final class ShuttleData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final ShuttleData instance = new ShuttleData();
+
 	private final Map<Integer, L2ShuttleData> _shuttles = new HashMap<>();
 	private final Map<Integer, L2ShuttleInstance> _shuttleInstances = new HashMap<>();
-	
-	protected ShuttleData()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies = @Dependency(clazz = DoorData.class))
-	private void load() throws Exception
-	{
-		if (!_shuttleInstances.isEmpty())
-		{
-			for (L2ShuttleInstance shuttle : _shuttleInstances.values())
-			{
+
+	private ShuttleData() {
+		if (!_shuttleInstances.isEmpty()) {
+			for (L2ShuttleInstance shuttle : _shuttleInstances.values()) {
 				shuttle.deleteMe();
 			}
 			_shuttleInstances.clear();
 		}
 		parseDatapackFile("data/shuttledata.xml");
 		init();
-		LOGGER.info("Loaded: {} Shuttles.", _shuttles.size());
+		log.info("Loaded: {} Shuttles.", _shuttles.size());
 	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		NamedNodeMap attrs;
 		StatsSet set;
 		Node att;
 		L2ShuttleData data;
-		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
-		{
-			if ("list".equalsIgnoreCase(n.getNodeName()))
-			{
-				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
-				{
-					if ("shuttle".equalsIgnoreCase(d.getNodeName()))
-					{
+		for (Node n = doc.getFirstChild(); n != null; n = n.getNextSibling()) {
+			if ("list".equalsIgnoreCase(n.getNodeName())) {
+				for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling()) {
+					if ("shuttle".equalsIgnoreCase(d.getNodeName())) {
 						attrs = d.getAttributes();
 						set = new StatsSet();
-						for (int i = 0; i < attrs.getLength(); i++)
-						{
+						for (int i = 0; i < attrs.getLength(); i++) {
 							att = attrs.item(i);
 							set.set(att.getNodeName(), att.getNodeValue());
 						}
 						data = new L2ShuttleData(set);
-						for (Node b = d.getFirstChild(); b != null; b = b.getNextSibling())
-						{
-							if ("doors".equalsIgnoreCase(b.getNodeName()))
-							{
-								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling())
-								{
-									if ("door".equalsIgnoreCase(a.getNodeName()))
-									{
+						for (Node b = d.getFirstChild(); b != null; b = b.getNextSibling()) {
+							if ("doors".equalsIgnoreCase(b.getNodeName())) {
+								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling()) {
+									if ("door".equalsIgnoreCase(a.getNodeName())) {
 										attrs = a.getAttributes();
 										data.addDoor(parseInteger(attrs, "id"));
 									}
 								}
-							}
-							else if ("stops".equalsIgnoreCase(b.getNodeName()))
-							{
-								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling())
-								{
-									if ("stop".equalsIgnoreCase(a.getNodeName()))
-									{
+							} else if ("stops".equalsIgnoreCase(b.getNodeName())) {
+								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling()) {
+									if ("stop".equalsIgnoreCase(a.getNodeName())) {
 										attrs = a.getAttributes();
 										L2ShuttleStop stop = new L2ShuttleStop(parseInteger(attrs, "id"));
-										
-										for (Node z = a.getFirstChild(); z != null; z = z.getNextSibling())
-										{
-											if ("dimension".equalsIgnoreCase(z.getNodeName()))
-											{
+
+										for (Node z = a.getFirstChild(); z != null; z = z.getNextSibling()) {
+											if ("dimension".equalsIgnoreCase(z.getNodeName())) {
 												attrs = z.getAttributes();
 												stop.addDimension(new Location(parseInteger(attrs, "x"), parseInteger(attrs, "y"), parseInteger(attrs, "z")));
 											}
@@ -129,28 +104,21 @@ public final class ShuttleData implements IGameXmlReader
 										data.addStop(stop);
 									}
 								}
-							}
-							else if ("routes".equalsIgnoreCase(b.getNodeName()))
-							{
-								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling())
-								{
-									if ("route".equalsIgnoreCase(a.getNodeName()))
-									{
+							} else if ("routes".equalsIgnoreCase(b.getNodeName())) {
+								for (Node a = b.getFirstChild(); a != null; a = a.getNextSibling()) {
+									if ("route".equalsIgnoreCase(a.getNodeName())) {
 										attrs = a.getAttributes();
 										List<Location> locs = new ArrayList<>();
-										for (Node z = a.getFirstChild(); z != null; z = z.getNextSibling())
-										{
-											if ("loc".equalsIgnoreCase(z.getNodeName()))
-											{
+										for (Node z = a.getFirstChild(); z != null; z = z.getNextSibling()) {
+											if ("loc".equalsIgnoreCase(z.getNodeName())) {
 												attrs = z.getAttributes();
 												locs.add(new Location(parseInteger(attrs, "x"), parseInteger(attrs, "y"), parseInteger(attrs, "z")));
 											}
 										}
-										
+
 										VehiclePathPoint[] route = new VehiclePathPoint[locs.size()];
 										int i = 0;
-										for (Location loc : locs)
-										{
+										for (Location loc : locs) {
 											route[i++] = new VehiclePathPoint(loc);
 										}
 										data.addRoute(route);
@@ -164,16 +132,13 @@ public final class ShuttleData implements IGameXmlReader
 			}
 		}
 	}
-	
-	public int getShuttleCount()
-	{
+
+	public int getShuttleCount() {
 		return _shuttles.size();
 	}
-	
-	private void init()
-	{
-		for (L2ShuttleData data : _shuttles.values())
-		{
+
+	private void init() {
+		for (L2ShuttleData data : _shuttles.values()) {
 			final L2ShuttleInstance shuttle = new L2ShuttleInstance(new L2CharTemplate(new StatsSet()));
 			shuttle.setData(data);
 			shuttle.setHeading(data.getLocation().getHeading());
@@ -186,28 +151,14 @@ public final class ShuttleData implements IGameXmlReader
 			_shuttleInstances.put(shuttle.getObjectId(), shuttle);
 		}
 	}
-	
-	public L2ShuttleInstance getShuttle(int id)
-	{
-		for (L2ShuttleInstance shuttle : _shuttleInstances.values())
-		{
-			if ((shuttle.getObjectId() == id) || (shuttle.getId() == id))
-			{
+
+	public L2ShuttleInstance getShuttle(int id) {
+		for (L2ShuttleInstance shuttle : _shuttleInstances.values()) {
+			if ((shuttle.getObjectId() == id) || (shuttle.getId() == id)) {
 				return shuttle;
 			}
 		}
-		
+
 		return null;
-	}
-	
-	@InstanceGetter
-	public static ShuttleData getInstance()
-	{
-		return SingletonHolder._instance;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final ShuttleData _instance = new ShuttleData();
 	}
 }

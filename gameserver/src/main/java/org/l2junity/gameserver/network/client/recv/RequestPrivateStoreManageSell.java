@@ -25,31 +25,27 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.2.2.1.2.4 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestPrivateStoreManageSell implements IClientIncomingPacket
-{
+public final class RequestPrivateStoreManageSell implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		// TODO: implement me properly
 		// packet.readD();
 		// packet.readQ();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
+
 		// Player shouldn't be able to set stores if he/she is alike dead (dead or fake death)
-		if (player.isAlikeDead() || player.isInOlympiadMode())
-		{
+		if (player.isAlikeDead() || player.isInOlympiadMode()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}

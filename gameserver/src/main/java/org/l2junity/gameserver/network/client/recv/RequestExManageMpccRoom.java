@@ -30,17 +30,15 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestExManageMpccRoom implements IClientIncomingPacket
-{
+public class RequestExManageMpccRoom implements IClientIncomingPacket {
 	private int _roomId;
 	private int _maxMembers;
 	private int _minLevel;
 	private int _maxLevel;
 	private String _title;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_roomId = packet.readD();
 		_maxMembers = packet.readD();
 		_minLevel = packet.readD();
@@ -49,29 +47,26 @@ public class RequestExManageMpccRoom implements IClientIncomingPacket
 		_title = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final MatchingRoom room = activeChar.getMatchingRoom();
-		if ((room == null) || (room.getId() != _roomId) || (room.getRoomType() != MatchingRoomType.COMMAND_CHANNEL) || (room.getLeader() != activeChar))
-		{
+		if ((room == null) || (room.getId() != _roomId) || (room.getRoomType() != MatchingRoomType.COMMAND_CHANNEL) || (room.getLeader() != activeChar)) {
 			return;
 		}
-		
+
 		room.setTitle(_title);
 		room.setMaxMembers(_maxMembers);
 		room.setMinLvl(_minLevel);
 		room.setMaxLvl(_maxLevel);
-		
+
 		room.getMembers().forEach(p -> p.sendPacket(new ExMPCCRoomInfo((CommandChannelMatchingRoom) room)));
-		
+
 		activeChar.sendPacket(SystemMessageId.THE_COMMAND_CHANNEL_MATCHING_ROOM_INFORMATION_WAS_EDITED);
 	}
 }

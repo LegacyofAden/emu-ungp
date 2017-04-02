@@ -26,80 +26,62 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author DS
  */
-public class PcRefund extends ItemContainer
-{
+public class PcRefund extends ItemContainer {
 	private final PlayerInstance _owner;
-	
-	public PcRefund(PlayerInstance owner)
-	{
+
+	public PcRefund(PlayerInstance owner) {
 		_owner = owner;
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "Refund";
 	}
-	
+
 	@Override
-	public PlayerInstance getOwner()
-	{
+	public PlayerInstance getOwner() {
 		return _owner;
 	}
-	
+
 	@Override
-	public ItemLocation getBaseLocation()
-	{
+	public ItemLocation getBaseLocation() {
 		return ItemLocation.REFUND;
 	}
-	
+
 	@Override
-	protected void addItem(ItemInstance item)
-	{
+	protected void addItem(ItemInstance item) {
 		super.addItem(item);
-		try
-		{
-			if (getSize() > 12)
-			{
+		try {
+			if (getSize() > 12) {
 				ItemInstance removedItem = _items.remove(0);
-				if (removedItem != null)
-				{
+				if (removedItem != null) {
 					ItemTable.getInstance().destroyItem("ClearRefund", removedItem, getOwner(), null);
 					removedItem.updateDatabase(true);
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.error("addItem()", e);
 		}
 	}
-	
+
 	@Override
-	public void refreshWeight()
-	{
+	public void refreshWeight() {
 	}
-	
+
 	@Override
-	public void deleteMe()
-	{
-		try
-		{
-			for (ItemInstance item : _items.values())
-			{
+	public void deleteMe() {
+		try {
+			for (ItemInstance item : _items.values()) {
 				ItemTable.getInstance().destroyItem("ClearRefund", item, getOwner(), null);
 				item.updateDatabase(true);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.error("deleteMe()", e);
 		}
 		_items.clear();
 	}
-	
+
 	@Override
-	public void restore()
-	{
+	public void restore() {
 	}
 }

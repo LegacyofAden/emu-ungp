@@ -33,64 +33,49 @@ import org.l2junity.network.PacketReader;
 /**
  * @author UnAfraid
  */
-public class RequestPledgeBonusReward implements IClientIncomingPacket
-{
+public class RequestPledgeBonusReward implements IClientIncomingPacket {
 	private int _type;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_type = packet.readC();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if ((player == null) || (player.getClan() == null))
-		{
+		if ((player == null) || (player.getClan() == null)) {
 			return;
 		}
-		
-		if ((_type < 0) || (_type > ClanRewardType.values().length))
-		{
+
+		if ((_type < 0) || (_type > ClanRewardType.values().length)) {
 			return;
 		}
-		
+
 		final L2Clan clan = player.getClan();
 		final ClanRewardType type = ClanRewardType.values()[_type];
 		final ClanMember member = clan.getClanMember(player.getObjectId());
-		if (member.isRewardClaimed(type))
-		{
+		if (member.isRewardClaimed(type)) {
 			player.sendPacket(SystemMessageId.THE_PRODUCT_HAS_ALREADY_BEEN_RECEIVED);
 			return;
-		}
-		else if (clan.canClaimBonusReward(player, type))
-		{
+		} else if (clan.canClaimBonusReward(player, type)) {
 			final ClanRewardBonus bonus = type.getAvailableBonus(player.getClan());
-			if (bonus != null)
-			{
+			if (bonus != null) {
 				final ItemHolder itemReward = bonus.getItemReward();
 				final SkillHolder skillReward = bonus.getSkillReward();
-				if (itemReward != null)
-				{
-					if (!player.isInventoryUnder90(false))
-					{
+				if (itemReward != null) {
+					if (!player.isInventoryUnder90(false)) {
 						player.sendPacket(SystemMessageId.THE_ITEM_CANNOT_BE_RECEIVED_BECAUSE_THE_INVENTORY_WEIGHT_QUANTITY_LIMIT_HAS_BEEN_EXCEEDED);
 						return;
 					}
-					
+
 					player.addItem("ClanReward", itemReward.getId(), itemReward.getCount(), player, true);
-				}
-				else if (skillReward != null)
-				{
+				} else if (skillReward != null) {
 					skillReward.getSkill().activateSkill(player, player);
 				}
 				member.setRewardClaimed(type);
-			}
-			else
-			{
+			} else {
 				_log.warn("{} Attempting to claim reward but clan({}) doesn't have such!", player, clan);
 			}
 		}

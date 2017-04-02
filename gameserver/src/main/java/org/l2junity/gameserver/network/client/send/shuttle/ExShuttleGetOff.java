@@ -27,28 +27,25 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author UnAfraid
  */
-public class ExShuttleGetOff implements IClientOutgoingPacket
-{
+public class ExShuttleGetOff implements IClientOutgoingPacket {
 	private final int _playerObjectId;
 	private final int _shuttleObjectId;
 	private final int _x;
 	private final int _y;
 	private final int _z;
-	
-	public ExShuttleGetOff(PlayerInstance player, L2ShuttleInstance shuttle, int x, int y, int z)
-	{
+
+	public ExShuttleGetOff(PlayerInstance player, L2ShuttleInstance shuttle, int x, int y, int z) {
 		_playerObjectId = player.getObjectId();
 		_shuttleObjectId = shuttle.getObjectId();
 		_x = x;
 		_y = y;
 		_z = z;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SUTTLE_GET_OFF.writeId(packet);
-		
+
 		packet.writeD(_playerObjectId);
 		packet.writeD(_shuttleObjectId);
 		packet.writeD(_x);

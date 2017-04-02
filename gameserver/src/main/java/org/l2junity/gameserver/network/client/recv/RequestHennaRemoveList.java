@@ -23,24 +23,20 @@ import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.HennaRemoveList;
 import org.l2junity.network.PacketReader;
 
-public final class RequestHennaRemoveList implements IClientIncomingPacket
-{
+public final class RequestHennaRemoveList implements IClientIncomingPacket {
 	@SuppressWarnings("unused")
 	private int _unknown;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_unknown = packet.readD(); // TODO: Identify.
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
 		client.sendPacket(new HennaRemoveList(activeChar));

@@ -24,23 +24,20 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author godson
  */
-public class ExOlympiadMode implements IClientOutgoingPacket
-{
+public class ExOlympiadMode implements IClientOutgoingPacket {
 	private final int _mode;
-	
+
 	/**
 	 * @param mode (0 = return, 3 = spectate)
 	 */
-	public ExOlympiadMode(int mode)
-	{
+	public ExOlympiadMode(int mode) {
 		_mode = mode;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_OLYMPIAD_MODE.writeId(packet);
-		
+
 		packet.writeC(_mode);
 		return true;
 	}

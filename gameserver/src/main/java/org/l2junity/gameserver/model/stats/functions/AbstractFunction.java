@@ -31,13 +31,17 @@ import org.slf4j.LoggerFactory;
  * FuncAtkAccuracy -> Math.sqrt(_player.getDEX())*6+_player.getLevel()<br>
  * When the calc method of a calculator is launched, each mathematics function is called according to its priority <B>_order</B>.<br>
  * Indeed, functions with lowest priority order is executed first and functions with the same order are executed in unspecified order.<br>
+ *
  * @author Zoey76
  */
-public abstract class AbstractFunction
-{
-	/** Logger. */
+public abstract class AbstractFunction {
+	/**
+	 * Logger.
+	 */
 	protected static final Logger LOG = LoggerFactory.getLogger(AbstractFunction.class);
-	/** Statistics, that is affected by this function (See L2Character.CALCULATOR_XXX constants) */
+	/**
+	 * Statistics, that is affected by this function (See L2Character.CALCULATOR_XXX constants)
+	 */
 	private final DoubleStat _stat;
 	/**
 	 * Order of functions calculation.<br>
@@ -53,79 +57,84 @@ public abstract class AbstractFunction
 	 * Used to remove all functions added by this owner.
 	 */
 	private final Object _funcOwner;
-	/** Function may be disabled by attached condition. */
+	/**
+	 * Function may be disabled by attached condition.
+	 */
 	private final Condition _applayCond;
-	/** The value. */
+	/**
+	 * The value.
+	 */
 	private final double _value;
-	
+
 	/**
 	 * Constructor of Func.
-	 * @param stat the stat
-	 * @param order the order
-	 * @param owner the owner
-	 * @param value the value
+	 *
+	 * @param stat       the stat
+	 * @param order      the order
+	 * @param owner      the owner
+	 * @param value      the value
 	 * @param applayCond the apply condition
 	 */
-	public AbstractFunction(DoubleStat stat, int order, Object owner, double value, Condition applayCond)
-	{
+	public AbstractFunction(DoubleStat stat, int order, Object owner, double value, Condition applayCond) {
 		_stat = stat;
 		_order = order;
 		_funcOwner = owner;
 		_value = value;
 		_applayCond = applayCond;
 	}
-	
+
 	/**
 	 * Gets the apply condition
+	 *
 	 * @return the apply condition
 	 */
-	public Condition getApplayCond()
-	{
+	public Condition getApplayCond() {
 		return _applayCond;
 	}
-	
+
 	/**
 	 * Gets the fuction owner.
+	 *
 	 * @return the function owner
 	 */
-	public final Object getFuncOwner()
-	{
+	public final Object getFuncOwner() {
 		return _funcOwner;
 	}
-	
+
 	/**
 	 * Gets the function order.
+	 *
 	 * @return the order
 	 */
-	public final int getOrder()
-	{
+	public final int getOrder() {
 		return _order;
 	}
-	
+
 	/**
 	 * Gets the stat.
+	 *
 	 * @return the stat
 	 */
-	public final DoubleStat getStat()
-	{
+	public final DoubleStat getStat() {
 		return _stat;
 	}
-	
+
 	/**
 	 * Gets the value.
+	 *
 	 * @return the value
 	 */
-	public final double getValue()
-	{
+	public final double getValue() {
 		return _value;
 	}
-	
+
 	/**
 	 * Run the mathematics function of the Func.
+	 *
 	 * @param effector the effector
 	 * @param effected the effected
-	 * @param skill the skill
-	 * @param initVal the initial value
+	 * @param skill    the skill
+	 * @param initVal  the initial value
 	 * @return the calculated value
 	 */
 	public abstract double calc(Creature effector, Creature effected, Skill skill, double initVal);

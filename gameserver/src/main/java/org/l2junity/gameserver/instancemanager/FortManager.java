@@ -18,6 +18,18 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.impl.DoorData;
+import org.l2junity.gameserver.data.xml.impl.NpcData;
+import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
+import org.l2junity.gameserver.data.xml.impl.StaticObjectData;
+import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.entity.Fort;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -25,77 +37,42 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.l2junity.commons.loader.annotations.Dependency;
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.data.xml.impl.DoorData;
-import org.l2junity.gameserver.data.xml.impl.NpcData;
-import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
-import org.l2junity.gameserver.data.xml.impl.StaticObjectData;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.entity.Fort;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@Slf4j
+@StartupComponent(value = "Data", dependency = {StaticObjectData.class, DoorData.class, NpcData.class, SkillTreesData.class})
+public final class FortManager {
+	@Getter(lazy = true)
+	private static final FortManager instance = new FortManager();
 
-public final class FortManager
-{
-	protected static final Logger LOGGER = LoggerFactory.getLogger(FortManager.class);
-	
 	private final Map<Integer, Fort> _forts = new ConcurrentSkipListMap<>();
-	
-	protected FortManager()
-	{
-	}
-	
-	@Load(group = LoadGroup.class, dependencies =
-	{
-		@Dependency(clazz = StaticObjectData.class),
-		@Dependency(clazz = DoorData.class),
-		@Dependency(clazz = NpcData.class),
-		@Dependency(clazz = SkillTreesData.class)
-	})
-	protected void load()
-	{
+
+	protected FortManager() {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			Statement s = con.createStatement();
-			ResultSet rs = s.executeQuery("SELECT id FROM fort ORDER BY id"))
-		{
-			while (rs.next())
-			{
+			 Statement s = con.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT id FROM fort ORDER BY id")) {
+			while (rs.next()) {
 				final int fortId = rs.getInt("id");
 				_forts.computeIfAbsent(fortId, Fort::new);
 			}
-			
-			LOGGER.info(getClass().getSimpleName() + ": Loaded: " + getForts().size() + " fortress");
-			for (Fort fort : getForts())
-			{
+
+			log.info(getClass().getSimpleName() + ": Loaded: " + getForts().size() + " fortress");
+			for (Fort fort : getForts()) {
 				fort.getSiege().loadSiegeGuard();
 			}
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("Failed to load fortress: ", e);
+		} catch (Exception e) {
+			log.warn("Failed to load fortress: ", e);
 		}
 	}
-	
-	public final Fort findNearestFort(WorldObject obj)
-	{
+
+	public final Fort findNearestFort(WorldObject obj) {
 		return findNearestFort(obj, Long.MAX_VALUE);
 	}
-	
-	public final Fort findNearestFort(WorldObject obj, long maxDistance)
-	{
+
+	public final Fort findNearestFort(WorldObject obj, long maxDistance) {
 		Fort nearestFort = getFort(obj);
-		if (nearestFort == null)
-		{
-			for (Fort fort : getForts())
-			{
+		if (nearestFort == null) {
+			for (Fort fort : getForts()) {
 				double distance = fort.getDistance(obj);
-				if (maxDistance > distance)
-				{
+				if (maxDistance > distance) {
 					maxDistance = (long) distance;
 					nearestFort = fort;
 				}
@@ -103,73 +80,48 @@ public final class FortManager
 		}
 		return nearestFort;
 	}
-	
-	public final Fort getFortById(int fortId)
-	{
-		for (Fort f : getForts())
-		{
-			if (f.getResidenceId() == fortId)
-			{
+
+	public final Fort getFortById(int fortId) {
+		for (Fort f : getForts()) {
+			if (f.getResidenceId() == fortId) {
 				return f;
 			}
 		}
 		return null;
 	}
-	
-	public final Fort getFortByOwner(L2Clan clan)
-	{
-		for (Fort f : getForts())
-		{
-			if (f.getOwnerClan() == clan)
-			{
+
+	public final Fort getFortByOwner(L2Clan clan) {
+		for (Fort f : getForts()) {
+			if (f.getOwnerClan() == clan) {
 				return f;
 			}
 		}
 		return null;
 	}
-	
-	public final Fort getFort(String name)
-	{
-		for (Fort f : getForts())
-		{
-			if (f.getName().equalsIgnoreCase(name.trim()))
-			{
+
+	public final Fort getFort(String name) {
+		for (Fort f : getForts()) {
+			if (f.getName().equalsIgnoreCase(name.trim())) {
 				return f;
 			}
 		}
 		return null;
 	}
-	
-	public final Fort getFort(double x, double y, double z)
-	{
-		for (Fort f : getForts())
-		{
-			if (f.checkIfInZone(x, y, z))
-			{
+
+	public final Fort getFort(double x, double y, double z) {
+		for (Fort f : getForts()) {
+			if (f.checkIfInZone(x, y, z)) {
 				return f;
 			}
 		}
 		return null;
 	}
-	
-	public final Fort getFort(WorldObject activeObject)
-	{
+
+	public final Fort getFort(WorldObject activeObject) {
 		return getFort(activeObject.getX(), activeObject.getY(), activeObject.getZ());
 	}
-	
-	public final Collection<Fort> getForts()
-	{
+
+	public final Collection<Fort> getForts() {
 		return _forts.values();
-	}
-	
-	@InstanceGetter
-	public static FortManager getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final FortManager INSTANCE = new FortManager();
 	}
 }

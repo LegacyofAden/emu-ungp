@@ -18,8 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-public enum DamageByAttackType
-{
+public enum DamageByAttackType {
 	NONE,
 	PK, // Players and summons.
 	MOB, // Regular monsters.

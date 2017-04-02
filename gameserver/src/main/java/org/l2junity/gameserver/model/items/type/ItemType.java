@@ -20,9 +20,9 @@ package org.l2junity.gameserver.model.items.type;
 
 /**
  * Created for allow comparing different item types
+ *
  * @author DS
  */
-public interface ItemType
-{
+public interface ItemType {
 	int mask();
 }

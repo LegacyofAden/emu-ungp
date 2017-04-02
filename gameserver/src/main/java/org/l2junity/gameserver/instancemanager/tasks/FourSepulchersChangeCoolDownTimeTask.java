@@ -18,50 +18,46 @@
  */
 package org.l2junity.gameserver.instancemanager.tasks;
 
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
+
 import java.util.Calendar;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
-
 /**
  * Four Sepulchers change cool down time task.
+ *
  * @author xban1x
  */
-public final class FourSepulchersChangeCoolDownTimeTask implements Runnable
-{
+public final class FourSepulchersChangeCoolDownTimeTask implements Runnable {
 	@Override
-	public void run()
-	{
+	public void run() {
 		final FourSepulchersManager manager = FourSepulchersManager.getInstance();
 		manager.setIsEntryTime(false);
 		manager.setIsWarmUpTime(false);
 		manager.setIsAttackTime(false);
 		manager.setIsCoolDownTime(true);
-		
+
 		manager.clean();
-		
+
 		final Calendar time = Calendar.getInstance();
 		// one hour = 55th min to 55 min of next hour, so we check for this,
 		// also check for first launch
-		if (!manager.isFirstTimeRun() && (Calendar.getInstance().get(Calendar.MINUTE) > manager.getCycleMin()))
-		{
+		if (!manager.isFirstTimeRun() && (Calendar.getInstance().get(Calendar.MINUTE) > manager.getCycleMin())) {
 			time.set(Calendar.HOUR, Calendar.getInstance().get(Calendar.HOUR) + 1);
 		}
 		time.set(Calendar.MINUTE, manager.getCycleMin());
-		if (manager.isFirstTimeRun())
-		{
+		if (manager.isFirstTimeRun()) {
 			manager.setIsFirstTimeRun(false);
 		}
-		
+
 		long interval = time.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-		
-		manager.setChangeEntryTimeTask(ThreadPool.schedule(new FourSepulchersChangeEntryTimeTask(), interval, TimeUnit.MILLISECONDS));
+
+		manager.setChangeEntryTimeTask(ThreadPool.getInstance().scheduleGeneral(new FourSepulchersChangeEntryTimeTask(), interval, TimeUnit.MILLISECONDS));
 		final ScheduledFuture<?> changeCoolDownTimeTask = manager.getChangeCoolDownTimeTask();
-		
-		if (changeCoolDownTimeTask != null)
-		{
+
+		if (changeCoolDownTimeTask != null) {
 			changeCoolDownTimeTask.cancel(true);
 			manager.setChangeCoolDownTimeTask(null);
 		}

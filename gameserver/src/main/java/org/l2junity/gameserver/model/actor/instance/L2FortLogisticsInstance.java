@@ -18,134 +18,103 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
+import java.util.StringTokenizer;
+
 /**
  * @author Vice, Zoey76
  */
-public class L2FortLogisticsInstance extends L2MerchantInstance
-{
+public class L2FortLogisticsInstance extends L2MerchantInstance {
 	private static final int[] SUPPLY_BOX_IDS =
-	{
-		35665,
-		35697,
-		35734,
-		35766,
-		35803,
-		35834,
-		35866,
-		35903,
-		35935,
-		35973,
-		36010,
-		36042,
-		36080,
-		36117,
-		36148,
-		36180,
-		36218,
-		36256,
-		36293,
-		36325,
-		36363
-	};
-	
-	public L2FortLogisticsInstance(L2NpcTemplate template)
-	{
+			{
+					35665,
+					35697,
+					35734,
+					35766,
+					35803,
+					35834,
+					35866,
+					35903,
+					35935,
+					35973,
+					36010,
+					36042,
+					36080,
+					36117,
+					36148,
+					36180,
+					36218,
+					36256,
+					36293,
+					36325,
+					36363
+			};
+
+	public L2FortLogisticsInstance(L2NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortLogisticsInstance);
 	}
-	
+
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command)
-	{
-		if (player.getLastFolkNPC().getObjectId() != getObjectId())
-		{
+	public void onBypassFeedback(PlayerInstance player, String command) {
+		if (player.getLastFolkNPC().getObjectId() != getObjectId()) {
 			return;
 		}
-		
+
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
-		
+
 		boolean isMyLord = player.isClanLeader() ? (player.getClan().getFortId() == (getFort() != null ? getFort().getResidenceId() : -1)) : false;
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		if (actualCommand.equalsIgnoreCase("rewards"))
-		{
-			if (isMyLord)
-			{
-				html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-rewards.htm");
+		if (actualCommand.equalsIgnoreCase("rewards")) {
+			if (isMyLord) {
+				html.setFile(player.getHtmlPrefix(), "fortress/logistics-rewards.htm");
 				html.replace("%bloodoath%", String.valueOf(player.getClan().getBloodOathCount()));
-			}
-			else
-			{
-				html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-noprivs.htm");
+			} else {
+				html.setFile(player.getHtmlPrefix(), "fortress/logistics-noprivs.htm");
 			}
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
-		}
-		else if (actualCommand.equalsIgnoreCase("blood"))
-		{
-			if (isMyLord)
-			{
+		} else if (actualCommand.equalsIgnoreCase("blood")) {
+			if (isMyLord) {
 				final int blood = player.getClan().getBloodOathCount();
-				if (blood > 0)
-				{
+				if (blood > 0) {
 					player.addItem("Quest", 9910, blood, this, true);
 					player.getClan().resetBloodOathCount();
-					html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-blood.htm");
+					html.setFile(player.getHtmlPrefix(), "fortress/logistics-blood.htm");
+				} else {
+					html.setFile(player.getHtmlPrefix(), "fortress/logistics-noblood.htm");
 				}
-				else
-				{
-					html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-noblood.htm");
-				}
-			}
-			else
-			{
-				html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-noprivs.htm");
+			} else {
+				html.setFile(player.getHtmlPrefix(), "fortress/logistics-noprivs.htm");
 			}
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
-		}
-		else if (actualCommand.equalsIgnoreCase("supplylvl"))
-		{
-			if (getFort().getFortState() == 2)
-			{
-				if (player.isClanLeader())
-				{
-					html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-supplylvl.htm");
+		} else if (actualCommand.equalsIgnoreCase("supplylvl")) {
+			if (getFort().getFortState() == 2) {
+				if (player.isClanLeader()) {
+					html.setFile(player.getHtmlPrefix(), "fortress/logistics-supplylvl.htm");
 					html.replace("%supplylvl%", String.valueOf(getFort().getSupplyLvL()));
+				} else {
+					html.setFile(player.getHtmlPrefix(), "fortress/logistics-noprivs.htm");
 				}
-				else
-				{
-					html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-noprivs.htm");
-				}
-			}
-			else
-			{
-				html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-1.htm"); // TODO: Missing HTML?
+			} else {
+				html.setFile(player.getHtmlPrefix(), "fortress/logistics-1.htm"); // TODO: Missing HTML?
 			}
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
-		}
-		else if (actualCommand.equalsIgnoreCase("supply"))
-		{
-			if (isMyLord)
-			{
-				if (getFort().getSiege().isInProgress())
-				{
-					html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-siege.htm");
-				}
-				else
-				{
+		} else if (actualCommand.equalsIgnoreCase("supply")) {
+			if (isMyLord) {
+				if (getFort().getSiege().isInProgress()) {
+					html.setFile(player.getHtmlPrefix(), "fortress/logistics-siege.htm");
+				} else {
 					final int level = getFort().getSupplyLvL();
-					if (level > 0)
-					{
+					if (level > 0) {
 						// spawn box
 						L2NpcTemplate BoxTemplate = NpcData.getInstance().getTemplate(SUPPLY_BOX_IDS[level - 1]);
 						L2MonsterInstance box = new L2MonsterInstance(BoxTemplate);
@@ -153,87 +122,68 @@ public class L2FortLogisticsInstance extends L2MerchantInstance
 						box.setCurrentMp(box.getMaxMp());
 						box.setHeading(0);
 						box.spawnMe(getX() - 23, getY() + 41, getZ());
-						
+
 						getFort().setSupplyLvL(0);
 						getFort().saveFortVariables();
-						
-						html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-supply.htm");
-					}
-					else
-					{
-						html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-nosupply.htm");
+
+						html.setFile(player.getHtmlPrefix(), "fortress/logistics-supply.htm");
+					} else {
+						html.setFile(player.getHtmlPrefix(), "fortress/logistics-nosupply.htm");
 					}
 				}
-			}
-			else
-			{
-				html.setFile(player.getHtmlPrefix(), "data/html/fortress/logistics-noprivs.htm");
+			} else {
+				html.setFile(player.getHtmlPrefix(), "fortress/logistics-noprivs.htm");
 			}
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
-		}
-		else
-		{
+		} else {
 			super.onBypassFeedback(player, command);
 		}
 	}
-	
+
 	@Override
-	public void showChatWindow(PlayerInstance player)
-	{
+	public void showChatWindow(PlayerInstance player) {
 		showMessageWindow(player, 0);
 	}
-	
-	private void showMessageWindow(PlayerInstance player, int val)
-	{
+
+	private void showMessageWindow(PlayerInstance player, int val) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
+
 		String filename;
-		
-		if (val == 0)
-		{
-			filename = "data/html/fortress/logistics.htm";
+
+		if (val == 0) {
+			filename = "fortress/logistics.htm";
+		} else {
+			filename = "fortress/logistics-" + val + ".htm";
 		}
-		else
-		{
-			filename = "data/html/fortress/logistics-" + val + ".htm";
-		}
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getHtmlPrefix(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcId%", String.valueOf(getId()));
-		if (getFort().getOwnerClan() != null)
-		{
+		if (getFort().getOwnerClan() != null) {
 			html.replace("%clanname%", getFort().getOwnerClan().getName());
-		}
-		else
-		{
+		} else {
 			html.replace("%clanname%", "NPC");
 		}
 		player.sendPacket(html);
 	}
-	
+
 	@Override
-	public String getHtmlPath(int npcId, int val)
-	{
+	public String getHtmlPath(int npcId, int val) {
 		String pom = "";
-		
-		if (val == 0)
-		{
+
+		if (val == 0) {
 			pom = "logistics";
-		}
-		else
-		{
+		} else {
 			pom = "logistics-" + val;
 		}
-		
-		return "data/html/fortress/" + pom + ".htm";
+
+		return "fortress/" + pom + ".htm";
 	}
-	
+
 	@Override
-	public boolean hasRandomAnimation()
-	{
+	public boolean hasRandomAnimation() {
 		return false;
 	}
 }

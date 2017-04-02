@@ -24,19 +24,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author -Wooden-
  */
-public class ShowPCCafeCouponShowUI implements IClientOutgoingPacket
-{
+public class ShowPCCafeCouponShowUI implements IClientOutgoingPacket {
 	public static final ShowPCCafeCouponShowUI STATIC_PACKET = new ShowPCCafeCouponShowUI();
-	
-	private ShowPCCafeCouponShowUI()
-	{
+
+	private ShowPCCafeCouponShowUI() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.SHOW_PCCAFE_COUPON_SHOW_UI.writeId(packet);
-		
+
 		return true;
 	}
 }

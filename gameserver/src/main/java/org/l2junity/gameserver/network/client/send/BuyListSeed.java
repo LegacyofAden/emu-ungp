@@ -18,51 +18,44 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.SeedProduction;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author l3x
  */
-public final class BuyListSeed implements IClientOutgoingPacket
-{
+public final class BuyListSeed implements IClientOutgoingPacket {
 	private final int _manorId;
 	private final long _money;
 	private final List<SeedProduction> _list = new ArrayList<>();
-	
-	public BuyListSeed(long currentMoney, int castleId)
-	{
+
+	public BuyListSeed(long currentMoney, int castleId) {
 		_money = currentMoney;
 		_manorId = castleId;
-		
-		for (SeedProduction s : CastleManorManager.getInstance().getSeedProduction(castleId, false))
-		{
-			if ((s.getAmount() > 0) && (s.getPrice() > 0))
-			{
+
+		for (SeedProduction s : CastleManorManager.getInstance().getSeedProduction(castleId, false)) {
+			if ((s.getAmount() > 0) && (s.getPrice() > 0)) {
 				_list.add(s);
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.BUY_LIST_SEED.writeId(packet);
-		
+
 		packet.writeQ(_money); // current money
 		packet.writeD(0x00); // TODO: Find me!
 		packet.writeD(_manorId); // manor id
-		
-		if (!_list.isEmpty())
-		{
+
+		if (!_list.isEmpty()) {
 			packet.writeH(_list.size()); // list length
-			for (SeedProduction s : _list)
-			{
+			for (SeedProduction s : _list) {
 				packet.writeC(0x00); // mask item 0 to print minimal item information
 				packet.writeD(s.getId()); // ObjectId
 				packet.writeD(s.getId()); // ItemId
@@ -79,9 +72,7 @@ public final class BuyListSeed implements IClientOutgoingPacket
 				packet.writeQ(s.getPrice()); // price
 			}
 			_list.clear();
-		}
-		else
-		{
+		} else {
 			packet.writeH(0x00);
 		}
 		return true;

@@ -28,18 +28,16 @@ import org.l2junity.network.PacketReader;
 /**
  * @author Sdw
  */
-public class RequestPledgeDraftListSearch implements IClientIncomingPacket
-{
+public class RequestPledgeDraftListSearch implements IClientIncomingPacket {
 	private int _levelMin;
 	private int _levelMax;
 	private int _classId;
 	private String _query;
 	private int _sortBy;
 	private boolean _descending;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_levelMin = CommonUtil.constrain(packet.readD(), 0, 107);
 		_levelMax = CommonUtil.constrain(packet.readD(), 0, 107);
 		_classId = packet.readD();
@@ -48,23 +46,18 @@ public class RequestPledgeDraftListSearch implements IClientIncomingPacket
 		_descending = packet.readD() == 2;
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		
-		if (activeChar == null)
-		{
+
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (_query.isEmpty())
-		{
+
+		if (_query.isEmpty()) {
 			client.sendPacket(new ExPledgeDraftListSearch(ClanEntryManager.getInstance().getSortedWaitingList(_levelMin, _levelMax, _classId, _sortBy, _descending)));
-		}
-		else
-		{
+		} else {
 			client.sendPacket(new ExPledgeDraftListSearch(ClanEntryManager.getInstance().queryWaitingListByName(_query.toLowerCase())));
 		}
 	}

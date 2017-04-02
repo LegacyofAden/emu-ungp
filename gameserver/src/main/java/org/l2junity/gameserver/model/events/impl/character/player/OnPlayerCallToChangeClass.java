@@ -25,23 +25,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 /**
  * @author Sdw
  */
-public class OnPlayerCallToChangeClass implements IBaseEvent
-{
+public class OnPlayerCallToChangeClass implements IBaseEvent {
 	private final PlayerInstance _activeChar;
-	
-	public OnPlayerCallToChangeClass(PlayerInstance activeChar)
-	{
+
+	public OnPlayerCallToChangeClass(PlayerInstance activeChar) {
 		_activeChar = activeChar;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.ON_PLAYER_CALL_TO_CHANGE_CLASS;
 	}
 }

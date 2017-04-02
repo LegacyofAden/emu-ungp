@@ -21,34 +21,29 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class AskJoinPledge implements IClientOutgoingPacket
-{
+public final class AskJoinPledge implements IClientOutgoingPacket {
 	private final int _requestorObjId;
 	private final String _subPledgeName;
 	private final int _pledgeType;
 	private final String _pledgeName;
-	
-	public AskJoinPledge(int requestorObjId, String subPledgeName, int pledgeType, String pledgeName)
-	{
+
+	public AskJoinPledge(int requestorObjId, String subPledgeName, int pledgeType, String pledgeName) {
 		_requestorObjId = requestorObjId;
 		_subPledgeName = subPledgeName;
 		_pledgeType = pledgeType;
 		_pledgeName = pledgeName;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.ASK_JOIN_PLEDGE.writeId(packet);
-		
+
 		packet.writeD(_requestorObjId);
-		if (_subPledgeName != null)
-		{
+		if (_subPledgeName != null) {
 			packet.writeS(_pledgeType > 0 ? _subPledgeName : _pledgeName);
 		}
 		packet.writeS(_pledgeName);
-		if (_pledgeType != 0)
-		{
+		if (_pledgeType != 0) {
 			packet.writeD(_pledgeType);
 		}
 		return true;

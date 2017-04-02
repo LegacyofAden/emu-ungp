@@ -26,18 +26,15 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author Sdw
  */
-public class ExConnectedTimeAndGettableReward implements IClientOutgoingPacket
-{
+public class ExConnectedTimeAndGettableReward implements IClientOutgoingPacket {
 	private final int _oneDayRewardAvailableCount;
-	
-	public ExConnectedTimeAndGettableReward(PlayerInstance player)
-	{
+
+	public ExConnectedTimeAndGettableReward(PlayerInstance player) {
 		_oneDayRewardAvailableCount = OneDayRewardData.getInstance().getOneDayRewardData(player).size();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CONNECTED_TIME_AND_GETTABLE_REWARD.writeId(packet);
 		packet.writeD(0x00);
 		packet.writeD(_oneDayRewardAvailableCount);
@@ -53,5 +50,5 @@ public class ExConnectedTimeAndGettableReward implements IClientOutgoingPacket
 		packet.writeD(0x00);
 		return true;
 	}
-	
+
 }

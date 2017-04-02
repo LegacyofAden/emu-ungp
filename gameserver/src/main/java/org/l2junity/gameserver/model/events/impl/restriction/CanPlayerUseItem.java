@@ -26,38 +26,32 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 /**
  * @author lord_rex
  */
-public final class CanPlayerUseItem implements IBaseEvent
-{
+public final class CanPlayerUseItem implements IBaseEvent {
 	private final PlayerInstance _activeChar;
 	private final ItemInstance _item;
 	private final boolean _ctrlPressed;
-	
-	public CanPlayerUseItem(PlayerInstance activeChar, ItemInstance item, boolean ctrlPressed)
-	{
+
+	public CanPlayerUseItem(PlayerInstance activeChar, ItemInstance item, boolean ctrlPressed) {
 		_activeChar = activeChar;
 		_item = item;
-		
+
 		_ctrlPressed = ctrlPressed;
 	}
-	
-	public PlayerInstance getActiveChar()
-	{
+
+	public PlayerInstance getActiveChar() {
 		return _activeChar;
 	}
-	
-	public ItemInstance getItem()
-	{
+
+	public ItemInstance getItem() {
 		return _item;
 	}
-	
-	public boolean isCtrlPressed()
-	{
+
+	public boolean isCtrlPressed() {
 		return _ctrlPressed;
 	}
-	
+
 	@Override
-	public EventType getType()
-	{
+	public EventType getType() {
 		return EventType.CAN_PLAYER_USE_ITEM;
 	}
 }

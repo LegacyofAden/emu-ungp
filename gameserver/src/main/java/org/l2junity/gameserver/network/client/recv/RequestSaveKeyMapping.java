@@ -18,11 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.UIData;
 import org.l2junity.gameserver.model.ActionKey;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,42 +26,41 @@ import org.l2junity.gameserver.network.client.ConnectionState;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Request Save Key Mapping client packet.
+ *
  * @author mrTJO, Zoey76
  */
-public class RequestSaveKeyMapping implements IClientIncomingPacket
-{
+public class RequestSaveKeyMapping implements IClientIncomingPacket {
 	private final Map<Integer, List<ActionKey>> _keyMap = new HashMap<>();
 	private final Map<Integer, List<Integer>> _catMap = new HashMap<>();
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		int category = 0;
-		
+
 		packet.readD(); // Unknown
 		packet.readD(); // Unknown
 		final int _tabNum = packet.readD();
-		for (int i = 0; i < _tabNum; i++)
-		{
+		for (int i = 0; i < _tabNum; i++) {
 			int cmd1Size = packet.readC();
-			for (int j = 0; j < cmd1Size; j++)
-			{
+			for (int j = 0; j < cmd1Size; j++) {
 				UIData.addCategory(_catMap, category, packet.readC());
 			}
 			category++;
-			
+
 			int cmd2Size = packet.readC();
-			for (int j = 0; j < cmd2Size; j++)
-			{
+			for (int j = 0; j < cmd2Size; j++) {
 				UIData.addCategory(_catMap, category, packet.readC());
 			}
 			category++;
-			
+
 			int cmdSize = packet.readD();
-			for (int j = 0; j < cmdSize; j++)
-			{
+			for (int j = 0; j < cmdSize; j++) {
 				int cmd = packet.readD();
 				int key = packet.readD();
 				int tgKey1 = packet.readD();
@@ -78,13 +73,11 @@ public class RequestSaveKeyMapping implements IClientIncomingPacket
 		packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (!PlayerConfig.STORE_UI_SETTINGS || (player == null) || (client.getConnectionState() != ConnectionState.IN_GAME))
-		{
+		if (!PlayerConfig.STORE_UI_SETTINGS || (player == null) || (client.getConnectionState() != ConnectionState.IN_GAME)) {
 			return;
 		}
 		player.getUISettings().storeAll(_catMap, _keyMap);

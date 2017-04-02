@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.util.Util;
@@ -26,38 +26,33 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ... cS
+ *
  * @version $Revision: 1.1.2.2.2.2 $ $Date: 2005/03/27 15:29:30 $
  */
-public class RequestRecipeShopMessageSet implements IClientIncomingPacket
-{
+public class RequestRecipeShopMessageSet implements IClientIncomingPacket {
 	private static final int MAX_MSG_LENGTH = 29;
-	
+
 	private String _name;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_name = packet.readS();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance player = client.getActiveChar();
-		if (player == null)
-		{
+		if (player == null) {
 			return;
 		}
-		
-		if ((_name != null) && (_name.length() > MAX_MSG_LENGTH))
-		{
+
+		if ((_name != null) && (_name.length() > MAX_MSG_LENGTH)) {
 			Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to overflow recipe shop message", GeneralConfig.DEFAULT_PUNISH);
 			return;
 		}
-		
-		if (player.hasManufactureShop())
-		{
+
+		if (player.hasManufactureShop()) {
 			player.setStoreName(_name);
 		}
 	}

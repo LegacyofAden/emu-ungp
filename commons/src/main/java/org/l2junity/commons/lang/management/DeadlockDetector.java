@@ -18,143 +18,111 @@
  */
 package org.l2junity.commons.lang.management;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.util.CommonUtil;
+import org.l2junity.core.startup.StartupComponent;
+
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.l2junity.commons.util.CommonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@Slf4j
+@StartupComponent("BeforeStart")
+public final class DeadlockDetector extends Thread {
+	@Getter(lazy = true)
+	private static final DeadlockDetector instance = new DeadlockDetector();
 
-public final class DeadlockDetector extends Thread
-{
-	public static final Logger LOGGER = LoggerFactory.getLogger(DeadlockDetector.class);
-	
 	private final Set<Long> _logged = new HashSet<>();
-	
+
 	public static boolean ALLOWED = false;
 	public static boolean RESTART_ON_DEADLOCK = true;
 	public static long CHECK_INTERVAL = 20_000;
 	public static Runnable RESTART_EVENT = null;
-	
-	protected DeadlockDetector()
-	{
+
+	protected DeadlockDetector() {
 		super("DeadlockDetector");
 		setPriority(Thread.MAX_PRIORITY);
 		setDaemon(true);
-		
-		if (!ALLOWED)
-		{
-			LOGGER.info("Disabled.");
+
+		if (!ALLOWED) {
+			log.info("Disabled.");
 			return;
 		}
-		
+
 		start();
-		
-		LOGGER.info("Initialized.");
+
+		log.info("Initialized.");
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		final long[] ids = findDeadlockedThreadIds();
-		if (ids == null)
-		{
+		if (ids == null) {
 			return;
 		}
-		
+
 		final List<Thread> deadlocked = new ArrayList<>();
-		
-		for (final long id : ids)
-		{
-			if (_logged.add(id))
-			{
+
+		for (final long id : ids) {
+			if (_logged.add(id)) {
 				deadlocked.add(findThreadById(id));
 			}
 		}
-		
-		if (!deadlocked.isEmpty())
-		{
+
+		if (!deadlocked.isEmpty()) {
 			CommonUtil.printSection("Deadlocked Thread(s)");
-			for (final Thread thread : deadlocked)
-			{
-				LOGGER.error("{}", ManagementFactory.getThreadMXBean().getThreadInfo(thread.getId()));
+			for (final Thread thread : deadlocked) {
+				log.error("{}", ManagementFactory.getThreadMXBean().getThreadInfo(thread.getId()));
 			}
-			
-			if (RESTART_EVENT != null)
-			{
+
+			if (RESTART_EVENT != null) {
 				RESTART_EVENT.run();
 			}
-			
+
 			new Halt().start();
-			
-			if (RESTART_ON_DEADLOCK)
-			{
-				ShutdownManager.restart("DeadlockDetector");
+
+			if (RESTART_ON_DEADLOCK) {
+				ShutdownManager.getInstance().restart("DeadlockDetector");
 			}
 		}
-		
-		try
-		{
+
+		try {
 			Thread.sleep(CHECK_INTERVAL);
-		}
-		catch (InterruptedException e)
-		{
-			LOGGER.warn("", e);
+		} catch (InterruptedException e) {
+			log.warn("", e);
 		}
 	}
-	
-	private static long[] findDeadlockedThreadIds()
-	{
-		if (ManagementFactory.getThreadMXBean().isSynchronizerUsageSupported())
-		{
+
+	private static long[] findDeadlockedThreadIds() {
+		if (ManagementFactory.getThreadMXBean().isSynchronizerUsageSupported()) {
 			return ManagementFactory.getThreadMXBean().findDeadlockedThreads();
 		}
 		return ManagementFactory.getThreadMXBean().findMonitorDeadlockedThreads();
 	}
-	
-	private static Thread findThreadById(long id)
-	{
-		for (final Thread thread : Thread.getAllStackTraces().keySet())
-		{
-			if (thread.getId() == id)
-			{
+
+	private static Thread findThreadById(long id) {
+		for (final Thread thread : Thread.getAllStackTraces().keySet()) {
+			if (thread.getId() == id) {
 				return thread;
 			}
 		}
-		
+
 		throw new IllegalStateException("Deadlocked Thread not found!");
 	}
-	
-	protected static final class Halt extends Thread
-	{
+
+	protected static final class Halt extends Thread {
 		@Override
-		public void run()
-		{
-			try
-			{
+		public void run() {
+			try {
 				Thread.sleep(40_000);
-			}
-			catch (final InterruptedException e)
-			{
-				LOGGER.error("", e);
-			}
-			finally
-			{
-				ShutdownManager.halt(DeadlockDetector.class.getSimpleName());
+			} catch (final InterruptedException e) {
+				log.error("", e);
+			} finally {
+				ShutdownManager.getInstance().halt(DeadlockDetector.class.getSimpleName());
 			}
 		}
-	}
-	
-	public static DeadlockDetector getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static final class SingletonHolder
-	{
-		protected static final DeadlockDetector INSTANCE = new DeadlockDetector();
 	}
 }

@@ -18,38 +18,33 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.l2junity.gameserver.enums.SkillEnchantType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public class ExEnchantSkillList implements IClientOutgoingPacket
-{
+import java.util.LinkedList;
+import java.util.List;
+
+public class ExEnchantSkillList implements IClientOutgoingPacket {
 	private final SkillEnchantType _type;
 	private final List<Skill> _skills = new LinkedList<>();
-	
-	public ExEnchantSkillList(SkillEnchantType type)
-	{
+
+	public ExEnchantSkillList(SkillEnchantType type) {
 		_type = type;
 	}
-	
-	public void addSkill(Skill skill)
-	{
+
+	public void addSkill(Skill skill) {
 		_skills.add(skill);
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_ENCHANT_SKILL_LIST.writeId(packet);
-		
+
 		packet.writeD(_type.ordinal());
 		packet.writeD(_skills.size());
-		for (Skill skill : _skills)
-		{
+		for (Skill skill : _skills) {
 			packet.writeD(skill.getId());
 			packet.writeH(skill.getLevel());
 			packet.writeH(skill.getSubLevel());

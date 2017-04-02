@@ -26,31 +26,27 @@ import org.l2junity.network.PacketReader;
 
 /**
  * Format:(ch) d
+ *
  * @author chris_00
  */
-public final class RequestExMPCCShowPartyMembersInfo implements IClientIncomingPacket
-{
+public final class RequestExMPCCShowPartyMembersInfo implements IClientIncomingPacket {
 	private int _partyLeaderId;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_partyLeaderId = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final PlayerInstance player = World.getInstance().getPlayer(_partyLeaderId);
-		if ((player != null) && (player.getParty() != null))
-		{
+		if ((player != null) && (player.getParty() != null)) {
 			client.sendPacket(new ExMPCCShowPartyMemberInfo(player.getParty()));
 		}
 	}

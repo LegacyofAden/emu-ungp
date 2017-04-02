@@ -32,66 +32,58 @@ import org.l2junity.network.PacketReader;
 
 /**
  * This class ...
+ *
  * @version $Revision: 1.3.4.4 $ $Date: 2005/03/27 15:29:30 $
  */
-public final class RequestJoinPledge implements IClientIncomingPacket
-{
+public final class RequestJoinPledge implements IClientIncomingPacket {
 	private int _target;
 	private int _pledgeType;
-	
+
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		_target = packet.readD();
 		_pledgeType = packet.readD();
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = activeChar.getClan();
-		if (clan == null)
-		{
+		if (clan == null) {
 			return;
 		}
-		
+
 		final PlayerInstance target = World.getInstance().getPlayer(_target);
-		if (target == null)
-		{
+		if (target == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return;
 		}
-		
+
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerInviteToClan(activeChar, target), activeChar, BooleanReturn.class);
-		if ((term != null) && !term.getValue())
-		{
+		if ((term != null) && !term.getValue()) {
 			return;
 		}
-		
-		if (!clan.checkClanJoinCondition(activeChar, target, _pledgeType))
-		{
+
+		if (!clan.checkClanJoinCondition(activeChar, target, _pledgeType)) {
 			return;
 		}
-		
+
 		final ClanInvitationRequest request = new ClanInvitationRequest(activeChar, target, _pledgeType);
 		request.scheduleTimeout(30 * 1000);
 		activeChar.addRequest(request);
 		target.addRequest(request);
-		
+
 		final String pledgeName = activeChar.getClan().getName();
 		final String subPledgeName = (activeChar.getClan().getSubPledge(_pledgeType) != null ? activeChar.getClan().getSubPledge(_pledgeType).getName() : null);
 		target.sendPacket(new AskJoinPledge(activeChar.getObjectId(), subPledgeName, _pledgeType, pledgeName));
 	}
-	
-	public int getPledgeType()
-	{
+
+	public int getPledgeType() {
 		return _pledgeType;
 	}
 }

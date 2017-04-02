@@ -25,19 +25,16 @@ import org.l2junity.network.PacketWriter;
 /**
  * @author NosBit
  */
-public class ExShowCommission implements IClientOutgoingPacket
-{
+public class ExShowCommission implements IClientOutgoingPacket {
 	public static final ExShowCommission STATIC_PACKET = new ExShowCommission();
-	
-	private ExShowCommission()
-	{
+
+	private ExShowCommission() {
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_SHOW_COMMISSION.writeId(packet);
-		
+
 		packet.writeD(0x01);
 		return true;
 	}

@@ -45,41 +45,36 @@ import org.l2junity.network.PacketWriter;
  * S = AllyName<BR>
  * S = AllyLeaderName<BR>
  * d = AllyCrestID<BR>
+ *
  * @author KenM
  */
-public final class SiegeAttackerList implements IClientOutgoingPacket
-{
+public final class SiegeAttackerList implements IClientOutgoingPacket {
 	private final Castle _castle;
-	
-	public SiegeAttackerList(Castle castle)
-	{
+
+	public SiegeAttackerList(Castle castle) {
 		_castle = castle;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CASTLE_SIEGE_ATTACKER_LIST.writeId(packet);
-		
+
 		packet.writeD(_castle.getResidenceId());
 		packet.writeD(0x00); // 0
 		packet.writeD(0x01); // 1
 		packet.writeD(0x00); // 0
 		int size = _castle.getSiege().getAttackerClans().size();
-		if (size > 0)
-		{
+		if (size > 0) {
 			L2Clan clan;
-			
+
 			packet.writeD(size);
 			packet.writeD(size);
-			for (SiegeClan siegeclan : _castle.getSiege().getAttackerClans())
-			{
+			for (SiegeClan siegeclan : _castle.getSiege().getAttackerClans()) {
 				clan = ClanTable.getInstance().getClan(siegeclan.getClanId());
-				if (clan == null)
-				{
+				if (clan == null) {
 					continue;
 				}
-				
+
 				packet.writeD(clan.getId());
 				packet.writeS(clan.getName());
 				packet.writeS(clan.getLeaderName());
@@ -90,9 +85,7 @@ public final class SiegeAttackerList implements IClientOutgoingPacket
 				packet.writeS(""); // AllyLeaderName
 				packet.writeD(clan.getAllyCrestId());
 			}
-		}
-		else
-		{
+		} else {
 			packet.writeD(0x00);
 			packet.writeD(0x00);
 		}

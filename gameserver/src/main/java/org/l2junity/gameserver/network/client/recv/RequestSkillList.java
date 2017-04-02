@@ -25,20 +25,16 @@ import org.l2junity.network.PacketReader;
 /**
  * @version 1.4
  */
-public final class RequestSkillList implements IClientIncomingPacket
-{
+public final class RequestSkillList implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance cha = client.getActiveChar();
-		if (cha != null)
-		{
+		if (cha != null) {
 			cha.sendSkillList();
 		}
 	}

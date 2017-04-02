@@ -22,20 +22,17 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
-public final class DoorStatusUpdate implements IClientOutgoingPacket
-{
+public final class DoorStatusUpdate implements IClientOutgoingPacket {
 	private final DoorInstance _door;
-	
-	public DoorStatusUpdate(DoorInstance door)
-	{
+
+	public DoorStatusUpdate(DoorInstance door) {
 		_door = door;
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.DOOR_STATUS_UPDATE.writeId(packet);
-		
+
 		packet.writeD(_door.getObjectId());
 		packet.writeD(_door.isOpen() ? 0 : 1);
 		packet.writeD(_door.getDamage());

@@ -18,53 +18,48 @@
  */
 package org.l2junity.gameserver.data.xml.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.data.xml.IGameXmlReader;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.multibox.MultiboxSettings;
+import org.w3c.dom.Document;
+
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.l2junity.commons.loader.annotations.InstanceGetter;
-import org.l2junity.commons.loader.annotations.Load;
-import org.l2junity.commons.loader.annotations.Reload;
-import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.loader.LoadGroup;
-import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.multibox.MultiboxSettings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
 /**
  * @author UnAfraid
  */
-public class MultiboxData implements IGameXmlReader
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(MultiboxData.class);
-	
+@Slf4j
+@StartupComponent("Data")
+public class MultiboxData implements IGameXmlReader {
+	@Getter(lazy = true)
+	private static final MultiboxData instance = new MultiboxData();
+
 	private final Map<String, MultiboxSettings> _data = new LinkedHashMap<>();
-	
-	protected MultiboxData()
-	{
+
+	private MultiboxData() {
+		try {
+			parseDatapackFile("config/MultiboxProtection.xml");
+			LOGGER.info("Loaded {} settings.", _data.size());
+		} catch (Exception e) {
+			log.error("Error while loading MultiboxData", e);
+		}
 	}
-	
-	@Reload("multibox")
-	@Load(group = LoadGroup.class)
-	private void load() throws Exception
-	{
-		parseDatapackFile("config/MultiboxProtection.xml");
-		LOGGER.info("Loaded {} settings.", _data.size());
-	}
-	
+
 	@Override
-	public void parseDocument(Document doc, Path path)
-	{
+	public void parseDocument(Document doc, Path path) {
 		forEach(doc, "list", listNode -> forEach(listNode, "protection", protectionNode ->
 		{
 			final StatsSet set = new StatsSet(parseAttributes(protectionNode));
 			final MultiboxSettings settings = _data.computeIfAbsent(set.getString("name"), MultiboxSettings::new);
-			
+
 			// Update the settings in case of reload
 			settings.set(set);
-			
+
 			// Add some exceptions
 			forEach(protectionNode, "whitelist", whitelistNode ->
 			{
@@ -74,24 +69,8 @@ public class MultiboxData implements IGameXmlReader
 			});
 		}));
 	}
-	
-	public MultiboxSettings getSettings(String name)
-	{
+
+	public MultiboxSettings getSettings(String name) {
 		return _data.get(name);
-	}
-	
-	/**
-	 * Gets the single instance of MultiboxData.
-	 * @return single instance of MultiboxData
-	 */
-	@InstanceGetter
-	public static MultiboxData getInstance()
-	{
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final MultiboxData INSTANCE = new MultiboxData();
 	}
 }

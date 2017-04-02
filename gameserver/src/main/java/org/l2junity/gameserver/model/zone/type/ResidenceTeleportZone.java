@@ -25,56 +25,45 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 
 /**
  * based on Kerberos work for custom L2CastleTeleportZone
+ *
  * @author Nyaran
  */
-public class ResidenceTeleportZone extends L2ZoneRespawn
-{
+public class ResidenceTeleportZone extends L2ZoneRespawn {
 	private int _residenceId;
-	
-	public ResidenceTeleportZone(int id)
-	{
+
+	public ResidenceTeleportZone(int id) {
 		super(id);
 	}
-	
+
 	@Override
-	public void setParameter(String name, String value)
-	{
-		if (name.equals("residenceId"))
-		{
+	public void setParameter(String name, String value) {
+		if (name.equals("residenceId")) {
 			_residenceId = Integer.parseInt(value);
-		}
-		else
-		{
+		} else {
 			super.setParameter(name, value);
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(Creature character)
-	{
+	protected void onEnter(Creature character) {
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true); // FIXME: Custom ?
 	}
-	
+
 	@Override
-	protected void onExit(Creature character)
-	{
+	protected void onExit(Creature character) {
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false); // FIXME: Custom ?
 	}
-	
+
 	@Override
-	public void oustAllPlayers()
-	{
-		for (PlayerInstance player : getPlayersInside())
-		{
-			if ((player != null) && player.isOnline())
-			{
+	public void oustAllPlayers() {
+		for (PlayerInstance player : getPlayersInside()) {
+			if ((player != null) && player.isOnline()) {
 				player.teleToLocation(getSpawnLoc(), 200);
 			}
 		}
 	}
-	
-	public int getResidenceId()
-	{
+
+	public int getResidenceId() {
 		return _residenceId;
 	}
 }

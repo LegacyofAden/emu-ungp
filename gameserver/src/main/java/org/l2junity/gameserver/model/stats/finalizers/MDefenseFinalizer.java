@@ -18,9 +18,7 @@
  */
 package org.l2junity.gameserver.model.stats.finalizers;
 
-import java.util.OptionalDouble;
-
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,74 +28,63 @@ import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
 
+import java.util.OptionalDouble;
+
 /**
  * @author UnAfraid
  */
-public class MDefenseFinalizer implements IStatsFunction
-{
+public class MDefenseFinalizer implements IStatsFunction {
 	private static final int[] SLOTS =
-	{
-		Inventory.PAPERDOLL_LFINGER,
-		Inventory.PAPERDOLL_RFINGER,
-		Inventory.PAPERDOLL_LEAR,
-		Inventory.PAPERDOLL_REAR,
-		Inventory.PAPERDOLL_NECK
-	};
-	
+			{
+					Inventory.PAPERDOLL_LFINGER,
+					Inventory.PAPERDOLL_RFINGER,
+					Inventory.PAPERDOLL_LEAR,
+					Inventory.PAPERDOLL_REAR,
+					Inventory.PAPERDOLL_NECK
+			};
+
 	@Override
-	public double calc(Creature creature, OptionalDouble base, DoubleStat stat)
-	{
+	public double calc(Creature creature, OptionalDouble base, DoubleStat stat) {
 		throwIfPresent(base);
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
-		if (creature.isPet())
-		{
+		if (creature.isPet()) {
 			final L2PetInstance pet = (L2PetInstance) creature;
 			baseValue = pet.getPetLevelData().getPetMDef();
 		}
 		baseValue += calcEnchantedItemBonus(creature, stat);
-		
+
 		final Inventory inv = creature.getInventory();
-		if (inv != null)
-		{
-			for (ItemInstance item : inv.getPaperdollItems(ItemInstance::isEquipped))
-			{
+		if (inv != null) {
+			for (ItemInstance item : inv.getPaperdollItems(ItemInstance::isEquipped)) {
 				baseValue += item.getItem().getStats(stat, 0);
 			}
 		}
-		
-		if (creature.isPlayer())
-		{
+
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
-			for (int slot : SLOTS)
-			{
-				if (!player.getInventory().isPaperdollSlotEmpty(slot))
-				{
+			for (int slot : SLOTS) {
+				if (!player.getInventory().isPaperdollSlotEmpty(slot)) {
 					final int defaultStatValue = player.getTemplate().getBaseDefBySlot(slot);
 					baseValue -= creature.getTransformation().map(transform -> transform.getBaseDefBySlot(player, slot)).orElse(defaultStatValue);
 				}
 			}
-			
+
 			baseValue *= BaseStats.CHA.calcBonus(creature);
-		}
-		else if (creature.isPet() && (creature.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_NECK) != 0))
-		{
+		} else if (creature.isPet() && (creature.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_NECK) != 0)) {
 			baseValue -= 13;
 		}
-		if (creature.isRaid())
-		{
+		if (creature.isRaid()) {
 			baseValue *= NpcConfig.RAID_MDEFENCE_MULTIPLIER;
 		}
-		
+
 		baseValue *= creature.getMEN() > 1 ? BaseStats.MEN.calcBonus(creature) : 1.;
-		if (creature.getLevel() > 0)
-		{
+		if (creature.getLevel() > 0) {
 			baseValue *= creature.getLevelMod();
 		}
 		return defaultValue(creature, stat, baseValue);
 	}
-	
-	private double defaultValue(Creature creature, DoubleStat stat, double baseValue)
-	{
+
+	private double defaultValue(Creature creature, DoubleStat stat, double baseValue) {
 		final double mul = Math.max(creature.getStat().getMul(stat), 0.5);
 		final double add = creature.getStat().getAdd(stat);
 		return (baseValue * mul) + add + creature.getStat().getMoveTypeValue(stat, creature.getMoveType());

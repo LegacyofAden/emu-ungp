@@ -18,29 +18,26 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import java.util.Set;
-
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
+import java.util.Set;
+
 /**
  * @author UnAfraid, mrTJO
  */
-public class ExShowContactList implements IClientOutgoingPacket
-{
+public class ExShowContactList implements IClientOutgoingPacket {
 	private final Set<String> _contacts;
-	
-	public ExShowContactList(PlayerInstance player)
-	{
+
+	public ExShowContactList(PlayerInstance player) {
 		_contacts = player.getContactList().getAllContacts();
 	}
-	
+
 	@Override
-	public boolean write(PacketWriter packet)
-	{
+	public boolean write(PacketWriter packet) {
 		OutgoingPackets.EX_CONFIRM_ADDING_POST_FRIEND.writeId(packet);
-		
+
 		packet.writeD(_contacts.size());
 		_contacts.forEach(packet::writeS);
 		return true;

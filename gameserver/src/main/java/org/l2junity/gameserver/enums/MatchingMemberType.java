@@ -21,8 +21,7 @@ package org.l2junity.gameserver.enums;
 /**
  * @author Sdw
  */
-public enum MatchingMemberType
-{
+public enum MatchingMemberType {
 	WAITING_PLAYER,
 	PARTY_LEADER,
 	PARTY_MEMBER,

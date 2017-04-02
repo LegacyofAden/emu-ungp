@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExUISetting;
@@ -27,25 +27,20 @@ import org.l2junity.network.PacketReader;
 /**
  * @author KenM / mrTJO
  */
-public class RequestKeyMapping implements IClientIncomingPacket
-{
+public class RequestKeyMapping implements IClientIncomingPacket {
 	@Override
-	public boolean read(L2GameClient client, PacketReader packet)
-	{
+	public boolean read(L2GameClient client, PacketReader packet) {
 		return true;
 	}
-	
+
 	@Override
-	public void run(L2GameClient client)
-	{
+	public void run(L2GameClient client) {
 		final PlayerInstance activeChar = client.getActiveChar();
-		if (activeChar == null)
-		{
+		if (activeChar == null) {
 			return;
 		}
-		
-		if (PlayerConfig.STORE_UI_SETTINGS)
-		{
+
+		if (PlayerConfig.STORE_UI_SETTINGS) {
 			client.sendPacket(new ExUISetting(activeChar));
 		}
 	}

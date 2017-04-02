@@ -23,21 +23,18 @@ import org.l2junity.util.network.BaseRecievePacket;
 /**
  * @author mrTJO Thanks to mochitto
  */
-public class RequestCharacters extends BaseRecievePacket
-{
+public class RequestCharacters extends BaseRecievePacket {
 	private final String _account;
-	
-	public RequestCharacters(byte[] decrypt)
-	{
+
+	public RequestCharacters(byte[] decrypt) {
 		super(decrypt);
 		_account = readS();
 	}
-	
+
 	/**
 	 * @return Return account name
 	 */
-	public String getAccount()
-	{
+	public String getAccount() {
 		return _account;
 	}
 }
