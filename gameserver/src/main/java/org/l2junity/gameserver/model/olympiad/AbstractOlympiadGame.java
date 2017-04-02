@@ -337,7 +337,7 @@ public abstract class AbstractOlympiadGame {
 			player.setCurrentMp(player.getMaxMp());
 			player.getStatus().startHpMpRegeneration();
 
-			MultiboxManager.getInstance().unregisterClient(Olympiad.getInstance(), player.getClient());
+			MultiboxManager.getInstance().unregisterClient(Olympiad.class, player.getClient());
 		} catch (Exception e) {
 			_log.warn("playerStatusBack()", e);
 		}

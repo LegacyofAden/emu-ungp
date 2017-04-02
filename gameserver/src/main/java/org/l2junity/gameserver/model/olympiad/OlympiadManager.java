@@ -79,7 +79,7 @@ public class OlympiadManager {
 	}
 
 	private boolean isRegistered(PlayerInstance noble, PlayerInstance player, boolean showMessage) {
-		final Integer objId = Integer.valueOf(noble.getObjectId());
+		final Integer objId = noble.getObjectId();
 		if (_nonClassBasedRegisters.contains(objId)) {
 			if (showMessage) {
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ALREADY_REGISTERED_ON_THE_WAITING_LIST_FOR_THE_ALL_CLASS_BATTLE);
@@ -174,7 +174,7 @@ public class OlympiadManager {
 				}
 
 				if (!MultiboxManager.getInstance().registerClient(Olympiad.class, player.getClient())) {
-					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.getInstance(), player.getClient());
+					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.class, player.getClient());
 					return false;
 				}
 
@@ -194,7 +194,7 @@ public class OlympiadManager {
 				}
 
 				if (!MultiboxManager.getInstance().registerClient(Olympiad.class, player.getClient())) {
-					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.getInstance(), player.getClient());
+					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.class, player.getClient());
 					return false;
 				}
 
@@ -233,9 +233,9 @@ public class OlympiadManager {
 			return false;
 		}
 
-		Integer objId = Integer.valueOf(noble.getObjectId());
+		Integer objId = noble.getObjectId();
 		if (_nonClassBasedRegisters.remove(objId)) {
-			MultiboxManager.getInstance().unregisterClient(Olympiad.getInstance(), noble.getClient());
+			MultiboxManager.getInstance().unregisterClient(Olympiad.class, noble.getClient());
 
 			noble.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REMOVED_FROM_THE_OLYMPIAD_WAITING_LIST);
 			return true;
@@ -243,7 +243,7 @@ public class OlympiadManager {
 
 		final Set<Integer> classed = _classBasedRegisters.get(noble.getBaseClass());
 		if ((classed != null) && classed.remove(objId)) {
-			MultiboxManager.getInstance().unregisterClient(Olympiad.getInstance(), noble.getClient());
+			MultiboxManager.getInstance().unregisterClient(Olympiad.class, noble.getClient());
 
 			noble.sendPacket(SystemMessageId.YOU_HAVE_BEEN_REMOVED_FROM_THE_OLYMPIAD_WAITING_LIST);
 			return true;
@@ -258,7 +258,7 @@ public class OlympiadManager {
 			task.getGame().handleDisconnect(player);
 		}
 
-		final Integer objId = Integer.valueOf(player.getObjectId());
+		final Integer objId = player.getObjectId();
 		if (_nonClassBasedRegisters.remove(objId)) {
 			return;
 		}
