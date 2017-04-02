@@ -16,38 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
-import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
-import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
-import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
+import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
-
-import java.util.List;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
 
 /**
  * @author UnAfraid
  */
-public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
+public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
 
-	public BossOneDayRewardHandler(OneDayRewardDataHolder holder) {
+	public OlympiadOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
 
 	@Override
 	public void init() {
-		Containers.Monsters().addListener(new ConsumerEventListener(this, EventType.ON_ATTACKABLE_KILL, (OnAttackableKill event) -> onAttackableKill(event), this));
+		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_OLYMPIAD_MATCH_RESULT, (OnOlympiadMatchResult event) -> onOlympiadMatchResult(event), this));
 	}
 
 	@Override
@@ -71,28 +65,21 @@ public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		return false;
 	}
 
-	private void onAttackableKill(OnAttackableKill event) {
-		final Attackable monster = event.getTarget();
-		final PlayerInstance player = event.getAttacker();
-		if (monster.isRaid() && (monster.getInstanceId() > 0) && (player != null)) {
-			final Party party = player.getParty();
-			if (party != null) {
-				final CommandChannel channel = party.getCommandChannel();
-				final List<PlayerInstance> members = channel != null ? channel.getMembers() : party.getMembers();
-				members.stream().filter(member -> member.distance3d(monster) <= PlayerConfig.ALT_PARTY_RANGE).forEach(this::processPlayerProgress);
-			} else {
-				processPlayerProgress(player);
+	private void onOlympiadMatchResult(OnOlympiadMatchResult event) {
+		final OneDayRewardPlayerEntry winnerEntry = getPlayerEntry(event.getWinner().getObjectId(), true);
+		if (winnerEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+			if (winnerEntry.increaseProgress() >= _amount) {
+				winnerEntry.setStatus(OneDayRewardStatus.AVAILABLE);
 			}
+			storePlayerEntry(winnerEntry);
 		}
-	}
 
-	private void processPlayerProgress(PlayerInstance player) {
-		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
-		if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
-			if (entry.increaseProgress() >= _amount) {
-				entry.setStatus(OneDayRewardStatus.AVAILABLE);
+		final OneDayRewardPlayerEntry loseEntry = getPlayerEntry(event.getLoser().getObjectId(), true);
+		if (loseEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+			if (loseEntry.increaseProgress() >= _amount) {
+				loseEntry.setStatus(OneDayRewardStatus.AVAILABLE);
 			}
-			storePlayerEntry(entry);
+			storePlayerEntry(loseEntry);
 		}
 	}
 }

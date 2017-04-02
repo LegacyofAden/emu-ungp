@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.skills.affectscopetypes;
 
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.handler.IAffectScopeHandler;
+import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;

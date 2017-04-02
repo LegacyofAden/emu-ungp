@@ -16,32 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.ceremonyofchaos.OnCeremonyOfChaosMatchResult;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFishing;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
+import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingEndReason;
 
 /**
  * @author UnAfraid
  */
-public class CeremonyOfChaosOneDayRewardHandler extends AbstractOneDayRewardHandler {
+public class FishingOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
 
-	public CeremonyOfChaosOneDayRewardHandler(OneDayRewardDataHolder holder) {
+	public FishingOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
 
 	@Override
 	public void init() {
-		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_CEREMONY_OF_CHAOS_MATCH_RESULT, (OnCeremonyOfChaosMatchResult event) -> onCeremonyOfChaosMatchResult(event), this));
+		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_FISHING, (OnPlayerFishing event) -> onPlayerFishing(event), this));
 	}
 
 	@Override
@@ -65,16 +66,16 @@ public class CeremonyOfChaosOneDayRewardHandler extends AbstractOneDayRewardHand
 		return false;
 	}
 
-	private void onCeremonyOfChaosMatchResult(OnCeremonyOfChaosMatchResult event) {
-		event.getMembers().forEach(member ->
-		{
-			final OneDayRewardPlayerEntry entry = getPlayerEntry(member.getObjectId(), true);
+	private void onPlayerFishing(OnPlayerFishing event) {
+		final PlayerInstance player = event.getActiveChar();
+		if (event.getReason() == FishingEndReason.WIN) {
+			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
 			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
 				if (entry.increaseProgress() >= _amount) {
 					entry.setStatus(OneDayRewardStatus.AVAILABLE);
 				}
 				storePlayerEntry(entry);
 			}
-		});
+		}
 	}
 }

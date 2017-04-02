@@ -16,32 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
+import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerQuestComplete;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
 
 /**
  * @author UnAfraid
  */
-public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler {
+public class QuestOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
 
-	public OlympiadOneDayRewardHandler(OneDayRewardDataHolder holder) {
+	public QuestOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
 
 	@Override
 	public void init() {
-		Containers.Global().addListener(new ConsumerEventListener(this, EventType.ON_OLYMPIAD_MATCH_RESULT, (OnOlympiadMatchResult event) -> onOlympiadMatchResult(event), this));
+		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_QUEST_COMPLETE, (OnPlayerQuestComplete event) -> onQuestComplete(event), this));
 	}
 
 	@Override
@@ -65,21 +66,16 @@ public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		return false;
 	}
 
-	private void onOlympiadMatchResult(OnOlympiadMatchResult event) {
-		final OneDayRewardPlayerEntry winnerEntry = getPlayerEntry(event.getWinner().getObjectId(), true);
-		if (winnerEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
-			if (winnerEntry.increaseProgress() >= _amount) {
-				winnerEntry.setStatus(OneDayRewardStatus.AVAILABLE);
+	private void onQuestComplete(OnPlayerQuestComplete event) {
+		final PlayerInstance player = event.getActiveChar();
+		if (event.getQuestType() == QuestType.DAILY) {
+			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
+			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+				if (entry.increaseProgress() >= _amount) {
+					entry.setStatus(OneDayRewardStatus.AVAILABLE);
+				}
+				storePlayerEntry(entry);
 			}
-			storePlayerEntry(winnerEntry);
-		}
-
-		final OneDayRewardPlayerEntry loseEntry = getPlayerEntry(event.getLoser().getObjectId(), true);
-		if (loseEntry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
-			if (loseEntry.increaseProgress() >= _amount) {
-				loseEntry.setStatus(OneDayRewardStatus.AVAILABLE);
-			}
-			storePlayerEntry(loseEntry);
 		}
 	}
 }
