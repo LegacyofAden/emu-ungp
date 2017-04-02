@@ -20,14 +20,12 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
 import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
-import org.l2junity.gameserver.handler.OneDayRewardHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.onedayreward.OneDayRewardType;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * @author Sdw
