@@ -32,6 +32,7 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 import org.l2junity.gameserver.model.multibox.MultiboxHolder;
 import org.l2junity.gameserver.model.multibox.MultiboxSettings;
 import org.l2junity.gameserver.model.multibox.MultiboxSourceType;
+import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
@@ -54,6 +55,7 @@ public class MultiboxManager {
 	private MultiboxManager() {
 		Containers.Global().addListener(new ConsumerEventListener(Containers.Global(), EventType.ON_PLAYER_LOGOUT, event -> onPlayerLogout((OnPlayerLogout) event), this));
 		registerManager(GameServer.getInstance());
+		registerManager(Olympiad.getInstance());
 	}
 
 	/**
