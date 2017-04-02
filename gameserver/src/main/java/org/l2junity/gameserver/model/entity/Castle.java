@@ -209,7 +209,6 @@ public final class Castle extends AbstractResidence {
 			loadFunctions();
 			loadDoorUpgrade();
 		}
-		loadDoor();
 	}
 
 	/**
@@ -518,7 +517,7 @@ public final class Castle extends AbstractResidence {
 	 * @param isDoorWeak
 	 */
 	public void spawnDoor(boolean isDoorWeak) {
-		for (DoorInstance door : _doors) {
+		for (DoorInstance door : getDoors()) {
 			if (door.isDead()) {
 				door.doRevive();
 				door.setCurrentHp((isDoorWeak) ? (door.getMaxHp() / 2) : (door.getMaxHp()));
@@ -655,7 +654,7 @@ public final class Castle extends AbstractResidence {
 	}
 
 	private void removeDoorUpgrade() {
-		for (DoorInstance door : _doors) {
+		for (DoorInstance door : getDoors()) {
 			door.getStat().setUpgradeHpRatio(1);
 			door.setCurrentHp(door.getCurrentHp());
 		}
@@ -732,6 +731,9 @@ public final class Castle extends AbstractResidence {
 	}
 
 	public final List<DoorInstance> getDoors() {
+		if (_doors.isEmpty()) {
+			loadDoor();
+		}
 		return _doors;
 	}
 

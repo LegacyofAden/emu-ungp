@@ -61,7 +61,7 @@ public final class GameScriptsLoader implements IGameXmlReader {
 			// load scripts
 			ScriptEngineManager.getInstance().executeScriptList(SCRIPT_FOLDER, _exclusions);
 		} catch (Exception e) {
-			log.error("Error while loading datapack scripts.");
+			log.error("Error while loading datapack scripts.", e);
 		}
 
 

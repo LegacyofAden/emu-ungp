@@ -71,7 +71,7 @@ public class OlympiadManager {
 	protected final void clearRegistered() {
 		_nonClassBasedRegisters.clear();
 		_classBasedRegisters.clear();
-		MultiboxManager.getInstance().clearManager(Olympiad.getInstance());
+		MultiboxManager.getInstance().clearManager(Olympiad.class);
 	}
 
 	public final boolean isRegistered(PlayerInstance noble) {
@@ -173,7 +173,7 @@ public class OlympiadManager {
 					return false;
 				}
 
-				if (!MultiboxManager.getInstance().registerClient(Olympiad.getInstance(), player.getClient())) {
+				if (!MultiboxManager.getInstance().registerClient(Olympiad.class, player.getClient())) {
 					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.getInstance(), player.getClient());
 					return false;
 				}
@@ -193,7 +193,7 @@ public class OlympiadManager {
 					return false;
 				}
 
-				if (!MultiboxManager.getInstance().registerClient(Olympiad.getInstance(), player.getClient())) {
+				if (!MultiboxManager.getInstance().registerClient(Olympiad.class, player.getClient())) {
 					MultiboxManager.getInstance().sendDefaultRestrictionMessage(Olympiad.getInstance(), player.getClient());
 					return false;
 				}
