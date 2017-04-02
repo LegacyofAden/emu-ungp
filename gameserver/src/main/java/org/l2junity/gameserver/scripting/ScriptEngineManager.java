@@ -20,6 +20,7 @@ package org.l2junity.gameserver.scripting;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.l2junity.core.configs.ScriptEngineConfig;
 import org.l2junity.gameserver.scripting.java.JavaScriptingEngine;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.BasePathProvider;
@@ -45,70 +46,27 @@ public final class ScriptEngineManager {
 	@Getter(lazy = true)
 	private static final ScriptEngineManager instance = new ScriptEngineManager();
 
-	private static final Path CONFIG_FILE = BasePathProvider.resolvePath(Paths.get("config", "ScriptEngines.properties"));
-	private static final Pattern ENV_PATTERN = Pattern.compile("\\%([a-zA-Z0-9.\\-_]*)\\%");
-
 	private final Map<String, IExecutionContext> _extEngines = new HashMap<>();
 	private IExecutionContext _currentExecutionContext = null;
 
 	protected ScriptEngineManager() {
-		if (Files.notExists(CONFIG_FILE)) {
-			log.info("Configuration not found, disabled!");
-			return;
+		JavaScriptingEngine javaEngine = new JavaScriptingEngine();
+		for(String compiler : ScriptEngineConfig.PREFERED_COMPILER) {
+			javaEngine.setProperty("preferedCompiler", compiler);
 		}
+		javaEngine.setProperty("classloader", ScriptEngineConfig.CLASS_LOADER);
+		javaEngine.setProperty("source", ScriptEngineConfig.SOURCE_COMPATIBILITY);
+		javaEngine.setProperty("sourcepath", ScriptEngineConfig.SOURCE_PATH);
+		javaEngine.setProperty("g", ScriptEngineConfig.DEBUG_ARGS);
+		javaEngine.setProperty("warn", ScriptEngineConfig.WARN_VARS);
+		javaEngine.setProperty("cp", System.getProperty("java.class.path"));
 
-		// register engines
-		final Properties props = loadProperties();
-
-		// Default java engine implementation
-		registerEngine(new JavaScriptingEngine(), props);
-
-		// Load external script engines
-		ServiceLoader.load(IScriptingEngine.class).forEach(engine -> registerEngine(engine, props));
-	}
-
-	private static Properties loadProperties() {
-		final Properties properties = new Properties();
-		try (final InputStream is = Files.newInputStream(CONFIG_FILE)) {
-			properties.load(is);
-		} catch (Exception e) {
-			log.warn("Couldn't load ScriptEngines.properties!", e);
-		}
-
-		return properties;
-	}
-
-	private void registerEngine(final IScriptingEngine engine, final Properties props) {
-		maybeSetProperties("language." + engine.getLanguageName() + ".", props, engine);
-		final IExecutionContext context = engine.createExecutionContext();
-		for (String commonExtension : engine.getCommonFileExtensions()) {
+		final IExecutionContext context = javaEngine.createExecutionContext();
+		for (String commonExtension : javaEngine.getCommonFileExtensions()) {
 			_extEngines.put(commonExtension, context);
 		}
 
-		log.info(engine.getEngineName() + " " + engine.getEngineVersion() + " (" + engine.getLanguageName() + " " + engine.getLanguageVersion() + ")");
-	}
-
-	private static void maybeSetProperties(final String propPrefix, final Properties props, final IScriptingEngine engine) {
-		if (props == null) {
-			return;
-		}
-
-		for (final Entry<Object, Object> prop : props.entrySet()) {
-			String key = (String) prop.getKey();
-			String value = (String) prop.getValue();
-
-			if (key.startsWith(propPrefix)) {
-				key = key.substring(propPrefix.length());
-				if (value.contains("%")) {
-					final Matcher matcher = ENV_PATTERN.matcher(value);
-					while (matcher.find()) {
-						value = value.replace("%" + matcher.group(1) + "%", System.getProperty(matcher.group(1)));
-					}
-				}
-
-				engine.setProperty(key, value);
-			}
-		}
+		log.info(javaEngine.getEngineName() + " " + javaEngine.getEngineVersion() + " (" + javaEngine.getLanguageName() + " " + javaEngine.getLanguageVersion() + ")");
 	}
 
 	private IExecutionContext getEngineByExtension(String ext) {
