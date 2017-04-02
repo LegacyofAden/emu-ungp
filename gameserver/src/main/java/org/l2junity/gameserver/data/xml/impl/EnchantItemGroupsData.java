@@ -51,6 +51,10 @@ public final class EnchantItemGroupsData implements IGameXmlReader {
 	private final Map<Integer, EnchantScrollGroup> _scrollGroups = new HashMap<>();
 
 	private EnchantItemGroupsData() {
+		reload();
+	}
+
+	public void reload() {
 		_itemGroups.clear();
 		_scrollGroups.clear();
 		parseDatapackFile("data/enchantItemGroups.xml");

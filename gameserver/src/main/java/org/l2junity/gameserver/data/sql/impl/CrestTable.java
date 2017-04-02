@@ -48,6 +48,10 @@ public final class CrestTable {
 	private final AtomicInteger _nextId = new AtomicInteger(1);
 
 	protected CrestTable() {
+		reload();
+	}
+
+	public void reload() {
 		_crests.clear();
 		final Set<Integer> crestsInUse = new HashSet<>();
 		for (L2Clan clan : ClanTable.getInstance().getClans()) {

@@ -56,6 +56,12 @@ public final class QuestManager {
 		return q.reload();
 	}
 
+	public void reloadAll() {
+		for (Quest quest : _quests.values()) {
+			quest.reload();
+		}
+	}
+
 	/**
 	 * Reloads a the quest by ID.
 	 *
