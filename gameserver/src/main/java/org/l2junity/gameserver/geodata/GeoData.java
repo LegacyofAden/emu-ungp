@@ -38,7 +38,9 @@ import org.l2junity.gameserver.util.LinePointIterator3D;
 import org.l2junity.geodriver.Cell;
 import org.l2junity.geodriver.GeoDriver;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author -Nemesiss-, HorridoJoho
@@ -61,10 +63,12 @@ public final class GeoData {
 		try {
 			for (int regionX = World.TILE_X_MIN; regionX <= World.TILE_X_MAX; regionX++) {
 				for (int regionY = World.TILE_Y_MIN; regionY <= World.TILE_Y_MAX; regionY++) {
-					final Path geoFilePath = BasePathProvider.resolveDatapackPath(GeoDataConfig.GEODATA_PATH, String.format(FILE_NAME_FORMAT, regionX, regionY));
-					log.debug("Loading " + geoFilePath.getFileName() + "...");
-					_driver.loadRegion(geoFilePath, regionX, regionY);
-					loadedRegions++;
+					final Path geoFilePath = Paths.get(GeoDataConfig.GEODATA_PATH.toString(), String.format(FILE_NAME_FORMAT, regionX, regionY));
+					if (Files.exists(geoFilePath)) {
+						log.debug("Loading " + geoFilePath.getFileName() + "...");
+						_driver.loadRegion(geoFilePath, regionX, regionY);
+						loadedRegions++;
+					}
 				}
 			}
 		} catch (Exception e) {

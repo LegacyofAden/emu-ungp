@@ -35,7 +35,7 @@ public final class ItemsAutoDestroy extends AbstractPeriodicTaskManager {
 	@Getter(lazy = true)
 	private static final ItemsAutoDestroy instance = new ItemsAutoDestroy();
 
-	private final List<ItemInstance> _items = new LinkedList<>();
+	private static final List<ItemInstance> _items = new LinkedList<>();
 
 	private ItemsAutoDestroy() {
 		super(5000);

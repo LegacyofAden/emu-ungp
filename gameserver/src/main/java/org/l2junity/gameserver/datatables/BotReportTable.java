@@ -89,7 +89,7 @@ public final class BotReportTable {
 			_punishments = new ConcurrentHashMap<>();
 
 			try {
-				final Path punishments = BasePathProvider.resolvePath(Paths.get("config", "botreport_punishments.xml"));
+				final Path punishments = Paths.get("configs/xml/botreport_punishments.xml");
 				if (Files.notExists(punishments)) {
 					throw new FileNotFoundException(punishments.toString());
 				}
