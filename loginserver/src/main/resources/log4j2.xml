@@ -8,7 +8,9 @@
 					 filePattern="log/$${date:yyyy-MM}/console/console-%date{yyyy-MM-dd}.log">
 			<PatternLayout pattern="[%date] [%thread] %logger{1.}: %message%n"/>
 			<Policies>
-				<TimeBasedTriggeringPolicy/>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="50 MB"/>
 			</Policies>
 		</RollingFile>
 	</Appenders>
