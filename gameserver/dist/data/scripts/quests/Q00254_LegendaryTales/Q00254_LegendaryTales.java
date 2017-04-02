@@ -27,16 +27,15 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Legendary Tales (254)
+ *
  * @author nonom
  */
-public class Q00254_LegendaryTales extends Quest
-{
+public class Q00254_LegendaryTales extends Quest {
 	// NPC
 	private static final int GILMORE = 30754;
-	
+
 	// Monsters
-	public enum Bosses
-	{
+	public enum Bosses {
 		EMERALD_HORN(25718),
 		DUST_RIDER(25719),
 		BLEEDING_FLY(25720),
@@ -44,86 +43,73 @@ public class Q00254_LegendaryTales extends Quest
 		SHADOW_SUMMONER(25722),
 		SPIKE_SLASHER(25723),
 		MUSCLE_BOMBER(25724);
-		
+
 		private final int _bossId;
 		private final int _mask;
-		
-		private Bosses(int bossId)
-		{
+
+		private Bosses(int bossId) {
 			_bossId = bossId;
 			_mask = 1 << ordinal();
 		}
-		
-		public int getId()
-		{
+
+		public int getId() {
 			return _bossId;
 		}
-		
-		public int getMask()
-		{
+
+		public int getMask() {
 			return _mask;
 		}
-		
-		public static Bosses valueOf(int npcId)
-		{
-			for (Bosses val : values())
-			{
-				if (val.getId() == npcId)
-				{
+
+		public static Bosses valueOf(int npcId) {
+			for (Bosses val : values()) {
+				if (val.getId() == npcId) {
 					return val;
 				}
 			}
 			return null;
 		}
 	}
-	
+
 	// @formatter:off
 	private static final int[] MONSTERS =
-	{
-		Bosses.EMERALD_HORN.getId(), Bosses.DUST_RIDER.getId(), Bosses.BLEEDING_FLY.getId(), 
-		Bosses.BLACK_DAGGER.getId(), Bosses.SHADOW_SUMMONER.getId(), Bosses.SPIKE_SLASHER.getId(), 
-		Bosses.MUSCLE_BOMBER.getId()
-	};
+			{
+					Bosses.EMERALD_HORN.getId(), Bosses.DUST_RIDER.getId(), Bosses.BLEEDING_FLY.getId(),
+					Bosses.BLACK_DAGGER.getId(), Bosses.SHADOW_SUMMONER.getId(), Bosses.SPIKE_SLASHER.getId(),
+					Bosses.MUSCLE_BOMBER.getId()
+			};
 	// @formatter:on
-	
+
 	// Items
 	private static final int LARGE_DRAGON_SKULL = 17249;
-	
+
 	// Misc
 	private static final int MIN_LEVEL = 80;
-	
-	public Q00254_LegendaryTales()
-	{
+
+	public Q00254_LegendaryTales() {
 		super(254);
 		addStartNpc(GILMORE);
 		addTalkId(GILMORE);
 		addKillId(MONSTERS);
 		registerQuestItems(LARGE_DRAGON_SKULL);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = (player.getLevel() < MIN_LEVEL) ? "30754-00.htm" : "30754-01.htm";
 				break;
 			case State.STARTED:
 				long count = getQuestItemsCount(player, LARGE_DRAGON_SKULL);
-				if (st.isCond(1))
-				{
+				if (st.isCond(1)) {
 					htmltext = ((count > 0) ? "30754-14.htm" : "30754-06.html");
-				}
-				else if (st.isCond(2))
-				{
+				} else if (st.isCond(2)) {
 					htmltext = ((count < 7) ? "30754-12.htm" : "30754-07.html");
 				}
 				break;
@@ -133,20 +119,17 @@ public class Q00254_LegendaryTales extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30754-05.html":
 				st.startQuest();
 			case "30754-02.html":
@@ -190,8 +173,7 @@ public class Q00254_LegendaryTales extends Quest
 			case "13460": // Vesper Sharper
 			case "13461": // Vesper Fighter
 			case "13462": // Vesper Stormer
-				if (st.isCond(2) && (getQuestItemsCount(player, LARGE_DRAGON_SKULL) >= 7))
-				{
+				if (st.isCond(2) && (getQuestItemsCount(player, LARGE_DRAGON_SKULL) >= 7)) {
 					htmltext = "30754-09.html";
 					rewardItems(player, Integer.parseInt(event), 1);
 					st.exitQuest(false, true);
@@ -200,53 +182,41 @@ public class Q00254_LegendaryTales extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isPet)
-	{
-		if (player.isInParty())
-		{
-			for (PlayerInstance partyMember : player.getParty().getMembers())
-			{
+	public String onKill(Npc npc, PlayerInstance player, boolean isPet) {
+		if (player.isInParty()) {
+			for (PlayerInstance partyMember : player.getParty().getMembers()) {
 				actionForEachPlayer(partyMember, npc, false);
 			}
-		}
-		else
-		{
+		} else {
 			actionForEachPlayer(player, npc, false);
 		}
 		return super.onKill(npc, player, isPet);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = player.getQuestState(Q00254_LegendaryTales.class.getSimpleName());
-		
-		if ((st != null) && st.isCond(1))
-		{
+
+		if ((st != null) && st.isCond(1)) {
 			final int raids = st.getInt("raids");
 			final Bosses boss = Bosses.valueOf(npc.getId());
-			
-			if (!checkMask(st, boss))
-			{
+
+			if (!checkMask(st, boss)) {
 				st.set("raids", raids | boss.getMask());
 				giveItems(player, LARGE_DRAGON_SKULL, 1);
-				
-				if (getQuestItemsCount(player, LARGE_DRAGON_SKULL) < 7)
-				{
+
+				if (getQuestItemsCount(player, LARGE_DRAGON_SKULL) < 7) {
 					playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
-				}
-				else
-				{
+				} else {
 					st.setCond(2, true);
 				}
 			}
 		}
 	}
-	
-	private static boolean checkMask(QuestState qs, Bosses boss)
-	{
+
+	private static boolean checkMask(QuestState qs, Bosses boss) {
 		int pos = boss.getMask();
 		return ((qs.getInt("raids") & pos) == pos);
 	}

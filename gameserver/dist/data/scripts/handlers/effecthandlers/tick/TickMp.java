@@ -27,54 +27,45 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * Mana Heal Over Time effect implementation.
  */
-public final class TickMp extends AbstractEffect
-{
+public final class TickMp extends AbstractEffect {
 	private final double _power;
 	private final StatModifierType _mode;
-	
-	public TickMp(StatsSet params)
-	{
+
+	public TickMp(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double mp = target.getCurrentMp();
 		double maxMp = target.getMaxRecoverableMp();
 		double power = 0;
-		
-		switch (_mode)
-		{
-			case DIFF:
-			{
+
+		switch (_mode) {
+			case DIFF: {
 				power = _power * getTicksMultiplier();
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				power = mp * _power * getTicksMultiplier();
 				break;
 			}
 		}
-		
-		if ((power > 0) && (mp > maxMp))
-		{
+
+		if ((power > 0) && (mp > maxMp)) {
 			return;
 		}
-		
-		if ((power < 0) && ((mp + power) <= 0))
-		{
+
+		if ((power < 0) && ((mp + power) <= 0)) {
 			power = -mp;
 		}
-		
+
 		target.setCurrentMp(Math.min(target.getCurrentMp() + power, maxMp));
 	}
 }

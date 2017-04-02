@@ -29,63 +29,52 @@ import org.l2junity.gameserver.model.stats.Formulas;
 /**
  * Dam Over Time effect implementation.
  */
-public final class TickHpFatal extends AbstractEffect
-{
+public final class TickHpFatal extends AbstractEffect {
 	private final double _power;
 	private final StatModifierType _mode;
-	
-	public TickHpFatal(StatsSet params)
-	{
+
+	public TickHpFatal(StatsSet params) {
 		_power = params.getDouble("power");
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (skill.isMagic())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (skill.isMagic()) {
 			// TODO: M.Crit can occur even if this skill is resisted. Only then m.crit damage is applied and not debuff
 			final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, target, skill);
-			if (mcrit)
-			{
+			if (mcrit) {
 				double damage = _power * 10; // Tests show that 10 times HP DOT is taken during magic critical.
 				caster.doAttack(damage, target, skill, true, false, true, false);
 			}
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DMG_OVER_TIME;
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double damage = 0;
-		
-		switch (_mode)
-		{
-			case DIFF:
-			{
+
+		switch (_mode) {
+			case DIFF: {
 				damage = _power * getTicksMultiplier();
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				damage = target.getCurrentHp() * _power * getTicksMultiplier();
 				break;
 			}
 		}
-		
+
 		caster.doAttack(Math.abs(damage), target, skill, true, false, false, false);
 	}
 }

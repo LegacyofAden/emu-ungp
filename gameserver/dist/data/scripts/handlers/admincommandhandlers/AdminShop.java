@@ -37,96 +37,69 @@ import org.slf4j.LoggerFactory;
  * <li>buy id = shows shop with respective id</li>
  * </ul>
  */
-public class AdminShop implements IAdminCommandHandler
-{
+public class AdminShop implements IAdminCommandHandler {
 	private static final Logger _log = LoggerFactory.getLogger(AdminShop.class);
-	
+
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_buy",
-		"admin_gmshop",
-		"admin_multisell",
-		"admin_exc_multisell"
-	};
-	
+			{
+					"admin_buy",
+					"admin_gmshop",
+					"admin_multisell",
+					"admin_exc_multisell"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_buy"))
-		{
-			try
-			{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_buy")) {
+			try {
 				handleBuyRequest(activeChar, command.substring(10));
-			}
-			catch (IndexOutOfBoundsException e)
-			{
+			} catch (IndexOutOfBoundsException e) {
 				activeChar.sendMessage("Please specify buylist.");
 			}
-		}
-		else if (command.equals("admin_gmshop"))
-		{
+		} else if (command.equals("admin_gmshop")) {
 			AdminHtml.showAdminHtml(activeChar, "gmshops.htm");
-		}
-		else if (command.startsWith("admin_multisell"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_multisell")) {
+			try {
 				int listId = Integer.parseInt(command.substring(16).trim());
 				MultisellData.getInstance().separateAndSend(listId, activeChar, null, false);
-			}
-			catch (NumberFormatException | IndexOutOfBoundsException e)
-			{
+			} catch (NumberFormatException | IndexOutOfBoundsException e) {
 				activeChar.sendMessage("Please specify multisell list ID.");
 			}
-		}
-		else if (command.toLowerCase().startsWith("admin_exc_multisell"))
-		{
-			try
-			{
+		} else if (command.toLowerCase().startsWith("admin_exc_multisell")) {
+			try {
 				int listId = Integer.parseInt(command.substring(20).trim());
 				MultisellData.getInstance().separateAndSend(listId, activeChar, null, true);
-			}
-			catch (NumberFormatException | IndexOutOfBoundsException e)
-			{
+			} catch (NumberFormatException | IndexOutOfBoundsException e) {
 				activeChar.sendMessage("Please specify multisell list ID.");
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void handleBuyRequest(PlayerInstance activeChar, String command)
-	{
+
+	private void handleBuyRequest(PlayerInstance activeChar, String command) {
 		int val = -1;
-		try
-		{
+		try {
 			val = Integer.parseInt(command);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("admin buylist failed:" + command);
 		}
-		
+
 		final ProductList buyList = BuyListData.getInstance().getBuyList(val);
-		if (buyList != null)
-		{
+		if (buyList != null) {
 			activeChar.sendPacket(new BuyList(buyList, activeChar, 0));
 			activeChar.sendPacket(new ExBuySellList(activeChar, false));
-		}
-		else
-		{
+		} else {
 			_log.warn("no buylist with id:" + val);
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminShop());
 	}
 }

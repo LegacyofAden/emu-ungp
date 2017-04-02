@@ -18,7 +18,7 @@
  */
 package handlers.itemhandlers;
 
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
@@ -29,37 +29,30 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 /**
  * @author JIV
  */
-public class Bypass implements IItemHandler
-{
+public class Bypass implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!(playable instanceof PlayerInstance))
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!(playable instanceof PlayerInstance)) {
 			return false;
 		}
 		PlayerInstance activeChar = (PlayerInstance) playable;
 		final int itemId = item.getId();
-		
-		String filename = "data/html/item/" + itemId + ".htm";
-		String content = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), filename);
+
+		String filename = "item/" + itemId + ".htm";
+		String content = HtmRepository.getInstance().getCustomHtm(filename);
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, item.getId());
-		if (content == null)
-		{
+		if (content == null) {
 			html.setHtml("<html><body>My Text is missing:<br>" + filename + "</body></html>");
 			activeChar.sendPacket(html);
-		}
-		else
-		{
+		} else {
 			html.setHtml(content);
 			html.replace("%itemId%", String.valueOf(item.getObjectId()));
 			activeChar.sendPacket(html);
 		}
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new Bypass());
 	}
 }

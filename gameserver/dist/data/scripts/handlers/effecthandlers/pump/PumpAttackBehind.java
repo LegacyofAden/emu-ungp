@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-
-import handlers.effecthandlers.AbstractBooleanStatEffect;
 
 /**
  * @author Nik
  */
-public class PumpAttackBehind extends AbstractBooleanStatEffect
-{
-	public PumpAttackBehind(StatsSet params)
-	{
+public class PumpAttackBehind extends AbstractBooleanStatEffect {
+	public PumpAttackBehind(StatsSet params) {
 		super(BooleanStat.ATTACK_BEHIND);
 	}
 }

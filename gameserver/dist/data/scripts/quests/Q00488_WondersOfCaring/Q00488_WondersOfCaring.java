@@ -27,33 +27,32 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Wonders of Caring (488)
+ *
  * @author St3eT
  */
-public final class Q00488_WondersOfCaring extends Quest
-{
+public final class Q00488_WondersOfCaring extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int DOLPHREN = 32880;
 	private static final int[] MONSTERS =
-	{
-		20965, // Chimera Piece
-		20970, // Soldier of Ancient Times
-		20966, // Mutated Creation
-		20971, // Warrior of Ancient Times
-		20972, // Shaman of Ancient Times
-		20967, // Creature of the Past
-		20973, // Forgotten Ancient People
-		20968, // Forgotten Face
-		20969, // Giant's Shadow
-	};
+			{
+					20965, // Chimera Piece
+					20970, // Soldier of Ancient Times
+					20966, // Mutated Creation
+					20971, // Warrior of Ancient Times
+					20972, // Shaman of Ancient Times
+					20967, // Creature of the Past
+					20973, // Forgotten Ancient People
+					20968, // Forgotten Face
+					20969, // Giant's Shadow
+			};
 	// Items
 	private static final int BOX = 19500; // Relic Box
 	// Misc
 	private static final int MIN_LEVEL = 75;
 	private static final int MAX_LEVEL = 79;
-	
-	public Q00488_WondersOfCaring()
-	{
+
+	public Q00488_WondersOfCaring() {
 		super(488);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, DOLPHREN);
@@ -61,28 +60,23 @@ public final class Q00488_WondersOfCaring extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 		registerQuestItems(BOX);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
-			case "32327-03.htm":
-			{
+			case "32327-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32327-04.htm":
-			{
+			case "32327-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
@@ -90,43 +84,30 @@ public final class Q00488_WondersOfCaring extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER) {
 					htmltext = "32327-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ADVENTURER ? "32327-05.html" : "32880-01.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (npc.getId() == ADVENTURER)
-					{
+				} else if (st.isCond(2)) {
+					if (npc.getId() == ADVENTURER) {
 						htmltext = "32327-05.html";
-					}
-					else if (npc.getId() == DOLPHREN)
-					{
-						if (!isSimulated)
-						{
+					} else if (npc.getId() == DOLPHREN) {
+						if (!isSimulated) {
 							st.exitQuest(QuestType.DAILY, true);
 							giveAdena(player, 490_545, true);
-							if (player.getLevel() >= MIN_LEVEL)
-							{
+							if (player.getLevel() >= MIN_LEVEL) {
 								addExp(player, 22_901_550);
 								addSp(player, 5_496);
 							}
@@ -136,18 +117,13 @@ public final class Q00488_WondersOfCaring extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if ((npc.getId() == ADVENTURER) && st.isNowAvailable())
-				{
-					if (!isSimulated)
-					{
+			case State.COMPLETED: {
+				if ((npc.getId() == ADVENTURER) && st.isNowAvailable()) {
+					if (!isSimulated) {
 						st.setState(State.CREATED);
 					}
 					htmltext = "32327-01.htm";
-				}
-				else if ((npc.getId() == DOLPHREN) && st.isCompleted() && !st.isNowAvailable())
-				{
+				} else if ((npc.getId() == DOLPHREN) && st.isCompleted() && !st.isNowAvailable()) {
 					htmltext = "32880-03.html";
 				}
 				break;
@@ -155,16 +131,13 @@ public final class Q00488_WondersOfCaring extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, BOX, 1, 50, 0.4, true))
-			{
+
+		if ((st != null) && st.isCond(1)) {
+			if (giveItemRandomly(killer, BOX, 1, 50, 0.4, true)) {
 				st.setCond(2, true);
 			}
 		}

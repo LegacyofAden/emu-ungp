@@ -36,19 +36,18 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Check if this effect is not counted as being stunned.
+ *
  * @author UnAfraid
  */
-public final class InstantKnockBack extends AbstractEffect
-{
+public final class InstantKnockBack extends AbstractEffect {
 	private final int _distance;
 	private final int _speed;
 	private final int _delay;
 	private final int _animationSpeed;
 	private final boolean _knockDown;
 	private final FlyType _type;
-	
-	public InstantKnockBack(StatsSet params)
-	{
+
+	public InstantKnockBack(StatsSet params) {
 		_distance = params.getInt("distance", 50);
 		_speed = params.getInt("speed", 0);
 		_delay = params.getInt("delay", 0);
@@ -56,48 +55,39 @@ public final class InstantKnockBack extends AbstractEffect
 		_knockDown = params.getBoolean("knockDown", false);
 		_type = params.getEnum("type", FlyType.class, _knockDown ? FlyType.PUSH_DOWN_HORIZONTAL : FlyType.PUSH_HORIZONTAL);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(Double.NaN, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (!_knockDown)
-		{
+		if (!_knockDown) {
 			knockBack(caster, targetCreature);
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (_knockDown)
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (_knockDown) {
 			knockBack(caster, target);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (!target.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (!target.isPlayer()) {
 			target.getAI().notifyEvent(CtrlEvent.EVT_THINK);
 		}
 	}
-	
-	public void knockBack(Creature effector, Creature effected)
-	{
+
+	public void knockBack(Creature effector, Creature effected) {
 		final double radians = Math.toRadians(Util.calculateAngleFrom(effector, effected));
 		final double x = effected.getX() + (_distance * Math.cos(radians));
 		final double y = effected.getY() + (_distance * Math.sin(radians));
@@ -105,8 +95,7 @@ public final class InstantKnockBack extends AbstractEffect
 		final Location loc = GeoData.getInstance().moveCheck(effected.getX(), effected.getY(), effected.getZ(), x, y, z, effected.getInstanceWorld());
 		effected.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		effected.broadcastPacket(new FlyToLocation(effected, loc, _type, _speed, _delay, _animationSpeed));
-		if (_knockDown)
-		{
+		if (_knockDown) {
 			effected.setHeading(Util.calculateHeadingFrom(effected, effector));
 		}
 		effected.setXYZ(loc);

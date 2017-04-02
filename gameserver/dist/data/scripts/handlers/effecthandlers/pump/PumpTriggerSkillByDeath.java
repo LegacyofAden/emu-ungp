@@ -35,76 +35,65 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 
 /**
  * Trigger Skill By Death Blow effect implementation.
+ *
  * @author Sdw
  */
-public final class PumpTriggerSkillByDeath extends AbstractEffect
-{
+public final class PumpTriggerSkillByDeath extends AbstractEffect {
 	private final int _minAttackerLevel;
 	private final int _maxAttackerLevel;
 	private final int _chance;
 	private final SkillHolder _skill;
 	private final ITargetTypeHandler _targetTypeHandler;
 	private final InstanceType _attackerType;
-	
-	public PumpTriggerSkillByDeath(StatsSet params)
-	{
+
+	public PumpTriggerSkillByDeath(StatsSet params) {
 		_minAttackerLevel = params.getInt("minAttackerLevel", 1);
 		_maxAttackerLevel = params.getInt("maxAttackerLevel", 127);
 		_chance = params.getInt("chance", 100);
 		_skill = new SkillHolder(params.getInt("skillId"), params.getInt("skillLevel"));
 		final String targetType = params.getString("targetType", "SELF");
 		_targetTypeHandler = TargetHandler.getInstance().getTargetTypeHandler(targetType);
-		if (_targetTypeHandler == null)
-		{
+		if (_targetTypeHandler == null) {
 			throw new RuntimeException("Target Type not found for effect[" + getClass().getSimpleName() + "] TargetType[" + targetType + "].");
 		}
 		_attackerType = params.getEnum("attackerType", InstanceType.class, InstanceType.L2Character);
 	}
-	
-	public void onDamageReceivedEvent(OnCreatureDamageReceived event)
-	{
-		if (event.getDamage() < event.getTarget().getCurrentHp())
-		{
+
+	public void onDamageReceivedEvent(OnCreatureDamageReceived event) {
+		if (event.getDamage() < event.getTarget().getCurrentHp()) {
 			return;
 		}
-		
-		if ((_chance == 0) || (_skill.getSkillLevel() == 0))
-		{
+
+		if ((_chance == 0) || (_skill.getSkillLevel() == 0)) {
 			return;
 		}
-		
-		if (event.getAttacker() == event.getTarget())
-		{
+
+		if (event.getAttacker() == event.getTarget()) {
 			return;
 		}
-		
-		if ((event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel))
-		{
+
+		if ((event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel)) {
 			return;
 		}
-		
-		if (((_chance < 100) && (Rnd.get(100) > _chance)) || !event.getAttacker().getInstanceType().isType(_attackerType))
-		{
+
+		if (((_chance < 100) && (Rnd.get(100) > _chance)) || !event.getAttacker().getInstanceType().isType(_attackerType)) {
 			return;
 		}
-		
+
 		final Skill triggerSkill = _skill.getSkill();
 		final WorldObject target = _targetTypeHandler.getTarget(event.getTarget(), event.getAttacker(), triggerSkill, false, false, false);
-		if ((target != null) && target.isCreature())
-		{
+		if ((target != null) && target.isCreature()) {
 			SkillCaster.triggerCast(event.getTarget(), target, triggerSkill);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_DAMAGE_RECEIVED, listener -> listener.getOwner() == this);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new ConsumerEventListener(target, EventType.ON_CREATURE_DAMAGE_RECEIVED, (OnCreatureDamageReceived event) -> onDamageReceivedEvent(event), this));
 	}
 }

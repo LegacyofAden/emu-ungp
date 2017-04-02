@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10416_InSearchOfTheEyeOfArgos.Q10416_InSearchOfTheEyeOfArgos;
 
 /**
  * Daimon the White-eyed (10417)
+ *
  * @author St3eT
  */
-public final class Q10417_DaimonTheWhiteEyed extends Quest
-{
+public final class Q10417_DaimonTheWhiteEyed extends Quest {
 	// NPCs
 	private static final int EYE_OF_ARGOS = 31683;
 	private static final int JANITT = 33851;
@@ -42,9 +41,8 @@ public final class Q10417_DaimonTheWhiteEyed extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 70;
 	private static final int MAX_LEVEL = 75;
-	
-	public Q10417_DaimonTheWhiteEyed()
-	{
+
+	public Q10417_DaimonTheWhiteEyed() {
 		super(10417);
 		addStartNpc(EYE_OF_ARGOS);
 		addTalkId(EYE_OF_ARGOS, JANITT);
@@ -53,49 +51,39 @@ public final class Q10417_DaimonTheWhiteEyed extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "31683-08.htm");
 		addCondCompletedQuest(Q10416_InSearchOfTheEyeOfArgos.class.getSimpleName(), "31683-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31683-02.htm":
-			case "31683-03.htm":
-			{
+			case "31683-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "31683-04.htm":
-			{
+			case "31683-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31683-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "31683-07.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31683-03.html":
-			{
-				if (st.isCond(3))
-				{
+			case "31683-03.html": {
+				if (st.isCond(3)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 5);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() > MIN_LEVEL)
-					{
+					if (player.getLevel() > MIN_LEVEL) {
 						addExp(player, 2_721_600);
 						addSp(player, 653);
 					}
@@ -106,24 +94,18 @@ public final class Q10417_DaimonTheWhiteEyed extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = null;
-		
-		if (st.getState() == State.CREATED)
-		{
-			if (npc.getId() == EYE_OF_ARGOS)
-			{
+
+		if (st.getState() == State.CREATED) {
+			if (npc.getId() == EYE_OF_ARGOS) {
 				htmltext = "31683-01.htm";
 			}
-		}
-		else if (st.getState() == State.STARTED)
-		{
-			switch (st.getCond())
-			{
+		} else if (st.getState() == State.STARTED) {
+			switch (st.getCond()) {
 				case 1:
 					htmltext = npc.getId() == EYE_OF_ARGOS ? "31683-05.html" : "33851-01.html";
 					break;
@@ -137,14 +119,12 @@ public final class Q10417_DaimonTheWhiteEyed extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
+
+		if ((st != null) && st.isCond(1)) {
 			st.setCond(2, true);
 		}
 		return super.onKill(npc, killer, isSummon);

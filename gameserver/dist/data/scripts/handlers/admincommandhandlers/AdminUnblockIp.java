@@ -29,55 +29,46 @@ import org.slf4j.LoggerFactory;
  * <ul>
  * <li>admin_unblockip</li>
  * </ul>
+ *
  * @version $Revision: 1.3.2.6.2.4 $ $Date: 2005/04/11 10:06:06 $
  */
-public class AdminUnblockIp implements IAdminCommandHandler
-{
+public class AdminUnblockIp implements IAdminCommandHandler {
 	private static final Logger _log = LoggerFactory.getLogger(AdminUnblockIp.class);
-	
+
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_unblockip"
-	};
-	
-	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		
-		if (command.startsWith("admin_unblockip "))
-		{
-			try
 			{
+					"admin_unblockip"
+			};
+
+	@Override
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+
+		if (command.startsWith("admin_unblockip ")) {
+			try {
 				String ipAddress = command.substring(16);
-				if (unblockIp(ipAddress, activeChar))
-				{
+				if (unblockIp(ipAddress, activeChar)) {
 					activeChar.sendMessage("Removed IP " + ipAddress + " from blocklist!");
 				}
-			}
-			catch (StringIndexOutOfBoundsException e)
-			{
+			} catch (StringIndexOutOfBoundsException e) {
 				activeChar.sendMessage("Usage: //unblockip <ip>");
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private boolean unblockIp(String ipAddress, PlayerInstance activeChar)
-	{
+
+	private boolean unblockIp(String ipAddress, PlayerInstance activeChar) {
 		// LoginServerThread.getInstance().unBlockip(ipAddress);
 		_log.warn("IP removed by GM " + activeChar.getName());
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminUnblockIp());
 	}
 }

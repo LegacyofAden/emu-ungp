@@ -30,52 +30,43 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target ground location. Returns yourself if your current skill's ground location meets the conditions.
+ *
  * @author Nik
  */
-public class Ground implements ITargetTypeHandler
-{
+public class Ground implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
-		if (activeChar.isPlayer())
-		{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
+		if (activeChar.isPlayer()) {
 			ILocational worldPosition = activeChar.getActingPlayer().getCurrentSkillWorldPosition();
-			if (worldPosition != null)
-			{
-				if (dontMove && !activeChar.isInRadius2d(worldPosition, skill.getCastRange() + activeChar.getTemplate().getCollisionRadius()))
-				{
+			if (worldPosition != null) {
+				if (dontMove && !activeChar.isInRadius2d(worldPosition, skill.getCastRange() + activeChar.getTemplate().getCollisionRadius())) {
 					return null;
 				}
-				
-				if (!GeoData.getInstance().canSeeTarget(activeChar, worldPosition))
-				{
-					if (sendMessage)
-					{
+
+				if (!GeoData.getInstance().canSeeTarget(activeChar, worldPosition)) {
+					if (sendMessage) {
 						activeChar.sendPacket(SystemMessageId.CANNOT_SEE_TARGET);
 					}
 					return null;
 				}
-				
+
 				final ZoneRegion zoneRegion = ZoneManager.getInstance().getRegion(activeChar);
-				if (skill.isBad() && !zoneRegion.checkEffectRangeInsidePeaceZone(skill, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()))
-				{
-					if (sendMessage)
-					{
+				if (skill.isBad() && !zoneRegion.checkEffectRangeInsidePeaceZone(skill, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ())) {
+					if (sendMessage) {
 						activeChar.sendPacket(SystemMessageId.A_MALICIOUS_SKILL_CANNOT_BE_USED_IN_A_PEACE_ZONE);
 					}
 					return null;
 				}
-				
+
 				return activeChar; // Return yourself to know that your ground location is legit.
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public boolean isGround()
-	{
+	public boolean isGround() {
 		return true;
 	}
 }

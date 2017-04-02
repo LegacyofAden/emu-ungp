@@ -30,53 +30,43 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class CanTransformSkillCondition implements ISkillCondition
-{
+public class CanTransformSkillCondition implements ISkillCondition {
 	// TODO: What to do with this?
 	// private final int _transformId;
-	
-	public CanTransformSkillCondition(StatsSet params)
-	{
+
+	public CanTransformSkillCondition(StatsSet params) {
 		// _transformId = params.getInt("transformId");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (target.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (target.isPlayer()) {
 			final PlayerInstance player = target.getActingPlayer();
-			if ((player == null) || player.isAlikeDead() || player.isCursedWeaponEquipped())
-			{
+			if ((player == null) || player.isAlikeDead() || player.isCursedWeaponEquipped()) {
 				return false;
 			}
-			if (player.isSitting())
-			{
+			if (player.isSitting()) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_TRANSFORM_WHILE_SITTING);
 				return false;
 			}
-			if (player.isTransformed())
-			{
+			if (player.isTransformed()) {
 				player.sendPacket(SystemMessageId.YOU_ALREADY_POLYMORPHED_AND_CANNOT_POLYMORPH_AGAIN);
 				return false;
 			}
-			if (player.isInWater())
-			{
+			if (player.isInWater()) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_POLYMORPH_INTO_THE_DESIRED_FORM_IN_WATER);
 				return false;
 			}
-			if (player.isFlyingMounted() || player.isMounted())
-			{
+			if (player.isFlyingMounted() || player.isMounted()) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_TRANSFORM_WHILE_RIDING_A_PET);
 				return false;
 			}
-			if (player.getStat().has(BooleanStat.TRANSFORM_DISABLE))
-			{
+			if (player.getStat().has(BooleanStat.TRANSFORM_DISABLE)) {
 				player.sendPacket(SystemMessageId.YOU_ARE_STILL_UNDER_TRANSFORMATION_PENALTY_AND_CANNOT_BE_POLYMORPHED);
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 }

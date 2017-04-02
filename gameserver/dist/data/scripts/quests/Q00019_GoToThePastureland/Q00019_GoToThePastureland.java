@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Go to the Pastureland (19)
+ *
  * @author malyelfik
  */
-public final class Q00019_GoToThePastureland extends Quest
-{
+public final class Q00019_GoToThePastureland extends Quest {
 	// NPCs
 	private static final int VLADIMIR = 31302;
 	private static final int TUNATUN = 31537;
@@ -37,86 +37,66 @@ public final class Q00019_GoToThePastureland extends Quest
 	private static final int VEAL = 15532;
 	// Misc
 	private static final int MIN_LEVEL = 82;
-	
-	public Q00019_GoToThePastureland()
-	{
+
+	public Q00019_GoToThePastureland() {
 		super(19);
 		addStartNpc(VLADIMIR);
 		addTalkId(VLADIMIR, TUNATUN);
 		registerQuestItems(VEAL);
 		addCondMinLevel(MIN_LEVEL, "31302-03.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equalsIgnoreCase("31302-02.htm"))
-		{
+
+		if (event.equalsIgnoreCase("31302-02.htm")) {
 			st.startQuest();
 			giveItems(player, VEAL, 1);
-		}
-		else if (event.equalsIgnoreCase("31537-02.htm"))
-		{
-			if (hasQuestItems(player, VEAL))
-			{
-				if ((player.getLevel() >= MIN_LEVEL))
-				{
+		} else if (event.equalsIgnoreCase("31537-02.htm")) {
+			if (hasQuestItems(player, VEAL)) {
+				if ((player.getLevel() >= MIN_LEVEL)) {
 					giveAdena(player, 299_928, true);
 					addExp(player, 1_456_218);
 					addSp(player, 349);
 					st.exitQuest(false, true);
 					htmltext = event;
-				}
-				else
-				{
+				} else {
 					htmltext = getNoQuestLevelRewardMsg(player);
 				}
-			}
-			else
-			{
+			} else {
 				htmltext = "31537-03.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (npc.getId() == VLADIMIR)
-		{
-			switch (st.getState())
-			{
-				case State.CREATED:
-				{
+
+		if (npc.getId() == VLADIMIR) {
+			switch (st.getState()) {
+				case State.CREATED: {
 					htmltext = "31302-01.html";
 					break;
 				}
-				case State.STARTED:
-				{
+				case State.STARTED: {
 					htmltext = "31302-04.html";
 					break;
 				}
-				case State.COMPLETED:
-				{
+				case State.COMPLETED: {
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 				}
 			}
-		}
-		else if ((npc.getId() == TUNATUN) && (st.isCond(1)))
-		{
+		} else if ((npc.getId() == TUNATUN) && (st.isCond(1))) {
 			htmltext = "31537-01.html";
 		}
 		return htmltext;

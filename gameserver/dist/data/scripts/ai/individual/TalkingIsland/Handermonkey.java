@@ -18,57 +18,48 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Handermonkey AI.
+ *
  * @author Gladicek
  */
-public final class Handermonkey extends AbstractNpcAI
-{
+public final class Handermonkey extends AbstractNpcAI {
 	// NPC
 	private static final int HANDERMONKEY = 33203;
-	
-	private Handermonkey()
-	{
+
+	private Handermonkey() {
 		addSpawnId(HANDERMONKEY);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_MOVE") && (npc != null))
-		{
-			if (getRandom(100) < 70)
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_MOVE") && (npc != null)) {
+			if (getRandom(100) < 70) {
 				final double x = npc.getSpawn().getX() + (getRandom(-100, 100));
 				final double y = npc.getSpawn().getY() + (getRandom(-100, 100));
 				final Location loc = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), x, y, npc.getZ(), npc.getInstanceWorld());
 				addMoveToDesire(npc, loc, 0);
-			}
-			else
-			{
+			} else {
 				npc.broadcastSocialAction(9);
 			}
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setRunning();
 		startQuestTimer("NPC_MOVE", 5000, npc, null, true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Handermonkey();
 	}
 }

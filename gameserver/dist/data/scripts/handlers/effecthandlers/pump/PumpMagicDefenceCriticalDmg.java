@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpMagicDefenceCriticalDmg extends AbstractDoubleStatEffect
-{
-	public PumpMagicDefenceCriticalDmg(StatsSet params)
-	{
+public class PumpMagicDefenceCriticalDmg extends AbstractDoubleStatEffect {
+	public PumpMagicDefenceCriticalDmg(StatsSet params) {
 		super(params, DoubleStat.DEFENCE_MAGIC_CRITICAL_DAMAGE);
 	}
 }

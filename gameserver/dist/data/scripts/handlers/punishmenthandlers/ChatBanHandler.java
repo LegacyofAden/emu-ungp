@@ -30,58 +30,45 @@ import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
 
 /**
  * This class handles chat ban punishment.
+ *
  * @author UnAfraid
  */
-public class ChatBanHandler implements IPunishmentHandler
-{
+public class ChatBanHandler implements IPunishmentHandler {
 	@Override
-	public void onStart(PunishmentTask task)
-	{
-		switch (task.getAffect())
-		{
-			case CHARACTER:
-			{
+	public void onStart(PunishmentTask task) {
+		switch (task.getAffect()) {
+			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
 				final PlayerInstance player = World.getInstance().getPlayer(objectId);
-				if (player != null)
-				{
+				if (player != null) {
 					applyToPlayer(task, player);
 				}
 				break;
 			}
-			case ACCOUNT:
-			{
+			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
 				final L2GameClient client = LoginServerThread.getInstance().getClient(account);
-				if (client != null)
-				{
+				if (client != null) {
 					final PlayerInstance player = client.getActiveChar();
-					if (player != null)
-					{
+					if (player != null) {
 						applyToPlayer(task, player);
 					}
 				}
 				break;
 			}
-			case IP:
-			{
+			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers())
-				{
-					if (ip.equalsIgnoreCase(player.getIPAddress()))
-					{
+				for (PlayerInstance player : World.getInstance().getPlayers()) {
+					if (ip.equalsIgnoreCase(player.getIPAddress())) {
 						applyToPlayer(task, player);
 					}
 				}
 				break;
 			}
-			case HWID:
-			{
+			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers())
-				{
-					if (hwid.equalsIgnoreCase(player.getHWID()))
-					{
+				for (PlayerInstance player : World.getInstance().getPlayers()) {
+					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						applyToPlayer(task, player);
 					}
 				}
@@ -89,55 +76,42 @@ public class ChatBanHandler implements IPunishmentHandler
 			}
 		}
 	}
-	
+
 	@Override
-	public void onEnd(PunishmentTask task)
-	{
-		switch (task.getAffect())
-		{
-			case CHARACTER:
-			{
+	public void onEnd(PunishmentTask task) {
+		switch (task.getAffect()) {
+			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
 				final PlayerInstance player = World.getInstance().getPlayer(objectId);
-				if (player != null)
-				{
+				if (player != null) {
 					removeFromPlayer(player);
 				}
 				break;
 			}
-			case ACCOUNT:
-			{
+			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
 				final L2GameClient client = LoginServerThread.getInstance().getClient(account);
-				if (client != null)
-				{
+				if (client != null) {
 					final PlayerInstance player = client.getActiveChar();
-					if (player != null)
-					{
+					if (player != null) {
 						removeFromPlayer(player);
 					}
 				}
 				break;
 			}
-			case IP:
-			{
+			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers())
-				{
-					if (ip.equalsIgnoreCase(player.getIPAddress()))
-					{
+				for (PlayerInstance player : World.getInstance().getPlayers()) {
+					if (ip.equalsIgnoreCase(player.getIPAddress())) {
 						removeFromPlayer(player);
 					}
 				}
 				break;
 			}
-			case HWID:
-			{
+			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers())
-				{
-					if (hwid.equalsIgnoreCase(player.getHWID()))
-					{
+				for (PlayerInstance player : World.getInstance().getPlayers()) {
+					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						removeFromPlayer(player);
 					}
 				}
@@ -145,44 +119,39 @@ public class ChatBanHandler implements IPunishmentHandler
 			}
 		}
 	}
-	
+
 	/**
 	 * Applies all punishment effects from the player.
+	 *
 	 * @param task
 	 * @param player
 	 */
-	private static void applyToPlayer(PunishmentTask task, PlayerInstance player)
-	{
+	private static void applyToPlayer(PunishmentTask task, PlayerInstance player) {
 		long delay = ((task.getExpirationTime() - System.currentTimeMillis()) / 1000);
-		if (delay > 0)
-		{
+		if (delay > 0) {
 			player.sendMessage("You've been chat banned for " + (delay > 60 ? ((delay / 60) + " minutes.") : delay + " seconds."));
-		}
-		else
-		{
+		} else {
 			player.sendMessage("You've been chat banned forever.");
 		}
 		player.sendPacket(new EtcStatusUpdate(player));
 	}
-	
+
 	/**
 	 * Removes any punishment effects from the player.
+	 *
 	 * @param player
 	 */
-	private static void removeFromPlayer(PlayerInstance player)
-	{
+	private static void removeFromPlayer(PlayerInstance player) {
 		player.sendMessage("Your Chat ban has been lifted");
 		player.sendPacket(new EtcStatusUpdate(player));
 	}
-	
+
 	@Override
-	public PunishmentType getType()
-	{
+	public PunishmentType getType() {
 		return PunishmentType.CHAT_BAN;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PunishmentHandler.getInstance().registerHandler(new ChatBanHandler());
 	}
 }

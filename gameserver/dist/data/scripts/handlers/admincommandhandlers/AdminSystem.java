@@ -18,10 +18,10 @@
  */
 package handlers.admincommandhandlers;
 
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.BasePathProvider;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.SystemUtil;
-import org.l2junity.commons.util.concurrent.ThreadPool;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -39,79 +39,68 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class AdminSystem implements IAdminCommandHandler
-{
+public final class AdminSystem implements IAdminCommandHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminSystem.class);
-	
+
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_system_time",
-		"admin_os_info",
-		"admin_cpu_info",
-		"admin_runtime_info",
-		"admin_jre_info",
-		"admin_jvm_info",
-		"admin_memory_usage",
-		"admin_view_threads",
-		"admin_dump_threads",
-	};
-	
+			{
+					"admin_system_time",
+					"admin_os_info",
+					"admin_cpu_info",
+					"admin_runtime_info",
+					"admin_jre_info",
+					"admin_jvm_info",
+					"admin_memory_usage",
+					"admin_view_threads",
+					"admin_dump_threads",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance player)
-	{
-		switch (command.toLowerCase())
-		{
+	public boolean useAdminCommand(String command, PlayerInstance player) {
+		switch (command.toLowerCase()) {
 			case "admin_system_time":
-				for (final String line : SystemUtil.getSystemTime())
-				{
+				for (final String line : SystemUtil.getSystemTime()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_os_info":
-				for (final String line : SystemUtil.getOSInfo())
-				{
+				for (final String line : SystemUtil.getOSInfo()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_cpu_info":
-				for (final String line : SystemUtil.getCPUInfo())
-				{
+				for (final String line : SystemUtil.getCPUInfo()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_runtime_info":
-				for (final String line : SystemUtil.getRuntimeInfo())
-				{
+				for (final String line : SystemUtil.getRuntimeInfo()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_jre_info":
-				for (final String line : SystemUtil.getJREInfo())
-				{
+				for (final String line : SystemUtil.getJREInfo()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_jvm_info":
-				for (final String line : SystemUtil.getJVMInfo())
-				{
+				for (final String line : SystemUtil.getJVMInfo()) {
 					player.sendMessage(line);
 				}
 				break;
-			
+
 			case "admin_memory_usage":
-				for (final String line : SystemUtil.getMemoryUsageStatistics())
-				{
+				for (final String line : SystemUtil.getMemoryUsageStatistics()) {
 					player.sendMessage(line);
 				}
 				break;
 			case "admin_dump_threads":
-				try
-				{
+				try {
 					//@formatter:off
 					final Path path = Files.createDirectories(BasePathProvider.resolvePath(Paths.get("log", "thread-dumps")))
 							.resolve(LocalDateTime.now().format(CommonUtil.getFilenameDateTimeFormatter()) + ".txt");
@@ -122,35 +111,30 @@ public final class AdminSystem implements IAdminCommandHandler
 					Files.write(path, threadDump, StandardCharsets.UTF_8);
 					LOGGER.info("Thread Dump successfully saved to {}!", path);
 					player.sendMessage("Thread Dump done. Please see 'log/thread-dumps' directory.");
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					LOGGER.warn("", e);
 					player.sendMessage("Thread Dump failed. Please check logs for more information.");
 				}
 				break;
 		}
-		
-		if (command.startsWith("admin_view_threads"))
-		{
+
+		if (command.startsWith("admin_view_threads")) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<html><title>Thread Viewer: ").append("</title><body>");
-			ThreadPool.getStats().forEach(line -> sb.append(line).append("<br1>"));
+			sb.append(ThreadPool.getInstance().getStats());
 			sb.append("</body></html>");
 			player.sendPacket(new NpcHtmlMessage(sb.toString()));
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminSystem());
 	}
 }

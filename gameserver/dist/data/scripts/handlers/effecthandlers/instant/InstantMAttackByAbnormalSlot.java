@@ -31,41 +31,35 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Magical Attack By Abnormal Slot effect implementation.
+ *
  * @author Sdw
  */
-public final class InstantMAttackByAbnormalSlot extends AbstractEffect
-{
+public final class InstantMAttackByAbnormalSlot extends AbstractEffect {
 	private final double _power;
 	private final AbnormalType _abnormalType;
-	
-	public InstantMAttackByAbnormalSlot(StatsSet params)
-	{
+
+	public InstantMAttackByAbnormalSlot(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_abnormalType = AbnormalType.getAbnormalType(params.getString("abnormalType", null));
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.isAlikeDead() || !targetCreature.getEffectList().stopEffects(_abnormalType))
-		{
+		if (caster.isAlikeDead() || !targetCreature.getEffectList().stopEffects(_abnormalType)) {
 			return;
 		}
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.asPlayer().stopFakeDeath(true);
 		}
 
@@ -73,7 +67,7 @@ public final class InstantMAttackByAbnormalSlot extends AbstractEffect
 		boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
 		double damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power, targetCreature.getMDef(), sps, bss, mcrit);
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

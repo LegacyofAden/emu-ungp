@@ -18,34 +18,28 @@
  */
 package ai.spawns;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.spawns.SpawnGroup;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 
-import ai.AbstractNpcAI;
-
 /**
  * @author UnAfraid
  */
-public final class NoRandomActivity extends AbstractNpcAI
-{
-	private NoRandomActivity()
-	{
+public final class NoRandomActivity extends AbstractNpcAI {
+	private NoRandomActivity() {
 	}
-	
+
 	@Override
-	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc)
-	{
+	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc) {
 		npc.setRandomAnimation(npc.getParameters().getBoolean("disableRandomAnimation", false));
 		npc.setRandomWalking(npc.getParameters().getBoolean("disableRandomWalk", false));
-		if (npc.getSpawn() != null)
-		{
+		if (npc.getSpawn() != null) {
 			npc.getSpawn().setRandomWalking(!npc.getParameters().getBoolean("disableRandomWalk", false));
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new NoRandomActivity();
 	}
 }

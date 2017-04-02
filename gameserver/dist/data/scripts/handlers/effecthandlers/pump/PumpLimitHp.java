@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpLimitHp extends AbstractDoubleStatEffect
-{
-	public PumpLimitHp(StatsSet params)
-	{
+public class PumpLimitHp extends AbstractDoubleStatEffect {
+	public PumpLimitHp(StatsSet params) {
 		super(params, DoubleStat.MAX_RECOVERABLE_HP);
 	}
 }

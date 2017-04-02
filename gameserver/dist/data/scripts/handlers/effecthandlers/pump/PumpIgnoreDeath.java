@@ -27,15 +27,12 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 /**
  * @author Sdw
  */
-public class PumpIgnoreDeath extends AbstractEffect
-{
-	public PumpIgnoreDeath(StatsSet params)
-	{
+public class PumpIgnoreDeath extends AbstractEffect {
+	public PumpIgnoreDeath(StatsSet params) {
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().set(BooleanStat.IGNORE_DEATH);
 	}
 }

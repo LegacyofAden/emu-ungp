@@ -27,20 +27,17 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class AbstractDoubleStatAddEffect extends AbstractEffect
-{
+public class AbstractDoubleStatAddEffect extends AbstractEffect {
 	private final DoubleStat _stat;
 	private final double _amount;
-	
-	public AbstractDoubleStatAddEffect(StatsSet params, DoubleStat stat)
-	{
+
+	public AbstractDoubleStatAddEffect(StatsSet params, DoubleStat stat) {
 		_stat = stat;
 		_amount = params.getDouble("amount", 0);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(_stat, _amount);
 	}
 }

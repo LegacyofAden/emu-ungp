@@ -18,9 +18,7 @@
  */
 package ai.individual.TalkingIsland.YeSegiraTeleportDevice;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
@@ -33,37 +31,37 @@ import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerCreate;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Ye Segira Teleport Device AI.
+ *
  * @author St3eT
  */
-public final class YeSegiraTeleportDevice extends AbstractNpcAI
-{
+public final class YeSegiraTeleportDevice extends AbstractNpcAI {
 	// NPCs
 	private static final int[] TELEPORT_DEVICES =
-	{
-		33180,
-		33181,
-		33182,
-		33183,
-		33185,
-		33186,
-		33187,
-		33188,
-		33189,
-		33190,
-		33191,
-		33205,
-		33192,
-		33197,
-	};
+			{
+					33180,
+					33181,
+					33182,
+					33183,
+					33185,
+					33186,
+					33187,
+					33188,
+					33189,
+					33190,
+					33191,
+					33205,
+					33192,
+					33197,
+			};
 	// Locations
 	private static final Map<String, Location> LOCATIONS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		LOCATIONS.put("village", new Location(-114413, 252159, -1592));
 		LOCATIONS.put("village2", new Location(-112529, 256741, -1456));
 		LOCATIONS.put("observatory", new Location(-114675, 230171, -1648));
@@ -75,43 +73,36 @@ public final class YeSegiraTeleportDevice extends AbstractNpcAI
 		LOCATIONS.put("4_exploration_zone", new Location(-112382, 238710, -2904));
 		LOCATIONS.put("5_exploration_zone", new Location(-110980, 233774, -3200));
 	}
-	
-	private YeSegiraTeleportDevice()
-	{
+
+	private YeSegiraTeleportDevice() {
 		addFirstTalkId(TELEPORT_DEVICES);
 		addStartNpc(TELEPORT_DEVICES);
 		addTalkId(TELEPORT_DEVICES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (LOCATIONS.containsKey(event))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (LOCATIONS.containsKey(event)) {
 			player.teleToLocation(LOCATIONS.get(event), true);
-			
-			if (event.equals("observatory") && player.getVariables().getBoolean(PlayerVariables.TI_YESEGIRA_MOVIE, false))
-			{
+
+			if (event.equals("observatory") && player.getVariables().getBoolean(PlayerVariables.TI_YESEGIRA_MOVIE, false)) {
 				playMovie(player, Movie.SI_ILLUSION_03_QUE);
 				player.getVariables().remove(PlayerVariables.TI_YESEGIRA_MOVIE);
 			}
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_CREATE)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerCreate(OnPlayerCreate event)
-	{
+	public void OnPlayerCreate(OnPlayerCreate event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (player.getRace() != Race.ERTHEIA)
-		{
+		if (player.getRace() != Race.ERTHEIA) {
 			player.getVariables().set(PlayerVariables.TI_YESEGIRA_MOVIE, true);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new YeSegiraTeleportDevice();
 	}
 }

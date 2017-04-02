@@ -18,36 +18,29 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
-import handlers.effecthandlers.AbstractDoubleStatEffect;
-
 /**
  * @author Sdw
  */
-public class PumpCriticalRate extends AbstractDoubleStatEffect
-{
-	
-	public PumpCriticalRate(StatsSet params)
-	{
+public class PumpCriticalRate extends AbstractDoubleStatEffect {
+
+	public PumpCriticalRate(StatsSet params) {
 		super(params, DoubleStat.CRITICAL_RATE);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_mode)
-		{
-			case DIFF:
-			{
+	public void pump(Creature target, Skill skill) {
+		switch (_mode) {
+			case DIFF: {
 				target.getStat().mergeAdd(_addStat, _amount);
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				target.getStat().mergeMul(_mulStat, (_amount / 100));
 				break;
 			}

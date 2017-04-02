@@ -18,62 +18,54 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Double Casting effect implementation.
+ *
  * @author Nik
  */
-public final class PumpDcMode extends AbstractBooleanStatEffect
-{
+public final class PumpDcMode extends AbstractBooleanStatEffect {
 	private static final SkillHolder[] TOGGLE_SKILLS = new SkillHolder[]
-	{
-		new SkillHolder(11007, 1),
-		new SkillHolder(11009, 1),
-		new SkillHolder(11008, 1),
-		new SkillHolder(11010, 1)
-	};
-	
+			{
+					new SkillHolder(11007, 1),
+					new SkillHolder(11009, 1),
+					new SkillHolder(11008, 1),
+					new SkillHolder(11010, 1)
+			};
+
 	private final Map<Integer, List<SkillHolder>> _addedToggles = new HashMap<>();
-	
-	public PumpDcMode(StatsSet params)
-	{
+
+	public PumpDcMode(StatsSet params) {
 		super(BooleanStat.DOUBLE_CAST);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
-			for (SkillHolder holder : TOGGLE_SKILLS)
-			{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
+			for (SkillHolder holder : TOGGLE_SKILLS) {
 				skill = holder.getSkill();
-				if ((skill != null) && !target.isAffectedBySkill(holder))
-				{
+				if ((skill != null) && !target.isAffectedBySkill(holder)) {
 					_addedToggles.computeIfAbsent(target.getObjectId(), v -> new ArrayList<>()).add(holder);
 					skill.applyEffects(target, target);
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			_addedToggles.computeIfPresent(target.getObjectId(), (k, v) ->
 			{
 				v.forEach(h -> target.stopSkillEffects(h.getSkill()));

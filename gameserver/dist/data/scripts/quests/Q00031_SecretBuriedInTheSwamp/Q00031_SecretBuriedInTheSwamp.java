@@ -18,21 +18,21 @@
  */
 package quests.Q00031_SecretBuriedInTheSwamp;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Secret Buried in the Swamp (31)
+ *
  * @author janiko, Gladicek
  */
-public final class Q00031_SecretBuriedInTheSwamp extends Quest
-{
+public final class Q00031_SecretBuriedInTheSwamp extends Quest {
 	// NPCs
 	private static final int ABERCROMBIE = 31555;
 	private static final int FORGOTTEN_MONUMENT_1 = 31661;
@@ -46,9 +46,8 @@ public final class Q00031_SecretBuriedInTheSwamp extends Quest
 	private static final int MIN_LVL = 66;
 	// Monuments
 	private static final List<Integer> MONUMENTS = Arrays.asList(FORGOTTEN_MONUMENT_1, FORGOTTEN_MONUMENT_2, FORGOTTEN_MONUMENT_3, FORGOTTEN_MONUMENT_4);
-	
-	public Q00031_SecretBuriedInTheSwamp()
-	{
+
+	public Q00031_SecretBuriedInTheSwamp() {
 		super(31);
 		addStartNpc(ABERCROMBIE);
 		addTalkId(ABERCROMBIE, CORPSE_OF_DWARF);
@@ -56,39 +55,31 @@ public final class Q00031_SecretBuriedInTheSwamp extends Quest
 		registerQuestItems(KRORINS_JOURNAL);
 		addCondMinLevel(MIN_LVL, "31555-03.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
 		String htmltext = null;
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "31555-02.html":
-			{
+
+		switch (event) {
+			case "31555-02.html": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31665-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31665-02.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					giveItems(player, KRORINS_JOURNAL, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31555-05.html":
-			{
-				if (st.isCond(2) && hasQuestItems(player, KRORINS_JOURNAL))
-				{
+			case "31555-05.html": {
+				if (st.isCond(2) && hasQuestItems(player, KRORINS_JOURNAL)) {
 					takeItems(player, KRORINS_JOURNAL, -1);
 					st.setCond(3, true);
 					htmltext = event;
@@ -98,29 +89,22 @@ public final class Q00031_SecretBuriedInTheSwamp extends Quest
 			case "31661-02.html":
 			case "31662-02.html":
 			case "31663-02.html":
-			case "31664-02.html":
-			{
-				if (MONUMENTS.contains(npc.getId()) && st.isCond(MONUMENTS.indexOf(npc.getId()) + 3))
-				{
+			case "31664-02.html": {
+				if (MONUMENTS.contains(npc.getId()) && st.isCond(MONUMENTS.indexOf(npc.getId()) + 3)) {
 					st.setCond(st.getCond() + 1, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31555-08.html":
-			{
-				if (st.isCond(7))
-				{
-					if (player.getLevel() >= MIN_LVL)
-					{
+			case "31555-08.html": {
+				if (st.isCond(7)) {
+					if (player.getLevel() >= MIN_LVL) {
 						giveAdena(player, 343_430, true);
 						addExp(player, 1_650_970);
 						addSp(player, 396);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -129,65 +113,48 @@ public final class Q00031_SecretBuriedInTheSwamp extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ABERCROMBIE)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ABERCROMBIE) {
 					htmltext = "31555-03.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case ABERCROMBIE:
-					{
-						switch (st.getCond())
-						{
-							case 1:
-							{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case ABERCROMBIE: {
+						switch (st.getCond()) {
+							case 1: {
 								htmltext = "31555-02.html";
 								break;
 							}
-							case 2:
-							{
-								if (hasQuestItems(player, KRORINS_JOURNAL))
-								{
+							case 2: {
+								if (hasQuestItems(player, KRORINS_JOURNAL)) {
 									htmltext = "31555-04.html";
 								}
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								htmltext = "31555-06.html";
 								break;
 							}
-							case 7:
-							{
+							case 7: {
 								htmltext = "31555-07.html";
 								break;
 							}
 						}
 						break;
 					}
-					case CORPSE_OF_DWARF:
-					{
-						if (st.isCond(1))
-						{
+					case CORPSE_OF_DWARF: {
+						if (st.isCond(1)) {
 							htmltext = "31665-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "31665-03.html";
 						}
 						break;
@@ -195,23 +162,18 @@ public final class Q00031_SecretBuriedInTheSwamp extends Quest
 					case FORGOTTEN_MONUMENT_1:
 					case FORGOTTEN_MONUMENT_2:
 					case FORGOTTEN_MONUMENT_3:
-					case FORGOTTEN_MONUMENT_4:
-					{
+					case FORGOTTEN_MONUMENT_4: {
 						final int loc = MONUMENTS.indexOf(npc.getId()) + 3;
-						if (st.isCond(loc))
-						{
+						if (st.isCond(loc)) {
 							htmltext = npc.getId() + "-01.html";
-						}
-						else if (st.isCond(loc + 1))
-						{
+						} else if (st.isCond(loc + 1)) {
 							htmltext = npc.getId() + "-03.html";
 						}
 						break;
 					}
 				}
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

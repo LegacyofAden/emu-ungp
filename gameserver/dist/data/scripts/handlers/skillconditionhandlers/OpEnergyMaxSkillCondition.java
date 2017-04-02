@@ -28,24 +28,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author UnAfraid
  */
-public class OpEnergyMaxSkillCondition implements ISkillCondition
-{
+public class OpEnergyMaxSkillCondition implements ISkillCondition {
 	private final int _amount;
-	
-	public OpEnergyMaxSkillCondition(StatsSet params)
-	{
+
+	public OpEnergyMaxSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (caster.getActingPlayer().getCharges() >= _amount)
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (caster.getActingPlayer().getCharges() >= _amount) {
 			caster.sendPacket(SystemMessageId.YOUR_FORCE_HAS_REACHED_MAXIMUM_CAPACITY);
 			return false;
 		}
-		
+
 		return true;
 	}
 }

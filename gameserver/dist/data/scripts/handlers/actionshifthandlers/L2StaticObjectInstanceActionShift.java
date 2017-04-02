@@ -27,30 +27,25 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.StaticObject;
 
-public class L2StaticObjectInstanceActionShift implements IActionShiftHandler
-{
+public class L2StaticObjectInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (activeChar.isGM())
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (activeChar.isGM()) {
 			activeChar.setTarget(target);
 			activeChar.sendPacket(new StaticObject((L2StaticObjectInstance) target));
-			
+
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1, "<html><body><center><font color=\"LEVEL\">Static Object Info</font></center><br><table border=0><tr><td>Coords X,Y,Z: </td><td>" + target.getX() + ", " + target.getY() + ", " + target.getZ() + "</td></tr><tr><td>Object ID: </td><td>" + target.getObjectId() + "</td></tr><tr><td>Static Object ID: </td><td>" + target.getId() + "</td></tr><tr><td>Mesh Index: </td><td>" + ((L2StaticObjectInstance) target).getMeshIndex() + "</td></tr><tr><td><br></td></tr><tr><td>Class: </td><td>" + target.getClass().getSimpleName() + "</td></tr></table></body></html>");
 			activeChar.sendPacket(html);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2StaticObjectInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionShiftHandler.getInstance().registerHandler(new L2StaticObjectInstanceActionShift());
 	}
 }

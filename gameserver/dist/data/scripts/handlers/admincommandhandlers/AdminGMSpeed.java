@@ -18,11 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.AdminConfig;
+import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
@@ -32,99 +28,87 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.util.BuilderUtil;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 /**
  * A retail-like implementation of //gmspeed builder command.
+ *
  * @author lord_rex
  */
-public final class AdminGMSpeed implements IAdminCommandHandler
-{
+public final class AdminGMSpeed implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_gmspeed",
-	};
-	
+			{
+					"admin_gmspeed",
+			};
+
 	private static final Set<DoubleStat> SPEED_STATS = EnumSet.of(DoubleStat.RUN_SPEED, DoubleStat.WALK_SPEED, DoubleStat.SWIM_RUN_SPEED, DoubleStat.SWIM_WALK_SPEED, DoubleStat.FLY_RUN_SPEED, DoubleStat.FLY_WALK_SPEED);
-	
+
 	@Override
-	public boolean useAdminCommand(final String command, final PlayerInstance player)
-	{
+	public boolean useAdminCommand(final String command, final PlayerInstance player) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
-		switch (cmd)
-		{
-			case "admin_gmspeed":
-			{
-				if (!st.hasMoreTokens())
-				{
+		switch (cmd) {
+			case "admin_gmspeed": {
+				if (!st.hasMoreTokens()) {
 					BuilderUtil.sendSysMessage(player, "//gmspeed [0...10]");
 					return false;
 				}
 				final String token = st.nextToken();
-				
+
 				// Rollback feature for old custom way, in order to make everyone happy.
-				if (AdminConfig.USE_SUPER_HASTE_AS_GM_SPEED)
-				{
+				if (AdminConfig.USE_SUPER_HASTE_AS_GM_SPEED) {
 					AdminCommandHandler.getInstance().useAdminCommand(player, AdminSuperHaste.ADMIN_COMMANDS[0] + " " + token, false);
 					return true;
 				}
-				
-				if (!Util.isDouble(token))
-				{
+
+				if (!Util.isDouble(token)) {
 					BuilderUtil.sendSysMessage(player, "//gmspeed [0...10]");
 					return false;
 				}
 				final double runSpeedBoost = Double.parseDouble(token);
-				if ((runSpeedBoost < 0) || (runSpeedBoost > 10))
-				{
+				if ((runSpeedBoost < 0) || (runSpeedBoost > 10)) {
 					// Custom limit according to SDW's request - real retail limit is unknown.
 					BuilderUtil.sendSysMessage(player, "//gmspeed [0...10]");
 					return false;
 				}
-				
+
 				final Creature targetCreature;
 				final WorldObject target = player.getTarget();
-				if ((target != null) && target.isCreature())
-				{
+				if ((target != null) && target.isCreature()) {
 					targetCreature = target.asCreature();
-				}
-				else
-				{
+				} else {
 					// If there is no target, let's use the command executer.
 					targetCreature = player;
 				}
-				
+
 				SPEED_STATS.forEach(speedStat -> targetCreature.getStat().removeFixedValue(speedStat));
-				if (runSpeedBoost > 0)
-				{
+				if (runSpeedBoost > 0) {
 					SPEED_STATS.forEach(speedStat -> targetCreature.getStat().addFixedValue(speedStat, targetCreature.getTemplate().getBaseValue(speedStat, 120) * runSpeedBoost));
 				}
-				
+
 				targetCreature.getStat().recalculateStats(false);
-				if (targetCreature.isPlayer())
-				{
+				if (targetCreature.isPlayer()) {
 					targetCreature.asPlayer().broadcastUserInfo();
-				}
-				else
-				{
+				} else {
 					targetCreature.broadcastInfo();
 				}
-				
+
 				BuilderUtil.sendSysMessage(player, "[" + targetCreature.getName() + "] speed is [" + (runSpeedBoost * 100) + "0]% fast.");
 				break;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(final String[] args)
-	{
+
+	public static void main(final String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminGMSpeed());
 	}
 }

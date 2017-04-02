@@ -27,34 +27,33 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Filling the Energy of Destruction (943)
+ *
  * @author St3eT
  */
-public final class Q00943_FillingTheEnergyOfDestruction extends Quest
-{
+public final class Q00943_FillingTheEnergyOfDestruction extends Quest {
 	// NPCs
 	private static final int SEED_TALISMAN = 33715;
 	private static final int[] BOSSES =
-	{
-		29195, // Istina (common)
-		29196, // Istina (extreme)
-		29194, // Octavis (common)
-		29212, // Octavis (extreme)
-		25779, // Spezion (normal)
-		25867, // Spezion (extreme)
-		29213, // Baylor
-		29218, // Balok
-		25825, // Ron
-		29236, // Tauti (common)
-		29237, // Tauti (extreme)
-	};
+			{
+					29195, // Istina (common)
+					29196, // Istina (extreme)
+					29194, // Octavis (common)
+					29212, // Octavis (extreme)
+					25779, // Spezion (normal)
+					25867, // Spezion (extreme)
+					29213, // Baylor
+					29218, // Balok
+					25825, // Ron
+					29236, // Tauti (common)
+					29237, // Tauti (extreme)
+			};
 	// Items
 	private static final int TWISTED_MAGIC = 35668;
 	private static final int ENERGY_OF_DESTRUCTION = 35562;
 	// Misc
 	private static final int MIN_LEVEL = 90;
-	
-	public Q00943_FillingTheEnergyOfDestruction()
-	{
+
+	public Q00943_FillingTheEnergyOfDestruction() {
 		super(943);
 		addStartNpc(SEED_TALISMAN);
 		addTalkId(SEED_TALISMAN);
@@ -62,33 +61,27 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest
 		registerQuestItems(TWISTED_MAGIC);
 		addCondMinLevel(MIN_LEVEL, "33715-08.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "33715-02.htm":
-			{
+		switch (event) {
+			case "33715-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33715-03.htm":
-			{
+			case "33715-03.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33715-06.html":
-			{
+			case "33715-06.html": {
 				st.exitQuest(QuestType.DAILY, true);
 				giveItems(player, ENERGY_OF_DESTRUCTION, 1);
 				htmltext = event;
@@ -97,36 +90,27 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (npc.getId() == SEED_TALISMAN)
-		{
-			switch (st.getState())
-			{
-				case State.CREATED:
-				{
+
+		if (npc.getId() == SEED_TALISMAN) {
+			switch (st.getState()) {
+				case State.CREATED: {
 					htmltext = "33715-01.htm";
 					break;
 				}
-				case State.STARTED:
-				{
+				case State.STARTED: {
 					htmltext = st.isCond(1) ? "33715-04.html" : "33715-05.html";
 					break;
 				}
-				case State.COMPLETED:
-				{
-					if (st.isNowAvailable())
-					{
+				case State.COMPLETED: {
+					if (st.isNowAvailable()) {
 						st.setState(State.CREATED);
 						htmltext = "33715-01.htm";
-					}
-					else
-					{
+					} else {
 						htmltext = "33715-07.html";
 					}
 					break;
@@ -135,20 +119,17 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		executeForEachPlayer(player, npc, isSummon, true, true);
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, true);
-		if ((st != null) && st.isCond(1) && (npc.distance2d(player) <= 1500))
-		{
+		if ((st != null) && st.isCond(1) && (npc.distance2d(player) <= 1500)) {
 			st.setCond(2, true);
 			giveItems(player, TWISTED_MAGIC, 1);
 		}

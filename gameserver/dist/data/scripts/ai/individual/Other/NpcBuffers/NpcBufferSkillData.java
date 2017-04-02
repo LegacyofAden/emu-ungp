@@ -25,31 +25,26 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class NpcBufferSkillData
-{
+public class NpcBufferSkillData {
 	private final SkillHolder _skill;
 	private final int _scaleToLevel;
 	private final int _initialDelay;
-	
-	public NpcBufferSkillData(StatsSet set)
-	{
+
+	public NpcBufferSkillData(StatsSet set) {
 		_skill = new SkillHolder(set.getInt("id"), set.getInt("level"));
 		_scaleToLevel = set.getInt("scaleToLevel", -1);
 		_initialDelay = set.getInt("initialDelay", 0) * 1000;
 	}
-	
-	public Skill getSkill()
-	{
+
+	public Skill getSkill() {
 		return _skill.getSkill();
 	}
-	
-	public int getScaleToLevel()
-	{
+
+	public int getScaleToLevel() {
 		return _scaleToLevel;
 	}
-	
-	public int getInitialDelay()
-	{
+
+	public int getInitialDelay() {
 		return _initialDelay;
 	}
 }

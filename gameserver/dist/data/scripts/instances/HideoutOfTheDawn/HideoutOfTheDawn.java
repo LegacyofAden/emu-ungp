@@ -18,44 +18,39 @@
  */
 package instances.HideoutOfTheDawn;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import instances.AbstractInstance;
-
 /**
  * Hideout of the Dawn instance zone.
+ *
  * @author Adry_85
  */
-public final class HideoutOfTheDawn extends AbstractInstance
-{
+public final class HideoutOfTheDawn extends AbstractInstance {
 	// NPCs
 	private static final int WOOD = 32593;
 	private static final int JAINA = 32617;
 	// Misc
 	private static final int TEMPLATE_ID = 113;
-	
-	public HideoutOfTheDawn()
-	{
+
+	public HideoutOfTheDawn() {
 		super(TEMPLATE_ID);
 		addStartNpc(WOOD);
 		addTalkId(WOOD, JAINA);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
-		if (npc.getId() == WOOD)
-		{
+	public String onTalk(Npc npc, PlayerInstance talker) {
+		if (npc.getId() == WOOD) {
 			enterInstance(talker, npc, TEMPLATE_ID);
 			return "32593-01.htm";
 		}
 		finishInstance(talker, 0);
 		return "32617-01.htm";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new HideoutOfTheDawn();
 	}
 }

@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -31,53 +29,44 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Collection;
+
 /**
  * Sweeper effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantSweeper extends AbstractEffect
-{
-	public InstantSweeper(StatsSet params)
-	{
+public final class InstantSweeper extends AbstractEffect {
+	public InstantSweeper(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final Attackable targetAttackable = target.asAttackable();
-		if (targetAttackable == null)
-		{
+		if (targetAttackable == null) {
 			return;
 		}
-		
-		if (!targetAttackable.checkSpoilOwner(casterPlayer, false))
-		{
+
+		if (!targetAttackable.checkSpoilOwner(casterPlayer, false)) {
 			return;
 		}
-		
-		if (!casterPlayer.getInventory().checkInventorySlotsAndWeight(targetAttackable.getSpoilLootItems(), false, false))
-		{
+
+		if (!casterPlayer.getInventory().checkInventorySlotsAndWeight(targetAttackable.getSpoilLootItems(), false, false)) {
 			return;
 		}
-		
+
 		final Collection<ItemHolder> items = targetAttackable.takeSweep();
-		if (items != null)
-		{
-			for (ItemHolder sweepedItem : items)
-			{
+		if (items != null) {
+			for (ItemHolder sweepedItem : items) {
 				Party party = targetAttackable.getParty();
-				if (party != null)
-				{
+				if (party != null) {
 					party.distributeItem(casterPlayer, sweepedItem, true, targetAttackable);
-				}
-				else
-				{
+				} else {
 					casterPlayer.addItem("Sweeper", sweepedItem, targetAttackable, true);
 				}
 			}

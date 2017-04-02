@@ -28,41 +28,34 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Get EXP effect implementation.
+ *
  * @author Kazumi
  */
-public final class InstantGetExp extends AbstractEffect
-{
+public final class InstantGetExp extends AbstractEffect {
 	private final int _exp;
 	private final int _minLevel;
 	private final int _underMinLevelExpPercent;
-	
-	public InstantGetExp(StatsSet params)
-	{
+
+	public InstantGetExp(StatsSet params) {
 		_exp = params.getInt("exp");
 		_minLevel = params.getInt("minLevel");
 		_underMinLevelExpPercent = params.getInt("underMinLevelExpPercent");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
-		if (casterPlayer.isAlikeDead())
-		{
+		if (casterPlayer.isAlikeDead()) {
 			return;
 		}
-		
-		if (casterPlayer.getLevel() >= _minLevel)
-		{
+
+		if (casterPlayer.getLevel() >= _minLevel) {
 			casterPlayer.addExpAndSp(_exp, 0);
-		}
-		else
-		{
+		} else {
 			final long exp = (_exp * _underMinLevelExpPercent) / 100L;
 			casterPlayer.addExpAndSp(exp, 0);
 		}

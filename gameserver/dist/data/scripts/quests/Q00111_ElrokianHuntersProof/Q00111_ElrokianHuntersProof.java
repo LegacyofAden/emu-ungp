@@ -18,9 +18,6 @@
  */
 package quests.Q00111_ElrokianHuntersProof;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,12 +26,15 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Elrokian Hunter's Proof (111)
+ *
  * @author Adry_85
  */
-public final class Q00111_ElrokianHuntersProof extends Quest
-{
+public final class Q00111_ElrokianHuntersProof extends Quest {
 	// NPCs
 	private static final int MARQUEZ = 32113;
 	private static final int MUSHIKA = 32114;
@@ -53,9 +53,8 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 	private static final int MIN_LEVEL = 75;
 	// Mobs
 	private static final Map<Integer, ItemChanceHolder> MOBS_DROP_CHANCES = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS_DROP_CHANCES.put(22196, new ItemChanceHolder(DIARY_FRAGMENT, 0.51, 4)); // velociraptor_leader
 		MOBS_DROP_CHANCES.put(22197, new ItemChanceHolder(DIARY_FRAGMENT, 0.51, 4)); // velociraptor
 		MOBS_DROP_CHANCES.put(22198, new ItemChanceHolder(DIARY_FRAGMENT, 0.51, 4)); // velociraptor_s
@@ -77,9 +76,8 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 		MOBS_DROP_CHANCES.put(22221, new ItemChanceHolder(PACHYCEPHALOSAURUS_SKIN, 0.49, 11)); // pachycephalosaurus_n
 		MOBS_DROP_CHANCES.put(22226, new ItemChanceHolder(PACHYCEPHALOSAURUS_SKIN, 0.50, 11)); // pachycephalosaurus_ldr2
 	}
-	
-	public Q00111_ElrokianHuntersProof()
-	{
+
+	public Q00111_ElrokianHuntersProof() {
 		super(111);
 		addStartNpc(MARQUEZ);
 		addTalkId(MARQUEZ, MUSHIKA, ASAMAH, KIRIKACHIN);
@@ -87,19 +85,16 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 		addCondMinLevel(MIN_LEVEL, "32113-06.htm");
 		registerQuestItems(DIARY_FRAGMENT, EXPEDITION_MEMBERS_LETTER, ORNITHOMINUS_CLAW, DEINONYCHUS_BONE, PACHYCEPHALOSAURUS_SKIN, PRACTICE_ELROKIAN_TRAP);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "32113-02.htm":
 			case "32113-05.htm":
 			case "32113-04.html":
@@ -116,32 +111,26 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 			case "32113-23.html":
 			case "32113-24.html":
 			case "32115-08.html":
-			case "32116-03.html":
-			{
+			case "32116-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "32113-03.html":
-			{
+			case "32113-03.html": {
 				qs.startQuest();
 				qs.setMemoState(1);
 				htmltext = event;
 				break;
 			}
-			case "32113-15.html":
-			{
-				if (qs.isMemoState(3))
-				{
+			case "32113-15.html": {
+				if (qs.isMemoState(3)) {
 					qs.setMemoState(4);
 					qs.setCond(4, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32113-25.html":
-			{
-				if (qs.isMemoState(5))
-				{
+			case "32113-25.html": {
+				if (qs.isMemoState(5)) {
 					qs.setMemoState(6);
 					qs.setCond(6, true);
 					giveItems(player, EXPEDITION_MEMBERS_LETTER, 1);
@@ -149,20 +138,16 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 				}
 				break;
 			}
-			case "32115-03.html":
-			{
-				if (qs.isMemoState(2))
-				{
+			case "32115-03.html": {
+				if (qs.isMemoState(2)) {
 					qs.setMemoState(3);
 					qs.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32115-06.html":
-			{
-				if (qs.isMemoState(9))
-				{
+			case "32115-06.html": {
+				if (qs.isMemoState(9)) {
 					qs.setMemoState(10);
 					qs.setCond(9);
 					playSound(player, QuestSound.ETCSOUND_ELROKI_SONG_FULL);
@@ -170,42 +155,33 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 				}
 				break;
 			}
-			case "32115-09.html":
-			{
-				if (qs.isMemoState(10))
-				{
+			case "32115-09.html": {
+				if (qs.isMemoState(10)) {
 					qs.setMemoState(11);
 					qs.setCond(10, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32116-04.html":
-			{
-				if (qs.isMemoState(7))
-				{
+			case "32116-04.html": {
+				if (qs.isMemoState(7)) {
 					qs.setMemoState(8);
 					playSound(player, QuestSound.ETCSOUND_ELROKI_SONG_FULL);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32116-07.html":
-			{
-				if (qs.isMemoState(8))
-				{
+			case "32116-07.html": {
+				if (qs.isMemoState(8)) {
 					qs.setMemoState(9);
 					qs.setCond(8, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32116-10.html":
-			{
-				if (qs.isMemoState(12) && hasQuestItems(player, PRACTICE_ELROKIAN_TRAP))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "32116-10.html": {
+				if (qs.isMemoState(12) && hasQuestItems(player, PRACTICE_ELROKIAN_TRAP)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						takeItems(player, PRACTICE_ELROKIAN_TRAP, -1);
 						giveItems(player, ELROKIAN_TRAP, 1);
 						giveItems(player, TRAP_STONE, 100);
@@ -214,9 +190,7 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 						addSp(player, 4793);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
@@ -226,30 +200,22 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(player, -1, 3, npc);
-		if (qs != null)
-		{
+		if (qs != null) {
 			final ItemChanceHolder item = MOBS_DROP_CHANCES.get(npc.getId());
-			if (item.getCount() == qs.getMemoState())
-			{
-				if (qs.isCond(4))
-				{
-					if (giveItemRandomly(qs.getPlayer(), npc, item.getId(), 1, 50, item.getChance(), true))
-					{
+			if (item.getCount() == qs.getMemoState()) {
+				if (qs.isCond(4)) {
+					if (giveItemRandomly(qs.getPlayer(), npc, item.getId(), 1, 50, item.getChance(), true)) {
 						qs.setCond(5);
 					}
-				}
-				else if (qs.isCond(10))
-				{
+				} else if (qs.isCond(10)) {
 					if (giveItemRandomly(qs.getPlayer(), npc, item.getId(), 1, 10, item.getChance(), true) //
-						&& (getQuestItemsCount(qs.getPlayer(), ORNITHOMINUS_CLAW) >= 10) //
-						&& (getQuestItemsCount(qs.getPlayer(), DEINONYCHUS_BONE) >= 10) //
-						&& (getQuestItemsCount(qs.getPlayer(), PACHYCEPHALOSAURUS_SKIN) >= 10))
-					{
+							&& (getQuestItemsCount(qs.getPlayer(), ORNITHOMINUS_CLAW) >= 10) //
+							&& (getQuestItemsCount(qs.getPlayer(), DEINONYCHUS_BONE) >= 10) //
+							&& (getQuestItemsCount(qs.getPlayer(), PACHYCEPHALOSAURUS_SKIN) >= 10)) {
 						qs.setCond(11);
 					}
 				}
@@ -257,132 +223,99 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.COMPLETED:
-			{
-				if (npc.getId() == MARQUEZ)
-				{
+
+		switch (qs.getState()) {
+			case State.COMPLETED: {
+				if (npc.getId() == MARQUEZ) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;
 			}
-			case State.CREATED:
-			{
-				if (npc.getId() == MARQUEZ)
-				{
+			case State.CREATED: {
+				if (npc.getId() == MARQUEZ) {
 					htmltext = "32113-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case MARQUEZ:
-					{
-						switch (qs.getMemoState())
-						{
-							case 1:
-							{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case MARQUEZ: {
+						switch (qs.getMemoState()) {
+							case 1: {
 								htmltext = "32113-07.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "32113-08.html";
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								htmltext = "32113-09.html";
 								break;
 							}
-							case 4:
-							{
-								if (getQuestItemsCount(player, DIARY_FRAGMENT) < 50)
-								{
+							case 4: {
+								if (getQuestItemsCount(player, DIARY_FRAGMENT) < 50) {
 									htmltext = "32113-16.html";
-								}
-								else
-								{
+								} else {
 									takeItems(player, DIARY_FRAGMENT, -1);
 									qs.setMemoState(5);
 									htmltext = "32113-17.html";
 								}
 								break;
 							}
-							case 5:
-							{
+							case 5: {
 								htmltext = "32113-26.html";
 								break;
 							}
-							case 6:
-							{
+							case 6: {
 								htmltext = "32113-27.html";
 								break;
 							}
 							case 7:
-							case 8:
-							{
+							case 8: {
 								htmltext = "32113-28.html";
 								break;
 							}
-							case 9:
-							{
+							case 9: {
 								htmltext = "32113-29.html";
 								break;
 							}
 							case 10:
 							case 11:
-							case 12:
-							{
+							case 12: {
 								htmltext = "32113-30.html";
 								break;
 							}
 						}
 						break;
 					}
-					case MUSHIKA:
-					{
-						if (qs.isMemoState(1))
-						{
+					case MUSHIKA: {
+						if (qs.isMemoState(1)) {
 							qs.setCond(2, true);
 							qs.setMemoState(2);
 							htmltext = "32114-01.html";
-						}
-						else if ((qs.getMemoState() > 1) && (qs.getMemoState() < 10))
-						{
+						} else if ((qs.getMemoState() > 1) && (qs.getMemoState() < 10)) {
 							htmltext = "32114-02.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "32114-03.html";
 						}
 						break;
 					}
-					case ASAMAH:
-					{
-						switch (qs.getMemoState())
-						{
-							case 1:
-							{
+					case ASAMAH: {
+						switch (qs.getMemoState()) {
+							case 1: {
 								htmltext = "32115-01.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "32115-02.html";
 								break;
 							}
@@ -391,29 +324,22 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 							case 5:
 							case 6:
 							case 7:
-							case 8:
-							{
+							case 8: {
 								htmltext = "32115-04.html";
 								break;
 							}
-							case 9:
-							{
+							case 9: {
 								htmltext = "32115-05.html";
 								break;
 							}
-							case 10:
-							{
+							case 10: {
 								htmltext = "32115-07.html";
 								break;
 							}
-							case 11:
-							{
-								if ((getQuestItemsCount(player, ORNITHOMINUS_CLAW) < 10) || (getQuestItemsCount(player, DEINONYCHUS_BONE) < 10) || (getQuestItemsCount(player, PACHYCEPHALOSAURUS_SKIN) < 10))
-								{
+							case 11: {
+								if ((getQuestItemsCount(player, ORNITHOMINUS_CLAW) < 10) || (getQuestItemsCount(player, DEINONYCHUS_BONE) < 10) || (getQuestItemsCount(player, PACHYCEPHALOSAURUS_SKIN) < 10)) {
 									htmltext = "32115-10.html";
-								}
-								else
-								{
+								} else {
 									qs.setMemoState(12);
 									qs.setCond(12, true);
 									giveItems(player, PRACTICE_ELROKIAN_TRAP, 1);
@@ -424,31 +350,25 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 								}
 								break;
 							}
-							case 12:
-							{
+							case 12: {
 								htmltext = "32115-12.html";
 								break;
 							}
 						}
 						break;
 					}
-					case KIRIKACHIN:
-					{
-						switch (qs.getMemoState())
-						{
+					case KIRIKACHIN: {
+						switch (qs.getMemoState()) {
 							case 1:
 							case 2:
 							case 3:
 							case 4:
-							case 5:
-							{
+							case 5: {
 								htmltext = "32116-01.html";
 								break;
 							}
-							case 6:
-							{
-								if (hasQuestItems(player, EXPEDITION_MEMBERS_LETTER))
-								{
+							case 6: {
+								if (hasQuestItems(player, EXPEDITION_MEMBERS_LETTER)) {
 									qs.setMemoState(7);
 									qs.setCond(7, true);
 									takeItems(player, EXPEDITION_MEMBERS_LETTER, -1);
@@ -456,25 +376,21 @@ public final class Q00111_ElrokianHuntersProof extends Quest
 								}
 								break;
 							}
-							case 7:
-							{
+							case 7: {
 								htmltext = "32116-05.html";
 								break;
 							}
-							case 8:
-							{
+							case 8: {
 								htmltext = "32116-06.html";
 								break;
 							}
 							case 9:
 							case 10:
-							case 11:
-							{
+							case 11: {
 								htmltext = "32116-08.html";
 								break;
 							}
-							case 12:
-							{
+							case 12: {
 								htmltext = "32116-09.html";
 								break;
 							}

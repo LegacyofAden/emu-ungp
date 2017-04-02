@@ -18,19 +18,18 @@
  */
 package ai.individual.GardenOfGenesis.Statues;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
-import ai.AbstractNpcAI;
-
 /**
  * Statues AI.
+ *
  * @author St3eT
  */
-public final class Statues extends AbstractNpcAI
-{
+public final class Statues extends AbstractNpcAI {
 	// NPCs
 	private static final int STATUE_1 = 33138; // Genesis Angel Statue
 	private static final int STATUE_2 = 33139; // Fountain of Genesis
@@ -45,27 +44,22 @@ public final class Statues extends AbstractNpcAI
 	private static final Location LOC_1 = new Location(210049, 119367, -1352);
 	private static final Location LOC_2 = new Location(217785, 110621, -1344);
 	private static final Location LOC_3 = new Location(217792, 118844, -1760);
-	
-	private Statues()
-	{
+
+	private Statues() {
 		addStartNpc(STATUE_1, STATUE_2, STATUE_3);
 		addFirstTalkId(STATUE_1, STATUE_2, STATUE_3);
 		addTalkId(STATUE_1, STATUE_2, STATUE_3);
 		addKillId(STATUE_KEEPER_1, STATUE_KEEPER_2, STATUE_KEEPER_3);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (event.equals("fight"))
-		{
-			if (npc.isScriptValue(0))
-			{
+		if (event.equals("fight")) {
+			if (npc.isScriptValue(0)) {
 				Location loc = null;
 				int npcId = -1;
-				switch (npc.getId())
-				{
+				switch (npc.getId()) {
 					case STATUE_1:
 						loc = LOC_1;
 						npcId = STATUE_KEEPER_1;
@@ -79,40 +73,34 @@ public final class Statues extends AbstractNpcAI
 						npcId = STATUE_KEEPER_3;
 						break;
 				}
-				
-				if ((loc != null) && (npcId != -1))
-				{
+
+				if ((loc != null) && (npcId != -1)) {
 					npc.setScriptValue(1);
 					getTimers().addTimer("FUNCTION_REUSE", 900000, evnt -> npc.setScriptValue(0));
 					final Npc keeper = addSpawn(npcId, loc, false, 900000);
 					addAttackPlayerDesire(keeper, player);
 				}
-			}
-			else
-			{
+			} else {
 				htmltext = npc.getId() + "-no.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return npc.getId() + ".html";
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Npc buffNpc = addSpawn(BUFF_NPC, npc, false, 5000);
 		buffNpc.setIsInvul(true);
 		addSkillCastDesire(buffNpc, buffNpc, REWARD_BUFF, 23);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Statues();
 	}
 }

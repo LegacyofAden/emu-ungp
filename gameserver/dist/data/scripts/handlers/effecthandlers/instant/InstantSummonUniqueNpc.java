@@ -38,83 +38,71 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Summon Npc effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantSummonUniqueNpc extends AbstractEffect
-{
+public final class InstantSummonUniqueNpc extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantSummonUniqueNpc.class);
-	
+
 	private int _despawnDelay;
 	private final int _npcId;
 	private final int _npcCount;
 	private final boolean _randomOffset;
 	private final boolean _isSummonSpawn;
-	
-	public InstantSummonUniqueNpc(StatsSet params)
-	{
+
+	public InstantSummonUniqueNpc(StatsSet params) {
 		_despawnDelay = params.getInt("despawnDelay", 20000);
 		_npcId = params.getInt("npcId", 0);
 		_npcCount = params.getInt("npcCount", 1);
 		_randomOffset = params.getBoolean("randomOffset", false);
 		_isSummonSpawn = params.getBoolean("isSummonSpawn", false);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
-		if (casterPlayer.isAlikeDead() || casterPlayer.inObserverMode())
-		{
+
+		if (casterPlayer.isAlikeDead() || casterPlayer.inObserverMode()) {
 			return;
 		}
-		
-		if ((_npcId <= 0) || (_npcCount <= 0))
-		{
+
+		if ((_npcId <= 0) || (_npcCount <= 0)) {
 			LOGGER.warn("Invalid NPC ID or count skill ID: {}", skill.getId());
 			return;
 		}
-		
-		if (casterPlayer.isMounted())
-		{
+
+		if (casterPlayer.isMounted()) {
 			return;
 		}
-		
+
 		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_npcId);
-		if (npcTemplate == null)
-		{
+		if (npcTemplate == null) {
 			LOGGER.warn("Spawn of the nonexisting NPC ID: {}, skill ID: {}", _npcId, skill.getId());
 			return;
 		}
-		
+
 		double x = casterPlayer.getX();
 		double y = casterPlayer.getY();
 		double z = casterPlayer.getZ();
-		if (skill.getTargetTypeHandler().isGround())
-		{
+		if (skill.getTargetTypeHandler().isGround()) {
 			final ILocational wordPosition = casterPlayer.getCurrentSkillWorldPosition();
-			if (wordPosition != null)
-			{
+			if (wordPosition != null) {
 				x = wordPosition.getX();
 				y = wordPosition.getY();
 				z = wordPosition.getZ();
 			}
 		}
-		
-		if (_randomOffset)
-		{
+
+		if (_randomOffset) {
 			x += (Rnd.nextBoolean() ? Rnd.get(20, 50) : Rnd.get(-50, -20));
 			y += (Rnd.nextBoolean() ? Rnd.get(20, 50) : Rnd.get(-50, -20));
 		}
-		
-		switch (npcTemplate.getType())
-		{
-			case "L2Decoy":
-			{
+
+		switch (npcTemplate.getType()) {
+			case "L2Decoy": {
 				final L2DecoyInstance decoy = new L2DecoyInstance(npcTemplate, casterPlayer, _despawnDelay);
 				decoy.setCurrentHp(decoy.getMaxHp());
 				decoy.setCurrentMp(decoy.getMaxMp());
@@ -134,38 +122,32 @@ public final class InstantSummonUniqueNpc extends AbstractEffect
 				effectPoint.setTitle(casterPlayer.getName());
 				effectPoint.spawnMe(x, y, z);
 				_despawnDelay = effectPoint.getParameters().getInt("despawn_time", 0) * 1000;
-				if (_despawnDelay > 0)
-				{
+				if (_despawnDelay > 0) {
 					effectPoint.scheduleDespawn(_despawnDelay);
 				}
 				break;
 			}
-			default:
-			{
+			default: {
 				L2Spawn spawn;
-				try
-				{
+				try {
 					spawn = new L2Spawn(npcTemplate);
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					LOGGER.warn("Unable to create spawn", e);
 					return;
 				}
-				
+
 				spawn.setXYZ(x, y, z);
 				spawn.setHeading(casterPlayer.getHeading());
 				spawn.stopRespawn();
-				
+
 				// Delete any other identical npc
 				casterPlayer.getSummonedNpcs().stream().filter(npc -> npc.getId() == _npcId).forEach(npc -> npc.deleteMe());
-				
+
 				final Npc npc = spawn.doSpawn(_isSummonSpawn);
 				casterPlayer.addSummonedNpc(npc); // npc.setSummoner(player);
 				npc.setName(npcTemplate.getName());
 				npc.setTitle(npcTemplate.getName());
-				if (_despawnDelay > 0)
-				{
+				if (_despawnDelay > 0) {
 					npc.scheduleDespawn(_despawnDelay);
 				}
 				npc.setIsRunning(false); // TODO: Fix broadcast info.

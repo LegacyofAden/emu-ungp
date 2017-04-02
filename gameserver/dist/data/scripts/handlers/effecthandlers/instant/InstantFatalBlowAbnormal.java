@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -33,84 +29,76 @@ import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Fatal Blow effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantFatalBlowAbnormal extends AbstractEffect
-{
+public final class InstantFatalBlowAbnormal extends AbstractEffect {
 	private final double _power;
 	private final double _chance;
 	private final double _criticalChance;
 	private final Set<AbnormalType> _abnormals;
 	private final double _abnormalPower;
-	
-	public InstantFatalBlowAbnormal(StatsSet params)
-	{
+
+	public InstantFatalBlowAbnormal(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_chance = params.getDouble("chance", 0);
 		_criticalChance = params.getDouble("criticalChance", 0);
-		
+
 		String abnormals = params.getString("abnormalType", null);
-		if ((abnormals != null) && !abnormals.isEmpty())
-		{
+		if ((abnormals != null) && !abnormals.isEmpty()) {
 			_abnormals = new HashSet<>();
-			for (String slot : abnormals.split(";"))
-			{
+			for (String slot : abnormals.split(";")) {
 				_abnormals.add(AbnormalType.getAbnormalType(slot));
 			}
-		}
-		else
-		{
-			_abnormals = Collections.<AbnormalType> emptySet();
+		} else {
+			_abnormals = Collections.<AbnormalType>emptySet();
 		}
 		_abnormalPower = params.getDouble("abnormalPower", 1);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill) && Formulas.calcBlowSuccess(caster, target.asCreature(), skill, _chance);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.isAlikeDead())
-		{
+		if (caster.isAlikeDead()) {
 			return;
 		}
 
 		double power = _power;
-		
+
 		// Check if we apply an abnormal modifier
-		if (_abnormals.stream().anyMatch(targetCreature::hasAbnormalType))
-		{
+		if (_abnormals.stream().anyMatch(targetCreature::hasAbnormalType)) {
 			power += _abnormalPower;
 		}
-		
+
 		boolean ss = skill.useSoulShot() && caster.isChargedShot(ShotType.SOULSHOTS);
 		byte shld = Formulas.calcShldUse(caster, targetCreature);
 		double damage = Formulas.calcBlowDamage(caster, targetCreature, skill, false, power, shld, ss);
 		boolean crit = Formulas.calcCrit(_criticalChance, caster, targetCreature, skill);
-		
-		if (crit)
-		{
+
+		if (crit) {
 			damage *= 2;
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, true, false);
 	}
 }

@@ -28,53 +28,47 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Channel Leave user command.
+ *
  * @author Chris, Zoey76
  */
-public class ChannelLeave implements IUserCommandHandler
-{
+public class ChannelLeave implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		96
-	};
-	
+			{
+					96
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
-		if (!activeChar.isInParty() || !activeChar.getParty().isLeader(activeChar))
-		{
+
+		if (!activeChar.isInParty() || !activeChar.getParty().isLeader(activeChar)) {
 			activeChar.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_LEAVE_A_COMMAND_CHANNEL);
 			return false;
 		}
-		
-		if (activeChar.getParty().isInCommandChannel())
-		{
+
+		if (activeChar.getParty().isInCommandChannel()) {
 			final CommandChannel channel = activeChar.getParty().getCommandChannel();
 			final Party party = activeChar.getParty();
 			channel.removeParty(party);
 			party.getLeader().sendPacket(SystemMessageId.YOU_HAVE_QUIT_THE_COMMAND_CHANNEL);
-			
+
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_S_PARTY_HAS_LEFT_THE_COMMAND_CHANNEL);
 			sm.addPcName(party.getLeader());
 			channel.broadcastPacket(sm);
 			return true;
 		}
 		return false;
-		
+
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new ChannelLeave());
 	}
 }

@@ -30,63 +30,55 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Backstab effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantBackstab extends AbstractEffect
-{
+public final class InstantBackstab extends AbstractEffect {
 	private final double _power;
 	private final double _chance;
 	private final double _criticalChance;
 	private final boolean _overHit;
-	
-	public InstantBackstab(StatsSet params)
-	{
+
+	public InstantBackstab(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_chance = params.getDouble("chance", 0);
 		_criticalChance = params.getDouble("criticalChance", 0);
 		_overHit = params.getBoolean("overHit", false);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && !caster.isInFrontOf(target.asCreature()) && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill) && Formulas.calcBlowSuccess(caster, target.asCreature(), skill, _chance);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (caster.isAlikeDead())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (caster.isAlikeDead()) {
 			return;
 		}
-		
+
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (_overHit && target.isAttackable())
-		{
+
+		if (_overHit && target.isAttackable()) {
 			target.asAttackable().overhitEnabled(true);
 		}
-		
+
 		boolean ss = skill.useSoulShot() && caster.isChargedShot(ShotType.SOULSHOTS);
 		byte shld = Formulas.calcShldUse(caster, targetCreature);
 		double damage = Formulas.calcBlowDamage(caster, targetCreature, skill, true, _power, shld, ss);
-		
-		if (Formulas.calcCrit(_criticalChance, caster, targetCreature, skill))
-		{
+
+		if (Formulas.calcCrit(_criticalChance, caster, targetCreature, skill)) {
 			damage *= 2;
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, true, true, false);
 	}
 }

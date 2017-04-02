@@ -24,24 +24,22 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10333_DisappearedSakum.Q10333_DisappearedSakum;
 
 /**
  * Reporting The Status Of The Windmill Hill (10334)
+ *
  * @author St3eT
  */
-public final class Q10334_ReportingTheStatusOfTheWindmillHill extends Quest
-{
+public final class Q10334_ReportingTheStatusOfTheWindmillHill extends Quest {
 	// NPCs
 	private static final int SCHUNAIN = 33508;
 	private static final int BATHIS = 30332;
 	// Misc
 	private static final int MIN_LEVEL = 22;
 	private static final int MAX_LEVEL = 40;
-	
-	public Q10334_ReportingTheStatusOfTheWindmillHill()
-	{
+
+	public Q10334_ReportingTheStatusOfTheWindmillHill() {
 		super(10334);
 		addStartNpc(SCHUNAIN);
 		addTalkId(SCHUNAIN, BATHIS);
@@ -49,44 +47,34 @@ public final class Q10334_ReportingTheStatusOfTheWindmillHill extends Quest
 		addCondCompletedQuest(Q10333_DisappearedSakum.class.getSimpleName(), "33508-06.htm");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33508-06.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33508-02.htm":
-			case "30332-02.htm":
-			{
+			case "30332-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33508-03.htm":
-			{
+			case "33508-03.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "30332-03.htm":
-			{
-				if (st.isCond(1))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30332-03.htm": {
+				if (st.isCond(1)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 200_000);
 						addSp(player, 48);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -95,30 +83,24 @@ public final class Q10334_ReportingTheStatusOfTheWindmillHill extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == SCHUNAIN)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == SCHUNAIN) {
 					htmltext = "33508-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = npc.getId() == SCHUNAIN ? "33508-04.htm" : "30332-01.htm";
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = npc.getId() == SCHUNAIN ? "33508-05.htm" : "30332-04.htm";
 				break;
 			}

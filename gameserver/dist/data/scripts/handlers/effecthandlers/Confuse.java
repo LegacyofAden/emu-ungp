@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -32,42 +30,39 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.List;
+
 /**
  * Confuse effect implementation.
+ *
  * @author littlecrow
  */
-public final class Confuse extends AbstractBooleanStatEffect
-{
+public final class Confuse extends AbstractBooleanStatEffect {
 	private final int _chance;
-	
-	public Confuse(StatsSet params)
-	{
+
+	public Confuse(StatsSet params) {
 		super(BooleanStat.CONFUSED);
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		targetCreature.getAI().notifyEvent(CtrlEvent.EVT_CONFUSED);
 
 		// Getting the possible targets
 		final List<Creature> targetList = World.getInstance().getVisibleObjects(targetCreature, Creature.class);
 		// if there is no target, exit function
-		if (!targetList.isEmpty())
-		{
+		if (!targetList.isEmpty()) {
 			// Choosing randomly a new target
 			final Creature randomTarget = targetList.get(Rnd.nextInt(targetList.size()));
 			// Attacking the target

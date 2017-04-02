@@ -30,30 +30,26 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Headquarter Create effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantInstallCamp extends AbstractEffect
-{
+public final class InstantInstallCamp extends AbstractEffect {
 	private static final int HQ_NPC_ID = 35062;
-	
-	public InstantInstallCamp(StatsSet params)
-	{
+
+	public InstantInstallCamp(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
-		if ((casterPlayer.getClan() == null) || (casterPlayer.getClan().getLeaderId() != casterPlayer.getObjectId()))
-		{
+
+		if ((casterPlayer.getClan() == null) || (casterPlayer.getClan().getLeaderId() != casterPlayer.getObjectId())) {
 			return;
 		}
-		
+
 		final L2SiegeFlagInstance flag = new L2SiegeFlagInstance(casterPlayer, NpcData.getInstance().getTemplate(HQ_NPC_ID), false);
 		flag.setTitle(casterPlayer.getClan().getName());
 		flag.setCurrentHpMp(flag.getMaxHp(), flag.getMaxMp());

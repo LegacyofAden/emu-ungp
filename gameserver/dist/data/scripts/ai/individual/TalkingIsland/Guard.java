@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,83 +26,65 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Guard AI.
+ *
  * @author Gladicek
  */
-public final class Guard extends AbstractNpcAI
-{
+public final class Guard extends AbstractNpcAI {
 	// NPCs
 	private static final int GUARD = 33106;
-	
-	private Guard()
-	{
+
+	private Guard() {
 		addSpawnId(GUARD);
 		addMoveFinishedId(GUARD);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final int rand = getRandom(3);
-		switch (event)
-		{
-			
-			case "NPC_SHOUT1":
-			{
+		switch (event) {
+
+			case "NPC_SHOUT1": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.INFORMATION_IS_COLLECTED_IN_THE_MUSEUM_WHERE_CAN_LEARN_ABOUT_THE_HEROES);
 				getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "NPC_SHOUT2":
-			{
-				if (rand == 0)
-				{
+			case "NPC_SHOUT2": {
+				if (rand == 0) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.VISIT_THE_ADMINISTRATION_OFFICE_TO_FORM_A_CLAN);
-				}
-				else if (rand == 1)
-				{
+				} else if (rand == 1) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.KAKAI_MANAGES_THE_ADMINISTRATION_OFFICE);
 				}
 				getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "NPC_SHOUT3":
-			{
-				if (rand == 0)
-				{
+			case "NPC_SHOUT3": {
+				if (rand == 0) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.TRAINING_GROUNDS_HAS_UNDERGROUND_FACILITIES_AS_WELL);
-				}
-				else if (rand == 1)
-				{
+				} else if (rand == 1) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IF_YOU_WISH_TO_USE_THE_TRAINING_GROUNDS_MEET_SHANNON);
 				}
 				getTimers().addTimer("NPC_SHOUT3", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "NPC_SHOUT4":
-			{
+			case "NPC_SHOUT4": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THIS_IS_TALKING_ISLAND_VILLAGE_RIGHT);
 				getTimers().addTimer("NPC_SHOUT4", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "CONTINUE":
-			{
+			case "CONTINUE": {
 				SuperpointManager.getInstance().resumeMoving(npc);
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final int npcstring = npc.getParameters().getInt("npcstring", -1);
-		
-		switch (npcstring)
-		{
+
+		switch (npcstring) {
 			case 1:
 				getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
 				break;
@@ -117,20 +100,17 @@ public final class Guard extends AbstractNpcAI
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public void onMoveFinished(Npc npc)
-	{
-		if (getRandom(100) < 30)
-		{
+	public void onMoveFinished(Npc npc) {
+		if (getRandom(100) < 30) {
 			SuperpointManager.getInstance().stopMoving(npc, true, false);
 			npc.broadcastSocialAction(2);
 			getTimers().addTimer("CONTINUE", 4500, npc, null);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Guard();
 	}
 }

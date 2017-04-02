@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10786_ResidentProblemSolver.Q10786_ResidentProblemSolver;
 
 /**
  * A Spy Mission (10787)
+ *
  * @author malyelfik
  */
-public final class Q10787_ASpyMission extends Quest
-{
+public final class Q10787_ASpyMission extends Quest {
 	// NPCs
 	private static final int SHUVANN = 33867;
 	private static final int SUSPICIOUS_BOX = 33994;
@@ -46,9 +45,8 @@ public final class Q10787_ASpyMission extends Quest
 	private static final int MIN_LEVEL = 61;
 	private static final int MAX_LEVEL = 65;
 	private static final int ITEMGET_CHANCE = 30;
-	
-	public Q10787_ASpyMission()
-	{
+
+	public Q10787_ASpyMission() {
 		super(10787);
 		addStartNpc(SHUVANN);
 		addTalkId(SHUVANN, SUSPICIOUS_BOX);
@@ -57,57 +55,46 @@ public final class Q10787_ASpyMission extends Quest
 		addCondCompletedQuest(Q10786_ResidentProblemSolver.class.getSimpleName(), "33867-01.htm");
 		registerQuestItems(EMBRYO_MISSIVES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33867-03.htm":
 			case "33867-04.htm":
 				break;
 			case "33867-05.htm":
 				qs.startQuest();
 				break;
-			case "33994-02.html":
-			{
-				if (qs.isCond(1))
-				{
-					if (getRandom(100) < ITEMGET_CHANCE)
-					{
+			case "33994-02.html": {
+				if (qs.isCond(1)) {
+					if (getRandom(100) < ITEMGET_CHANCE) {
 						giveItems(player, EMBRYO_MISSIVES, 1);
 						qs.setCond(2, true);
 						htmltext = "33994-03.html";
 					}
 					// @formatter:off
 					World.getInstance().getVisibleObjects(npc, Npc.class, 150).stream()
-					.filter(n -> (n.getId() == EMBRYO_PURIFIER))
-					.forEach(mob -> addAttackPlayerDesire(mob, player));
+							.filter(n -> (n.getId() == EMBRYO_PURIFIER))
+							.forEach(mob -> addAttackPlayerDesire(mob, player));
 					// @formatter:on
 					getTimers().addTimer("DESPAWN", 1000, npc, null);
 				}
 				break;
 			}
-			case "33867-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33867-08.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 17_234_475);
 						addSp(player, 750);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -118,17 +105,14 @@ public final class Q10787_ASpyMission extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == SHUVANN)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == SHUVANN) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "33867-02.htm";
 					break;
@@ -139,23 +123,17 @@ public final class Q10787_ASpyMission extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted() && qs.isCond(1))
-		{
+		} else if (qs.isStarted() && qs.isCond(1)) {
 			htmltext = "33994-01.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if ((npc != null) && (npc.getId() == SUSPICIOUS_BOX) && event.equals("DESPAWN"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if ((npc != null) && (npc.getId() == SUSPICIOUS_BOX) && event.equals("DESPAWN")) {
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			super.onTimerEvent(event, params, npc, player);
 		}
 	}

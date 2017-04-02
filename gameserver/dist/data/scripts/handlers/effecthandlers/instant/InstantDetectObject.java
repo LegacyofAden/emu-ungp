@@ -29,25 +29,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Detect Hidden Objects effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantDetectObject extends AbstractEffect
-{
-	public InstantDetectObject(StatsSet params)
-	{
+public final class InstantDetectObject extends AbstractEffect {
+	public InstantDetectObject(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final DoorInstance targetDoor = target.asDoor();
-		if (targetDoor == null)
-		{
+		if (targetDoor == null) {
 			return;
 		}
-		
-		if (targetDoor.getTemplate().isStealth())
-		{
+
+		if (targetDoor.getTemplate().isStealth()) {
 			targetDoor.setMeshIndex(1);
 			targetDoor.setTargetable(targetDoor.getTemplate().getOpenType() != DoorOpenType.NONE);
 			targetDoor.broadcastStatusUpdate();

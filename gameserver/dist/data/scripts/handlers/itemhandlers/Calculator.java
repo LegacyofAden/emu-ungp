@@ -28,23 +28,19 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Zoey76
  */
-public class Calculator implements IItemHandler
-{
+public class Calculator implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		playable.sendPacket(new ShowCalculator(item.getId()));
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new Calculator());
 	}
 }

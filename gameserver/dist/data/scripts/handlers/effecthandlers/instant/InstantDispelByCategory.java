@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.DispelSlotType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -31,46 +29,42 @@ import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.List;
+
 /**
  * Dispel By Category effect implementation.
+ *
  * @author DS, Adry_85
  */
-public final class InstantDispelByCategory extends AbstractEffect
-{
+public final class InstantDispelByCategory extends AbstractEffect {
 	private final DispelSlotType _slot;
 	private final int _rate;
 	private final int _max;
-	
-	public InstantDispelByCategory(StatsSet params)
-	{
+
+	public InstantDispelByCategory(StatsSet params) {
 		_slot = params.getEnum("slot", DispelSlotType.class, DispelSlotType.BUFF);
 		_rate = params.getInt("rate", 0);
 		_max = params.getInt("max", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DISPEL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.isDead())
-		{
+
+		if (targetCreature.isDead()) {
 			return;
 		}
-		
+
 		final List<BuffInfo> canceled = Formulas.calcCancelStealEffects(caster, targetCreature, skill, _slot, _rate, _max);
-		for (BuffInfo can : canceled)
-		{
+		for (BuffInfo can : canceled) {
 			targetCreature.getEffectList().stopSkillEffects(true, can.getSkill());
 		}
 	}

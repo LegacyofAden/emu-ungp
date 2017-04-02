@@ -25,15 +25,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: A Clue Completed (10393)
+ *
  * @author St3eT
  */
-public final class Q10393_KekropusLetterAClueCompleted extends LetterQuest
-{
+public final class Q10393_KekropusLetterAClueCompleted extends LetterQuest {
 	// NPCs
 	private static final int FLUTER = 30677;
 	private static final int KELIOS = 33862;
@@ -47,51 +46,42 @@ public final class Q10393_KekropusLetterAClueCompleted extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 46;
 	private static final int MAX_LEVEL = 51;
-	
-	public Q10393_KekropusLetterAClueCompleted()
-	{
+
+	public Q10393_KekropusLetterAClueCompleted() {
 		super(10393);
 		addTalkId(FLUTER, KELIOS);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartQuestSound("Npcdialog1.kekrops_quest_2");
 		setStartLocation(SOE_TOWN_OF_OREN, TELEPORT_LOC);
 		registerQuestItems(SOE_TOWN_OF_OREN, SOE_OUTLAW_FOREST);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30677-02.html":
-			{
+		switch (event) {
+			case "30677-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "30677-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30677-03.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					giveItems(player, SOE_OUTLAW_FOREST, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33862-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33862-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAC, 4);
 					giveStoryQuestReward(npc, player);
@@ -105,42 +95,33 @@ public final class Q10393_KekropusLetterAClueCompleted extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if (st.isCond(1) && (npc.getId() == FLUTER))
-			{
+
+		if (st.isStarted()) {
+			if (st.isCond(1) && (npc.getId() == FLUTER)) {
 				htmltext = "30677-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == FLUTER ? "30677-04.html" : "33862-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.OUTLAW_FOREST_IS_A_GOOD_HUNTING_ZONE_FOR_LV_46_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}

@@ -32,51 +32,42 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Give Recommendation effect implementation.
+ *
  * @author NosBit
  */
-public final class InstantBonusCountUp extends AbstractEffect
-{
+public final class InstantBonusCountUp extends AbstractEffect {
 	private final int _amount;
-	
-	public InstantBonusCountUp(StatsSet params)
-	{
+
+	public InstantBonusCountUp(StatsSet params) {
 		_amount = params.getInt("amount", 0);
-		if (_amount == 0)
-		{
+		if (_amount == 0) {
 			throw new IllegalArgumentException("amount parameter is missing or set to 0.");
 		}
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		int recommendationsGiven = _amount;
-		if ((targetPlayer.getRecomHave() + _amount) >= 255)
-		{
+		if ((targetPlayer.getRecomHave() + _amount) >= 255) {
 			recommendationsGiven = 255 - targetPlayer.getRecomHave();
 		}
-		
-		if (recommendationsGiven > 0)
-		{
+
+		if (recommendationsGiven > 0) {
 			targetPlayer.setRecomHave(targetPlayer.getRecomHave() + recommendationsGiven);
-			
+
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_OBTAINED_S1_RECOMMENDATION_S);
 			sm.addInt(recommendationsGiven);
 			targetPlayer.sendPacket(sm);
 			targetPlayer.sendPacket(new UserInfo(targetPlayer));
 			targetPlayer.sendPacket(new ExVoteSystemInfo(targetPlayer));
-		}
-		else
-		{
+		} else {
 			final PlayerInstance casterPlayer = caster.asPlayer();
-			if (casterPlayer != null)
-			{
+			if (casterPlayer != null) {
 				casterPlayer.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 			}
 		}

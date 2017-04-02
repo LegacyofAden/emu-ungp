@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
@@ -37,61 +38,59 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
-
 /**
  * Primeval Isle AI.
+ *
  * @author St3eT
  */
-public final class PrimevalIsle extends AbstractNpcAI
-{
+public final class PrimevalIsle extends AbstractNpcAI {
 	// NPC
 	private static final int EGG = 18344; // Ancient Egg
 	private static final int SAILREN = 29065; // Sailren
 	private static final int ORNIT = 22742; // Ornithomimus
 	private static final int DEINO = 22743; // Deinonychus
 	private static final int[] SPRIGNANT =
-	{
-		18345, // Sprigant (Anesthesia)
-		18346, // Sprigant (Deadly Poison)
-	};
+			{
+					18345, // Sprigant (Anesthesia)
+					18346, // Sprigant (Deadly Poison)
+			};
 	private static final int[] MONSTERS =
-	{
-		22196, // Velociraptor
-		22198, // Velociraptor
-		22200, // Ornithomimus
-		22202, // Ornithomimus
-		22203, // Deinonychus
-		22205, // Deinonychus
-		22208, // Pachycephalosaurus
-		22210, // Pachycephalosaurus
-		22211, // Wild Strider
-		22213, // Wild Strider
-		22223, // Velociraptor
-		22224, // Ornithomimus
-		22225, // Deinonychus
-		22226, // Pachycephalosaurus
-		22227, // Wild Strider
-		22742, // Ornithomimus
-		22743, // Deinonychus
-	};
+			{
+					22196, // Velociraptor
+					22198, // Velociraptor
+					22200, // Ornithomimus
+					22202, // Ornithomimus
+					22203, // Deinonychus
+					22205, // Deinonychus
+					22208, // Pachycephalosaurus
+					22210, // Pachycephalosaurus
+					22211, // Wild Strider
+					22213, // Wild Strider
+					22223, // Velociraptor
+					22224, // Ornithomimus
+					22225, // Deinonychus
+					22226, // Pachycephalosaurus
+					22227, // Wild Strider
+					22742, // Ornithomimus
+					22743, // Deinonychus
+			};
 	private static final int[] TREX =
-	{
-		22215, // Tyrannosaurus
-		22216, // Tyrannosaurus
-		22217, // Tyrannosaurus
-	};
+			{
+					22215, // Tyrannosaurus
+					22216, // Tyrannosaurus
+					22217, // Tyrannosaurus
+			};
 	private static final int[] VEGETABLE =
-	{
-		22200, // Ornithomimus
-		22201, // Ornithomimus
-		22202, // Ornithomimus
-		22203, // Deinonychus
-		22204, // Deinonychus
-		22205, // Deinonychus
-		22224, // Ornithomimus
-		22225, // Deinonychus
-	};
+			{
+					22200, // Ornithomimus
+					22201, // Ornithomimus
+					22202, // Ornithomimus
+					22203, // Deinonychus
+					22204, // Deinonychus
+					22205, // Deinonychus
+					22224, // Ornithomimus
+					22225, // Deinonychus
+			};
 	// Item
 	private static final int DEINONYCHUS = 14828; // Deinonychus Mesozoic Stone
 	// Skill
@@ -105,9 +104,8 @@ public final class PrimevalIsle extends AbstractNpcAI
 	private static final SkillHolder PHYSICALSPECIAL3 = new SkillHolder(5082, 4); // NPC Spinning, Slashing Trick
 	private static final SkillHolder CREW_SKILL = new SkillHolder(6172, 1); // Presentation - Tyranno
 	private static final SkillHolder INVIN_BUFF_ON = new SkillHolder(5225, 1); // Invincible
-	
-	private PrimevalIsle()
-	{
+
+	private PrimevalIsle() {
 		addSpawnId(TREX);
 		addSpawnId(SPRIGNANT);
 		addSpawnId(MONSTERS);
@@ -120,55 +118,41 @@ public final class PrimevalIsle extends AbstractNpcAI
 		addSeeCreatureId(TREX);
 		addSeeCreatureId(MONSTERS);
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
-		if (skill.getId() == CREW_SKILL.getSkillId())
-		{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+		if (skill.getId() == CREW_SKILL.getSkillId()) {
 			startQuestTimer("START_INVUL", 4000, npc, null);
 			final Npc target = (Npc) npc.getTarget();
-			if (target != null)
-			{
+			if (target != null) {
 				target.doDie(npc);
 			}
 		}
-		if (npc.isInCombat())
-		{
+		if (npc.isInCombat()) {
 			final Attackable mob = (Attackable) npc;
 			final Creature target = mob.getMostHated();
-			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 60)
-			{
-				if (skill.getId() == SELFBUFF1.getSkillId())
-				{
+			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 60) {
+				if (skill.getId() == SELFBUFF1.getSkillId()) {
 					npc.setScriptValue(3);
-					if ((target != null))
-					{
+					if ((target != null)) {
 						npc.setTarget(target);
 						mob.setIsRunning(true);
 						mob.addDamageHate(target, 0, 555);
 						mob.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 					}
 				}
-			}
-			else if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 30)
-			{
-				if (skill.getId() == SELFBUFF1.getSkillId())
-				{
+			} else if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) < 30) {
+				if (skill.getId() == SELFBUFF1.getSkillId()) {
 					npc.setScriptValue(1);
-					if ((target != null))
-					{
+					if ((target != null)) {
 						npc.setTarget(target);
 						mob.setIsRunning(true);
 						mob.addDamageHate(target, 0, 555);
 						mob.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 					}
-				}
-				else if (skill.getId() == SELFBUFF2.getSkillId())
-				{
+				} else if (skill.getId() == SELFBUFF2.getSkillId()) {
 					npc.setScriptValue(5);
-					if ((target != null))
-					{
+					if ((target != null)) {
 						npc.setTarget(target);
 						mob.setIsRunning(true);
 						mob.addDamageHate(target, 0, 555);
@@ -179,43 +163,31 @@ public final class PrimevalIsle extends AbstractNpcAI
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "USE_SKILL":
-			{
-				if ((npc != null) && !npc.isDead())
-				{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "USE_SKILL": {
+				if ((npc != null) && !npc.isDead()) {
 					npc.doCast((npc.getId() == SPRIGNANT[0] ? ANESTHESIA.getSkill() : DEADLY_POISON.getSkill()));
 					startQuestTimer("USE_SKILL", 15000, npc, null);
 				}
 				break;
 			}
-			case "GHOST_DESPAWN":
-			{
-				if ((npc != null) && !npc.isDead())
-				{
-					if (!npc.isInCombat())
-					{
+			case "GHOST_DESPAWN": {
+				if ((npc != null) && !npc.isDead()) {
+					if (!npc.isInCombat()) {
 						npc.deleteMe();
-					}
-					else
-					{
+					} else {
 						startQuestTimer("GHOST_DESPAWN", 1800000, npc, null);
 					}
 				}
 				break;
 			}
-			case "TREX_ATTACK":
-			{
-				if ((npc != null) && (player != null))
-				{
+			case "TREX_ATTACK": {
+				if ((npc != null) && (player != null)) {
 					npc.setScriptValue(0);
-					if (player.isInRadius3d(npc, 800))
-					{
+					if (player.isInRadius3d(npc, 800)) {
 						npc.setTarget(player);
 						npc.doCast(LONGRANGEDMAGIC1.getSkill());
 						addAttackPlayerDesire(npc, player);
@@ -223,19 +195,15 @@ public final class PrimevalIsle extends AbstractNpcAI
 				}
 				break;
 			}
-			case "START_INVUL":
-			{
-				if ((npc != null) && !npc.isDead())
-				{
+			case "START_INVUL": {
+				if ((npc != null) && !npc.isDead()) {
 					npc.doCast(INVIN_BUFF_ON.getSkill());
 					startQuestTimer("START_INVUL_2", 30000, npc, null);
 				}
 				break;
 			}
-			case "START_INVUL_2":
-			{
-				if ((npc != null) && !npc.isDead())
-				{
+			case "START_INVUL_2": {
+				if ((npc != null) && !npc.isDead()) {
 					npc.doInstantCast(npc, INVIN_BUFF_ON);
 				}
 				break;
@@ -243,27 +211,23 @@ public final class PrimevalIsle extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (ArrayUtil.contains(MONSTERS, npc.getId()))
-		{
-			if (creature.isPlayer())
-			{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (ArrayUtil.contains(MONSTERS, npc.getId())) {
+			if (creature.isPlayer()) {
 				final Attackable mob = (Attackable) npc;
 				final int ag_type = npc.getParameters().getInt("ag_type", 0);
 				final int probPhysicalSpecial1 = npc.getParameters().getInt("ProbPhysicalSpecial1", 0);
 				final int probPhysicalSpecial2 = npc.getParameters().getInt("ProbPhysicalSpecial2", 0);
 				final SkillHolder physicalSpecial1 = npc.getParameters().getObject("PhysicalSpecial1", SkillHolder.class);
 				final SkillHolder physicalSpecial2 = npc.getParameters().getObject("PhysicalSpecial2", SkillHolder.class);
-				
-				if (((getRandom(100) < 30) && (npc.getId() == DEINO)) || ((npc.getId() == ORNIT) && npc.isScriptValue(0)))
-				{
+
+				if (((getRandom(100) < 30) && (npc.getId() == DEINO)) || ((npc.getId() == ORNIT) && npc.isScriptValue(0))) {
 					mob.clearAggroList();
 					npc.setScriptValue(1);
 					npc.setRunning();
-					
+
 					final int distance = 3000;
 					final int heading = Util.calculateHeadingFrom(creature, npc);
 					final double angle = Util.convertHeadingToDegree(heading);
@@ -274,30 +238,21 @@ public final class PrimevalIsle extends AbstractNpcAI
 					final int newY = (int) (npc.getY() + (sin * distance));
 					final Location loc = GeoData.getInstance().moveCheck(npc.getX(), npc.getY(), npc.getZ(), newX, newY, npc.getZ(), npc.getInstanceWorld());
 					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, loc, 0);
-				}
-				else if (ag_type == 1)
-				{
-					if (getRandom(100) <= (probPhysicalSpecial1 * npc.getVariables().getInt("SKILL_MULTIPLER")))
-					{
-						if (!npc.isSkillDisabled(physicalSpecial1.getSkill()))
-						{
+				} else if (ag_type == 1) {
+					if (getRandom(100) <= (probPhysicalSpecial1 * npc.getVariables().getInt("SKILL_MULTIPLER"))) {
+						if (!npc.isSkillDisabled(physicalSpecial1.getSkill())) {
 							npc.setTarget(creature);
 							npc.doCast(physicalSpecial1.getSkill());
 						}
-					}
-					else if (getRandom(100) <= (probPhysicalSpecial2 * npc.getVariables().getInt("SKILL_MULTIPLER")))
-					{
-						if (!npc.isSkillDisabled(physicalSpecial2.getSkill()))
-						{
+					} else if (getRandom(100) <= (probPhysicalSpecial2 * npc.getVariables().getInt("SKILL_MULTIPLER"))) {
+						if (!npc.isSkillDisabled(physicalSpecial2.getSkill())) {
 							npc.setTarget(creature);
 							npc.doCast(physicalSpecial2.getSkill());
 						}
 					}
 				}
 			}
-		}
-		else if (ArrayUtil.contains(VEGETABLE, creature.getId()))
-		{
+		} else if (ArrayUtil.contains(VEGETABLE, creature.getId())) {
 			npc.setTarget(creature);
 			npc.doCast(CREW_SKILL.getSkill());
 			npc.setIsRunning(true);
@@ -305,12 +260,10 @@ public final class PrimevalIsle extends AbstractNpcAI
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (npc.isScriptValue(0))
-		{
+	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			npc.broadcastSay(ChatType.NPC_GENERAL, "?");
 			((Attackable) npc).clearAggroList();
@@ -318,133 +271,98 @@ public final class PrimevalIsle extends AbstractNpcAI
 		}
 		return super.onAggroRangeEnter(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (npc.getId() == EGG)
-		{
-			if ((getRandom(100) <= 80) && npc.isScriptValue(0))
-			{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (npc.getId() == EGG) {
+			if ((getRandom(100) <= 80) && npc.isScriptValue(0)) {
 				npc.setScriptValue(1);
 				final Playable playable = isSummon ? attacker.getServitors().values().stream().findFirst().orElse(attacker.getPet()) : attacker;
 				World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 500, monster ->
 				{
-					if ((getRandomBoolean()))
-					{
+					if ((getRandomBoolean())) {
 						addAttackPlayerDesire(monster, playable);
 					}
 				});
 			}
-		}
-		else if (ArrayUtil.contains(TREX, npc.getId()))
-		{
+		} else if (ArrayUtil.contains(TREX, npc.getId())) {
 			final Attackable mob = (Attackable) npc;
 			final Creature target = mob.getMostHated();
-			
-			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 30)
-			{
-				if (npc.isScriptValue(3))
-				{
-					if (!npc.isSkillDisabled(SELFBUFF1.getSkill()))
-					{
+
+			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 30) {
+				if (npc.isScriptValue(3)) {
+					if (!npc.isSkillDisabled(SELFBUFF1.getSkill())) {
 						npc.doCast(SELFBUFF1.getSkill());
 					}
-				}
-				else if (npc.isScriptValue(1))
-				{
-					if (!npc.isSkillDisabled(SELFBUFF2.getSkill()))
-					{
+				} else if (npc.isScriptValue(1)) {
+					if (!npc.isSkillDisabled(SELFBUFF2.getSkill())) {
 						npc.doCast(SELFBUFF2.getSkill());
 					}
 				}
-			}
-			else if ((((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 60) && (npc.isScriptValue(3)))
-			{
-				if (!npc.isSkillDisabled(SELFBUFF1.getSkill()))
-				{
+			} else if ((((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 60) && (npc.isScriptValue(3))) {
+				if (!npc.isSkillDisabled(SELFBUFF1.getSkill())) {
 					npc.doCast(SELFBUFF1.getSkill());
 				}
 			}
-			
-			if (!npc.isInRadius3d(attacker, 100))
-			{
-				if (!npc.isSkillDisabled(LONGRANGEDMAGIC1.getSkill()) && (getRandom(100) <= (10 * npc.getScriptValue())))
-				{
+
+			if (!npc.isInRadius3d(attacker, 100)) {
+				if (!npc.isSkillDisabled(LONGRANGEDMAGIC1.getSkill()) && (getRandom(100) <= (10 * npc.getScriptValue()))) {
 					npc.setTarget(attacker);
 					npc.doCast(LONGRANGEDMAGIC1.getSkill());
 				}
-			}
-			else
-			{
-				if (!npc.isSkillDisabled(LONGRANGEDMAGIC1.getSkill()) && (getRandom(100) <= (10 * npc.getScriptValue())))
-				{
+			} else {
+				if (!npc.isSkillDisabled(LONGRANGEDMAGIC1.getSkill()) && (getRandom(100) <= (10 * npc.getScriptValue()))) {
 					npc.setTarget(target);
 					npc.doCast(LONGRANGEDMAGIC1.getSkill());
 				}
-				if (!npc.isSkillDisabled(PHYSICALSPECIAL1.getSkill()) && (getRandom(100) <= (5 * npc.getScriptValue())))
-				{
+				if (!npc.isSkillDisabled(PHYSICALSPECIAL1.getSkill()) && (getRandom(100) <= (5 * npc.getScriptValue()))) {
 					npc.setTarget(target);
 					npc.doCast(PHYSICALSPECIAL1.getSkill());
 				}
-				if (!npc.isSkillDisabled(PHYSICALSPECIAL2.getSkill()) && (getRandom(100) <= (3 * npc.getScriptValue())))
-				{
+				if (!npc.isSkillDisabled(PHYSICALSPECIAL2.getSkill()) && (getRandom(100) <= (3 * npc.getScriptValue()))) {
 					npc.setTarget(target);
 					npc.doCast(PHYSICALSPECIAL2.getSkill());
 				}
-				if (!npc.isSkillDisabled(PHYSICALSPECIAL3.getSkill()) && (getRandom(100) <= (5 * npc.getScriptValue())))
-				{
+				if (!npc.isSkillDisabled(PHYSICALSPECIAL3.getSkill()) && (getRandom(100) <= (5 * npc.getScriptValue()))) {
 					npc.setTarget(target);
 					npc.doCast(PHYSICALSPECIAL3.getSkill());
 				}
 			}
-		}
-		else
-		{
+		} else {
 			Creature target = null;
 			final int probPhysicalSpecial1 = npc.getParameters().getInt("ProbPhysicalSpecial1", 0);
 			final int probPhysicalSpecial2 = npc.getParameters().getInt("ProbPhysicalSpecial2", 0);
 			final SkillHolder selfRangeBuff1 = npc.getParameters().getObject("SelfRangeBuff1", SkillHolder.class);
 			final SkillHolder physicalSpecial1 = npc.getParameters().getObject("PhysicalSpecial1", SkillHolder.class);
 			final SkillHolder physicalSpecial2 = npc.getParameters().getObject("PhysicalSpecial2", SkillHolder.class);
-			
-			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 50)
-			{
+
+			if (((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 50) {
 				npc.getVariables().set("SKILL_MULTIPLER", 2);
-			}
-			else
-			{
+			} else {
 				npc.getVariables().set("SKILL_MULTIPLER", 1);
 			}
-			
-			if ((((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 30) && (npc.getVariables().getInt("SELFBUFF_USED") == 0))
-			{
+
+			if ((((npc.getCurrentHp() / npc.getMaxHp()) * 100) <= 30) && (npc.getVariables().getInt("SELFBUFF_USED") == 0)) {
 				final Attackable mob = (Attackable) npc;
 				target = mob.getMostHated();
 				mob.clearAggroList();
-				if (!npc.isSkillDisabled(selfRangeBuff1.getSkill()))
-				{
+				if (!npc.isSkillDisabled(selfRangeBuff1.getSkill())) {
 					npc.getVariables().set("SELFBUFF_USED", 1);
 					npc.doCast(selfRangeBuff1.getSkill());
 					npc.setIsRunning(true);
 					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 				}
 			}
-			
-			if (target != null)
-			{
-				if (getRandom(100) <= (probPhysicalSpecial1 * npc.getVariables().getInt("SKILL_MULTIPLER")))
-				{
-					if (!npc.isSkillDisabled(physicalSpecial1.getSkill()))
-					{
+
+			if (target != null) {
+				if (getRandom(100) <= (probPhysicalSpecial1 * npc.getVariables().getInt("SKILL_MULTIPLER"))) {
+					if (!npc.isSkillDisabled(physicalSpecial1.getSkill())) {
 						npc.setTarget(target);
 						npc.doCast(physicalSpecial1.getSkill());
 					}
 				}
-				if (getRandom(100) <= (probPhysicalSpecial2 * npc.getVariables().getInt("SKILL_MULTIPLER")))
-				{
-					if (!npc.isSkillDisabled(physicalSpecial2.getSkill()))
-					{
+				if (getRandom(100) <= (probPhysicalSpecial2 * npc.getVariables().getInt("SKILL_MULTIPLER"))) {
+					if (!npc.isSkillDisabled(physicalSpecial2.getSkill())) {
 						npc.setTarget(target);
 						npc.doCast(physicalSpecial2.getSkill());
 					}
@@ -453,63 +371,48 @@ public final class PrimevalIsle extends AbstractNpcAI
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if ((npc.getId() == DEINO) || ((npc.getId() == ORNIT) && !npc.isScriptValue(1)))
-		{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if ((npc.getId() == DEINO) || ((npc.getId() == ORNIT) && !npc.isScriptValue(1))) {
 			return super.onKill(npc, killer, isSummon);
 		}
-		if ((npc.getId() == SAILREN) || (getRandom(100) < 3))
-		{
+		if ((npc.getId() == SAILREN) || (getRandom(100) < 3)) {
 			final PlayerInstance player = npc.getId() == SAILREN ? getRandomPartyMember(killer) : killer;
-			if (player.isInventoryUnder80(false))
-			{
+			if (player.isInventoryUnder80(false)) {
 				giveItems(player, DEINONYCHUS, 1);
 				final ItemInstance summonItem = player.getInventory().getItemByItemId(DEINONYCHUS);
 				final IItemHandler handler = ItemHandler.getInstance().getHandler(summonItem.getEtcItem());
-				if ((handler != null) && !player.hasPet())
-				{
+				if ((handler != null) && !player.hasPet()) {
 					handler.useItem(player, summonItem, true);
 				}
 				showOnScreenMsg(player, NpcStringId.LIFE_STONE_FROM_THE_BEGINNING_ACQUIRED, 2, 6000);
-			}
-			else
-			{
+			} else {
 				showOnScreenMsg(player, NpcStringId.WHEN_INVENTORY_WEIGHT_NUMBER_ARE_MORE_THAN_80_THE_LIFE_STONE_FROM_THE_BEGINNING_CANNOT_BE_ACQUIRED, 2, 6000);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (ArrayUtil.contains(SPRIGNANT, npc.getId()))
-		{
+	public String onSpawn(Npc npc) {
+		if (ArrayUtil.contains(SPRIGNANT, npc.getId())) {
 			startQuestTimer("USE_SKILL", 15000, npc, null);
-		}
-		else if (ArrayUtil.contains(TREX, npc.getId()))
-		{
+		} else if (ArrayUtil.contains(TREX, npc.getId())) {
 			final int collectGhost = npc.getParameters().getInt("CollectGhost", 0);
 			final int collectDespawn = npc.getParameters().getInt("CollectGhostDespawnTime", 30);
-			
-			if (collectGhost == 1)
-			{
+
+			if (collectGhost == 1) {
 				startQuestTimer("GHOST_DESPAWN", collectDespawn * 60000, npc, null);
 			}
-		}
-		else
-		{
+		} else {
 			npc.getVariables().set("SELFBUFF_USED", 0);
 			npc.getVariables().set("SKILL_MULTIPLER", 1);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PrimevalIsle();
 	}
 }

@@ -18,57 +18,50 @@
  */
 package ai.individual.Parnassus.Fioren;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.OnEventTrigger;
 
-import ai.AbstractNpcAI;
-
 /**
  * Fioren AI.
+ *
  * @author St3eT
  */
-public final class Fioren extends AbstractNpcAI
-{
+public final class Fioren extends AbstractNpcAI {
 	// NPCs
 	private static final int FIOREN = 33044;
 	// Misc
 	private static final int BAYLOR_TRIGGER = 24230010;
 	private static final int BALOK_TRIGGER = 24230012;
-	
-	private Fioren()
-	{
+
+	private Fioren() {
 		addStartNpc(FIOREN);
 		addTalkId(FIOREN);
 		addFirstTalkId(FIOREN);
 		addSeeCreatureId(FIOREN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("startMovie"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("startMovie")) {
 			playMovie(player, Movie.SI_BARLOG_STORY);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			creature.getActingPlayer().sendPacket(new OnEventTrigger(BAYLOR_TRIGGER, true));
 			creature.getActingPlayer().sendPacket(new OnEventTrigger(BALOK_TRIGGER, true));
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Fioren();
 	}
 }

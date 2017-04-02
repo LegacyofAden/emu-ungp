@@ -31,54 +31,47 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Magical Soul Attack effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantMSoulAttack extends AbstractEffect
-{
+public final class InstantMSoulAttack extends AbstractEffect {
 	private final double _power;
-	
-	public InstantMSoulAttack(StatsSet params)
-	{
+
+	public InstantMSoulAttack(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (casterPlayer.isAlikeDead())
-		{
+
+		if (casterPlayer.isAlikeDead()) {
 			return;
 		}
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.asPlayer().stopFakeDeath(true);
 		}
-		
+
 		boolean sps = skill.useSpiritShot() && casterPlayer.isChargedShot(ShotType.SPIRITSHOTS);
 		boolean bss = skill.useSpiritShot() && casterPlayer.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), casterPlayer, targetCreature, skill);
 		final double mAtk = casterPlayer.getMAtk() * Formulas.calcSoulBonus(casterPlayer, skill);
 		double damage = Formulas.calcMagicDam(casterPlayer, targetCreature, skill, mAtk, _power, targetCreature.getMDef(), sps, bss, mcrit);
-		
+
 		casterPlayer.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

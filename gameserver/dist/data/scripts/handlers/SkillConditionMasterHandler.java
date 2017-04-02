@@ -18,17 +18,14 @@
  */
 package handlers;
 
-import org.l2junity.gameserver.handler.SkillConditionHandler;
-
 import handlers.skillconditionhandlers.*;
+import org.l2junity.gameserver.handler.SkillConditionHandler;
 
 /**
  * @author NosBit
  */
-public class SkillConditionMasterHandler
-{
-	public static void main(String[] args)
-	{
+public class SkillConditionMasterHandler {
+	public static void main(String[] args) {
 		SkillConditionHandler.getInstance().registerHandler("EquipWeapon", EquipWeaponSkillCondition::new);
 		SkillConditionHandler.getInstance().registerHandler("EquipArmor", EquipArmorSkillCondition::new);
 		SkillConditionHandler.getInstance().registerHandler("EquipShield", EquipShieldSkillCondition::new);

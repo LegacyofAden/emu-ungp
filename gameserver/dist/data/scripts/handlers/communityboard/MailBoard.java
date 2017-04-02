@@ -18,47 +18,43 @@
  */
 package handlers.communityboard;
 
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IWriteBoardHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Mail board.
+ *
  * @author Zoey76
  */
-public class MailBoard implements IWriteBoardHandler
-{
+public class MailBoard implements IWriteBoardHandler {
 	private static final String[] COMMANDS =
-	{
-		"_maillist"
-	};
-	
+			{
+					"_maillist"
+			};
+
 	@Override
-	public String[] getCommunityBoardCommands()
-	{
+	public String[] getCommunityBoardCommands() {
 		return COMMANDS;
 	}
-	
+
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
 		CommunityBoardHandler.getInstance().addBypass(activeChar, "Mail Command", command);
-		
-		final String html = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/mail.html");
+
+		final String html = HtmRepository.getInstance().getCustomHtm("CommunityBoard/mail.html");
 		CommunityBoardHandler.separateAndSend(html, activeChar);
 		return true;
 	}
-	
+
 	@Override
-	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5)
-	{
+	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
 		// TODO: Implement.
 		return false;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		CommunityBoardHandler.getInstance().registerHandler(new MailBoard());
 	}
 }

@@ -18,53 +18,49 @@
  */
 package handlers.usercommandhandlers;
 
-import java.util.Calendar;
-
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Calendar;
+
 /**
  * My Birthday user command.
+ *
  * @author JIV
  */
-public class MyBirthday implements IUserCommandHandler
-{
+public class MyBirthday implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		126
-	};
-	
+			{
+					126
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
+
 		Calendar date = activeChar.getCreateDate();
-		
+
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_S_BIRTHDAY_IS_S3_S4_S2);
 		sm.addPcName(activeChar);
 		sm.addString(Integer.toString(date.get(Calendar.YEAR)));
 		sm.addString(Integer.toString(date.get(Calendar.MONTH) + 1));
 		sm.addString(Integer.toString(date.get(Calendar.DATE)));
-		
+
 		activeChar.sendPacket(sm);
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new MyBirthday());
 	}
 }

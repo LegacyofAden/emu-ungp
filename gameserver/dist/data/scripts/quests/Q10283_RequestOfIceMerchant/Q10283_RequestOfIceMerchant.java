@@ -25,16 +25,15 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00115_TheOtherSideOfTruth.Q00115_TheOtherSideOfTruth;
 
 /**
  * Request of Ice Merchant (10283)
+ *
  * @author Gnacik
  * @version 2013-02-07 Updated to High Five
  */
-public class Q10283_RequestOfIceMerchant extends Quest
-{
+public class Q10283_RequestOfIceMerchant extends Quest {
 	// NPCs
 	private static final int RAFFORTY = 32020;
 	private static final int KIER = 32022;
@@ -43,57 +42,41 @@ public class Q10283_RequestOfIceMerchant extends Quest
 	private static final Location MOVE_TO_END = new Location(104457, -107010, -3698, 0);
 	// Misc
 	private boolean _jiniaOnSpawn = false;
-	
-	public Q10283_RequestOfIceMerchant()
-	{
+
+	public Q10283_RequestOfIceMerchant() {
 		super(10283);
 		addStartNpc(RAFFORTY);
 		addTalkId(RAFFORTY, KIER, JINIA);
 		addFirstTalkId(JINIA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (npc.getId() == RAFFORTY)
-		{
-			if (event.equalsIgnoreCase("32020-03.htm"))
-			{
+
+		if (npc.getId() == RAFFORTY) {
+			if (event.equalsIgnoreCase("32020-03.htm")) {
 				st.startQuest();
-			}
-			else if (event.equalsIgnoreCase("32020-07.htm"))
-			{
+			} else if (event.equalsIgnoreCase("32020-07.htm")) {
 				st.setCond(2, true);
 			}
-		}
-		else if ((npc.getId() == KIER) && event.equalsIgnoreCase("spawn"))
-		{
-			if (_jiniaOnSpawn)
-			{
+		} else if ((npc.getId() == KIER) && event.equalsIgnoreCase("spawn")) {
+			if (_jiniaOnSpawn) {
 				htmltext = "32022-02.html";
-			}
-			else
-			{
+			} else {
 				addSpawn(JINIA, 104473, -107549, -3695, 44954, false, 180000);
 				_jiniaOnSpawn = true;
 				startQuestTimer("despawn", 180000, npc, player);
 				return null;
 			}
-		}
-		else if (event.equalsIgnoreCase("despawn"))
-		{
+		} else if (event.equalsIgnoreCase("despawn")) {
 			_jiniaOnSpawn = false;
 			return null;
-		}
-		else if ((npc.getId() == JINIA) && event.equalsIgnoreCase("32760-04.html"))
-		{
+		} else if ((npc.getId() == JINIA) && event.equalsIgnoreCase("32760-04.html")) {
 			giveAdena(player, 190000, true);
 			addExp(player, 627000);
 			addSp(player, 50300); // TODO Incorrect SP reward.
@@ -104,48 +87,38 @@ public class Q10283_RequestOfIceMerchant extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if (npc.isInInstance())
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if (npc.isInInstance()) {
 			return "32760-10.html";
 		}
-		
+
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(2))
-		{
+		if ((st != null) && st.isCond(2)) {
 			return "32760-01.html";
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
+
+		switch (npc.getId()) {
 			case RAFFORTY:
-				switch (st.getState())
-				{
+				switch (st.getState()) {
 					case State.CREATED:
 						htmltext = (player.hasQuestCompleted(Q00115_TheOtherSideOfTruth.class.getSimpleName()) && (player.getLevel() >= 82)) ? "32020-01.htm" : "32020-00.htm";
 						break;
 					case State.STARTED:
-						if (st.isCond(1))
-						{
+						if (st.isCond(1)) {
 							htmltext = "32020-04.htm";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "32020-08.htm";
 						}
 						break;
@@ -155,14 +128,12 @@ public class Q10283_RequestOfIceMerchant extends Quest
 				}
 				break;
 			case KIER:
-				if (st.isCond(2))
-				{
+				if (st.isCond(2)) {
 					htmltext = "32022-01.html";
 				}
 				break;
 			case JINIA:
-				if (st.isCond(2))
-				{
+				if (st.isCond(2)) {
 					htmltext = "32760-02.html";
 				}
 				break;

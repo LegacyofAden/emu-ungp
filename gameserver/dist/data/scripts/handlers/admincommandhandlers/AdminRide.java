@@ -26,133 +26,101 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author
  */
-public class AdminRide implements IAdminCommandHandler
-{
+public class AdminRide implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_ride_horse",
-		"admin_ride_bike",
-		"admin_ride_wyvern",
-		"admin_ride_strider",
-		"admin_unride_wyvern",
-		"admin_unride_strider",
-		"admin_unride",
-		"admin_ride_wolf",
-		"admin_unride_wolf",
-	};
+			{
+					"admin_ride_horse",
+					"admin_ride_bike",
+					"admin_ride_wyvern",
+					"admin_ride_strider",
+					"admin_unride_wyvern",
+					"admin_unride_strider",
+					"admin_unride",
+					"admin_ride_wolf",
+					"admin_unride_wolf",
+			};
 	private int _petRideId;
-	
+
 	private static final int PURPLE_MANED_HORSE_TRANSFORMATION_ID = 106;
-	
+
 	private static final int JET_BIKE_TRANSFORMATION_ID = 20001;
-	
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		PlayerInstance player = getRideTarget(activeChar);
-		if (player == null)
-		{
+		if (player == null) {
 			return false;
 		}
-		
-		if (command.startsWith("admin_ride"))
-		{
-			if (player.isMounted() || player.hasSummon())
-			{
+
+		if (command.startsWith("admin_ride")) {
+			if (player.isMounted() || player.hasSummon()) {
 				activeChar.sendMessage("Target already have a summon.");
 				return false;
 			}
-			if (command.startsWith("admin_ride_wyvern"))
-			{
+			if (command.startsWith("admin_ride_wyvern")) {
 				_petRideId = 12621;
-			}
-			else if (command.startsWith("admin_ride_strider"))
-			{
+			} else if (command.startsWith("admin_ride_strider")) {
 				_petRideId = 12526;
-			}
-			else if (command.startsWith("admin_ride_wolf"))
-			{
+			} else if (command.startsWith("admin_ride_wolf")) {
 				_petRideId = 16041;
-			}
-			else if (command.startsWith("admin_ride_horse")) // handled using transformation
+			} else if (command.startsWith("admin_ride_horse")) // handled using transformation
 			{
-				if (player.isTransformed())
-				{
+				if (player.isTransformed()) {
 					activeChar.sendPacket(SystemMessageId.YOU_ALREADY_POLYMORPHED_AND_CANNOT_POLYMORPH_AGAIN);
-				}
-				else
-				{
+				} else {
 					player.transform(PURPLE_MANED_HORSE_TRANSFORMATION_ID, true);
 				}
-				
+
 				return true;
-			}
-			else if (command.startsWith("admin_ride_bike")) // handled using transformation
+			} else if (command.startsWith("admin_ride_bike")) // handled using transformation
 			{
-				if (player.isTransformed())
-				{
+				if (player.isTransformed()) {
 					activeChar.sendPacket(SystemMessageId.YOU_ALREADY_POLYMORPHED_AND_CANNOT_POLYMORPH_AGAIN);
-				}
-				else
-				{
+				} else {
 					player.transform(JET_BIKE_TRANSFORMATION_ID, true);
 				}
-				
+
 				return true;
-			}
-			else
-			{
+			} else {
 				activeChar.sendMessage("Command '" + command + "' not recognized");
 				return false;
 			}
-			
+
 			player.mount(_petRideId, 0, false);
-			
+
 			return false;
-		}
-		else if (command.startsWith("admin_unride"))
-		{
-			if (player.getTransformationId() == PURPLE_MANED_HORSE_TRANSFORMATION_ID)
-			{
+		} else if (command.startsWith("admin_unride")) {
+			if (player.getTransformationId() == PURPLE_MANED_HORSE_TRANSFORMATION_ID) {
 				player.untransform();
 			}
-			
-			if (player.getTransformationId() == JET_BIKE_TRANSFORMATION_ID)
-			{
+
+			if (player.getTransformationId() == JET_BIKE_TRANSFORMATION_ID) {
 				player.untransform();
-			}
-			else
-			{
+			} else {
 				player.dismount();
 			}
 		}
 		return true;
 	}
-	
-	private PlayerInstance getRideTarget(PlayerInstance activeChar)
-	{
+
+	private PlayerInstance getRideTarget(PlayerInstance activeChar) {
 		PlayerInstance player = null;
-		
-		if ((activeChar.getTarget() == null) || (activeChar.getTarget().getObjectId() == activeChar.getObjectId()) || !(activeChar.getTarget() instanceof PlayerInstance))
-		{
+
+		if ((activeChar.getTarget() == null) || (activeChar.getTarget().getObjectId() == activeChar.getObjectId()) || !(activeChar.getTarget() instanceof PlayerInstance)) {
 			player = activeChar;
-		}
-		else
-		{
+		} else {
 			player = (PlayerInstance) activeChar.getTarget();
 		}
-		
+
 		return player;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminRide());
 	}
 }

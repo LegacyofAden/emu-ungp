@@ -32,41 +32,36 @@ import org.l2junity.gameserver.network.client.send.ValidateLocation;
 
 /**
  * An effect that pulls effected target back to the effector.
+ *
  * @author Nik
  */
-public final class InstantPull extends AbstractEffect
-{
+public final class InstantPull extends AbstractEffect {
 	private final int _speed;
 	private final int _delay;
 	private final int _animationSpeed;
 	private final FlyType _type;
-	
-	public InstantPull(StatsSet params)
-	{
+
+	public InstantPull(StatsSet params) {
 		_speed = params.getInt("speed", 0);
 		_delay = params.getInt("delay", _speed);
 		_animationSpeed = params.getInt("animationSpeed", 0);
 		_type = params.getEnum("type", FlyType.class, FlyType.WARP_FORWARD); // type 9
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(Double.NaN, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
 		// In retail, you get debuff, but you are not even moved if there is obstacle. You are still disabled from using skills and moving though.
-		if (GeoData.getInstance().canMove(targetCreature, caster))
-		{
+		if (GeoData.getInstance().canMove(targetCreature, caster)) {
 			targetCreature.broadcastPacket(new FlyToLocation(targetCreature, caster, _type, _speed, _delay, _animationSpeed));
 			targetCreature.setXYZ(caster);
 			targetCreature.broadcastPacket(new ValidateLocation(target));

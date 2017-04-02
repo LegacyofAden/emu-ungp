@@ -18,48 +18,41 @@
  */
 package ai.individual.PrimevalIsle.ElrokiTeleporters;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Elroki teleport AI.
+ *
  * @author Plim
  */
-public final class ElrokiTeleporters extends AbstractNpcAI
-{
+public final class ElrokiTeleporters extends AbstractNpcAI {
 	// NPCs
 	private static final int ORAHOCHIN = 32111;
 	private static final int GARIACHIN = 32112;
 	// Locations
 	private static final Location TELEPORT_ORAHOCIN = new Location(4990, -1879, -3178);
 	private static final Location TELEPORT_GARIACHIN = new Location(7557, -5513, -3221);
-	
-	private ElrokiTeleporters()
-	{
+
+	private ElrokiTeleporters() {
 		addFirstTalkId(ORAHOCHIN, GARIACHIN);
 		addStartNpc(ORAHOCHIN, GARIACHIN);
 		addTalkId(ORAHOCHIN, GARIACHIN);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
-		if (!talker.isInCombat())
-		{
+	public String onTalk(Npc npc, PlayerInstance talker) {
+		if (!talker.isInCombat()) {
 			talker.teleToLocation((npc.getId() == ORAHOCHIN) ? TELEPORT_ORAHOCIN : TELEPORT_GARIACHIN);
-		}
-		else
-		{
+		} else {
 			return npc.getId() + "-no.html";
 		}
 		return super.onTalk(npc, talker);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ElrokiTeleporters();
 	}
 }

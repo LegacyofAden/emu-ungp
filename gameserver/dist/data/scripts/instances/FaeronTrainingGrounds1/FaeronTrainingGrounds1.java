@@ -18,6 +18,7 @@
  */
 package instances.FaeronTrainingGrounds1;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -37,16 +38,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import instances.AbstractInstance;
 import quests.Q10735_ASpecialPower.Q10735_ASpecialPower;
 
 /**
  * Fearon Training Grounds Instance Zone.
+ *
  * @author Sdw, malyelfik
  */
-public final class FaeronTrainingGrounds1 extends AbstractInstance
-{
+public final class FaeronTrainingGrounds1 extends AbstractInstance {
 	// NPCs
 	private static final int AYANTHE = 33942;
 	private static final int AYANTHE_2 = 33944;
@@ -58,50 +57,42 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 	private static final ItemHolder SPIRITSHOTS_TRAINING = new ItemHolder(2509, 150);
 	// Locations
 	private static final Location[] MOB_SPAWNS =
-	{
-		new Location(-74721, 240513, -3584),
-		new Location(-74760, 240773, -3560)
-	};
+			{
+					new Location(-74721, 240513, -3584),
+					new Location(-74760, 240773, -3560)
+			};
 	// Misc
 	private static final int TEMPLATE_ID = 251;
 	private static final double DAMAGE_BY_SKILL = 0.5d; // Percent
-	
-	public FaeronTrainingGrounds1()
-	{
+
+	public FaeronTrainingGrounds1() {
 		super(TEMPLATE_ID);
 		addStartNpc(AYANTHE, AYANTHE_2);
 		addFirstTalkId(AYANTHE_2);
 		addTalkId(AYANTHE, AYANTHE_2);
 		addKillId(FLOATO, FLOATO2, RATEL);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = player.getQuestState(Q10735_ASpecialPower.class.getSimpleName());
 		String htmltext = null;
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "enter_instance":
 				enterInstance(player, npc, TEMPLATE_ID);
 				break;
 			case "exit_instance":
 				finishInstance(player, 0);
 				break;
-			case "33944-03.html":
-			{
-				if (qs.isCond(6))
-				{
+			case "33944-03.html": {
+				if (qs.isCond(6)) {
 					spawnMonsters(RATEL, player);
 					showOnScreenMsg(player, NpcStringId.FIGHT_USING_SKILLS, ExShowScreenMessage.TOP_CENTER, 10000);
-				}
-				else
-				{
+				} else {
 					final int npcId = (qs.isCond(4)) ? FLOATO2 : FLOATO;
 					spawnMonsters(npcId, player);
 					showOnScreenMsg(player, NpcStringId.ATTACK_THE_MONSTER, ExShowScreenMessage.TOP_CENTER, 10000);
@@ -109,10 +100,8 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 				htmltext = event;
 				break;
 			}
-			case "33944-07.html":
-			{
-				if (qs.isCond(5))
-				{
+			case "33944-07.html": {
+				if (qs.isCond(5)) {
 					qs.setCond(6, true);
 					showOnScreenMsg(player, NpcStringId.FIGHT_USING_SKILLS, ExShowScreenMessage.TOP_CENTER, 10000);
 					spawnMonsters(RATEL, player);
@@ -123,23 +112,18 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = player.getQuestState(Q10735_ASpecialPower.class.getSimpleName());
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if ((npc.getId() == AYANTHE_2) && qs.isStarted())
-		{
-			switch (qs.getCond())
-			{
-				case 1:
-				{
+
+		if ((npc.getId() == AYANTHE_2) && qs.isStarted()) {
+			switch (qs.getCond()) {
+				case 1: {
 					qs.setCond(2, true);
 					spawnMonsters(FLOATO, player);
 					showOnScreenMsg(player, NpcStringId.ATTACK_THE_MONSTER, ExShowScreenMessage.TOP_CENTER, 10000);
@@ -148,22 +132,17 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 				}
 				case 2:
 				case 4:
-				case 6:
-				{
+				case 6: {
 					htmltext = "33944-02.html";
 					break;
 				}
-				case 3:
-				{
-					if (qs.getInt("ss") == 1)
-					{
+				case 3: {
+					if (qs.getInt("ss") == 1) {
 						spawnMonsters(FLOATO2, player);
 						showOnScreenMsg(player, NpcStringId.ATTACK_THE_MONSTER, ExShowScreenMessage.TOP_CENTER, 10000);
 						qs.setCond(4, true);
 						htmltext = "33944-05.html";
-					}
-					else
-					{
+					} else {
 						qs.set("ss", 1);
 						giveItems(player, SPIRITSHOTS_TRAINING);
 						showOnScreenMsg(player, NpcStringId.AUTOMATE_SPIRITSHOT_AS_SHOWN_IN_THE_TUTORIAL, ExShowScreenMessage.TOP_CENTER, 10000);
@@ -171,14 +150,12 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 					}
 					break;
 				}
-				case 5:
-				{
+				case 5: {
 					player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_004_skill_01.htm", TutorialShowHtml.LARGE_WINDOW));
 					htmltext = "33944-06.html";
 					break;
 				}
-				case 7:
-				{
+				case 7: {
 					htmltext = "33944-08.html";
 					break;
 				}
@@ -186,43 +163,34 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		// Check if monster is inside instance
 		final Instance world = npc.getInstanceWorld();
-		if (world == null)
-		{
+		if (world == null) {
 			return super.onKill(npc, killer, isSummon);
 		}
-		
+
 		// Remove monster from instance spawn holder
 		world.setParameter("Mob" + npc.getScriptValue(), null);
-		
+
 		// Handle quest state
 		final QuestState qs = killer.getQuestState(Q10735_ASpecialPower.class.getSimpleName());
-		if (qs != null)
-		{
-			switch (npc.getId())
-			{
+		if (qs != null) {
+			switch (npc.getId()) {
 				case FLOATO:
-				case FLOATO2:
-				{
-					if ((qs.isCond(2) || qs.isCond(4)) && onKillQuestChange(killer, qs))
-					{
+				case FLOATO2: {
+					if ((qs.isCond(2) || qs.isCond(4)) && onKillQuestChange(killer, qs)) {
 						despawnMonsters(killer);
-						if (qs.isCond(5) && (killer.getLevel() < 5))
-						{
+						if (qs.isCond(5) && (killer.getLevel() < 5)) {
 							addExp(killer, 1_716);
 						}
 					}
 					break;
 				}
-				case RATEL:
-				{
-					if (qs.isCond(6) && onKillQuestChange(killer, qs))
-					{
+				case RATEL: {
+					if (qs.isCond(6) && onKillQuestChange(killer, qs)) {
 						despawnMonsters(killer);
 						showOnScreenMsg(killer, NpcStringId.TALK_TO_AYANTHE_TO_LEAVE_THE_TRAINING_GROUNDS, ExShowScreenMessage.TOP_CENTER, 10000);
 					}
@@ -232,20 +200,16 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@RegisterEvent(EventType.ON_CREATURE_DAMAGE_RECEIVED)
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(RATEL)
-	public DamageReturn onCreatureDamageReceived(OnCreatureDamageReceived event)
-	{
+	public DamageReturn onCreatureDamageReceived(OnCreatureDamageReceived event) {
 		final Creature target = event.getTarget();
-		if (target.isNpc() && event.getAttacker().isPlayer())
-		{
+		if (target.isNpc() && event.getAttacker().isPlayer()) {
 			final QuestState qs = event.getAttacker().getActingPlayer().getQuestState(Q10735_ASpecialPower.class.getSimpleName());
-			if ((qs != null) && (qs.isCond(5) || qs.isCond(6)))
-			{
-				if (event.getSkill() == null)
-				{
+			if ((qs != null) && (qs.isCond(5) || qs.isCond(6))) {
+				if (event.getSkill() == null) {
 					return new DamageReturn(true, true, true, 0);
 				}
 				return new DamageReturn(false, true, false, target.getMaxHp() * DAMAGE_BY_SKILL);
@@ -253,18 +217,17 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Handle death of training monster. When all monsters are killed, quest cond is increased.
+	 *
 	 * @param killer player who killed monster
-	 * @param qs quest state of killer
+	 * @param qs     quest state of killer
 	 * @return {@code true} when all monsters are killed, otherwise {@code false}
 	 */
-	private boolean onKillQuestChange(PlayerInstance killer, QuestState qs)
-	{
+	private boolean onKillQuestChange(PlayerInstance killer, QuestState qs) {
 		final int value = qs.getMemoStateEx(Q10735_ASpecialPower.KILL_COUNT_VAR) + 1;
-		if (value >= 2)
-		{
+		if (value >= 2) {
 			qs.setCond(qs.getCond() + 1, true);
 			qs.setMemoStateEx(Q10735_ASpecialPower.KILL_COUNT_VAR, 0);
 			return true;
@@ -274,22 +237,19 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 		qs.getQuest().sendNpcLogList(killer);
 		return false;
 	}
-	
+
 	/**
 	 * Spawn training monsters inside instance
-	 * @param npcId template id of training monster
+	 *
+	 * @param npcId  template id of training monster
 	 * @param player player that owns instance
 	 */
-	private void spawnMonsters(int npcId, PlayerInstance player)
-	{
+	private void spawnMonsters(int npcId, PlayerInstance player) {
 		final Instance world = player.getInstanceWorld();
-		if (world != null)
-		{
+		if (world != null) {
 			final StatsSet params = world.getParameters();
-			for (int i = 0; i < MOB_SPAWNS.length; i++)
-			{
-				if (params.getObject("Mob" + i, Npc.class) == null)
-				{
+			for (int i = 0; i < MOB_SPAWNS.length; i++) {
+				if (params.getObject("Mob" + i, Npc.class) == null) {
 					final Npc npc = addSpawn(npcId, MOB_SPAWNS[i], false, 0, false, world.getId());
 					npc.setScriptValue(i);
 					params.set("Mob" + i, npc);
@@ -297,31 +257,27 @@ public final class FaeronTrainingGrounds1 extends AbstractInstance
 			}
 		}
 	}
-	
+
 	/**
 	 * Despawn training monsters inside instance
+	 *
 	 * @param player player that owns instance
 	 */
-	private void despawnMonsters(PlayerInstance player)
-	{
+	private void despawnMonsters(PlayerInstance player) {
 		final Instance world = player.getInstanceWorld();
-		if (world != null)
-		{
+		if (world != null) {
 			final StatsSet params = world.getParameters();
-			for (int i = 0; i < MOB_SPAWNS.length; i++)
-			{
+			for (int i = 0; i < MOB_SPAWNS.length; i++) {
 				final Npc mob = params.getObject("Mob" + i, Npc.class);
-				if (mob != null)
-				{
+				if (mob != null) {
 					mob.deleteMe();
 					params.remove("Mob" + i);
 				}
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FaeronTrainingGrounds1();
 	}
 }

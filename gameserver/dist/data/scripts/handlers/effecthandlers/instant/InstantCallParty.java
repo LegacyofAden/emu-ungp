@@ -29,29 +29,23 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Call Party effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantCallParty extends AbstractEffect
-{
-	public InstantCallParty(StatsSet params)
-	{
+public final class InstantCallParty extends AbstractEffect {
+	public InstantCallParty(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Party party = caster.getParty();
-		if (party == null)
-		{
+		if (party == null) {
 			return;
 		}
-		
-		for (PlayerInstance partyMember : party.getMembers())
-		{
-			if (InstantCallPc.checkSummonTargetStatus(partyMember, caster.asPlayer()))
-			{
-				if (caster != partyMember)
-				{
+
+		for (PlayerInstance partyMember : party.getMembers()) {
+			if (InstantCallPc.checkSummonTargetStatus(partyMember, caster.asPlayer())) {
+				if (caster != partyMember) {
 					partyMember.teleToLocation(caster.getLocation(), true);
 				}
 			}

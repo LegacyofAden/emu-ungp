@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Block Resurrection effect implementation.
+ *
  * @author UnAfraid
  */
-public final class PumpBlockResurrection extends AbstractBooleanStatEffect
-{
-	public PumpBlockResurrection(StatsSet params)
-	{
+public final class PumpBlockResurrection extends AbstractBooleanStatEffect {
+	public PumpBlockResurrection(StatsSet params) {
 		super(BooleanStat.BLOCK_RESURRECTION);
 	}
 }

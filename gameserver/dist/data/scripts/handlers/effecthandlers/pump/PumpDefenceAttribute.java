@@ -28,46 +28,37 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpDefenceAttribute extends AbstractEffect
-{
+public class PumpDefenceAttribute extends AbstractEffect {
 	private final AttributeType _attribute;
 	private final double _amount;
-	
-	public PumpDefenceAttribute(StatsSet params)
-	{
+
+	public PumpDefenceAttribute(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_attribute = params.getEnum("attribute", AttributeType.class, AttributeType.FIRE);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		DoubleStat stat = DoubleStat.FIRE_RES;
-		
-		switch (_attribute)
-		{
-			case WATER:
-			{
+
+		switch (_attribute) {
+			case WATER: {
 				stat = DoubleStat.WATER_RES;
 				break;
 			}
-			case WIND:
-			{
+			case WIND: {
 				stat = DoubleStat.WIND_RES;
 				break;
 			}
-			case EARTH:
-			{
+			case EARTH: {
 				stat = DoubleStat.EARTH_RES;
 				break;
 			}
-			case HOLY:
-			{
+			case HOLY: {
 				stat = DoubleStat.HOLY_RES;
 				break;
 			}
-			case DARK:
-			{
+			case DARK: {
 				stat = DoubleStat.DARK_RES;
 				break;
 			}

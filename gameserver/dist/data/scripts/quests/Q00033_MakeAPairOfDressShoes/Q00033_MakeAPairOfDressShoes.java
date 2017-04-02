@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Make a Pair of Dress Shoes (33)
+ *
  * @author malyelfik, Gladicek
  */
-public class Q00033_MakeAPairOfDressShoes extends Quest
-{
+public class Q00033_MakeAPairOfDressShoes extends Quest {
 	// NPCs
 	private static final int IAN = 30164;
 	private static final int WOODLEY = 30838;
@@ -46,90 +46,68 @@ public class Q00033_MakeAPairOfDressShoes extends Quest
 	private static final int ADENA_COUNT = 500000;
 	private static final int ADENA_COUNT2 = 200000;
 	private static final int ADENA_COUNT3 = 300000;
-	
-	public Q00033_MakeAPairOfDressShoes()
-	{
+
+	public Q00033_MakeAPairOfDressShoes() {
 		super(33);
 		addStartNpc(WOODLEY);
 		addTalkId(WOODLEY, IAN, LEIKAR);
 		addCondMinLevel(MIN_LEVEL, "30838-02.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "30838-03.htm":
-			{
+		switch (event) {
+			case "30838-03.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30838-06.html":
-			{
-				if (st.isCond(2))
-				{
+			case "30838-06.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 				}
 				break;
 			}
-			case "30838-09.html":
-			{
-				if (st.isCond(3))
-				{
-					if ((getQuestItemsCount(player, WORN_LEATHER) >= WORN_LEATHER_COUNT) && (getQuestItemsCount(player, ACCESSORY_GEM_LOW_GRADE) >= ACCESSORY_GEM_LOW_GRADE_COUNT) && (player.getAdena() >= ADENA_COUNT2))
-					{
+			case "30838-09.html": {
+				if (st.isCond(3)) {
+					if ((getQuestItemsCount(player, WORN_LEATHER) >= WORN_LEATHER_COUNT) && (getQuestItemsCount(player, ACCESSORY_GEM_LOW_GRADE) >= ACCESSORY_GEM_LOW_GRADE_COUNT) && (player.getAdena() >= ADENA_COUNT2)) {
 						takeItems(player, WORN_LEATHER, WORN_LEATHER_COUNT);
 						takeItems(player, ACCESSORY_GEM_LOW_GRADE, ACCESSORY_GEM_LOW_GRADE_COUNT);
 						takeItems(player, Inventory.ADENA_ID, ADENA_COUNT2);
 						st.setCond(4, true);
-					}
-					else
-					{
+					} else {
 						htmltext = "30838-10.html";
 					}
 					break;
 				}
 				break;
 			}
-			case "30838-13.html":
-			{
-				if (st.isCond(5))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30838-13.html": {
+				if (st.isCond(5)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, DRESS_SHOES_BOX, 1);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
 				}
 				break;
 			}
-			case "31520-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31520-02.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "30164-02.html":
-			{
-				if (st.isCond(4))
-				{
-					if (player.getAdena() < ADENA_COUNT3)
-					{
+			case "30164-02.html": {
+				if (st.isCond(4)) {
+					if (player.getAdena() < ADENA_COUNT3) {
 						htmltext = "30164-03.html";
 					}
 					takeItems(player, Inventory.ADENA_ID, ADENA_COUNT3);
@@ -143,35 +121,26 @@ public class Q00033_MakeAPairOfDressShoes extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == WOODLEY)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == WOODLEY) {
 					htmltext = "30838-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case WOODLEY:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case WOODLEY: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30838-04.html";
 								break;
@@ -190,26 +159,18 @@ public class Q00033_MakeAPairOfDressShoes extends Quest
 						}
 						break;
 					}
-					case LEIKAR:
-					{
-						if (st.isCond(1))
-						{
+					case LEIKAR: {
+						if (st.isCond(1)) {
 							htmltext = "31520-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "31520-03.html";
 						}
 						break;
 					}
-					case IAN:
-					{
-						if (st.isCond(4))
-						{
+					case IAN: {
+						if (st.isCond(4)) {
 							htmltext = "30164-01.html";
-						}
-						else if (st.isCond(5))
-						{
+						} else if (st.isCond(5)) {
 							htmltext = "30164-04.html";
 						}
 						break;

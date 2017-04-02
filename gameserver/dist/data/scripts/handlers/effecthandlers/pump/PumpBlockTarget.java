@@ -18,28 +18,25 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Targeting disable effect implementation. When affected, player will lose target and be unable to target for the duration.
+ *
  * @author Nik
  */
-public final class PumpBlockTarget extends AbstractBooleanStatEffect
-{
-	public PumpBlockTarget(StatsSet params)
-	{
+public final class PumpBlockTarget extends AbstractBooleanStatEffect {
+	public PumpBlockTarget(StatsSet params) {
 		super(BooleanStat.TARGETING_DISABLE);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.setTarget(null);
 		target.abortAttack();
 		target.abortCast();

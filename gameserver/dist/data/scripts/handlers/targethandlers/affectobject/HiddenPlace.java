@@ -24,13 +24,11 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Nik
  */
-public class HiddenPlace implements IAffectObjectHandler
-{
+public class HiddenPlace implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
 		// TODO: What is this?
-		
+
 		return false;
 	}
 }

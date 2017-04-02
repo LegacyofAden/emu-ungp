@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -31,30 +29,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class PumpStatBonusSpeed extends AbstractEffect
-{
+public class PumpStatBonusSpeed extends AbstractEffect {
 	private final BaseStats _stat;
 	protected final int _armorTypesMask;
-	
-	public PumpStatBonusSpeed(StatsSet params)
-	{
+
+	public PumpStatBonusSpeed(StatsSet params) {
 		_stat = params.getEnum("stat", BaseStats.class, BaseStats.DEX);
-		
+
 		int armorTypesMask = 0;
 		final List<String> armorTypes = params.getList("armorType", String.class);
-		if (armorTypes != null)
-		{
-			for (String armorType : armorTypes)
-			{
-				try
-				{
+		if (armorTypes != null) {
+			for (String armorType : armorTypes) {
+				try {
 					armorTypesMask |= ArmorType.valueOf(armorType).mask();
-				}
-				catch (IllegalArgumentException e)
-				{
+				} catch (IllegalArgumentException e) {
 					final IllegalArgumentException exception = new IllegalArgumentException("armorTypes should contain ArmorType enum value but found " + armorType);
 					exception.addSuppressed(e);
 					throw exception;
@@ -63,43 +56,36 @@ public class PumpStatBonusSpeed extends AbstractEffect
 		}
 		_armorTypesMask = armorTypesMask;
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
-		if (caster.isPlayer())
-		{
-			if (_armorTypesMask != 0)
-			{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
+		if (caster.isPlayer()) {
+			if (_armorTypesMask != 0) {
 				final Inventory inv = caster.getInventory();
 				final ItemInstance chest = inv.getPaperdollItem(Inventory.PAPERDOLL_CHEST);
-				if (chest == null)
-				{
+				if (chest == null) {
 					return false;
 				}
-				
+
 				boolean chestOk = (_armorTypesMask & chest.getItem().getItemMask()) != 0;
-				
-				if (chest.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)
-				{
+
+				if (chest.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) {
 					return chestOk;
 				}
-				
+
 				final ItemInstance legs = inv.getPaperdollItem(Inventory.PAPERDOLL_LEGS);
-				if (legs == null)
-				{
+				if (legs == null) {
 					return false;
 				}
-				
+
 				return chestOk && ((_armorTypesMask & legs.getItem().getItemMask()) != 0);
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(DoubleStat.STAT_BONUS_SPEED, _stat.ordinal());
 	}
 }

@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,53 +26,44 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Kandra AI.
+ *
  * @author Gladicek
  */
-public final class Kandra extends AbstractNpcAI
-{
+public final class Kandra extends AbstractNpcAI {
 	// NPC
 	private static final int KANDRA = 33111;
 	private static final int ELPHASIA = 33576;
 	private static final int MEPHISTO = 33577;
 	// Items
 	private static final int WEAPON = 15304;
-	
-	private Kandra()
-	{
+
+	private Kandra() {
 		addSpawnId(KANDRA);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IMPRESSIVE_LOOKING_STATUES);
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_FOLLOW"))
-		{
+		} else if (event.equals("NPC_FOLLOW")) {
 			addSpawn(ELPHASIA, npc.getX() + 10, npc.getY(), npc.getZ(), 0, false, 0);
 			addSpawn(MEPHISTO, npc.getX(), npc.getY() + 10, npc.getZ(), 0, false, 0);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setRHandId(WEAPON);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addTimer("NPC_FOLLOW", 100, npc, null);
 		SuperpointManager.getInstance().startMoving(npc, "si_lib_02");
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Kandra();
 	}
 }

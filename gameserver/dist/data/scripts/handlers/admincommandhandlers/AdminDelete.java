@@ -29,65 +29,53 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * This class handles following admin commands: - delete = deletes target
+ *
  * @version $Revision: 1.2.2.1.2.4 $ $Date: 2005/04/11 10:05:56 $
  */
-public class AdminDelete implements IAdminCommandHandler
-{
+public class AdminDelete implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_delete"
-	};
-	
+			{
+					"admin_delete"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("admin_delete"))
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("admin_delete")) {
 			handleDelete(activeChar);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
+
 	// TODO: add possibility to delete any L2Object (except L2PcInstance)
-	private void handleDelete(PlayerInstance activeChar)
-	{
+	private void handleDelete(PlayerInstance activeChar) {
 		WorldObject obj = activeChar.getTarget();
-		if (obj instanceof Npc)
-		{
+		if (obj instanceof Npc) {
 			Npc target = (Npc) obj;
 			target.deleteMe();
-			
+
 			L2Spawn spawn = target.getSpawn();
-			if (spawn != null)
-			{
+			if (spawn != null) {
 				spawn.stopRespawn();
-				
-				if (DBSpawnManager.getInstance().isDefined(spawn.getId()))
-				{
+
+				if (DBSpawnManager.getInstance().isDefined(spawn.getId())) {
 					DBSpawnManager.getInstance().deleteSpawn(spawn, true);
-				}
-				else
-				{
+				} else {
 					SpawnTable.getInstance().deleteSpawn(spawn, true);
 				}
 			}
-			
+
 			activeChar.sendMessage("Deleted " + target.getName() + " from " + target.getObjectId() + ".");
-		}
-		else
-		{
+		} else {
 			activeChar.sendMessage("Incorrect target.");
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminDelete());
 	}
 }

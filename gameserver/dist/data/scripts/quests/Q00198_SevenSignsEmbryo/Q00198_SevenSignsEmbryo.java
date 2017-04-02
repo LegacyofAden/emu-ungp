@@ -30,15 +30,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q00197_SevenSignsTheSacredBookOfSeal.Q00197_SevenSignsTheSacredBookOfSeal;
 
 /**
  * Seven Signs, Embryo (198)
+ *
  * @author Adry_85
  */
-public final class Q00198_SevenSignsEmbryo extends Quest
-{
+public final class Q00198_SevenSignsEmbryo extends Quest {
 	// NPCs
 	private static final int SHILENS_EVIL_THOUGHTS = 27346;
 	private static final int WOOD = 32593;
@@ -52,9 +51,8 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 	private boolean isBusy = false;
 	// Skill
 	private static SkillHolder NPC_HEAL = new SkillHolder(4065, 8);
-	
-	public Q00198_SevenSignsEmbryo()
-	{
+
+	public Q00198_SevenSignsEmbryo() {
 		super(198);
 		addFirstTalkId(JAINA);
 		addStartNpc(WOOD);
@@ -62,51 +60,41 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 		addKillId(SHILENS_EVIL_THOUGHTS);
 		registerQuestItems(SCULPTURE_OF_DOUBT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if ((npc.getId() == SHILENS_EVIL_THOUGHTS) && "despawn".equals(event))
-		{
-			if (!npc.isDead())
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if ((npc.getId() == SHILENS_EVIL_THOUGHTS) && "despawn".equals(event)) {
+			if (!npc.isDead()) {
 				isBusy = false;
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.NEXT_TIME_YOU_WILL_NOT_ESCAPE);
 				npc.deleteMe();
 			}
 			return super.onAdvEvent(event, npc, player);
 		}
-		
+
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32593-02.html":
-			{
+		switch (event) {
+			case "32593-02.html": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
 			case "32597-02.html":
 			case "32597-03.html":
-			case "32597-04.html":
-			{
-				if (st.isCond(1))
-				{
+			case "32597-04.html": {
+				if (st.isCond(1)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "fight":
-			{
+			case "fight": {
 				htmltext = "32597-05.html";
-				if (st.isCond(1))
-				{
+				if (st.isCond(1)) {
 					isBusy = true;
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.S1_THAT_STRANGER_MUST_BE_DEFEATED_HERE_IS_THE_ULTIMATE_HELP, player.getName());
 					startQuestTimer("heal", 30000 - getRandom(20000), npc, player);
@@ -119,14 +107,10 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 				}
 				break;
 			}
-			case "heal":
-			{
-				if (!npc.isInRadius3d(player, 600))
-				{
+			case "heal": {
+				if (!npc.isInRadius3d(player, 600)) {
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.LOOK_HERE_S1_DON_T_FALL_TOO_FAR_BEHIND, player.getName());
-				}
-				else if (!player.isDead())
-				{
+				} else if (!player.isDead()) {
 					npc.setTarget(player);
 					npc.doCast(NPC_HEAL.getSkill());
 				}
@@ -135,18 +119,14 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 			}
 			case "32597-08.html":
 			case "32597-09.html":
-			case "32597-10.html":
-			{
-				if (st.isCond(2) && hasQuestItems(player, SCULPTURE_OF_DOUBT))
-				{
+			case "32597-10.html": {
+				if (st.isCond(2) && hasQuestItems(player, SCULPTURE_OF_DOUBT)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32597-11.html":
-			{
-				if (st.isCond(2) && hasQuestItems(player, SCULPTURE_OF_DOUBT))
-				{
+			case "32597-11.html": {
+				if (st.isCond(2) && hasQuestItems(player, SCULPTURE_OF_DOUBT)) {
 					takeItems(player, SCULPTURE_OF_DOUBT, -1);
 					st.setCond(3, true);
 					htmltext = event;
@@ -154,37 +134,32 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 				}
 				break;
 			}
-			case "32617-02.html":
-			{
+			case "32617-02.html": {
 				htmltext = event;
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return "32617-01.html";
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
-		if (partyMember == null)
-		{
+		if (partyMember == null) {
 			return null;
 		}
-		
+
 		final QuestState st = getQuestState(partyMember, false);
-		if (npc.isInRadius3d(partyMember, 1500))
-		{
+		if (npc.isInRadius3d(partyMember, 1500)) {
 			giveItems(partyMember, SCULPTURE_OF_DOUBT, 1);
 			st.setCond(2, true);
 		}
-		
+
 		isBusy = false;
 		cancelQuestTimers("despawn");
 		cancelQuestTimers("heal");
@@ -193,71 +168,51 @@ public final class Q00198_SevenSignsEmbryo extends Quest
 		playMovie(partyMember, Movie.SSQ_EMBRYO);
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
+		switch (st.getState()) {
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
-			case State.CREATED:
-			{
-				if (npc.getId() == WOOD)
-				{
+			case State.CREATED: {
+				if (npc.getId() == WOOD) {
 					htmltext = ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q00197_SevenSignsTheSacredBookOfSeal.class.getSimpleName())) ? "32593-01.htm" : "32593-03.html";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == WOOD)
-				{
-					if ((st.getCond() > 0) && (st.getCond() < 3))
-					{
+			case State.STARTED: {
+				if (npc.getId() == WOOD) {
+					if ((st.getCond() > 0) && (st.getCond() < 3)) {
 						htmltext = "32593-04.html";
-					}
-					else if (st.isCond(3))
-					{
-						if (player.getLevel() >= MIN_LEVEL)
-						{
+					} else if (st.isCond(3)) {
+						if (player.getLevel() >= MIN_LEVEL) {
 							addExp(player, 315108090);
 							addSp(player, 34906059); // TODO Incorrect SP reward.
 							giveItems(player, DAWNS_BRACELET, 1);
 							giveItems(player, Inventory.ANCIENT_ADENA_ID, 1500000);
 							st.exitQuest(false, true);
 							htmltext = "32593-05.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "level_check.html";
 						}
 					}
-				}
-				else if (npc.getId() == FRANZ)
-				{
-					switch (st.getCond())
-					{
-						case 1:
-						{
+				} else if (npc.getId() == FRANZ) {
+					switch (st.getCond()) {
+						case 1: {
 							htmltext = (isBusy) ? "32597-06.html" : "32597-01.html";
 							break;
 						}
-						case 2:
-						{
-							if (hasQuestItems(player, SCULPTURE_OF_DOUBT))
-							{
+						case 2: {
+							if (hasQuestItems(player, SCULPTURE_OF_DOUBT)) {
 								htmltext = "32597-07.html";
 							}
 							break;
 						}
-						case 3:
-						{
+						case 3: {
 							htmltext = "32597-12.html";
 							break;
 						}

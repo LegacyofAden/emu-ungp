@@ -32,10 +32,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Containing the Attribute Power (10275)
+ *
  * @author nonom
  */
-public class Q10275_ContainingTheAttributePower extends Quest
-{
+public class Q10275_ContainingTheAttributePower extends Quest {
 	// NPCs
 	private static final int HOLLY = 30839;
 	private static final int WEBER = 31307;
@@ -51,28 +51,24 @@ public class Q10275_ContainingTheAttributePower extends Quest
 	// Skills
 	private static final SkillHolder BLESSING_OF_FIRE = new SkillHolder(2635, 1);
 	private static final SkillHolder BLESSING_OF_EARTH = new SkillHolder(2636, 1);
-	
-	public Q10275_ContainingTheAttributePower()
-	{
+
+	public Q10275_ContainingTheAttributePower() {
 		super(10275);
 		addStartNpc(HOLLY, WEBER);
 		addTalkId(HOLLY, WEBER, YIN, YANG);
 		addKillId(AIR, WATER);
 		registerQuestItems(YINSWORD, YANGSWORD, SOULPIECEWATER, SOULPIECEAIR);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30839-02.html":
 			case "31307-02.html":
 				st.startQuest();
@@ -92,16 +88,14 @@ public class Q10275_ContainingTheAttributePower extends Quest
 				giveItems(player, YANGSWORD, 1, AttributeType.EARTH, 10);
 				break;
 			case "32325-06.html":
-				if (hasQuestItems(player, YINSWORD))
-				{
+				if (hasQuestItems(player, YINSWORD)) {
 					takeItems(player, YINSWORD, 1);
 					htmltext = "32325-07.html";
 				}
 				giveItems(player, YINSWORD, 1, AttributeType.FIRE, 10);
 				break;
 			case "32326-06.html":
-				if (hasQuestItems(player, YANGSWORD))
-				{
+				if (hasQuestItems(player, YANGSWORD)) {
 					takeItems(player, YANGSWORD, 1);
 					htmltext = "32326-07.html";
 				}
@@ -118,9 +112,8 @@ public class Q10275_ContainingTheAttributePower extends Quest
 				giveItems(player, YANGSWORD, 1, AttributeType.EARTH, 10);
 				break;
 		}
-		
-		if (Util.isDigit(event))
-		{
+
+		if (Util.isDigit(event)) {
 			htmltext = Integer.toString(npc.getId()) + "-1" + event + ".html";
 			giveItems(player, 10520 + CommonUtil.constrain(Integer.parseInt(event), 0, 6), 2);
 			addExp(player, 202160);
@@ -129,73 +122,56 @@ public class Q10275_ContainingTheAttributePower extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
-		switch (npc.getId())
-		{
+
+		switch (npc.getId()) {
 			case AIR:
-				if ((st.isCond(8) || st.isCond(10)) && (getItemEquipped(player, Inventory.PAPERDOLL_RHAND) == YANGSWORD) && (getQuestItemsCount(player, SOULPIECEAIR) < 6) && (getRandom(100) < 30))
-				{
+				if ((st.isCond(8) || st.isCond(10)) && (getItemEquipped(player, Inventory.PAPERDOLL_RHAND) == YANGSWORD) && (getQuestItemsCount(player, SOULPIECEAIR) < 6) && (getRandom(100) < 30)) {
 					giveItems(player, SOULPIECEAIR, 1);
-					if (getQuestItemsCount(player, SOULPIECEAIR) >= 6)
-					{
+					if (getQuestItemsCount(player, SOULPIECEAIR) >= 6) {
 						st.setCond(st.getCond() + 1, true);
-					}
-					else
-					{
+					} else {
 						playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 				}
 				break;
 			case WATER:
-				if (((st.getCond() >= 3) || (st.getCond() <= 5)) && (getItemEquipped(player, Inventory.PAPERDOLL_RHAND) == YINSWORD) && (getQuestItemsCount(player, SOULPIECEWATER) < 6) && (getRandom(100) < 30))
-				{
+				if (((st.getCond() >= 3) || (st.getCond() <= 5)) && (getItemEquipped(player, Inventory.PAPERDOLL_RHAND) == YINSWORD) && (getQuestItemsCount(player, SOULPIECEWATER) < 6) && (getRandom(100) < 30)) {
 					giveItems(player, SOULPIECEWATER, 1);
-					if (getQuestItemsCount(player, SOULPIECEWATER) >= 6)
-					{
+					if (getQuestItemsCount(player, SOULPIECEWATER) >= 6) {
 						st.setCond(st.getCond() + 1, true);
-					}
-					else
-					{
+					} else {
 						playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 				}
 				break;
 		}
 		return null;
-		
+
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
-			case HOLLY:
-			{
-				switch (st.getState())
-				{
+
+		switch (npc.getId()) {
+			case HOLLY: {
+				switch (st.getState()) {
 					case State.CREATED:
 						htmltext = (player.getLevel() > 75) ? "30839-01.htm" : "30839-00.html";
 						break;
 					case State.STARTED:
-						switch (st.getCond())
-						{
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30839-03.html";
 								break;
@@ -210,16 +186,13 @@ public class Q10275_ContainingTheAttributePower extends Quest
 				}
 				break;
 			}
-			case WEBER:
-			{
-				switch (st.getState())
-				{
+			case WEBER: {
+				switch (st.getState()) {
 					case State.CREATED:
 						htmltext = (player.getLevel() > 75) ? "31307-01.htm" : "31307-00.html";
 						break;
 					case State.STARTED:
-						switch (st.getCond())
-						{
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "31307-03.html";
 								break;
@@ -234,12 +207,9 @@ public class Q10275_ContainingTheAttributePower extends Quest
 				}
 				break;
 			}
-			case YIN:
-			{
-				if (st.isStarted())
-				{
-					switch (st.getCond())
-					{
+			case YIN: {
+				if (st.isStarted()) {
+					switch (st.getCond()) {
 						case 2:
 							htmltext = "32325-01.html";
 							break;
@@ -259,12 +229,9 @@ public class Q10275_ContainingTheAttributePower extends Quest
 				}
 				break;
 			}
-			case YANG:
-			{
-				if (st.isStarted())
-				{
-					switch (st.getCond())
-					{
+			case YANG: {
+				if (st.isStarted()) {
+					switch (st.getCond()) {
 						case 7:
 							htmltext = "32326-01.html";
 							break;

@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: With Courage (10414)
+ *
  * @author St3eT
  */
-public final class Q10414_KekropusLetterWithCourage extends LetterQuest
-{
+public final class Q10414_KekropusLetterWithCourage extends LetterQuest {
 	// NPCs
 	private static final int ANDREI = 31292;
 	private static final int JANITT = 33851;
@@ -48,41 +47,34 @@ public final class Q10414_KekropusLetterWithCourage extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 70;
 	private static final int MAX_LEVEL = 75;
-	
-	public Q10414_KekropusLetterWithCourage()
-	{
+
+	public Q10414_KekropusLetterWithCourage() {
 		super(10414);
 		addTalkId(ANDREI, JANITT);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartQuestSound("Npcdialog1.kekrops_quest_8");
 		setStartLocation(SOE_TOWN_OF_GODDARD, TELEPORT_LOC);
 		registerQuestItems(SOE_TOWN_OF_GODDARD, SOE_WALL_OF_ARGOS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "31292-02.html":
-			{
+		switch (event) {
+			case "31292-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "31292-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31292-03.html": {
+				if (st.isCond(1)) {
 					takeItems(player, SOE_TOWN_OF_GODDARD, -1);
 					giveItems(player, SOE_WALL_OF_ARGOS, 1);
 					st.setCond(2, true);
@@ -90,15 +82,12 @@ public final class Q10414_KekropusLetterWithCourage extends LetterQuest
 				}
 				break;
 			}
-			case "33851-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33851-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 5);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 1_088_640);
 						addSp(player, 261);
 					}
@@ -110,51 +99,41 @@ public final class Q10414_KekropusLetterWithCourage extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if ((npc.getId() == ANDREI) && st.isCond(1))
-			{
+
+		if (st.isStarted()) {
+			if ((npc.getId() == ANDREI) && st.isCond(1)) {
 				htmltext = "31292-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == ANDREI ? "31292-04.html" : "33851-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.WALL_OF_ARGOS_IS_A_GOOD_HUNTING_ZONE_FOR_LV_70_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public boolean canShowTutorialMark(PlayerInstance player)
-	{
+	public boolean canShowTutorialMark(PlayerInstance player) {
 		return !player.isInCategory(CategoryType.MAGE_GROUP);
 	}
 }

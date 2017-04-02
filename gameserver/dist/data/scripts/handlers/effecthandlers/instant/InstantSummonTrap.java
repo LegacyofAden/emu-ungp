@@ -33,52 +33,45 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Summon Trap effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantSummonTrap extends AbstractEffect
-{
+public final class InstantSummonTrap extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantSummonTrap.class);
 
 	private final int _npcId;
-	
-	public InstantSummonTrap(StatsSet params)
-	{
+
+	public InstantSummonTrap(StatsSet params) {
 		_npcId = params.getInt("npcId", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
-		if (casterPlayer.isAlikeDead() || casterPlayer.inObserverMode() || casterPlayer.isMounted())
-		{
+
+		if (casterPlayer.isAlikeDead() || casterPlayer.inObserverMode() || casterPlayer.isMounted()) {
 			return;
 		}
-		
-		if (_npcId <= 0)
-		{
+
+		if (_npcId <= 0) {
 			LOGGER.warn("Invalid NPC ID: {} in skill ID: {}", _npcId, skill.getId());
 			return;
 		}
-		
+
 		// Unsummon previous trap
-		if (casterPlayer.getTrap() != null)
-		{
+		if (casterPlayer.getTrap() != null) {
 			casterPlayer.getTrap().unSummon();
 		}
-		
+
 		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_npcId);
-		if (npcTemplate == null)
-		{
+		if (npcTemplate == null) {
 			LOGGER.warn("Spawn of the non-existing Trap ID: {} in skill ID: {}", _npcId, skill.getId());
 			return;
 		}
-		
+
 		final L2TrapInstance trap = new L2TrapInstance(npcTemplate, casterPlayer);
 		trap.setCurrentHp(trap.getMaxHp());
 		trap.setCurrentMp(trap.getMaxMp());

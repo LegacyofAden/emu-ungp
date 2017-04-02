@@ -27,26 +27,22 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class PumpReuseDelay extends AbstractEffect
-{
+public class PumpReuseDelay extends AbstractEffect {
 	private final int _magicType;
 	private final double _amount;
-	
-	public PumpReuseDelay(StatsSet params)
-	{
+
+	public PumpReuseDelay(StatsSet params) {
 		_magicType = params.getInt("magicType", 0);
 		_amount = params.getDouble("amount", 0);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergeReuseTypeValue(_magicType, (_amount / 100) + 1, MathUtil::mul);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getStat().mergeReuseTypeValue(_magicType, (_amount / 100) + 1, MathUtil::div);
 	}
 }

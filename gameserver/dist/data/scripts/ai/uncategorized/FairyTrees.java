@@ -18,54 +18,48 @@
  */
 package ai.uncategorized;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
-import ai.AbstractNpcAI;
-
 /**
  * Fairy Trees AI.
+ *
  * @author Charus
  */
-public class FairyTrees extends AbstractNpcAI
-{
+public class FairyTrees extends AbstractNpcAI {
 	// NPC
 	private static final int SOUL_GUARDIAN = 27189; // Soul of Tree Guardian
-	
+
 	private static final int[] MOBS =
-	{
-		27185, // Fairy Tree of Wind
-		27186, // Fairy Tree of Star
-		27187, // Fairy Tree of Twilight
-		27188, // Fairy Tree of Abyss
-	};
-	
+			{
+					27185, // Fairy Tree of Wind
+					27186, // Fairy Tree of Star
+					27187, // Fairy Tree of Twilight
+					27188, // Fairy Tree of Abyss
+			};
+
 	// Skill
 	private static SkillHolder VENOMOUS_POISON = new SkillHolder(4243, 1); // Venomous Poison
-	
+
 	// Misc
 	private static final int MIN_DISTANCE = 1500;
-	
-	private FairyTrees()
-	{
+
+	private FairyTrees() {
 		addKillId(MOBS);
 		addSpawnId(MOBS);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (npc.distance3d(killer) <= MIN_DISTANCE)
-		{
-			for (int i = 0; i < 20; i++)
-			{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (npc.distance3d(killer) <= MIN_DISTANCE) {
+			for (int i = 0; i < 20; i++) {
 				final Npc guardian = addSpawn(SOUL_GUARDIAN, npc, false, 30000);
 				final Playable attacker = isSummon ? killer.getServitors().values().stream().findFirst().orElse(killer.getPet()) : killer;
 				addAttackPlayerDesire(guardian, attacker);
-				if (getRandomBoolean())
-				{
+				if (getRandomBoolean()) {
 					guardian.setTarget(attacker);
 					guardian.doCast(VENOMOUS_POISON.getSkill());
 				}
@@ -73,17 +67,15 @@ public class FairyTrees extends AbstractNpcAI
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setRandomWalking(false);
 		npc.setIsImmobilized(true);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FairyTrees();
 	}
 }

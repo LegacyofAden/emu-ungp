@@ -24,11 +24,9 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Nik
  */
-public class All implements IAffectObjectHandler
-{
+public class All implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
 		return true;
 	}
 }

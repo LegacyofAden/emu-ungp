@@ -18,10 +18,7 @@
  */
 package ai.individual.TalkingIsland.AwakeningMaster;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.CategoryType;
@@ -45,17 +42,19 @@ import org.l2junity.gameserver.network.client.send.ExShowUsm;
 import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
-import ai.AbstractNpcAI;
 import quests.Q10338_SeizeYourDestiny.Q10338_SeizeYourDestiny;
 import quests.Q10472_WindsOfFateEncroachingShadows.Q10472_WindsOfFateEncroachingShadows;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * AwakeningMaster AI.
+ *
  * @author Sdw
  */
-public final class AwakeningMaster extends AbstractNpcAI
-{
+public final class AwakeningMaster extends AbstractNpcAI {
 	// NPCs
 	private static final int SIGEL_MASTER = 33397;
 	private static final int TYRR_MASTER = 33398;
@@ -70,9 +69,8 @@ public final class AwakeningMaster extends AbstractNpcAI
 	private static final int CHAOS_POMANDER = 37374;
 	private static final int CHAOS_POMANDER_DUAL_CLASS = 37375;
 	private static final Map<CategoryType, Integer> AWAKE_POWER = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		AWAKE_POWER.put(CategoryType.SIXTH_SIGEL_GROUP, 32264);
 		AWAKE_POWER.put(CategoryType.SIXTH_TIR_GROUP, 32265);
 		AWAKE_POWER.put(CategoryType.SIXTH_OTHEL_GROUP, 32266);
@@ -82,7 +80,7 @@ public final class AwakeningMaster extends AbstractNpcAI
 		AWAKE_POWER.put(CategoryType.SIXTH_WYNN_GROUP, 32270);
 		AWAKE_POWER.put(CategoryType.SIXTH_EOLH_GROUP, 32271);
 	}
-	
+
 	// Skills
 	private static final SkillHolder WYNN_POWER = new SkillHolder(16390, 1);
 	private static final SkillHolder FEOH_POWER = new SkillHolder(16391, 1);
@@ -92,104 +90,78 @@ public final class AwakeningMaster extends AbstractNpcAI
 	private static final SkillHolder YUL_POWER = new SkillHolder(16395, 1);
 	private static final SkillHolder SIGEL_POWER = new SkillHolder(16396, 1);
 	private static final SkillHolder AEORE_POWER = new SkillHolder(16397, 1);
-	
-	private AwakeningMaster()
-	{
+
+	private AwakeningMaster() {
 		addStartNpc(SIGEL_MASTER, TYRR_MASTER, OTHELL_MASTER, YUL_MASTER, FEOH_MASTER, ISS_MASTER, WYNN_MASTER, AEORE_MASTER);
 		addTalkId(SIGEL_MASTER, TYRR_MASTER, OTHELL_MASTER, YUL_MASTER, FEOH_MASTER, ISS_MASTER, WYNN_MASTER, AEORE_MASTER);
 		addFirstTalkId(SIGEL_MASTER, TYRR_MASTER, OTHELL_MASTER, YUL_MASTER, FEOH_MASTER, ISS_MASTER, WYNN_MASTER, AEORE_MASTER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
 		String htmltext = null;
-		switch (event)
-		{
-			case "awakening":
-			{
-				if (hasQuestItems(player, SCROLL_OF_AFTERLIFE) && (player.getLevel() > 84) && (!player.isSubClassActive() || player.isDualClassActive()) && player.isInCategory(CategoryType.FOURTH_CLASS_GROUP) && player.hasQuestCompleted(Q10338_SeizeYourDestiny.class.getSimpleName()))
-				{
-					switch (npc.getId())
-					{
-						case SIGEL_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.TANKER_CATEGORY))
-							{
+		switch (event) {
+			case "awakening": {
+				if (hasQuestItems(player, SCROLL_OF_AFTERLIFE) && (player.getLevel() > 84) && (!player.isSubClassActive() || player.isDualClassActive()) && player.isInCategory(CategoryType.FOURTH_CLASS_GROUP) && player.hasQuestCompleted(Q10338_SeizeYourDestiny.class.getSimpleName())) {
+					switch (npc.getId()) {
+						case SIGEL_MASTER: {
+							if (!player.isInCategory(CategoryType.TANKER_CATEGORY)) {
 								return SIGEL_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case TYRR_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.WARRIOR_CATEGORY))
-							{
+						case TYRR_MASTER: {
+							if (!player.isInCategory(CategoryType.WARRIOR_CATEGORY)) {
 								return TYRR_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case OTHELL_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.ROGUE_CATEGORY))
-							{
+						case OTHELL_MASTER: {
+							if (!player.isInCategory(CategoryType.ROGUE_CATEGORY)) {
 								return OTHELL_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case YUL_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.ARCHER_CATEGORY))
-							{
+						case YUL_MASTER: {
+							if (!player.isInCategory(CategoryType.ARCHER_CATEGORY)) {
 								return YUL_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case FEOH_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.WIZARD_CATEGORY))
-							{
+						case FEOH_MASTER: {
+							if (!player.isInCategory(CategoryType.WIZARD_CATEGORY)) {
 								return FEOH_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case ISS_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.ENCHANTER_CATEGORY))
-							{
+						case ISS_MASTER: {
+							if (!player.isInCategory(CategoryType.ENCHANTER_CATEGORY)) {
 								return ISS_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case WYNN_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.SUMMONER_CATEGORY))
-							{
+						case WYNN_MASTER: {
+							if (!player.isInCategory(CategoryType.SUMMONER_CATEGORY)) {
 								return WYNN_MASTER + "-no_class.htm";
 							}
 							break;
 						}
-						case AEORE_MASTER:
-						{
-							if (!player.isInCategory(CategoryType.HEALER_CATEGORY))
-							{
+						case AEORE_MASTER: {
+							if (!player.isInCategory(CategoryType.HEALER_CATEGORY)) {
 								return AEORE_MASTER + "-no_class.htm";
 							}
 							break;
 						}
 					}
-					
-					for (ClassId newClass : player.getClassId().getNextClassIds())
-					{
+
+					for (ClassId newClass : player.getClassId().getNextClassIds()) {
 						player.sendPacket(new ExChangeToAwakenedClass(newClass.getId()));
 					}
-				}
-				else
-				{
+				} else {
 					return npc.getId() + "-no.htm";
 				}
 				break;
@@ -197,46 +169,28 @@ public final class AwakeningMaster extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
-		if (player.getRace().equals(Race.ERTHEIA))
-		{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
+		if (player.getRace().equals(Race.ERTHEIA)) {
 			// Ertheia dual class quest
 			final QuestState qs = player.getQuestState(Q10472_WindsOfFateEncroachingShadows.class.getSimpleName());
-			if (qs != null)
-			{
-				if ((npc.getId() == WYNN_MASTER) && qs.isCond(8))
-				{
+			if (qs != null) {
+				if ((npc.getId() == WYNN_MASTER) && qs.isCond(8)) {
 					return setNextErtheiaQuestState(npc, qs, WYNN_MASTER, 9, WYNN_POWER);
-				}
-				else if ((npc.getId() == FEOH_MASTER) && qs.isCond(9))
-				{
+				} else if ((npc.getId() == FEOH_MASTER) && qs.isCond(9)) {
 					return setNextErtheiaQuestState(npc, qs, FEOH_MASTER, 10, FEOH_POWER);
-				}
-				else if ((npc.getId() == TYRR_MASTER) && qs.isCond(10))
-				{
+				} else if ((npc.getId() == TYRR_MASTER) && qs.isCond(10)) {
 					return setNextErtheiaQuestState(npc, qs, TYRR_MASTER, 11, TYRR_POWER);
-				}
-				else if ((npc.getId() == OTHELL_MASTER) && qs.isCond(11))
-				{
+				} else if ((npc.getId() == OTHELL_MASTER) && qs.isCond(11)) {
 					return setNextErtheiaQuestState(npc, qs, OTHELL_MASTER, 12, OTHELL_POWER);
-				}
-				else if ((npc.getId() == ISS_MASTER) && qs.isCond(12))
-				{
+				} else if ((npc.getId() == ISS_MASTER) && qs.isCond(12)) {
 					return setNextErtheiaQuestState(npc, qs, ISS_MASTER, 13, ISS_POWER);
-				}
-				else if ((npc.getId() == YUL_MASTER) && qs.isCond(13))
-				{
+				} else if ((npc.getId() == YUL_MASTER) && qs.isCond(13)) {
 					return setNextErtheiaQuestState(npc, qs, YUL_MASTER, 14, YUL_POWER);
-				}
-				else if ((npc.getId() == SIGEL_MASTER) && qs.isCond(14))
-				{
+				} else if ((npc.getId() == SIGEL_MASTER) && qs.isCond(14)) {
 					return setNextErtheiaQuestState(npc, qs, SIGEL_MASTER, 15, SIGEL_POWER);
-				}
-				else if ((npc.getId() == AEORE_MASTER) && qs.isCond(15))
-				{
+				} else if ((npc.getId() == AEORE_MASTER) && qs.isCond(15)) {
 					return setNextErtheiaQuestState(npc, qs, AEORE_MASTER, 16, AEORE_POWER);
 				}
 			}
@@ -244,74 +198,60 @@ public final class AwakeningMaster extends AbstractNpcAI
 		}
 		return npc.getId() + ".html";
 	}
-	
-	private String setNextErtheiaQuestState(Npc npc, QuestState qs, int npcId, int cond, SkillHolder skill)
-	{
+
+	private String setNextErtheiaQuestState(Npc npc, QuestState qs, int npcId, int cond, SkillHolder skill) {
 		npc.setTarget(qs.getPlayer());
 		npc.doCast(skill.getSkill());
 		qs.setCond(cond, true);
 		return npcId + "-01.html";
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_CHANGE_TO_AWAKENED_CLASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerChangeToAwakenedClass(OnPlayerChangeToAwakenedClass event)
-	{
+	public void OnPlayerChangeToAwakenedClass(OnPlayerChangeToAwakenedClass event) {
 		final PlayerInstance player = event.getActiveChar();
-		
-		if (player.isSubClassActive() && !player.isDualClassActive())
-		{
+
+		if (player.isSubClassActive() && !player.isDualClassActive()) {
 			return;
 		}
-		
-		if ((player.getLevel() < 85) || !player.isInCategory(CategoryType.FOURTH_CLASS_GROUP))
-		{
+
+		if ((player.getLevel() < 85) || !player.isInCategory(CategoryType.FOURTH_CLASS_GROUP)) {
 			return;
 		}
-		
-		if (!player.hasQuestCompleted(Q10338_SeizeYourDestiny.class.getSimpleName()))
-		{
+
+		if (!player.hasQuestCompleted(Q10338_SeizeYourDestiny.class.getSimpleName())) {
 			return;
 		}
-		
-		if (player.isHero() || Hero.getInstance().isUnclaimedHero(player.getObjectId()))
-		{
+
+		if (player.isHero() || Hero.getInstance().isUnclaimedHero(player.getObjectId())) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_AWAKEN_WHEN_YOU_ARE_A_HERO_OR_ON_THE_WAIT_LIST_FOR_HERO_STATUS);
 			return;
 		}
-		
-		if (!player.isInventoryUnder80(false))
-		{
+
+		if (!player.isInventoryUnder80(false)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_AWAKEN_DUE_TO_YOUR_CURRENT_INVENTORY_WEIGHT_PLEASE_ORGANIZE_YOUR_INVENTORY_AND_TRY_AGAIN_DWARVEN_CHARACTERS_MUST_BE_AT_20_OR_BELOW_THE_INVENTORY_MAX_TO_AWAKEN);
 			return;
 		}
-		
-		if (player.isMounted() || player.isTransformed())
-		{
+
+		if (player.isMounted() || player.isTransformed()) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_AWAKEN_WHILE_YOU_RE_TRANSFORMED_OR_RIDING);
 			return;
 		}
-		
+
 		final ItemInstance item = player.getInventory().getItemByItemId(SCROLL_OF_AFTERLIFE);
-		if (item == null)
-		{
+		if (item == null) {
 			return;
 		}
-		
-		if (!player.destroyItem("Awakening", item, player, true))
-		{
+
+		if (!player.destroyItem("Awakening", item, player, true)) {
 			return;
 		}
-		
-		for (ClassId newClass : player.getClassId().getNextClassIds())
-		{
+
+		for (ClassId newClass : player.getClassId().getNextClassIds()) {
 			player.setClassId(newClass.getId());
-			if (player.isDualClassActive())
-			{
+			if (player.isDualClassActive()) {
 				player.getSubClasses().get(player.getClassIndex()).setClassId(player.getActiveClass());
-			}
-			else
-			{
+			} else {
 				player.setBaseClass(player.getActiveClass());
 			}
 			player.sendPacket(SystemMessageId.CONGRATULATIONS_YOU_VE_COMPLETED_A_CLASS_TRANSFER);
@@ -320,34 +260,30 @@ public final class AwakeningMaster extends AbstractNpcAI
 			ui.addComponentType(UserInfoType.MAX_HPCPMP);
 			player.sendPacket(ui);
 			player.broadcastInfo();
-			
+
 			player.broadcastPacket(new SocialAction(player.getObjectId(), 20));
-			for (Entry<CategoryType, Integer> ent : AWAKE_POWER.entrySet())
-			{
-				if (player.isInCategory(ent.getKey()))
-				{
+			for (Entry<CategoryType, Integer> ent : AWAKE_POWER.entrySet()) {
+				if (player.isInCategory(ent.getKey())) {
 					giveItems(player, ent.getValue(), 1);
 					break;
 				}
 			}
 			giveItems(player, player.isDualClassActive() ? CHAOS_POMANDER_DUAL_CLASS : CHAOS_POMANDER, 2);
-			
+
 			SkillTreesData.getInstance().cleanSkillUponAwakening(player);
-			for (SkillLearn skill : SkillTreesData.getInstance().getRaceSkillTree(player.getRace()))
-			{
+			for (SkillLearn skill : SkillTreesData.getInstance().getRaceSkillTree(player.getRace())) {
 				player.addSkill(SkillData.getInstance().getSkill(skill.getSkillId(), skill.getSkillLevel()), true);
 			}
 			player.sendSkillList();
 		}
-		
+
 		getTimers().addTimer("AWAKENING_END", 10000, evnt ->
 		{
 			player.sendPacket(ExShowUsm.AWAKENING_END);
 		});
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new AwakeningMaster();
 	}
 }

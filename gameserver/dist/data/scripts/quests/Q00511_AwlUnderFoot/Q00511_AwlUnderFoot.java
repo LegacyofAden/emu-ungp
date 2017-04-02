@@ -28,61 +28,57 @@ import org.l2junity.gameserver.model.quest.QuestState;
 
 /**
  * Awl Under Foot (511)
+ *
  * @author malyelfik
  */
-public final class Q00511_AwlUnderFoot extends Quest
-{
+public final class Q00511_AwlUnderFoot extends Quest {
 	// NPCs
 	private static final int[] NPCS =
-	{
-		35666, // Shanty
-		35698, // Southern
-		35735, // Hive
-		35767, // Valley
-		35804, // Ivory
-		35835, // Narsell
-		35867, // Bayou
-		35904, // White Sands
-		35936, // Borderland
-		35974, // Swamp
-		36011, // Archaic
-		36043, // Floran
-		36118, // Tanor
-		36149, // Dragonspine
-		36181, // Antharas
-		36219, // Western
-		36257, // Hunter
-		36294, // Aaru
-		36326, // Demon
-		36364, // Monastic
-	};
+			{
+					35666, // Shanty
+					35698, // Southern
+					35735, // Hive
+					35767, // Valley
+					35804, // Ivory
+					35835, // Narsell
+					35867, // Bayou
+					35904, // White Sands
+					35936, // Borderland
+					35974, // Swamp
+					36011, // Archaic
+					36043, // Floran
+					36118, // Tanor
+					36149, // Dragonspine
+					36181, // Antharas
+					36219, // Western
+					36257, // Hunter
+					36294, // Aaru
+					36326, // Demon
+					36364, // Monastic
+			};
 	// Items
 	private static final int MARK = 9797;
 	private static final int KNIGHT_EPALUETTE = 9912;
 	// Misc
 	private static final int MIN_LEVEL = 85;
-	
-	public Q00511_AwlUnderFoot()
-	{
+
+	public Q00511_AwlUnderFoot() {
 		super(511);
 		addStartNpc(NPCS);
 		addTalkId(NPCS);
-		
+
 		addCondMinLevel(MIN_LEVEL, "Warden-00a.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "Warden-03.html":
 			case "Warden-04.html":
 			case "Warden-05.html":
@@ -100,30 +96,22 @@ public final class Q00511_AwlUnderFoot extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs.isCreated())
-		{
+
+		if (qs.isCreated()) {
 			final Fort fort = npc.getFort();
 			final L2Clan clan = player.getClan();
 			htmltext = ((fort != null) && (clan != null) && (clan.getFortId() == fort.getResidenceId())) ? "Warden-01.htm" : "Warden-00b.htm";
-		}
-		else
-		{
+		} else {
 			final long itemCount = getQuestItemsCount(player, MARK);
-			if (itemCount == 0)
-			{
+			if (itemCount == 0) {
 				htmltext = "Warden-07.html";
-			}
-			else
-			{
-				if (!isSimulated)
-				{
+			} else {
+				if (!isSimulated) {
 					takeItems(player, MARK, itemCount);
 					giveItems(player, KNIGHT_EPALUETTE, itemCount * 2);
 				}

@@ -18,8 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
@@ -28,51 +26,47 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.function.Consumer;
+
 /**
  * Ring Range affect scope implementation. Gathers objects in ring/donut shaped area with start and end range.
+ *
  * @author Nik
  */
-public class RingRange implements IAffectScopeHandler
-{
+public class RingRange implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final int affectRange = skill.getAffectRange();
 		final int affectLimit = skill.getAffectLimit();
 		final int startRange = skill.getFanRange()[2];
-		
+
 		// Target checks.
 		final MutableInt affected = new MutableInt(0);
-		
+
 		// Check and add targets.
 		World.getInstance().forEachVisibleObjectInRadius(target, Creature.class, affectRange, c ->
 		{
-			if ((affectLimit > 0) && (affected.intValue() >= affectLimit))
-			{
+			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;
 			}
-			
-			if (c.isDead())
-			{
+
+			if (c.isDead()) {
 				return;
 			}
-			
+
 			// Targets before the start range are unaffected.
-			if (c.isInRadius2d(target, startRange))
-			{
+			if (c.isInRadius2d(target, startRange)) {
 				return;
 			}
-			
-			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
-			{
+
+			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c)) {
 				return;
 			}
-			
-			if (!GeoData.getInstance().canSeeTarget(target, c))
-			{
+
+			if (!GeoData.getInstance().canSeeTarget(target, c)) {
 				return;
 			}
-			
+
 			affected.increment();
 			action.accept(c);
 		});

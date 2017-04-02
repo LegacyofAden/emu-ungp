@@ -28,38 +28,35 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Olympiad Stat user command.
+ *
  * @author kamy, Zoey76
  */
-public class OlympiadStat implements IUserCommandHandler
-{
+public class OlympiadStat implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		109
-	};
-	
+			{
+					109
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
+
 		int nobleObjId = activeChar.getObjectId();
 		final WorldObject target = activeChar.getTarget();
-		if ((target == null) || !target.isPlayer() || !target.getActingPlayer().isNoble())
-		{
+		if ((target == null) || !target.isPlayer() || !target.getActingPlayer().isNoble()) {
 			activeChar.sendPacket(SystemMessageId.THIS_COMMAND_CAN_ONLY_BE_USED_WHEN_THE_TARGET_IS_AN_AWAKENED_NOBLESSE_EXALTED);
 			return false;
 		}
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.FOR_THE_CURRENT_OLYMPIAD_YOU_HAVE_PARTICIPATED_IN_S1_MATCH_ES_AND_HAD_S2_WIN_S_AND_S3_DEFEAT_S_YOU_CURRENTLY_HAVE_S4_OLYMPIAD_POINT_S);
 		sm.addInt(Olympiad.getInstance().getCompetitionDone(nobleObjId));
 		sm.addInt(Olympiad.getInstance().getCompetitionWon(nobleObjId));
 		sm.addInt(Olympiad.getInstance().getCompetitionLost(nobleObjId));
 		sm.addInt(Olympiad.getInstance().getNoblePoints((PlayerInstance) target));
 		activeChar.sendPacket(sm);
-		
+
 		final SystemMessage sm2 = SystemMessage.getSystemMessage(SystemMessageId.THE_MATCHES_THIS_WEEK_ARE_ALL_CLASS_BATTLES_THE_NUMBER_OF_MATCHES_THAT_ARE_ALLOWED_TO_PARTICIPATE_IS_S1);
 		sm2.addInt(Olympiad.getInstance().getRemainingWeeklyMatches(nobleObjId));
 		sm2.addInt(Olympiad.getInstance().getRemainingWeeklyMatchesClassed(nobleObjId));
@@ -68,15 +65,13 @@ public class OlympiadStat implements IUserCommandHandler
 		activeChar.sendPacket(sm2);
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new OlympiadStat());
 	}
 }

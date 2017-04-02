@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10363_RequestOfTheSeeker.Q10363_RequestOfTheSeeker;
 
 /**
  * Obligations of the Seeker (10364)
+ *
  * @author Gladicek
  */
-public final class Q10364_ObligationsOfTheSeeker extends Quest
-{
+public final class Q10364_ObligationsOfTheSeeker extends Quest {
 	// NPCs
 	private static final int CELIN = 33451;
 	private static final int WALTER = 33452;
@@ -47,9 +46,8 @@ public final class Q10364_ObligationsOfTheSeeker extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 13;
 	private static final int MAX_LEVEL = 25;
-	
-	public Q10364_ObligationsOfTheSeeker()
-	{
+
+	public Q10364_ObligationsOfTheSeeker() {
 		super(10364);
 		addStartNpc(CELIN);
 		addTalkId(CELIN, WALTER, DEP);
@@ -60,59 +58,47 @@ public final class Q10364_ObligationsOfTheSeeker extends Quest
 		addCondNotRace(Race.ERTHEIA, "");
 		addCondCompletedQuest(Q10363_RequestOfTheSeeker.class.getSimpleName(), "33451-04.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33451-02.htm":
 			case "33452-02.html":
 			case "33452-03.html":
 			case "33453-02.html":
-			case "33453-03.html":
-			{
+			case "33453-03.html": {
 				htmltext = event;
 				break;
 			}
-			case "33451-03.htm":
-			{
+			case "33451-03.htm": {
 				qs.startQuest();
 				showOnScreenMsg(player, NpcStringId.USE_THE_YE_SAGIRA_TELEPORT_DEVICE_SHINING_WITH_A_RED_SHIMMER_TO_GO_TO_EXPLORATION_AREA_3, ExShowScreenMessage.TOP_CENTER, 4500);
 				htmltext = event;
 				break;
 			}
-			case "33452-04.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "33452-04.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					htmltext = event;
 					break;
 				}
 				break;
 			}
-			case "33453-04.html":
-			{
-				if (qs.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33453-04.html": {
+				if (qs.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, LEATHER_SHOES, 1);
 						addExp(player, 114_000);
 						addSp(player, 14);
 						qs.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
@@ -122,103 +108,80 @@ public final class Q10364_ObligationsOfTheSeeker extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		
-		if ((qs != null) && qs.isCond(2))
-		{
-			if (giveItemRandomly(killer, npc, DIRTY_PAPER_PIECES, 1, 5, 0.5, true))
-			{
+
+		if ((qs != null) && qs.isCond(2)) {
+			if (giveItemRandomly(killer, npc, DIRTY_PAPER_PIECES, 1, 5, 0.5, true)) {
 				qs.setCond(3);
 				showOnScreenMsg(killer, NpcStringId.USE_THE_YE_SAGIRA_TELEPORT_DEVICE_SHINING_WITH_A_RED_SHIMMER_TO_GO_TO_EXPLORATION_AREA_4, ExShowScreenMessage.TOP_CENTER, 4500);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == CELIN)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == CELIN) {
 					htmltext = "33451-01.htm";
 					break;
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case CELIN:
-					{
-						if ((qs.isCond(1)) && (!isSimulated))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case CELIN: {
+						if ((qs.isCond(1)) && (!isSimulated)) {
 							showOnScreenMsg(player, NpcStringId.USE_THE_YE_SAGIRA_TELEPORT_DEVICE_SHINING_WITH_A_RED_SHIMMER_TO_GO_TO_EXPLORATION_AREA_3, ExShowScreenMessage.TOP_CENTER, 4500);
 							htmltext = "33451-06.html";
 						}
 						break;
 					}
-					case WALTER:
-					{
-						switch (qs.getCond())
-						{
-							case 1:
-							{
+					case WALTER: {
+						switch (qs.getCond()) {
+							case 1: {
 								htmltext = "33452-01.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "33452-05.html";
 								break;
 							}
-							case 3:
-							{
+							case 3: {
 								htmltext = "33452-06.html";
 								break;
 							}
 						}
 						break;
 					}
-					case DEP:
-					{
-						if (qs.isCond(3))
-						{
+					case DEP: {
+						if (qs.isCond(3)) {
 							htmltext = "33453-01.html";
 							break;
 						}
 					}
-						break;
+					break;
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
-					case CELIN:
-					{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
+					case CELIN: {
 						htmltext = "33451-05.html";
 						break;
 					}
-					case WALTER:
-					{
+					case WALTER: {
 						htmltext = "33452-07.html";
 						break;
 					}
-					case DEP:
-					{
+					case DEP: {
 						htmltext = "33453-05.html";
 						break;
 					}

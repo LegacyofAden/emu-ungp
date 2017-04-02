@@ -18,33 +18,29 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Banette AI.
+ *
  * @author St3eT
  */
-public final class Banette extends AbstractNpcAI
-{
+public final class Banette extends AbstractNpcAI {
 	// NPCs
 	private static final int BANETTE = 33114;
-	
-	private Banette()
-	{
+
+	private Banette() {
 		addSpawnId(BANETTE);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (getRandom(4))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (getRandom(4)) {
 			case 0:
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.TRAINING_GROUND_IS_LOCATED_STRAIGHT_AHEAD);
 				break;
@@ -57,16 +53,14 @@ public final class Banette extends AbstractNpcAI
 		}
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Banette();
 	}
 }

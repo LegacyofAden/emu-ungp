@@ -18,6 +18,7 @@
  */
 package instances.FinalEmperialTomb;
 
+import instances.AbstractInstance;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -37,13 +38,10 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.type.EffectZone;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import instances.AbstractInstance;
-
 /**
  * @author Sdw
  */
-public class FinalEmperialTomb extends AbstractInstance
-{
+public class FinalEmperialTomb extends AbstractInstance {
 	// NPCs
 	private static final int IMPERIAL_TOMB_GUIDE = 32011;
 	private static final int HALL_ALARM = 18328;
@@ -58,21 +56,21 @@ public class FinalEmperialTomb extends AbstractInstance
 	private static final int DARK_CHOIR_SHAMAN = 18338;
 	private static final int DARK_CHOIR_PLAYER = 18339;
 	private static final int[] HALL_A_NPCS =
-	{
-		HALL_KEEPER_CAPTAIN,
-		HALL_KEEPER_WIZARD,
-		HALL_KEEPER_GUARD,
-		HALL_KEEPER_SUICIDAL_SOLDIER
-	};
+			{
+					HALL_KEEPER_CAPTAIN,
+					HALL_KEEPER_WIZARD,
+					HALL_KEEPER_GUARD,
+					HALL_KEEPER_SUICIDAL_SOLDIER
+			};
 	private static final int[] HALL_B_NPCS =
-	{
-		DARK_CHOIR_CAPTAIN,
-		DARK_CHOIR_PRIMA_DONNA,
-		DARK_CHOIR_LANCER,
-		DARK_CHOIR_ARCHER,
-		DARK_CHOIR_SHAMAN,
-		DARK_CHOIR_PLAYER
-	};
+			{
+					DARK_CHOIR_CAPTAIN,
+					DARK_CHOIR_PRIMA_DONNA,
+					DARK_CHOIR_LANCER,
+					DARK_CHOIR_ARCHER,
+					DARK_CHOIR_SHAMAN,
+					DARK_CHOIR_PLAYER
+			};
 	// Items
 	private static final int SOUL_BREAKING_ARROW = 8192; // Soul Breaking Arrow
 	private static final int DEWDROP_OF_DESTRUCTION = 8556; // Dewdrop of Destruction
@@ -81,81 +79,80 @@ public class FinalEmperialTomb extends AbstractInstance
 	private static final Location HALL_B_ROOM_CENTER = new Location(-87952, -147079, -9188);
 	// Doors
 	private static final int[] HALL_A_START_DOORS =
-	{
-		17130051,
-		17130052,
-		17130053,
-		17130054,
-		17130055,
-		17130056,
-		17130057,
-		17130058
-	};
+			{
+					17130051,
+					17130052,
+					17130053,
+					17130054,
+					17130055,
+					17130056,
+					17130057,
+					17130058
+			};
 	private static final int[] HALL_A_END_DOORS =
-	{
-		17130042,
-		17130043,
-		17130045
-	};
+			{
+					17130042,
+					17130043,
+					17130045
+			};
 	private static final int[] HALL_B_PLAYER_ATTACKED_DOORS_1 =
-	{
-		17130042,
-		17130043,
-		17130045,
-		17130046
-	};
+			{
+					17130042,
+					17130043,
+					17130045,
+					17130046
+			};
 	private static final int[] HALL_B_PLAYER_ATTACKED_DOORS_2 =
-	{
-		17130061,
-		17130062,
-		17130063,
-		17130064,
-		17130065,
-		17130066,
-		17130067,
-		17130068,
-		17130069,
-		17130070
-	};
+			{
+					17130061,
+					17130062,
+					17130063,
+					17130064,
+					17130065,
+					17130066,
+					17130067,
+					17130068,
+					17130069,
+					17130070
+			};
 	private static final int[] HALL_B_END_DOORS =
-	{
-		17130045,
-		17130046
-	};
+			{
+					17130045,
+					17130046
+			};
 	// Misc
 	private static final String[] HALL_A_GROUPS =
-	{
-		"godard32_1713_011m1",
-		"godard32_1713_012m1",
-		"godard32_1713_013m1",
-		"godard32_1713_014m1",
-		"godard32_1713_015m1",
-		"godard32_1713_016m1",
-		"godard32_1713_017m1",
-		"godard32_1713_018m1",
-	
-	};
+			{
+					"godard32_1713_011m1",
+					"godard32_1713_012m1",
+					"godard32_1713_013m1",
+					"godard32_1713_014m1",
+					"godard32_1713_015m1",
+					"godard32_1713_016m1",
+					"godard32_1713_017m1",
+					"godard32_1713_018m1",
+
+			};
 	private static final String[] HALL_B_GROUPS =
-	{
-		"godard32_1713_023m1",
-		"godard32_1713_024m1",
-		"godard32_1713_025m1",
-		"godard32_1713_026m1",
-		"godard32_1713_027m1",
-		"godard32_1713_028m1",
-		"godard32_1713_029m1"
-	
-	};
+			{
+					"godard32_1713_023m1",
+					"godard32_1713_024m1",
+					"godard32_1713_025m1",
+					"godard32_1713_026m1",
+					"godard32_1713_027m1",
+					"godard32_1713_028m1",
+					"godard32_1713_029m1"
+
+			};
 	private final static String[] DAMAGE_ZONE =
-	{
-		"25_15_frintessaE_02",
-		"25_15_frintessaE_03",
-		"25_15_frintessaE_04"
-	};
+			{
+					"25_15_frintessaE_02",
+					"25_15_frintessaE_03",
+					"25_15_frintessaE_04"
+			};
 	private static final int TEMPLATE_ID = 136;
-	
-	public FinalEmperialTomb()
-	{
+
+	public FinalEmperialTomb() {
 		super(TEMPLATE_ID);
 		addStartNpc(IMPERIAL_TOMB_GUIDE);
 		addTalkId(IMPERIAL_TOMB_GUIDE);
@@ -172,111 +169,85 @@ public class FinalEmperialTomb extends AbstractInstance
 		setCreatureSeeId(this::onCreatureSee, HALL_A_NPCS);
 		setCreatureSeeId(this::onCreatureSee, HALL_B_NPCS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("enterInstance"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
-			
+
 			final ItemInstance dewdropOfDestruction = player.getInventory().getItemByItemId(DEWDROP_OF_DESTRUCTION);
-			if (dewdropOfDestruction != null)
-			{
+			if (dewdropOfDestruction != null) {
 				player.getInventory().destroyItem("Quest", dewdropOfDestruction, player, player);
 			}
-			
+
 			final ItemInstance soulBreakingArrow = player.getInventory().getItemByItemId(SOUL_BREAKING_ARROW);
-			if (soulBreakingArrow != null)
-			{
+			if (soulBreakingArrow != null) {
 				player.getInventory().destroyItem("Quest", soulBreakingArrow, player, player);
 			}
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case HALL_ALARM:
-				{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case HALL_ALARM: {
 					npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.INTRUDERS_SOUND_THE_ALARM);
 					break;
 				}
-				case DARK_CHOIR_CAPTAIN:
-				{
+				case DARK_CHOIR_CAPTAIN: {
 					npc.disableCoreAI(true);
 					npc.setRandomWalking(false);
-					for (String zoneName : DAMAGE_ZONE)
-					{
+					for (String zoneName : DAMAGE_ZONE) {
 						final EffectZone zone = ZoneManager.getInstance().getZoneByName(zoneName, EffectZone.class);
-						if (zone != null)
-						{
+						if (zone != null) {
 							zone.setEnabled(true, instance.getId());
 						}
 					}
 					break;
 				}
 			}
-			if (ArrayUtil.contains(HALL_A_NPCS, npc.getId()))
-			{
+			if (ArrayUtil.contains(HALL_A_NPCS, npc.getId())) {
 				npc.initSeenCreatures();
 			}
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
+
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
 				case DARK_CHOIR_PRIMA_DONNA:
 				case DARK_CHOIR_SHAMAN:
-				case HALL_KEEPER_WIZARD:
-				{
+				case HALL_KEEPER_WIZARD: {
 					final Skill attackSkill = npc.getParameters().getSkillHolder(npc.distance2d(attacker) > 100 ? "W_LongRangeDDMagic" : "W_ShortRangeDDMagic").getSkill();
-					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill))
-					{
+					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill)) {
 						addSkillCastDesire(npc, attacker, attackSkill, 1000000);
-					}
-					else
-					{
+					} else {
 						addAttackDesire(npc, attacker);
 					}
 					break;
 				}
 				case HALL_KEEPER_CAPTAIN:
 				case HALL_KEEPER_GUARD:
-				case DARK_CHOIR_LANCER:
-				{
+				case DARK_CHOIR_LANCER: {
 					final Skill attackSkill = npc.getParameters().getSkillHolder("PhysicalSpecial").getSkill();
-					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill))
-					{
+					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill)) {
 						addSkillCastDesire(npc, attacker, attackSkill, 1000000);
-					}
-					else
-					{
+					} else {
 						addAttackDesire(npc, attacker);
 					}
 					break;
 				}
-				case HALL_KEEPER_SUICIDAL_SOLDIER:
-				{
-					if (npc.distance2d(attacker) < 200)
-					{
+				case HALL_KEEPER_SUICIDAL_SOLDIER: {
+					if (npc.distance2d(attacker) < 200) {
 						final Skill suicideSkill = npc.getParameters().getSkillHolder("SelfRangeDDMagic").getSkill();
-						if ((suicideSkill != null) && !npc.isSkillDisabled(suicideSkill))
-						{
+						if ((suicideSkill != null) && !npc.isSkillDisabled(suicideSkill)) {
 							addSkillCastDesire(npc, attacker, suicideSkill, 1000000);
 						}
 					}
@@ -286,35 +257,27 @@ public class FinalEmperialTomb extends AbstractInstance
 		}
 		return super.onAttack(npc, attacker, damage, isSummon, skill);
 	}
-	
+
 	@Override
-	public String onFactionCall(Npc npc, Npc caller, PlayerInstance attacker, boolean isSummon)
-	{
+	public String onFactionCall(Npc npc, Npc caller, PlayerInstance attacker, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
+
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
 				case DARK_CHOIR_PRIMA_DONNA:
 				case DARK_CHOIR_SHAMAN:
-				case HALL_KEEPER_WIZARD:
-				{
+				case HALL_KEEPER_WIZARD: {
 					final Skill attackSkill = npc.getParameters().getSkillHolder(npc.distance2d(attacker) > 100 ? "W_LongRangeDDMagic" : "W_ShortRangeDDMagic").getSkill();
-					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill))
-					{
+					if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill)) {
 						addSkillCastDesire(npc, attacker, attackSkill, 1000000);
-					}
-					else
-					{
+					} else {
 						addAttackDesire(npc, attacker);
 					}
 					break;
 				}
 				case HALL_KEEPER_CAPTAIN:
 				case HALL_KEEPER_GUARD:
-				case DARK_CHOIR_LANCER:
-				{
+				case DARK_CHOIR_LANCER: {
 					addAttackDesire(npc, attacker);
 					break;
 				}
@@ -322,29 +285,21 @@ public class FinalEmperialTomb extends AbstractInstance
 		}
 		return super.onFactionCall(npc, caller, attacker, isSummon);
 	}
-	
+
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon)
-	{
+	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
+
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
 				case DARK_CHOIR_PRIMA_DONNA:
 				case DARK_CHOIR_SHAMAN:
-				case HALL_KEEPER_WIZARD:
-				{
-					if ((Rnd.get(100) < 50) && caster.isInCategory(CategoryType.CLERIC_GROUP))
-					{
+				case HALL_KEEPER_WIZARD: {
+					if ((Rnd.get(100) < 50) && caster.isInCategory(CategoryType.CLERIC_GROUP)) {
 						final Skill attackSkill = npc.getParameters().getSkillHolder(npc.distance2d(caster) > 100 ? "W_LongRangeDDMagic" : "W_ShortRangeDDMagic").getSkill();
-						if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill))
-						{
+						if ((attackSkill != null) && !npc.isSkillDisabled(attackSkill)) {
 							addSkillCastDesire(npc, caster, attackSkill, 1000000);
-						}
-						else
-						{
+						} else {
 							addAttackDesire(npc, caster);
 						}
 					}
@@ -353,10 +308,8 @@ public class FinalEmperialTomb extends AbstractInstance
 				case HALL_KEEPER_CAPTAIN:
 				case HALL_KEEPER_GUARD:
 				case DARK_CHOIR_LANCER:
-				case DARK_CHOIR_ARCHER:
-				{
-					if ((Rnd.get(100) < 20) && caster.isInCategory(CategoryType.CLERIC_GROUP))
-					{
+				case DARK_CHOIR_ARCHER: {
+					if ((Rnd.get(100) < 20) && caster.isInCategory(CategoryType.CLERIC_GROUP)) {
 						addAttackDesire(npc, caster);
 					}
 					break;
@@ -365,68 +318,50 @@ public class FinalEmperialTomb extends AbstractInstance
 		}
 		return super.onSkillSee(npc, caster, skill, targets, isSummon);
 	}
-	
-	private void onCreatureSee(OnCreatureSee event)
-	{
+
+	private void onCreatureSee(OnCreatureSee event) {
 		final Creature creature = event.getSeen();
 		final Attackable npc = event.getSeer().asAttackable();
 		final Instance instance = npc.getInstanceWorld();
-		
-		if (isInInstance(instance) && creature.isPlayable())
-		{
-			switch (npc.getId())
-			{
+
+		if (isInInstance(instance) && creature.isPlayable()) {
+			switch (npc.getId()) {
 				case DARK_CHOIR_PRIMA_DONNA:
 				case DARK_CHOIR_SHAMAN:
-				case HALL_KEEPER_WIZARD:
-				{
+				case HALL_KEEPER_WIZARD: {
 					final Skill skill = npc.getParameters().getSkillHolder(npc.distance2d(creature) > 100 ? "W_LongRangeDDMagic" : "W_ShortRangeDDMagic").getSkill();
-					if ((skill != null) && !npc.isSkillDisabled(skill))
-					{
+					if ((skill != null) && !npc.isSkillDisabled(skill)) {
 						addSkillCastDesire(npc, creature, skill, 1000000);
-					}
-					else
-					{
+					} else {
 						addAttackDesire(npc, creature);
 					}
-					if (creature.isInCategory(CategoryType.SUMMON_NPC_GROUP))
-					{
+					if (creature.isInCategory(CategoryType.SUMMON_NPC_GROUP)) {
 						npc.addDamageHate(creature, 0, 200);
 					}
 					break;
 				}
 				case HALL_KEEPER_CAPTAIN:
 				case HALL_KEEPER_GUARD:
-				case DARK_CHOIR_LANCER:
-				{
+				case DARK_CHOIR_LANCER: {
 					final Skill selfBuff = npc.getParameters().getSkillHolder("SelfBuff").getSkill();
-					if ((selfBuff != null) && !creature.isInCategory(CategoryType.SUMMON_NPC_GROUP) && !npc.isSkillDisabled(selfBuff))
-					{
+					if ((selfBuff != null) && !creature.isInCategory(CategoryType.SUMMON_NPC_GROUP) && !npc.isSkillDisabled(selfBuff)) {
 						addSkillCastDesire(npc, npc, selfBuff, 1000000);
-					}
-					else if (npc.isInMyTerritory())
-					{
+					} else if (npc.isInMyTerritory()) {
 						addAttackDesire(npc, creature);
 					}
 					break;
 				}
-				case HALL_KEEPER_SUICIDAL_SOLDIER:
-				{
-					if (npc.isInMyTerritory() && !creature.isInCategory(CategoryType.SUMMON_NPC_GROUP))
-					{
+				case HALL_KEEPER_SUICIDAL_SOLDIER: {
+					if (npc.isInMyTerritory() && !creature.isInCategory(CategoryType.SUMMON_NPC_GROUP)) {
 						addAttackDesire(npc, creature);
 					}
 					break;
 				}
-				case DARK_CHOIR_ARCHER:
-				{
+				case DARK_CHOIR_ARCHER: {
 					final Skill skill = npc.getParameters().getSkillHolder("PhysicalSpecial").getSkill();
-					if ((skill != null) && !npc.isSkillDisabled(skill))
-					{
+					if ((skill != null) && !npc.isSkillDisabled(skill)) {
 						addSkillCastDesire(npc, creature, skill, 1000000);
-					}
-					else
-					{
+					} else {
 						addAttackDesire(npc, creature);
 					}
 					break;
@@ -434,24 +369,18 @@ public class FinalEmperialTomb extends AbstractInstance
 			}
 		}
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (npc.getId())
-			{
-				case HALL_ALARM:
-				{
-					for (int doorId : HALL_A_START_DOORS)
-					{
+		if (isInInstance(instance)) {
+			switch (npc.getId()) {
+				case HALL_ALARM: {
+					for (int doorId : HALL_A_START_DOORS) {
 						instance.openCloseDoor(doorId, true);
 					}
 					npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.ALARM_SYSTEM_DESTROYED_INTRUDER_EXCLUDED);
-					for (String group : HALL_A_GROUPS)
-					{
+					for (String group : HALL_A_GROUPS) {
 						instance.getNpcsOfGroup(group).forEach(mob ->
 						{
 							mob.setIsRunning(true);
@@ -463,29 +392,22 @@ public class FinalEmperialTomb extends AbstractInstance
 				}
 				case HALL_KEEPER_CAPTAIN:
 				case HALL_KEEPER_GUARD:
-				case DARK_CHOIR_LANCER:
-				{
-					if (Rnd.get(100) < 5)
-					{
+				case DARK_CHOIR_LANCER: {
+					if (Rnd.get(100) < 5) {
 						npc.dropItem(killer, DEWDROP_OF_DESTRUCTION, 1);
 					}
 					break;
 				}
-				case DARK_CHOIR_PLAYER:
-				{
-					if (instance.getAliveNpcs(npc.getId()).isEmpty())
-					{
-						for (int doorId : HALL_B_PLAYER_ATTACKED_DOORS_1)
-						{
+				case DARK_CHOIR_PLAYER: {
+					if (instance.getAliveNpcs(npc.getId()).isEmpty()) {
+						for (int doorId : HALL_B_PLAYER_ATTACKED_DOORS_1) {
 							instance.openCloseDoor(doorId, false);
 						}
-						for (int doorId : HALL_B_PLAYER_ATTACKED_DOORS_2)
-						{
+						for (int doorId : HALL_B_PLAYER_ATTACKED_DOORS_2) {
 							instance.openCloseDoor(doorId, true);
 						}
-						
-						for (String group : HALL_B_GROUPS)
-						{
+
+						for (String group : HALL_B_GROUPS) {
 							instance.getNpcsOfGroup(group).forEach(mob ->
 							{
 								mob.setIsRunning(true);
@@ -495,36 +417,27 @@ public class FinalEmperialTomb extends AbstractInstance
 					}
 					break;
 				}
-				case DARK_CHOIR_CAPTAIN:
-				{
-					if (instance.getAliveNpcs(npc.getId()).isEmpty())
-					{
-						for (int doorId : HALL_B_END_DOORS)
-						{
+				case DARK_CHOIR_CAPTAIN: {
+					if (instance.getAliveNpcs(npc.getId()).isEmpty()) {
+						for (int doorId : HALL_B_END_DOORS) {
 							instance.openCloseDoor(doorId, true);
 						}
 					}
-					if (Rnd.get(100) < 50)
-					{
+					if (Rnd.get(100) < 50) {
 						npc.dropItem(killer, SOUL_BREAKING_ARROW, 1);
 					}
 					break;
 				}
 			}
-			
-			switch (instance.getStatus())
-			{
-				case 1:
-				{
+
+			switch (instance.getStatus()) {
+				case 1: {
 					boolean hallAEmpty = true;
-					for (String group : HALL_A_GROUPS)
-					{
+					for (String group : HALL_A_GROUPS) {
 						hallAEmpty &= instance.getNpcsOfGroup(group, mob -> !mob.isDead()).isEmpty();
 					}
-					if (hallAEmpty)
-					{
-						for (int doorId : HALL_A_END_DOORS)
-						{
+					if (hallAEmpty) {
+						for (int doorId : HALL_A_END_DOORS) {
 							instance.openCloseDoor(doorId, true);
 						}
 						instance.setStatus(2);
@@ -533,12 +446,11 @@ public class FinalEmperialTomb extends AbstractInstance
 				}
 			}
 		}
-		
+
 		return super.onKill(npc, killer, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FinalEmperialTomb();
 	}
 }

@@ -23,15 +23,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00015_SweetWhispers.Q00015_SweetWhispers;
 
 /**
  * Light And Darkness (17)
+ *
  * @author Gladicek
  */
-public final class Q00017_LightAndDarkness extends Quest
-{
+public final class Q00017_LightAndDarkness extends Quest {
 	// NPCs
 	private static final int HIERARCH = 31517;
 	private static final int SAINT_ALTAR_1 = 31508;
@@ -42,9 +41,8 @@ public final class Q00017_LightAndDarkness extends Quest
 	private static final int BLOOD_OF_SAINT = 7168;
 	// Misc
 	private static final int MIN_LEVEL = 61;
-	
-	public Q00017_LightAndDarkness()
-	{
+
+	public Q00017_LightAndDarkness() {
 		super(17);
 		addStartNpc(HIERARCH);
 		addTalkId(HIERARCH, SAINT_ALTAR_1, SAINT_ALTAR_2, SAINT_ALTAR_3, SAINT_ALTAR_4);
@@ -52,92 +50,68 @@ public final class Q00017_LightAndDarkness extends Quest
 		addCondMinLevel(MIN_LEVEL, "31517-07.html");
 		addCondCompletedQuest(Q00015_SweetWhispers.class.getSimpleName(), "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "31517-03.htm":
-			{
+
+		switch (event) {
+			case "31517-03.htm": {
 				qs.startQuest();
 				giveItems(player, BLOOD_OF_SAINT, 4);
 			}
-				break;
-			case "31508-02.htm":
-			{
-				if (qs.isCond(1))
-				{
-					if (hasQuestItems(player, BLOOD_OF_SAINT))
-					{
+			break;
+			case "31508-02.htm": {
+				if (qs.isCond(1)) {
+					if (hasQuestItems(player, BLOOD_OF_SAINT)) {
 						qs.setMemoState(1);
 						qs.setCond(2);
 						takeItems(player, BLOOD_OF_SAINT, 1);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = "31508-03.html";
 					}
 				}
 				break;
 			}
-			case "31509-02.htm":
-			{
-				if (qs.isCond(2))
-				{
-					if (hasQuestItems(player, BLOOD_OF_SAINT))
-					{
+			case "31509-02.htm": {
+				if (qs.isCond(2)) {
+					if (hasQuestItems(player, BLOOD_OF_SAINT)) {
 						qs.setMemoState(2);
 						qs.setCond(3);
 						takeItems(player, BLOOD_OF_SAINT, 1);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = "31512-03.html";
 					}
 				}
 				break;
 			}
-			case "31510-02.htm":
-			{
-				if (qs.isCond(3))
-				{
-					if (hasQuestItems(player, BLOOD_OF_SAINT))
-					{
+			case "31510-02.htm": {
+				if (qs.isCond(3)) {
+					if (hasQuestItems(player, BLOOD_OF_SAINT)) {
 						qs.setMemoState(3);
 						qs.setCond(4);
 						takeItems(player, BLOOD_OF_SAINT, 1);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = "31512-03.html";
 					}
 				}
 				break;
 			}
-			case "31511-02.htm":
-			{
-				if (qs.isCond(4))
-				{
-					if (hasQuestItems(player, BLOOD_OF_SAINT))
-					{
+			case "31511-02.htm": {
+				if (qs.isCond(4)) {
+					if (hasQuestItems(player, BLOOD_OF_SAINT)) {
 						qs.setMemoState(4);
 						qs.setCond(5);
 						takeItems(player, BLOOD_OF_SAINT, 1);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = "31512-03.html";
 					}
 				}
@@ -146,61 +120,42 @@ public final class Q00017_LightAndDarkness extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState qs = getQuestState(player, true);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == HIERARCH)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == HIERARCH) {
 					htmltext = "31517-01.html";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case HIERARCH:
-					{
-						if ((qs.getCond() >= 1) && (qs.getCond() <= 4))
-						{
-							if (hasQuestItems(player, BLOOD_OF_SAINT))
-							{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case HIERARCH: {
+						if ((qs.getCond() >= 1) && (qs.getCond() <= 4)) {
+							if (hasQuestItems(player, BLOOD_OF_SAINT)) {
 								htmltext = "31517-04.html";
-							}
-							else
-							{
-								if (!isSimulated)
-								{
+							} else {
+								if (!isSimulated) {
 									qs.exitQuest(true, true);
 								}
 								htmltext = "31517-06.html";
 							}
 							break;
-						}
-						else if (qs.isCond(5))
-						{
-							if (!isSimulated)
-							{
-								if ((player.getLevel() >= MIN_LEVEL))
-								{
+						} else if (qs.isCond(5)) {
+							if (!isSimulated) {
+								if ((player.getLevel() >= MIN_LEVEL)) {
 									addExp(player, 1_469_840);
 									addSp(player, 352);
 									qs.exitQuest(false, true);
-								}
-								else
-								{
+								} else {
 									htmltext = getNoQuestLevelRewardMsg(player);
 								}
 								break;
@@ -209,61 +164,41 @@ public final class Q00017_LightAndDarkness extends Quest
 						}
 						break;
 					}
-					case SAINT_ALTAR_1:
-					{
-						if (qs.isCond(1))
-						{
+					case SAINT_ALTAR_1: {
+						if (qs.isCond(1)) {
 							htmltext = "31508-01.html";
-						}
-						else
-						{
-							if (qs.isMemoState(1))
-							{
+						} else {
+							if (qs.isMemoState(1)) {
 								htmltext = "31508-04.html";
 							}
 						}
 						break;
 					}
-					case SAINT_ALTAR_2:
-					{
-						if (qs.isCond(2))
-						{
+					case SAINT_ALTAR_2: {
+						if (qs.isCond(2)) {
 							htmltext = "31509-01.html";
-						}
-						else
-						{
-							if (qs.isMemoState(2))
-							{
+						} else {
+							if (qs.isMemoState(2)) {
 								htmltext = "31509-04.html";
 							}
 						}
 						break;
 					}
-					case SAINT_ALTAR_3:
-					{
-						if (qs.isCond(3))
-						{
+					case SAINT_ALTAR_3: {
+						if (qs.isCond(3)) {
 							htmltext = "31510-01.html";
-						}
-						else
-						{
-							if (qs.isMemoState(3))
-							{
+						} else {
+							if (qs.isMemoState(3)) {
 								htmltext = "31510-04.html";
 							}
 						}
 						break;
 					}
-					case SAINT_ALTAR_4:
-					{
-						if (qs.isCond(4))
-						{
+					case SAINT_ALTAR_4: {
+						if (qs.isCond(4)) {
 							htmltext = "31511-01.html";
-						}
-						else
-						{
-							if (qs.isMemoState(4))
-							{
+						} else {
+							if (qs.isMemoState(4)) {
 								htmltext = "31511-04.html";
 							}
 						}
@@ -272,8 +207,7 @@ public final class Q00017_LightAndDarkness extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

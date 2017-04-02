@@ -32,31 +32,26 @@ import org.l2junity.gameserver.network.client.send.ValidateLocation;
 
 /**
  * Teleport player to summoned npc effect implementation.
+ *
  * @author Nik
  */
-public final class InstantTeleportToNpc extends AbstractEffect
-{
+public final class InstantTeleportToNpc extends AbstractEffect {
 	private final int _npcId;
-	
-	public InstantTeleportToNpc(StatsSet params)
-	{
+
+	public InstantTeleportToNpc(StatsSet params) {
 		_npcId = params.getInt("npcId");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
 		final ILocational teleLocation = caster.getSummonedNpcs().stream().filter(npc -> npc.getId() == _npcId).findAny().orElse(null);
-		if (teleLocation != null)
-		{
-			if (targetCreature.isInRadius2d(teleLocation, 900))
-			{
+		if (teleLocation != null) {
+			if (targetCreature.isInRadius2d(teleLocation, 900)) {
 				targetCreature.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 				targetCreature.broadcastPacket(new FlyToLocation(targetCreature, teleLocation, FlyType.DUMMY));
 				targetCreature.abortAttack();
@@ -64,9 +59,7 @@ public final class InstantTeleportToNpc extends AbstractEffect
 				targetCreature.setXYZ(teleLocation);
 				targetCreature.broadcastPacket(new ValidateLocation(targetCreature));
 				targetCreature.revalidateZone(true);
-			}
-			else
-			{
+			} else {
 				targetCreature.teleToLocation(teleLocation);
 			}
 		}

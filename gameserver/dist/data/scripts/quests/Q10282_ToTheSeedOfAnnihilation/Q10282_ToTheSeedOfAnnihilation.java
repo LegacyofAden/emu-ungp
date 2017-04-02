@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * To the Seed of Destruction (10269)
+ *
  * @author nonom
  */
-public final class Q10282_ToTheSeedOfAnnihilation extends Quest
-{
+public final class Q10282_ToTheSeedOfAnnihilation extends Quest {
 	// NPCs
 	private static final int KBALDIR = 32733;
 	private static final int KLEMIS = 32734;
@@ -39,36 +39,30 @@ public final class Q10282_ToTheSeedOfAnnihilation extends Quest
 	private static final int EAR = 17527; // Scroll: Enchant Armor (R-grade)
 	// Misc
 	private static final int MIN_LV = 85;
-	
-	public Q10282_ToTheSeedOfAnnihilation()
-	{
+
+	public Q10282_ToTheSeedOfAnnihilation() {
 		super(10282);
 		addStartNpc(KBALDIR);
 		addTalkId(KBALDIR, KLEMIS);
 		registerQuestItems(SOA_ORDERS);
 		addCondMinLevel(MIN_LV, "32733-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "32733-07.htm":
-			{
+
+		switch (event) {
+			case "32733-07.htm": {
 				st.startQuest();
 				giveItems(player, SOA_ORDERS, 1);
 				break;
 			}
-			case "32734-02.htm":
-			{
+			case "32734-02.htm": {
 				giveAdena(player, 212182, true);
 				giveItems(player, EAR, 5);
 				addExp(player, 1148480);
@@ -79,55 +73,41 @@ public final class Q10282_ToTheSeedOfAnnihilation extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final int npcId = npc.getId();
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
-				if (npcId == KBALDIR)
-				{
+		switch (st.getState()) {
+			case State.COMPLETED: {
+				if (npcId == KBALDIR) {
 					htmltext = "32733-09.htm";
-				}
-				else if (npcId == KLEMIS)
-				{
+				} else if (npcId == KLEMIS) {
 					htmltext = "32734-03.htm";
 				}
 				break;
 			}
-			case State.CREATED:
-			{
-				if (npcId == KBALDIR)
-				{
+			case State.CREATED: {
+				if (npcId == KBALDIR) {
 					htmltext = "32733-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
-					if (npcId == KBALDIR)
-					{
+			case State.STARTED: {
+				if (st.isCond(1)) {
+					if (npcId == KBALDIR) {
 						htmltext = "32733-08.htm";
-					}
-					else if (npcId == KLEMIS)
-					{
+					} else if (npcId == KLEMIS) {
 						htmltext = "32734-01.htm";
 					}
 				}
 			}
-				break;
+			break;
 		}
 		return htmltext;
 	}

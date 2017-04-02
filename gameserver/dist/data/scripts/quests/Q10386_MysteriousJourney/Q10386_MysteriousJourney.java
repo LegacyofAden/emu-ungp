@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Mysterious Journey (10386)
+ *
  * @author St3eT
  */
-public final class Q10386_MysteriousJourney extends Quest
-{
+public final class Q10386_MysteriousJourney extends Quest {
 	// NPCs
 	private static final int TAPOY = 30499;
 	private static final int HESED = 33780;
@@ -41,68 +41,56 @@ public final class Q10386_MysteriousJourney extends Quest
 	private static final int EWR = 17526; // Scroll: Enchant Weapon (R-grade)
 	// Misc
 	private static final int MIN_LEVEL = 93;
-	
-	public Q10386_MysteriousJourney()
-	{
+
+	public Q10386_MysteriousJourney() {
 		super(10386);
 		addStartNpc(TAPOY);
 		addTalkId(TAPOY, HESED, SEAL_WATCHMAN, VERNA);
 		registerQuestItems(VACCINE_BOX);
 		addCondMinLevel(MIN_LEVEL, "30499-05.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "30499-02.htm":
 			case "33780-02.html":
 			case "33780-03.html":
 			case "33797-02.html":
-			case "33796-02.html":
-			{
+			case "33796-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "30499-03.htm":
-			{
+			case "30499-03.htm": {
 				st.startQuest();
 				giveItems(player, VACCINE_BOX, 1);
 				playMovie(player, Movie.SC_SOULISLAND_QUEST);
 				htmltext = event;
 				break;
 			}
-			case "33780-04.html":
-			{
-				if (st.isCond(1))
-				{
+			case "33780-04.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33797-03.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33797-03.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					takeItems(player, VACCINE_BOX, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33796-03.html":
-			{
-				if (st.isCond(3))
-				{
+			case "33796-03.html": {
+				if (st.isCond(3)) {
 					st.setCond(4, true);
 					htmltext = event;
 				}
@@ -111,53 +99,40 @@ public final class Q10386_MysteriousJourney extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == TAPOY)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == TAPOY) {
 					htmltext = "30499-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case TAPOY:
-					{
-						if (st.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case TAPOY: {
+						if (st.isCond(1)) {
 							htmltext = "30499-04.html";
 						}
 						break;
 					}
-					case HESED:
-					{
-						switch (st.getCond())
-						{
+					case HESED: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "33780-01.html";
 								break;
 							case 2:
 								htmltext = "33780-05.html";
 								break;
-							case 4:
-							{
-								if (!isSimulated)
-								{
+							case 4: {
+								if (!isSimulated) {
 									giveAdena(player, 58_707, true);
 									giveItems(player, EWR, 1);
-									if (player.getLevel() >= MIN_LEVEL)
-									{
+									if (player.getLevel() >= MIN_LEVEL) {
 										addExp(player, 27_244_350);
 										addSp(player, 6_538);
 									}
@@ -169,26 +144,18 @@ public final class Q10386_MysteriousJourney extends Quest
 						}
 						break;
 					}
-					case SEAL_WATCHMAN:
-					{
-						if (st.isCond(2))
-						{
+					case SEAL_WATCHMAN: {
+						if (st.isCond(2)) {
 							htmltext = "33797-01.html";
-						}
-						else if (st.isCond(3))
-						{
+						} else if (st.isCond(3)) {
 							htmltext = "33797-03.html";
 						}
 						break;
 					}
-					case VERNA:
-					{
-						if (st.isCond(3))
-						{
+					case VERNA: {
+						if (st.isCond(3)) {
 							htmltext = "33796-01.html";
-						}
-						else if (st.isCond(4))
-						{
+						} else if (st.isCond(4)) {
 							htmltext = "33796-04.html";
 						}
 						break;
@@ -196,14 +163,10 @@ public final class Q10386_MysteriousJourney extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == TAPOY)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == TAPOY) {
 					htmltext = "30499-06.html";
-				}
-				else if (npc.getId() == HESED)
-				{
+				} else if (npc.getId() == HESED) {
 					htmltext = "33780-07.html";
 				}
 				break;

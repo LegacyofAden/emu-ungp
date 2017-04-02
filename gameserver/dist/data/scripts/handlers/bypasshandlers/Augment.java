@@ -25,25 +25,20 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.ExShowVariationCancelWindow;
 import org.l2junity.gameserver.network.client.send.ExShowVariationMakeWindow;
 
-public class Augment implements IBypassHandler
-{
+public class Augment implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"Augment"
-	};
-	
+			{
+					"Augment"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		try
-		{
-			switch (Integer.parseInt(command.substring(8, 9).trim()))
-			{
+
+		try {
+			switch (Integer.parseInt(command.substring(8, 9).trim())) {
 				case 1:
 					activeChar.sendPacket(ExShowVariationMakeWindow.STATIC_PACKET);
 					return true;
@@ -51,22 +46,18 @@ public class Augment implements IBypassHandler
 					activeChar.sendPacket(ExShowVariationCancelWindow.STATIC_PACKET);
 					return true;
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Augment());
 	}
 }

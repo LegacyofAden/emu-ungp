@@ -24,29 +24,25 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class Link implements IBypassHandler
-{
+public class Link implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"Link"
-	};
-	
+			{
+					"Link"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
 		String htmlPath = command.substring(4).trim();
-		if (htmlPath.isEmpty())
-		{
+		if (htmlPath.isEmpty()) {
 			_log.warn("Player " + activeChar.getName() + " sent empty link html!");
 			return false;
 		}
-		
-		if (htmlPath.contains(".."))
-		{
+
+		if (htmlPath.contains("..")) {
 			_log.warn("Player " + activeChar.getName() + " sent invalid link html: " + htmlPath);
 			return false;
 		}
-		
+
 		String filename = "data/html/" + htmlPath;
 		final NpcHtmlMessage html = new NpcHtmlMessage(target != null ? target.getObjectId() : 0);
 		html.setFile(activeChar.getHtmlPrefix(), filename);
@@ -54,15 +50,13 @@ public class Link implements IBypassHandler
 		activeChar.sendPacket(html);
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Link());
 	}
 }

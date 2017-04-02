@@ -27,20 +27,17 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * Wrong Casting effect implementation.
  */
-public final class PumpWrongCasting extends AbstractEffect
-{
+public final class PumpWrongCasting extends AbstractEffect {
 	private final int _magicType;
 	private final int _chance;
-	
-	public PumpWrongCasting(StatsSet params)
-	{
+
+	public PumpWrongCasting(StatsSet params) {
 		_magicType = params.getInt("magicType");
 		_chance = params.getInt("chance");
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeCastChanceValue(_magicType, (_chance / 100) + 1, MathUtil::mul);
 	}
 }

@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class CheckSexSkillCondition implements ISkillCondition
-{
+public class CheckSexSkillCondition implements ISkillCondition {
 	private final boolean _isFemale;
-	
-	public CheckSexSkillCondition(StatsSet params)
-	{
+
+	public CheckSexSkillCondition(StatsSet params) {
 		_isFemale = params.getBoolean("isFemale");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isPlayer() && (caster.getActingPlayer().getAppearance().getSex() == _isFemale);
 	}
 }

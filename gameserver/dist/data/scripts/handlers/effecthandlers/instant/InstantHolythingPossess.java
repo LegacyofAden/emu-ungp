@@ -30,25 +30,22 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Take Castle effect implementation.
+ *
  * @author Adry_85, St3eT
  */
-public final class InstantHolythingPossess extends AbstractEffect
-{
+public final class InstantHolythingPossess extends AbstractEffect {
 	private final CastleSide _side;
-	
-	public InstantHolythingPossess(StatsSet params)
-	{
+
+	public InstantHolythingPossess(StatsSet params) {
 		_side = params.getEnum("side", CastleSide.class);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (!caster.isPlayer())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (!caster.isPlayer()) {
 			return;
 		}
-		
+
 		final Castle castle = CastleManager.getInstance().getCastle(caster);
 		castle.engrave(caster.getClan(), target, _side);
 	}

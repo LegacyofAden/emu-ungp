@@ -28,17 +28,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpCannotUseTargetWithPrivateStoreSkillCondition implements ISkillCondition
-{
-	public OpCannotUseTargetWithPrivateStoreSkillCondition(StatsSet params)
-	{
+public class OpCannotUseTargetWithPrivateStoreSkillCondition implements ISkillCondition {
+	public OpCannotUseTargetWithPrivateStoreSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target != null) && target.isPlayer() && (target.getActingPlayer().getPrivateStoreType() != PrivateStoreType.NONE))
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target != null) && target.isPlayer() && (target.getActingPlayer().getPrivateStoreType() != PrivateStoreType.NONE)) {
 			return false;
 		}
 		return true;

@@ -18,9 +18,7 @@
  */
 package ai.individual.KetraOrcOutpust.KetraOrcSupport;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -29,36 +27,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Ketra Orc Support AI.<br>
+ *
  * @authors Nyaran
  */
-public final class KetraOrcSupport extends AbstractNpcAI
-{
-	private static class BuffsData
-	{
+public final class KetraOrcSupport extends AbstractNpcAI {
+	private static class BuffsData {
 		private final int _skill;
 		private final int _cost;
-		
-		public BuffsData(int skill, int cost)
-		{
+
+		public BuffsData(int skill, int cost) {
 			_skill = skill;
 			_cost = cost;
 		}
-		
-		public Skill getSkill()
-		{
+
+		public Skill getSkill() {
 			return SkillData.getInstance().getSkill(_skill, 1);
 		}
-		
-		public int getCost()
-		{
+
+		public int getCost() {
 			return _cost;
 		}
 	}
-	
+
 	// NPCs
 	private static final int KADUN = 31370; // Hierarch
 	private static final int WAHKAN = 31371; // Messenger
@@ -70,18 +65,17 @@ public final class KetraOrcSupport extends AbstractNpcAI
 	// Items
 	private static final int HORN = 7186;
 	private static final int[] KETRA_MARKS =
-	{
-		7211, // Mark of Ketra's Alliance - Level 1
-		7212, // Mark of Ketra's Alliance - Level 2
-		7213, // Mark of Ketra's Alliance - Level 3
-		7214, // Mark of Ketra's Alliance - Level 4
-		7215, // Mark of Ketra's Alliance - Level 5
-	};
+			{
+					7211, // Mark of Ketra's Alliance - Level 1
+					7212, // Mark of Ketra's Alliance - Level 2
+					7213, // Mark of Ketra's Alliance - Level 3
+					7214, // Mark of Ketra's Alliance - Level 4
+					7215, // Mark of Ketra's Alliance - Level 5
+			};
 	// Misc
 	private static final Map<Integer, BuffsData> BUFF = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		BUFF.put(1, new BuffsData(4359, 2)); // Focus: Requires 2 Buffalo Horns
 		BUFF.put(2, new BuffsData(4360, 2)); // Death Whisper: Requires 2 Buffalo Horns
 		BUFF.put(3, new BuffsData(4345, 3)); // Might: Requires 3 Buffalo Horns
@@ -91,64 +85,50 @@ public final class KetraOrcSupport extends AbstractNpcAI
 		BUFF.put(7, new BuffsData(4356, 6)); // Empower: Requires 6 Buffalo Horns
 		BUFF.put(8, new BuffsData(4357, 6)); // Haste: Requires 6 Buffalo Horns
 	}
-	
-	private KetraOrcSupport()
-	{
+
+	private KetraOrcSupport() {
 		addFirstTalkId(KADUN, WAHKAN, ASEFA, ATAN, JAFF, JUMARA, KURFA);
 		addTalkId(ASEFA, KURFA, JAFF);
 		addStartNpc(KURFA, JAFF);
 	}
-	
-	private int getAllianceLevel(PlayerInstance player)
-	{
-		for (int i = 0; i < KETRA_MARKS.length; i++)
-		{
-			if (hasQuestItems(player, KETRA_MARKS[i]))
-			{
+
+	private int getAllianceLevel(PlayerInstance player) {
+		for (int i = 0; i < KETRA_MARKS.length; i++) {
+			if (hasQuestItems(player, KETRA_MARKS[i])) {
 				return (i + 1);
 			}
 		}
 		return 0;
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (Util.isDigit(event) && BUFF.containsKey(Integer.parseInt(event)))
-		{
+		if (Util.isDigit(event) && BUFF.containsKey(Integer.parseInt(event))) {
 			final BuffsData buff = BUFF.get(Integer.parseInt(event));
-			if (getQuestItemsCount(player, HORN) >= buff.getCost())
-			{
+			if (getQuestItemsCount(player, HORN) >= buff.getCost()) {
 				takeItems(player, HORN, buff.getCost());
 				npc.setTarget(player);
 				npc.doCast(buff.getSkill());
 				npc.setCurrentHpMp(npc.getMaxHp(), npc.getMaxMp());
-			}
-			else
-			{
+			} else {
 				htmltext = "31372-02.html";
 			}
-		}
-		else if (event.equals("Teleport"))
-		{
+		} else if (event.equals("Teleport")) {
 			final String listName = "list" + getAllianceLevel(player);
 			final TeleportHolder holder = TeleportersData.getInstance().getHolder(npc.getId(), listName);
-			if (holder != null)
-			{
+			if (holder != null) {
 				holder.showTeleportList(player, npc);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final int AllianceLevel = getAllianceLevel(player);
-		switch (npc.getId())
-		{
+		switch (npc.getId()) {
 			case KADUN:
 				htmltext = (AllianceLevel > 0) ? "31370-friend.html" : "31370-no.html";
 				break;
@@ -165,8 +145,7 @@ public final class KetraOrcSupport extends AbstractNpcAI
 				htmltext = (AllianceLevel > 0) ? (AllianceLevel == 1) ? "31374-01.html" : "31374-02.html" : "31374-no.html";
 				break;
 			case JUMARA:
-				switch (AllianceLevel)
-				{
+				switch (AllianceLevel) {
 					case 1:
 					case 2:
 						htmltext = "31375-01.html";
@@ -184,8 +163,7 @@ public final class KetraOrcSupport extends AbstractNpcAI
 				}
 				break;
 			case KURFA:
-				switch (AllianceLevel)
-				{
+				switch (AllianceLevel) {
 					case 1:
 					case 2:
 					case 3:
@@ -205,9 +183,8 @@ public final class KetraOrcSupport extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String args[])
-	{
+
+	public static void main(String args[]) {
 		new KetraOrcSupport();
 	}
 }

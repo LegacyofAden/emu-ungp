@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -30,64 +31,51 @@ import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Cruma Tower AI
+ *
  * @author malyelfik
  */
-public final class CrumaTower extends AbstractNpcAI
-{
+public final class CrumaTower extends AbstractNpcAI {
 	// NPCs
 	private static final int CARSUS = 30483;
 	private static final int TELEPORT_DEVICE = 33157;
-	
-	public CrumaTower()
-	{
+
+	public CrumaTower() {
 		addSpawnId(CARSUS);
 		addAttackId(TELEPORT_DEVICE);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("MESSAGE") && (npc != null))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("MESSAGE") && (npc != null)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_CAN_GO_TO_UNDERGROUND_LV_3_USING_THE_ELEVATOR_IN_THE_BACK);
 			getTimers().addTimer(event, 15000, npc, player);
-		}
-		else
-		{
+		} else {
 			super.onTimerEvent(event, params, npc, player);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("MESSAGE", 15000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
+
 	@RegisterEvent(EventType.ON_CREATURE_DAMAGE_RECEIVED)
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(TELEPORT_DEVICE)
-	public void onCreatureDamageReceived(OnCreatureDamageReceived event)
-	{
-		try
-		{
+	public void onCreatureDamageReceived(OnCreatureDamageReceived event) {
+		try {
 			final Npc npc = (Npc) event.getTarget();
 			final int[] location = npc.getParameters().getIntArray("teleport", ";");
 			event.getAttacker().teleToLocation(location[0], location[1], location[2]);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Invalid location for Cruma Tower teleport device.");
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new CrumaTower();
 	}
 }

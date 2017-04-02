@@ -29,16 +29,15 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10735_ASpecialPower.Q10735_ASpecialPower;
 import quests.Q10736_ASpecialPower.Q10736_ASpecialPower;
 
 /**
  * Grakons Warehouse (10737)
+ *
  * @author Sdw
  */
-public final class Q10737_GrakonsWarehouse extends Quest
-{
+public final class Q10737_GrakonsWarehouse extends Quest {
 	// NPC's
 	private static final int KATALIN = 33943;
 	private static final int AYANTHE = 33942;
@@ -50,61 +49,48 @@ public final class Q10737_GrakonsWarehouse extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 5;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10737_GrakonsWarehouse()
-	{
+
+	public Q10737_GrakonsWarehouse() {
 		super(10737);
 		addStartNpc(KATALIN, AYANTHE);
 		addTalkId(KATALIN, AYANTHE, GRAKON);
 		addCondRace(Race.ERTHEIA, "");
 		registerQuestItems(APPRENTICE_SUPPORT_BOX.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33942-02.htm":
 			case "33943-02.htm":
 			case "33947-03.html":
 			case "33947-04.html":
 				break;
 			case "33942-03.htm":
-			case "33943-03.htm":
-			{
+			case "33943-03.htm": {
 				qs.startQuest();
 				giveItems(player, APPRENTICE_SUPPORT_BOX);
 				break;
 			}
-			case "33947-05.html":
-			{
-				if (qs.isStarted())
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33947-05.html": {
+				if (qs.isStarted()) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2text\\QT_007_post_01.htm", TutorialShowHtml.LARGE_WINDOW));
 						showOnScreenMsg(player, NpcStringId.WEAPONS_HAVE_BEEN_ADDED_TO_YOUR_INVENTORY, ExShowScreenMessage.TOP_CENTER, 10000);
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							giveItems(player, APPRENTICE_ADVENTURER_STAFF);
-						}
-						else
-						{
+						} else {
 							giveItems(player, APPRENTICE_ADVENTURER_FISTS);
 						}
 						addExp(player, 2625);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -115,31 +101,23 @@ public final class Q10737_GrakonsWarehouse extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				switch (npc.getId())
-				{
-					case KATALIN:
-					{
-						if (!player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				switch (npc.getId()) {
+					case KATALIN: {
+						if (!player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = (meetStartRestrictions(player)) ? "33943-01.htm" : "33943-00.htm";
 						}
 						break;
 					}
-					case AYANTHE:
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+					case AYANTHE: {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = (meetStartRestrictions(player)) ? "33942-01.htm" : "33942-00.htm";
 						}
 						break;
@@ -147,47 +125,37 @@ public final class Q10737_GrakonsWarehouse extends Quest
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case KATALIN:
-					{
-						if (!player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case KATALIN: {
+						if (!player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "33943-04.html";
 						}
 						break;
 					}
-					case AYANTHE:
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+					case AYANTHE: {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "33942-04.html";
 						}
 						break;
 					}
-					case GRAKON:
-					{
+					case GRAKON: {
 						htmltext = (player.isInCategory(CategoryType.MAGE_GROUP)) ? "33947-02.html" : "33947-01.html";
 					}
-						break;
+					break;
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	private boolean meetStartRestrictions(PlayerInstance player)
-	{
-		if (player.isInCategory(CategoryType.MAGE_GROUP))
-		{
+
+	private boolean meetStartRestrictions(PlayerInstance player) {
+		if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 			return (player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL) && player.hasQuestCompleted(Q10735_ASpecialPower.class.getSimpleName());
 		}
 		return (player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL) && player.hasQuestCompleted(Q10736_ASpecialPower.class.getSimpleName());

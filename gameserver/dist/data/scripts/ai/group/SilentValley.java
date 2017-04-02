@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -27,14 +28,12 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Silent Valley AI
+ *
  * @author malyelfik
  */
-public final class SilentValley extends AbstractNpcAI
-{
+public final class SilentValley extends AbstractNpcAI {
 	// Skills
 	private static final SkillHolder BETRAYAL = new SkillHolder(6033, 1); // Treasure Seeker's Betrayal
 	private static final SkillHolder BLAZE = new SkillHolder(4157, 10); // NPC Blaze - Magic
@@ -48,20 +47,19 @@ public final class SilentValley extends AbstractNpcAI
 	private static final int GUARD1 = 18694; // Treasure Chest Guard
 	private static final int GUARD2 = 18695; // Treasure Chest Guard
 	private static final int[] MOBS =
-	{
-		20965, // Chimera Piece
-		20966, // Changed Creation
-		20967, // Past Creature
-		20968, // Nonexistent Man
-		20969, // Giant's Shadow
-		20970, // Soldier of Ancient Times
-		20971, // Warrior of Ancient Times
-		20972, // Shaman of Ancient Times
-		20973, // Forgotten Ancient People
-	};
-	
-	private SilentValley()
-	{
+			{
+					20965, // Chimera Piece
+					20966, // Changed Creation
+					20967, // Past Creature
+					20968, // Nonexistent Man
+					20969, // Giant's Shadow
+					20970, // Soldier of Ancient Times
+					20971, // Warrior of Ancient Times
+					20972, // Shaman of Ancient Times
+					20973, // Forgotten Ancient People
+			};
+
+	private SilentValley() {
 		addAttackId(MOBS);
 		addAttackId(CHEST, GUARD1, GUARD2);
 		addEventReceivedId(GUARD1, GUARD2);
@@ -70,14 +68,11 @@ public final class SilentValley extends AbstractNpcAI
 		addSeeCreatureId(GUARD1, GUARD2);
 		addSpawnId(CHEST, GUARD2);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if ((npc != null) && !npc.isDead())
-		{
-			switch (event)
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if ((npc != null) && !npc.isDead()) {
+			switch (event) {
 				case "CLEAR":
 					npc.doDie(null);
 					break;
@@ -92,23 +87,17 @@ public final class SilentValley extends AbstractNpcAI
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon)
-	{
-		switch (npc.getId())
-		{
-			case CHEST:
-			{
-				if (!isSummon && npc.isScriptValue(0))
-				{
+	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+		switch (npc.getId()) {
+			case CHEST: {
+				if (!isSummon && npc.isScriptValue(0)) {
 					npc.setScriptValue(1);
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.YOU_WILL_BE_CURSED_FOR_SEEKING_THE_TREASURE);
 					npc.setTarget(player);
 					npc.doCast(BETRAYAL.getSkill());
-				}
-				else if (isSummon || (getRandom(100) < CHEST_DIE_CHANCE))
-				{
+				} else if (isSummon || (getRandom(100) < CHEST_DIE_CHANCE)) {
 					npc.dropItem(player, SACK, 1);
 					npc.broadcastEvent("CLEAR_ALL", 2000, null);
 					npc.doDie(null);
@@ -117,29 +106,24 @@ public final class SilentValley extends AbstractNpcAI
 				break;
 			}
 			case GUARD1:
-			case GUARD2:
-			{
+			case GUARD2: {
 				npc.setTarget(player);
 				npc.doCast(BLAZE.getSkill());
 				addAttackPlayerDesire(npc, player);
 				break;
 			}
-			default:
-			{
-				if (isSummon)
-				{
+			default: {
+				if (isSummon) {
 					addAttackPlayerDesire(npc, player);
 				}
 			}
 		}
 		return super.onAttack(npc, player, damage, isSummon);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (getRandom(1000) < SPAWN_CHANCE)
-		{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (getRandom(1000) < SPAWN_CHANCE) {
 			final double newZ = npc.getZ() + 100;
 			addSpawn(GUARD2, npc.getX() + 100, npc.getY(), newZ, 0, false, 0);
 			addSpawn(GUARD1, npc.getX() - 100, npc.getY(), newZ, 0, false, 0);
@@ -148,49 +132,37 @@ public final class SilentValley extends AbstractNpcAI
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayable())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayable()) {
 			final PlayerInstance player = (isSummon) ? ((Summon) creature).getOwner() : creature.getActingPlayer();
-			if ((npc.getId() == GUARD1) || (npc.getId() == GUARD2))
-			{
+			if ((npc.getId() == GUARD1) || (npc.getId() == GUARD2)) {
 				npc.setTarget(player);
 				npc.doCast(BLAZE.getSkill());
 				addAttackPlayerDesire(npc, player);
-			}
-			else if (creature.isAffectedBySkill(BETRAYAL.getSkillId()))
-			{
+			} else if (creature.isAffectedBySkill(BETRAYAL.getSkillId())) {
 				addAttackPlayerDesire(npc, player);
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getId() == CHEST)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getId() == CHEST) {
 			npc.setIsInvul(true);
 			startQuestTimer("CLEAR_EVENT", 300000, npc, null);
-		}
-		else
-		{
+		} else {
 			startQuestTimer("SPAWN_CHEST", 10000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference)
-	{
-		if ((receiver != null) && !receiver.isDead())
-		{
-			switch (eventName)
-			{
+	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference) {
+		if ((receiver != null) && !receiver.isDead()) {
+			switch (eventName) {
 				case "CLEAR_ALL":
 					startQuestTimer("CLEAR", 60000, receiver, null);
 					break;
@@ -201,9 +173,8 @@ public final class SilentValley extends AbstractNpcAI
 		}
 		return super.onEventReceived(eventName, sender, receiver, reference);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new SilentValley();
 	}
 }

@@ -18,11 +18,7 @@
  */
 package handlers.bypasshandlers;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.instancemanager.ItemAuctionManager;
@@ -33,110 +29,91 @@ import org.l2junity.gameserver.model.itemauction.ItemAuctionInstance;
 import org.l2junity.gameserver.network.client.send.ExItemAuctionInfoPacket;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class ItemAuctionLink implements IBypassHandler
-{
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
+public class ItemAuctionLink implements IBypassHandler {
 	private static final SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
-	
+
 	private static final String[] COMMANDS =
-	{
-		"ItemAuction"
-	};
-	
+			{
+					"ItemAuction"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED)
-		{
+
+		if (!GeneralConfig.ALT_ITEM_AUCTION_ENABLED) {
 			activeChar.sendPacket(SystemMessageId.IT_IS_NOT_AN_AUCTION_PERIOD);
 			return true;
 		}
-		
+
 		final ItemAuctionInstance au = ItemAuctionManager.getInstance().getManagerInstance(target.getId());
-		if (au == null)
-		{
+		if (au == null) {
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			StringTokenizer st = new StringTokenizer(command);
 			st.nextToken(); // bypass "ItemAuction"
-			if (!st.hasMoreTokens())
-			{
+			if (!st.hasMoreTokens()) {
 				return false;
 			}
-			
+
 			String cmd = st.nextToken();
-			if ("show".equalsIgnoreCase(cmd))
-			{
-				if (!activeChar.getFloodProtectors().getItemAuction().tryPerformAction("RequestInfoItemAuction"))
-				{
+			if ("show".equalsIgnoreCase(cmd)) {
+				if (!activeChar.getFloodProtectors().getItemAuction().tryPerformAction("RequestInfoItemAuction")) {
 					return false;
 				}
-				
-				if (activeChar.isItemAuctionPolling())
-				{
+
+				if (activeChar.isItemAuctionPolling()) {
 					return false;
 				}
-				
+
 				final ItemAuction currentAuction = au.getCurrentAuction();
 				final ItemAuction nextAuction = au.getNextAuction();
-				
-				if (currentAuction == null)
-				{
+
+				if (currentAuction == null) {
 					activeChar.sendPacket(SystemMessageId.IT_IS_NOT_AN_AUCTION_PERIOD);
-					
-					if (nextAuction != null)
-					{
+
+					if (nextAuction != null) {
 						activeChar.sendMessage("The next auction will begin on the " + fmt.format(new Date(nextAuction.getStartingTime())) + ".");
 					}
 					return true;
 				}
-				
+
 				activeChar.sendPacket(new ExItemAuctionInfoPacket(false, currentAuction, nextAuction));
-			}
-			else if ("cancel".equalsIgnoreCase(cmd))
-			{
+			} else if ("cancel".equalsIgnoreCase(cmd)) {
 				final ItemAuction[] auctions = au.getAuctionsByBidder(activeChar.getObjectId());
 				boolean returned = false;
-				for (final ItemAuction auction : auctions)
-				{
-					if (auction.cancelBid(activeChar))
-					{
+				for (final ItemAuction auction : auctions) {
+					if (auction.cancelBid(activeChar)) {
 						returned = true;
 					}
 				}
-				if (!returned)
-				{
+				if (!returned) {
 					activeChar.sendPacket(SystemMessageId.THERE_ARE_NO_OFFERINGS_I_OWN_OR_I_MADE_A_BID_FOR);
 				}
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new ItemAuctionLink());
 	}
 }

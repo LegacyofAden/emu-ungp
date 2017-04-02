@@ -29,22 +29,18 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class CanRefuelAirshipSkillCondition implements ISkillCondition
-{
+public class CanRefuelAirshipSkillCondition implements ISkillCondition {
 	private final int _amount;
-	
-	public CanRefuelAirshipSkillCondition(StatsSet params)
-	{
+
+	public CanRefuelAirshipSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		boolean canRefuelAirship = true;
 		final PlayerInstance player = caster.getActingPlayer();
-		if ((player == null) || (player.getAirShip() == null) || !(player.getAirShip() instanceof L2ControllableAirShipInstance) || ((player.getAirShip().getFuel() + _amount) > player.getAirShip().getMaxFuel()))
-		{
+		if ((player == null) || (player.getAirShip() == null) || !(player.getAirShip() instanceof L2ControllableAirShipInstance) || ((player.getAirShip().getFuel() + _amount) > player.getAirShip().getMaxFuel())) {
 			canRefuelAirship = false;
 		}
 		return canRefuelAirship;

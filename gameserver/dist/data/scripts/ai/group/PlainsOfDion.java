@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
@@ -27,61 +28,52 @@ import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * AI for mobs in Plains of Dion (near Floran Village).
+ *
  * @author Gladicek
  */
-public final class PlainsOfDion extends AbstractNpcAI
-{
+public final class PlainsOfDion extends AbstractNpcAI {
 	private static final int DELU_LIZARDMEN[] =
-	{
-		21104, // Delu Lizardman Supplier
-		21105, // Delu Lizardman Special Agent
-		21107, // Delu Lizardman Commander
-	};
-	
+			{
+					21104, // Delu Lizardman Supplier
+					21105, // Delu Lizardman Special Agent
+					21107, // Delu Lizardman Commander
+			};
+
 	private static final NpcStringId[] MONSTERS_MSG =
-	{
-		NpcStringId.S1_HOW_DARE_YOU_INTERRUPT_OUR_FIGHT_HEY_GUYS_HELP,
-		NpcStringId.S1_HEY_WE_RE_HAVING_A_DUEL_HERE,
-		NpcStringId.THE_DUEL_IS_OVER_ATTACK,
-		NpcStringId.FOUL_KILL_THE_COWARD,
-		NpcStringId.HOW_DARE_YOU_INTERRUPT_A_SACRED_DUEL_YOU_MUST_BE_TAUGHT_A_LESSON
-	};
-	
+			{
+					NpcStringId.S1_HOW_DARE_YOU_INTERRUPT_OUR_FIGHT_HEY_GUYS_HELP,
+					NpcStringId.S1_HEY_WE_RE_HAVING_A_DUEL_HERE,
+					NpcStringId.THE_DUEL_IS_OVER_ATTACK,
+					NpcStringId.FOUL_KILL_THE_COWARD,
+					NpcStringId.HOW_DARE_YOU_INTERRUPT_A_SACRED_DUEL_YOU_MUST_BE_TAUGHT_A_LESSON
+			};
+
 	private static final NpcStringId[] MONSTERS_ASSIST_MSG =
-	{
-		NpcStringId.DIE_YOU_COWARD,
-		NpcStringId.KILL_THE_COWARD,
-		NpcStringId.WHAT_ARE_YOU_LOOKING_AT
-	};
-	
-	private PlainsOfDion()
-	{
+			{
+					NpcStringId.DIE_YOU_COWARD,
+					NpcStringId.KILL_THE_COWARD,
+					NpcStringId.WHAT_ARE_YOU_LOOKING_AT
+			};
+
+	private PlainsOfDion() {
 		addAttackId(DELU_LIZARDMEN);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon)
-	{
-		if (npc.isScriptValue(0))
-		{
+	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+		if (npc.isScriptValue(0)) {
 			final int i = getRandom(5);
-			if (i < 2)
-			{
+			if (i < 2) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, MONSTERS_MSG[i], player.getName());
-			}
-			else
-			{
+			} else {
 				npc.broadcastSay(ChatType.NPC_GENERAL, MONSTERS_MSG[i]);
 			}
-			
+
 			World.getInstance().forEachVisibleObjectInRadius(npc, L2MonsterInstance.class, npc.getTemplate().getClanHelpRange(), obj ->
 			{
-				if (ArrayUtil.contains(DELU_LIZARDMEN, obj.getId()) && !obj.isAttackingNow() && !obj.isDead() && GeoData.getInstance().canSeeTarget(npc, obj))
-				{
+				if (ArrayUtil.contains(DELU_LIZARDMEN, obj.getId()) && !obj.isAttackingNow() && !obj.isDead() && GeoData.getInstance().canSeeTarget(npc, obj)) {
 					addAttackPlayerDesire(obj, player);
 					obj.broadcastSay(ChatType.NPC_GENERAL, MONSTERS_ASSIST_MSG[getRandom(3)]);
 				}
@@ -90,9 +82,8 @@ public final class PlainsOfDion extends AbstractNpcAI
 		}
 		return super.onAttack(npc, player, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PlainsOfDion();
 	}
 }

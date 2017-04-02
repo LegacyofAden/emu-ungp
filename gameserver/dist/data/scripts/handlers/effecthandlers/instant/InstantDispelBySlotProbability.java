@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -32,73 +28,65 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Dispel By Slot Probability effect implementation.
+ *
  * @author Adry_85, Zoey76
  */
-public final class InstantDispelBySlotProbability extends AbstractEffect
-{
+public final class InstantDispelBySlotProbability extends AbstractEffect {
 	private final String _dispel;
 	private final Map<AbnormalType, Short> _dispelAbnormals;
 	private final int _rate;
-	
-	public InstantDispelBySlotProbability(StatsSet params)
-	{
+
+	public InstantDispelBySlotProbability(StatsSet params) {
 		_dispel = params.getString("dispel");
 		_rate = params.getInt("rate", 100);
-		if ((_dispel != null) && !_dispel.isEmpty())
-		{
+		if ((_dispel != null) && !_dispel.isEmpty()) {
 			_dispelAbnormals = new HashMap<>();
-			for (String ngtStack : _dispel.split(";"))
-			{
+			for (String ngtStack : _dispel.split(";")) {
 				String[] ngt = ngtStack.split(",");
 				_dispelAbnormals.put(AbnormalType.getAbnormalType(ngt[0]), Short.MAX_VALUE);
 			}
-		}
-		else
-		{
-			_dispelAbnormals = Collections.<AbnormalType, Short> emptyMap();
+		} else {
+			_dispelAbnormals = Collections.<AbnormalType, Short>emptyMap();
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DISPEL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (_dispelAbnormals.isEmpty())
-		{
+
+		if (_dispelAbnormals.isEmpty()) {
 			return;
 		}
-		
+
 		// Dispel transformations (buff and by GM)
-		if ((Rnd.get(100) < _rate))
-		{
+		if ((Rnd.get(100) < _rate)) {
 			final Short transformToDispel = _dispelAbnormals.get(AbnormalType.TRANSFORM);
-			if ((transformToDispel != null) && ((transformToDispel == targetCreature.getTransformationId()) || (transformToDispel < 0)))
-			{
+			if ((transformToDispel != null) && ((transformToDispel == targetCreature.getTransformationId()) || (transformToDispel < 0))) {
 				targetCreature.stopTransformation(true);
 			}
 		}
-		
+
 		targetCreature.getEffectList().stopEffects(info ->
 		{
 			// We have already dealt with transformation from above.
-			if (info.isAbnormalType(AbnormalType.TRANSFORM))
-			{
+			if (info.isAbnormalType(AbnormalType.TRANSFORM)) {
 				return false;
 			}
-			
+
 			final Short abnormalLevel = (Rnd.get(100) < _rate) ? _dispelAbnormals.get(info.getSkill().getAbnormalType()) : null;
 			return (abnormalLevel != null) && ((abnormalLevel < 0) || (abnormalLevel >= info.getSkill().getAbnormalLvl()));
 		}, true, true);

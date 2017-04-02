@@ -18,47 +18,40 @@
  */
 package ai.individual.WharfGludioAirships.FortuneTelling;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 
-import ai.AbstractNpcAI;
-
 /**
  * Fortune Telling AI.
+ *
  * @author Nyaran
  */
-public final class FortuneTelling extends AbstractNpcAI
-{
+public final class FortuneTelling extends AbstractNpcAI {
 	// NPC
 	private static final int MINE = 32616;
 	// Misc
 	private static final int COST = 1000;
-	
-	public FortuneTelling()
-	{
+
+	public FortuneTelling() {
 		addStartNpc(MINE);
 		addTalkId(MINE);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (player.getAdena() < COST)
-		{
+		if (player.getAdena() < COST) {
 			htmltext = "lowadena.htm";
-		}
-		else
-		{
+		} else {
 			takeItems(player, Inventory.ADENA_ID, COST);
 			htmltext = getHtm(player.getHtmlPrefix(), "fortune.htm").replace("%fortune%", String.valueOf(getRandom(1800309, 1800695)));
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FortuneTelling();
 	}
 }

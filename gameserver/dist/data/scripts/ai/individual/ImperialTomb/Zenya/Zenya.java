@@ -18,56 +18,48 @@
  */
 package ai.individual.ImperialTomb.Zenya;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Zenya AI.
+ *
  * @author Nik
  */
-public final class Zenya extends AbstractNpcAI
-{
+public final class Zenya extends AbstractNpcAI {
 	// NPC
 	private static final int ZENYA = 32140;
 	// Location
 	private static final Location TELEPORT_LOC = new Location(183399, -81012, -5320);
 	// Misc
 	private static final int MIN_LEVEL = 80;
-	
-	private Zenya()
-	{
+
+	private Zenya() {
 		addStartNpc(ZENYA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
-			case "teleport":
-			{
+		switch (event) {
+			case "teleport": {
 				htmltext = player.getLevel() >= MIN_LEVEL ? "32140-4.htm" : "32140-5.htm";
 				break;
 			}
-			case "imperial_tomb":
-			{
-				if (player.getLevel() >= MIN_LEVEL)
-				{
+			case "imperial_tomb": {
+				if (player.getLevel() >= MIN_LEVEL) {
 					player.teleToLocation(TELEPORT_LOC);
 				}
 				break;
 			}
 		}
-		
+
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Zenya();
 	}
 }

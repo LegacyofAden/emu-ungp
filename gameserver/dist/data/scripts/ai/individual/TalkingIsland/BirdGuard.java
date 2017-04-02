@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,86 +26,68 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Bird Guard AI.
+ *
  * @author Gladicek
  */
-public final class BirdGuard extends AbstractNpcAI
-{
+public final class BirdGuard extends AbstractNpcAI {
 	// NPCs
 	private static final int GUARD = 33105;
-	
-	private BirdGuard()
-	{
+
+	private BirdGuard() {
 		addSpawnId(GUARD);
 		addMoveFinishedId(GUARD);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "NPC_SHOUT1":
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "NPC_SHOUT1": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.VISIT_THE_ADMINISTRATION_OFFICE_TO_COMPLETE_YOUR_CLASS_TRANSFERS);
 				getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "NPC_SHOUT2":
-			{
+			case "NPC_SHOUT2": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IMPROVE_YOURSELF_FASTER_AT_THE_TRAINING_GROUNDS);
 				getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "CONTINUE":
-			{
+			case "CONTINUE": {
 				SuperpointManager.getInstance().resumeMoving(npc);
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final int npcstring = npc.getParameters().getInt("npcstring", -1);
-		
-		if (npcstring == 1)
-		{
+
+		if (npcstring == 1) {
 			getTimers().addTimer("NPC_SHOUT1", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (npcstring == 2)
-		{
+		} else if (npcstring == 2) {
 			getTimers().addTimer("NPC_SHOUT2", (10 + getRandom(5)) * 1000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public void onMoveFinished(Npc npc)
-	{
-		if (getRandom(100) < 30)
-		{
-			if (getRandom(20) < 10)
-			{
+	public void onMoveFinished(Npc npc) {
+		if (getRandom(100) < 30) {
+			if (getRandom(20) < 10) {
 				SuperpointManager.getInstance().stopMoving(npc, true, false);
 				npc.broadcastSocialAction(10);
 				getTimers().addTimer("CONTINUE", 4500, npc, null);
-			}
-			else
-			{
+			} else {
 				SuperpointManager.getInstance().stopMoving(npc, true, false);
 				npc.broadcastSocialAction(9);
 				getTimers().addTimer("CONTINUE", 4500, npc, null);
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BirdGuard();
 	}
 }

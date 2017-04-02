@@ -27,33 +27,28 @@ import org.l2junity.gameserver.network.client.send.ensoul.ExShowEnsoulWindow;
 /**
  * @author St3eT
  */
-public class EnsoulWindow implements IBypassHandler
-{
+public class EnsoulWindow implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"show_ensoul_window",
-	};
-	
+			{
+					"show_ensoul_window",
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
+
 		activeChar.sendPacket(ExShowEnsoulWindow.STATIC_PACKET);
 		return true;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new EnsoulWindow());
 	}
 }

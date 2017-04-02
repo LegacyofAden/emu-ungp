@@ -35,67 +35,57 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Sdw
  */
-public class InstantSummonHallucination extends AbstractEffect
-{
+public class InstantSummonHallucination extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantSummonHallucination.class);
 
 	private final int _despawnDelay;
 	private final int _npcId;
 	private final int _npcCount;
-	
-	public InstantSummonHallucination(StatsSet params)
-	{
+
+	public InstantSummonHallucination(StatsSet params) {
 		_despawnDelay = params.getInt("despawnDelay", 20000);
 		_npcId = params.getInt("npcId", 0);
 		_npcCount = params.getInt("npcCount", 1);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isAlikeDead())
-		{
+		if (targetCreature.isAlikeDead()) {
 			return;
 		}
-		
-		if ((_npcId <= 0) || (_npcCount <= 0))
-		{
+
+		if ((_npcId <= 0) || (_npcCount <= 0)) {
 			LOGGER.warn("Invalid NPC ID or count skill ID: {}", skill.getId());
 			return;
 		}
 
-		if (casterPlayer.isMounted())
-		{
+		if (casterPlayer.isMounted()) {
 			return;
 		}
-		
+
 		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_npcId);
-		if (npcTemplate == null)
-		{
+		if (npcTemplate == null) {
 			LOGGER.warn("Spawn of the nonexisting NPC ID: {}, skill ID: {}", _npcId, skill.getId());
 			return;
 		}
-		
+
 		double x = targetCreature.getX();
 		double y = targetCreature.getY();
 		final double z = targetCreature.getZ();
-		for (int i = 0; i < _npcCount; i++)
-		{
+		for (int i = 0; i < _npcCount; i++) {
 			x += (Rnd.nextBoolean() ? Rnd.get(0, 20) : Rnd.get(-20, 0));
 			y += (Rnd.nextBoolean() ? Rnd.get(0, 20) : Rnd.get(-20, 0));
-			
+
 			final DoppelgangerInstance clone = new DoppelgangerInstance(npcTemplate, casterPlayer);
 			clone.setCurrentHp(clone.getMaxHp());
 			clone.setCurrentMp(clone.getMaxMp());

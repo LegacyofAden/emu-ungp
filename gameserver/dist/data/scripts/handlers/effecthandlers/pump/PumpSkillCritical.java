@@ -28,18 +28,15 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpSkillCritical extends AbstractEffect
-{
+public class PumpSkillCritical extends AbstractEffect {
 	private final BaseStats _stat;
-	
-	public PumpSkillCritical(StatsSet params)
-	{
+
+	public PumpSkillCritical(StatsSet params) {
 		_stat = params.getEnum("stat", BaseStats.class, BaseStats.STR);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(DoubleStat.SKILL_CRITICAL, _stat.ordinal());
 	}
 }

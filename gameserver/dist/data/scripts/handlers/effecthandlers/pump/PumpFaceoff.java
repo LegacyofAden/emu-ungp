@@ -18,39 +18,33 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * @author Sdw
  */
-public class PumpFaceoff extends AbstractBooleanStatEffect
-{
-	public PumpFaceoff(StatsSet params)
-	{
+public class PumpFaceoff extends AbstractBooleanStatEffect {
+	public PumpFaceoff(StatsSet params) {
 		super(BooleanStat.FACE_OFF);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		caster.getActingPlayer().setAttackerObjId(target.getObjectId());
 		target.getActingPlayer().setAttackerObjId(caster.getObjectId());
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		caster.getActingPlayer().setAttackerObjId(0);
 		target.getActingPlayer().setAttackerObjId(0);
 	}

@@ -29,30 +29,24 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class CanEnchantAttributeSkillCondition implements ISkillCondition
-{
-	public CanEnchantAttributeSkillCondition(StatsSet params)
-	{
-		
+public class CanEnchantAttributeSkillCondition implements ISkillCondition {
+	public CanEnchantAttributeSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (!caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (!caster.isPlayer()) {
 			caster.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = caster.getActingPlayer();
-		if (activeChar.isCastingNow())
-		{
+		if (activeChar.isCastingNow()) {
 			return false;
 		}
-		
-		if (activeChar.hasItemRequest())
-		{
+
+		if (activeChar.hasItemRequest()) {
 			activeChar.sendPacket(SystemMessageId.ANOTHER_ENCHANTMENT_IS_IN_PROGRESS_PLEASE_COMPLETE_THE_PREVIOUS_TASK_THEN_TRY_AGAIN);
 			return false;
 		}

@@ -33,51 +33,40 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class CanSummonSiegeGolemSkillCondition implements ISkillCondition
-{
-	public CanSummonSiegeGolemSkillCondition(StatsSet params)
-	{
-		
+public class CanSummonSiegeGolemSkillCondition implements ISkillCondition {
+	public CanSummonSiegeGolemSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((caster == null) || !caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((caster == null) || !caster.isPlayer()) {
 			return false;
 		}
-		
+
 		final PlayerInstance player = caster.getActingPlayer();
 		boolean canSummonSiegeGolem = true;
-		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || (player.getClan() == null))
-		{
+		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || (player.getClan() == null)) {
 			canSummonSiegeGolem = false;
 		}
-		
+
 		final Castle castle = CastleManager.getInstance().getCastle(player);
 		final Fort fort = FortManager.getInstance().getFort(player);
-		if ((castle == null) && (fort == null))
-		{
+		if ((castle == null) && (fort == null)) {
 			canSummonSiegeGolem = false;
 		}
-		
-		if (((fort != null) && (fort.getResidenceId() == 0)) || ((castle != null) && (castle.getResidenceId() == 0)))
-		{
+
+		if (((fort != null) && (fort.getResidenceId() == 0)) || ((castle != null) && (castle.getResidenceId() == 0))) {
+			player.sendPacket(SystemMessageId.INVALID_TARGET);
+			canSummonSiegeGolem = false;
+		} else if (((castle != null) && !castle.getSiege().isInProgress()) || ((fort != null) && !fort.getSiege().isInProgress())) {
+			player.sendPacket(SystemMessageId.INVALID_TARGET);
+			canSummonSiegeGolem = false;
+		} else if ((player.getClanId() != 0) && (((castle != null) && (castle.getSiege().getAttackerClan(player.getClanId()) == null)) || ((fort != null) && (fort.getSiege().getAttackerClan(player.getClanId()) == null)))) {
 			player.sendPacket(SystemMessageId.INVALID_TARGET);
 			canSummonSiegeGolem = false;
 		}
-		else if (((castle != null) && !castle.getSiege().isInProgress()) || ((fort != null) && !fort.getSiege().isInProgress()))
-		{
-			player.sendPacket(SystemMessageId.INVALID_TARGET);
-			canSummonSiegeGolem = false;
-		}
-		else if ((player.getClanId() != 0) && (((castle != null) && (castle.getSiege().getAttackerClan(player.getClanId()) == null)) || ((fort != null) && (fort.getSiege().getAttackerClan(player.getClanId()) == null))))
-		{
-			player.sendPacket(SystemMessageId.INVALID_TARGET);
-			canSummonSiegeGolem = false;
-		}
-		
+
 		return canSummonSiegeGolem;
 	}
 }

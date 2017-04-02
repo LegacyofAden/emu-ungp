@@ -23,16 +23,13 @@ import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public final class TeleportBookmark implements IPlayerActionHandler
-{
+public final class TeleportBookmark implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new TeleportBookmark());
 	}
 }

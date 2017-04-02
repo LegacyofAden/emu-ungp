@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpMpRegenAdd extends AbstractDoubleStatEffect
-{
-	public PumpMpRegenAdd(StatsSet params)
-	{
+public class PumpMpRegenAdd extends AbstractDoubleStatEffect {
+	public PumpMpRegenAdd(StatsSet params) {
 		super(params, DoubleStat.REGENERATE_MP_RATE_ADD);
 	}
 }

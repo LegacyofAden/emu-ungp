@@ -34,60 +34,52 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 
 /**
  * Trigger Skill By Avoid effect implementation.
+ *
  * @author Zealar
  */
-public final class PumpTriggerSkillByAvoid extends AbstractEffect
-{
+public final class PumpTriggerSkillByAvoid extends AbstractEffect {
 	private final int _chance;
 	private final SkillHolder _skill;
 	private final ITargetTypeHandler _targetTypeHandler;
-	
+
 	/**
 	 * @param params
 	 */
-	
-	public PumpTriggerSkillByAvoid(StatsSet params)
-	{
+
+	public PumpTriggerSkillByAvoid(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 		_skill = new SkillHolder(params.getInt("skillId", 0), params.getInt("skillLevel", 0));
 		final String targetType = params.getString("targetType", "TARGET");
 		_targetTypeHandler = TargetHandler.getInstance().getTargetTypeHandler(targetType);
-		if (_targetTypeHandler == null)
-		{
+		if (_targetTypeHandler == null) {
 			throw new RuntimeException("Target Type not found for effect[" + getClass().getSimpleName() + "] TargetType[" + targetType + "].");
 		}
 	}
-	
-	public void onAvoidEvent(OnCreatureAttackAvoid event)
-	{
-		if (event.isDamageOverTime() || (_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0)))
-		{
+
+	public void onAvoidEvent(OnCreatureAttackAvoid event) {
+		if (event.isDamageOverTime() || (_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0))) {
 			return;
 		}
-		
-		if ((_chance < 100) && (Rnd.get(100) > _chance))
-		{
+
+		if ((_chance < 100) && (Rnd.get(100) > _chance)) {
 			return;
 		}
-		
+
 		final Skill triggerSkill = _skill.getSkill();
 		final WorldObject target = _targetTypeHandler.getTarget(event.getTarget(), event.getAttacker(), triggerSkill, false, false, false);
-		
-		if ((target != null) && target.isCreature())
-		{
+
+		if ((target != null) && target.isCreature()) {
 			SkillCaster.triggerCast(event.getAttacker(), target, triggerSkill);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_ATTACK_AVOID, listener -> listener.getOwner() == this);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new ConsumerEventListener(target, EventType.ON_CREATURE_ATTACK_AVOID, (OnCreatureAttackAvoid event) -> onAvoidEvent(event), this));
 	}
 }

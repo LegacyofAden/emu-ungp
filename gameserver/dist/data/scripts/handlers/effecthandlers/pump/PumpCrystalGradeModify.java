@@ -26,35 +26,30 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Crystal Grade Modify effect implementation.
+ *
  * @author Zoey76
  */
-public final class PumpCrystalGradeModify extends AbstractEffect
-{
+public final class PumpCrystalGradeModify extends AbstractEffect {
 	private final int _amount;
-	
-	public PumpCrystalGradeModify(StatsSet params)
-	{
+
+	public PumpCrystalGradeModify(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().setExpertisePenaltyBonus(_amount);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setExpertisePenaltyBonus(0);
 		}
 	}

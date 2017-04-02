@@ -27,24 +27,21 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 /**
  * Tactical Signs setting player action handler.
+ *
  * @author Nik
  */
-public final class TacticalSignUse implements IPlayerActionHandler
-{
+public final class TacticalSignUse implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if ((!activeChar.isInParty() || (activeChar.getTarget() == null) || !activeChar.getTarget().isCreature()))
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if ((!activeChar.isInParty() || (activeChar.getTarget() == null) || !activeChar.getTarget().isCreature())) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		activeChar.getParty().addTacticalSign(activeChar, data.getOptionId(), (Creature) activeChar.getTarget());
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new TacticalSignUse());
 	}
 }

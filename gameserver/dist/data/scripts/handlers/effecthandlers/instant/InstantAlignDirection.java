@@ -30,38 +30,33 @@ import org.l2junity.gameserver.network.client.send.StopRotation;
 
 /**
  * Bluff effect implementation.
+ *
  * @author decad
  */
-public final class InstantAlignDirection extends AbstractEffect
-{
+public final class InstantAlignDirection extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantAlignDirection(StatsSet params)
-	{
+
+	public InstantAlignDirection(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		// Headquarters NPC should not rotate
-		if ((targetCreature.getId() == 35062) || targetCreature.isRaid() || targetCreature.isRaidMinion())
-		{
+		if ((targetCreature.getId() == 35062) || targetCreature.isRaid() || targetCreature.isRaidMinion()) {
 			return;
 		}
-		
+
 		targetCreature.broadcastPacket(new StartRotation(targetCreature.getObjectId(), targetCreature.getHeading(), 1, 65535));
 		targetCreature.broadcastPacket(new StopRotation(targetCreature.getObjectId(), caster.getHeading(), 65535));
 		targetCreature.setHeading(caster.getHeading());

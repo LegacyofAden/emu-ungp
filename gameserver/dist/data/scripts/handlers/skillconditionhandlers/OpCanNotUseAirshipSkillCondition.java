@@ -28,15 +28,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpCanNotUseAirshipSkillCondition implements ISkillCondition
-{
-	public OpCanNotUseAirshipSkillCondition(StatsSet params)
-	{
+public class OpCanNotUseAirshipSkillCondition implements ISkillCondition {
+	public OpCanNotUseAirshipSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isPlayer() && !(caster.getActingPlayer().getVehicle() instanceof L2AirShipInstance);
 	}
 }

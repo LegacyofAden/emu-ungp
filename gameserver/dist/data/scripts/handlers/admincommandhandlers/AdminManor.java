@@ -30,20 +30,17 @@ import org.l2junity.gameserver.util.Util;
 /**
  * @author malyelfik
  */
-public final class AdminManor implements IAdminCommandHandler
-{
+public final class AdminManor implements IAdminCommandHandler {
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final CastleManorManager manor = CastleManorManager.getInstance();
 		final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
 		msg.setFile(activeChar.getHtmlPrefix(), "data/html/admin/manor.htm");
 		msg.replace("%status%", manor.getCurrentModeName());
 		msg.replace("%change%", manor.getNextModeChange());
-		
+
 		final StringBuilder sb = new StringBuilder(3400);
-		for (Castle c : CastleManager.getInstance().getCastles())
-		{
+		for (Castle c : CastleManager.getInstance().getCastles()) {
 			sb.append("<tr><td>Name:</td><td><font color=008000>" + c.getName() + "</font></td></tr>");
 			sb.append("<tr><td>Current period cost:</td><td><font color=FF9900>" + Util.formatAdena(manor.getManorCost(c.getResidenceId(), false)) + " Adena</font></td></tr>");
 			sb.append("<tr><td>Next period cost:</td><td><font color=FF9900>" + Util.formatAdena(manor.getManorCost(c.getResidenceId(), true)) + " Adena</font></td></tr>");
@@ -51,22 +48,20 @@ public final class AdminManor implements IAdminCommandHandler
 		}
 		msg.replace("%castleInfo%", sb.toString());
 		activeChar.sendPacket(msg);
-		
+
 		sb.setLength(0);
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return new String[]
-		{
-			"admin_manor"
-		};
+				{
+						"admin_manor"
+				};
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminManor());
 	}
 }

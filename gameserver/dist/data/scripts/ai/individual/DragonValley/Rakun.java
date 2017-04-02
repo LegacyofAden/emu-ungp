@@ -18,47 +18,41 @@
  */
 package ai.individual.DragonValley;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Rakun AI.
+ *
  * @author Gladicek
  */
-public final class Rakun extends AbstractNpcAI
-{
+public final class Rakun extends AbstractNpcAI {
 	// NPC
 	private static final int RAKUN = 33972;
-	
-	private Rakun()
-	{
+
+	private Rakun() {
 		addSpawnId(RAKUN);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.MONSTERS_APPEAR_HERE_AND_THERE_CONFUSED_BY_THE_WHIRLING_VORTEX);
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 3000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 3000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Rakun();
 	}
 }

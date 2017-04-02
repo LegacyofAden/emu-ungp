@@ -27,15 +27,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpCanEscapeSkillCondition implements ISkillCondition
-{
-	public OpCanEscapeSkillCondition(StatsSet params)
-	{
+public class OpCanEscapeSkillCondition implements ISkillCondition {
+	public OpCanEscapeSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return !caster.cannotEscape();
 	}
 }

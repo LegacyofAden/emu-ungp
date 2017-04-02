@@ -24,23 +24,21 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.ThirdClassTransferQuest;
 
 /**
  * Day of Destiny: Dwarf's Fate (10345)
+ *
  * @author St3eT
  */
-public final class Q10345_DayOfDestinyDwarfsFate extends ThirdClassTransferQuest
-{
+public final class Q10345_DayOfDestinyDwarfsFate extends ThirdClassTransferQuest {
 	// NPC
 	private static final int FERRIS = 30847;
 	// Misc
 	private static final int MIN_LEVEL = 76;
 	private static final Race START_RACE = Race.DWARF;
-	
-	public Q10345_DayOfDestinyDwarfsFate()
-	{
+
+	public Q10345_DayOfDestinyDwarfsFate() {
 		super(10345, MIN_LEVEL, START_RACE);
 		addStartNpc(FERRIS);
 		addTalkId(FERRIS);
@@ -48,62 +46,48 @@ public final class Q10345_DayOfDestinyDwarfsFate extends ThirdClassTransferQuest
 		addCondRace(START_RACE, "30847-11.html");
 		addCondInCategory(CategoryType.THIRD_CLASS_GROUP, "30847-12.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "30847-02.htm":
 			case "30847-03.htm":
 			case "30847-04.htm":
-			case "30847-08.html":
-			{
+			case "30847-08.html": {
 				htmltext = event;
 				break;
 			}
-			case "30847-05.htm":
-			{
+			case "30847-05.htm": {
 				st.startQuest();
 				st.set("STARTED_CLASS", player.getClassId().getId());
 				htmltext = event;
 				break;
 			}
-			default:
-			{
+			default: {
 				htmltext = super.onAdvEvent(event, npc, player);
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		if (npc.getId() == FERRIS)
-		{
-			if (st.getState() == State.CREATED)
-			{
+
+		if (npc.getId() == FERRIS) {
+			if (st.getState() == State.CREATED) {
 				htmltext = "30847-01.htm";
-			}
-			else if (st.getState() == State.STARTED)
-			{
-				if (st.isCond(1))
-				{
+			} else if (st.getState() == State.STARTED) {
+				if (st.isCond(1)) {
 					htmltext = "30847-06.html";
-				}
-				else if (st.isCond(13))
-				{
+				} else if (st.isCond(13)) {
 					htmltext = "30847-07.html";
 				}
 			}

@@ -18,24 +18,23 @@
  */
 package quests.Q10336_DividedSakumKanilov;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10335_RequestToFindSakum.Q10335_RequestToFindSakum;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Divided Sakum, Kanilov (10336)
+ *
  * @author St3eT
  */
-public final class Q10336_DividedSakumKanilov extends Quest
-{
+public final class Q10336_DividedSakumKanilov extends Quest {
 	// NPCs
 	private static final int ZENATH = 33509;
 	private static final int ADVENTURE_GUILDSMAN = 31795;
@@ -45,9 +44,8 @@ public final class Q10336_DividedSakumKanilov extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 27;
 	private static final int MAX_LEVEL = 40;
-	
-	public Q10336_DividedSakumKanilov()
-	{
+
+	public Q10336_DividedSakumKanilov() {
 		super(10336);
 		addStartNpc(ZENATH);
 		addTalkId(ZENATH, ADVENTURE_GUILDSMAN);
@@ -56,44 +54,34 @@ public final class Q10336_DividedSakumKanilov extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33509-08.htm");
 		addCondCompletedQuest(Q10335_RequestToFindSakum.class.getSimpleName(), "33509-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33509-02.htm":
-			case "31795-05.htm":
-			{
+			case "31795-05.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33509-03.htm":
-			{
+			case "33509-03.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "31795-06.htm":
-			{
-				if (st.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "31795-06.htm": {
+				if (st.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 500_000);
 						addSp(player, 120);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -102,82 +90,65 @@ public final class Q10336_DividedSakumKanilov extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = npc.getId() == ZENATH ? "33509-01.htm" : "31795-02.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
 						htmltext = npc.getId() == ZENATH ? "33509-04.htm" : "31795-01.htm";
 						break;
 					}
-					case 2:
-					{
-						if (npc.getId() == ZENATH)
-						{
-							if (!isSimulated)
-							{
+					case 2: {
+						if (npc.getId() == ZENATH) {
+							if (!isSimulated) {
 								st.setCond(3);
 								giveItems(player, SAKUM_SKETCH, 1);
 							}
 							htmltext = "33509-05.htm";
-						}
-						else
-						{
+						} else {
 							htmltext = "31795-03.htm";
 						}
 						break;
 					}
-					case 3:
-					{
+					case 3: {
 						htmltext = npc.getId() == ZENATH ? "33509-06.htm" : "31795-04.htm";
 						break;
 					}
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = npc.getId() == ZENATH ? "33509-07.htm" : "31795-07.htm";
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
+
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
 			st.set("killed_" + KANILOV, 1);
 			st.setCond(2);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
 		final QuestState st = getQuestState(activeChar, false);
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(1);
 			npcLogList.add(new NpcLogListHolder(KANILOV, false, st.getInt("killed_" + KANILOV)));
 			return npcLogList;

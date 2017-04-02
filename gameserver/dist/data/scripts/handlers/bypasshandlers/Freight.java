@@ -31,67 +31,50 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author UnAfraid
  */
-public class Freight implements IBypassHandler
-{
+public class Freight implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"package_withdraw",
-		"package_deposit"
-	};
-	
+			{
+					"package_withdraw",
+					"package_deposit"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		if (command.equalsIgnoreCase(COMMANDS[0]))
-		{
+
+		if (command.equalsIgnoreCase(COMMANDS[0])) {
 			PcFreight freight = activeChar.getFreight();
-			if (freight != null)
-			{
-				if (freight.getSize() > 0)
-				{
+			if (freight != null) {
+				if (freight.getSize() > 0) {
 					activeChar.setActiveWarehouse(freight);
-					for (ItemInstance i : activeChar.getActiveWarehouse().getItems())
-					{
-						if (i.isTimeLimitedItem() && (i.getRemainingTime() <= 0))
-						{
+					for (ItemInstance i : activeChar.getActiveWarehouse().getItems()) {
+						if (i.isTimeLimitedItem() && (i.getRemainingTime() <= 0)) {
 							activeChar.getActiveWarehouse().destroyItem("L2ItemInstance", i, activeChar, null);
 						}
 					}
 					activeChar.sendPacket(new WareHouseWithdrawalList(activeChar, WareHouseWithdrawalList.FREIGHT));
-				}
-				else
-				{
+				} else {
 					activeChar.sendPacket(SystemMessageId.YOU_HAVE_NOT_DEPOSITED_ANY_ITEMS_IN_YOUR_WAREHOUSE);
 				}
 			}
-		}
-		else if (command.equalsIgnoreCase(COMMANDS[1]))
-		{
-			if (activeChar.getAccountChars().size() < 1)
-			{
+		} else if (command.equalsIgnoreCase(COMMANDS[1])) {
+			if (activeChar.getAccountChars().size() < 1) {
 				activeChar.sendPacket(SystemMessageId.THAT_CHARACTER_DOES_NOT_EXIST);
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(new PackageToList(activeChar.getAccountChars()));
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Freight());
 	}
 }

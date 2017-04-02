@@ -36,81 +36,69 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Summon Cubic effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantSummonCubic extends AbstractEffect
-{
+public final class InstantSummonCubic extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstantSummonCubic.class);
-	
+
 	private final int _cubicId;
 	private final int _cubicLvl;
-	
-	public InstantSummonCubic(StatsSet params)
-	{
+
+	public InstantSummonCubic(StatsSet params) {
 		_cubicId = params.getInt("cubicId", -1);
 		_cubicLvl = params.getInt("cubicLvl", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 
-		if (targetPlayer.isAlikeDead() || targetPlayer.inObserverMode() || targetPlayer.isMounted())
-		{
+		if (targetPlayer.isAlikeDead() || targetPlayer.inObserverMode() || targetPlayer.isMounted()) {
 			return;
 		}
-		
-		if (_cubicId < 0)
-		{
+
+		if (_cubicId < 0) {
 			LOGGER.warn("Invalid Cubic ID: {} in skill ID: {}", _cubicId, skill.getId());
 			return;
 		}
-		
+
 		// If cubic is already present, it's replaced.
 		final CubicInstance cubic = targetPlayer.getCubicById(_cubicId);
-		if (cubic != null)
-		{
-			if (cubic.getTemplate().getLevel() > _cubicLvl)
-			{
+		if (cubic != null) {
+			if (cubic.getTemplate().getLevel() > _cubicLvl) {
 				// What do we do in such case?
 				return;
 			}
-			
+
 			cubic.deactivate();
-		}
-		else
-		{
+		} else {
 			// If maximum amount is reached, random cubic is removed.
 			// Players with no mastery can have only one cubic.
 			final int allowedCubicCount = (int) targetPlayer.getStat().getValue(DoubleStat.MAX_CUBIC, 1);
 			final int currentCubicCount = targetPlayer.getCubics().size();
 			// Extra cubics are removed, one by one, randomly.
-			for (int i = 0; i <= (currentCubicCount - allowedCubicCount); i++)
-			{
+			for (int i = 0; i <= (currentCubicCount - allowedCubicCount); i++) {
 				final int removedCubicId = (int) targetPlayer.getCubics().keySet().toArray()[Rnd.get(currentCubicCount)];
 				final CubicInstance removedCubic = targetPlayer.getCubicById(removedCubicId);
 				removedCubic.deactivate();
 			}
 		}
-		
+
 		final L2CubicTemplate template = CubicData.getInstance().getCubicTemplate(_cubicId, _cubicLvl);
-		if (template == null)
-		{
+		if (template == null) {
 			LOGGER.warn("Attempting to summon cubic without existing template id: {} level: {}", _cubicId, _cubicLvl);
 			return;
 		}
-		
+
 		// Adding a new cubic.
 		targetPlayer.addCubic(new CubicInstance(targetPlayer, casterPlayer, template));
 		targetPlayer.sendPacket(new ExUserInfoCubic(targetPlayer));

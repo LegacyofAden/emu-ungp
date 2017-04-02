@@ -31,24 +31,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class InstantPvPPoint extends AbstractEffect
-{
+public class InstantPvPPoint extends AbstractEffect {
 	private final int _fame;
-	
-	public InstantPvPPoint(StatsSet params)
-	{
+
+	public InstantPvPPoint(StatsSet params) {
 		_fame = params.getInt("fame", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		targetPlayer.setFame(targetPlayer.getFame() + _fame);
 		final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_ACQUIRED_S1_FAME);
 		msg.addInt(_fame);

@@ -18,7 +18,7 @@
  */
 package quests.Q10331_StartOfFate;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -40,10 +40,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Start of Fate (10331)
+ *
  * @author Gladicek
  */
-public final class Q10331_StartOfFate extends Quest
-{
+public final class Q10331_StartOfFate extends Quest {
 	// NPCs
 	private static final int SEBION = 32978;
 	private static final int FRANCO = 32153;
@@ -60,9 +60,8 @@ public final class Q10331_StartOfFate extends Quest
 	private static final int PAULINA_EQUIPMENT_SET_D = 46849;
 	// Misc
 	private static final int MIN_LEVEL = 18;
-	
-	public Q10331_StartOfFate()
-	{
+
+	public Q10331_StartOfFate() {
 		super(10331);
 		addStartNpc(SEBION);
 		addTalkId(SEBION, FRANCO, RIVIAN, DEVON, TOOK, MOKA, VALFAR);
@@ -71,26 +70,21 @@ public final class Q10331_StartOfFate extends Quest
 		addCondMinLevel(MIN_LEVEL, "32978-11.htm");
 		registerQuestItems(SARIL_NECKLACE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32978-02.htm":
-			{
+		switch (event) {
+			case "32978-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32978-03.html":
-			{
+			case "32978-03.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
@@ -133,28 +127,21 @@ public final class Q10331_StartOfFate extends Quest
 			case "32150-05.html": // Orc Monk
 			case "32150-06.html": // Orc Shaman
 			{
-				if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-				{
+				if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
 					htmltext = event;
 				}
 				break;
 			}
-			default:
-			{
-				if (event.startsWith("classChange;"))
-				{
+			default: {
+				if (event.startsWith("classChange;")) {
 					final ClassId newClassId = ClassId.getClassId(Integer.parseInt(event.replace("classChange;", "")));
 					final ClassId currentClassId = player.getClassId();
-					
-					if (!newClassId.childOf(currentClassId) || ((qs.getCond() < 3) && (qs.getCond() > 8)))
-					{
+
+					if (!newClassId.childOf(currentClassId) || ((qs.getCond() < 3) && (qs.getCond() > 8))) {
 						Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to cheat the 1st class transfer!", GeneralConfig.DEFAULT_PUNISH);
 						return null;
-					}
-					else if ((player.getLevel() >= MIN_LEVEL))
-					{
-						switch (newClassId)
-						{
+					} else if ((player.getLevel() >= MIN_LEVEL)) {
+						switch (newClassId) {
 							case WARRIOR:
 								htmltext = "32153-09.html";
 								break;
@@ -228,9 +215,7 @@ public final class Q10331_StartOfFate extends Quest
 						addSp(player, 15);
 						player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_009_enchant_01.htm", TutorialShowHtml.LARGE_WINDOW));
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -238,72 +223,55 @@ public final class Q10331_StartOfFate extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == SEBION)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == SEBION) {
 					htmltext = "32978-01.htm";
 					break;
 				}
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case SEBION:
-					{
-						switch (qs.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case SEBION: {
+						switch (qs.getCond()) {
 							case 1:
 								htmltext = "32978-03.html";
 								break;
-							case 2:
-							{
-								if (!isSimulated)
-								{
-									switch (player.getRace())
-									{
-										case HUMAN:
-										{
+							case 2: {
+								if (!isSimulated) {
+									switch (player.getRace()) {
+										case HUMAN: {
 											qs.setCond(3, true);
 											htmltext = "32978-04.html";
 											break;
 										}
-										case ELF:
-										{
+										case ELF: {
 											qs.setCond(4, true);
 											htmltext = "32978-05.html";
 											break;
 										}
-										case DARK_ELF:
-										{
+										case DARK_ELF: {
 											qs.setCond(5, true);
 											htmltext = "32978-06.html";
 											break;
 										}
-										case ORC:
-										{
+										case ORC: {
 											qs.setCond(6, true);
 											htmltext = "32978-07.html";
 											break;
 										}
-										case DWARF:
-										{
+										case DWARF: {
 											qs.setCond(7, true);
 											htmltext = "32978-08.html";
 											break;
 										}
-										case KAMAEL:
-										{
+										case KAMAEL: {
 											qs.setCond(8, true);
 											htmltext = "32978-09.html";
 											break;
@@ -324,21 +292,15 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case FRANCO:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.HUMAN)
-							{
-								switch (player.getClassId())
-								{
-									case FIGHTER:
-									{
+					case FRANCO: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.HUMAN) {
+								switch (player.getClassId()) {
+									case FIGHTER: {
 										htmltext = "32153-02.html";
 										break;
 									}
-									case MAGE:
-									{
+									case MAGE: {
 										htmltext = "32153-03.html";
 										break;
 									}
@@ -350,21 +312,15 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case RIVIAN:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.ELF)
-							{
-								switch (player.getClassId())
-								{
-									case ELVEN_FIGHTER:
-									{
+					case RIVIAN: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.ELF) {
+								switch (player.getClassId()) {
+									case ELVEN_FIGHTER: {
 										htmltext = "32147-02.html";
 										break;
 									}
-									case ELVEN_MAGE:
-									{
+									case ELVEN_MAGE: {
 										htmltext = "32147-03.html";
 										break;
 									}
@@ -376,21 +332,15 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case DEVON:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.DARK_ELF)
-							{
-								switch (player.getClassId())
-								{
-									case DARK_FIGHTER:
-									{
+					case DEVON: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.DARK_ELF) {
+								switch (player.getClassId()) {
+									case DARK_FIGHTER: {
 										htmltext = "32160-02.html";
 										break;
 									}
-									case DARK_MAGE:
-									{
+									case DARK_MAGE: {
 										htmltext = "32160-03.html";
 										break;
 									}
@@ -402,21 +352,15 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case TOOK:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.ORC)
-							{
-								switch (player.getClassId())
-								{
-									case ORC_FIGHTER:
-									{
+					case TOOK: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.ORC) {
+								switch (player.getClassId()) {
+									case ORC_FIGHTER: {
 										htmltext = "32150-02.html";
 										break;
 									}
-									case ORC_MAGE:
-									{
+									case ORC_MAGE: {
 										htmltext = "32150-03.html";
 										break;
 									}
@@ -428,12 +372,9 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case MOKA:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.DWARF)
-							{
+					case MOKA: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.DWARF) {
 								htmltext = "32157-02.html";
 								break;
 							}
@@ -442,21 +383,15 @@ public final class Q10331_StartOfFate extends Quest
 						}
 						break;
 					}
-					case VALFAR:
-					{
-						if ((qs.getCond() >= 3) && (qs.getCond() <= 8))
-						{
-							if (player.getRace() == Race.KAMAEL)
-							{
-								switch (player.getClassId())
-								{
-									case MALE_SOLDIER:
-									{
+					case VALFAR: {
+						if ((qs.getCond() >= 3) && (qs.getCond() <= 8)) {
+							if (player.getRace() == Race.KAMAEL) {
+								switch (player.getClassId()) {
+									case MALE_SOLDIER: {
 										htmltext = "32146-03.html";
 										break;
 									}
-									case FEMALE_SOLDIER:
-									{
+									case FEMALE_SOLDIER: {
 										htmltext = "32146-02.html";
 										break;
 									}
@@ -471,18 +406,15 @@ public final class Q10331_StartOfFate extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
 					case SEBION:
 					case FRANCO:
 					case RIVIAN:
 					case DEVON:
 					case TOOK:
 					case MOKA:
-					case VALFAR:
-					{
+					case VALFAR: {
 						htmltext = getAlreadyCompletedMsg(player);
 						break;
 					}
@@ -492,42 +424,36 @@ public final class Q10331_StartOfFate extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event)
-	{
-		if (event.getQuestId() == getId())
-		{
+	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
+		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
 			player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup.html")));
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLevelChanged(OnPlayerLevelChanged event)
-	{
+	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
-		
-		if ((qs == null) && (oldLevel < newLevel) && (newLevel == MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP)))
-		{
+
+		if ((qs == null) && (oldLevel < newLevel) && (newLevel == MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP))) {
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	public void OnPlayerLogin(OnPlayerLogin event)
-	{
+	public void OnPlayerLogin(OnPlayerLogin event) {
 		final PlayerInstance player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
-		
-		if ((qs == null) && (player.getRace() != Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP)))
-		{
+
+		if ((qs == null) && (player.getRace() != Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP))) {
 			player.sendPacket(new TutorialShowQuestionMark(getId(), 1));
 		}
 	}

@@ -18,29 +18,26 @@
  */
 package handlers.conditions;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.CategoryType;
+import org.l2junity.gameserver.handler.IConditionHandler;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.handler.IConditionHandler;
+
+import java.util.List;
 
 /**
  * @author Sdw
  */
-public class CategoryTypeCondition implements IConditionHandler
-{
+public class CategoryTypeCondition implements IConditionHandler {
 	private final List<CategoryType> _categoryTypes;
-	
-	public CategoryTypeCondition(StatsSet params)
-	{
+
+	public CategoryTypeCondition(StatsSet params) {
 		_categoryTypes = params.getEnumList("category", CategoryType.class);
 	}
-	
+
 	@Override
-	public boolean test(Creature creature, WorldObject target)
-	{
+	public boolean test(Creature creature, WorldObject target) {
 		return _categoryTypes.stream().anyMatch(creature::isInCategory);
 	}
 }

@@ -18,6 +18,7 @@
  */
 package instances.FortressOfTheDead;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -26,16 +27,14 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import instances.AbstractInstance;
 import quests.Q10752_WindsOfFateAPromise.Q10752_WindsOfFateAPromise;
 
 /**
  * Fortress of the Dead instance zone.
+ *
  * @author Gladicek
  */
-public final class FortressOfTheDead extends AbstractInstance
-{
+public final class FortressOfTheDead extends AbstractInstance {
 	// NPCs
 	private static final int BROKEN_BOOKSHELF = 31526;
 	private static final int VAMPIRIC_SOLDIER = 19567;
@@ -50,32 +49,25 @@ public final class FortressOfTheDead extends AbstractInstance
 	private static final Location KAIN_VAN_HALTER_LOC = new Location(57963, -28676, 568, 49980);
 	// Misc
 	private static final int TEMPLATE_ID = 254;
-	
-	public FortressOfTheDead()
-	{
+
+	public FortressOfTheDead() {
 		super(TEMPLATE_ID);
 		addStartNpc(BROKEN_BOOKSHELF);
 		addFirstTalkId(KAIN_VAN_HALTER);
 		addTalkId(BROKEN_BOOKSHELF, KAIN_VAN_HALTER, MYSTERIOUS_WIZARD);
 		addKillId(VAMPIRIC_SOLDIER, VON_HELLMAN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		if (event.equals("enterInstance"))
-		{
+
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
-		}
-		else
-		{
+		} else {
 			final Instance world = npc.getInstanceWorld();
-			if (isInInstance(world))
-			{
-				switch (event)
-				{
+			if (isInInstance(world)) {
+				switch (event) {
 					case "33979-01.html":
 					case "33979-02.html":
 					case "33979-03.html":
@@ -85,28 +77,23 @@ public final class FortressOfTheDead extends AbstractInstance
 					case "33979-07.html":
 					case "33979-08.html":
 					case "33979-09.html":
-					case "33979-10.html":
-					{
+					case "33979-10.html": {
 						htmltext = event;
 						break;
 					}
-					case "exitInstance":
-					{
+					case "exitInstance": {
 						world.finishInstance(0);
 						break;
 					}
-					case "vampire_dead":
-					{
+					case "vampire_dead": {
 						addSpawn(VON_HELLMAN, VON_HELLMAN_LOC, false, 0, false, world.getId());
 						break;
 					}
-					case "hellman_dead":
-					{
+					case "hellman_dead": {
 						addSpawn(KAIN_VAN_HALTER, KAIN_VAN_HALTER_LOC, false, 0, false, world.getId());
 						break;
 					}
-					case "spawnWizard":
-					{
+					case "spawnWizard": {
 						showOnScreenMsg(player, NpcStringId.TALK_TO_THE_MYSTERIOUS_WIZARD, ExShowScreenMessage.TOP_CENTER, 5000);
 						final Npc wizzard = addSpawn(MYSTERIOUS_WIZARD, MYSTERIOUS_WIZARD_LOC, true, 0, false, world.getId());
 						wizzard.setSummoner(player);
@@ -115,12 +102,10 @@ public final class FortressOfTheDead extends AbstractInstance
 						htmltext = "33979-11.html";
 						break;
 					}
-					case "endCinematic":
-					{
+					case "endCinematic": {
 						final QuestState qs = player.getQuestState(Q10752_WindsOfFateAPromise.class.getSimpleName());
-						
-						if ((qs != null) && qs.isCond(8))
-						{
+
+						if ((qs != null) && qs.isCond(8)) {
 							qs.setCond(9, true);
 							giveItems(player, KAIN_PROPHECY_MACHINE_FRAGMENT, 1);
 						}
@@ -135,23 +120,17 @@ public final class FortressOfTheDead extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
-		
-		if (isInInstance(world))
-		{
-			if (npc.getId() == VAMPIRIC_SOLDIER)
-			{
-				if (world.getAliveNpcs(VAMPIRIC_SOLDIER).isEmpty())
-				{
+
+		if (isInInstance(world)) {
+			if (npc.getId() == VAMPIRIC_SOLDIER) {
+				if (world.getAliveNpcs(VAMPIRIC_SOLDIER).isEmpty()) {
 					startQuestTimer("vampire_dead", 3000, npc, player);
 				}
-			}
-			else if (npc.getId() == VON_HELLMAN)
-			{
+			} else if (npc.getId() == VON_HELLMAN) {
 				npc.deleteMe();
 				playMovie(player, Movie.ERT_QUEST_A);
 				startQuestTimer("hellman_dead", 6000, npc, player);
@@ -159,9 +138,8 @@ public final class FortressOfTheDead extends AbstractInstance
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FortressOfTheDead();
 	}
 }

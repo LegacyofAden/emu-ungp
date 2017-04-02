@@ -28,23 +28,19 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * This class provides handling for items that should display a map when double clicked.
  */
-public class Maps implements IItemHandler
-{
+public class Maps implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		playable.sendPacket(new ShowMiniMap(item.getId()));
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new Maps());
 	}
 }

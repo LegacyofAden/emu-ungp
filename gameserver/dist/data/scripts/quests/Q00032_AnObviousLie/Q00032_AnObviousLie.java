@@ -18,9 +18,6 @@
  */
 package quests.Q00032_AnObviousLie;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
@@ -28,12 +25,15 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An Obvious Lie (32).
+ *
  * @author janiko, Gladicek
  */
-public final class Q00032_AnObviousLie extends Quest
-{
+public final class Q00032_AnObviousLie extends Quest {
 	// NPCs
 	private static final int MAXIMILIAN = 30120;
 	private static final int GENTLER = 30094;
@@ -50,15 +50,14 @@ public final class Q00032_AnObviousLie extends Quest
 	private static final int MIN_LVL = 45;
 	// Reward
 	private static final Map<String, Integer> EARS = new HashMap<>();
-	
+
 	{
 		EARS.put("cat", 6843); // Cat Ears
 		EARS.put("raccoon", 7680); // Raccoon ears
 		EARS.put("rabbit", 7683); // Rabbit ears
 	}
-	
-	public Q00032_AnObviousLie()
-	{
+
+	public Q00032_AnObviousLie() {
 		super(32);
 		addStartNpc(MAXIMILIAN);
 		addTalkId(MAXIMILIAN, GENTLER, MIKI_THE_CAT);
@@ -66,83 +65,66 @@ public final class Q00032_AnObviousLie extends Quest
 		addCondMinLevel(MIN_LVL, "30120-03.htm");
 		registerQuestItems(MAP_OF_GENTLER, MEDICINAL_HERB.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "30120-02.html":
-			{
+
+		switch (event) {
+			case "30120-02.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "30094-02.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30094-02.html": {
+				if (qs.isCond(1)) {
 					giveItems(player, MAP_OF_GENTLER, 1);
 					qs.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31706-02.html":
-			{
-				if (qs.isCond(2) && hasQuestItems(player, MAP_OF_GENTLER))
-				{
+			case "31706-02.html": {
+				if (qs.isCond(2) && hasQuestItems(player, MAP_OF_GENTLER)) {
 					takeItems(player, MAP_OF_GENTLER, -1);
 					qs.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30094-06.html":
-			{
-				if (qs.isCond(4) && hasItem(player, MEDICINAL_HERB))
-				{
+			case "30094-06.html": {
+				if (qs.isCond(4) && hasItem(player, MEDICINAL_HERB)) {
 					takeItem(player, MEDICINAL_HERB);
 					qs.setCond(5, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30094-09.html":
-			{
-				if (qs.isCond(5) && hasItem(player, SPIRIT_ORE))
-				{
+			case "30094-09.html": {
+				if (qs.isCond(5) && hasItem(player, SPIRIT_ORE)) {
 					takeItem(player, SPIRIT_ORE);
 					qs.setCond(6, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30094-12.html":
-			{
-				if (qs.isCond(7))
-				{
+			case "30094-12.html": {
+				if (qs.isCond(7)) {
 					qs.setCond(8, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30094-15.html":
-			{
+			case "30094-15.html": {
 				htmltext = event;
 				break;
 			}
-			case "31706-05.html":
-			{
-				if (qs.isCond(6))
-				{
+			case "31706-05.html": {
+				if (qs.isCond(6)) {
 					qs.setCond(7, true);
 					htmltext = event;
 				}
@@ -150,23 +132,16 @@ public final class Q00032_AnObviousLie extends Quest
 			}
 			case "cat":
 			case "raccoon":
-			case "rabbit":
-			{
-				if (qs.isCond(8) && takeAllItems(player, ARMOR_FRAGMENT_LOW_GRADE, ACCESORY_GEM_LOW_GRADE))
-				{
-					if ((player.getLevel() >= MIN_LVL))
-					{
+			case "rabbit": {
+				if (qs.isCond(8) && takeAllItems(player, ARMOR_FRAGMENT_LOW_GRADE, ACCESORY_GEM_LOW_GRADE)) {
+					if ((player.getLevel() >= MIN_LVL)) {
 						giveItems(player, EARS.get(event), 1);
 						qs.exitQuest(false, true);
 						htmltext = "30094-16.html";
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "30094-17.html";
 				}
 				break;
@@ -174,91 +149,68 @@ public final class Q00032_AnObviousLie extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, 3, 3, npc);
-		if ((qs != null) && giveItemRandomly(qs.getPlayer(), npc, MEDICINAL_HERB.getId(), 1, MEDICINAL_HERB.getCount(), 1.0, true))
-		{
+		if ((qs != null) && giveItemRandomly(qs.getPlayer(), npc, MEDICINAL_HERB.getId(), 1, MEDICINAL_HERB.getCount(), 1.0, true)) {
 			qs.setCond(4);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == MAXIMILIAN)
-				{
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == MAXIMILIAN) {
 					htmltext = "30120-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case MAXIMILIAN:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case MAXIMILIAN: {
+						if (qs.isCond(1)) {
 							htmltext = "30120-04.html";
 						}
 						break;
 					}
-					case GENTLER:
-					{
-						switch (qs.getCond())
-						{
-							case 1:
-							{
+					case GENTLER: {
+						switch (qs.getCond()) {
+							case 1: {
 								htmltext = "30094-01.html";
 								break;
 							}
-							case 2:
-							{
+							case 2: {
 								htmltext = "30094-03.html";
 								break;
 							}
-							case 4:
-							{
+							case 4: {
 								htmltext = (hasItem(player, MEDICINAL_HERB) ? "30094-04.html" : "30094-05.html");
 								break;
 							}
-							case 5:
-							{
+							case 5: {
 								htmltext = (hasItem(player, SPIRIT_ORE) ? "30094-07.html" : "30094-08.html");
 								break;
 							}
-							case 6:
-							{
+							case 6: {
 								htmltext = "30094-10.html";
 								break;
 							}
-							case 7:
-							{
+							case 7: {
 								htmltext = "30094-11.html";
 								break;
 							}
-							case 8:
-							{
-								if (hasAllItems(player, true, ARMOR_FRAGMENT_LOW_GRADE, ACCESORY_GEM_LOW_GRADE))
-								{
+							case 8: {
+								if (hasAllItems(player, true, ARMOR_FRAGMENT_LOW_GRADE, ACCESORY_GEM_LOW_GRADE)) {
 									htmltext = "30094-13.html";
-								}
-								else
-								{
+								} else {
 									htmltext = "30094-14.html";
 								}
 								break;
@@ -266,32 +218,25 @@ public final class Q00032_AnObviousLie extends Quest
 						}
 						break;
 					}
-					case MIKI_THE_CAT:
-					{
-						switch (qs.getCond())
-						{
-							case 2:
-							{
-								if (hasQuestItems(player, MAP_OF_GENTLER))
-								{
+					case MIKI_THE_CAT: {
+						switch (qs.getCond()) {
+							case 2: {
+								if (hasQuestItems(player, MAP_OF_GENTLER)) {
 									htmltext = "31706-01.html";
 								}
 								break;
 							}
 							case 3:
 							case 4:
-							case 5:
-							{
+							case 5: {
 								htmltext = "31706-03.html";
 								break;
 							}
-							case 6:
-							{
+							case 6: {
 								htmltext = "31706-04.html";
 								break;
 							}
-							case 7:
-							{
+							case 7: {
 								htmltext = "31706-06.html";
 								break;
 							}

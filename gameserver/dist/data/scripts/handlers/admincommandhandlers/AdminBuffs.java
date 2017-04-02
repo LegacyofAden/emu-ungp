@@ -18,14 +18,8 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-
-import org.l2junity.gameserver.config.AdminConfig;
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.AdminConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -45,80 +39,72 @@ import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.GMAudit;
 
-public class AdminBuffs implements IAdminCommandHandler
-{
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
+public class AdminBuffs implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_buff",
-		"admin_getbuffs",
-		"admin_getbuffs_ps",
-		"admin_stopbuff",
-		"admin_stopallbuffs",
-		"admin_viewblockedeffects",
-		"admin_areacancel",
-		"admin_removereuse",
-		"admin_switch_gm_buffs"
-	};
+			{
+					"admin_buff",
+					"admin_getbuffs",
+					"admin_getbuffs_ps",
+					"admin_stopbuff",
+					"admin_stopallbuffs",
+					"admin_viewblockedeffects",
+					"admin_areacancel",
+					"admin_removereuse",
+					"admin_switch_gm_buffs"
+			};
 	// Misc
 	private static final String FONT_RED1 = "<font color=\"FF0000\">";
 	private static final String FONT_RED2 = "</font>";
-	
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_buff"))
-		{
-			if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature())
-			{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_buff")) {
+			if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature()) {
 				activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 				return false;
 			}
-			
+
 			final StringTokenizer st = new StringTokenizer(command, " ");
 			command = st.nextToken();
-			if (!st.hasMoreTokens())
-			{
+			if (!st.hasMoreTokens()) {
 				activeChar.sendMessage("Skill Id and level are not specified.");
 				activeChar.sendMessage("Usage: //buff <skillId> <skillLevel>");
 				return false;
 			}
-			
-			try
-			{
+
+			try {
 				final int skillId = Integer.parseInt(st.nextToken());
 				final int skillLevel = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : SkillData.getInstance().getMaxLevel(skillId);
 				final Creature target = (Creature) activeChar.getTarget();
 				final Skill skill = SkillData.getInstance().getSkill(skillId, skillLevel);
-				if (skill == null)
-				{
+				if (skill == null) {
 					activeChar.sendMessage("Skill with id: " + skillId + ", lvl: " + skillLevel + " not found.");
 					return false;
 				}
-				
+
 				activeChar.sendMessage("Admin buffing " + skill.getName() + " (" + skillId + "," + skillLevel + ")");
 				skill.applyEffects(activeChar, target);
 				return true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed buffing: " + e.getMessage());
 				activeChar.sendMessage("Usage: //buff <skillId> <skillLevel>");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_getbuffs"))
-		{
+		} else if (command.startsWith("admin_getbuffs")) {
 			final StringTokenizer st = new StringTokenizer(command, " ");
 			command = st.nextToken();
-			if (st.hasMoreTokens())
-			{
+			if (st.hasMoreTokens()) {
 				final String playername = st.nextToken();
 				PlayerInstance player = World.getInstance().getPlayer(playername);
-				if (player != null)
-				{
+				if (player != null) {
 					int page = 0;
-					if (st.hasMoreTokens())
-					{
+					if (st.hasMoreTokens()) {
 						page = Integer.parseInt(st.nextToken());
 					}
 					showBuffs(activeChar, player, page, command.endsWith("_ps"));
@@ -126,142 +112,101 @@ public class AdminBuffs implements IAdminCommandHandler
 				}
 				activeChar.sendMessage("The player " + playername + " is not online.");
 				return false;
-			}
-			else if ((activeChar.getTarget() != null) && activeChar.getTarget().isCreature())
-			{
+			} else if ((activeChar.getTarget() != null) && activeChar.getTarget().isCreature()) {
 				showBuffs(activeChar, (Creature) activeChar.getTarget(), 0, command.endsWith("_ps"));
 				return true;
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_stopbuff"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_stopbuff")) {
+			try {
 				StringTokenizer st = new StringTokenizer(command, " ");
-				
+
 				st.nextToken();
 				int objectId = Integer.parseInt(st.nextToken());
 				int skillId = Integer.parseInt(st.nextToken());
-				
+
 				removeBuff(activeChar, objectId, skillId);
 				return true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed removing effect: " + e.getMessage());
 				activeChar.sendMessage("Usage: //stopbuff <objectId> <skillId>");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_stopallbuffs"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_stopallbuffs")) {
+			try {
 				StringTokenizer st = new StringTokenizer(command, " ");
 				st.nextToken();
 				int objectId = Integer.parseInt(st.nextToken());
 				removeAllBuffs(activeChar, objectId);
 				return true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed removing all effects: " + e.getMessage());
 				activeChar.sendMessage("Usage: //stopallbuffs <objectId>");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_viewblockedeffects"))
-		{
-			try
-			{
+		} else if (command.startsWith("admin_viewblockedeffects")) {
+			try {
 				StringTokenizer st = new StringTokenizer(command, " ");
 				st.nextToken();
 				int objectId = Integer.parseInt(st.nextToken());
 				viewBlockedEffects(activeChar, objectId);
 				return true;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("Failed viewing blocked effects: " + e.getMessage());
 				activeChar.sendMessage("Usage: //viewblockedeffects <objectId>");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_areacancel"))
-		{
+		} else if (command.startsWith("admin_areacancel")) {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			st.nextToken();
 			String val = st.nextToken();
-			try
-			{
+			try {
 				int radius = Integer.parseInt(val);
-				
+
 				World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, radius, Creature::stopAllEffects);
-				
+
 				activeChar.sendMessage("All effects canceled within radius " + radius);
 				return true;
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				activeChar.sendMessage("Usage: //areacancel <radius>");
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_removereuse"))
-		{
+		} else if (command.startsWith("admin_removereuse")) {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			command = st.nextToken();
-			
+
 			PlayerInstance player = null;
-			if (st.hasMoreTokens())
-			{
+			if (st.hasMoreTokens()) {
 				String playername = st.nextToken();
-				
-				try
-				{
+
+				try {
 					player = World.getInstance().getPlayer(playername);
+				} catch (Exception e) {
 				}
-				catch (Exception e)
-				{
-				}
-				
-				if (player == null)
-				{
+
+				if (player == null) {
 					activeChar.sendMessage("The player " + playername + " is not online.");
 					return false;
 				}
-			}
-			else if ((activeChar.getTarget() != null) && activeChar.getTarget().isPlayer())
-			{
+			} else if ((activeChar.getTarget() != null) && activeChar.getTarget().isPlayer()) {
 				player = activeChar.getTarget().getActingPlayer();
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 				return false;
 			}
-			
-			try
-			{
+
+			try {
 				player.resetTimeStamps();
 				player.sendPacket(new SkillCoolTime(player));
 				activeChar.sendMessage("Skill reuse was removed from " + player.getName() + ".");
 				return true;
-			}
-			catch (NullPointerException e)
-			{
+			} catch (NullPointerException e) {
 				return false;
 			}
-		}
-		else if (command.startsWith("admin_switch_gm_buffs"))
-		{
-			if (AdminConfig.GM_GIVE_SPECIAL_SKILLS != AdminConfig.GM_GIVE_SPECIAL_AURA_SKILLS)
-			{
+		} else if (command.startsWith("admin_switch_gm_buffs")) {
+			if (AdminConfig.GM_GIVE_SPECIAL_SKILLS != AdminConfig.GM_GIVE_SPECIAL_AURA_SKILLS) {
 				final boolean toAuraSkills = activeChar.getKnownSkill(7041) != null;
 				switchSkills(activeChar, toAuraSkills);
 				activeChar.sendSkillList();
@@ -273,35 +218,30 @@ public class AdminBuffs implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	/**
-	 * @param gmchar the player to switch the Game Master skills.
+	 * @param gmchar       the player to switch the Game Master skills.
 	 * @param toAuraSkills if {@code true} it will remove "GM Aura" skills and add "GM regular" skills, vice versa if {@code false}.
 	 */
-	public static void switchSkills(PlayerInstance gmchar, boolean toAuraSkills)
-	{
+	public static void switchSkills(PlayerInstance gmchar, boolean toAuraSkills) {
 		final Collection<Skill> skills = toAuraSkills ? SkillTreesData.getInstance().getGMSkillTree() : SkillTreesData.getInstance().getGMAuraSkillTree();
-		for (Skill skill : skills)
-		{
+		for (Skill skill : skills) {
 			gmchar.removeSkill(skill, false); // Don't Save GM skills to database
 		}
 		SkillTreesData.getInstance().addSkills(gmchar, toAuraSkills);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void showBuffs(PlayerInstance activeChar, Creature target, int page, boolean passive)
-	{
+
+	public static void showBuffs(PlayerInstance activeChar, Creature target, int page, boolean passive) {
 		final String pageLink = "bypass -h admin_getbuffs" + (passive ? "_ps " : " ") + target.getName();
-		
+
 		int size = 0;
 		final PageResult result;
-		if (passive)
-		{
+		if (passive) {
 			final List<Skill> passives = target.getAllSkills().stream().filter(Skill::isPassive).collect(Collectors.toList());
 			size = passives.size();
 			result = PageBuilder.newBuilder(passives, 3, pageLink).currentPage(page).style(ButtonsStyle.INSTANCE).bodyHandler((pages, skill, sb) ->
@@ -314,15 +254,12 @@ public class AdminBuffs implements IAdminCommandHandler
 				sb.append("P");
 				sb.append("</td><td></td></tr>");
 			}).build();
-		}
-		else
-		{
+		} else {
 			final Collection<BuffInfo> effects = target.getEffectList().getEffects();
 			size = effects.size();
 			result = PageBuilder.newBuilder(effects, 3, pageLink).currentPage(page).style(ButtonsStyle.INSTANCE).bodyHandler((pages, info, sb) ->
 			{
-				for (AbstractEffect effect : info.getEffects())
-				{
+				for (AbstractEffect effect : info.getEffects()) {
 					sb.append("<tr><td>");
 					sb.append(!info.isInUse() ? FONT_RED1 : "");
 					sb.append(info.getSkill().getName());
@@ -342,126 +279,100 @@ public class AdminBuffs implements IAdminCommandHandler
 				}
 			}).build();
 		}
-		
+
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/getbuffs.htm");
-		
-		if (result.getPages() > 0)
-		{
+
+		if (result.getPages() > 0) {
 			html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");
-		}
-		else
-		{
+		} else {
 			html.replace("%pages%", "");
 		}
-		
+
 		html.replace("%targetName%", target.getName());
 		html.replace("%targetObjId%", target.getObjectId());
 		html.replace("%buffs%", result.getBodyTemplate().toString());
 		html.replace("%effectSize%", size);
 		activeChar.sendPacket(html);
-		
-		if (GeneralConfig.GMAUDIT)
-		{
+
+		if (GeneralConfig.GMAUDIT) {
 			GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", "getbuffs", target.getName() + " (" + Integer.toString(target.getObjectId()) + ")", "");
 		}
 	}
-	
-	private static void removeBuff(PlayerInstance activeChar, int objId, int skillId)
-	{
+
+	private static void removeBuff(PlayerInstance activeChar, int objId, int skillId) {
 		Creature target = null;
-		try
-		{
+		try {
 			target = (Creature) World.getInstance().findObject(objId);
+		} catch (Exception e) {
 		}
-		catch (Exception e)
-		{
-		}
-		
-		if ((target != null) && (skillId > 0))
-		{
-			if (target.isAffectedBySkill(skillId))
-			{
+
+		if ((target != null) && (skillId > 0)) {
+			if (target.isAffectedBySkill(skillId)) {
 				target.stopSkillEffects(true, skillId);
 				activeChar.sendMessage("Removed skill ID: " + skillId + " effects from " + target.getName() + " (" + objId + ").");
 			}
-			
+
 			showBuffs(activeChar, target, 0, false);
-			if (GeneralConfig.GMAUDIT)
-			{
+			if (GeneralConfig.GMAUDIT) {
 				GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", "stopbuff", target.getName() + " (" + objId + ")", Integer.toString(skillId));
 			}
 		}
 	}
-	
-	private static void removeAllBuffs(PlayerInstance activeChar, int objId)
-	{
+
+	private static void removeAllBuffs(PlayerInstance activeChar, int objId) {
 		Creature target = null;
-		try
-		{
+		try {
 			target = (Creature) World.getInstance().findObject(objId);
+		} catch (Exception e) {
 		}
-		catch (Exception e)
-		{
-		}
-		
-		if (target != null)
-		{
+
+		if (target != null) {
 			target.stopAllEffects();
 			activeChar.sendMessage("Removed all effects from " + target.getName() + " (" + objId + ")");
 			showBuffs(activeChar, target, 0, false);
-			if (GeneralConfig.GMAUDIT)
-			{
+			if (GeneralConfig.GMAUDIT) {
 				GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", "stopallbuffs", target.getName() + " (" + objId + ")", "");
 			}
 		}
 	}
-	
-	private static void viewBlockedEffects(PlayerInstance activeChar, int objId)
-	{
+
+	private static void viewBlockedEffects(PlayerInstance activeChar, int objId) {
 		Creature target = null;
-		try
-		{
+		try {
 			target = (Creature) World.getInstance().findObject(objId);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			activeChar.sendMessage("Target with object id " + objId + " not found.");
 			return;
 		}
-		
-		if (target != null)
-		{
+
+		if (target != null) {
 			final Set<AbnormalType> blockedAbnormals = target.getEffectList().getBlockedAbnormalTypes();
 			final int blockedAbnormalsSize = blockedAbnormals != null ? blockedAbnormals.size() : 0;
 			final StringBuilder html = new StringBuilder(500 + (blockedAbnormalsSize * 50));
 			html.append("<html><table width=\"100%\"><tr><td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center><font color=\"LEVEL\">Blocked effects of ");
 			html.append(target.getName());
 			html.append("</font></td><td width=45><button value=\"Back\" action=\"bypass -h admin_getbuffs" + (target.isPlayer() ? (" " + target.getName()) : "") + "\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table><br>");
-			
-			if ((blockedAbnormals != null) && !blockedAbnormals.isEmpty())
-			{
+
+			if ((blockedAbnormals != null) && !blockedAbnormals.isEmpty()) {
 				html.append("<br>Blocked buff slots: ");
-				for (AbnormalType slot : blockedAbnormals)
-				{
+				for (AbnormalType slot : blockedAbnormals) {
 					html.append("<br>").append(slot.toString());
 				}
 			}
-			
+
 			html.append("</html>");
-			
+
 			// Send the packet
 			activeChar.sendPacket(new NpcHtmlMessage(0, 1, html.toString()));
-			
-			if (GeneralConfig.GMAUDIT)
-			{
+
+			if (GeneralConfig.GMAUDIT) {
 				GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", "viewblockedeffects", target.getName() + " (" + Integer.toString(target.getObjectId()) + ")", "");
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminBuffs());
 	}
 }

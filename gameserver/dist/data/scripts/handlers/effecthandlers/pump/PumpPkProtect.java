@@ -18,27 +18,24 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Protection Blessing effect implementation.
+ *
  * @author kerberos_20
  */
-public final class PumpPkProtect extends AbstractBooleanStatEffect
-{
-	public PumpPkProtect(StatsSet params)
-	{
+public final class PumpPkProtect extends AbstractBooleanStatEffect {
+	public PumpPkProtect(StatsSet params) {
 		super(BooleanStat.PROTECTION_BLESSING);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
 }

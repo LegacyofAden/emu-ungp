@@ -18,27 +18,24 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * An effect that blocks the player (NPC?) control. <br>
  * It prevents moving, casting, social actions, etc.
+ *
  * @author Nik
  */
-public class PumpBlockControl extends AbstractBooleanStatEffect
-{
-	public PumpBlockControl(StatsSet params)
-	{
+public class PumpBlockControl extends AbstractBooleanStatEffect {
+	public PumpBlockControl(StatsSet params) {
 		super(BooleanStat.BLOCK_CONTROL);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.BLOCK_CONTROL;
 	}
 }

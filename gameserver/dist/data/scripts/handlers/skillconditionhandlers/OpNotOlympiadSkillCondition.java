@@ -27,16 +27,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpNotOlympiadSkillCondition implements ISkillCondition
-{
-	public OpNotOlympiadSkillCondition(StatsSet params)
-	{
+public class OpNotOlympiadSkillCondition implements ISkillCondition {
+	public OpNotOlympiadSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return (caster.isPlayer() && !caster.getActingPlayer().isInOlympiadMode());
 	}
-	
+
 }

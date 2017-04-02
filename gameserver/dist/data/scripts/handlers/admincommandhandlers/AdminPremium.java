@@ -26,16 +26,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author Sdw
  */
-public class AdminPremium implements IAdminCommandHandler
-{
+public class AdminPremium implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_premium"
-	};
-	
+			{
+					"admin_premium"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final WorldObject target = activeChar.getTarget();
 		final PlayerInstance player = ((target != null) && target.isPlayer()) ? target.getActingPlayer() : activeChar;
 		final boolean isPremium = player.isPremium();
@@ -44,15 +42,13 @@ public class AdminPremium implements IAdminCommandHandler
 		activeChar.sendMessage((isPremium ? "Remove premium account status of " : "Added premium account status to ") + player.getName());
 		return false;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminPremium());
 	}
 }

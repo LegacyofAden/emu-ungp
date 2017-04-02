@@ -27,44 +27,43 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Divinity Protector (470)
+ *
  * @author St3eT
  */
-public final class Q00470_DivinityProtector extends Quest
-{
+public final class Q00470_DivinityProtector extends Quest {
 	// NPCs
 	private static final int ADVENTURER = 32327;
 	private static final int AGRIPEL = 31348;
 	private static final int[] MONSTERS =
-	{
-		21520, // Eye of Splendor
-		21521, // Claws of Splendor
-		21523, // Flash of Splendor
-		21524, // Blade of Splendor
-		21526, // Wisdom of Splendor
-		21542, // Pilgrim's Disciple
-		21543, // Page of Pilgrim
-		21527, // Fury of Splendor
-		21529, // Soul of Splendor
-		21541, // Pilgrim of Splendor
-		21530, // Victory of Splendor
-		21532, // Shout of Splendor
-		21533, // Alliance of Splendor
-		21535, // Signet of Splendor
-		21536, // Crown of Splendor
-		21545, // Judge of Fire
-		21546, // Judge of Light
-		21537, // Fang of Splendor
-		21539, // Wailing of Splendor
-		21544, // Judge of Splendor
-	};
+			{
+					21520, // Eye of Splendor
+					21521, // Claws of Splendor
+					21523, // Flash of Splendor
+					21524, // Blade of Splendor
+					21526, // Wisdom of Splendor
+					21542, // Pilgrim's Disciple
+					21543, // Page of Pilgrim
+					21527, // Fury of Splendor
+					21529, // Soul of Splendor
+					21541, // Pilgrim of Splendor
+					21530, // Victory of Splendor
+					21532, // Shout of Splendor
+					21533, // Alliance of Splendor
+					21535, // Signet of Splendor
+					21536, // Crown of Splendor
+					21545, // Judge of Fire
+					21546, // Judge of Light
+					21537, // Fang of Splendor
+					21539, // Wailing of Splendor
+					21544, // Judge of Splendor
+			};
 	// Items
 	private static final int ASH = 19489; // Remnant Ash
 	// Misc
 	private static final int MIN_LEVEL = 60;
 	private static final int MAX_LEVEL = 64;
-	
-	public Q00470_DivinityProtector()
-	{
+
+	public Q00470_DivinityProtector() {
 		super(470);
 		addStartNpc(ADVENTURER);
 		addTalkId(ADVENTURER, AGRIPEL);
@@ -72,28 +71,23 @@ public final class Q00470_DivinityProtector extends Quest
 		registerQuestItems(ASH);
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32327-02.htm":
-			case "32327-03.htm":
-			{
+			case "32327-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32327-04.htm":
-			{
+			case "32327-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
@@ -101,43 +95,30 @@ public final class Q00470_DivinityProtector extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURER)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURER) {
 					htmltext = "32327-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == ADVENTURER ? "32327-05.html" : "31348-01.html";
-				}
-				else if (st.isCond(2))
-				{
-					if (npc.getId() == ADVENTURER)
-					{
+				} else if (st.isCond(2)) {
+					if (npc.getId() == ADVENTURER) {
 						htmltext = "32327-06.html";
-					}
-					else if (npc.getId() == AGRIPEL)
-					{
-						if (!isSimulated)
-						{
+					} else if (npc.getId() == AGRIPEL) {
+						if (!isSimulated) {
 							st.exitQuest(QuestType.DAILY, true);
 							giveAdena(player, 194_000, true);
-							if (player.getLevel() >= MIN_LEVEL)
-							{
+							if (player.getLevel() >= MIN_LEVEL) {
 								addExp(player, 1_879_400);
 								addSp(player, 451);
 							}
@@ -147,12 +128,9 @@ public final class Q00470_DivinityProtector extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if ((npc.getId() == ADVENTURER) && st.isNowAvailable())
-				{
-					if (!isSimulated)
-					{
+			case State.COMPLETED: {
+				if ((npc.getId() == ADVENTURER) && st.isNowAvailable()) {
+					if (!isSimulated) {
 						st.setState(State.CREATED);
 					}
 					htmltext = "32327-01.htm";
@@ -162,16 +140,13 @@ public final class Q00470_DivinityProtector extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, ASH, 1, 20, 0.20, true))
-			{
+
+		if ((st != null) && st.isCond(1)) {
+			if (giveItemRandomly(killer, ASH, 1, 20, 0.20, true)) {
 				st.setCond(2);
 			}
 		}

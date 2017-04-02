@@ -29,15 +29,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class EquipShieldSkillCondition implements ISkillCondition
-{
-	public EquipShieldSkillCondition(StatsSet params)
-	{
+public class EquipShieldSkillCondition implements ISkillCondition {
+	public EquipShieldSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final L2Item shield = caster.getSecondaryWeaponItem();
 		return (shield != null) && (shield.getItemType() == ArmorType.SHIELD);
 	}

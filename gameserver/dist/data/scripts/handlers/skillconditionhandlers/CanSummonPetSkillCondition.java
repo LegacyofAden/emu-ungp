@@ -18,7 +18,7 @@
  */
 package handlers.skillconditionhandlers;
 
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharSummonTable;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.StatsSet;
@@ -33,54 +33,39 @@ import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 /**
  * @author Sdw
  */
-public class CanSummonPetSkillCondition implements ISkillCondition
-{
-	public CanSummonPetSkillCondition(StatsSet params)
-	{
-		
+public class CanSummonPetSkillCondition implements ISkillCondition {
+	public CanSummonPetSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final PlayerInstance player = caster.getActingPlayer();
-		if (player == null)
-		{
+		if (player == null) {
 			return false;
 		}
-		
+
 		boolean canSummon = true;
-		
-		if (PlayerConfig.RESTORE_PET_ON_RECONNECT && CharSummonTable.getInstance().getPets().containsKey(player.getObjectId()))
-		{
+
+		if (PlayerConfig.RESTORE_PET_ON_RECONNECT && CharSummonTable.getInstance().getPets().containsKey(player.getObjectId())) {
 			player.sendPacket(SystemMessageId.YOU_MAY_NOT_SUMMON_MULTIPLE_PETS_AT_THE_SAME_TIME);
 			canSummon = false;
-		}
-		else if (player.hasPet())
-		{
+		} else if (player.hasPet()) {
 			player.sendPacket(SystemMessageId.YOU_MAY_NOT_SUMMON_MULTIPLE_PETS_AT_THE_SAME_TIME);
 			canSummon = false;
-		}
-		else if ((player.getActiveTradeList() != null) || player.hasItemRequest() || (player.getPrivateStoreType() != PrivateStoreType.NONE))
-		{
+		} else if ((player.getActiveTradeList() != null) || player.hasItemRequest() || (player.getPrivateStoreType() != PrivateStoreType.NONE)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_SUMMON_DURING_A_TRADE_OR_WHILE_USING_A_PRIVATE_STORE);
 			canSummon = false;
-		}
-		else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player))
-		{
+		} else if (AttackStanceTaskManager.getInstance().hasAttackStanceTask(player)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_SUMMON_DURING_COMBAT);
 			canSummon = false;
-		}
-		else if (player.isInAirShip())
-		{
+		} else if (player.isInAirShip()) {
 			player.sendPacket(SystemMessageId.A_SERVITOR_OR_PET_CANNOT_BE_SUMMONED_WHILE_ON_AN_AIRSHIP);
 			canSummon = false;
-		}
-		else if (player.isFlyingMounted() || player.isMounted() || player.inObserverMode() || player.isTeleporting())
-		{
+		} else if (player.isFlyingMounted() || player.isMounted() || player.inObserverMode() || player.isTeleporting()) {
 			canSummon = false;
 		}
-		
+
 		return canSummon;
 	}
 }

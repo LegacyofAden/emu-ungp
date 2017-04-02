@@ -31,31 +31,26 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Open Dwarf Recipe Book effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantOpenDwarfRecipeBook extends AbstractEffect
-{
-	public InstantOpenDwarfRecipeBook(StatsSet params)
-	{
+public final class InstantOpenDwarfRecipeBook extends AbstractEffect {
+	public InstantOpenDwarfRecipeBook(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
-		if (casterPlayer.getPrivateStoreType() == PrivateStoreType.MANUFACTURE)
-		{
+		if (casterPlayer.getPrivateStoreType() == PrivateStoreType.MANUFACTURE) {
 			casterPlayer.sendPacket(SystemMessageId.YOU_MAY_NOT_ALTER_YOUR_RECIPE_BOOK_WHILE_ENGAGED_IN_MANUFACTURING);
 			return;
 		}
-		
-		if (casterPlayer.isProcessingTransaction())
-		{
+
+		if (casterPlayer.isProcessingTransaction()) {
 			casterPlayer.sendPacket(SystemMessageId.ITEM_CREATION_IS_NOT_POSSIBLE_WHILE_ENGAGED_IN_A_TRADE);
 			return;
 		}

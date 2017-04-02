@@ -25,15 +25,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Letters from the Queen: Swamp of Screams (10789)
+ *
  * @author malyelfik
  */
-public final class Q10789_LettersFromTheQueenSwampOfScreams extends LetterQuest
-{
+public final class Q10789_LettersFromTheQueenSwampOfScreams extends LetterQuest {
 	// NPCs
 	private static final int INNOCENTIN = 31328;
 	private static final int DOKARA = 33847;
@@ -45,9 +44,8 @@ public final class Q10789_LettersFromTheQueenSwampOfScreams extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 65;
 	private static final int MAX_LEVEL = 69;
-	
-	public Q10789_LettersFromTheQueenSwampOfScreams()
-	{
+
+	public Q10789_LettersFromTheQueenSwampOfScreams() {
 		super(10789);
 		addTalkId(INNOCENTIN, DOKARA);
 		setIsErtheiaQuest(true);
@@ -56,45 +54,35 @@ public final class Q10789_LettersFromTheQueenSwampOfScreams extends LetterQuest
 		setStartLocation(SOE_RUNE, TELEPORT_LOC);
 		registerQuestItems(SOE_RUNE, SOE_SWAMP_OF_SCREAMS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "31328-02.html":
 			case "33847-02.html":
 				break;
-			case "31328-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "31328-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, SOE_SWAMP_OF_SCREAMS, 1);
 				}
 				break;
 			}
-			case "33847-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33847-03.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 942_690);
 						addSp(player, 226);
 						showOnScreenMsg(player, NpcStringId.GROW_STRONGER_HERE_UNTIL_YOU_RECEIVE_THE_NEXT_LETTER_FROM_QUEEN_NAVARI_AT_LV_70, ExShowScreenMessage.TOP_CENTER, 8000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -105,34 +93,27 @@ public final class Q10789_LettersFromTheQueenSwampOfScreams extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if (qs.isStarted())
-		{
-			if (npc.getId() == INNOCENTIN)
-			{
+
+		if (qs.isStarted()) {
+			if (npc.getId() == INNOCENTIN) {
 				htmltext = (qs.isCond(1)) ? "31328-01.html" : "31328-04.html";
-			}
-			else if (qs.isCond(2))
-			{
+			} else if (qs.isCond(2)) {
 				htmltext = "33847-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public boolean canShowTutorialMark(PlayerInstance player)
-	{
+	public boolean canShowTutorialMark(PlayerInstance player) {
 		return !player.isInCategory(CategoryType.MAGE_GROUP);
 	}
 }

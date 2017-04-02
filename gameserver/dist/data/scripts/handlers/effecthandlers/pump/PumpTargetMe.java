@@ -26,33 +26,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Target Me effect implementation.
+ *
  * @author -Nemesiss-
  */
-public final class PumpTargetMe extends AbstractEffect
-{
-	public PumpTargetMe(StatsSet params)
-	{
+public final class PumpTargetMe extends AbstractEffect {
+	public PumpTargetMe(StatsSet params) {
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayable())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayable()) {
 			((Playable) target).setLockedTarget(null);
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayable())
-		{
-			if (target.getTarget() != caster)
-			{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayable()) {
+			if (target.getTarget() != caster) {
 				target.setTarget(caster);
 			}
-			
+
 			((Playable) target).setLockedTarget(caster);
 		}
 	}

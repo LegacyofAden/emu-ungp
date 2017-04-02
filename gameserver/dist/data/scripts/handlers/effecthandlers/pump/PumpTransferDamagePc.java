@@ -18,39 +18,33 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatAddEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
-import handlers.effecthandlers.AbstractDoubleStatAddEffect;
-
 /**
  * Transfer Damage effect implementation.
+ *
  * @author UnAfraid
  */
-public final class PumpTransferDamagePc extends AbstractDoubleStatAddEffect
-{
-	public PumpTransferDamagePc(StatsSet params)
-	{
+public final class PumpTransferDamagePc extends AbstractDoubleStatAddEffect {
+	public PumpTransferDamagePc(StatsSet params) {
 		super(params, DoubleStat.TRANSFER_DAMAGE_TO_PLAYER);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayable() && caster.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayable() && caster.isPlayer()) {
 			((Playable) target).setTransferDamageTo(null);
 		}
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayable() && caster.isPlayer())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayable() && caster.isPlayer()) {
 			((Playable) target).setTransferDamageTo(caster.getActingPlayer());
 		}
 	}

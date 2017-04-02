@@ -25,29 +25,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Flag effect implementation.
+ *
  * @author BiggBoss
  */
-public final class PumpVioletBoy extends AbstractEffect
-{
-	public PumpVioletBoy(StatsSet params)
-	{
+public final class PumpVioletBoy extends AbstractEffect {
+	public PumpVioletBoy(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return (target != null) && target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.updatePvPFlag(1);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().updatePvPFlag(0);
 	}
 }

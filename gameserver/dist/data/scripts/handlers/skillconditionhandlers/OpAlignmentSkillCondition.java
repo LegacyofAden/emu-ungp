@@ -29,30 +29,23 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpAlignmentSkillCondition implements ISkillCondition
-{
+public class OpAlignmentSkillCondition implements ISkillCondition {
 	private final SkillConditionAffectType _affectType;
 	private final SkillConditionAlignment _alignment;
-	
-	public OpAlignmentSkillCondition(StatsSet params)
-	{
+
+	public OpAlignmentSkillCondition(StatsSet params) {
 		_affectType = params.getEnum("affectType", SkillConditionAffectType.class);
 		_alignment = params.getEnum("alignment", SkillConditionAlignment.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_affectType)
-		{
-			case CASTER:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_affectType) {
+			case CASTER: {
 				return _alignment.test(caster.getActingPlayer());
 			}
-			case TARGET:
-			{
-				if ((target != null) && target.isPlayer())
-				{
+			case TARGET: {
+				if ((target != null) && target.isPlayer()) {
 					return _alignment.test(target.getActingPlayer());
 				}
 				break;

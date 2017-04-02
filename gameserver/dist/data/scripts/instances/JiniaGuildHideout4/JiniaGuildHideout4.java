@@ -18,55 +18,48 @@
  */
 package instances.JiniaGuildHideout4;
 
+import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
-
-import instances.AbstractInstance;
 import quests.Q10287_StoryOfThoseLeft.Q10287_StoryOfThoseLeft;
 
 /**
  * Jinia Guild Hideout instance zone.
+ *
  * @author Adry_85
  */
-public final class JiniaGuildHideout4 extends AbstractInstance
-{
+public final class JiniaGuildHideout4 extends AbstractInstance {
 	// NPC
 	private static final int RAFFORTY = 32020;
 	// Misc
 	private static final int TEMPLATE_ID = 146;
-	
-	public JiniaGuildHideout4()
-	{
+
+	public JiniaGuildHideout4() {
 		super(TEMPLATE_ID);
 		addStartNpc(RAFFORTY);
 		addTalkId(RAFFORTY);
 	}
-	
+
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter)
-	{
+	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
-		if (firstEnter)
-		{
+		if (firstEnter) {
 			final QuestState qs = player.getQuestState(Q10287_StoryOfThoseLeft.class.getSimpleName());
-			if (qs != null)
-			{
+			if (qs != null) {
 				qs.setCond(2, true);
 			}
 		}
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
+	public String onTalk(Npc npc, PlayerInstance talker) {
 		enterInstance(talker, npc, TEMPLATE_ID);
 		return super.onTalk(npc, talker);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new JiniaGuildHideout4();
 	}
 }

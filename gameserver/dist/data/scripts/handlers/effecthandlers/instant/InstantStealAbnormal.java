@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.List;
-
 import org.l2junity.gameserver.enums.DispelSlotType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -32,51 +30,46 @@ import org.l2junity.gameserver.model.skills.EffectScope;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.List;
+
 /**
  * Steal Abnormal effect implementation.
+ *
  * @author Adry_85, Zoey76
  */
-public final class InstantStealAbnormal extends AbstractEffect
-{
+public final class InstantStealAbnormal extends AbstractEffect {
 	private final DispelSlotType _slot;
 	private final int _rate;
 	private final int _max;
-	
-	public InstantStealAbnormal(StatsSet params)
-	{
+
+	public InstantStealAbnormal(StatsSet params) {
 		_slot = params.getEnum("slot", DispelSlotType.class, DispelSlotType.BUFF);
 		_rate = params.getInt("rate", 0);
 		_max = params.getInt("max", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		if (casterPlayer.equals(targetPlayer))
-		{
+
+		if (casterPlayer.equals(targetPlayer)) {
 			return;
 		}
-		
+
 		final List<BuffInfo> toSteal = Formulas.calcCancelStealEffects(casterPlayer, targetPlayer, skill, _slot, _rate, _max);
-		if (toSteal.isEmpty())
-		{
+		if (toSteal.isEmpty()) {
 			return;
 		}
-		
-		for (BuffInfo infoToSteal : toSteal)
-		{
+
+		for (BuffInfo infoToSteal : toSteal) {
 			// Invert effected and effector.
 			final BuffInfo stolen = new BuffInfo(targetPlayer, casterPlayer, infoToSteal.getSkill(), false, null, null);
 			stolen.setAbnormalTime(infoToSteal.getTime()); // Copy the remaining time.

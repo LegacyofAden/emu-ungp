@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
@@ -26,38 +27,29 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
-
 /**
  * Devno AI.
+ *
  * @author St3eT
  */
-public final class Devno extends AbstractNpcAI
-{
+public final class Devno extends AbstractNpcAI {
 	// NPC
 	private static final int DEVNO = 33241;
-	
-	private Devno()
-	{
+
+	private Devno() {
 		addSpawnId(DEVNO);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_MOVE"))
-		{
-			if (getRandomBoolean())
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_MOVE")) {
+			if (getRandomBoolean()) {
 				addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 0, 500), npc.getInstanceWorld()), 23);
-				
+
 			}
 			getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_SHOUT"))
-		{
-			switch (getRandom(4))
-			{
+		} else if (event.equals("NPC_SHOUT")) {
+			switch (getRandom(4)) {
 				case 0:
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.CARRY_OUT_YOUR_QUESTS_FAITHFULLY_IN_TALKING_ISLAND_AND_YOU_LL_GET_TO_THE_1ST_CLASS_TRANSFER_IN_NO_TIME);
 					break;
@@ -71,17 +63,15 @@ public final class Devno extends AbstractNpcAI
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Devno();
 	}
 }

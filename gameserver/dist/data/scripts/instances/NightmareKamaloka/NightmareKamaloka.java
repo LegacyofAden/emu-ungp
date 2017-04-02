@@ -18,23 +18,22 @@
  */
 package instances.NightmareKamaloka;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import instances.AbstractInstance;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.instancezone.Instance;
 
-import instances.AbstractInstance;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Nightmare Kamaloka instance zone.
+ *
  * @author St3eT
  */
-public final class NightmareKamaloka extends AbstractInstance
-{
+public final class NightmareKamaloka extends AbstractInstance {
 	// NPCs
 	private static final int KURTIZ = 30870;
 	private static final int DARK_RIDER = 26102;
@@ -43,20 +42,20 @@ public final class NightmareKamaloka extends AbstractInstance
 	private static final int DARK_RIDER_UD = 16574;
 	//@formatter:off
 	private static final Map<Integer, Integer> BOSS_MAP = new HashMap<>();
-	static
-	{
+
+	static {
 		BOSS_MAP.put(26093, 18170002); // Mino
 		BOSS_MAP.put(26094, 18170004); // Sola
 		BOSS_MAP.put(26096, 18170006); // Ariarc
 		BOSS_MAP.put(26099, 18170008); // Sirra
 		BOSS_MAP.put(DARK_RIDER, -1); // Dark Rider
 	}
+
 	//@formatter:on
 	// Misc
 	private static final int TEMPLATE_ID = 258;
-	
-	public NightmareKamaloka()
-	{
+
+	public NightmareKamaloka() {
 		super(TEMPLATE_ID);
 		addStartNpc(KURTIZ);
 		addTalkId(KURTIZ);
@@ -64,92 +63,68 @@ public final class NightmareKamaloka extends AbstractInstance
 		addAttackId(DARK_RIDER_UD);
 		addKillId(BOSS_MAP.keySet());
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			switch (event)
-			{
-				case "SPAWN_BOSSES":
-				{
+		if (isInInstance(instance)) {
+			switch (event) {
+				case "SPAWN_BOSSES": {
 					instance.spawnGroup("BOSSES");
 					break;
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("enterInstance"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			if (npc.getId() == INVISIBLE_NPC)
-			{
+		if (isInInstance(instance)) {
+			if (npc.getId() == INVISIBLE_NPC) {
 				getTimers().addTimer("SPAWN_BOSSES", 10000, npc, null);
 			}
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
+		if (isInInstance(instance)) {
 			final int nextDoorId = BOSS_MAP.getOrDefault(npc.getId(), -1);
-			if (nextDoorId == -1)
-			{
+			if (nextDoorId == -1) {
 				instance.finishInstance();
-			}
-			else
-			{
+			} else {
 				instance.openCloseDoor(nextDoorId, true);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
-		if (isInInstance(instance))
-		{
-			if (npc.getId() == DARK_RIDER_UD)
-			{
-				if ((npc.getCurrentHpPercent() >= 95) && npc.isScriptValue(0))
-				{
+		if (isInInstance(instance)) {
+			if (npc.getId() == DARK_RIDER_UD) {
+				if ((npc.getCurrentHpPercent() >= 95) && npc.isScriptValue(0)) {
 					npc.doCast(SkillData.getInstance().getSkill(DARK_RIDER_UD, 1));
 					npc.setScriptValue(1);
-				}
-				else if ((npc.getCurrentHpPercent() >= 75) && npc.isScriptValue(1))
-				{
+				} else if ((npc.getCurrentHpPercent() >= 75) && npc.isScriptValue(1)) {
 					npc.doCast(SkillData.getInstance().getSkill(DARK_RIDER_UD, 2));
 					npc.setScriptValue(2);
-				}
-				else if ((npc.getCurrentHpPercent() >= 50) && npc.isScriptValue(2))
-				{
+				} else if ((npc.getCurrentHpPercent() >= 50) && npc.isScriptValue(2)) {
 					npc.doCast(SkillData.getInstance().getSkill(DARK_RIDER_UD, 3));
 					npc.setScriptValue(3);
-				}
-				else if ((npc.getCurrentHpPercent() >= 25) && npc.isScriptValue(3))
-				{
+				} else if ((npc.getCurrentHpPercent() >= 25) && npc.isScriptValue(3)) {
 					npc.doCast(SkillData.getInstance().getSkill(DARK_RIDER_UD, 4));
 					npc.setScriptValue(4);
 				}
@@ -157,9 +132,8 @@ public final class NightmareKamaloka extends AbstractInstance
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new NightmareKamaloka();
 	}
 }

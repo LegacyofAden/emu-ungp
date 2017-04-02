@@ -30,43 +30,35 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Open Chest effect implementation.
+ *
  * @author Adry_85
  */
-public final class OpenChest extends AbstractEffect
-{
-	public OpenChest(StatsSet params)
-	{
+public final class OpenChest extends AbstractEffect {
+	public OpenChest(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final TreasureInstance targetTreasure = target.asTreasure();
-		if (targetTreasure == null)
-		{
+		if (targetTreasure == null) {
 			return;
 		}
-		
-		if (targetTreasure.isDead() || (casterPlayer.getInstanceWorld() != targetTreasure.getInstanceWorld()))
-		{
+
+		if (targetTreasure.isDead() || (casterPlayer.getInstanceWorld() != targetTreasure.getInstanceWorld())) {
 			return;
 		}
-		
-		if (((casterPlayer.getLevel() <= 77) && (Math.abs(targetTreasure.getLevel() - casterPlayer.getLevel()) <= 6)) || ((casterPlayer.getLevel() >= 78) && (Math.abs(targetTreasure.getLevel() - casterPlayer.getLevel()) <= 5)))
-		{
+
+		if (((casterPlayer.getLevel() <= 77) && (Math.abs(targetTreasure.getLevel() - casterPlayer.getLevel()) <= 6)) || ((casterPlayer.getLevel() >= 78) && (Math.abs(targetTreasure.getLevel() - casterPlayer.getLevel()) <= 5))) {
 			casterPlayer.broadcastSocialAction(3);
 			targetTreasure.setDropEnabled(true);
 			targetTreasure.setMustRewardExpSp(false);
 			targetTreasure.reduceCurrentHp(targetTreasure.getMaxHp(), casterPlayer, skill);
-		}
-		else
-		{
+		} else {
 			casterPlayer.broadcastSocialAction(13);
 			targetTreasure.addDamageHate(casterPlayer, 0, 1);
 			targetTreasure.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, casterPlayer);

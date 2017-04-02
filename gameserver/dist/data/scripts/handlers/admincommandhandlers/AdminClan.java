@@ -18,9 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -36,43 +34,39 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.StringTokenizer;
+
 /**
  * @author UnAfraid, Zoey76
  */
-public class AdminClan implements IAdminCommandHandler
-{
+public class AdminClan implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_clan_info",
-		"admin_clan_changeleader",
-		"admin_clan_show_pending",
-		"admin_clan_force_pending"
-	};
-	
+			{
+					"admin_clan_info",
+					"admin_clan_changeleader",
+					"admin_clan_show_pending",
+					"admin_clan_force_pending"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
-		switch (cmd)
-		{
-			case "admin_clan_info":
-			{
+		switch (cmd) {
+			case "admin_clan_info": {
 				final PlayerInstance player = getPlayer(activeChar, st);
-				if (player == null)
-				{
+				if (player == null) {
 					break;
 				}
-				
+
 				final L2Clan clan = player.getClan();
-				if (clan == null)
-				{
+				if (clan == null) {
 					activeChar.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
 					return false;
 				}
-				
+
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-				html.setHtml(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/claninfo.htm"));
+				html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/claninfo.htm"));
 				html.replace("%clan_name%", clan.getName());
 				html.replace("%clan_leader%", clan.getLeaderName());
 				html.replace("%clan_level%", String.valueOf(clan.getLevel()));
@@ -87,44 +81,34 @@ public class AdminClan implements IAdminCommandHandler
 				activeChar.sendPacket(html);
 				break;
 			}
-			case "admin_clan_changeleader":
-			{
+			case "admin_clan_changeleader": {
 				final PlayerInstance player = getPlayer(activeChar, st);
-				if (player == null)
-				{
+				if (player == null) {
 					break;
 				}
-				
+
 				final L2Clan clan = player.getClan();
-				if (clan == null)
-				{
+				if (clan == null) {
 					activeChar.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
 					return false;
 				}
-				
+
 				final ClanMember member = clan.getClanMember(player.getObjectId());
-				if (member != null)
-				{
-					if (player.isAcademyMember())
-					{
+				if (member != null) {
+					if (player.isAcademyMember()) {
 						player.sendPacket(SystemMessageId.THAT_PRIVILEGE_CANNOT_BE_GRANTED_TO_A_CLAN_ACADEMY_MEMBER);
-					}
-					else
-					{
+					} else {
 						clan.setNewLeader(member);
 					}
 				}
 				break;
 			}
-			case "admin_clan_show_pending":
-			{
+			case "admin_clan_show_pending": {
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-				html.setHtml(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/clanchanges.htm"));
+				html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/clanchanges.htm"));
 				StringBuilder sb = new StringBuilder();
-				for (L2Clan clan : ClanTable.getInstance().getClans())
-				{
-					if (clan.getNewLeaderId() != 0)
-					{
+				for (L2Clan clan : ClanTable.getInstance().getClans()) {
+					if (clan.getNewLeaderId() != 0) {
 						sb.append("<tr>");
 						sb.append("<td>" + clan.getName() + "</td>");
 						sb.append("<td>" + clan.getNewLeaderName() + "</td>");
@@ -136,29 +120,24 @@ public class AdminClan implements IAdminCommandHandler
 				activeChar.sendPacket(html);
 				break;
 			}
-			case "admin_clan_force_pending":
-			{
-				if (st.hasMoreElements())
-				{
+			case "admin_clan_force_pending": {
+				if (st.hasMoreElements()) {
 					String token = st.nextToken();
-					if (!Util.isDigit(token))
-					{
+					if (!Util.isDigit(token)) {
 						break;
 					}
 					int clanId = Integer.parseInt(token);
-					
+
 					final L2Clan clan = ClanTable.getInstance().getClan(clanId);
-					if (clan == null)
-					{
+					if (clan == null) {
 						break;
 					}
-					
+
 					final ClanMember member = clan.getClanMember(clan.getNewLeaderId());
-					if (member == null)
-					{
+					if (member == null) {
 						break;
 					}
-					
+
 					clan.setNewLeader(member);
 					activeChar.sendMessage("Task have been forcely executed.");
 					break;
@@ -167,63 +146,49 @@ public class AdminClan implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param activeChar
 	 * @param st
 	 * @return
 	 */
-	private PlayerInstance getPlayer(PlayerInstance activeChar, StringTokenizer st)
-	{
+	private PlayerInstance getPlayer(PlayerInstance activeChar, StringTokenizer st) {
 		String val;
 		PlayerInstance player = null;
-		if (st.hasMoreTokens())
-		{
+		if (st.hasMoreTokens()) {
 			val = st.nextToken();
 			// From the HTML we receive player's object Id.
-			if (Util.isDigit(val))
-			{
+			if (Util.isDigit(val)) {
 				player = World.getInstance().getPlayer(Integer.parseInt(val));
-				if (player == null)
-				{
+				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 					return null;
 				}
-			}
-			else
-			{
+			} else {
 				player = World.getInstance().getPlayer(val);
-				if (player == null)
-				{
+				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 					return null;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			WorldObject targetObj = activeChar.getTarget();
-			if (targetObj instanceof PlayerInstance)
-			{
+			if (targetObj instanceof PlayerInstance) {
 				player = targetObj.getActingPlayer();
-			}
-			else
-			{
+			} else {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				return null;
 			}
 		}
 		return player;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminClan());
 	}
 }

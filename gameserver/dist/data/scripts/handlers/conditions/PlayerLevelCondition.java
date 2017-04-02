@@ -18,29 +18,26 @@
  */
 package handlers.conditions;
 
+import org.l2junity.gameserver.handler.IConditionHandler;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.handler.IConditionHandler;
 
 /**
  * @author Sdw
  */
-public class PlayerLevelCondition implements IConditionHandler
-{
+public class PlayerLevelCondition implements IConditionHandler {
 	private final int _minLevel;
 	private final int _maxLevel;
-	
-	public PlayerLevelCondition(StatsSet params)
-	{
+
+	public PlayerLevelCondition(StatsSet params) {
 		_minLevel = params.getInt("minLevel");
 		_maxLevel = params.getInt("maxLevel");
 	}
-	
+
 	@Override
-	public boolean test(Creature creature, WorldObject object)
-	{
+	public boolean test(Creature creature, WorldObject object) {
 		return creature.isPlayer() && (creature.getLevel() >= _minLevel) && (creature.getLevel() < _maxLevel);
 	}
-	
+
 }

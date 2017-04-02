@@ -27,22 +27,18 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * Item skills not allowed on Olympiad.
  */
-public class ItemSkills extends ItemSkillsTemplate
-{
+public class ItemSkills extends ItemSkillsTemplate {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
 		final PlayerInstance activeChar = playable.getActingPlayer();
-		if ((activeChar != null) && activeChar.isInOlympiadMode())
-		{
+		if ((activeChar != null) && activeChar.isInOlympiadMode()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_THAT_ITEM_IN_A_OLYMPIAD_MATCH);
 			return false;
 		}
 		return super.useItem(playable, item, forceUse);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new ItemSkills());
 	}
 }

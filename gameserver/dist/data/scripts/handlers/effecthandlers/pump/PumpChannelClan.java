@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * An effect that allows you to create a command channel.
+ *
  * @author Nik
  */
-public final class PumpChannelClan extends AbstractBooleanStatEffect
-{
-	public PumpChannelClan(StatsSet params)
-	{
+public final class PumpChannelClan extends AbstractBooleanStatEffect {
+	public PumpChannelClan(StatsSet params) {
 		super(BooleanStat.CAN_CREATE_COMMAND_CHANNEL);
 	}
 }

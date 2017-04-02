@@ -30,66 +30,59 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Soul Blow effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantSoulBlow extends AbstractEffect
-{
+public final class InstantSoulBlow extends AbstractEffect {
 	private final double _power;
 	private final double _chance;
 	private final boolean _overHit;
-	
-	public InstantSoulBlow(StatsSet params)
-	{
+
+	public InstantSoulBlow(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_chance = params.getDouble("chance", 0);
 		_overHit = params.getBoolean("overHit", false);
 	}
-	
+
 	/**
 	 * If is not evaded and blow lands.
+	 *
 	 * @param caster
 	 * @param target
 	 * @param skill
 	 */
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill) && Formulas.calcBlowSuccess(caster, target.asCreature(), skill, _chance);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.isAlikeDead())
-		{
+		if (caster.isAlikeDead()) {
 			return;
 		}
-		
-		if (_overHit && targetCreature.isAttackable())
-		{
+
+		if (_overHit && targetCreature.isAttackable()) {
 			targetCreature.asAttackable().overhitEnabled(true);
 		}
-		
+
 		boolean ss = skill.useSoulShot() && caster.isChargedShot(ShotType.SOULSHOTS);
 		byte shld = Formulas.calcShldUse(caster, targetCreature);
 		double damage = Formulas.calcBlowDamage(caster, targetCreature, skill, false, _power, shld, ss);
-		if ((skill.getMaxSoulConsumeCount() > 0) && caster.isPlayer())
-		{
+		if ((skill.getMaxSoulConsumeCount() > 0) && caster.isPlayer()) {
 			damage *= Formulas.calcSoulBonus(caster.asPlayer(), skill);
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, true, false);
 	}
 }

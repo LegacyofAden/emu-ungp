@@ -27,38 +27,37 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Kartia's Seed (10405)
+ *
  * @author St3eT
  */
-public final class Q10405_KartiasSeed extends Quest
-{
+public final class Q10405_KartiasSeed extends Quest {
 	// NPCs
 	private static final int SHUVANN = 33867;
 	private static final int[] MONSTERS =
-	{
-		21001, // Archer of Destruction
-		21003, // Graveyard Lich
-		21004, // Dismal Pole
-		21005, // Graveyard Predator
-		21002, // Doom Scout
-		21006, // Doom Servant
-		21007, // Doom Guard
-		21008, // Doom Archer
-		21009, // Doom Trooper
-		21010, // Doom Warrior
-		20674, // Doom Knight
-		20974, // Spiteful Soul Leader
-		20975, // Spiteful Soul Wizard
-		20976, // Spiteful Soul Warrior
-	};
+			{
+					21001, // Archer of Destruction
+					21003, // Graveyard Lich
+					21004, // Dismal Pole
+					21005, // Graveyard Predator
+					21002, // Doom Scout
+					21006, // Doom Servant
+					21007, // Doom Guard
+					21008, // Doom Archer
+					21009, // Doom Trooper
+					21010, // Doom Warrior
+					20674, // Doom Knight
+					20974, // Spiteful Soul Leader
+					20975, // Spiteful Soul Wizard
+					20976, // Spiteful Soul Warrior
+			};
 	// Items
 	private static final int KARTIA_SEED = 36714; // Kartia's Mutated Seed
 	private static final int EAA = 730; // Scroll: Enchant Armor (A-grade)
 	// Misc
 	private static final int MIN_LEVEL = 61;
 	private static final int MAX_LEVEL = 65;
-	
-	public Q10405_KartiasSeed()
-	{
+
+	public Q10405_KartiasSeed() {
 		super(10405);
 		addStartNpc(SHUVANN);
 		addTalkId(SHUVANN);
@@ -67,40 +66,32 @@ public final class Q10405_KartiasSeed extends Quest
 		addCondNotRace(Race.ERTHEIA, "33867-09.html");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33867-08.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33867-02.htm":
-			case "33867-03.htm":
-			{
+			case "33867-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33867-04.htm":
-			{
+			case "33867-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33867-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33867-07.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 5);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 6_251_174);
 						addSp(player, 1_500);
 					}
@@ -111,43 +102,35 @@ public final class Q10405_KartiasSeed extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (st.getState()) {
+			case State.CREATED: {
 				htmltext = "33867-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = st.isCond(1) ? "33867-05.html" : "33867-06.html";
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(1))
-		{
-			if (giveItemRandomly(killer, KARTIA_SEED, 1, 50, 1, true))
-			{
+
+		if ((st != null) && st.isStarted() && st.isCond(1)) {
+			if (giveItemRandomly(killer, KARTIA_SEED, 1, 50, 1, true)) {
 				st.setCond(2);
 			}
 		}

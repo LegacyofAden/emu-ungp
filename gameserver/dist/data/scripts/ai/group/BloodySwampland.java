@@ -18,38 +18,33 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Bloody Swampland AI.
+ *
  * @author St3eT
  */
-public final class BloodySwampland extends AbstractNpcAI
-{
+public final class BloodySwampland extends AbstractNpcAI {
 	// NPCs
 	private static final int COLLECTOR = 23171; // Corpse Collector
-	
-	public BloodySwampland()
-	{
+
+	public BloodySwampland() {
 		addAttackId(COLLECTOR);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (npc.isScriptValue(0) && (npc.getCurrentHp() < (npc.getMaxHp() * 0.3)))
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (npc.isScriptValue(0) && (npc.getCurrentHp() < (npc.getMaxHp() * 0.3))) {
 			addSkillCastDesire(npc, attacker, npc.getParameters().getSkillHolder("Skill01_ID"), 23);
 			npc.setScriptValue(1);
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new BloodySwampland();
 	}
 }

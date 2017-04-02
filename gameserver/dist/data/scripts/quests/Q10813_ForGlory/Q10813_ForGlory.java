@@ -31,15 +31,14 @@ import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10811_ExaltedOneWhoFacesTheLimit.Q10811_ExaltedOneWhoFacesTheLimit;
 
 /**
  * For Glory (10813)
+ *
  * @author Gladicek
  */
-public final class Q10813_ForGlory extends Quest
-{
+public final class Q10813_ForGlory extends Quest {
 	// Npc
 	private static final int MYSTERIOUS_BUTLER = 33685;
 	// Items
@@ -48,9 +47,8 @@ public final class Q10813_ForGlory extends Quest
 	private static final int BATTLE_QUIKCK_HEALING_POTION = 45945;
 	// Misc
 	private static final int MIN_LEVEL = 99;
-	
-	public Q10813_ForGlory()
-	{
+
+	public Q10813_ForGlory() {
 		super(10813);
 		addStartNpc(MYSTERIOUS_BUTLER);
 		addTalkId(MYSTERIOUS_BUTLER);
@@ -58,46 +56,37 @@ public final class Q10813_ForGlory extends Quest
 		addCondStartedQuest(Q10811_ExaltedOneWhoFacesTheLimit.class.getSimpleName(), "33685-07.htm");
 		registerQuestItems(PROOF_OF_BATTLE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "33685-02.htm":
-			case "33685-03.htm":
-			{
+			case "33685-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33685-04.html":
-			{
+			case "33685-04.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33685-06.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33685-06.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						takeItems(player, PROOF_OF_BATTLE, -1);
 						giveItems(player, BATTLE_QUIKCK_HEALING_POTION, 120);
 						giveItems(player, MYSTERIOUS_BUTLER_CERTIFICATE, 1);
 						qs.exitQuest(false, true);
-						
+
 						final Quest mainQ = QuestManager.getInstance().getQuest(Q10811_ExaltedOneWhoFacesTheLimit.class.getSimpleName());
-						if (mainQ != null)
-						{
+						if (mainQ != null) {
 							mainQ.notifyEvent("SUBQUEST_FINISHED_NOTIFY", npc, player);
 						}
 						htmltext = event;
@@ -110,71 +99,57 @@ public final class Q10813_ForGlory extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = "33685-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				if (qs.isCond(1))
-				{
+			case State.STARTED: {
+				if (qs.isCond(1)) {
 					htmltext = "33685-08.html";
-				}
-				else if (qs.isCond(2))
-				{
+				} else if (qs.isCond(2)) {
 					htmltext = "33685-05.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	private void manageQuestProgress(PlayerInstance player)
-	{
-		if (player != null)
-		{
+
+	private void manageQuestProgress(PlayerInstance player) {
+		if (player != null) {
 			final QuestState qs = getQuestState(player, false);
-			
-			if ((qs != null) && qs.isCond(1))
-			{
+
+			if ((qs != null) && qs.isCond(1)) {
 				giveItems(player, PROOF_OF_BATTLE, 1);
 				playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
-				
-				if (getQuestItemsCount(player, PROOF_OF_BATTLE) >= 80)
-				{
+
+				if (getQuestItemsCount(player, PROOF_OF_BATTLE) >= 80) {
 					qs.setCond(2, true);
 				}
 			}
 		}
 	}
-	
+
 	@RegisterEvent(EventType.ON_CEREMONY_OF_CHAOS_MATCH_RESULT)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	private void onCeremonyOfChaosMatchResult(OnCeremonyOfChaosMatchResult event)
-	{
+	private void onCeremonyOfChaosMatchResult(OnCeremonyOfChaosMatchResult event) {
 		event.getMembers().forEach(player -> manageQuestProgress(player.getPlayer()));
 	}
-	
+
 	@RegisterEvent(EventType.ON_OLYMPIAD_MATCH_RESULT)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
-	private void onOlympiadMatchResult(OnOlympiadMatchResult event)
-	{
+	private void onOlympiadMatchResult(OnOlympiadMatchResult event) {
 		manageQuestProgress(event.getWinner().getPlayer());
 		manageQuestProgress(event.getLoser().getPlayer());
 	}

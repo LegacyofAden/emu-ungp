@@ -18,9 +18,6 @@
  */
 package quests.Q10780_AWeakenedBarrier;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,32 +27,34 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * A Weakened Barrier (10780)
+ *
  * @author malyelfik
  */
-public final class Q10780_AWeakenedBarrier extends Quest
-{
+public final class Q10780_AWeakenedBarrier extends Quest {
 	// NPCs
 	private static final int ANDY = 33845;
 	private static final int BACON = 33846;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20555, // Giant Fungus
-		20558, // Rotting tree
-		23305, // Corroded Skeleton
-		23306, // Rotten Corpse
-		23307, // Corpse Spider
-		23308, // Explosive Spider
-	};
+			{
+					20555, // Giant Fungus
+					20558, // Rotting tree
+					23305, // Corroded Skeleton
+					23306, // Rotten Corpse
+					23307, // Corpse Spider
+					23308, // Explosive Spider
+			};
 	// Misc
 	private static final int MIN_LEVEL = 52;
 	private static final int MAX_LEVEL = 58;
 	private static final String KILL_COUNT_VAR = "KillCount";
-	
-	public Q10780_AWeakenedBarrier()
-	{
+
+	public Q10780_AWeakenedBarrier() {
 		super(10780);
 		addStartNpc(ANDY);
 		addTalkId(ANDY, BACON);
@@ -63,40 +62,31 @@ public final class Q10780_AWeakenedBarrier extends Quest
 		addCondRace(Race.ERTHEIA, "33845-01.htm");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33845-02.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33845-04.htm":
 			case "33845-05.htm":
 				break;
-			case "33845-06.htm":
-			{
+			case "33845-06.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33846-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33846-03.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 15_108_843);
 						addSp(player, 914);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -107,23 +97,19 @@ public final class Q10780_AWeakenedBarrier extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == ANDY)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == ANDY) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "33845-03.htm";
 					break;
 				case State.STARTED:
-					if (qs.isCond(1))
-					{
+					if (qs.isCond(1)) {
 						htmltext = "33845-07.html";
 					}
 					break;
@@ -131,46 +117,35 @@ public final class Q10780_AWeakenedBarrier extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted())
-		{
+		} else if (qs.isStarted()) {
 			htmltext = (qs.isCond(1)) ? "33846-01.html" : "33846-02.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			int count = qs.getInt(KILL_COUNT_VAR);
-			if (count < 80)
-			{
+			if (count < 80) {
 				qs.set(KILL_COUNT_VAR, ++count);
-				if (count >= 80)
-				{
+				if (count >= 80) {
 					qs.setCond(2, true);
-				}
-				else
-				{
+				} else {
 					sendNpcLogList(killer);
 				}
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			final int killCount = qs.getInt(KILL_COUNT_VAR);
-			if (killCount > 0)
-			{
+			if (killCount > 0) {
 				final Set<NpcLogListHolder> holder = new HashSet<>(1);
 				holder.add(new NpcLogListHolder(NpcStringId.KILL_MONSTERS_NEAR_THE_SEA_OF_SPORES, killCount));
 				return holder;

@@ -18,6 +18,7 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -27,34 +28,28 @@ import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Block Chat effect implementation.
+ *
  * @author BiggBoss
  */
-public final class PumpBlockChat extends AbstractBooleanStatEffect
-{
-	public PumpBlockChat(StatsSet params)
-	{
+public final class PumpBlockChat extends AbstractBooleanStatEffect {
+	public PumpBlockChat(StatsSet params) {
 		super(BooleanStat.BLOCK_CHAT);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		PunishmentManager.getInstance().startPunishment(new PunishmentTask(0, target.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.CHAT_BAN, 0, "Chat banned bot report", "system", true));
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		PunishmentManager.getInstance().stopPunishment(target.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.CHAT_BAN);
 	}
 }

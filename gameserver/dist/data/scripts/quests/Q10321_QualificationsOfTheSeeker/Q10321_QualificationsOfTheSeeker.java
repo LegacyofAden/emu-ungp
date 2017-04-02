@@ -26,58 +26,49 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10320_LetsGoToTheCentralSquare.Q10320_LetsGoToTheCentralSquare;
 
 /**
  * Qualifications Of The Seeker (10321)
+ *
  * @author ivantotov, Gladicek
  */
-public final class Q10321_QualificationsOfTheSeeker extends Quest
-{
+public final class Q10321_QualificationsOfTheSeeker extends Quest {
 	// NPCs
 	private static final int SHANNON = 32974;
 	private static final int THEODORE = 32975;
 	// Misc
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10321_QualificationsOfTheSeeker()
-	{
+
+	public Q10321_QualificationsOfTheSeeker() {
 		super(10321);
 		addStartNpc(THEODORE);
 		addTalkId(THEODORE, SHANNON);
 		addCondMaxLevel(MAX_LEVEL, "32975-01a.htm");
 		addCondCompletedQuest(Q10320_LetsGoToTheCentralSquare.class.getSimpleName(), "32975-01a.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "32975-03.htm":
-			{
+		switch (event) {
+			case "32975-03.htm": {
 				qs.startQuest();
 				player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_027_Quest_01.htm", TutorialShowHtml.LARGE_WINDOW));
 				htmltext = event;
 				break;
 			}
-			case "32975-02.htm":
-			{
+			case "32975-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32974-02.htm":
-			{
-				if (qs.isStarted())
-				{
+			case "32974-02.htm": {
+				if (qs.isStarted()) {
 					addExp(player, 300);
 					addSp(player, 6);
 					qs.exitQuest(false, true);
@@ -89,27 +80,22 @@ public final class Q10321_QualificationsOfTheSeeker extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = npc.getId() == THEODORE ? "32975-01.htm" : "32974-04.htm";
 				break;
 			}
-			case State.STARTED:
-			{
+			case State.STARTED: {
 				htmltext = npc.getId() == THEODORE ? "32975-04.htm" : "32974-01.htm";
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = npc.getId() == THEODORE ? "32975-05.htm" : "32974-03.htm";
 				break;
 			}

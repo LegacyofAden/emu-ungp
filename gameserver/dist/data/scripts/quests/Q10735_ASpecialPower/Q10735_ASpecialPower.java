@@ -18,9 +18,6 @@
  */
 package quests.Q10735_ASpecialPower;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -30,16 +27,18 @@ import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10734_DoOrDie.Q10734_DoOrDie;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Special Power (10735)<br>
  * Instance part is implemented in <b>FaeronTrainingGrounds1</b> script.
+ *
  * @author Sdw
  */
-public final class Q10735_ASpecialPower extends Quest
-{
+public final class Q10735_ASpecialPower extends Quest {
 	// NPC
 	private static final int AYANTHE = 33942;
 	// Monsters
@@ -52,9 +51,8 @@ public final class Q10735_ASpecialPower extends Quest
 	private static final int MIN_LEVEL = 4;
 	private static final int MAX_LEVEL = 20;
 	public static final int KILL_COUNT_VAR = 0;
-	
-	public Q10735_ASpecialPower()
-	{
+
+	public Q10735_ASpecialPower() {
 		super(10735);
 		addStartNpc(AYANTHE);
 		addTalkId(AYANTHE);
@@ -63,38 +61,30 @@ public final class Q10735_ASpecialPower extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33942-00.htm");
 		addCondCompletedQuest(Q10734_DoOrDie.class.getSimpleName(), "33942-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && event.equals("33942-02.htm"))
-		{
+		if ((qs != null) && event.equals("33942-02.htm")) {
 			qs.startQuest();
 			return event;
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
 				htmltext = "33942-01.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (qs.getCond())
-				{
-					case 1:
-					{
+			case State.STARTED: {
+				switch (qs.getCond()) {
+					case 1: {
 						htmltext = "33942-03.html";
 						break;
 					}
@@ -102,23 +92,17 @@ public final class Q10735_ASpecialPower extends Quest
 					case 3:
 					case 4:
 					case 5:
-					case 6:
-					{
+					case 6: {
 						htmltext = "33942-04.html";
 						break;
 					}
-					case 7:
-					{
-						if (!isSimulated)
-						{
-							if ((player.getLevel() >= MIN_LEVEL))
-							{
+					case 7: {
+						if (!isSimulated) {
+							if ((player.getLevel() >= MIN_LEVEL)) {
 								giveItems(player, SPIRITSHOTS_REWARD);
 								addExp(player, 3154);
 								qs.exitQuest(false, true);
-							}
-							else
-							{
+							} else {
 								htmltext = getNoQuestLevelRewardMsg(player);
 							}
 							break;
@@ -135,17 +119,14 @@ public final class Q10735_ASpecialPower extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final Set<NpcLogListHolder> holder = new HashSet<>();
 		final QuestState qs = getQuestState(player, false);
-		if (qs != null)
-		{
+		if (qs != null) {
 			int npcId = -1;
-			switch (qs.getCond())
-			{
+			switch (qs.getCond()) {
 				case 2:
 					npcId = FLOATO;
 					break;
@@ -156,8 +137,7 @@ public final class Q10735_ASpecialPower extends Quest
 					npcId = RATEL;
 					break;
 			}
-			if (npcId != -1)
-			{
+			if (npcId != -1) {
 				holder.add(new NpcLogListHolder(npcId, false, qs.getMemoStateEx(KILL_COUNT_VAR)));
 			}
 		}

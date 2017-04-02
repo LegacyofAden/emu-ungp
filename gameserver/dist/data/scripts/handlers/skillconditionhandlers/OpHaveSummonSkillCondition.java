@@ -28,25 +28,20 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author UnAfraid
  */
-public class OpHaveSummonSkillCondition implements ISkillCondition
-{
-	public OpHaveSummonSkillCondition(StatsSet params)
-	{
+public class OpHaveSummonSkillCondition implements ISkillCondition {
+	public OpHaveSummonSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (!caster.hasServitors())
-		{
-			if (caster.isPlayer())
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (!caster.hasServitors()) {
+			if (caster.isPlayer()) {
 				caster.sendPacket(SystemMessageId.YOU_CANNOT_USE_THE_SKILL_BECAUSE_THE_SERVITOR_HAS_NOT_BEEN_SUMMONED);
 			}
-			
+
 			return false;
 		}
-		
+
 		return true;
 	}
 }

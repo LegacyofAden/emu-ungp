@@ -27,33 +27,32 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * In Search of an Ancient Giant (10775)
+ *
  * @author malyelfik
  */
-public final class Q10775_InSearchOfAnAncientGiant extends Quest
-{
+public final class Q10775_InSearchOfAnAncientGiant extends Quest {
 	// NPCs
 	private static final int BELKADHI = 30485;
 	private static final int ROMBEL = 30487;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20221, // Perum
-		20753, // Dark Lord
-		20754, // Dark Knight
-		21040, // Soldier of Darkness
-		21037, // Ossiud
-		21038, // Liangma
-		23153, // Achelando
-		23154, // Styrindo
-		23155, // Ashende
-	};
+			{
+					20221, // Perum
+					20753, // Dark Lord
+					20754, // Dark Knight
+					21040, // Soldier of Darkness
+					21037, // Ossiud
+					21038, // Liangma
+					23153, // Achelando
+					23154, // Styrindo
+					23155, // Ashende
+			};
 	// Items
 	private static final int ENERGY_OF_REGENERATION = 39715;
 	// Misc
 	private static final int MIN_LEVEL = 46;
-	
-	public Q10775_InSearchOfAnAncientGiant()
-	{
+
+	public Q10775_InSearchOfAnAncientGiant() {
 		super(10775);
 		addStartNpc(ROMBEL);
 		addTalkId(ROMBEL, BELKADHI);
@@ -62,43 +61,34 @@ public final class Q10775_InSearchOfAnAncientGiant extends Quest
 		addCondMinLevel(MIN_LEVEL, "30487-00.htm");
 		registerQuestItems(ENERGY_OF_REGENERATION);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30487-02.htm":
 			case "30487-03.htm":
 			case "30487-04.htm":
 			case "30485-02.html":
 			case "30485-03.html":
 				break;
-			case "30487-05.htm":
-			{
+			case "30487-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "30485-04.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30485-04.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 12_526_523);
 						addSp(player, 1_066);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -109,23 +99,19 @@ public final class Q10775_InSearchOfAnAncientGiant extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == ROMBEL)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == ROMBEL) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "30487-01.htm";
 					break;
 				case State.STARTED:
-					if (qs.isCond(1))
-					{
+					if (qs.isCond(1)) {
 						htmltext = "30487-06.html";
 					}
 					break;
@@ -133,23 +119,18 @@ public final class Q10775_InSearchOfAnAncientGiant extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted() && qs.isCond(2))
-		{
+		} else if (qs.isStarted() && qs.isCond(2)) {
 			htmltext = "30485-01.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			giveItems(killer, ENERGY_OF_REGENERATION, 1);
-			if (getQuestItemsCount(killer, ENERGY_OF_REGENERATION) >= 40)
-			{
+			if (getQuestItemsCount(killer, ENERGY_OF_REGENERATION) >= 40) {
 				qs.setCond(2, true);
 			}
 		}

@@ -30,68 +30,58 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
-public class RollingDice implements IItemHandler
-{
+public class RollingDice implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		PlayerInstance activeChar = playable.getActingPlayer();
 		int itemId = item.getId();
-		
-		if (activeChar.isInOlympiadMode())
-		{
+
+		if (activeChar.isInOlympiadMode()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_THAT_ITEM_IN_A_OLYMPIAD_MATCH);
 			return false;
 		}
-		
+
 		int number = rollDice(activeChar);
-		if (number == 0)
-		{
+		if (number == 0) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_THROW_THE_DICE_AT_THIS_TIME_TRY_AGAIN_LATER);
 			return false;
 		}
-		
+
 		Broadcast.toSelfAndKnownPlayers(activeChar, new Dice(activeChar.getObjectId(), itemId, number, activeChar.getX() - 30, activeChar.getY() - 30, activeChar.getZ()));
-		
+
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_ROLLED_A_S2);
 		sm.addString(activeChar.getName());
 		sm.addInt(number);
-		
+
 		activeChar.sendPacket(sm);
-		if (activeChar.isInsideZone(ZoneId.PEACE))
-		{
+		if (activeChar.isInsideZone(ZoneId.PEACE)) {
 			Broadcast.toKnownPlayers(activeChar, sm);
-		}
-		else if (activeChar.isInParty()) // TODO: Verify this!
+		} else if (activeChar.isInParty()) // TODO: Verify this!
 		{
 			activeChar.getParty().broadcastToPartyMembers(activeChar, sm);
 		}
 		return true;
-		
+
 	}
-	
+
 	/**
 	 * @param player
 	 * @return
 	 */
-	private int rollDice(PlayerInstance player)
-	{
+	private int rollDice(PlayerInstance player) {
 		// Check if the dice is ready
-		if (!player.getFloodProtectors().getRollDice().tryPerformAction("roll dice"))
-		{
+		if (!player.getFloodProtectors().getRollDice().tryPerformAction("roll dice")) {
 			return 0;
 		}
 		return Rnd.get(1, 6);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new RollingDice());
 	}
 }

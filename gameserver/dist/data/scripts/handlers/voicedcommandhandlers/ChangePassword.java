@@ -18,10 +18,8 @@
  */
 package handlers.voicedcommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.LoginServerThread;
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,78 +27,62 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.StringTokenizer;
+
 /**
  * @author Nik
  */
-public class ChangePassword implements IVoicedCommandHandler
-{
+public class ChangePassword implements IVoicedCommandHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChangePassword.class);
-	
+
 	private static final String[] _voicedCommands =
-	{
-		"changepassword"
-	};
-	
-	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String target)
-	{
-		if (target != null)
-		{
-			final StringTokenizer st = new StringTokenizer(target);
-			try
 			{
+					"changepassword"
+			};
+
+	@Override
+	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String target) {
+		if (target != null) {
+			final StringTokenizer st = new StringTokenizer(target);
+			try {
 				String curpass = null, newpass = null, repeatnewpass = null;
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					curpass = st.nextToken();
 				}
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					newpass = st.nextToken();
 				}
-				if (st.hasMoreTokens())
-				{
+				if (st.hasMoreTokens()) {
 					repeatnewpass = st.nextToken();
 				}
-				
-				if (!((curpass == null) || (newpass == null) || (repeatnewpass == null)))
-				{
-					if (!newpass.equals(repeatnewpass))
-					{
+
+				if (!((curpass == null) || (newpass == null) || (repeatnewpass == null))) {
+					if (!newpass.equals(repeatnewpass)) {
 						activeChar.sendMessage("The new password doesn't match with the repeated one!");
 						return false;
 					}
-					if (newpass.length() < 3)
-					{
+					if (newpass.length() < 3) {
 						activeChar.sendMessage("The new password is shorter than 3 chars! Please try with a longer one.");
 						return false;
 					}
-					if (newpass.length() > 30)
-					{
+					if (newpass.length() > 30) {
 						activeChar.sendMessage("The new password is longer than 30 chars! Please try with a shorter one.");
 						return false;
 					}
-					
+
 					LoginServerThread.getInstance().sendChangePassword(activeChar.getAccountName(), activeChar.getName(), curpass, newpass);
-				}
-				else
-				{
+				} else {
 					activeChar.sendMessage("Invalid password data! You have to fill all boxes.");
 					return false;
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				activeChar.sendMessage("A problem occured while changing password!");
 				LOGGER.warn("", e);
 			}
-		}
-		else
-		{
+		} else {
 			// showHTML(activeChar);
-			String html = HtmCache.getInstance().getHtm("en", "data/html/mods/ChangePassword.htm");
-			if (html == null)
-			{
+			String html = HtmRepository.getInstance().getCustomHtm("mods/ChangePassword.htm");
+			if (html == null) {
 				html = "<html><body><br><br><center><font color=LEVEL>404:</font> File Not Found</center></body></html>";
 			}
 			activeChar.sendPacket(new NpcHtmlMessage(html));
@@ -108,15 +90,13 @@ public class ChangePassword implements IVoicedCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getVoicedCommandList()
-	{
+	public String[] getVoicedCommandList() {
 		return _voicedCommands;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		VoicedCommandHandler.getInstance().registerHandler(new ChangePassword());
 	}
 }

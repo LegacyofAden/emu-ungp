@@ -32,41 +32,32 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpHomeSkillCondition implements ISkillCondition
-{
+public class OpHomeSkillCondition implements ISkillCondition {
 	private final ResidenceType _type;
-	
-	public OpHomeSkillCondition(StatsSet params)
-	{
+
+	public OpHomeSkillCondition(StatsSet params) {
 		_type = params.getEnum("type", ResidenceType.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (caster.isPlayer()) {
 			final L2Clan clan = caster.getActingPlayer().getClan();
-			if (clan != null)
-			{
-				switch (_type)
-				{
-					case CASTLE:
-					{
+			if (clan != null) {
+				switch (_type) {
+					case CASTLE: {
 						return CastleManager.getInstance().getCastleByOwner(clan) != null;
 					}
-					case FORTRESS:
-					{
+					case FORTRESS: {
 						return FortManager.getInstance().getFortByOwner(clan) != null;
 					}
-					case CLANHALL:
-					{
+					case CLANHALL: {
 						return ClanHallData.getInstance().getClanHallByClan(clan) != null;
 					}
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

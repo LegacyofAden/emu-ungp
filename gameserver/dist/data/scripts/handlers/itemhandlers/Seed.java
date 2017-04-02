@@ -18,9 +18,7 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
@@ -36,74 +34,61 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.List;
+
 /**
  * @author l3x
  */
-public class Seed implements IItemHandler
-{
+public class Seed implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!GeneralConfig.ALLOW_MANOR)
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!GeneralConfig.ALLOW_MANOR) {
 			return false;
-		}
-		else if (!playable.isPlayer())
-		{
+		} else if (!playable.isPlayer()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		final WorldObject tgt = playable.getTarget();
-		if (!tgt.isNpc())
-		{
+		if (!tgt.isNpc()) {
 			playable.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;
-		}
-		else if (!tgt.isMonster() || ((L2MonsterInstance) tgt).isRaid() || tgt.isTreasure())
-		{
+		} else if (!tgt.isMonster() || ((L2MonsterInstance) tgt).isRaid() || tgt.isTreasure()) {
 			playable.sendPacket(SystemMessageId.THE_TARGET_IS_UNAVAILABLE_FOR_SEEDING);
 			return false;
 		}
-		
+
 		final L2MonsterInstance target = (L2MonsterInstance) tgt;
-		if (target.isDead())
-		{
+		if (target.isDead()) {
 			playable.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;
-		}
-		else if (target.isSeeded())
-		{
+		} else if (target.isSeeded()) {
 			playable.sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
-		
+
 		final L2Seed seed = CastleManorManager.getInstance().getSeed(item.getId());
-		if (seed == null)
-		{
+		if (seed == null) {
 			return false;
 		}
-		
+
 		final Castle taxCastle = target.getTaxCastle();
-		if ((taxCastle == null) || (seed.getCastleId() != taxCastle.getResidenceId()))
-		{
+		if ((taxCastle == null) || (seed.getCastleId() != taxCastle.getResidenceId())) {
 			playable.sendPacket(SystemMessageId.THIS_SEED_MAY_NOT_BE_SOWN_HERE);
 			return false;
 		}
-		
+
 		final PlayerInstance activeChar = playable.getActingPlayer();
 		target.setSeeded(seed, activeChar);
-		
+
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);
-		if (skills != null)
-		{
+		if (skills != null) {
 			skills.forEach(holder -> activeChar.useMagic(holder.getSkill(), target, item, false, false));
 		}
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new Seed());
 	}
 }

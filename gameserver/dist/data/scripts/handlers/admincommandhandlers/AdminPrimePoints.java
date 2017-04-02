@@ -18,10 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.Collection;
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
@@ -29,68 +26,59 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.Collection;
+import java.util.StringTokenizer;
+
 /**
  * Admin Prime Points manage admin commands.
+ *
  * @author St3eT
  */
-public final class AdminPrimePoints implements IAdminCommandHandler
-{
+public final class AdminPrimePoints implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_primepoints",
-	};
-	
+			{
+					"admin_primepoints",
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
-		
-		if (actualCommand.equals("admin_primepoints"))
-		{
-			if (st.hasMoreTokens())
-			{
+
+		if (actualCommand.equals("admin_primepoints")) {
+			if (st.hasMoreTokens()) {
 				final String action = st.nextToken();
-				
+
 				final PlayerInstance target = getTarget(activeChar);
-				if ((target == null) || !st.hasMoreTokens())
-				{
+				if ((target == null) || !st.hasMoreTokens()) {
 					return false;
 				}
-				
+
 				int value = 0;
-				try
-				{
+				try {
 					value = Integer.parseInt(st.nextToken());
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					showMenuHtml(activeChar);
 					activeChar.sendMessage("Invalid Value!");
 					return false;
 				}
-				
-				switch (action)
-				{
-					case "set":
-					{
+
+				switch (action) {
+					case "set": {
 						target.setPrimePoints(value);
 						target.sendMessage("Admin set your Prime Point(s) to " + value + "!");
 						activeChar.sendMessage("You set " + value + " Prime Point(s) to player " + target.getName());
 						break;
 					}
-					case "increase":
-					{
-						if (target.getPrimePoints() == Integer.MAX_VALUE)
-						{
+					case "increase": {
+						if (target.getPrimePoints() == Integer.MAX_VALUE) {
 							showMenuHtml(activeChar);
 							activeChar.sendMessage(target.getName() + " already have max count of Prime Points!");
 							return false;
 						}
-						
+
 						int primeCount = Math.min((target.getPrimePoints() + value), Integer.MAX_VALUE);
-						if (primeCount < 0)
-						{
+						if (primeCount < 0) {
 							primeCount = Integer.MAX_VALUE;
 						}
 						target.setPrimePoints(primeCount);
@@ -98,40 +86,31 @@ public final class AdminPrimePoints implements IAdminCommandHandler
 						activeChar.sendMessage("You increased Prime Point(s) of " + target.getName() + " by " + value);
 						break;
 					}
-					case "decrease":
-					{
-						if (target.getPrimePoints() == 0)
-						{
+					case "decrease": {
+						if (target.getPrimePoints() == 0) {
 							showMenuHtml(activeChar);
 							activeChar.sendMessage(target.getName() + " already have min count of Prime Points!");
 							return false;
 						}
-						
+
 						final int primeCount = Math.max(target.getPrimePoints() - value, 0);
 						target.setPrimePoints(primeCount);
 						target.sendMessage("Admin decreased your Prime Point(s) by " + value + "!");
 						activeChar.sendMessage("You decreased Prime Point(s) of " + target.getName() + " by " + value);
 						break;
 					}
-					case "rewardOnline":
-					{
+					case "rewardOnline": {
 						int range = 0;
-						try
-						{
+						try {
 							range = Integer.parseInt(st.nextToken());
+						} catch (Exception e) {
+
 						}
-						catch (Exception e)
-						{
-							
-						}
-						
-						if (range <= 0)
-						{
+
+						if (range <= 0) {
 							final int count = increaseForAll(World.getInstance().getPlayers(), value);
 							activeChar.sendMessage("You increased Prime Point(s) of all online players (" + count + ") by " + value + ".");
-						}
-						else if (range > 0)
-						{
+						} else if (range > 0) {
 							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, PlayerInstance.class, range), value);
 							activeChar.sendMessage("You increased Prime Point(s) of all players (" + count + ") in range " + range + " by " + value + ".");
 						}
@@ -139,30 +118,23 @@ public final class AdminPrimePoints implements IAdminCommandHandler
 					}
 				}
 				showMenuHtml(activeChar);
-			}
-			else
-			{
+			} else {
 				showMenuHtml(activeChar);
 			}
 		}
 		return true;
 	}
-	
-	private int increaseForAll(Collection<PlayerInstance> playerList, int value)
-	{
+
+	private int increaseForAll(Collection<PlayerInstance> playerList, int value) {
 		int counter = 0;
-		for (PlayerInstance temp : playerList)
-		{
-			if ((temp != null) && (temp.isOnlineInt() == 1))
-			{
-				if (temp.getPrimePoints() == Integer.MAX_VALUE)
-				{
+		for (PlayerInstance temp : playerList) {
+			if ((temp != null) && (temp.isOnlineInt() == 1)) {
+				if (temp.getPrimePoints() == Integer.MAX_VALUE) {
 					continue;
 				}
-				
+
 				int primeCount = Math.min((temp.getPrimePoints() + value), Integer.MAX_VALUE);
-				if (primeCount < 0)
-				{
+				if (primeCount < 0) {
 					primeCount = Integer.MAX_VALUE;
 				}
 				temp.setPrimePoints(primeCount);
@@ -172,31 +144,27 @@ public final class AdminPrimePoints implements IAdminCommandHandler
 		}
 		return counter;
 	}
-	
-	private PlayerInstance getTarget(PlayerInstance activeChar)
-	{
+
+	private PlayerInstance getTarget(PlayerInstance activeChar) {
 		return ((activeChar.getTarget() != null) && (activeChar.getTarget().getActingPlayer() != null)) ? activeChar.getTarget().getActingPlayer() : activeChar;
 	}
-	
-	private void showMenuHtml(PlayerInstance activeChar)
-	{
+
+	private void showMenuHtml(PlayerInstance activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		final PlayerInstance target = getTarget(activeChar);
 		final int points = target.getPrimePoints();
-		html.setHtml(HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/admin/primepoints.htm"));
+		html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/primepoints.htm"));
 		html.replace("%points%", Util.formatAdena(points));
 		html.replace("%targetName%", target.getName());
 		activeChar.sendPacket(html);
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminPrimePoints());
 	}
 }

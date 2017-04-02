@@ -26,27 +26,22 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-public class L2ItemInstanceActionShift implements IActionShiftHandler
-{
+public class L2ItemInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (activeChar.isGM())
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (activeChar.isGM()) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1, "<html><body><center><font color=\"LEVEL\">Item Info</font></center><br><table border=0><tr><td>Object ID: </td><td>" + target.getObjectId() + "</td></tr><tr><td>Item ID: </td><td>" + target.getId() + "</td></tr><tr><td>Owner ID: </td><td>" + ((ItemInstance) target).getOwnerId() + "</td></tr><tr><td>Location: </td><td>" + target.getLocation() + "</td></tr><tr><td><br></td></tr><tr><td>Class: </td><td>" + target.getClass().getSimpleName() + "</td></tr></table></body></html>");
 			activeChar.sendPacket(html);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2ItemInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionShiftHandler.getInstance().registerHandler(new L2ItemInstanceActionShift());
 	}
 }

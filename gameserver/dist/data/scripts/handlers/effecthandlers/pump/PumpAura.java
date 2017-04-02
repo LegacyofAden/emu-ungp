@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.Collections;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -29,60 +27,50 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+
 /**
  * Aura effect implementation.
  */
-public final class PumpAura extends AbstractEffect
-{
+public final class PumpAura extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PumpAura.class);
-	
+
 	private final SkillHolder _skill;
-	
-	public PumpAura(StatsSet params)
-	{
+
+	public PumpAura(StatsSet params) {
 		_skill = new SkillHolder(params.getInt("skillId"), params.getInt("skillLevel", 1), params.getInt("skillSubLevel", 0));
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (!_skill.getSkill().isSynergySkill())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (!_skill.getSkill().isSynergySkill()) {
 			target.getEffectList().stopEffects(Collections.singleton(_skill.getSkill().getAbnormalType()));
 			target.getEffectList().addBlockedAbnormalTypes(Collections.singleton(_skill.getSkill().getAbnormalType()));
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (!_skill.getSkill().isSynergySkill())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (!_skill.getSkill().isSynergySkill()) {
 			target.getEffectList().removeBlockedAbnormalTypes(Collections.singleton(_skill.getSkill().getAbnormalType()));
 		}
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature effected, Skill skill)
-	{
-		if (caster.isDead())
-		{
+	public void tick(Creature caster, Creature effected, Skill skill) {
+		if (caster.isDead()) {
 			return;
 		}
-		
+
 		final Skill triggerSkill = _skill.getSkill();
-		if (triggerSkill != null)
-		{
-			if (triggerSkill.isSynergySkill())
-			{
+		if (triggerSkill != null) {
+			if (triggerSkill.isSynergySkill()) {
 				triggerSkill.applyEffects(caster, caster);
 			}
-			
+
 			SkillCaster.triggerCast(caster, caster, triggerSkill);
-		}
-		else
-		{
+		} else {
 			LOGGER.warn("Skill not found effect called from {}", skill);
 		}
 	}

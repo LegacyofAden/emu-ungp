@@ -18,37 +18,32 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Disarm effect implementation.
+ *
  * @author nBd
  */
-public final class PumpDisarm extends AbstractBooleanStatEffect
-{
-	public PumpDisarm(StatsSet params)
-	{
+public final class PumpDisarm extends AbstractBooleanStatEffect {
+	public PumpDisarm(StatsSet params) {
 		super(BooleanStat.DISARMED);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.unequipWeapon();
 		}
 	}

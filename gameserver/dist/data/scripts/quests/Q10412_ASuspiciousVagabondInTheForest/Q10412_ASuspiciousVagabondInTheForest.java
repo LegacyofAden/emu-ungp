@@ -28,10 +28,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Suspicious Vagabond in the Forest (10412)
+ *
  * @author St3eT
  */
-public final class Q10412_ASuspiciousVagabondInTheForest extends Quest
-{
+public final class Q10412_ASuspiciousVagabondInTheForest extends Quest {
 	// NPCs
 	private static final int HATUBA = 33849;
 	private static final int VAGABOND = 33850; // Suspicious Vagabond Mortally Endangered
@@ -40,9 +40,8 @@ public final class Q10412_ASuspiciousVagabondInTheForest extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 65;
 	private static final int MAX_LEVEL = 70;
-	
-	public Q10412_ASuspiciousVagabondInTheForest()
-	{
+
+	public Q10412_ASuspiciousVagabondInTheForest() {
 		super(10412);
 		addStartNpc(HATUBA);
 		addTalkId(HATUBA, VAGABOND);
@@ -50,40 +49,32 @@ public final class Q10412_ASuspiciousVagabondInTheForest extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33849-09.htm");
 		addCondInCategory(CategoryType.MAGE_GROUP, "33849-09.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33849-02.htm":
-			case "33849-03.htm":
-			{
+			case "33849-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "33849-04.htm":
-			{
+			case "33849-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33849-07.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33849-07.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EAA, 3);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 942_690);
 						addSp(player, 226);
 					}
@@ -94,43 +85,32 @@ public final class Q10412_ASuspiciousVagabondInTheForest extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = null;
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == HATUBA)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == HATUBA) {
 					htmltext = "33849-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (npc.getId() == HATUBA)
-				{
+			case State.STARTED: {
+				if (npc.getId() == HATUBA) {
 					htmltext = st.isCond(1) ? "33849-05.html" : "33849-06.html";
-				}
-				else if ((npc.getId() == VAGABOND) && st.isCond(1))
-				{
-					if (!isSimulated)
-					{
+				} else if ((npc.getId() == VAGABOND) && st.isCond(1)) {
+					if (!isSimulated) {
 						st.setCond(2, true);
 					}
 					htmltext = "33850-01.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == HATUBA)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == HATUBA) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

@@ -31,26 +31,22 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class InstantHpSelf extends AbstractEffect
-{
+public class InstantHpSelf extends AbstractEffect {
 	private final double _power;
-	
-	public InstantHpSelf(StatsSet params)
-	{
+
+	public InstantHpSelf(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (caster.isDead() || caster.isHpBlocked())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (caster.isDead() || caster.isHpBlocked()) {
 			return;
 		}
-		
+
 		final double healedAmount = CommonUtil.constrain(_power, 0, caster.getMaxRecoverableHp() - caster.getCurrentHp());
 		caster.setCurrentHp(caster.getCurrentHp() + healedAmount);
-		
+
 		// System message
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 		sm.addInt((int) healedAmount);

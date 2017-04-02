@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpShieldDefenceRate extends AbstractDoubleStatEffect
-{
-	public PumpShieldDefenceRate(StatsSet params)
-	{
+public class PumpShieldDefenceRate extends AbstractDoubleStatEffect {
+	public PumpShieldDefenceRate(StatsSet params) {
 		super(params, DoubleStat.SHIELD_DEFENCE_RATE);
 	}
 }

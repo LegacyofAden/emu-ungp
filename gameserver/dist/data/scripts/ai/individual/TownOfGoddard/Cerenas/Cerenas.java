@@ -18,57 +18,46 @@
  */
 package ai.individual.TownOfGoddard.Cerenas;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-
-import ai.AbstractNpcAI;
 import quests.Q10369_NoblesseSoulTesting.Q10369_NoblesseSoulTesting;
 
 /**
  * Cerenas AI.
+ *
  * @author Gladicek
  */
-public final class Cerenas extends AbstractNpcAI
-{
+public final class Cerenas extends AbstractNpcAI {
 	// NPC
 	private static final int CERENAS = 31281;
 	// Item
 	private static final int NOBLESSE_TIARA = 7694;
-	
-	private Cerenas()
-	{
+
+	private Cerenas() {
 		addStartNpc(CERENAS);
 		addTalkId(CERENAS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		if (event.equals("tiara"))
-		{
-			if (player.hasQuestCompleted(Q10369_NoblesseSoulTesting.class.getSimpleName()))
-			{
-				if (!hasQuestItems(player, NOBLESSE_TIARA))
-				{
+
+		if (event.equals("tiara")) {
+			if (player.hasQuestCompleted(Q10369_NoblesseSoulTesting.class.getSimpleName())) {
+				if (!hasQuestItems(player, NOBLESSE_TIARA)) {
 					giveItems(player, NOBLESSE_TIARA, 1);
-				}
-				else
-				{
+				} else {
 					htmltext = "31281-02.html";
 				}
-			}
-			else
-			{
+			} else {
 				htmltext = "31281-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Cerenas();
 	}
 }

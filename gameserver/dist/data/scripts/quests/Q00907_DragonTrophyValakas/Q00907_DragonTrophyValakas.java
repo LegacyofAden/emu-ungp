@@ -29,10 +29,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Dragon Trophy - Valakas (907)
+ *
  * @author Zoey76
  */
-public class Q00907_DragonTrophyValakas extends Quest
-{
+public class Q00907_DragonTrophyValakas extends Quest {
 	// NPC
 	private static final int KLEIN = 31540;
 	// Monster
@@ -42,47 +42,38 @@ public class Q00907_DragonTrophyValakas extends Quest
 	private static final int VACUALITE_FLOATING_STONE = 7267;
 	// Misc
 	private static final int MIN_LEVEL = 84;
-	
-	public Q00907_DragonTrophyValakas()
-	{
+
+	public Q00907_DragonTrophyValakas() {
 		super(907);
 		addStartNpc(KLEIN);
 		addTalkId(KLEIN);
 		addKillId(VALAKAS);
 	}
-	
+
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon)
-	{
+	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false))
-		{
+		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false)) {
 			st.setCond(2, true);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, VACUALITE_FLOATING_STONE))
-		{
-			switch (event)
-			{
+		if ((player.getLevel() >= MIN_LEVEL) && hasQuestItems(player, VACUALITE_FLOATING_STONE)) {
+			switch (event) {
 				case "31540-05.htm":
-				case "31540-06.htm":
-				{
+				case "31540-06.htm": {
 					htmltext = event;
 					break;
 				}
-				case "31540-07.html":
-				{
+				case "31540-07.html": {
 					st.startQuest();
 					htmltext = event;
 					break;
@@ -91,53 +82,39 @@ public class Q00907_DragonTrophyValakas extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, true);
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
+
 		String htmltext = getNoQuestMsg(player);
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (player.getLevel() < MIN_LEVEL)
-				{
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (player.getLevel() < MIN_LEVEL) {
 					htmltext = "31540-02.html";
-				}
-				else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE))
-				{
+				} else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE)) {
 					htmltext = "31540-04.html";
-				}
-				else
-				{
+				} else {
 					htmltext = "31540-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
 						htmltext = "31540-08.html";
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						giveItems(player, MEDAL_OF_GLORY, 30);
 						playSound(player, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 						st.exitQuest(QuestType.DAILY, true);
@@ -147,25 +124,16 @@ public class Q00907_DragonTrophyValakas extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (!st.isNowAvailable())
-				{
+			case State.COMPLETED: {
+				if (!st.isNowAvailable()) {
 					htmltext = "31540-03.html";
-				}
-				else
-				{
+				} else {
 					st.setState(State.CREATED);
-					if (player.getLevel() < MIN_LEVEL)
-					{
+					if (player.getLevel() < MIN_LEVEL) {
 						htmltext = "31540-02.html";
-					}
-					else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE))
-					{
+					} else if (!hasQuestItems(player, VACUALITE_FLOATING_STONE)) {
 						htmltext = "31540-04.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "31540-01.htm";
 					}
 				}

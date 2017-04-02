@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Block Move effect implementation.
+ *
  * @author Sdw
  */
-public final class PumpBlockMove extends AbstractBooleanStatEffect
-{
-	public PumpBlockMove(StatsSet params)
-	{
+public final class PumpBlockMove extends AbstractBooleanStatEffect {
+	public PumpBlockMove(StatsSet params) {
 		super(BooleanStat.BLOCK_MOVE);
 	}
 }

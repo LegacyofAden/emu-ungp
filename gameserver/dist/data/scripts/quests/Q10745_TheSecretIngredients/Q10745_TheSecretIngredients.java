@@ -29,10 +29,10 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * The Secret Ingredients (10745)
+ *
  * @author Sdw
  */
-public final class Q10745_TheSecretIngredients extends Quest
-{
+public final class Q10745_TheSecretIngredients extends Quest {
 	// Npc's
 	private static final int DOLKIN = 33954;
 	private static final int KARLA = 33933;
@@ -47,9 +47,8 @@ public final class Q10745_TheSecretIngredients extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 17;
 	private static final int MAX_LEVEL = 25;
-	
-	public Q10745_TheSecretIngredients()
-	{
+
+	public Q10745_TheSecretIngredients() {
 		super(10745);
 		addStartNpc(DOLKIN);
 		addTalkId(DOLKIN, KARLA);
@@ -58,54 +57,42 @@ public final class Q10745_TheSecretIngredients extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33954-00.htm");
 		registerQuestItems(SECRET_INGREDIENTS.getId(), DOLKIN_REPORT.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "33954-02.htm":
-			{
+		switch (event) {
+			case "33954-02.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33954-05.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "33954-05.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 					takeItem(player, SECRET_INGREDIENTS);
 					giveItems(player, DOLKIN_REPORT);
 				}
 				break;
 			}
-			case "33933-02.html":
-			{
-				if (qs.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33933-02.html": {
+				if (qs.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 241_076);
 						addSp(player, 5);
 						showOnScreenMsg(player, NpcStringId.CHECK_YOUR_EQUIPMENT_IN_YOUR_INVENTORY, ExShowScreenMessage.TOP_CENTER, 10000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
 				break;
 			}
-			case "SPAWN_DOLKIN":
-			{
+			case "SPAWN_DOLKIN": {
 				showOnScreenMsg(player, NpcStringId.TALK_TO_DOLKIN_AND_LEAVE_THE_KARAPHON_HABITAT, ExShowScreenMessage.TOP_CENTER, 5000);
 				addSpawn(DOLKIN_INSTANCE, npc.getLocation(), false, 0, false, player.getInstanceId());
 				htmltext = null;
@@ -116,42 +103,29 @@ public final class Q10745_TheSecretIngredients extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = qs.isCompleted() ? getAlreadyCompletedMsg(player) : getNoQuestMsg(player);
-		
-		switch (npc.getId())
-		{
-			case DOLKIN:
-			{
-				if (qs.isCreated())
-				{
+
+		switch (npc.getId()) {
+			case DOLKIN: {
+				if (qs.isCreated()) {
 					htmltext = "33954-01.htm";
-				}
-				else if (qs.isStarted())
-				{
-					if (qs.isCond(1))
-					{
+				} else if (qs.isStarted()) {
+					if (qs.isCond(1)) {
 						htmltext = "33954-03.html";
-					}
-					else if (qs.isCond(2))
-					{
+					} else if (qs.isCond(2)) {
 						htmltext = "33954-04.html";
-					}
-					else if (qs.isCond(3))
-					{
+					} else if (qs.isCond(3)) {
 						htmltext = "33954-06.html";
 					}
 				}
 				break;
 			}
-			case KARLA:
-			{
-				if (qs.isCond(3))
-				{
+			case KARLA: {
+				if (qs.isCond(3)) {
 					htmltext = "33933-01.html";
 				}
 				break;
@@ -159,25 +133,19 @@ public final class Q10745_TheSecretIngredients extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if (qs != null)
-		{
+		if (qs != null) {
 			int killedMobs = qs.getMemoStateEx(0);
-			if (npc.getId() == KARAPHON)
-			{
+			if (npc.getId() == KARAPHON) {
 				giveItems(killer, SECRET_INGREDIENTS);
 				qs.setCond(2, true);
 			}
-			if ((++killedMobs) == 3)
-			{
+			if ((++killedMobs) == 3) {
 				startQuestTimer("SPAWN_DOLKIN", 5000, npc, killer);
-			}
-			else
-			{
+			} else {
 				qs.setMemoStateEx(0, killedMobs);
 			}
 		}

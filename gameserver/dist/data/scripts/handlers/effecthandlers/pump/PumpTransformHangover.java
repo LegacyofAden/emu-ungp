@@ -18,19 +18,17 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * An effect that blocks transformation.
+ *
  * @author Nik
  */
-public class PumpTransformHangover extends AbstractBooleanStatEffect
-{
-	public PumpTransformHangover(StatsSet params)
-	{
+public class PumpTransformHangover extends AbstractBooleanStatEffect {
+	public PumpTransformHangover(StatsSet params) {
 		super(BooleanStat.TRANSFORM_DISABLE);
 	}
 }

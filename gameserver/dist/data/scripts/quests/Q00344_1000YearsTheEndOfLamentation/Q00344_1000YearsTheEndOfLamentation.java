@@ -18,21 +18,21 @@
  */
 package quests.Q00344_1000YearsTheEndOfLamentation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 1000 years, the End of Lamentation (344)
+ *
  * @author Pandragon
  */
-public final class Q00344_1000YearsTheEndOfLamentation extends Quest
-{
+public final class Q00344_1000YearsTheEndOfLamentation extends Quest {
 	// NPCs
 	private static final int KAIEN = 30623;
 	private static final int GARVARENTZ = 30704;
@@ -47,7 +47,7 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 	private static final ItemHolder CRUCIFIX = new ItemHolder(4273, 1);
 	// Monsters
 	private static final Map<Integer, Double> MONSTER_CHANCES = new HashMap<>();
-	
+
 	{
 		MONSTER_CHANCES.put(20236, 0.58); // Cave Servant
 		MONSTER_CHANCES.put(20238, 0.75); // Cave Servant Warrior
@@ -60,7 +60,7 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 		MONSTER_CHANCES.put(20275, 0.79); // Cave Servant Captain
 		MONSTER_CHANCES.put(20276, 0.85); // Royal Cave Servant
 	}
-	
+
 	// Rewards
 	private static final ItemHolder ORIHARUKON_ORE = new ItemHolder(1874, 25);
 	private static final ItemHolder VARNISH_OF_PURITY = new ItemHolder(1887, 10);
@@ -76,85 +76,65 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 	private static final ItemHolder DRAKE_LEATHER_BOOTS = new ItemHolder(2437, 1);
 	// Misc
 	private static final int MIN_LVL = 48;
-	
-	public Q00344_1000YearsTheEndOfLamentation()
-	{
+
+	public Q00344_1000YearsTheEndOfLamentation() {
 		super(344);
 		addStartNpc(GILMORE);
 		addTalkId(KAIEN, GARVARENTZ, GILMORE, RODEMAI, ORVEN);
 		addKillId(MONSTER_CHANCES.keySet());
 		registerQuestItems(ARTICLES, OLD_KEY.getId(), OLD_HILT.getId(), TOTEM_NECKLACE.getId(), CRUCIFIX.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30754-03.htm":
-			case "30754-16.html":
-			{
+			case "30754-16.html": {
 				htmltext = event;
 				break;
 			}
-			case "30754-04.htm":
-			{
-				if (qs.isCreated())
-				{
+			case "30754-04.htm": {
+				if (qs.isCreated()) {
 					qs.startQuest();
 					htmltext = event;
 				}
 				break;
 			}
-			case "30754-08.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30754-08.html": {
+				if (qs.isCond(1)) {
 					final long count = getQuestItemsCount(player, ARTICLES);
-					if (count < 1)
-					{
+					if (count < 1) {
 						htmltext = "30754-07.html";
-					}
-					else
-					{
+					} else {
 						takeItems(player, ARTICLES, -1);
-						if (getRandom(1000) >= count)
-						{
+						if (getRandom(1000) >= count) {
 							giveAdena(player, count * 60, true);
 							htmltext = event;
-						}
-						else
-						{
+						} else {
 							qs.setCond(2, true);
-							switch (getRandom(4))
-							{
-								case 0:
-								{
+							switch (getRandom(4)) {
+								case 0: {
 									qs.setMemoState(1);
 									giveItems(player, OLD_HILT);
 									break;
 								}
-								case 1:
-								{
+								case 1: {
 									qs.setMemoState(2);
 									giveItems(player, OLD_KEY);
 									break;
 								}
-								case 2:
-								{
+								case 2: {
 									qs.setMemoState(3);
 									giveItems(player, TOTEM_NECKLACE);
 									break;
 								}
-								case 3:
-								{
+								case 3: {
 									qs.setMemoState(4);
 									giveItems(player, CRUCIFIX);
 									break;
@@ -166,36 +146,28 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 				}
 				break;
 			}
-			case "30754-17.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30754-17.html": {
+				if (qs.isCond(1)) {
 					htmltext = event;
 					qs.exitQuest(true, true);
 				}
 				break;
 			}
-			case "relic_info":
-			{
-				switch (qs.getMemoState())
-				{
-					case 1:
-					{
+			case "relic_info": {
+				switch (qs.getMemoState()) {
+					case 1: {
 						htmltext = "30754-10.html";
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						htmltext = "30754-11.html";
 						break;
 					}
-					case 3:
-					{
+					case 3: {
 						htmltext = "30754-12.html";
 						break;
 					}
-					case 4:
-					{
+					case 4: {
 						htmltext = "30754-13.html";
 						break;
 					}
@@ -205,161 +177,106 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
+	public String onTalk(Npc npc, PlayerInstance talker) {
 		final QuestState qs = getQuestState(talker, true);
 		String htmltext = getNoQuestMsg(talker);
-		switch (npc.getId())
-		{
-			case GILMORE:
-			{
-				if (qs.isCreated())
-				{
+		switch (npc.getId()) {
+			case GILMORE: {
+				if (qs.isCreated()) {
 					htmltext = (talker.getLevel() >= MIN_LVL) ? "30754-02.htm" : "30754-01.htm";
-				}
-				else if (qs.isStarted())
-				{
-					if (qs.isCond(1))
-					{
+				} else if (qs.isStarted()) {
+					if (qs.isCond(1)) {
 						htmltext = (hasQuestItems(talker, ARTICLES)) ? "30754-06.html" : "30754-05.html";
-					}
-					else if (hasItem(talker, OLD_KEY) || hasItem(talker, OLD_HILT) || hasItem(talker, TOTEM_NECKLACE) || hasItem(talker, CRUCIFIX))
-					{
+					} else if (hasItem(talker, OLD_KEY) || hasItem(talker, OLD_HILT) || hasItem(talker, TOTEM_NECKLACE) || hasItem(talker, CRUCIFIX)) {
 						htmltext = "30754-14.html";
-					}
-					else
-					{
+					} else {
 						qs.setCond(1);
 						htmltext = "30754-15.html";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = getAlreadyCompletedMsg(talker);
 				}
 				break;
 			}
-			case KAIEN:
-			{
-				if (qs.getMemoState() == 1)
-				{
-					if (hasItem(talker, OLD_HILT))
-					{
+			case KAIEN: {
+				if (qs.getMemoState() == 1) {
+					if (hasItem(talker, OLD_HILT)) {
 						takeItems(talker, OLD_HILT.getId(), -1);
 						final int rand = getRandom(100);
-						if (rand <= 52)
-						{
+						if (rand <= 52) {
 							rewardItems(talker, ORIHARUKON_ORE);
-						}
-						else if (rand <= 76)
-						{
+						} else if (rand <= 76) {
 							rewardItems(talker, VARNISH_OF_PURITY);
-						}
-						else if (rand <= 98)
-						{
+						} else if (rand <= 98) {
 							rewardItems(talker, SCROLL_EWC);
-						}
-						else
-						{
+						} else {
 							rewardItems(talker, RAID_SWORD);
 						}
 						qs.setCond(1);
 						htmltext = "30623-01.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "30623-02.html";
 					}
 				}
 				break;
 			}
-			case RODEMAI:
-			{
-				if (qs.getMemoState() == 2)
-				{
-					if (hasItem(talker, OLD_KEY))
-					{
+			case RODEMAI: {
+				if (qs.getMemoState() == 2) {
+					if (hasItem(talker, OLD_KEY)) {
 						takeItems(talker, OLD_KEY.getId(), -1);
 						final int rand = getRandom(100);
-						if (rand <= 39)
-						{
+						if (rand <= 39) {
 							rewardItems(talker, COKES);
-						}
-						else if (rand <= 89)
-						{
+						} else if (rand <= 89) {
 							rewardItems(talker, SCROLL_EWC);
-						}
-						else
-						{
+						} else {
 							rewardItems(talker, RING_OF_AGES);
 						}
 						qs.setCond(1);
 						htmltext = "30756-01.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "30756-02.html";
 					}
 				}
 				break;
 			}
-			case GARVARENTZ:
-			{
-				if (qs.getMemoState() == 3)
-				{
-					if (hasItem(talker, TOTEM_NECKLACE))
-					{
+			case GARVARENTZ: {
+				if (qs.getMemoState() == 3) {
+					if (hasItem(talker, TOTEM_NECKLACE)) {
 						takeItems(talker, TOTEM_NECKLACE.getId(), -1);
 						final int rand = getRandom(100);
-						if (rand <= 47)
-						{
+						if (rand <= 47) {
 							rewardItems(talker, LEATHER);
-						}
-						else if (rand <= 97)
-						{
+						} else if (rand <= 97) {
 							rewardItems(talker, COARSE_BONE_POWDER);
-						}
-						else
-						{
+						} else {
 							rewardItems(talker, HEAVY_DOOM_HAMMER);
 						}
 						qs.setCond(1);
 						htmltext = "30704-01.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "30704-02.html";
 					}
 				}
 				break;
 			}
-			case ORVEN:
-			{
-				if (qs.getMemoState() == 4)
-				{
-					if (hasItem(talker, CRUCIFIX))
-					{
+			case ORVEN: {
+				if (qs.getMemoState() == 4) {
+					if (hasItem(talker, CRUCIFIX)) {
 						takeItems(talker, CRUCIFIX.getId(), -1);
 						final int rand = getRandom(100);
-						if (rand <= 49)
-						{
+						if (rand <= 49) {
 							rewardItems(talker, STONE_OF_PURITY);
-						}
-						else if (rand <= 69)
-						{
+						} else if (rand <= 69) {
 							rewardItems(talker, SCROLL_EAC);
-						}
-						else
-						{
+						} else {
 							rewardItems(talker, DRAKE_LEATHER_BOOTS);
 						}
 						qs.setCond(1);
 						htmltext = "30857-01.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "30857-02.html";
 					}
 				}
@@ -368,13 +285,11 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, 1, 3, npc);
-		if (qs != null)
-		{
+		if (qs != null) {
 			giveItemRandomly(qs.getPlayer(), npc, ARTICLES, 1, 0, MONSTER_CHANCES.get(npc.getId()), true);
 		}
 		return super.onKill(npc, killer, isSummon);

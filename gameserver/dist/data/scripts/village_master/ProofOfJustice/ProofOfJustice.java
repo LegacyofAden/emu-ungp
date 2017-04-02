@@ -18,32 +18,30 @@
  */
 package village_master.ProofOfJustice;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 
-import ai.AbstractNpcAI;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Proof Of Justice implementation.
+ *
  * @author St3eT
  */
-public final class ProofOfJustice extends AbstractNpcAI
-{
+public final class ProofOfJustice extends AbstractNpcAI {
 	// Items
 	private static final int JUSTICE = 17822; // Proof of Justice
 	// Misc
 	private static final Map<Integer, List<ClassId>> CLASSLIST = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		CLASSLIST.put(30505, Arrays.asList(ClassId.DESTROYER, ClassId.TYRANT, ClassId.OVERLORD, ClassId.WARCRYER));
 		CLASSLIST.put(30504, Arrays.asList(ClassId.BOUNTY_HUNTER, ClassId.WARSMITH));
 		CLASSLIST.put(30288, Arrays.asList(ClassId.GLADIATOR, ClassId.WARLORD, ClassId.PALADIN, ClassId.DARK_AVENGER, ClassId.TREASURE_HUNTER, ClassId.HAWKEYE));
@@ -53,34 +51,26 @@ public final class ProofOfJustice extends AbstractNpcAI
 		CLASSLIST.put(30289, Arrays.asList(ClassId.SORCERER, ClassId.NECROMANCER, ClassId.WARLOCK, ClassId.BISHOP, ClassId.PROPHET));
 		CLASSLIST.put(32196, Arrays.asList(ClassId.BERSERKER, ClassId.MALE_SOULBREAKER, ClassId.FEMALE_SOULBREAKER, ClassId.ARBALESTER));
 	}
-	
-	private ProofOfJustice()
-	{
+
+	private ProofOfJustice() {
 		addStartNpc(CLASSLIST.keySet());
 		addTalkId(CLASSLIST.keySet());
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
-		if (player.isInOneOfCategory(CategoryType.FIRST_CLASS_GROUP, CategoryType.SECOND_CLASS_GROUP))
-		{
+	public String onTalk(Npc npc, PlayerInstance player) {
+		if (player.isInOneOfCategory(CategoryType.FIRST_CLASS_GROUP, CategoryType.SECOND_CLASS_GROUP)) {
 			return npc.getId() + "-noclass.html";
-		}
-		else if (!hasAtLeastOneQuestItem(player, JUSTICE))
-		{
+		} else if (!hasAtLeastOneQuestItem(player, JUSTICE)) {
 			return npc.getId() + "-noitem.html";
-		}
-		else if (!CLASSLIST.get(npc.getId()).contains(player.getClassId()))
-		{
+		} else if (!CLASSLIST.get(npc.getId()).contains(player.getClassId())) {
 			return npc.getId() + "-no.html";
 		}
 		MultisellData.getInstance().separateAndSend(718, player, npc, false);
 		return super.onTalk(npc, player);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ProofOfJustice();
 	}
 }

@@ -27,20 +27,20 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * In Search of Cloth (34)
+ *
  * @author malyelfik, Gladicek
  */
-public class Q00034_InSearchOfCloth extends Quest
-{
+public class Q00034_InSearchOfCloth extends Quest {
 	// NPCs
 	private static final int RADIA = 30088;
 	private static final int RALFORD = 30165;
 	private static final int VARAN = 30294;
 	// Monsters
 	private static final int[] MOBS =
-	{
-		20560, // Trisalim Spider
-		20561, // Trisalim Tarantula
-	};
+			{
+					20560, // Trisalim Spider
+					20561, // Trisalim Tarantula
+			};
 	// Items
 	private static final int ARMOR_FRAGMENT_LOW_GRADE = 36551;
 	private static final int ACCESSORY_GEM_LOW_GRADE = 36556;
@@ -52,9 +52,8 @@ public class Q00034_InSearchOfCloth extends Quest
 	private static final int SPINNERET_COUNT = 10;
 	private static final int ARMOR_FRAGMENT_COUNT = 420;
 	private static final int ACCESSORY_GEM_COUNT = 750;
-	
-	public Q00034_InSearchOfCloth()
-	{
+
+	public Q00034_InSearchOfCloth() {
 		super(34);
 		addStartNpc(RADIA);
 		addTalkId(RADIA, RALFORD, VARAN);
@@ -62,54 +61,41 @@ public class Q00034_InSearchOfCloth extends Quest
 		addCondMinLevel(MIN_LEVEL, "30088-02.html");
 		registerQuestItems(SKEIN_OF_YARN, SPINNERET);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "30088-03.htm":
-			{
+		switch (event) {
+			case "30088-03.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30294-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30294-02.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "30088-06.html":
-			{
-				if (st.isCond(2))
-				{
+			case "30088-06.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 				}
 				break;
 			}
-			case "30165-02.html":
-			{
-				if (st.isCond(3))
-				{
+			case "30165-02.html": {
+				if (st.isCond(3)) {
 					st.setCond(4, true);
 				}
 				break;
 			}
-			case "30165-05.html":
-			{
-				if (st.isCond(5))
-				{
-					if (getQuestItemsCount(player, SPINNERET) < SPINNERET_COUNT)
-					{
+			case "30165-05.html": {
+				if (st.isCond(5)) {
+					if (getQuestItemsCount(player, SPINNERET) < SPINNERET_COUNT) {
 						return getNoQuestMsg(player);
 					}
 					takeItems(player, SPINNERET, SPINNERET_COUNT);
@@ -118,27 +104,19 @@ public class Q00034_InSearchOfCloth extends Quest
 				}
 				break;
 			}
-			case "30088-10.html":
-			{
-				if (st.isCond(6))
-				{
-					if ((getQuestItemsCount(player, ARMOR_FRAGMENT_LOW_GRADE) >= ARMOR_FRAGMENT_COUNT) && (getQuestItemsCount(player, ACCESSORY_GEM_LOW_GRADE) >= ACCESSORY_GEM_COUNT) && hasQuestItems(player, SKEIN_OF_YARN))
-					{
-						if ((player.getLevel() >= MIN_LEVEL))
-						{
+			case "30088-10.html": {
+				if (st.isCond(6)) {
+					if ((getQuestItemsCount(player, ARMOR_FRAGMENT_LOW_GRADE) >= ARMOR_FRAGMENT_COUNT) && (getQuestItemsCount(player, ACCESSORY_GEM_LOW_GRADE) >= ACCESSORY_GEM_COUNT) && hasQuestItems(player, SKEIN_OF_YARN)) {
+						if ((player.getLevel() >= MIN_LEVEL)) {
 							takeItems(player, SKEIN_OF_YARN, 1);
 							takeItems(player, ARMOR_FRAGMENT_LOW_GRADE, ARMOR_FRAGMENT_COUNT);
 							takeItems(player, ACCESSORY_GEM_LOW_GRADE, ACCESSORY_GEM_COUNT);
 							giveItems(player, MYSTERIOUS_CLOTH, 1);
 							st.exitQuest(false, true);
-						}
-						else
-						{
+						} else {
 							htmltext = getNoQuestLevelRewardMsg(player);
 						}
-					}
-					else
-					{
+					} else {
 						htmltext = "30088-11.html";
 					}
 				}
@@ -150,56 +128,42 @@ public class Q00034_InSearchOfCloth extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		final PlayerInstance member = getRandomPartyMember(player, 4);
-		
-		if ((st.isCond(4)) && (member != null) && getRandomBoolean())
-		{
+
+		if ((st.isCond(4)) && (member != null) && getRandomBoolean()) {
 			giveItems(member, SPINNERET, 1);
-			if (getQuestItemsCount(member, SPINNERET) >= SPINNERET_COUNT)
-			{
+			if (getQuestItemsCount(member, SPINNERET) >= SPINNERET_COUNT) {
 				st.setCond(5, true);
-			}
-			else
-			{
+			} else {
 				playSound(member, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == RADIA)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == RADIA) {
 					htmltext = "30088-01.htm";
 					break;
 				}
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case RADIA:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case RADIA: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30088-04.html";
 								break;
@@ -215,22 +179,16 @@ public class Q00034_InSearchOfCloth extends Quest
 						}
 						break;
 					}
-					case VARAN:
-					{
-						if (st.isCond(1))
-						{
+					case VARAN: {
+						if (st.isCond(1)) {
 							htmltext = "30294-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "30294-03.html";
 						}
 						break;
 					}
-					case RALFORD:
-					{
-						switch (st.getCond())
-						{
+					case RALFORD: {
+						switch (st.getCond()) {
 							case 3:
 								htmltext = "30165-01.html";
 								break;

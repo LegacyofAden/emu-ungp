@@ -18,9 +18,7 @@
  */
 package instances.EvilIncubator;
 
-import java.util.EnumMap;
-import java.util.List;
-
+import instances.AbstractInstance;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Race;
@@ -39,8 +37,6 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
-import instances.AbstractInstance;
 import quests.Q10341_DayOfDestinyHumansFate.Q10341_DayOfDestinyHumansFate;
 import quests.Q10342_DayOfDestinyElvenFate.Q10342_DayOfDestinyElvenFate;
 import quests.Q10343_DayOfDestinyDarkElfsFate.Q10343_DayOfDestinyDarkElfsFate;
@@ -48,12 +44,15 @@ import quests.Q10344_DayOfDestinyOrcsFate.Q10344_DayOfDestinyOrcsFate;
 import quests.Q10345_DayOfDestinyDwarfsFate.Q10345_DayOfDestinyDwarfsFate;
 import quests.Q10346_DayOfDestinyKamaelsFate.Q10346_DayOfDestinyKamaelsFate;
 
+import java.util.EnumMap;
+import java.util.List;
+
 /**
  * Evil Incubator instance zone.
+ *
  * @author St3eT
  */
-public final class EvilIncubator extends AbstractInstance
-{
+public final class EvilIncubator extends AbstractInstance {
 	// NPCs
 	private static final int VANGUARD_MEMBER = 33165;
 	private static final int ADOLPH = 33170;
@@ -62,31 +61,31 @@ public final class EvilIncubator extends AbstractInstance
 	private static final int HAYUK = 33173;
 	private static final int ELIYAH = 33174;
 	private static final int[] MONSTERS =
-	{
-		27431, // Slayer
-		27432, // Tracker
-		27433, // Priest of Darkness
-		27434, // Guardian of Darkness
-		27430, // Screaming Shaman
-	};
+			{
+					27431, // Slayer
+					27432, // Tracker
+					27433, // Priest of Darkness
+					27434, // Guardian of Darkness
+					27430, // Screaming Shaman
+			};
 	private static final int[] BOSSES =
-	{
-		27425, // Death Wound
-		27426, // Death Wound
-		27427, // Death Wound
-		27428, // Death Wound
-		27429, // Death Wound
-	};
+			{
+					27425, // Death Wound
+					27426, // Death Wound
+					27427, // Death Wound
+					27428, // Death Wound
+					27429, // Death Wound
+			};
 	private static final int[] HELPERS =
-	{
-		33170, // Adolph
-		// 33171, // Priest Alice
-		33172, // Officer Barton
-		33173, // Sniper Hayuk
-		33174, // Magus Eliyah
-		33414, // Van Archer
-		33415, // Van Infantry
-	};
+			{
+					33170, // Adolph
+					// 33171, // Priest Alice
+					33172, // Officer Barton
+					33173, // Sniper Hayuk
+					33174, // Magus Eliyah
+					33414, // Van Archer
+					33415, // Van Infantry
+			};
 	// Items
 	private static final int SOE = 736; // Scroll of Escape
 	// Locations
@@ -98,8 +97,8 @@ public final class EvilIncubator extends AbstractInstance
 	private static final int TEMPLATE_ID = 185;
 	//@formatter:off
 	private static final EnumMap<Race, String> RACE_QUESTS = new EnumMap<>(Race.class);
-	static
-	{
+
+	static {
 		RACE_QUESTS.put(Race.HUMAN, Q10341_DayOfDestinyHumansFate.class.getSimpleName());
 		RACE_QUESTS.put(Race.ELF, Q10342_DayOfDestinyElvenFate.class.getSimpleName());
 		RACE_QUESTS.put(Race.DARK_ELF, Q10343_DayOfDestinyDarkElfsFate.class.getSimpleName());
@@ -107,9 +106,10 @@ public final class EvilIncubator extends AbstractInstance
 		RACE_QUESTS.put(Race.DWARF, Q10345_DayOfDestinyDwarfsFate.class.getSimpleName());
 		RACE_QUESTS.put(Race.KAMAEL, Q10346_DayOfDestinyKamaelsFate.class.getSimpleName());
 	}
+
 	private static final EnumMap<ClassId, Integer> CLASS_BOSS = new EnumMap<>(ClassId.class);
-	static
-	{
+
+	static {
 		CLASS_BOSS.put(ClassId.GLADIATOR, 27426);
 		CLASS_BOSS.put(ClassId.WARLORD, 27426);
 		CLASS_BOSS.put(ClassId.PALADIN, 27425);
@@ -146,9 +146,10 @@ public final class EvilIncubator extends AbstractInstance
 		CLASS_BOSS.put(ClassId.FEMALE_SOULBREAKER, 27426);
 		CLASS_BOSS.put(ClassId.ARBALESTER, 27428);
 	}
+
 	private static final EnumMap<ClassId, Integer> CLASS_ITEMS = new EnumMap<>(ClassId.class);
-	static
-	{
+
+	static {
 		CLASS_ITEMS.put(ClassId.GLADIATOR, 17484);
 		CLASS_ITEMS.put(ClassId.WARLORD, 17485);
 		CLASS_ITEMS.put(ClassId.PALADIN, 17486);
@@ -186,9 +187,8 @@ public final class EvilIncubator extends AbstractInstance
 		CLASS_ITEMS.put(ClassId.ARBALESTER, 17517);
 	}
 	//@formatter:on
-	
-	public EvilIncubator()
-	{
+
+	public EvilIncubator() {
 		super(TEMPLATE_ID);
 		addStartNpc(VANGUARD_MEMBER);
 		addTalkId(VANGUARD_MEMBER, ADOLPH, ALICE, BARTON, HAYUK, ELIYAH);
@@ -196,61 +196,47 @@ public final class EvilIncubator extends AbstractInstance
 		setCreatureKillId(this::onCreatureKill, MONSTERS);
 		setCreatureKillId(this::onCreatureKill, BOSSES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player);
-		if ((st == null) || !st.isStarted())
-		{
+		if ((st == null) || !st.isStarted()) {
 			return super.onAdvEvent(event, npc, player);
 		}
 		String htmltext = null;
-		
-		if (event.equals("enterInstance"))
-		{
+
+		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 			st.setCond(5);
 			htmltext = "33165-01.html";
-		}
-		else
-		{
+		} else {
 			final Instance world = npc.getInstanceWorld();
-			if (world != null)
-			{
-				switch (event)
-				{
-					case "33170-02.html":
-					{
-						if (st.isCond(5))
-						{
+			if (world != null) {
+				switch (event) {
+					case "33170-02.html": {
+						if (st.isCond(5)) {
 							st.setCond(6, true);
 							htmltext = event;
 						}
 						break;
 					}
-					case "selectHelper":
-					{
+					case "selectHelper": {
 						int helperCount = world.getParameters().getInt("HELPER_COUNT", 0);
-						if ((helperCount < 2) && st.isCond(6))
-						{
+						if ((helperCount < 2) && st.isCond(6)) {
 							helperCount++;
 							world.setParameter("HELPER_COUNT", helperCount);
 							npc.teleToLocation(helperCount == 1 ? BATTLE_LOC_2 : BATTLE_LOC_3);
-							
-							if (helperCount == 2)
-							{
+
+							if (helperCount == 2) {
 								st.setCond(7, true);
 								World.getInstance().getVisibleObjects(world.getNpc(ADOLPH), FriendlyNpcInstance.class, 1000).forEach(c -> c.deleteMe());
 							}
 						}
 						break;
 					}
-					case "teamSelected":
-					{
+					case "teamSelected": {
 						int helperCount = world.getParameters().getInt("HELPER_COUNT", 0);
-						if ((helperCount == 2) && st.isCond(7))
-						{
+						if ((helperCount == 2) && st.isCond(7)) {
 							helperCount++;
 							world.setParameter("HELPER_COUNT", helperCount);
 							st.setCond(8, true);
@@ -260,14 +246,11 @@ public final class EvilIncubator extends AbstractInstance
 						}
 						break;
 					}
-					case "giveItem":
-					{
-						if (st.isCond(9))
-						{
+					case "giveItem": {
+						if (st.isCond(9)) {
 							st.setCond(10, true);
 							final int classItemId = CLASS_ITEMS.getOrDefault(player.getClassId(), -1);
-							if ((classItemId != -1) && !hasQuestItems(player, classItemId))
-							{
+							if ((classItemId != -1) && !hasQuestItems(player, classItemId)) {
 								giveItems(player, classItemId, 1);
 							}
 							npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THE_CRY_OF_DESTINY_PENDANT_WILL_BE_HELPFUL_TO_YOU_PLEASE_EQUIP_IT_AND_BRING_OUT_THE_POWER_OF_THE_PENDANT_TO_PREPARE_FOR_THE_NEXT_FIGHT);
@@ -275,10 +258,8 @@ public final class EvilIncubator extends AbstractInstance
 						}
 						break;
 					}
-					case "resumeFight":
-					{
-						if (st.isCond(10))
-						{
+					case "resumeFight": {
+						if (st.isCond(10)) {
 							st.setCond(11, true);
 							manageWaveSpawn(world);
 						}
@@ -289,58 +270,45 @@ public final class EvilIncubator extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player);
-		
-		if ((st == null) || !st.isStarted())
-		{
+
+		if ((st == null) || !st.isStarted()) {
 			return super.onTalk(npc, player, isSimulated);
 		}
-		
-		if (st.getState() == State.STARTED)
-		{
-			switch (npc.getId())
-			{
-				case ADOLPH:
-				{
-					switch (st.getCond())
-					{
-						case 5:
-						{
+
+		if (st.getState() == State.STARTED) {
+			switch (npc.getId()) {
+				case ADOLPH: {
+					switch (st.getCond()) {
+						case 5: {
 							htmltext = npc.getId() + "-01.html";
 							break;
 						}
-						case 6:
-						{
+						case 6: {
 							htmltext = "33170-02.html";
 							break;
 						}
-						case 7:
-						{
+						case 7: {
 							htmltext = "33170-03.html";
 							break;
 						}
-						case 9:
-						{
+						case 9: {
 							htmltext = "33170-05.html";
 							break;
 						}
-						case 10:
-						{
+						case 10: {
 							htmltext = "33170-07.html";
 							break;
 						}
-						case 12:
-						{
+						case 12: {
 							st.setCond(13, true);
 							giveItems(player, SOE, 1);
 						}
-						case 13:
-						{
+						case 13: {
 							htmltext = "33170-08.html";
 							break;
 						}
@@ -350,17 +318,13 @@ public final class EvilIncubator extends AbstractInstance
 				case ALICE:
 				case BARTON:
 				case ELIYAH:
-				case HAYUK:
-				{
-					switch (st.getCond())
-					{
-						case 5:
-						{
+				case HAYUK: {
+					switch (st.getCond()) {
+						case 5: {
 							htmltext = npc.getId() + "-01.html";
 							break;
 						}
-						case 6:
-						{
+						case 6: {
 							htmltext = npc.getId() + "-02.html";
 							break;
 						}
@@ -371,37 +335,30 @@ public final class EvilIncubator extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
 		final QuestState st = getQuestState(player);
-		
-		if ((st == null) || !st.isStarted())
-		{
+
+		if ((st == null) || !st.isStarted()) {
 			return htmltext;
 		}
-		
-		switch (npc.getId())
-		{
-			case ADOLPH:
-			{
-				switch (st.getCond())
-				{
+
+		switch (npc.getId()) {
+			case ADOLPH: {
+				switch (st.getCond()) {
 					case 5:
 					case 6:
 					case 7:
 					case 9:
 					case 10:
 					case 12:
-					case 13:
-					{
+					case 13: {
 						htmltext = "33170.html";
 						break;
 					}
-					default:
-					{
+					default: {
 						htmltext = "33170-04.html";
 					}
 				}
@@ -410,78 +367,64 @@ public final class EvilIncubator extends AbstractInstance
 			case ALICE:
 			case BARTON:
 			case ELIYAH:
-			case HAYUK:
-			{
+			case HAYUK: {
 				htmltext = st.getCond() > 7 ? (npc.getId() + "-03.html") : (npc.getId() + ".html");
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
-	public void onCreatureKill(OnCreatureDeath event)
-	{
+
+	public void onCreatureKill(OnCreatureDeath event) {
 		final Npc npc = (Npc) event.getTarget();
-		
+
 		final Instance world = npc.getInstanceWorld();
-		if (world != null)
-		{
+		if (world != null) {
 			final int waveId = world.getParameters().getInt("WORLD_WAVE", 1);
-			
-			if (ArrayUtil.contains(BOSSES, npc.getId()))
-			{
+
+			if (ArrayUtil.contains(BOSSES, npc.getId())) {
 				final QuestState st = getQuestState(world.getFirstPlayer());
-				if ((st == null) || !st.isStarted())
-				{
+				if ((st == null) || !st.isStarted()) {
 					return;
 				}
-				
+
 				st.setCond(12, true);
-			}
-			else if (waveId < 8)
-			{
-				if (world.getAliveNpcs(MONSTERS).isEmpty())
-				{
+			} else if (waveId < 8) {
+				if (world.getAliveNpcs(MONSTERS).isEmpty()) {
 					getTimers().addTimer("SPAWN_WAVE", 5000, e -> manageWaveSpawn(world));
 				}
 			}
 			getTimers().addTimer("WORLD_ATTACK", 1000, e -> managerWorldAttack(world, null));
 		}
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+
 	}
-	
-	private void manageWaveSpawn(Instance world)
-	{
+
+	private void manageWaveSpawn(Instance world) {
 		final QuestState st = getQuestState(world.getFirstPlayer());
-		if ((st == null) || !st.isStarted())
-		{
+		if ((st == null) || !st.isStarted()) {
 			return;
 		}
-		
+
 		List<Npc> spawnedNpcs = null;
 		int waveId = world.getParameters().getInt("WORLD_WAVE", 1);
-		switch (waveId)
-		{
+		switch (waveId) {
 			case 1:
 			case 2:
 			case 3:
 			case 4:
 			case 5:
-			case 6:
-			{
+			case 6: {
 				spawnedNpcs = world.spawnGroup("wave_" + waveId);
 				waveId++;
 				world.setParameter("WORLD_WAVE", waveId);
 				showOnScreenMsg(world, NpcStringId.CREATURES_RESURRECTED_DEFEND_YOURSELF, ExShowScreenMessage.TOP_CENTER, 5000, true);
 				break;
 			}
-			case 7:
-			{
+			case 7: {
 				waveId++;
 				world.setParameter("WORLD_WAVE", waveId);
 				showOnScreenMsg(world, NpcStringId.CREATURES_HAVE_STOPPED_THEIR_ATTACK_REST_AND_THEN_SPEAK_WITH_ADOLPH, ExShowScreenMessage.TOP_CENTER, 5000, true);
@@ -494,8 +437,7 @@ public final class EvilIncubator extends AbstractInstance
 			case 11:
 			case 12:
 			case 13:
-			case 14:
-			{
+			case 14: {
 				spawnedNpcs = world.spawnGroup("wave_" + waveId);
 				waveId++;
 				world.setParameter("WORLD_WAVE", waveId);
@@ -503,8 +445,7 @@ public final class EvilIncubator extends AbstractInstance
 				getTimers().addTimer("SPAWN_WAVE", 20000, e -> manageWaveSpawn(world));
 				break;
 			}
-			case 15:
-			{
+			case 15: {
 				spawnedNpcs = world.spawnGroup("wave_" + waveId);
 				waveId++;
 				world.setParameter("WORLD_WAVE", waveId);
@@ -517,21 +458,16 @@ public final class EvilIncubator extends AbstractInstance
 		}
 		managerWorldAttack(world, spawnedNpcs);
 	}
-	
-	private void managerWorldAttack(Instance world, List<Npc> spawnedNpcs)
-	{
+
+	private void managerWorldAttack(Instance world, List<Npc> spawnedNpcs) {
 		final List<FriendlyNpcInstance> helperList = World.getInstance().getVisibleObjects(world.getFirstPlayer(), FriendlyNpcInstance.class);
-		
-		if ((spawnedNpcs != null) && !spawnedNpcs.isEmpty())
-		{
-			for (Npc npc : spawnedNpcs)
-			{
-				if (!helperList.isEmpty())
-				{
+
+		if ((spawnedNpcs != null) && !spawnedNpcs.isEmpty()) {
+			for (Npc npc : spawnedNpcs) {
+				if (!helperList.isEmpty()) {
 					final FriendlyNpcInstance helper = helperList.get(getRandom(helperList.size()));
-					
-					if (ArrayUtil.contains(HELPERS, helper.getId()))
-					{
+
+					if (ArrayUtil.contains(HELPERS, helper.getId())) {
 						npc.reduceCurrentHp(1, helper, null);
 						helper.reduceCurrentHp(1, npc, null);
 						addAttackDesire(helper, npc);
@@ -540,30 +476,24 @@ public final class EvilIncubator extends AbstractInstance
 				}
 			}
 		}
-		
-		for (FriendlyNpcInstance helper : helperList)
-		{
-			for (Attackable monster : World.getInstance().getVisibleObjects(helper, Attackable.class))
-			{
-				if (!(monster instanceof FriendlyNpcInstance))
-				{
+
+		for (FriendlyNpcInstance helper : helperList) {
+			for (Attackable monster : World.getInstance().getVisibleObjects(helper, Attackable.class)) {
+				if (!(monster instanceof FriendlyNpcInstance)) {
 					addAttackDesire(helper, monster);
 				}
 			}
 		}
 	}
-	
-	private QuestState getQuestState(PlayerInstance player)
-	{
-		if (player == null)
-		{
+
+	private QuestState getQuestState(PlayerInstance player) {
+		if (player == null) {
 			return null;
 		}
 		return RACE_QUESTS.containsKey(player.getRace()) ? player.getQuestState(RACE_QUESTS.get(player.getRace())) : null;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new EvilIncubator();
 	}
 }

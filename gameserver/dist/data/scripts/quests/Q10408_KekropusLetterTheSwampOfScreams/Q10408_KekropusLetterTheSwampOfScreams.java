@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: The Swamp of Screams (10408)
+ *
  * @author St3eT
  */
-public final class Q10408_KekropusLetterTheSwampOfScreams extends LetterQuest
-{
+public final class Q10408_KekropusLetterTheSwampOfScreams extends LetterQuest {
 	// NPCs
 	private static final int MATHIAS = 31340;
 	private static final int DOKARA = 33847;
@@ -48,41 +47,34 @@ public final class Q10408_KekropusLetterTheSwampOfScreams extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 65;
 	private static final int MAX_LEVEL = 69;
-	
-	public Q10408_KekropusLetterTheSwampOfScreams()
-	{
+
+	public Q10408_KekropusLetterTheSwampOfScreams() {
 		super(10408);
 		addTalkId(MATHIAS, DOKARA);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartQuestSound("Npcdialog1.kekrops_quest_6");
 		setStartLocation(SOE_TOWN_OF_RUNE, TELEPORT_LOC);
 		registerQuestItems(SOE_TOWN_OF_RUNE, SOE_SWAMP_OF_SCREAMS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "31340-02.html":
-			{
+		switch (event) {
+			case "31340-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "31340-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31340-03.html": {
+				if (st.isCond(1)) {
 					takeItems(player, SOE_TOWN_OF_RUNE, -1);
 					giveItems(player, SOE_SWAMP_OF_SCREAMS, 1);
 					st.setCond(2, true);
@@ -90,15 +82,12 @@ public final class Q10408_KekropusLetterTheSwampOfScreams extends LetterQuest
 				}
 				break;
 			}
-			case "33847-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33847-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EWA, 2);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 942_690);
 						addSp(player, 226);
 					}
@@ -110,51 +99,41 @@ public final class Q10408_KekropusLetterTheSwampOfScreams extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if ((npc.getId() == MATHIAS) && st.isCond(1))
-			{
+
+		if (st.isStarted()) {
+			if ((npc.getId() == MATHIAS) && st.isCond(1)) {
 				htmltext = "31340-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == MATHIAS ? "31340-04.html" : "33847-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.SWAMP_OF_SCREAMS_IA_A_GOOD_HUNTING_ZONE_FOR_LV_65_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public boolean canShowTutorialMark(PlayerInstance player)
-	{
+	public boolean canShowTutorialMark(PlayerInstance player) {
 		return !player.isInCategory(CategoryType.MAGE_GROUP);
 	}
 }

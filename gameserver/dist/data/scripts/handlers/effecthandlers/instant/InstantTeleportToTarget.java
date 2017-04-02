@@ -34,32 +34,29 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Teleport To Target effect implementation.
+ *
  * @author Didldak, Adry_85
  */
-public final class InstantTeleportToTarget extends AbstractEffect
-{
-	public InstantTeleportToTarget(StatsSet params)
-	{
+public final class InstantTeleportToTarget extends AbstractEffect {
+	public InstantTeleportToTarget(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		double px = target.getX();
 		double py = target.getY();
 		double ph = Util.convertHeadingToDegree(target.getHeading());
-		
+
 		ph += 180;
-		if (ph > 360)
-		{
+		if (ph > 360) {
 			ph -= 360;
 		}
-		
+
 		ph = (Math.PI * ph) / 180;
 		double x = px + (25 * Math.cos(ph));
 		double y = py + (25 * Math.sin(ph));
 		double z = target.getZ();
-		
+
 		final Location loc = GeoData.getInstance().moveCheck(caster.getX(), caster.getY(), caster.getZ(), x, y, z, caster.getInstanceWorld());
 		caster.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		caster.broadcastPacket(new FlyToLocation(caster, loc.getX(), loc.getY(), loc.getZ(), FlyType.DUMMY));

@@ -18,27 +18,24 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * Noblesse Blessing effect implementation.
+ *
  * @author earendil
  */
-public final class PumpPreserveAbnormal extends AbstractBooleanStatEffect
-{
-	public PumpPreserveAbnormal(StatsSet params)
-	{
+public final class PumpPreserveAbnormal extends AbstractBooleanStatEffect {
+	public PumpPreserveAbnormal(StatsSet params) {
 		super(BooleanStat.PRESERVE_ABNORMAL);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayable();
 	}
 }

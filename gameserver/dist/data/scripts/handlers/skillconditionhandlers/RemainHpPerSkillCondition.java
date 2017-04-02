@@ -29,32 +29,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class RemainHpPerSkillCondition implements ISkillCondition
-{
+public class RemainHpPerSkillCondition implements ISkillCondition {
 	private final int _amount;
 	private final SkillConditionPercentType _percentType;
 	private final SkillConditionAffectType _affectType;
-	
-	public RemainHpPerSkillCondition(StatsSet params)
-	{
+
+	public RemainHpPerSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 		_percentType = params.getEnum("percentType", SkillConditionPercentType.class);
 		_affectType = params.getEnum("affectType", SkillConditionAffectType.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_affectType)
-		{
-			case CASTER:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_affectType) {
+			case CASTER: {
 				return _percentType.test(caster.getCurrentHpPercent(), _amount);
 			}
-			case TARGET:
-			{
-				if ((target != null) && target.isCreature())
-				{
+			case TARGET: {
+				if ((target != null) && target.isCreature()) {
 					return _percentType.test(((Creature) target).getCurrentHpPercent(), _amount);
 				}
 				break;

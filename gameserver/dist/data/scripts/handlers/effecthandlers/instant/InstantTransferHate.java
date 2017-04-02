@@ -30,44 +30,38 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Transfer Hate effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantTransferHate extends AbstractEffect
-{
+public final class InstantTransferHate extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantTransferHate(StatsSet params)
-	{
+
+	public InstantTransferHate(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
 		World.getInstance().forEachVisibleObjectInRadius(caster, Attackable.class, skill.getEffectRange(), hater ->
 		{
-			if (hater.isDead())
-			{
+			if (hater.isDead()) {
 				return;
 			}
 			final int hate = hater.getHating(caster);
-			if (hate <= 0)
-			{
+			if (hate <= 0) {
 				return;
 			}
-			
+
 			hater.reduceHate(caster, -hate);
 			hater.addDamageHate(targetCreature, 0, hate);
 		});

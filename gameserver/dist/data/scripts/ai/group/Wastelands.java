@@ -18,6 +18,7 @@
  */
 package ai.group;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
@@ -35,14 +36,12 @@ import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Wastelands AI.
+ *
  * @author St3eT
  */
-public final class Wastelands extends AbstractNpcAI
-{
+public final class Wastelands extends AbstractNpcAI {
 	// NPCs
 	private static final int JOEL = 33516;
 	private static final int SCHUAZEN = 33517;
@@ -57,126 +56,108 @@ public final class Wastelands extends AbstractNpcAI
 	private static final int COMMANDO_CAPTAIN = 19127;
 	// Misc
 	private static final NpcStringId[] GUARD_SHOUT =
-	{
-		NpcStringId.ATTACK2,
-		NpcStringId.FOLLOW_ME3
-	};
+			{
+					NpcStringId.ATTACK2,
+					NpcStringId.FOLLOW_ME3
+			};
 	// Locations
 	private static final Location GUARD_POSLOF_LOC = new Location(-29474, 187083, -3912);
 	private static final Location[] COMMANDO_SAKUM_LOC =
-	{
-		new Location(-36525, 192032, -3640),
-		new Location(-36160, 191912, -3640),
-		new Location(-36371, 191370, -3632),
-		new Location(-36765, 191759, -3632),
-	};
+			{
+					new Location(-36525, 192032, -3640),
+					new Location(-36160, 191912, -3640),
+					new Location(-36371, 191370, -3632),
+					new Location(-36765, 191759, -3632),
+			};
 	private static final Location[] COMMANDO_CAPTAIN_SAKUM_LOC =
-	{
-		new Location(-36683, 191475, -3632),
-		new Location(-36131, 191574, -3632),
-	};
-	
-	private Wastelands()
-	{
+			{
+					new Location(-36683, 191475, -3632),
+					new Location(-36131, 191574, -3632),
+			};
+
+	private Wastelands() {
 		addSpawnId(COMMANDER, GUARD, DECO_GUARD, REGENERATED_KANILOV, REGENERATED_POSLOF, SAKUM);
 		addSeeCreatureId(JOEL, SCHUAZEN, COMMANDO, COMMANDO_CAPTAIN);
 		addKillId(REGENERATED_POSLOF, SAKUM);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "SOCIAL_SHOW":
-			{
-				
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "SOCIAL_SHOW": {
+
 				npc.broadcastSocialAction(4);
 				npc.broadcastSay(ChatType.NPC_GENERAL, GUARD_SHOUT[getRandom(2)], 1000);
-				
+
 				World.getInstance().getVisibleObjects(npc, Npc.class, 500).stream().filter(n -> n.getId() == GUARD).forEach(guard ->
 				{
 					startQuestTimer("SOCIAL_ACTION", getRandom(2500, 3500), guard, null);
 				});
 				break;
 			}
-			case "SOCIAL_ACTION":
-			{
+			case "SOCIAL_ACTION": {
 				npc.broadcastSocialAction(4);
 				break;
 			}
-			case "START_ATTACK":
-			{
+			case "START_ATTACK": {
 				final Attackable guard = (Attackable) npc;
 				final int attackId;
-				
-				switch (guard.getId())
-				{
-					case JOEL:
-					{
+
+				switch (guard.getId()) {
+					case JOEL: {
 						attackId = REGENERATED_KANILOV;
 						break;
 					}
-					case SCHUAZEN:
-					{
+					case SCHUAZEN: {
 						attackId = REGENERATED_POSLOF;
 						break;
 					}
 					case COMMANDO:
-					case COMMANDO_CAPTAIN:
-					{
+					case COMMANDO_CAPTAIN: {
 						attackId = SAKUM;
 						break;
 					}
-					default:
-					{
+					default: {
 						attackId = 0;
 						break;
 					}
 				}
-				
-				if (attackId > 0)
-				{
+
+				if (attackId > 0) {
 					//@formatter:off
 					final Npc monster = World.getInstance().getVisibleObjects(guard, Npc.class, 1000)
-						.stream()
-						.filter(obj -> (obj.getId() == attackId))
-						.findFirst()
-						.orElse(null);
+							.stream()
+							.filter(obj -> (obj.getId() == attackId))
+							.findFirst()
+							.orElse(null);
 					//@formatter:on
-					
-					if (monster != null)
-					{
+
+					if (monster != null) {
 						guard.reduceCurrentHp(1, monster, null); // TODO: Find better way for attack
 						monster.reduceCurrentHp(1, guard, null);
 						guard.setCanStopAttackByTime(false);
-						
-						if ((guard.getId() != COMMANDO) && (guard.getId() != COMMANDO_CAPTAIN))
-						{
+
+						if ((guard.getId() != COMMANDO) && (guard.getId() != COMMANDO_CAPTAIN)) {
 							guard.setIsInvul(true);
 						}
-						
-						if (guard.getId() == SCHUAZEN)
-						{
+
+						if (guard.getId() == SCHUAZEN) {
 							//@formatter:off
 							final L2QuestGuardInstance decoGuard = (L2QuestGuardInstance) World.getInstance().getVisibleObjects(guard, Npc.class, 500)
-								.stream()
-								.filter(obj -> (obj.getId() == DECO_GUARD2))
-								.findFirst()
-								.orElse(null);
+									.stream()
+									.filter(obj -> (obj.getId() == DECO_GUARD2))
+									.findFirst()
+									.orElse(null);
 							//@formatter:on
-							
-							if (decoGuard != null)
-							{
+
+							if (decoGuard != null) {
 								decoGuard.reduceCurrentHp(0, monster, null); // TODO: Find better way for attack
 								monster.reduceCurrentHp(1, decoGuard, null);
 								decoGuard.setCanStopAttackByTime(false);
 								decoGuard.setIsInvul(true);
 							}
 						}
-					}
-					else
-					{
+					} else {
 						startQuestTimer("START_ATTACK", 250, guard, null);
 					}
 				}
@@ -185,44 +166,36 @@ public final class Wastelands extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer() && (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK))
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer() && (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK)) {
 			startQuestTimer("START_ATTACK", 250, npc, null);
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		switch (npc.getId())
-		{
-			case COMMANDER:
-			{
+	public String onSpawn(Npc npc) {
+		switch (npc.getId()) {
+			case COMMANDER: {
 				startQuestTimer("SOCIAL_SHOW", 13000, npc, null, true);
 				npc.setRandomAnimation(false);
 				break;
 			}
 			case REGENERATED_KANILOV:
-			case REGENERATED_POSLOF:
-			{
+			case REGENERATED_POSLOF: {
 				final int guardId = npc.getId() == REGENERATED_KANILOV ? JOEL : SCHUAZEN;
 				//@formatter:off
 				final L2QuestGuardInstance guard = (L2QuestGuardInstance) World.getInstance().getVisibleObjects(npc, Npc.class, 500)
-					.stream()
-					.filter(obj -> (obj.getId() == guardId))
-					.findFirst()
-					.orElse(null);
+						.stream()
+						.filter(obj -> (obj.getId() == guardId))
+						.findFirst()
+						.orElse(null);
 				//@formatter:on
-				
-				if (guard != null)
-				{
-					if (guard.getId() == SCHUAZEN)
-					{
+
+				if (guard != null) {
+					if (guard.getId() == SCHUAZEN) {
 						addSpawn(DECO_GUARD2, GUARD_POSLOF_LOC);
 					}
 					guard.broadcastSay(ChatType.NPC_GENERAL, guard.getId() == JOEL ? NpcStringId.AH_REGENERATOR_POSLOF_APPEARED_AGAIN : NpcStringId.AH_REGENERATOR_KANILOV_APPEARED_AGAIN);
@@ -230,118 +203,98 @@ public final class Wastelands extends AbstractNpcAI
 				}
 				break;
 			}
-			case SAKUM:
-			{
+			case SAKUM: {
 				manageCommando((Attackable) npc);
 				break;
 			}
 			case GUARD:
-			case DECO_GUARD:
-			{
+			case DECO_GUARD: {
 				npc.setRandomAnimation(false);
 				break;
 			}
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (npc.getId() == REGENERATED_POSLOF)
-		{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (npc.getId() == REGENERATED_POSLOF) {
 			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
 			{
-				if ((guard.getId() == DECO_GUARD2))
-				{
+				if ((guard.getId() == DECO_GUARD2)) {
 					guard.deleteMe();
 				}
 			});
-		}
-		else if (npc.getId() == SAKUM)
-		{
+		} else if (npc.getId() == SAKUM) {
 			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
 			{
-				if ((guard.getId() == COMMANDO) || (guard.getId() == COMMANDO_CAPTAIN))
-				{
+				if ((guard.getId() == COMMANDO) || (guard.getId() == COMMANDO_CAPTAIN)) {
 					guard.deleteMe();
 				}
 			});
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@RegisterEvent(EventType.ON_CREATURE_DEATH)
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(COMMANDO)
 	@Id(COMMANDO_CAPTAIN)
-	public void onCreatureKill(OnCreatureDeath event)
-	{
+	public void onCreatureKill(OnCreatureDeath event) {
 		final Attackable guard = (Attackable) event.getTarget();
-		
+
 		//@formatter:off
 		final Attackable sakum = World.getInstance().getVisibleObjects(guard, Attackable.class, 1000)
-			.stream()
-			.filter(obj -> (obj.getId() == SAKUM))
-			.findFirst()
-			.orElse(null);
+				.stream()
+				.filter(obj -> (obj.getId() == SAKUM))
+				.findFirst()
+				.orElse(null);
 		//@formatter:on
-		
-		if (sakum != null)
-		{
+
+		if (sakum != null) {
 			manageCommando(sakum);
 		}
 	}
-	
-	private void manageCommando(Attackable sakum)
-	{
+
+	private void manageCommando(Attackable sakum) {
 		int guardCount = sakum.getVariables().getInt("GUARD_COUNT", 0);
 		guardCount--;
-		
-		if (guardCount <= 0)
-		{
-			if (sakum.getVariables().getBoolean("GUARD_CAPTAIN", false))
-			{
+
+		if (guardCount <= 0) {
+			if (sakum.getVariables().getBoolean("GUARD_CAPTAIN", false)) {
 				sakum.getVariables().set("GUARD_COUNT", COMMANDO_CAPTAIN_SAKUM_LOC.length);
 				sakum.getVariables().set("GUARD_CAPTAIN", false);
-				
-				for (Location loc : COMMANDO_CAPTAIN_SAKUM_LOC)
-				{
+
+				for (Location loc : COMMANDO_CAPTAIN_SAKUM_LOC) {
 					final Attackable commander = (Attackable) addSpawn(COMMANDO_CAPTAIN, loc);
 					commander.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.HOW_DARE_YOU_ATTACK);
-					
+
 					commander.reduceCurrentHp(1, sakum, null); // TODO: Find better way for attack
 					sakum.reduceCurrentHp(1, commander, null);
 					commander.setCanStopAttackByTime(false);
-					
+
 					notifyEvent("START_ATTACK", commander, null);
 				}
-			}
-			else
-			{
+			} else {
 				sakum.getVariables().set("GUARD_COUNT", COMMANDO_SAKUM_LOC.length);
 				sakum.getVariables().set("GUARD_CAPTAIN", true);
-				
-				for (Location loc : COMMANDO_SAKUM_LOC)
-				{
+
+				for (Location loc : COMMANDO_SAKUM_LOC) {
 					final Attackable commander = (Attackable) addSpawn(COMMANDO, loc);
-					
+
 					commander.reduceCurrentHp(1, sakum, null); // TODO: Find better way for attack
 					sakum.reduceCurrentHp(1, commander, null);
 					commander.setCanStopAttackByTime(false);
-					
+
 					notifyEvent("START_ATTACK", commander, null);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			sakum.getVariables().set("GUARD_COUNT", guardCount);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Wastelands();
 	}
 }

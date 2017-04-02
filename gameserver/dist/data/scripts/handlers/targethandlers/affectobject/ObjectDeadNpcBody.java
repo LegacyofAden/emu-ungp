@@ -24,16 +24,13 @@ import org.l2junity.gameserver.model.actor.Creature;
 /**
  * @author Nik
  */
-public class ObjectDeadNpcBody implements IAffectObjectHandler
-{
+public class ObjectDeadNpcBody implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
-		if (activeChar == target)
-		{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
+		if (activeChar == target) {
 			return false;
 		}
-		
+
 		return target.isNpc() && target.isDead();
 	}
 }

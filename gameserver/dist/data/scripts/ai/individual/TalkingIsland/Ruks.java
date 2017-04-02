@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
@@ -25,42 +26,35 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Ruks AI.
+ *
  * @author St3eT
  */
-public final class Ruks extends AbstractNpcAI
-{
+public final class Ruks extends AbstractNpcAI {
 	// NPC
 	private static final int RUKS = 33207;
-	
-	private Ruks()
-	{
+
+	private Ruks() {
 		addSpawnId(RUKS);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SHOUT"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SHOUT")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, getRandomBoolean() ? NpcStringId.THE_SEVEN_SIGNS_ENDED : NpcStringId.WE_NEED_TO_FIND_HER_WEAKNESS);
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		SuperpointManager.getInstance().startMoving(npc, "si_town_04");
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Ruks();
 	}
 }

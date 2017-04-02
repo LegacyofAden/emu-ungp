@@ -18,8 +18,6 @@
  */
 package handlers.itemhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.handler.IItemHandler;
@@ -34,191 +32,151 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.List;
+
 /**
  * Template for item skills handler.
+ *
  * @author Zoey76
  */
-public class ItemSkillsTemplate implements IItemHandler
-{
+public class ItemSkillsTemplate implements IItemHandler {
 	@Override
-	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse)
-	{
-		if (!playable.isPlayer() && !playable.isPet())
-		{
+	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
+		if (!playable.isPlayer() && !playable.isPet()) {
 			return false;
 		}
-		
+
 		// Pets can use items only when they are tradable.
-		if (playable.isPet() && !item.isTradeable())
-		{
+		if (playable.isPet() && !item.isTradeable()) {
 			playable.sendPacket(SystemMessageId.YOUR_PET_CANNOT_CARRY_THIS_ITEM);
 			return false;
 		}
-		
+
 		// Verify that item is not under reuse.
-		if (!checkReuse(playable, null, item))
-		{
+		if (!checkReuse(playable, null, item)) {
 			return false;
 		}
-		
+
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);
-		if (skills == null)
-		{
+		if (skills == null) {
 			_log.info("Item " + item + " does not have registered any skill for handler.");
 			return false;
 		}
-		
+
 		boolean hasConsumeSkill = false;
 		boolean successfulUse = false;
-		
-		for (SkillHolder skillInfo : skills)
-		{
-			if (skillInfo == null)
-			{
+
+		for (SkillHolder skillInfo : skills) {
+			if (skillInfo == null) {
 				continue;
 			}
-			
+
 			Skill itemSkill = skillInfo.getSkill();
-			
-			if (itemSkill != null)
-			{
-				if (itemSkill.getItemConsumeId() > 0)
-				{
+
+			if (itemSkill != null) {
+				if (itemSkill.getItemConsumeId() > 0) {
 					hasConsumeSkill = true;
 				}
-				
-				if (!itemSkill.checkCondition(playable, playable.getTarget()))
-				{
+
+				if (!itemSkill.checkCondition(playable, playable.getTarget())) {
 					continue;
 				}
-				
-				if (playable.isSkillDisabled(itemSkill))
-				{
+
+				if (playable.isSkillDisabled(itemSkill)) {
 					continue;
 				}
-				
+
 				// Verify that skill is not under reuse.
-				if (!checkReuse(playable, itemSkill, item))
-				{
+				if (!checkReuse(playable, itemSkill, item)) {
 					continue;
 				}
-				
-				if (!item.isPotion() && !item.isElixir() && !item.isScroll() && playable.isCastingNow())
-				{
+
+				if (!item.isPotion() && !item.isElixir() && !item.isScroll() && playable.isCastingNow()) {
 					continue;
 				}
-				
+
 				// Send message to the master.
-				if (playable.isPet())
-				{
+				if (playable.isPet()) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_PET_USES_S1);
 					sm.addSkillName(itemSkill);
 					playable.sendPacket(sm);
 				}
-				
-				if (itemSkill.isWithoutAction() || item.getItem().hasImmediateEffect() || item.getItem().hasExImmediateEffect())
-				{
+
+				if (itemSkill.isWithoutAction() || item.getItem().hasImmediateEffect() || item.getItem().hasExImmediateEffect()) {
 					SkillCaster.triggerCast(playable, null, itemSkill, item, false);
 					successfulUse = true;
-				}
-				else
-				{
+				} else {
 					playable.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
-					if (playable.useMagic(itemSkill, playable.getTarget(), item, forceUse, false))
-					{
+					if (playable.useMagic(itemSkill, playable.getTarget(), item, forceUse, false)) {
 						successfulUse = true;
 					}
 				}
-				
-				if (itemSkill.getReuseDelay() > 0)
-				{
+
+				if (itemSkill.getReuseDelay() > 0) {
 					playable.addTimeStamp(itemSkill, itemSkill.getReuseDelay());
 				}
 			}
 		}
-		
+
 		// Consume the item if its skills don't have item consume.
-		if (!hasConsumeSkill && item.getItem().hasImmediateEffect())
-		{
-			switch (item.getItem().getDefaultAction())
-			{
-				case SKILL_REDUCE:
-				{
-					if (item.getItem().getItemType() == EtcItemType.ENCHT_ATTR)
-					{
+		if (!hasConsumeSkill && item.getItem().hasImmediateEffect()) {
+			switch (item.getItem().getDefaultAction()) {
+				case SKILL_REDUCE: {
+					if (item.getItem().getItemType() == EtcItemType.ENCHT_ATTR) {
 						break;
 					}
 				}
 				case SKILL_REDUCE_ON_SKILL_SUCCESS:
-				case CAPSULE:
-				{
+				case CAPSULE: {
 					// Capsules are consumed regardless of skill consuming or not.
-					if (!playable.destroyItem("Consume", item.getObjectId(), 1, playable, false))
-					{
+					if (!playable.destroyItem("Consume", item.getObjectId(), 1, playable, false)) {
 						playable.sendPacket(SystemMessageId.INCORRECT_ITEM_COUNT2);
 						return false;
 					}
 				}
 			}
 		}
-		
+
 		return successfulUse;
 	}
-	
+
 	/**
 	 * @param playable the character using the item or skill
-	 * @param skill the skill being used, can be null
-	 * @param item the item being used
+	 * @param skill    the skill being used, can be null
+	 * @param item     the item being used
 	 * @return {@code true} if the the item or skill to check is available, {@code false} otherwise
 	 */
-	private boolean checkReuse(Playable playable, Skill skill, ItemInstance item)
-	{
+	private boolean checkReuse(Playable playable, Skill skill, ItemInstance item) {
 		final long remainingTime = (skill != null) ? playable.getSkillRemainingReuseTime(skill.getReuseHashCode()) : playable.getItemRemainingReuseTime(item.getObjectId());
 		final boolean isAvailable = remainingTime <= 0;
-		if (playable.isPlayer())
-		{
-			if (!isAvailable)
-			{
+		if (playable.isPlayer()) {
+			if (!isAvailable) {
 				final int hours = (int) (remainingTime / 3600000L);
 				final int minutes = (int) (remainingTime % 3600000L) / 60000;
 				final int seconds = (int) ((remainingTime / 1000) % 60);
 				SystemMessage sm = null;
-				if (hours > 0)
-				{
+				if (hours > 0) {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.THERE_ARE_S2_HOUR_S_S3_MINUTE_S_AND_S4_SECOND_S_REMAINING_IN_S1_S_RE_USE_TIME);
-					if ((skill == null) || skill.isStatic())
-					{
+					if ((skill == null) || skill.isStatic()) {
 						sm.addItemName(item);
-					}
-					else
-					{
+					} else {
 						sm.addSkillName(skill);
 					}
 					sm.addInt(hours);
 					sm.addInt(minutes);
-				}
-				else if (minutes > 0)
-				{
+				} else if (minutes > 0) {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.THERE_ARE_S2_MINUTE_S_S3_SECOND_S_REMAINING_IN_S1_S_RE_USE_TIME);
-					if ((skill == null) || skill.isStatic())
-					{
+					if ((skill == null) || skill.isStatic()) {
 						sm.addItemName(item);
-					}
-					else
-					{
+					} else {
 						sm.addSkillName(skill);
 					}
 					sm.addInt(minutes);
-				}
-				else
-				{
+				} else {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.THERE_ARE_S2_SECOND_S_REMAINING_IN_S1_S_RE_USE_TIME);
-					if ((skill == null) || skill.isStatic())
-					{
+					if ((skill == null) || skill.isStatic()) {
 						sm.addItemName(item);
-					}
-					else
-					{
+					} else {
 						sm.addSkillName(skill);
 					}
 				}
@@ -228,9 +186,8 @@ public class ItemSkillsTemplate implements IItemHandler
 		}
 		return isAvailable;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ItemHandler.getInstance().registerHandler(new ItemSkillsTemplate());
 	}
 }

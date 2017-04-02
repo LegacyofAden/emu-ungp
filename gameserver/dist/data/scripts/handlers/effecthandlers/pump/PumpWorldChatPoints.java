@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Nik
  */
-public class PumpWorldChatPoints extends AbstractDoubleStatEffect
-{
-	public PumpWorldChatPoints(StatsSet params)
-	{
+public class PumpWorldChatPoints extends AbstractDoubleStatEffect {
+	public PumpWorldChatPoints(StatsSet params) {
 		super(params, DoubleStat.WORLD_CHAT_POINTS);
 	}
 }

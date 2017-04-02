@@ -18,8 +18,6 @@
  */
 package handlers.skillconditionhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.StatsSet;
@@ -29,31 +27,27 @@ import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class OpCheckResidenceSkillCondition implements ISkillCondition
-{
+public class OpCheckResidenceSkillCondition implements ISkillCondition {
 	private final List<Integer> _residencesId;
 	private final boolean _isWithin;
-	
-	public OpCheckResidenceSkillCondition(StatsSet params)
-	{
+
+	public OpCheckResidenceSkillCondition(StatsSet params) {
 		_residencesId = params.getList("residencesId", Integer.class);
 		_isWithin = params.getBoolean("isWithin");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (caster.isPlayer()) {
 			final L2Clan clan = caster.getActingPlayer().getClan();
-			if (clan != null)
-			{
+			if (clan != null) {
 				final ClanHall clanHall = ClanHallData.getInstance().getClanHallByClan(clan);
-				if (clanHall != null)
-				{
+				if (clanHall != null) {
 					return _isWithin ? _residencesId.contains(clanHall.getResidenceId()) : !_residencesId.contains(clanHall.getResidenceId());
 				}
 			}

@@ -32,67 +32,55 @@ import org.l2junity.gameserver.network.client.send.ChairSit;
 
 /**
  * Sit/Stand player action handler.
+ *
  * @author UnAfraid
  */
-public final class SitStand implements IPlayerActionHandler
-{
+public final class SitStand implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (activeChar.isSitting() || !activeChar.isMoving() || activeChar.isFakeDeath())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (activeChar.isSitting() || !activeChar.isMoving() || activeChar.isFakeDeath()) {
 			useSit(activeChar, activeChar.getTarget());
-		}
-		else
-		{
+		} else {
 			// Sit when arrive using next action.
 			// Creating next action class.
 			final NextAction nextAction = new NextAction(CtrlEvent.EVT_ARRIVED, CtrlIntention.AI_INTENTION_MOVE_TO, () -> useSit(activeChar, activeChar.getTarget()));
-			
+
 			// Binding next action to AI.
 			activeChar.getAI().setNextAction(nextAction);
 		}
 	}
-	
+
 	/**
 	 * Use the sit action.
+	 *
 	 * @param activeChar the player trying to sit
-	 * @param target the target to sit, throne, bench or chair
+	 * @param target     the target to sit, throne, bench or chair
 	 * @return {@code true} if the player can sit, {@code false} otherwise
 	 */
-	protected boolean useSit(PlayerInstance activeChar, WorldObject target)
-	{
-		if (activeChar.getMountType() != MountType.NONE)
-		{
+	protected boolean useSit(PlayerInstance activeChar, WorldObject target) {
+		if (activeChar.getMountType() != MountType.NONE) {
 			return false;
 		}
-		
-		if (!activeChar.isSitting() && (target instanceof L2StaticObjectInstance) && (((L2StaticObjectInstance) target).getType() == 1) && activeChar.isInRadius2d(target, L2StaticObjectInstance.INTERACTION_DISTANCE))
-		{
+
+		if (!activeChar.isSitting() && (target instanceof L2StaticObjectInstance) && (((L2StaticObjectInstance) target).getType() == 1) && activeChar.isInRadius2d(target, L2StaticObjectInstance.INTERACTION_DISTANCE)) {
 			final ChairSit cs = new ChairSit(activeChar, target.getId());
 			activeChar.sendPacket(cs);
 			activeChar.sitDown();
 			activeChar.broadcastPacket(cs);
 			return true;
 		}
-		
-		if (activeChar.isFakeDeath())
-		{
+
+		if (activeChar.isFakeDeath()) {
 			activeChar.stopFakeDeath(true);
-		}
-		else if (activeChar.isSitting())
-		{
+		} else if (activeChar.isSitting()) {
 			activeChar.standUp();
-		}
-		else
-		{
+		} else {
 			activeChar.sitDown();
 		}
 		return true;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new SitStand());
 	}
 }

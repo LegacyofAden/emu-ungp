@@ -30,37 +30,32 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * HP Drain effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantHpDrain extends AbstractEffect
-{
+public final class InstantHpDrain extends AbstractEffect {
 	private final double _power;
 	private final double _percentage;
-	
-	public InstantHpDrain(StatsSet params)
-	{
+
+	public InstantHpDrain(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_percentage = params.getDouble("percentage", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.HP_DRAIN;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
 		// TODO: Unhardcode Cubic Skill to avoid double damage
-		if (caster.isAlikeDead() || (skill.getId() == 4050))
-		{
+		if (caster.isAlikeDead() || (skill.getId() == 4050)) {
 			return;
 		}
 
@@ -68,28 +63,23 @@ public final class InstantHpDrain extends AbstractEffect
 		boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 		boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
 		double damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power, targetCreature.getMDef(), sps, bss, mcrit);
-		
+
 		double drain = 0;
 		int cp = (int) targetCreature.getCurrentCp();
 		int hp = (int) targetCreature.getCurrentHp();
-		
-		if (cp > 0)
-		{
+
+		if (cp > 0) {
 			drain = (damage < cp) ? 0 : (damage - cp);
-		}
-		else if (damage > hp)
-		{
+		} else if (damage > hp) {
 			drain = hp;
-		}
-		else
-		{
+		} else {
 			drain = damage;
 		}
-		
+
 		final double hpAdd = ((_percentage / 100) * drain);
 		final double hpFinal = ((caster.getCurrentHp() + hpAdd) > caster.getMaxHp() ? caster.getMaxHp() : (caster.getCurrentHp() + hpAdd));
 		caster.setCurrentHp(hpFinal);
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

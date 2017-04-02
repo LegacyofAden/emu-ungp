@@ -27,51 +27,40 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
 
-public class ChatLink implements IBypassHandler
-{
+public class ChatLink implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"Chat"
-	};
-	
+			{
+					"Chat"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
+
 		int val = 0;
-		try
-		{
+		try {
 			val = Integer.parseInt(command.substring(5));
+		} catch (Exception ioobe) {
+
 		}
-		catch (Exception ioobe)
-		{
-			
-		}
-		
+
 		final Npc npc = (Npc) target;
-		if ((val == 0) && npc.hasListener(EventType.ON_NPC_FIRST_TALK))
-		{
+		if ((val == 0) && npc.hasListener(EventType.ON_NPC_FIRST_TALK)) {
 			EventDispatcher.getInstance().notifyEventAsync(new OnNpcFirstTalk(npc, activeChar), npc);
-		}
-		else
-		{
+		} else {
 			npc.showChatWindow(activeChar, val);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new ChatLink());
 	}
 }

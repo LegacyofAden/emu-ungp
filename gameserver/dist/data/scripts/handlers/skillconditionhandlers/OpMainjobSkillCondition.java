@@ -27,16 +27,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpMainjobSkillCondition implements ISkillCondition
-{
-	public OpMainjobSkillCondition(StatsSet params)
-	{
-		
+public class OpMainjobSkillCondition implements ISkillCondition {
+	public OpMainjobSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isPlayer() && !caster.getActingPlayer().isSubClassActive();
 	}
 }

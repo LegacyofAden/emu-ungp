@@ -18,36 +18,32 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * An effect that blocks a debuff. Acts like DOTA's Linken Sphere.
+ *
  * @author Nik
  */
-public final class PumpAbnormalShield extends AbstractBooleanStatEffect
-{
+public final class PumpAbnormalShield extends AbstractBooleanStatEffect {
 	private final int _times;
-	
-	public PumpAbnormalShield(StatsSet params)
-	{
+
+	public PumpAbnormalShield(StatsSet params) {
 		super(BooleanStat.ABNORMAL_SHIELD);
 		_times = params.getInt("times", -1);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.setAbnormalShieldBlocks(_times);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.setAbnormalShieldBlocks(Integer.MIN_VALUE);
 	}
 }

@@ -18,8 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
 import org.l2junity.gameserver.model.World;
@@ -29,46 +27,43 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.function.Consumer;
+
 /**
  * Static Object affect scope implementation. Used to detect hidden doors.
+ *
  * @author Nik
  */
-public class StaticObjectScope implements IAffectScopeHandler
-{
+public class StaticObjectScope implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final int affectRange = skill.getAffectRange();
 		final int affectLimit = skill.getAffectLimit();
-		
+
 		// Target checks.
 		final MutableInt affected = new MutableInt(0);
-		
+
 		// Always accept main target.
 		action.accept(target);
-		
+
 		// Check and add targets.
 		World.getInstance().forEachVisibleObjectInRadius(target, Creature.class, affectRange, c ->
 		{
-			if ((affectLimit > 0) && (affected.intValue() >= affectLimit))
-			{
+			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;
 			}
-			if (c.isDead())
-			{
+			if (c.isDead()) {
 				return;
 			}
-			
-			if (!(c instanceof DoorInstance) && !(c instanceof L2StaticObjectInstance))
-			{
+
+			if (!(c instanceof DoorInstance) && !(c instanceof L2StaticObjectInstance)) {
 				return;
 			}
-			
-			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
-			{
+
+			if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, c)) {
 				return;
 			}
-			
+
 			affected.increment();
 			action.accept(c);
 		});

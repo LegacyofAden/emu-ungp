@@ -25,15 +25,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: A Suspicious Badge (10397)
+ *
  * @author St3eT
  */
-public final class Q10397_KekropusLetterASuspiciousBadge extends LetterQuest
-{
+public final class Q10397_KekropusLetterASuspiciousBadge extends LetterQuest {
 	// NPCs
 	private static final int MOUEN = 30196;
 	private static final int ANDY = 33845;
@@ -47,56 +46,46 @@ public final class Q10397_KekropusLetterASuspiciousBadge extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 52;
 	private static final int MAX_LEVEL = 57;
-	
-	public Q10397_KekropusLetterASuspiciousBadge()
-	{
+
+	public Q10397_KekropusLetterASuspiciousBadge() {
 		super(10397);
 		addTalkId(MOUEN, ANDY);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartQuestSound("Npcdialog1.kekrops_quest_3");
 		setStartLocation(SOE_TOWN_OF_OREN, TELEPORT_LOC);
 		registerQuestItems(SOE_TOWN_OF_OREN, SOE_SEA_OF_SPORES);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "30196-02.html":
-			{
+		switch (event) {
+			case "30196-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "30196-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30196-03.html": {
+				if (st.isCond(1)) {
 					giveItems(player, SOE_SEA_OF_SPORES, 1);
 					st.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33845-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33845-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EWB, 2);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 635_250);
 						addSp(player, 152);
 					}
@@ -108,42 +97,33 @@ public final class Q10397_KekropusLetterASuspiciousBadge extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if (st.isCond(1) && (npc.getId() == MOUEN))
-			{
+
+		if (st.isStarted()) {
+			if (st.isCond(1) && (npc.getId() == MOUEN)) {
 				htmltext = "30196-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == MOUEN ? "30196-04.html" : "33845-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.SEA_OF_SPORES_IS_A_GOOD_HUNTING_ZONE_FOR_LV_52_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}

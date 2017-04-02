@@ -18,7 +18,7 @@
  */
 package handlers.communityboard;
 
-import org.l2junity.gameserver.cache.HtmCache;
+import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
@@ -31,36 +31,32 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Region board.
+ *
  * @author Zoey76
  */
-public class RegionBoard implements IWriteBoardHandler
-{
+public class RegionBoard implements IWriteBoardHandler {
 	// Region data
 	// @formatter:off
-	private static final int[] REGIONS = { 1049, 1052, 1053, 1057, 1060, 1059, 1248, 1247, 1056 };
+	private static final int[] REGIONS = {1049, 1052, 1053, 1057, 1060, 1059, 1248, 1247, 1056};
 	// @formatter:on
 	private static final String[] COMMANDS =
-	{
-		"_bbsloc"
-	};
-	
+			{
+					"_bbsloc"
+			};
+
 	@Override
-	public String[] getCommunityBoardCommands()
-	{
+	public String[] getCommunityBoardCommands() {
 		return COMMANDS;
 	}
-	
+
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("_bbsloc"))
-		{
+	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("_bbsloc")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Region", command);
-			
-			final String list = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/region_list.html");
+
+			final String list = HtmRepository.getInstance().getCustomHtm("CommunityBoard/region_list.html");
 			final StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < REGIONS.length; i++)
-			{
+			for (int i = 0; i < REGIONS.length; i++) {
 				final Castle castle = CastleManager.getInstance().getCastleById(i + 1);
 				final L2Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
 				String link = list.replaceAll("%region_id%", String.valueOf(i));
@@ -70,36 +66,31 @@ public class RegionBoard implements IWriteBoardHandler
 				link = link.replace("%region_tax_rate%", castle.getTaxPercent(TaxType.BUY) + "%");
 				sb.append(link);
 			}
-			
-			String html = HtmCache.getInstance().getHtm(activeChar.getHtmlPrefix(), "data/html/CommunityBoard/region.html");
+
+			String html = HtmRepository.getInstance().getCustomHtm("CommunityBoard/region.html");
 			html = html.replace("%region_list%", sb.toString());
 			CommunityBoardHandler.separateAndSend(html, activeChar);
-		}
-		else if (command.startsWith("_bbsloc;"))
-		{
+		} else if (command.startsWith("_bbsloc;")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Region>", command);
-			
+
 			final String id = command.replace("_bbsloc;", "");
-			if (!Util.isDigit(id))
-			{
+			if (!Util.isDigit(id)) {
 				LOG.warn(RegionBoard.class.getSimpleName() + ": Player " + activeChar + " sent and invalid region bypass " + command + "!");
 				return false;
 			}
-			
+
 			// TODO: Implement.
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5)
-	{
+	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
 		// TODO: Implement.
 		return false;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		CommunityBoardHandler.getInstance().registerHandler(new RegionBoard());
 	}
 }

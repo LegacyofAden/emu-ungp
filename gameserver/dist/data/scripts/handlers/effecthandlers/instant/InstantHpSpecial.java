@@ -31,51 +31,42 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * HP change effect. It is mostly used for potions and static damage.<br>
  * This effect is different from {@link InstantHp} effect because it affects CP as well.
+ *
  * @author Nik
  */
-public final class InstantHpSpecial extends AbstractEffect
-{
+public final class InstantHpSpecial extends AbstractEffect {
 	private final int _amount;
 	private final StatModifierType _mode;
-	
-	public InstantHpSpecial(StatsSet params)
-	{
+
+	public InstantHpSpecial(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
 
 		double hpAmount = 0;
 		double cpAmount = 0;
-		switch (_mode)
-		{
-			case DIFF:
-			{
+		switch (_mode) {
+			case DIFF: {
 				hpAmount = Math.min(_amount, targetCreature.getMaxRecoverableHp() - targetCreature.getCurrentHp());
-				if (_amount > hpAmount)
-				{
+				if (_amount > hpAmount) {
 					cpAmount = Math.min(_amount - hpAmount, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp());
 				}
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				hpAmount = Math.min(_amount, (targetCreature.getCurrentHp() * 100) / targetCreature.getMaxRecoverableHp());
-				if (_amount > hpAmount)
-				{
+				if (_amount > hpAmount) {
 					cpAmount = Math.min(_amount, (targetCreature.getCurrentCp() * 100) / targetCreature.getMaxRecoverableCp());
 					cpAmount = Math.min((targetCreature.getCurrentCp() * cpAmount) / 100.0, targetCreature.getMaxRecoverableCp() - targetCreature.getCurrentCp());
 				}
@@ -83,60 +74,47 @@ public final class InstantHpSpecial extends AbstractEffect
 				break;
 			}
 		}
-		
-		if ((hpAmount >= 0) || (cpAmount >= 0))
-		{
+
+		if ((hpAmount >= 0) || (cpAmount >= 0)) {
 			SystemMessage hpSM = null;
-			if (hpAmount != 0)
-			{
+			if (hpAmount != 0) {
 				final double newHp = hpAmount + targetCreature.getCurrentHp();
 				targetCreature.setCurrentHp(newHp, false);
-				
-				if (caster.getObjectId() != targetCreature.getObjectId())
-				{
+
+				if (caster.getObjectId() != targetCreature.getObjectId()) {
 					hpSM = SystemMessage.getSystemMessage(SystemMessageId.S2_HP_HAS_BEEN_RESTORED_BY_C1);
 					hpSM.addCharName(caster);
 					hpSM.addInt((int) hpAmount);
-				}
-				else
-				{
+				} else {
 					hpSM = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 					hpSM.addInt((int) hpAmount);
 				}
 			}
-			
+
 			SystemMessage cpSM = null;
-			if (cpAmount != 0)
-			{
+			if (cpAmount != 0) {
 				final double newCp = cpAmount + targetCreature.getCurrentCp();
 				targetCreature.setCurrentCp(newCp, false);
-				
-				if (caster.getObjectId() != targetCreature.getObjectId())
-				{
+
+				if (caster.getObjectId() != targetCreature.getObjectId()) {
 					cpSM = SystemMessage.getSystemMessage(SystemMessageId.S2_CP_HAS_BEEN_RESTORED_BY_C1);
 					cpSM.addCharName(caster);
 					cpSM.addInt((int) cpAmount);
-				}
-				else
-				{
+				} else {
 					cpSM = SystemMessage.getSystemMessage(SystemMessageId.S1_CP_HAS_BEEN_RESTORED);
 					cpSM.addInt((int) cpAmount);
 				}
 			}
-			
-			if (hpSM != null)
-			{
+
+			if (hpSM != null) {
 				targetCreature.sendPacket(hpSM);
 			}
-			if (cpSM != null)
-			{
+			if (cpSM != null) {
 				targetCreature.sendPacket(cpSM);
 			}
-			
+
 			targetCreature.broadcastStatusUpdate(caster);
-		}
-		else
-		{
+		} else {
 			final double damage = -hpAmount - cpAmount;
 			targetCreature.reduceCurrentHp(damage, caster, skill, false, false, false, false);
 			caster.sendDamageMessage(targetCreature, skill, (int) damage, false, false);

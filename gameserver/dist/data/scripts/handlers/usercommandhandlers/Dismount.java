@@ -24,42 +24,35 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
 /**
  * Dismount user command.
+ *
  * @author Micht
  */
-public class Dismount implements IUserCommandHandler
-{
+public class Dismount implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		62
-	};
-	
+			{
+					62
+			};
+
 	@Override
-	public synchronized boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public synchronized boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
-		if (activeChar.isRentedPet())
-		{
+
+		if (activeChar.isRentedPet()) {
 			activeChar.stopRentPet();
-		}
-		else if (activeChar.isMounted())
-		{
+		} else if (activeChar.isMounted()) {
 			activeChar.dismount();
 		}
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new Dismount());
 	}
 }

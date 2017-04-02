@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpSocialClassSkillCondition implements ISkillCondition
-{
+public class OpSocialClassSkillCondition implements ISkillCondition {
 	private final int _socialClass;
-	
-	public OpSocialClassSkillCondition(StatsSet params)
-	{
+
+	public OpSocialClassSkillCondition(StatsSet params) {
 		_socialClass = params.getInt("socialClass");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isPlayer() && (caster.getActingPlayer().getPledgeClass() >= _socialClass);
 	}
 }

@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-
-import handlers.effecthandlers.AbstractBooleanStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpCheapShot extends AbstractBooleanStatEffect
-{
-	public PumpCheapShot(StatsSet params)
-	{
+public class PumpCheapShot extends AbstractBooleanStatEffect {
+	public PumpCheapShot(StatsSet params) {
 		super(BooleanStat.CHEAPSHOT);
 	}
 }

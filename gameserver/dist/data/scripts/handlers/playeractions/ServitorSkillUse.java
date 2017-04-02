@@ -18,8 +18,6 @@
  */
 package handlers.playeractions;
 
-import java.util.Optional;
-
 import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
@@ -28,45 +26,41 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Optional;
+
 /**
  * Summon skill use player action handler.
+ *
  * @author Nik
  */
-public final class ServitorSkillUse implements IPlayerActionHandler
-{
+public final class ServitorSkillUse implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (activeChar.getTarget() == null)
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (activeChar.getTarget() == null) {
 			return;
 		}
-		
+
 		final Summon summon = activeChar.getAnyServitor();
-		if ((summon == null) || !summon.isServitor())
-		{
+		if ((summon == null) || !summon.isServitor()) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 			return;
 		}
-		
+
 		activeChar.getServitors().values().forEach(servitor ->
 		{
-			if (servitor.isBetrayed())
-			{
+			if (servitor.isBetrayed()) {
 				activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 				return;
 			}
 			final Optional<SkillHolder> holder = servitor.getTemplate().getParameters().getSkillHolder(data.getOptionId());
-			if (holder.isPresent())
-			{
+			if (holder.isPresent()) {
 				servitor.setTarget(activeChar.getTarget());
 				servitor.useMagic(holder.get().getSkill(), servitor.getTarget(), null, ctrlPressed, shiftPressed);
 			}
 		});
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new ServitorSkillUse());
 	}
 }

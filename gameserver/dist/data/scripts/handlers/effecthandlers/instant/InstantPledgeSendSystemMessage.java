@@ -30,34 +30,29 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 
 /**
  * Sends a specific system message ID to the clan. Used in skills such as Clan Gate.
+ *
  * @author Nik
  */
-public class InstantPledgeSendSystemMessage extends AbstractEffect
-{
+public class InstantPledgeSendSystemMessage extends AbstractEffect {
 	private final SystemMessage _message;
-	
-	public InstantPledgeSendSystemMessage(StatsSet params)
-	{
+
+	public InstantPledgeSendSystemMessage(StatsSet params) {
 		int id = params.getInt("id", 0);
 		_message = SystemMessage.getSystemMessage(id);
-		if (_message == null)
-		{
+		if (_message == null) {
 			throw new IllegalArgumentException("SystemMessageId not found for id: " + id);
 		}
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final L2Clan clan = casterPlayer.getClan();
-		if (clan != null)
-		{
+		if (clan != null) {
 			clan.broadcastToOnlineMembers(_message);
 		}
 	}

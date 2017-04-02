@@ -18,9 +18,7 @@
  */
 package ai.spawns;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -29,74 +27,58 @@ import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.OnDayNightChange;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 
-import ai.AbstractNpcAI;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author UnAfraid
  */
-public final class DayNightSpawns extends AbstractNpcAI
-{
+public final class DayNightSpawns extends AbstractNpcAI {
 	private static final String NIGHT_GROUP_NAME = "nightTime";
 	private static final String DAY_GROUP_NAME = "dayTime";
 	private final Set<SpawnTemplate> _templates = ConcurrentHashMap.newKeySet();
-	
-	private DayNightSpawns()
-	{
+
+	private DayNightSpawns() {
 	}
-	
+
 	@Override
-	public void onSpawnActivate(SpawnTemplate template)
-	{
-		if (_templates.add(template))
-		{
+	public void onSpawnActivate(SpawnTemplate template) {
+		if (_templates.add(template)) {
 			manageSpawns(template, GameTimeManager.getInstance().isNight());
 		}
 	}
-	
+
 	@Override
-	public void onSpawnDeactivate(SpawnTemplate template)
-	{
+	public void onSpawnDeactivate(SpawnTemplate template) {
 		_templates.remove(template);
 	}
-	
+
 	@RegisterEvent(EventType.ON_DAY_NIGHT_CHANGE)
 	@RegisterType(ListenerRegisterType.GLOBAL)
-	public void onDayNightChange(OnDayNightChange event)
-	{
+	public void onDayNightChange(OnDayNightChange event) {
 		_templates.forEach(template -> manageSpawns(template, event.isNight()));
 	}
-	
-	private void manageSpawns(SpawnTemplate template, boolean isNight)
-	{
+
+	private void manageSpawns(SpawnTemplate template, boolean isNight) {
 		template.getGroups().forEach(group ->
 		{
-			if (NIGHT_GROUP_NAME.equalsIgnoreCase(group.getName()))
-			{
-				if (!isNight)
-				{
+			if (NIGHT_GROUP_NAME.equalsIgnoreCase(group.getName())) {
+				if (!isNight) {
 					group.despawnAll();
-				}
-				else
-				{
+				} else {
 					group.spawnAll();
 				}
-			}
-			else if (DAY_GROUP_NAME.equalsIgnoreCase(group.getName()))
-			{
-				if (isNight)
-				{
+			} else if (DAY_GROUP_NAME.equalsIgnoreCase(group.getName())) {
+				if (isNight) {
 					group.despawnAll();
-				}
-				else
-				{
+				} else {
 					group.spawnAll();
 				}
 			}
 		});
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new DayNightSpawns();
 	}
 }

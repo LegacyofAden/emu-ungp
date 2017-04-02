@@ -18,7 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
@@ -31,36 +31,28 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class handles following admin commands: - heal = restores HP/MP/CP on target, name or radius
+ *
  * @version $Revision: 1.2.4.5 $ $Date: 2005/04/11 10:06:06 $ Small typo fix by Zoey76 24/02/2011
  */
-public class AdminHeal implements IAdminCommandHandler
-{
+public class AdminHeal implements IAdminCommandHandler {
 	private static Logger LOGGER = LoggerFactory.getLogger(AdminHeal.class);
 
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_heal"
-	};
-	
-	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		
-		if (command.equals("admin_heal"))
-		{
-			handleHeal(activeChar);
-		}
-		else if (command.startsWith("admin_heal"))
-		{
-			try
 			{
+					"admin_heal"
+			};
+
+	@Override
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+
+		if (command.equals("admin_heal")) {
+			handleHeal(activeChar);
+		} else if (command.startsWith("admin_heal")) {
+			try {
 				String healTarget = command.substring(11);
 				handleHeal(activeChar, healTarget);
-			}
-			catch (StringIndexOutOfBoundsException e)
-			{
-				if (GeneralConfig.DEVELOPER)
-				{
+			} catch (StringIndexOutOfBoundsException e) {
+				if (GeneralConfig.DEVELOPER) {
 					LOGGER.warn("Heal error", e);
 				}
 				activeChar.sendMessage("Incorrect target/radius specified.");
@@ -68,77 +60,59 @@ public class AdminHeal implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	private void handleHeal(PlayerInstance activeChar)
-	{
+
+	private void handleHeal(PlayerInstance activeChar) {
 		handleHeal(activeChar, null);
 	}
-	
-	private void handleHeal(PlayerInstance activeChar, String player)
-	{
-		
+
+	private void handleHeal(PlayerInstance activeChar, String player) {
+
 		WorldObject obj = activeChar.getTarget();
-		if (player != null)
-		{
+		if (player != null) {
 			PlayerInstance plyr = World.getInstance().getPlayer(player);
-			
-			if (plyr != null)
-			{
+
+			if (plyr != null) {
 				obj = plyr;
-			}
-			else
-			{
-				try
-				{
+			} else {
+				try {
 					int radius = Integer.parseInt(player);
 					World.getInstance().forEachVisibleObject(activeChar, Creature.class, character ->
 					{
 						character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-						if (character instanceof PlayerInstance)
-						{
+						if (character instanceof PlayerInstance) {
 							character.setCurrentCp(character.getMaxCp());
 						}
 					});
-					
+
 					activeChar.sendMessage("Healed within " + radius + " unit radius.");
 					return;
-				}
-				catch (NumberFormatException nbe)
-				{
+				} catch (NumberFormatException nbe) {
 				}
 			}
 		}
-		if (obj == null)
-		{
+		if (obj == null) {
 			obj = activeChar;
 		}
-		if (obj instanceof Creature)
-		{
+		if (obj instanceof Creature) {
 			Creature target = (Creature) obj;
 			target.setCurrentHpMp(target.getMaxHp(), target.getMaxMp());
-			if (target instanceof PlayerInstance)
-			{
+			if (target instanceof PlayerInstance) {
 				target.setCurrentCp(target.getMaxCp());
 			}
-			if (GeneralConfig.DEBUG)
-			{
+			if (GeneralConfig.DEBUG) {
 				LOGGER.debug("GM: {}({}) healed character {}", activeChar.getName(), activeChar.getObjectId(), target.getName());
 			}
-		}
-		else
-		{
+		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminHeal());
 	}
 }

@@ -18,11 +18,7 @@
  */
 package handlers.usercommandhandlers;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.util.Date;
-
-import org.l2junity.gameserver.config.L2JModsConfig;
+import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
@@ -30,23 +26,24 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Date;
+
 /**
  * Time user command.
  */
-public class Time implements IUserCommandHandler
-{
+public class Time implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		77
-	};
-	
+			{
+					77
+			};
+
 	private static final SimpleDateFormat fmt = new SimpleDateFormat("H:mm.");
-	
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (COMMAND_IDS[0] != id)
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (COMMAND_IDS[0] != id) {
 			return false;
 		}
 
@@ -55,21 +52,18 @@ public class Time implements IUserCommandHandler
 		sm.addString((gameTime.getHour() < 10 ? "0" : "") + gameTime.getHour());
 		sm.addString((gameTime.getMinute() < 10 ? "0" : "") + gameTime.getMinute());
 		activeChar.sendPacket(sm);
-		if (L2JModsConfig.L2JMOD_DISPLAY_SERVER_TIME)
-		{
+		if (L2JModsConfig.L2JMOD_DISPLAY_SERVER_TIME) {
 			activeChar.sendMessage("Server time is " + fmt.format(new Date(System.currentTimeMillis())));
 		}
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new Time());
 	}
 }

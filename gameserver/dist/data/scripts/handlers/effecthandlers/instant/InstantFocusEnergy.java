@@ -32,54 +32,46 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Focus Energy effect implementation.
+ *
  * @author DS
  */
-public final class InstantFocusEnergy extends AbstractEffect
-{
+public final class InstantFocusEnergy extends AbstractEffect {
 	private final int _amount;
 	private final int _maxCharges;
-	
-	public InstantFocusEnergy(StatsSet params)
-	{
+
+	public InstantFocusEnergy(StatsSet params) {
 		_amount = params.getInt("amount", 1);
 		_maxCharges = params.getInt("maxCharges", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		final int currentCharges = targetPlayer.getCharges();
 		final int maxCharges = Math.min(_maxCharges, (int) targetPlayer.getStat().getValue(DoubleStat.MAX_MOMENTUM, 0));
-		if (currentCharges >= maxCharges)
-		{
-			if (!skill.isTriggeredSkill())
-			{
+		if (currentCharges >= maxCharges) {
+			if (!skill.isTriggeredSkill()) {
 				targetPlayer.sendPacket(SystemMessageId.YOUR_FORCE_HAS_REACHED_MAXIMUM_CAPACITY);
 			}
 			return;
 		}
-		
+
 		final int newCharge = Math.min(currentCharges + _amount, maxCharges);
-		
+
 		targetPlayer.setCharges(newCharge);
-		
-		if (newCharge == maxCharges)
-		{
+
+		if (newCharge == maxCharges) {
 			targetPlayer.sendPacket(SystemMessageId.YOUR_FORCE_HAS_REACHED_MAXIMUM_CAPACITY);
-		}
-		else
-		{
+		} else {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_FORCE_HAS_INCREASED_TO_LEVEL_S1);
 			sm.addInt(newCharge);
 			targetPlayer.sendPacket(sm);
 		}
-		
+
 		targetPlayer.sendPacket(new EtcStatusUpdate(targetPlayer));
 	}
 }

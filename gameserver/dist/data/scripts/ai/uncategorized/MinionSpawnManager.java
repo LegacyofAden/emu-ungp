@@ -18,9 +18,7 @@
  */
 package ai.uncategorized;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
@@ -28,18 +26,18 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Minion Spawn Manager.
+ *
  * @author Zealar
  */
-public final class MinionSpawnManager extends AbstractNpcAI
-{
+public final class MinionSpawnManager extends AbstractNpcAI {
 	private static final Set<Integer> NPC = new HashSet<>(358);
-	
-	static
-	{
+
+	static {
 		NPC.add(18344); // Ancient Egg
 		NPC.add(18352); // Kamael Guard
 		NPC.add(18353); // Guardian of Records
@@ -405,49 +403,41 @@ public final class MinionSpawnManager extends AbstractNpcAI
 		NPC.add(23073); // Kenneth Bastian
 		NPC.add(23428); // Dragonblood Captain
 	}
-	
+
 	private static final NpcStringId[] ON_ATTACK_MSG =
-	{
-		NpcStringId.COME_OUT_YOU_CHILDREN_OF_DARKNESS,
-		NpcStringId.SHOW_YOURSELVES,
-		NpcStringId.DESTROY_THE_ENEMY_MY_BROTHERS,
-		NpcStringId.FORCES_OF_DARKNESS_FOLLOW_ME
-	};
-	
+			{
+					NpcStringId.COME_OUT_YOU_CHILDREN_OF_DARKNESS,
+					NpcStringId.SHOW_YOURSELVES,
+					NpcStringId.DESTROY_THE_ENEMY_MY_BROTHERS,
+					NpcStringId.FORCES_OF_DARKNESS_FOLLOW_ME
+			};
+
 	private static final int[] ON_ATTACK_NPC =
-	{
-		20767, // Timak Orc Troop Leader
-	};
-	
-	private MinionSpawnManager()
-	{
-		
+			{
+					20767, // Timak Orc Troop Leader
+			};
+
+	private MinionSpawnManager() {
+
 		addSpawnId(NPC);
 		addAttackId(ON_ATTACK_NPC);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getParameters().getSet().get("SummonPrivateRate") == null)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getParameters().getSet().get("SummonPrivateRate") == null) {
 			((L2MonsterInstance) npc).getMinionList().spawnMinions(npc.getParameters().getMinionList("Privates"));
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon)
-	{
-		if (npc.isMonster())
-		{
+	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+		if (npc.isMonster()) {
 			final L2MonsterInstance monster = (L2MonsterInstance) npc;
-			if (!monster.isTeleporting())
-			{
-				if (getRandom(1, 100) <= npc.getParameters().getInt("SummonPrivateRate", 0))
-				{
-					for (MinionHolder is : npc.getParameters().getMinionList("Privates"))
-					{
+			if (!monster.isTeleporting()) {
+				if (getRandom(1, 100) <= npc.getParameters().getInt("SummonPrivateRate", 0)) {
+					for (MinionHolder is : npc.getParameters().getMinionList("Privates")) {
 						addMinion((L2MonsterInstance) npc, is.getId());
 					}
 					npc.broadcastSay(ChatType.NPC_GENERAL, ON_ATTACK_MSG[getRandom(ON_ATTACK_MSG.length)]);
@@ -456,9 +446,8 @@ public final class MinionSpawnManager extends AbstractNpcAI
 		}
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new MinionSpawnManager();
 	}
 }

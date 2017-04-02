@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
@@ -26,58 +27,45 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
-
 /**
  * Morgan AI.
+ *
  * @author St3eT
  */
-public final class Morgan extends AbstractNpcAI
-{
+public final class Morgan extends AbstractNpcAI {
 	// NPC
 	private static final int MORGAN = 33121;
-	
-	private Morgan()
-	{
+
+	private Morgan() {
 		addSpawnId(MORGAN);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_MOVE"))
-		{
-			if (getRandomBoolean())
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_MOVE")) {
+			if (getRandomBoolean()) {
 				addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 0, 500), npc.getInstanceWorld()), 23);
 			}
 			getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_SHOUT"))
-		{
+		} else if (event.equals("NPC_SHOUT")) {
 			final int rand = getRandom(3);
-			if (rand == 0)
-			{
+			if (rand == 0) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DON_T_GO_HUNTING_WITHOUT_SOULSHOT);
-			}
-			else if (rand == 1)
-			{
+			} else if (rand == 1) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.BELOW_LEVEL_75_BE_SURE_TO_RECEIVE_NEWBIE_BUFFS);
 			}
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Morgan();
 	}
 }

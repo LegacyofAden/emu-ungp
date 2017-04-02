@@ -18,20 +18,19 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Mephisto AI.
+ *
  * @author Gladicek
  */
-public final class Mephisto extends AbstractNpcAI
-{
+public final class Mephisto extends AbstractNpcAI {
 	// NPC
 	private static final int MEPHISTO = 33577;
 	private static final int KANDRA = 33111;
@@ -40,43 +39,36 @@ public final class Mephisto extends AbstractNpcAI
 	// Distances
 	private static final int MIN_DISTANCE = 70;
 	private static final int MAX_DISTANCE = 200;
-	
-	private Mephisto()
-	{
+
+	private Mephisto() {
 		addSpawnId(MEPHISTO);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "NPC_SHOUT":
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "NPC_SHOUT": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.ACCORDING_TO_THIS_RECORDS_ARE_BROKEN_EVERY_MONTH);
 				getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 				break;
 			}
-			case "WALK_AROUND_KANDRA":
-			{
+			case "WALK_AROUND_KANDRA": {
 				followNpc(npc, KANDRA, 115, MIN_DISTANCE, MAX_DISTANCE);
 				break;
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setRHandId(WEAPON);
 		followNpc(npc, KANDRA, 115, MIN_DISTANCE, MAX_DISTANCE);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addRepeatingTimer("WALK_AROUND_KANDRA", 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Mephisto();
 	}
 }

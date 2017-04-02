@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
@@ -31,41 +29,36 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
 
+import java.util.List;
+
 /**
  * Randomize Hate effect implementation.
  */
-public final class InstantRandomizeHate extends AbstractEffect
-{
+public final class InstantRandomizeHate extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantRandomizeHate(StatsSet params)
-	{
+
+	public InstantRandomizeHate(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isAttackable() && Formulas.calcProbability(_chance, caster, target.asAttackable(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Attackable targetAttackable = target.asAttackable();
-		if (targetAttackable == null)
-		{
+		if (targetAttackable == null) {
 			return;
 		}
 
-		if (caster.equals(targetAttackable))
-		{
+		if (caster.equals(targetAttackable)) {
 			return;
 		}
 
-		final List<Creature> targetList = World.getInstance().getVisibleObjects(targetAttackable, Creature.class, c ->  !c.equals(caster) && (!c.isAttackable() || !c.asAttackable().isInMyClan(targetAttackable)));
-		if (targetList.isEmpty())
-		{
+		final List<Creature> targetList = World.getInstance().getVisibleObjects(targetAttackable, Creature.class, c -> !c.equals(caster) && (!c.isAttackable() || !c.asAttackable().isInMyClan(targetAttackable)));
+		if (targetList.isEmpty()) {
 			return;
 		}
 

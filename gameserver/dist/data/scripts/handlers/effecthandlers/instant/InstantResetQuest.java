@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.List;
-
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -30,32 +28,28 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class InstantResetQuest extends AbstractEffect
-{
+public class InstantResetQuest extends AbstractEffect {
 	final private List<Integer> _questIds;
-	
-	public InstantResetQuest(StatsSet params)
-	{
+
+	public InstantResetQuest(StatsSet params) {
 		_questIds = params.getList("questIds", Integer.class);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		for (int questId : _questIds)
-		{
+
+		for (int questId : _questIds) {
 			final Quest quest = QuestManager.getInstance().getQuest(questId);
-			if (quest != null)
-			{
+			if (quest != null) {
 				targetPlayer.delQuestState(quest.getClass().getSimpleName());
 			}
 		}

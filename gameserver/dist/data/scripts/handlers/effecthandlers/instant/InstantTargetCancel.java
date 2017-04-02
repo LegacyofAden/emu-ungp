@@ -29,29 +29,25 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Target Cancel effect implementation.
+ *
  * @author -Nemesiss-, Adry_85
  */
-public final class InstantTargetCancel extends AbstractEffect
-{
+public final class InstantTargetCancel extends AbstractEffect {
 	private final int _chance;
-	
-	public InstantTargetCancel(StatsSet params)
-	{
+
+	public InstantTargetCancel(StatsSet params) {
 		_chance = params.getInt("chance", 100);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(_chance, caster, target.asCreature(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 

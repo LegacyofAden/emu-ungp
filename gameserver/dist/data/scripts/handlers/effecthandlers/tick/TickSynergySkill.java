@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.tick;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -33,11 +29,14 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Synergy effect implementation.
  */
-public final class TickSynergySkill extends AbstractEffect
-{
+public final class TickSynergySkill extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TickSynergySkill.class);
 
 	private final Set<AbnormalType> _requiredSlots;
@@ -45,77 +44,59 @@ public final class TickSynergySkill extends AbstractEffect
 	private final int _partyBuffSkillId;
 	private final int _skillLevelScaleTo;
 	private final int _minSlot;
-	
-	public TickSynergySkill(StatsSet params)
-	{
+
+	public TickSynergySkill(StatsSet params) {
 		String requiredSlots = params.getString("requiredSlots", null);
-		if ((requiredSlots != null) && !requiredSlots.isEmpty())
-		{
+		if ((requiredSlots != null) && !requiredSlots.isEmpty()) {
 			_requiredSlots = new HashSet<>();
-			for (String slot : requiredSlots.split(";"))
-			{
+			for (String slot : requiredSlots.split(";")) {
 				_requiredSlots.add(AbnormalType.getAbnormalType(slot));
 			}
+		} else {
+			_requiredSlots = Collections.<AbnormalType>emptySet();
 		}
-		else
-		{
-			_requiredSlots = Collections.<AbnormalType> emptySet();
-		}
-		
+
 		String optionalSlots = params.getString("optionalSlots", null);
-		if ((optionalSlots != null) && !optionalSlots.isEmpty())
-		{
+		if ((optionalSlots != null) && !optionalSlots.isEmpty()) {
 			_optionalSlots = new HashSet<>();
-			for (String slot : optionalSlots.split(";"))
-			{
+			for (String slot : optionalSlots.split(";")) {
 				_optionalSlots.add(AbnormalType.getAbnormalType(slot));
 			}
+		} else {
+			_optionalSlots = Collections.<AbnormalType>emptySet();
 		}
-		else
-		{
-			_optionalSlots = Collections.<AbnormalType> emptySet();
-		}
-		
+
 		_partyBuffSkillId = params.getInt("partyBuffSkillId");
 		_skillLevelScaleTo = params.getInt("skillLevelScaleTo", 1);
 		_minSlot = params.getInt("minSlot", 2);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature effected, Skill skill)
-	{
-		if (caster.isDead())
-		{
+	public void tick(Creature caster, Creature effected, Skill skill) {
+		if (caster.isDead()) {
 			return;
 		}
-		
-		for (AbnormalType required : _requiredSlots)
-		{
-			if (!caster.hasAbnormalType(required))
-			{
+
+		for (AbnormalType required : _requiredSlots) {
+			if (!caster.hasAbnormalType(required)) {
 				return;
 			}
 		}
-		
+
 		final int abnormalCount = (int) _optionalSlots.stream().filter(caster::hasAbnormalType).count();
-		
-		if (abnormalCount >= _minSlot)
-		{
+
+		if (abnormalCount >= _minSlot) {
 			final SkillHolder partyBuff = new SkillHolder(_partyBuffSkillId, Math.min(abnormalCount - 1, _skillLevelScaleTo));
 			final Skill partyBuffSkill = partyBuff.getSkill();
-			
-			if (partyBuffSkill != null)
-			{
+
+			if (partyBuffSkill != null) {
 				final WorldObject target = partyBuffSkill.getTarget(caster, effected, false, false, false);
-				
-				if ((target != null) && target.isCreature())
-				{
+
+				if ((target != null) && target.isCreature()) {
 					SkillCaster.triggerCast(caster, target, partyBuffSkill);
 				}
-			}
-			else
-			{
+			} else {
 				LOGGER.warn("Skill not found effect called from {}", skill);
 			}
 		}

@@ -35,45 +35,37 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Call Pc effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantCallPc extends AbstractEffect
-{
+public final class InstantCallPc extends AbstractEffect {
 	private final int _itemId;
 	private final int _itemCount;
-	
-	public InstantCallPc(StatsSet params)
-	{
+
+	public InstantCallPc(StatsSet params) {
 		_itemId = params.getInt("itemId", 0);
 		_itemCount = params.getInt("itemCount", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		if (casterPlayer.equals(targetPlayer))
-		{
+
+		if (casterPlayer.equals(targetPlayer)) {
 			return;
 		}
-		
-		if (checkSummonTargetStatus(targetPlayer, casterPlayer))
-		{
-			if ((_itemId != 0) && (_itemCount != 0))
-			{
-				if (targetPlayer.getInventory().getInventoryItemCount(_itemId, 0) < _itemCount)
-				{
+
+		if (checkSummonTargetStatus(targetPlayer, casterPlayer)) {
+			if ((_itemId != 0) && (_itemCount != 0)) {
+				if (targetPlayer.getInventory().getInventoryItemCount(_itemId, 0) < _itemCount) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_IS_REQUIRED_FOR_SUMMONING);
 					sm.addItemName(_itemId);
 					targetPlayer.sendPacket(sm);
@@ -84,7 +76,7 @@ public final class InstantCallPc extends AbstractEffect
 				sm.addItemName(_itemId);
 				targetPlayer.sendPacket(sm);
 			}
-			
+
 			targetPlayer.addScript(new SummonRequestHolder(casterPlayer, skill));
 			final ConfirmDlg confirm = new ConfirmDlg(SystemMessageId.C1_WISHES_TO_SUMMON_YOU_FROM_S2_DO_YOU_ACCEPT.getId());
 			confirm.addCharName(casterPlayer);
@@ -94,69 +86,59 @@ public final class InstantCallPc extends AbstractEffect
 			targetPlayer.sendPacket(confirm);
 		}
 	}
-	
-	public static boolean checkSummonTargetStatus(PlayerInstance target, Creature activeChar)
-	{
-		if (target == activeChar)
-		{
+
+	public static boolean checkSummonTargetStatus(PlayerInstance target, Creature activeChar) {
+		if (target == activeChar) {
 			return false;
 		}
-		
-		if (target.isAlikeDead())
-		{
+
+		if (target.isAlikeDead()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_DEAD_AT_THE_MOMENT_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInStoreMode())
-		{
+
+		if (target.isInStoreMode()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_CURRENTLY_TRADING_OR_OPERATING_A_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isImmobilized() || target.isInCombat())
-		{
+
+		if (target.isImmobilized() || target.isInCombat()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInOlympiadMode())
-		{
+
+		if (target.isInOlympiadMode()) {
 			activeChar.sendPacket(SystemMessageId.A_USER_PARTICIPATING_IN_THE_OLYMPIAD_CANNOT_USE_SUMMONING_OR_TELEPORTING);
 			return false;
 		}
-		
-		if (target.isFlyingMounted() || target.isCombatFlagEquipped())
-		{
+
+		if (target.isFlyingMounted() || target.isCombatFlagEquipped()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_SUMMONING_OR_TELEPORTING_IN_THIS_AREA);
 			return false;
 		}
-		
-		if (target.inObserverMode() || OlympiadManager.getInstance().isRegisteredInComp(target))
-		{
+
+		if (target.inObserverMode() || OlympiadManager.getInstance().isRegisteredInComp(target)) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING_OR_TELEPORTING2);
 			sm.addCharName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || target.isInsideZone(ZoneId.JAIL))
-		{
+
+		if (target.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || target.isInsideZone(ZoneId.JAIL)) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING_OR_TELEPORTING);
 			sm.addString(target.getName());
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
+
 		final Instance instance = activeChar.getInstanceWorld();
-		if ((instance != null) && !instance.isPlayerSummonAllowed())
-		{
+		if ((instance != null) && !instance.isPlayerSummonAllowed()) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_SUMMON_FROM_YOUR_CURRENT_LOCATION);
 			return false;
 		}

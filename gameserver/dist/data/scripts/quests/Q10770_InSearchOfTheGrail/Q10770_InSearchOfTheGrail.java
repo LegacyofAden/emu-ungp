@@ -27,30 +27,29 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * In Search of the Grail (10770)
+ *
  * @author malyelfik
  */
-public final class Q10770_InSearchOfTheGrail extends Quest
-{
+public final class Q10770_InSearchOfTheGrail extends Quest {
 	// NPCs
 	private static final int LORAIN = 30673;
 	private static final int JANSSEN = 30484;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20213, // Porta
-		20214, // Excuro
-		20216, // Ricenseo
-		20217, // Krator
-		21036, // Shindebarn
-	};
+			{
+					20213, // Porta
+					20214, // Excuro
+					20216, // Ricenseo
+					20217, // Krator
+					21036, // Shindebarn
+			};
 	// Items
 	private static final int MYSTERIOUS_FRAGMENT = 39711;
 	// Misc
 	private static final int MIN_LEVEL = 40;
 	private static final double DROP_RATE = 0.4;
-	
-	public Q10770_InSearchOfTheGrail()
-	{
+
+	public Q10770_InSearchOfTheGrail() {
 		super(10770);
 		addStartNpc(LORAIN);
 		addTalkId(LORAIN, JANSSEN);
@@ -59,50 +58,39 @@ public final class Q10770_InSearchOfTheGrail extends Quest
 		addCondMinLevel(MIN_LEVEL, "30673-00.htm");
 		registerQuestItems(MYSTERIOUS_FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30673-02.htm":
 			case "30673-03.htm":
 			case "30673-04.htm":
 				break;
-			case "30673-05.htm":
-			{
+			case "30673-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "30484-02.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "30484-02.html": {
+				if (qs.isCond(2)) {
 					takeItems(player, MYSTERIOUS_FRAGMENT, -1);
 					qs.setCond(3, true);
 				}
 				break;
 			}
-			case "30484-04.html":
-			{
-				if (qs.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30484-04.html": {
+				if (qs.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 4_175_045);
 						addSp(player, 562);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -113,28 +101,21 @@ public final class Q10770_InSearchOfTheGrail extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == LORAIN)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == LORAIN) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "30673-01.htm";
 					break;
-				case State.STARTED:
-				{
-					if (qs.isCond(1))
-					{
+				case State.STARTED: {
+					if (qs.isCond(1)) {
 						htmltext = "30673-06.html";
-					}
-					else if (qs.isCond(2))
-					{
+					} else if (qs.isCond(2)) {
 						htmltext = "30673-07.html";
 					}
 					break;
@@ -143,27 +124,20 @@ public final class Q10770_InSearchOfTheGrail extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted())
-		{
-			if (qs.isCond(2))
-			{
+		} else if (qs.isStarted()) {
+			if (qs.isCond(2)) {
 				htmltext = "30484-01.html";
-			}
-			else if (qs.isCond(3))
-			{
+			} else if (qs.isCond(3)) {
 				htmltext = "30484-03.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1) && giveItemRandomly(killer, MYSTERIOUS_FRAGMENT, 1, 20, DROP_RATE, true))
-		{
+		if ((qs != null) && qs.isCond(1) && giveItemRandomly(killer, MYSTERIOUS_FRAGMENT, 1, 20, DROP_RATE, true)) {
 			qs.setCond(2, true);
 		}
 		return super.onKill(npc, killer, isSummon);

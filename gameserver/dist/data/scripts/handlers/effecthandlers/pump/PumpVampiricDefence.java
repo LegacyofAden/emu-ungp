@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpVampiricDefence extends AbstractEffect
-{
+public class PumpVampiricDefence extends AbstractEffect {
 	private final int _amount;
-	
-	public PumpVampiricDefence(StatsSet params)
-	{
+
+	public PumpVampiricDefence(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(DoubleStat.ABSORB_DAMAGE_DEFENCE, 1 - (_amount / 100));
 	}
 }

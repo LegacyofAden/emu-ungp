@@ -28,10 +28,8 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpNotTerritorySkillCondition implements ISkillCondition
-{
-	private enum AffectType
-	{
+public class OpNotTerritorySkillCondition implements ISkillCondition {
+	private enum AffectType {
 		SELF,
 		ALL
 	}
@@ -39,26 +37,20 @@ public class OpNotTerritorySkillCondition implements ISkillCondition
 	private final Territory _territory = new Territory();
 	private final AffectType _type;
 
-	public OpNotTerritorySkillCondition(StatsSet params)
-	{
+	public OpNotTerritorySkillCondition(StatsSet params) {
 		_type = params.getEnum("affectType", AffectType.class, AffectType.SELF);
-		for (StatsSet loc : params.getList("territory", StatsSet.class))
-		{
+		for (StatsSet loc : params.getList("territory", StatsSet.class)) {
 			_territory.addPoint(loc.getInt(".x"), loc.getInt(".y"), loc.getInt(".minZ"), loc.getInt(".maxZ"));
 		}
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_type)
-		{
-			case SELF:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_type) {
+			case SELF: {
 				return !_territory.isInside(caster.getX(), caster.getY(), caster.getZ());
 			}
-			case ALL:
-			{
+			case ALL: {
 				return !_territory.isInside(caster.getX(), caster.getY(), caster.getZ()) && !_territory.isInside(target.getX(), target.getY(), target.getZ());
 			}
 		}

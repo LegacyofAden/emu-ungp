@@ -34,41 +34,34 @@ import org.l2junity.gameserver.network.client.send.ValidateLocation;
 
 /**
  * Teleport party to summoned npc effect implementation.
+ *
  * @author Nik
  */
-public final class InstantPartyTeleportToNpc extends AbstractEffect
-{
+public final class InstantPartyTeleportToNpc extends AbstractEffect {
 	private final int _npcId;
-	
-	public InstantPartyTeleportToNpc(StatsSet params)
-	{
+
+	public InstantPartyTeleportToNpc(StatsSet params) {
 		_npcId = params.getInt("npcId");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		final ILocational teleLocation = caster.getSummonedNpcs().stream().filter(npc -> npc.getId() == _npcId).findAny().orElse(null);
-		if (teleLocation != null)
-		{
+		if (teleLocation != null) {
 			final Party party = targetPlayer.getParty();
-			if (party != null)
-			{
+			if (party != null) {
 				party.getMembers().forEach(p -> teleport(p, teleLocation));
 			}
 		}
 	}
-	
-	private void teleport(Creature effected, ILocational location)
-	{
-		if (effected.isInRadius2d(location, 900))
-		{
+
+	private void teleport(Creature effected, ILocational location) {
+		if (effected.isInRadius2d(location, 900)) {
 			effected.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 			effected.broadcastPacket(new FlyToLocation(effected, location, FlyType.DUMMY));
 			effected.abortAttack();
@@ -76,9 +69,7 @@ public final class InstantPartyTeleportToNpc extends AbstractEffect
 			effected.setXYZ(location);
 			effected.broadcastPacket(new ValidateLocation(effected));
 			effected.revalidateZone(true);
-		}
-		else
-		{
+		} else {
 			effected.teleToLocation(location);
 		}
 	}

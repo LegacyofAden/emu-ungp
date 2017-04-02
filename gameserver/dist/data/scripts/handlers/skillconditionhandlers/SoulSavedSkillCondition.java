@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class SoulSavedSkillCondition implements ISkillCondition
-{
+public class SoulSavedSkillCondition implements ISkillCondition {
 	private final int _amount;
-	
-	public SoulSavedSkillCondition(StatsSet params)
-	{
+
+	public SoulSavedSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.isPlayer() && (caster.getActingPlayer().getChargedSouls() >= _amount);
 	}
 }

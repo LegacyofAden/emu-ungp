@@ -27,107 +27,93 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * I'm the Only One You Can Trust (240)
+ *
  * @author malyelfik
  */
-public class Q00240_ImTheOnlyOneYouCanTrust extends Quest
-{
+public class Q00240_ImTheOnlyOneYouCanTrust extends Quest {
 	// NPC
 	private static final int KINTAIJIN = 32640;
 	// Monster
 	private static final int[] MOBS =
-	{
-		22617,
-		22618,
-		22619,
-		22620,
-		22621,
-		22622,
-		22623,
-		22624,
-		22625,
-		22626,
-		22627,
-		22628,
-		22629,
-		22630,
-		22631,
-		22632,
-		22633
-	};
+			{
+					22617,
+					22618,
+					22619,
+					22620,
+					22621,
+					22622,
+					22623,
+					22624,
+					22625,
+					22626,
+					22627,
+					22628,
+					22629,
+					22630,
+					22631,
+					22632,
+					22633
+			};
 	// Item
 	private static final int STAKATO_FANG = 14879;
-	
-	public Q00240_ImTheOnlyOneYouCanTrust()
-	{
+
+	public Q00240_ImTheOnlyOneYouCanTrust() {
 		super(240);
 		addStartNpc(KINTAIJIN);
 		addTalkId(KINTAIJIN);
 		addKillId(MOBS);
 		registerQuestItems(STAKATO_FANG);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return getNoQuestMsg(player);
 		}
-		
-		if (event.equalsIgnoreCase("32640-3.htm"))
-		{
+
+		if (event.equalsIgnoreCase("32640-3.htm")) {
 			st.startQuest();
 		}
 		return event;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
-		if (partyMember == null)
-		{
+		if (partyMember == null) {
 			return super.onKill(npc, player, isSummon);
 		}
-		
+
 		final QuestState st = getQuestState(partyMember, false);
 		giveItems(partyMember, STAKATO_FANG, 1);
-		if (getQuestItemsCount(partyMember, STAKATO_FANG) >= 25)
-		{
+		if (getQuestItemsCount(partyMember, STAKATO_FANG) >= 25) {
 			st.setCond(2, true);
-		}
-		else
-		{
+		} else {
 			playSound(partyMember, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = (player.getLevel() >= 81) ? "32640-1.htm" : "32640-0.htm";
 				break;
 			case State.STARTED:
-				switch (st.getCond())
-				{
+				switch (st.getCond()) {
 					case 1:
 						htmltext = (!hasQuestItems(player, STAKATO_FANG)) ? "32640-8.html" : "32640-9.html";
 						break;
 					case 2:
-						if (getQuestItemsCount(player, STAKATO_FANG) >= 25)
-						{
+						if (getQuestItemsCount(player, STAKATO_FANG) >= 25) {
 							giveAdena(player, 147200, true);
 							takeItems(player, STAKATO_FANG, -1);
 							addExp(player, 589542);

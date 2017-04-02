@@ -26,37 +26,31 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * Cp Heal Over Time effect implementation.
  */
-public final class TickCp extends AbstractEffect
-{
+public final class TickCp extends AbstractEffect {
 	private final double _power;
-	
-	public TickCp(StatsSet params)
-	{
+
+	public TickCp(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double cp = target.getCurrentCp();
 		double maxCp = target.getMaxRecoverableCp();
 		double power = _power * getTicksMultiplier();
-		if ((power > 0) && (cp > maxCp))
-		{
+		if ((power > 0) && (cp > maxCp)) {
 			return;
 		}
-		
-		if ((power < 0) && ((cp + power) <= 0))
-		{
+
+		if ((power < 0) && ((cp + power) <= 0)) {
 			power = -cp;
 		}
-		
+
 		target.setCurrentCp(Math.min(target.getCurrentCp() + power, maxCp));
 	}
 }

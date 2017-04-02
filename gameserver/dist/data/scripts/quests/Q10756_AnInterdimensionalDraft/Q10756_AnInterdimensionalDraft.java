@@ -27,77 +27,67 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * An Interdimensional Draft (10756)
+ *
  * @author malyelfik
  */
-public final class Q10756_AnInterdimensionalDraft extends Quest
-{
+public final class Q10756_AnInterdimensionalDraft extends Quest {
 	// NPC
 	private static final int PIO = 33963;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		20078, // Whispering Wind
-		21023, // Sobbing Wind
-		21024, // Babbling Wind
-		21025, // Giggling Wind
-		21026, // Singing Wind
-		23414, // Windima
-		23415, // Windima Feri
-		23416, // Windima Resh
-	};
+			{
+					20078, // Whispering Wind
+					21023, // Sobbing Wind
+					21024, // Babbling Wind
+					21025, // Giggling Wind
+					21026, // Singing Wind
+					23414, // Windima
+					23415, // Windima Feri
+					23416, // Windima Resh
+			};
 	// Items
 	private static final int UNWORLDLY_WIND = 39493;
 	// Misc
 	private static final int MIN_LEVEL = 20;
 	private static final double DROP_RATE = 0.7d;
-	
-	public Q10756_AnInterdimensionalDraft()
-	{
+
+	public Q10756_AnInterdimensionalDraft() {
 		super(10756);
 		addStartNpc(PIO);
 		addTalkId(PIO);
 		addKillId(MONSTERS);
-		
+
 		addCondRace(Race.ERTHEIA, "33963-00.htm");
 		addCondMinLevel(MIN_LEVEL, "33963-00.htm");
 		registerQuestItems(UNWORLDLY_WIND);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33963-01.htm":
 			case "33963-02.htm":
 			case "33963-03.htm":
 			case "33963-04.htm":
 				break;
-			case "33963-05.htm":
-			{
+			case "33963-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33963-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33963-08.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 267_479);
 						addSp(player, 41);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -108,15 +98,13 @@ public final class Q10756_AnInterdimensionalDraft extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33963-01.htm";
 				break;
@@ -129,13 +117,11 @@ public final class Q10756_AnInterdimensionalDraft extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1) && giveItemRandomly(killer, UNWORLDLY_WIND, 1, 30, DROP_RATE, true))
-		{
+		if ((qs != null) && qs.isCond(1) && giveItemRandomly(killer, UNWORLDLY_WIND, 1, 30, DROP_RATE, true)) {
 			qs.setCond(2, true);
 		}
 		return super.onKill(npc, killer, isSummon);

@@ -32,58 +32,46 @@ import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 /**
  * @author UnAfraid
  */
-public class QuestOneDayRewardHandler extends AbstractOneDayRewardHandler
-{
+public class QuestOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
-	
-	public QuestOneDayRewardHandler(OneDayRewardDataHolder holder)
-	{
+
+	public QuestOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
-	
+
 	@Override
-	public void init()
-	{
+	public void init() {
 		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_QUEST_COMPLETE, (OnPlayerQuestComplete event) -> onQuestComplete(event), this));
 	}
-	
+
 	@Override
-	public boolean isAvailable(PlayerInstance player)
-	{
+	public boolean isAvailable(PlayerInstance player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
-		if (entry != null)
-		{
-			switch (entry.getStatus())
-			{
+		if (entry != null) {
+			switch (entry.getStatus()) {
 				case NOT_AVAILABLE: // Initial state
 				{
-					if (entry.getProgress() >= _amount)
-					{
+					if (entry.getProgress() >= _amount) {
 						entry.setStatus(OneDayRewardStatus.AVAILABLE);
 						storePlayerEntry(entry);
 					}
 					break;
 				}
-				case AVAILABLE:
-				{
+				case AVAILABLE: {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	private void onQuestComplete(OnPlayerQuestComplete event)
-	{
+
+	private void onQuestComplete(OnPlayerQuestComplete event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (event.getQuestType() == QuestType.DAILY)
-		{
+		if (event.getQuestType() == QuestType.DAILY) {
 			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
-			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE)
-			{
-				if (entry.increaseProgress() >= _amount)
-				{
+			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+				if (entry.increaseProgress() >= _amount) {
 					entry.setStatus(OneDayRewardStatus.AVAILABLE);
 				}
 				storePlayerEntry(entry);

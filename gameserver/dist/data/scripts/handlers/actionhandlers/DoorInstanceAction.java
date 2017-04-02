@@ -31,63 +31,40 @@ import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.holders.DoorRequestHolder;
 import org.l2junity.gameserver.network.client.send.ConfirmDlg;
 
-public class DoorInstanceAction implements IActionHandler
-{
+public class DoorInstanceAction implements IActionHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
 		// Check if the L2PcInstance already target the L2NpcInstance
-		if (activeChar.getTarget() != target)
-		{
+		if (activeChar.getTarget() != target) {
 			activeChar.setTarget(target);
-		}
-		else if (interact)
-		{
+		} else if (interact) {
 			final DoorInstance door = (DoorInstance) target;
 			final ClanHall clanHall = ClanHallData.getInstance().getClanHallByDoorId(door.getId());
 			// MyTargetSelected my = new MyTargetSelected(getObjectId(), activeChar.getLevel());
 			// activeChar.sendPacket(my);
-			if (target.isAutoAttackable(activeChar))
-			{
-				if (Math.abs(activeChar.getZ() - target.getZ()) < 400)
-				{
+			if (target.isAutoAttackable(activeChar)) {
+				if (Math.abs(activeChar.getZ() - target.getZ()) < 400) {
 					activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 				}
-			}
-			else if ((activeChar.getClan() != null) && (clanHall != null) && (activeChar.getClanId() == clanHall.getOwnerId()))
-			{
-				if (!door.isInRadius2d(activeChar, Npc.INTERACTION_DISTANCE))
-				{
+			} else if ((activeChar.getClan() != null) && (clanHall != null) && (activeChar.getClanId() == clanHall.getOwnerId())) {
+				if (!door.isInRadius2d(activeChar, Npc.INTERACTION_DISTANCE)) {
 					activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, target);
-				}
-				else
-				{
+				} else {
 					activeChar.addScript(new DoorRequestHolder(door));
-					if (!door.isOpen())
-					{
+					if (!door.isOpen()) {
 						activeChar.sendPacket(new ConfirmDlg(1140));
-					}
-					else
-					{
+					} else {
 						activeChar.sendPacket(new ConfirmDlg(1141));
 					}
 				}
-			}
-			else if ((activeChar.getClan() != null) && (((DoorInstance) target).getFort() != null) && (activeChar.getClan() == ((DoorInstance) target).getFort().getOwnerClan()) && ((DoorInstance) target).isOpenableBySkill() && !((DoorInstance) target).getFort().getSiege().isInProgress())
-			{
-				if (!target.isInRadius2d(activeChar, Npc.INTERACTION_DISTANCE))
-				{
+			} else if ((activeChar.getClan() != null) && (((DoorInstance) target).getFort() != null) && (activeChar.getClan() == ((DoorInstance) target).getFort().getOwnerClan()) && ((DoorInstance) target).isOpenableBySkill() && !((DoorInstance) target).getFort().getSiege().isInProgress()) {
+				if (!target.isInRadius2d(activeChar, Npc.INTERACTION_DISTANCE)) {
 					activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, target);
-				}
-				else
-				{
+				} else {
 					activeChar.addScript(new DoorRequestHolder((DoorInstance) target));
-					if (!((DoorInstance) target).isOpen())
-					{
+					if (!((DoorInstance) target).isOpen()) {
 						activeChar.sendPacket(new ConfirmDlg(1140));
-					}
-					else
-					{
+					} else {
 						activeChar.sendPacket(new ConfirmDlg(1141));
 					}
 				}
@@ -95,15 +72,13 @@ public class DoorInstanceAction implements IActionHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.DoorInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionHandler.getInstance().registerHandler(new DoorInstanceAction());
 	}
 }

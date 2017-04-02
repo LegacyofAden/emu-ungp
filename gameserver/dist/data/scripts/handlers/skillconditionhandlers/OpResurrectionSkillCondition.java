@@ -31,85 +31,62 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * @author Sdw
  */
-public class OpResurrectionSkillCondition implements ISkillCondition
-{
-	public OpResurrectionSkillCondition(StatsSet params)
-	{
-		
+public class OpResurrectionSkillCondition implements ISkillCondition {
+	public OpResurrectionSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		boolean canResurrect = true;
-		
-		if (target == caster)
-		{
+
+		if (target == caster) {
 			return canResurrect;
 		}
-		
-		if (target.isPlayer())
-		{
+
+		if (target.isPlayer()) {
 			final PlayerInstance player = target.getActingPlayer();
-			if (!player.isDead())
-			{
+			if (!player.isDead()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 					msg.addSkillName(skill);
 					caster.sendPacket(msg);
 				}
-			}
-			else if (player.isResurrectionBlocked())
-			{
+			} else if (player.isResurrectionBlocked()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					caster.sendPacket(SystemMessageId.REJECT_RESURRECTION);
 				}
-			}
-			else if (player.isReviveRequested())
-			{
+			} else if (player.isReviveRequested()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					caster.sendPacket(SystemMessageId.RESURRECTION_HAS_ALREADY_BEEN_PROPOSED);
 				}
 			}
-		}
-		else if (target.isSummon())
-		{
+		} else if (target.isSummon()) {
 			final Summon summon = (Summon) target;
 			final PlayerInstance player = target.getActingPlayer();
-			if (!summon.isDead())
-			{
+			if (!summon.isDead()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 					msg.addSkillName(skill);
 					caster.sendPacket(msg);
 				}
-			}
-			else if (summon.isResurrectionBlocked())
-			{
+			} else if (summon.isResurrectionBlocked()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					caster.sendPacket(SystemMessageId.REJECT_RESURRECTION);
 				}
-			}
-			else if ((player != null) && player.isRevivingPet())
-			{
+			} else if ((player != null) && player.isRevivingPet()) {
 				canResurrect = false;
-				if (caster.isPlayer())
-				{
+				if (caster.isPlayer()) {
 					caster.sendPacket(SystemMessageId.RESURRECTION_HAS_ALREADY_BEEN_PROPOSED);
 				}
 			}
 		}
-		
+
 		return canResurrect;
 	}
 }

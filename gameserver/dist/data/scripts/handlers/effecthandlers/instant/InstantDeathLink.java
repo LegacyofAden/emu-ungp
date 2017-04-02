@@ -30,45 +30,39 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Death Link effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantDeathLink extends AbstractEffect
-{
+public final class InstantDeathLink extends AbstractEffect {
 	private final double _power;
-	
-	public InstantDeathLink(StatsSet params)
-	{
+
+	public InstantDeathLink(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DEATH_LINK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (caster.isAlikeDead())
-		{
+
+		if (caster.isAlikeDead()) {
 			return;
 		}
-		
+
 		boolean sps = skill.useSpiritShot() && caster.isChargedShot(ShotType.SPIRITSHOTS);
 		boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.stopFakeDeath(true);
 		}
-		
+
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
 		double damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power * (-((caster.getCurrentHp() * 2) / caster.getMaxHp()) + 2), targetCreature.getMDef(), sps, bss, mcrit);
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);

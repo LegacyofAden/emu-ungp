@@ -27,15 +27,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpTargetPcSkillCondition implements ISkillCondition
-{
-	public OpTargetPcSkillCondition(StatsSet params)
-	{
+public class OpTargetPcSkillCondition implements ISkillCondition {
+	public OpTargetPcSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return (target != null) && target.isPlayer();
 	}
 }

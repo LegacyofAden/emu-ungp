@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpPvpMagicalSkillDefenceBonus extends AbstractDoubleStatEffect
-{
-	public PumpPvpMagicalSkillDefenceBonus(StatsSet params)
-	{
+public class PumpPvpMagicalSkillDefenceBonus extends AbstractDoubleStatEffect {
+	public PumpPvpMagicalSkillDefenceBonus(StatsSet params) {
 		super(params, DoubleStat.PVP_MAGICAL_SKILL_DEFENCE);
 	}
 }

@@ -27,15 +27,12 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpNotInstantzoneSkillCondition implements ISkillCondition
-{
-	public OpNotInstantzoneSkillCondition(StatsSet params)
-	{
+public class OpNotInstantzoneSkillCondition implements ISkillCondition {
+	public OpNotInstantzoneSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.getInstanceId() == 0;
 	}
 }

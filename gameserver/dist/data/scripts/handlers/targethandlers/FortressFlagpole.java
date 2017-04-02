@@ -27,24 +27,21 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Target fortress flagpole
+ *
  * @author Nik
  */
-public class FortressFlagpole implements ITargetTypeHandler
-{
+public class FortressFlagpole implements ITargetTypeHandler {
 	@Override
-	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage)
-	{
+	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		final WorldObject target = activeChar.getTarget();
-		if ((target != null) && (target instanceof L2StaticObjectInstance) && (((L2StaticObjectInstance) target).getType() == 3))
-		{
+		if ((target != null) && (target instanceof L2StaticObjectInstance) && (((L2StaticObjectInstance) target).getType() == 3)) {
 			return target;
 		}
-		
-		if (sendMessage)
-		{
+
+		if (sendMessage) {
 			activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 		}
-		
+
 		return null;
 	}
 }

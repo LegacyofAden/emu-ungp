@@ -18,8 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.Collection;
-
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
@@ -34,64 +32,52 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.Collection;
+
 /**
  * @author Sdw
  */
-public final class InstantPlunder extends AbstractEffect
-{
-	public InstantPlunder(StatsSet params)
-	{
+public final class InstantPlunder extends AbstractEffect {
+	public InstantPlunder(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isMonster() && Formulas.calcMagicSuccess(caster, target.asMonster(), skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		final L2MonsterInstance targetMonster = target.asMonster();
-		if (targetMonster == null)
-		{
+		if (targetMonster == null) {
 			casterPlayer.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		
-		if (targetMonster.isDead())
-		{
+
+		if (targetMonster.isDead()) {
 			casterPlayer.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		
-		if (targetMonster.isSpoiled())
-		{
+
+		if (targetMonster.isSpoiled()) {
 			casterPlayer.sendPacket(SystemMessageId.PLUNDER_SKILL_HAS_BEEN_ALREADY_USED_ON_THIS_TARGET);
 			return;
 		}
-		
+
 		targetMonster.setSpoilerObjectId(caster.getObjectId());
-		if (targetMonster.isSweepActive())
-		{
+		if (targetMonster.isSweepActive()) {
 			final Collection<ItemHolder> items = targetMonster.takeSweep();
-			if (items != null)
-			{
-				for (ItemHolder sweepedItem : items)
-				{
+			if (items != null) {
+				for (ItemHolder sweepedItem : items) {
 					final Party party = casterPlayer.getParty();
-					if (party != null)
-					{
+					if (party != null) {
 						party.distributeItem(casterPlayer, sweepedItem, true, targetMonster);
-					}
-					else
-					{
+					} else {
 						casterPlayer.addItem("Sweeper", sweepedItem, targetMonster, true);
 					}
 				}

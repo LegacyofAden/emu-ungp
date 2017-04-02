@@ -18,33 +18,29 @@
  */
 package ai.individual.PrisonOfDarkness;
 
-import org.l2junity.gameserver.model.actor.Npc;
-
 import ai.AbstractNpcAI;
+import org.l2junity.gameserver.model.actor.Npc;
 
 /**
  * Present Spezion AI.
+ *
  * @author St3eT
  */
-public final class PresentSpezion extends AbstractNpcAI
-{
+public final class PresentSpezion extends AbstractNpcAI {
 	// NPCs
 	private static final int PRESENT_SPEZION = 32948;
-	
-	private PresentSpezion()
-	{
+
+	private PresentSpezion() {
 		addSpawnId(PRESENT_SPEZION);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.setState(2);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new PresentSpezion();
 	}
 }

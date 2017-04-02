@@ -26,19 +26,16 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author UnAfraid
  */
-public abstract class AbstractDoubleStatConditionalHpEffect extends AbstractDoubleStatEffect
-{
+public abstract class AbstractDoubleStatConditionalHpEffect extends AbstractDoubleStatEffect {
 	private final int _hpPercent;
-	
-	protected AbstractDoubleStatConditionalHpEffect(StatsSet params, DoubleStat stat, int hpPercent)
-	{
+
+	protected AbstractDoubleStatConditionalHpEffect(StatsSet params, DoubleStat stat, int hpPercent) {
 		super(params, stat);
 		_hpPercent = hpPercent;
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return ((_hpPercent <= 0) || (target.getCurrentHpPercent() <= _hpPercent));
 	}
 }

@@ -30,56 +30,49 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Magical Attack effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantMagicalAttack extends AbstractEffect
-{
+public final class InstantMagicalAttack extends AbstractEffect {
 	private final double _power;
 	private final double _debuffModifier;
-	
-	public InstantMagicalAttack(StatsSet params)
-	{
+
+	public InstantMagicalAttack(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_debuffModifier = params.getDouble("debuffModifier", 1);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MAGICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		// TODO: Unhardcode Cubic Skill to avoid double damage
-		if (caster.isAlikeDead() || (skill.getId() == 4049))
-		{
+		if (caster.isAlikeDead() || (skill.getId() == 4049)) {
 			return;
 		}
-		
-		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath())
-		{
+
+		if (targetCreature.isPlayer() && targetCreature.asPlayer().isFakeDeath()) {
 			targetCreature.stopFakeDeath(true);
 		}
-		
+
 		boolean sps = skill.useSpiritShot() && caster.isChargedShot(ShotType.SPIRITSHOTS);
 		boolean bss = skill.useSpiritShot() && caster.isChargedShot(ShotType.BLESSED_SPIRITSHOTS);
 		final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, targetCreature, skill);
 		double damage = Formulas.calcMagicDam(caster, targetCreature, skill, caster.getMAtk(), _power, targetCreature.getMDef(), sps, bss, mcrit);
-		
+
 		// Apply debuff mod
-		if (targetCreature.getEffectList().getDebuffCount() > 0)
-		{
+		if (targetCreature.getEffectList().getDebuffCount() > 0) {
 			damage *= _debuffModifier;
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, mcrit, false);
 	}
 }

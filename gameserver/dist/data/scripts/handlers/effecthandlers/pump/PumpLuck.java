@@ -33,31 +33,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Lucky effect implementation.
+ *
  * @author Zoey76
  */
-public final class PumpLuck extends AbstractEffect
-{
-	public PumpLuck(StatsSet params)
-	{
+public final class PumpLuck extends AbstractEffect {
+	public PumpLuck(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_PLAYER_DEATH_PENALTY, listener -> listener.getOwner() == this);
 		target.removeListenerIf(EventType.ON_PLAYER_DEATH_EXP_PENALTY, listener -> listener.getOwner() == this);
 		target.removeListenerIf(EventType.ON_PLAYER_VITALITY_CONSUME, listener -> listener.getOwner() == this);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new FunctionEventListener(target, EventType.ON_PLAYER_DEATH_PENALTY, (OnPlayerDeathPenalty event) -> target.getLevel() <= 9 ? new TerminateReturn(true, false, false) : null, this));
 		target.addListener(new FunctionEventListener(target, EventType.ON_PLAYER_DEATH_EXP_PENALTY, (OnPlayerDeathExpPenalty event) -> target.getLevel() <= 9 ? new LongReturn(true, false, false, 0) : null, this));
 		target.addListener(new FunctionEventListener(target, EventType.ON_PLAYER_VITALITY_CONSUME, (OnPlayerVitalityConsume event) -> target.getLevel() <= 9 ? new IntegerReturn(true, false, false, 0) : null, this));

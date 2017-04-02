@@ -25,15 +25,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: A Hidden Meaning (10404)
+ *
  * @author St3eT
  */
-public final class Q10404_KekropusLetterAHiddenMeaning extends LetterQuest
-{
+public final class Q10404_KekropusLetterAHiddenMeaning extends LetterQuest {
 	// NPCs
 	private static final int PATERSON = 33864;
 	private static final int SHUVANN = 33867;
@@ -47,56 +46,46 @@ public final class Q10404_KekropusLetterAHiddenMeaning extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 61;
 	private static final int MAX_LEVEL = 64;
-	
-	public Q10404_KekropusLetterAHiddenMeaning()
-	{
+
+	public Q10404_KekropusLetterAHiddenMeaning() {
 		super(10404);
 		addTalkId(PATERSON, SHUVANN);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartLocation(SOE_TOWN_OF_ADEN, TELEPORT_LOC);
 		setStartQuestSound("Npcdialog1.kekrops_quest_5");
 		registerQuestItems(SOE_TOWN_OF_ADEN, SOE_FIELDS_OF_MASSACRE);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "33864-02.html":
-			{
+		switch (event) {
+			case "33864-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "33864-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "33864-03.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					giveItems(player, SOE_FIELDS_OF_MASSACRE, 1);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33867-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33867-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EWA, 1);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 807_240);
 						addSp(player, 193);
 					}
@@ -108,42 +97,33 @@ public final class Q10404_KekropusLetterAHiddenMeaning extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if ((npc.getId() == PATERSON) && st.isCond(1))
-			{
+
+		if (st.isStarted()) {
+			if ((npc.getId() == PATERSON) && st.isCond(1)) {
 				htmltext = "33864-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == PATERSON ? "33864-04.html" : "33867-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.FIELDS_OF_MASSACRE_IS_A_GOOD_HUNTING_ZONE_FOR_LV_61_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}

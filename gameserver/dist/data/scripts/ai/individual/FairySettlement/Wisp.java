@@ -18,6 +18,7 @@
  */
 package ai.individual.FairySettlement;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -27,14 +28,12 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
-import ai.AbstractNpcAI;
-
 /**
  * Wisp AI.
+ *
  * @author St3eT
  */
-public final class Wisp extends AbstractNpcAI
-{
+public final class Wisp extends AbstractNpcAI {
 	// NPCs
 	private static final int WISP = 32915;
 	private static final int LARGE_WISP = 32916;
@@ -44,62 +43,50 @@ public final class Wisp extends AbstractNpcAI
 	// Misc
 	private static final int RESPAWN_MIN = 60000;
 	private static final int RESPAWN_MAX = 120000;
-	
-	private Wisp()
-	{
+
+	private Wisp() {
 		addSpawnId(WISP, LARGE_WISP);
 		setCreatureSeeId(this::onCreatureSee, WISP, LARGE_WISP);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("DELETE_NPC"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("DELETE_NPC")) {
 			params = new StatsSet();
 			params.set("LOCATION_OBJECT", npc.getLocation());
 			getTimers().addTimer("RESPAWN_WISP_" + npc.getObjectId(), params, getRandom(RESPAWN_MIN, RESPAWN_MAX), null, null);
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			addSpawn(WISP, params.getObject("LOCATION_OBJECT", Location.class));
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final L2Spawn spawn = npc.getSpawn();
 		spawn.stopRespawn();
-		
-		if ((npc.getId() == WISP) && (getRandom(100) < 10))
-		{
+
+		if ((npc.getId() == WISP) && (getRandom(100) < 10)) {
 			addSpawn(LARGE_WISP, npc);
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			npc.initSeenCreatures();
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public void onCreatureSee(OnCreatureSee event)
-	{
+
+	public void onCreatureSee(OnCreatureSee event) {
 		final Creature creature = event.getSeen();
 		final Npc npc = (Npc) event.getSeer();
-		
-		if (creature.isPlayer())
-		{
+
+		if (creature.isPlayer()) {
 			npc.setTarget(creature);
 			npc.doCast(npc.getId() == WISP ? WISP_HEAL.getSkill() : LARGE_WISP_HEAL.getSkill());
 			getTimers().addTimer("DELETE_NPC", 5000, npc, null);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Wisp();
 	}
 }

@@ -28,33 +28,29 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that sets the current hp to the given amount.
+ *
  * @author Nik
  */
-public final class SetHp extends AbstractEffect
-{
+public final class SetHp extends AbstractEffect {
 	private final double _amount;
 	private final StatModifierType _mode;
-	
-	public SetHp(StatsSet params)
-	{
+
+	public SetHp(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asPlayer();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDoor() || targetCreature.isDead())
-		{
+		if (targetCreature.isDoor() || targetCreature.isDead()) {
 			return;
 		}
-		
+
 		boolean full = (_mode == StatModifierType.PER) && (_amount == 100.0);
 		double amount = full ? targetCreature.getMaxHp() : (_mode == StatModifierType.PER) ? ((targetCreature.getMaxHp() * _amount) / 100.0) : _amount;
 		targetCreature.setCurrentHp(amount);

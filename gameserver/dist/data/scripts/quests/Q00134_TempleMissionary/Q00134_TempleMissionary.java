@@ -18,9 +18,6 @@
  */
 package quests.Q00134_TempleMissionary;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -28,12 +25,15 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Temple Missionary (134)
+ *
  * @author malyelfik, Gladicek
  */
-public class Q00134_TempleMissionary extends Quest
-{
+public class Q00134_TempleMissionary extends Quest {
 	// NPCs
 	private static final int GLYVKA = 30067;
 	private static final int ROUKE = 31418;
@@ -46,9 +46,8 @@ public class Q00134_TempleMissionary extends Quest
 	// Monsters
 	private static final int CRUMA_MARSHLANDS_TRAITOR = 27339;
 	private static final Map<Integer, Integer> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(20157, 78); // Marsh Stakato
 		MOBS.put(20229, 75); // Stinger Wasp
 		MOBS.put(20230, 86); // Marsh Stakato Worker
@@ -57,15 +56,14 @@ public class Q00134_TempleMissionary extends Quest
 		MOBS.put(20233, 95); // Marsh Spider
 		MOBS.put(20234, 96); // Marsh Stakato Drone
 	}
-	
+
 	// Misc
 	private static final int MIN_LEVEL = 35;
 	private static final int MAX_REWARD_LEVEL = 41;
 	private static final int FRAGMENT_COUNT = 10;
 	private static final int REPORT_COUNT = 3;
-	
-	public Q00134_TempleMissionary()
-	{
+
+	public Q00134_TempleMissionary() {
 		super(134);
 		addStartNpc(GLYVKA);
 		addTalkId(GLYVKA, ROUKE);
@@ -74,71 +72,55 @@ public class Q00134_TempleMissionary extends Quest
 		addCondMinLevel(MIN_LEVEL, "30067-02.htm");
 		registerQuestItems(GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, GIANTS_EXPERIMENTAL_TOOL, GIANTS_TECHNOLOGY_REPORT, ROUKES_REPOT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30067-05.html":
 			case "30067-09.html":
 			case "31418-07.html":
 				break;
-			case "30067-03.htm":
-			{
+			case "30067-03.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30067-06.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30067-06.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "31418-03.html":
-			{
-				if (st.isCond(2))
-				{
+			case "31418-03.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 				}
 				break;
 			}
-			case "31418-08.html":
-			{
-				if (st.isCond(4))
-				{
+			case "31418-08.html": {
+				if (st.isCond(4)) {
 					st.setCond(5, true);
 					giveItems(player, ROUKES_REPOT, 1);
 					st.unset("talk");
 				}
 				break;
 			}
-			case "30067-10.html":
-			{
-				if (st.isCond(5))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30067-10.html": {
+				if (st.isCond(5)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveItems(player, BADGE_TEMPLE_MISSIONARY, 1);
 						giveAdena(player, 15100, true);
-						if (player.getLevel() < MAX_REWARD_LEVEL)
-						{
+						if (player.getLevel() < MAX_REWARD_LEVEL) {
 							addExp(player, 30000);
 							addSp(player, 20); // TODO: Retail value
 						}
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 						break;
 					}
@@ -152,43 +134,30 @@ public class Q00134_TempleMissionary extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance member = getRandomPartyMember(player, 3);
-		if (member == null)
-		{
+		if (member == null) {
 			return super.onKill(npc, player, isSummon);
 		}
 		final QuestState st = getQuestState(member, false);
-		
-		if ((npc.getId() == CRUMA_MARSHLANDS_TRAITOR) && (st.isCond(3)))
-		{
+
+		if ((npc.getId() == CRUMA_MARSHLANDS_TRAITOR) && (st.isCond(3))) {
 			giveItems(member, GIANTS_TECHNOLOGY_REPORT, 1);
-			if (getQuestItemsCount(member, GIANTS_TECHNOLOGY_REPORT) >= REPORT_COUNT)
-			{
+			if (getQuestItemsCount(member, GIANTS_TECHNOLOGY_REPORT) >= REPORT_COUNT) {
 				st.setCond(4, true);
-			}
-			else
-			{
+			} else {
 				playSound(member, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 			}
-		}
-		else
-		{
-			if (st.isCond(3))
-			{
-				if (hasQuestItems(member, GIANTS_EXPERIMENTAL_TOOL))
-				{
+		} else {
+			if (st.isCond(3)) {
+				if (hasQuestItems(member, GIANTS_EXPERIMENTAL_TOOL)) {
 					takeItems(member, GIANTS_EXPERIMENTAL_TOOL, 1);
-					if (getRandom(100) != 0)
-					{
+					if (getRandom(100) != 0) {
 						addSpawn(CRUMA_MARSHLANDS_TRAITOR, npc.getX() + 20, npc.getY() + 20, npc.getZ(), npc.getHeading(), false, 60000);
 					}
-				}
-				else if (getRandom(100) < MOBS.get(npc.getId()))
-				{
+				} else if (getRandom(100) < MOBS.get(npc.getId())) {
 					giveItems(member, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, 1);
 					playSound(member, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
@@ -196,35 +165,26 @@ public class Q00134_TempleMissionary extends Quest
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == GLYVKA)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == GLYVKA) {
 					htmltext = "30067-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case GLYVKA:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case GLYVKA: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30067-04.html";
 								break;
@@ -233,14 +193,10 @@ public class Q00134_TempleMissionary extends Quest
 							case 4:
 								htmltext = "30067-07.html";
 								break;
-							case 5:
-							{
-								if (st.isSet("talk"))
-								{
+							case 5: {
+								if (st.isSet("talk")) {
 									htmltext = "30067-09.html";
-								}
-								else
-								{
+								} else {
 									takeItems(player, ROUKES_REPOT, -1);
 									st.set("talk", "1");
 									htmltext = "30067-08.html";
@@ -250,24 +206,18 @@ public class Q00134_TempleMissionary extends Quest
 						}
 						break;
 					}
-					case ROUKE:
-					{
-						switch (st.getCond())
-						{
+					case ROUKE: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "31418-01.html";
 								break;
 							case 2:
 								htmltext = "31418-02.html";
 								break;
-							case 3:
-							{
-								if ((getQuestItemsCount(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) < FRAGMENT_COUNT) && (getQuestItemsCount(player, GIANTS_TECHNOLOGY_REPORT) < REPORT_COUNT))
-								{
+							case 3: {
+								if ((getQuestItemsCount(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) < FRAGMENT_COUNT) && (getQuestItemsCount(player, GIANTS_TECHNOLOGY_REPORT) < REPORT_COUNT)) {
 									htmltext = "31418-04.html";
-								}
-								else if (getQuestItemsCount(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) >= FRAGMENT_COUNT)
-								{
+								} else if (getQuestItemsCount(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) >= FRAGMENT_COUNT) {
 									final int count = (int) (getQuestItemsCount(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT) / 10);
 									takeItems(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, count * 10);
 									giveItems(player, GIANTS_EXPERIMENTAL_TOOL, count);
@@ -275,14 +225,10 @@ public class Q00134_TempleMissionary extends Quest
 								}
 								break;
 							}
-							case 4:
-							{
-								if (st.isSet("talk"))
-								{
+							case 4: {
+								if (st.isSet("talk")) {
 									htmltext = "31418-07.html";
-								}
-								else if (getQuestItemsCount(player, GIANTS_TECHNOLOGY_REPORT) >= REPORT_COUNT)
-								{
+								} else if (getQuestItemsCount(player, GIANTS_TECHNOLOGY_REPORT) >= REPORT_COUNT) {
 									takeItems(player, GIANTS_EXPERIMENTAL_TOOL_FRAGMENT, -1);
 									takeItems(player, GIANTS_EXPERIMENTAL_TOOL, -1);
 									takeItems(player, GIANTS_TECHNOLOGY_REPORT, -1);
@@ -299,8 +245,7 @@ public class Q00134_TempleMissionary extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

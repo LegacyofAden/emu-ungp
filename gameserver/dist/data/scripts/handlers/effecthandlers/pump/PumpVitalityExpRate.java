@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Nik
  */
-public class PumpVitalityExpRate extends AbstractDoubleStatEffect
-{
-	public PumpVitalityExpRate(StatsSet params)
-	{
+public class PumpVitalityExpRate extends AbstractDoubleStatEffect {
+	public PumpVitalityExpRate(StatsSet params) {
 		super(params, DoubleStat.VITALITY_EXP_RATE);
 	}
 }

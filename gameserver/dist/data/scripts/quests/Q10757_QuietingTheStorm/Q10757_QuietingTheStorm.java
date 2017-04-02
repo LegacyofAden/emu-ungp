@@ -18,9 +18,6 @@
  */
 package quests.Q10757_QuietingTheStorm;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,15 +26,17 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10756_AnInterdimensionalDraft.Q10756_AnInterdimensionalDraft;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Quieting the Storm (10757)
+ *
  * @author malyelfik
  */
-public final class Q10757_QuietingTheStorm extends Quest
-{
+public final class Q10757_QuietingTheStorm extends Quest {
 	// NPC
 	private static final int PIO = 33963;
 	// Monsters
@@ -48,9 +47,8 @@ public final class Q10757_QuietingTheStorm extends Quest
 	private static final int MIN_LEVEL = 24;
 	private static final String VORTEX_COUNT_VAR = "VortexKillCount";
 	private static final String WINDIMA_COUNT_VAR = "WindimaKillCount";
-	
-	public Q10757_QuietingTheStorm()
-	{
+
+	public Q10757_QuietingTheStorm() {
 		super(10757);
 		addStartNpc(PIO);
 		addTalkId(PIO);
@@ -59,42 +57,33 @@ public final class Q10757_QuietingTheStorm extends Quest
 		addCondMinLevel(MIN_LEVEL, "33963-00.htm");
 		addCondCompletedQuest(Q10756_AnInterdimensionalDraft.class.getSimpleName(), "33963-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33963-01.htm":
 			case "33963-02.htm":
 			case "33963-03.htm":
 			case "33963-04.htm":
 				break;
-			case "33963-05.htm":
-			{
+			case "33963-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33963-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33963-08.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 808_754);
 						addSp(player, 151);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -105,15 +94,13 @@ public final class Q10757_QuietingTheStorm extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33963-01.htm";
 				break;
@@ -126,59 +113,47 @@ public final class Q10757_QuietingTheStorm extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			int vortexCount = qs.getInt(VORTEX_COUNT_VAR);
 			int windimaCount = qs.getInt(WINDIMA_COUNT_VAR);
-			if (npc.getId() == VORTEX)
-			{
-				if (vortexCount < 5)
-				{
+			if (npc.getId() == VORTEX) {
+				if (vortexCount < 5) {
 					qs.set(VORTEX_COUNT_VAR, ++vortexCount);
 					sendNpcLogList(killer);
 				}
-			}
-			else
-			{
-				if (windimaCount != 1)
-				{
+			} else {
+				if (windimaCount != 1) {
 					qs.set(WINDIMA_COUNT_VAR, ++windimaCount);
 					sendNpcLogList(killer);
 				}
 			}
-			
-			if ((vortexCount >= 5) && (windimaCount >= 1))
-			{
+
+			if ((vortexCount >= 5) && (windimaCount >= 1)) {
 				qs.setCond(2, true);
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			final Set<NpcLogListHolder> holder = new HashSet<>(2);
-			
+
 			// Wind vortex
 			final int vortexCount = qs.getInt(VORTEX_COUNT_VAR);
-			if (vortexCount > 0)
-			{
+			if (vortexCount > 0) {
 				holder.add(new NpcLogListHolder(VORTEX, false, vortexCount));
 			}
-			
+
 			// Windima
 			final int windimaCount = qs.getInt(WINDIMA_COUNT_VAR);
-			if (windimaCount == 1)
-			{
+			if (windimaCount == 1) {
 				holder.add(new NpcLogListHolder(NpcStringId.IMMENSE_WINDIMA_OR_GIANT_WINDIMA, windimaCount));
 			}
 			return holder;

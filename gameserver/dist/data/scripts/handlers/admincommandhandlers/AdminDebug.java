@@ -18,11 +18,6 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -31,64 +26,56 @@ import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.debugger.Debugger;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class AdminDebug implements IAdminCommandHandler
-{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class AdminDebug implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_debug"
-	};
-	
+			{
+					"admin_debug"
+			};
+
 	@Override
-	public final boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
+	public final boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
-		switch (cmd)
-		{
-			case "admin_debug":
-			{
-				if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature())
-				{
+		switch (cmd) {
+			case "admin_debug": {
+				if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature()) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 					break;
 				}
-				
+
 				final Creature character = (Creature) activeChar.getTarget();
-				if (character.isDebug(activeChar))
-				{
+				if (character.isDebug(activeChar)) {
 					character.removeDebugger(activeChar.getObjectId());
 					activeChar.sendMessage("Stopped debuggin player: " + character);
 					break;
 				}
-				
+
 				final Debugger debugger = new Debugger(activeChar);
 				final List<DebugType> debuggingTypes;
-				if (!st.hasMoreTokens())
-				{
+				if (!st.hasMoreTokens()) {
 					debuggingTypes = new ArrayList<>();
 					debuggingTypes.add(DebugType.ITEMS);
 					debuggingTypes.add(DebugType.SKILLS);
 					debuggingTypes.add(DebugType.OPTIONS);
 					debuggingTypes.add(DebugType.BYPASSES);
-				}
-				else
-				{
+				} else {
 					debuggingTypes = new ArrayList<>();
-					while (st.hasMoreTokens())
-					{
+					while (st.hasMoreTokens()) {
 						final String token = st.nextToken();
 						final DebugType type = DebugType.findByName(token);
-						if (type != null)
-						{
+						if (type != null) {
 							debuggingTypes.add(type);
-						}
-						else
-						{
+						} else {
 							activeChar.sendMessage("Debug type: " + token + " doesn't exists!");
 						}
 					}
 				}
-				
+
 				debuggingTypes.forEach(debugger::addDebugType);
 				character.addDebugger(debugger);
 				activeChar.sendMessage("Debugging " + character + " types: " + debuggingTypes);
@@ -98,15 +85,13 @@ public class AdminDebug implements IAdminCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public final String[] getAdminCommandList()
-	{
+	public final String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminDebug());
 	}
 }

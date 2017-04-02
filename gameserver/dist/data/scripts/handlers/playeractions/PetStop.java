@@ -27,36 +27,28 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Pet stop action player action handler.
+ *
  * @author Nik
  */
-public final class PetStop implements IPlayerActionHandler
-{
+public final class PetStop implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if ((activeChar.getPet() == null) || !activeChar.getPet().isPet())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if ((activeChar.getPet() == null) || !activeChar.getPet().isPet()) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_PET);
 			return;
 		}
-		
+
 		final L2PetInstance pet = activeChar.getPet();
-		if (pet.isUncontrollable())
-		{
+		if (pet.isUncontrollable()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
-		}
-		else if (pet.isBetrayed())
-		{
+		} else if (pet.isBetrayed()) {
 			activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
-		}
-		else
-		{
+		} else {
 			pet.cancelAction();
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new PetStop());
 	}
 }

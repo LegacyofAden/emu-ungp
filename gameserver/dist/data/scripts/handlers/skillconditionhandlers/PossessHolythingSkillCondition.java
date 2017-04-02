@@ -33,51 +33,39 @@ import org.l2junity.gameserver.util.Util;
 /**
  * @author UnAfraid
  */
-public class PossessHolythingSkillCondition implements ISkillCondition
-{
-	public PossessHolythingSkillCondition(StatsSet params)
-	{
+public class PossessHolythingSkillCondition implements ISkillCondition {
+	public PossessHolythingSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((caster == null) || !caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((caster == null) || !caster.isPlayer()) {
 			return false;
 		}
-		
+
 		final PlayerInstance player = caster.getActingPlayer();
 		boolean canTakeCastle = true;
-		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || !player.isClanLeader())
-		{
+		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || !player.isClanLeader()) {
 			canTakeCastle = false;
 		}
-		
+
 		final Castle castle = CastleManager.getInstance().getCastle(player);
 		SystemMessage sm;
-		if ((castle == null) || (castle.getResidenceId() <= 0) || !castle.getSiege().isInProgress() || (castle.getSiege().getAttackerClan(player.getClan()) == null))
-		{
+		if ((castle == null) || (castle.getResidenceId() <= 0) || !castle.getSiege().isInProgress() || (castle.getSiege().getAttackerClan(player.getClan()) == null)) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			sm.addSkillName(skill);
 			player.sendPacket(sm);
 			canTakeCastle = false;
-		}
-		else if (!castle.getArtefacts().contains(target))
-		{
+		} else if (!castle.getArtefacts().contains(target)) {
 			player.sendPacket(SystemMessageId.INVALID_TARGET);
 			canTakeCastle = false;
-		}
-		else if (!Util.checkIfInRange(skill.getCastRange(), player, target, true))
-		{
+		} else if (!Util.checkIfInRange(skill.getCastRange(), player, target, true)) {
 			player.sendPacket(SystemMessageId.THE_DISTANCE_IS_TOO_FAR_AND_SO_THE_CASTING_HAS_BEEN_STOPPED);
 			canTakeCastle = false;
-		}
-		else
-		{
+		} else {
 			castle.getSiege().announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.THE_OPPOSING_CLAN_HAS_STARTED_S1).addSkillName(skill.getId()), false);
 		}
-		
+
 		return canTakeCastle;
 	}
 }

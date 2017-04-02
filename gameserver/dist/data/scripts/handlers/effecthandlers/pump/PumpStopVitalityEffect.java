@@ -18,27 +18,24 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 
-import handlers.effecthandlers.AbstractBooleanStatEffect;
-
 /**
  * An effect that halts the vitality bonus and you do not receive its bonus or lose vitality.
+ *
  * @author Nik
  */
-public final class PumpStopVitalityEffect extends AbstractBooleanStatEffect
-{
-	public PumpStopVitalityEffect(StatsSet params)
-	{
+public final class PumpStopVitalityEffect extends AbstractBooleanStatEffect {
+	public PumpStopVitalityEffect(StatsSet params) {
 		super(BooleanStat.DISABLE_VITALITY);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
 }

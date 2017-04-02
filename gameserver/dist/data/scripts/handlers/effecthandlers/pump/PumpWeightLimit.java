@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpWeightLimit extends AbstractDoubleStatEffect
-{
-	public PumpWeightLimit(StatsSet params)
-	{
+public class PumpWeightLimit extends AbstractDoubleStatEffect {
+	public PumpWeightLimit(StatsSet params) {
 		super(params, DoubleStat.WEIGHT_LIMIT);
 	}
 }

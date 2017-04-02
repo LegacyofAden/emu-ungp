@@ -28,50 +28,39 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpAttackAttributeAdd extends AbstractEffect
-{
+public class PumpAttackAttributeAdd extends AbstractEffect {
 	private final double _amount;
-	
-	public PumpAttackAttributeAdd(StatsSet params)
-	{
+
+	public PumpAttackAttributeAdd(StatsSet params) {
 		_amount = params.getDouble("amount");
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		final ItemInstance weapon = target.getActiveWeaponInstance();
-		if (weapon != null)
-		{
-			switch (weapon.getAttackAttributeType())
-			{
-				case FIRE:
-				{
+		if (weapon != null) {
+			switch (weapon.getAttackAttributeType()) {
+				case FIRE: {
 					target.getStat().mergeAdd(DoubleStat.FIRE_POWER, _amount);
 					break;
 				}
-				case WATER:
-				{
+				case WATER: {
 					target.getStat().mergeAdd(DoubleStat.WATER_POWER, _amount);
 					break;
 				}
-				case WIND:
-				{
+				case WIND: {
 					target.getStat().mergeAdd(DoubleStat.WIND_POWER, _amount);
 					break;
 				}
-				case EARTH:
-				{
+				case EARTH: {
 					target.getStat().mergeAdd(DoubleStat.EARTH_POWER, _amount);
 					break;
 				}
-				case HOLY:
-				{
+				case HOLY: {
 					target.getStat().mergeAdd(DoubleStat.HOLY_POWER, _amount);
 					break;
 				}
-				case DARK:
-				{
+				case DARK: {
 					target.getStat().mergeAdd(DoubleStat.DARK_POWER, _amount);
 					break;
 				}

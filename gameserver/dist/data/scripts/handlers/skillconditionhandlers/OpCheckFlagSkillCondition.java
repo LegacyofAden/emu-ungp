@@ -33,44 +33,34 @@ import org.l2junity.gameserver.util.Util;
 /**
  * @author Sdw
  */
-public class OpCheckFlagSkillCondition implements ISkillCondition
-{
-	public OpCheckFlagSkillCondition(StatsSet params)
-	{
-		
+public class OpCheckFlagSkillCondition implements ISkillCondition {
+	public OpCheckFlagSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (!caster.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (!caster.isPlayer()) {
 			return false;
 		}
-		
+
 		final PlayerInstance player = caster.getActingPlayer();
 		boolean canTakeFort = true;
-		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || !player.isClanLeader())
-		{
+		if (player.isAlikeDead() || player.isCursedWeaponEquipped() || !player.isClanLeader()) {
 			canTakeFort = false;
 		}
-		
+
 		final Fort fort = FortManager.getInstance().getFort(player);
 		final SystemMessage sm;
-		if ((fort == null) || (fort.getResidenceId() <= 0) || !fort.getSiege().isInProgress() || (fort.getSiege().getAttackerClan(player.getClan()) == null))
-		{
+		if ((fort == null) || (fort.getResidenceId() <= 0) || !fort.getSiege().isInProgress() || (fort.getSiege().getAttackerClan(player.getClan()) == null)) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			sm.addSkillName(skill);
 			player.sendPacket(sm);
 			canTakeFort = false;
-		}
-		else if (fort.getFlagPole() != target)
-		{
+		} else if (fort.getFlagPole() != target) {
 			player.sendPacket(SystemMessageId.INVALID_TARGET);
 			canTakeFort = false;
-		}
-		else if (!Util.checkIfInRange(200, player, target, true))
-		{
+		} else if (!Util.checkIfInRange(200, player, target, true)) {
 			player.sendPacket(SystemMessageId.THE_DISTANCE_IS_TOO_FAR_AND_SO_THE_CASTING_HAS_BEEN_STOPPED);
 			canTakeFort = false;
 		}

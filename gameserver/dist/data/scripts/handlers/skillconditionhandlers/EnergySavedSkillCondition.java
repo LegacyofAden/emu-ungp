@@ -27,18 +27,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class EnergySavedSkillCondition implements ISkillCondition
-{
+public class EnergySavedSkillCondition implements ISkillCondition {
 	private final int _amount;
-	
-	public EnergySavedSkillCondition(StatsSet params)
-	{
+
+	public EnergySavedSkillCondition(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return caster.getActingPlayer().getCharges() >= _amount;
 	}
 }

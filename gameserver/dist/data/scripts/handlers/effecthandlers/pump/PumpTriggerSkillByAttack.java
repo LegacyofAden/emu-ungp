@@ -36,10 +36,10 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 
 /**
  * Trigger Skill By Attack effect implementation.
+ *
  * @author Zealar
  */
-public final class PumpTriggerSkillByAttack extends AbstractEffect
-{
+public final class PumpTriggerSkillByAttack extends AbstractEffect {
 	private final int _minAttackerLevel;
 	private final int _maxAttackerLevel;
 	private final int _minDamage;
@@ -52,13 +52,12 @@ public final class PumpTriggerSkillByAttack extends AbstractEffect
 	private final boolean _allowNormalAttack;
 	private final boolean _allowSkillAttack;
 	private final boolean _allowReflect;
-	
+
 	/**
 	 * @param params
 	 */
-	
-	public PumpTriggerSkillByAttack(StatsSet params)
-	{
+
+	public PumpTriggerSkillByAttack(StatsSet params) {
 		_minAttackerLevel = params.getInt("minAttackerLevel", 1);
 		_maxAttackerLevel = params.getInt("maxAttackerLevel", 127);
 		_minDamage = params.getInt("minDamage", 1);
@@ -66,8 +65,7 @@ public final class PumpTriggerSkillByAttack extends AbstractEffect
 		_skill = new SkillHolder(params.getInt("skillId"), params.getInt("skillLevel", 1));
 		final String targetType = params.getString("targetType", "SELF");
 		_targetTypeHandler = TargetHandler.getInstance().getTargetTypeHandler(targetType);
-		if (_targetTypeHandler == null)
-		{
+		if (_targetTypeHandler == null) {
 			throw new RuntimeException("Target Type not found for effect[" + getClass().getSimpleName() + "] TargetType[" + targetType + "].");
 		}
 		_attackerType = params.getEnum("attackerType", InstanceType.class, InstanceType.L2Character);
@@ -75,91 +73,73 @@ public final class PumpTriggerSkillByAttack extends AbstractEffect
 		_allowNormalAttack = params.getBoolean("allowNormalAttack", true);
 		_allowSkillAttack = params.getBoolean("allowSkillAttack", false);
 		_allowReflect = params.getBoolean("allowReflect", false);
-		
-		if (params.getString("allowWeapons", "ALL").equalsIgnoreCase("ALL"))
-		{
+
+		if (params.getString("allowWeapons", "ALL").equalsIgnoreCase("ALL")) {
 			_allowWeapons = 0;
-		}
-		else
-		{
-			for (String s : params.getString("allowWeapons").split(","))
-			{
+		} else {
+			for (String s : params.getString("allowWeapons").split(",")) {
 				_allowWeapons |= WeaponType.valueOf(s).mask();
 			}
 		}
 	}
-	
-	public void onAttackEvent(OnCreatureDamageDealt event)
-	{
-		if (event.isDamageOverTime() || (_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0)) || (!_allowNormalAttack && !_allowSkillAttack))
-		{
+
+	public void onAttackEvent(OnCreatureDamageDealt event) {
+		if (event.isDamageOverTime() || (_chance == 0) || ((_skill.getSkillId() == 0) || (_skill.getSkillLevel() == 0)) || (!_allowNormalAttack && !_allowSkillAttack)) {
 			return;
 		}
-		
+
 		// Check if there is dependancy on critical.
-		if ((_isCritical != null) && (_isCritical != event.isCritical()))
-		{
+		if ((_isCritical != null) && (_isCritical != event.isCritical())) {
 			return;
 		}
-		
+
 		// When no skill attacks are allowed.
-		if (!_allowSkillAttack && (event.getSkill() != null))
-		{
+		if (!_allowSkillAttack && (event.getSkill() != null)) {
 			return;
 		}
-		
+
 		// When no normal attacks are allowed.
-		if (!_allowNormalAttack && (event.getSkill() == null))
-		{
+		if (!_allowNormalAttack && (event.getSkill() == null)) {
 			return;
 		}
-		
-		if (!_allowReflect && event.isReflect())
-		{
+
+		if (!_allowReflect && event.isReflect()) {
 			return;
 		}
-		
-		if (event.getAttacker() == event.getTarget())
-		{
+
+		if (event.getAttacker() == event.getTarget()) {
 			return;
 		}
-		
-		if ((event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel))
-		{
+
+		if ((event.getAttacker().getLevel() < _minAttackerLevel) || (event.getAttacker().getLevel() > _maxAttackerLevel)) {
 			return;
 		}
-		
-		if ((event.getDamage() < _minDamage) || (Rnd.get(100) > _chance) || !event.getAttacker().getInstanceType().isType(_attackerType))
-		{
+
+		if ((event.getDamage() < _minDamage) || (Rnd.get(100) > _chance) || !event.getAttacker().getInstanceType().isType(_attackerType)) {
 			return;
 		}
-		
-		if (_allowWeapons > 0)
-		{
-			if ((event.getAttacker().getActiveWeaponItem() == null) || ((event.getAttacker().getActiveWeaponItem().getItemType().mask() & _allowWeapons) == 0))
-			{
+
+		if (_allowWeapons > 0) {
+			if ((event.getAttacker().getActiveWeaponItem() == null) || ((event.getAttacker().getActiveWeaponItem().getItemType().mask() & _allowWeapons) == 0)) {
 				return;
 			}
 		}
-		
+
 		final Skill triggerSkill = _skill.getSkill();
 		final WorldObject target = _targetTypeHandler.getTarget(event.getAttacker(), event.getTarget(), triggerSkill, false, false, false);
-		
-		if ((target != null) && target.isCreature())
-		{
+
+		if ((target != null) && target.isCreature()) {
 			SkillCaster.triggerCast(event.getAttacker(), target, triggerSkill);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.removeListenerIf(EventType.ON_CREATURE_DAMAGE_DEALT, listener -> listener.getOwner() == this);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.addListener(new ConsumerEventListener(target, EventType.ON_CREATURE_DAMAGE_DEALT, (OnCreatureDamageDealt event) -> onAttackEvent(event), this));
 	}
 }

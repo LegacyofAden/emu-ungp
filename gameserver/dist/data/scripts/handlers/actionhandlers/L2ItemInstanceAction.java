@@ -30,38 +30,31 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class L2ItemInstanceAction implements IActionHandler
-{
+public class L2ItemInstanceAction implements IActionHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
 		final Castle castle = CastleManager.getInstance().getCastle(target);
-		if ((castle != null) && (SiegeGuardManager.getInstance().getSiegeGuardByItem(castle.getResidenceId(), target.getId()) != null))
-		{
-			if ((activeChar.getClan() == null) || (castle.getOwnerId() != activeChar.getClanId()) || !activeChar.hasClanPrivilege(ClanPrivilege.CS_MERCENARIES))
-			{
+		if ((castle != null) && (SiegeGuardManager.getInstance().getSiegeGuardByItem(castle.getResidenceId(), target.getId()) != null)) {
+			if ((activeChar.getClan() == null) || (castle.getOwnerId() != activeChar.getClanId()) || !activeChar.hasClanPrivilege(ClanPrivilege.CS_MERCENARIES)) {
 				activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_AUTHORITY_TO_CANCEL_MERCENARY_POSITIONING);
 				activeChar.setTarget(target);
 				activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 				return false;
 			}
 		}
-		
-		if (!activeChar.isFlying())
-		{
+
+		if (!activeChar.isFlying()) {
 			activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_PICK_UP, target);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2ItemInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionHandler.getInstance().registerHandler(new L2ItemInstanceAction());
 	}
 }

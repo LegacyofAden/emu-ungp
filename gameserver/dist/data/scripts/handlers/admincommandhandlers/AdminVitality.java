@@ -18,78 +18,63 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 
+import java.util.StringTokenizer;
+
 /**
  * @author Psychokiller1888
  */
-public class AdminVitality implements IAdminCommandHandler
-{
-	
+public class AdminVitality implements IAdminCommandHandler {
+
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_set_vitality",
-		"admin_full_vitality",
-		"admin_empty_vitality",
-		"admin_get_vitality"
-	};
-	
+			{
+					"admin_set_vitality",
+					"admin_full_vitality",
+					"admin_empty_vitality",
+					"admin_get_vitality"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (activeChar == null)
-		{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (activeChar == null) {
 			return false;
 		}
-		
-		if (!PlayerConfig.ENABLE_VITALITY)
-		{
+
+		if (!PlayerConfig.ENABLE_VITALITY) {
 			activeChar.sendMessage("Vitality is not enabled on the server!");
 			return false;
 		}
-		
+
 		int vitality = 0;
-		
+
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String cmd = st.nextToken();
-		
-		if (activeChar.getTarget() instanceof PlayerInstance)
-		{
+
+		if (activeChar.getTarget() instanceof PlayerInstance) {
 			PlayerInstance target;
 			target = (PlayerInstance) activeChar.getTarget();
-			
-			if (cmd.equals("admin_set_vitality"))
-			{
-				try
-				{
+
+			if (cmd.equals("admin_set_vitality")) {
+				try {
 					vitality = Integer.parseInt(st.nextToken());
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					activeChar.sendMessage("Incorrect vitality");
 				}
-				
+
 				target.setVitalityPoints(vitality, true);
 				target.sendMessage("Admin set your Vitality points to " + vitality);
-			}
-			else if (cmd.equals("admin_full_vitality"))
-			{
+			} else if (cmd.equals("admin_full_vitality")) {
 				target.setVitalityPoints(PcStat.MAX_VITALITY_POINTS, true);
 				target.sendMessage("Admin completly recharged your Vitality");
-			}
-			else if (cmd.equals("admin_empty_vitality"))
-			{
+			} else if (cmd.equals("admin_empty_vitality")) {
 				target.setVitalityPoints(PcStat.MIN_VITALITY_POINTS, true);
 				target.sendMessage("Admin completly emptied your Vitality");
-			}
-			else if (cmd.equals("admin_get_vitality"))
-			{
+			} else if (cmd.equals("admin_get_vitality")) {
 				vitality = target.getVitalityPoints();
 				activeChar.sendMessage("Player vitality points: " + vitality);
 			}
@@ -98,15 +83,13 @@ public class AdminVitality implements IAdminCommandHandler
 		activeChar.sendMessage("Target not found or not a player");
 		return false;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminVitality());
 	}
 }

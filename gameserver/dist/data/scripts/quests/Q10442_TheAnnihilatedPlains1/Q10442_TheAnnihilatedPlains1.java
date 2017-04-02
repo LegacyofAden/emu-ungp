@@ -26,54 +26,45 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * The Annihilated Plains - 1 (10442)
+ *
  * @author St3eT
  */
-public final class Q10442_TheAnnihilatedPlains1 extends Quest
-{
+public final class Q10442_TheAnnihilatedPlains1 extends Quest {
 	// NPCs
 	private static final int MATHIAS = 31340;
 	private static final int TUSKA = 33839;
 	// Misc
 	private static final int MIN_LEVEL = 99;
-	
-	public Q10442_TheAnnihilatedPlains1()
-	{
+
+	public Q10442_TheAnnihilatedPlains1() {
 		super(10442);
 		addStartNpc(MATHIAS);
 		addTalkId(MATHIAS, TUSKA);
 		addCondMinLevel(MIN_LEVEL, "31340-06.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31340-02.htm":
-			case "31340-03.htm":
-			{
+			case "31340-03.htm": {
 				htmltext = event;
 				break;
 			}
-			case "31340-04.htm":
-			{
+			case "31340-04.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33839-02.html":
-			{
-				if (st.isCond(1))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33839-02.html": {
+				if (st.isCond(1)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 15_436_575);
 						addSp(player, 3_704);
 					}
@@ -85,35 +76,27 @@ public final class Q10442_TheAnnihilatedPlains1 extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == MATHIAS)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == MATHIAS) {
 					htmltext = "31340-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				if (st.isCond(1))
-				{
+			case State.STARTED: {
+				if (st.isCond(1)) {
 					htmltext = npc.getId() == MATHIAS ? "31340-05.html" : "33839-01.html";
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				if (npc.getId() == MATHIAS)
-				{
+			case State.COMPLETED: {
+				if (npc.getId() == MATHIAS) {
 					htmltext = getAlreadyCompletedMsg(player);
 				}
 				break;

@@ -18,9 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.awt.Color;
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
@@ -34,80 +31,73 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 
+import java.awt.*;
+import java.util.function.Consumer;
+
 /**
  * @author Nik
  */
-public class Pledge implements IAffectScopeHandler
-{
+public class Pledge implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final int affectRange = skill.getAffectRange();
 		final int affectLimit = skill.getAffectLimit();
-		
-		if (target.isPlayable())
-		{
+
+		if (target.isPlayable()) {
 			final Playable playable = (Playable) target;
 			final PlayerInstance player = playable.getActingPlayer();
-			
+
 			// Create the target filter.
 			final MutableInt affected = new MutableInt(0);
-			
+
 			// Always accept main target.
 			action.accept(target);
-			
+
 			// Check and add targets.
 			World.getInstance().forEachVisibleObjectInRadius(target, Playable.class, affectRange, c ->
 			{
-				if ((affectLimit > 0) && (affected.intValue() >= affectLimit))
-				{
+				if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 					return;
 				}
-				
+
 				PlayerInstance p = c.getActingPlayer();
-				if ((p == null) || p.isDead())
-				{
+				if ((p == null) || p.isDead()) {
 					return;
 				}
-				if ((p != player) && ((p.getClanId() == 0) || (p.getClanId() != player.getClanId())))
-				{
+				if ((p != player) && ((p.getClanId() == 0) || (p.getClanId() != player.getClanId()))) {
 					return;
 				}
-				if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, p))
-				{
+				if (!skill.getAffectObjectHandler().checkAffectedObject(activeChar, p)) {
 					return;
 				}
-				
+
 				affected.increment();
 				action.accept(c);
 			});
 		}
 	}
-	
+
 	@Override
-	public void drawEffected(Creature activeChar, WorldObject target, Skill skill)
-	{
+	public void drawEffected(Creature activeChar, WorldObject target, Skill skill) {
 		final ExServerPrimitive packet = new ExServerPrimitive(getClass().getSimpleName() + "-" + activeChar.getObjectId(), activeChar);
 		final int maxPoints = skill.getAffectRange() > 1000 ? 36 : skill.getAffectRange() > 100 ? 18 : 12;
 		final ILocational[] locs = new ILocational[maxPoints];
 		final double anglePoint = 360 / maxPoints;
-		for (int i = 0; i < locs.length; i++)
-		{
+		for (int i = 0; i < locs.length; i++) {
 			double angle = (anglePoint * i);
-			
+
 			final double tx = target.getX() + (skill.getAffectRange() * Math.cos(Math.toRadians(angle)));
 			final double ty = target.getY() + (skill.getAffectRange() * Math.sin(Math.toRadians(angle)));
 			final double tz = GeoData.getInstance().getHeight(tx, ty, target.getZ());
 			locs[i] = new Location(tx, ty, tz);
 		}
-		
+
 		packet.addLine("X -> O (" + skill.getAffectRange() + " AOE)", Color.GREEN, true, activeChar, target);
-		for (int i = 1; i < locs.length; i++)
-		{
+		for (int i = 1; i < locs.length; i++) {
 			packet.addLine((anglePoint * (i - 1)) + " -> " + (anglePoint * i), Color.GREEN, true, locs[i - 1], locs[i]);
 		}
 		packet.addLine((anglePoint * (locs.length - 1)) + " -> 360", Color.GREEN, true, locs[0], locs[locs.length - 1]);
-		
+
 		activeChar.sendDebugPacket(packet);
 	}
 }

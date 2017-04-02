@@ -28,20 +28,17 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpReflectSkill extends AbstractEffect
-{
+public class PumpReflectSkill extends AbstractEffect {
 	private final DoubleStat _stat;
 	private final double _amount;
-	
-	public PumpReflectSkill(StatsSet params)
-	{
+
+	public PumpReflectSkill(StatsSet params) {
 		_stat = params.getEnum("type", BasicProperty.class) == BasicProperty.PHYSICAL ? DoubleStat.REFLECT_SKILL_PHYSIC : DoubleStat.REFLECT_SKILL_MAGIC;
 		_amount = params.getDouble("amount", 0);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(_stat, _amount);
 	}
 }

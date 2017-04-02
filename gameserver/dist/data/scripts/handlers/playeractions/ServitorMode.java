@@ -27,31 +27,27 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Servitor passive/defend mode player action handler.
+ *
  * @author Nik
  */
-public final class ServitorMode implements IPlayerActionHandler
-{
+public final class ServitorMode implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (!activeChar.hasServitors())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (!activeChar.hasServitors()) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 			return;
 		}
-		
-		switch (data.getOptionId())
-		{
+
+		switch (data.getOptionId()) {
 			case 1: // Passive mode
 			{
 				activeChar.getServitors().values().forEach(s ->
 				{
-					if (s.isBetrayed())
-					{
+					if (s.isBetrayed()) {
 						activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 						return;
 					}
-					
+
 					((SummonAI) s.getAI()).setDefending(false);
 				});
 				break;
@@ -60,20 +56,18 @@ public final class ServitorMode implements IPlayerActionHandler
 			{
 				activeChar.getServitors().values().forEach(s ->
 				{
-					if (s.isBetrayed())
-					{
+					if (s.isBetrayed()) {
 						activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 						return;
 					}
-					
+
 					((SummonAI) s.getAI()).setDefending(true);
 				});
 			}
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new ServitorMode());
 	}
 }

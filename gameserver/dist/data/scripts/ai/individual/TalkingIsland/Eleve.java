@@ -18,6 +18,7 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
@@ -26,58 +27,45 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import ai.AbstractNpcAI;
-
 /**
  * Eleve AI.
+ *
  * @author St3eT
  */
-public final class Eleve extends AbstractNpcAI
-{
+public final class Eleve extends AbstractNpcAI {
 	// NPC
 	private static final int ELEVE = 33246;
-	
-	private Eleve()
-	{
+
+	private Eleve() {
 		addSpawnId(ELEVE);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_MOVE"))
-		{
-			if (getRandomBoolean())
-			{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_MOVE")) {
+			if (getRandomBoolean()) {
 				addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 0, 500), npc.getInstanceWorld()), 23);
 			}
 			getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
-		}
-		else if (event.equals("NPC_SHOUT"))
-		{
+		} else if (event.equals("NPC_SHOUT")) {
 			final int rand = getRandom(3);
-			if (rand == 0)
-			{
+			if (rand == 0) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DON_T_KNOW_WHAT_TO_DO_LOOK_AT_THE_MAP);
-			}
-			else if (rand == 1)
-			{
+			} else if (rand == 1) {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DO_YOU_SEE_A_SCROLL_ICON_GO_THAT_LOCATION);
 			}
 			getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		getTimers().addTimer("NPC_MOVE", (10 + getRandom(5)) * 1000, npc, null);
 		getTimers().addTimer("NPC_SHOUT", (10 + getRandom(5)) * 1000, npc, null);
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new Eleve();
 	}
 }

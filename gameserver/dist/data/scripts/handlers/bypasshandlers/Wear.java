@@ -18,9 +18,7 @@
  */
 package handlers.bypasshandlers;
 
-import java.util.StringTokenizer;
-
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
@@ -30,69 +28,59 @@ import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.ShopPreviewList;
 
-public class Wear implements IBypassHandler
-{
+import java.util.StringTokenizer;
+
+public class Wear implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"Wear"
-	};
-	
+			{
+					"Wear"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		if (!target.isNpc())
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		if (!target.isNpc()) {
 			return false;
 		}
-		
-		if (!GeneralConfig.ALLOW_WEAR)
-		{
+
+		if (!GeneralConfig.ALLOW_WEAR) {
 			return false;
 		}
-		
-		try
-		{
+
+		try {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			st.nextToken();
-			
-			if (st.countTokens() < 1)
-			{
+
+			if (st.countTokens() < 1) {
 				return false;
 			}
-			
+
 			showWearWindow(activeChar, Integer.parseInt(st.nextToken()));
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
-	private static final void showWearWindow(PlayerInstance player, int val)
-	{
+
+	private static final void showWearWindow(PlayerInstance player, int val) {
 		final ProductList buyList = BuyListData.getInstance().getBuyList(val);
-		if (buyList == null)
-		{
+		if (buyList == null) {
 			_log.warn("BuyList not found! BuyListId:" + val);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
+
 		player.setInventoryBlockingStatus(true);
-		
+
 		player.sendPacket(new ShopPreviewList(buyList, player.getAdena(), player.getExpertiseLevel()));
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new Wear());
 	}
 }

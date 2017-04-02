@@ -28,18 +28,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpInstantzoneSkillCondition implements ISkillCondition
-{
+public class OpInstantzoneSkillCondition implements ISkillCondition {
 	private final int _instanceId;
-	
-	public OpInstantzoneSkillCondition(StatsSet params)
-	{
+
+	public OpInstantzoneSkillCondition(StatsSet params) {
 		_instanceId = params.getInt("instanceId");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		final Instance instance = caster.getInstanceWorld();
 		return (instance != null) && (instance.getTemplateId() == _instanceId);
 	}

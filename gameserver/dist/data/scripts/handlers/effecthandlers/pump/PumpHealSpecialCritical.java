@@ -27,15 +27,12 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 /**
  * @author Sdw
  */
-public class PumpHealSpecialCritical extends AbstractEffect
-{
-	public PumpHealSpecialCritical(StatsSet params)
-	{
+public class PumpHealSpecialCritical extends AbstractEffect {
+	public PumpHealSpecialCritical(StatsSet params) {
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().set(BooleanStat.HEAL_SPECIAL_CRITICAL);
 	}
 }

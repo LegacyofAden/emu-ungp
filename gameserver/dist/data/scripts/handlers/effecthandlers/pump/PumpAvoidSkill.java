@@ -25,28 +25,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Note: In retail this effect doesn't stack. It appears that the active value is taken from the last such effect.
+ *
  * @author Sdw
  */
-public class PumpAvoidSkill extends AbstractEffect
-{
+public class PumpAvoidSkill extends AbstractEffect {
 	private final int _magicType;
 	private final double _amount;
-	
-	public PumpAvoidSkill(StatsSet params)
-	{
+
+	public PumpAvoidSkill(StatsSet params) {
 		_magicType = params.getInt("magicType", 0);
 		_amount = params.getDouble("amount", 0);
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getStat().addSkillEvasionTypeValue(_magicType, _amount);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getStat().removeSkillEvasionTypeValue(_magicType, _amount);
 	}
 }

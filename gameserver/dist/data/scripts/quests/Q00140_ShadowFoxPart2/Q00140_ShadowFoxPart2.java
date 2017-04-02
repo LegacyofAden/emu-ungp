@@ -18,23 +18,22 @@
  */
 package quests.Q00140_ShadowFoxPart2;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00139_ShadowFoxPart1.Q00139_ShadowFoxPart1;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Shadow Fox - 2 (140)
+ *
  * @author Nono, Gladicek
  */
-public class Q00140_ShadowFoxPart2 extends Quest
-{
+public class Q00140_ShadowFoxPart2 extends Quest {
 	// NPCs
 	private static final int KLUCK = 30895;
 	private static final int XENOVIA = 30912;
@@ -44,23 +43,21 @@ public class Q00140_ShadowFoxPart2 extends Quest
 	private static final int CRYPTOGRAM_OF_THE_GODDESS_SWORD = 10349;
 	// Monsters
 	private static final Map<Integer, Double> MOBS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MOBS.put(20789, 0.45); // Crokian
 		MOBS.put(20790, 0.58); // Dailaon
 		MOBS.put(20791, 1.0);// Crokian Warrior
 		MOBS.put(20792, 0.92); // Farhite
 	}
-	
+
 	// Misc
 	private static final int MIN_LEVEL = 37;
 	private static final int MAX_REWARD_LEVEL = 42;
 	private static final int CHANCE = 8;
 	private static final int CRYSTAL_COUNT = 5;
-	
-	public Q00140_ShadowFoxPart2()
-	{
+
+	public Q00140_ShadowFoxPart2() {
 		super(140);
 		addStartNpc(KLUCK);
 		addTalkId(KLUCK, XENOVIA);
@@ -69,77 +66,60 @@ public class Q00140_ShadowFoxPart2 extends Quest
 		addCondCompletedQuest(Q00139_ShadowFoxPart1.class.getSimpleName(), "30896-00.html");
 		registerQuestItems(DARK_CRYSTAL, DARK_OXYDE, CRYPTOGRAM_OF_THE_GODDESS_SWORD);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30895-05.html":
 			case "30895-06.html":
 			case "30912-03.html":
 			case "30912-04.html":
 			case "30912-05.html":
 			case "30912-08.html":
-			case "30895-10.html":
-			{
+			case "30895-10.html": {
 				break;
 			}
-			case "30895-03.htm":
-			{
+			case "30895-03.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30895-07.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30895-07.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "30912-06.html":
-			{
-				if (st.isMemoState(0))
-				{
+			case "30912-06.html": {
+				if (st.isMemoState(0)) {
 					st.setMemoState(1);
 				}
 				break;
 			}
-			case "30912-09.html":
-			{
-				if (st.isCond(2))
-				{
+			case "30912-09.html": {
+				if (st.isCond(2)) {
 					st.setMemoState(0);
 					st.setCond(3, true);
 				}
 				break;
 			}
-			case "30912-14.html":
-			{
-				if ((st.isCond(3)) && (getQuestItemsCount(player, DARK_CRYSTAL) >= 5))
-				{
+			case "30912-14.html": {
+				if ((st.isCond(3)) && (getQuestItemsCount(player, DARK_CRYSTAL) >= 5)) {
 					takeItems(player, DARK_CRYSTAL, 5);
-					
-					if (getRandom(10) < CHANCE)
-					{
-						if (hasQuestItems(player, DARK_OXYDE))
-						{
+
+					if (getRandom(10) < CHANCE) {
+						if (hasQuestItems(player, DARK_OXYDE)) {
 							st.setCond(4, true);
 							giveItems(player, CRYPTOGRAM_OF_THE_GODDESS_SWORD, 1);
 							takeItems(player, DARK_CRYSTAL, -1);
 							takeItems(player, DARK_OXYDE, -1);
 							htmltext = "30912-13.html";
-						}
-						else
-						{
+						} else {
 							giveItems(player, DARK_OXYDE, 1);
 							htmltext = "30912-12.html";
 						}
@@ -148,73 +128,56 @@ public class Q00140_ShadowFoxPart2 extends Quest
 				}
 				break;
 			}
-			case "30895-11.html":
-			{
-				if ((st.isCond(4)) && (st.isMemoState(1)))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "30895-11.html": {
+				if ((st.isCond(4)) && (st.isMemoState(1))) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveAdena(player, 18775, true);
-						
-						if (player.getLevel() <= MAX_REWARD_LEVEL)
-						{
+
+						if (player.getLevel() <= MAX_REWARD_LEVEL) {
 							addExp(player, 30000);
 							addSp(player, 20); // TODO: Retail value
 						}
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 					break;
 				}
 			}
-				break;
+			break;
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final QuestState st = getRandomPartyMemberState(player, 1, 3, npc);
-		
-		if ((st != null) && (st.isCond(3)))
-		{
+
+		if ((st != null) && (st.isCond(3))) {
 			giveItemRandomly(st.getPlayer(), npc, DARK_CRYSTAL, 1, 0, MOBS.get(npc.getId()), true);
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == KLUCK)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == KLUCK) {
 					htmltext = "30895-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case KLUCK:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case KLUCK: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30895-04.html";
 								break;
@@ -222,16 +185,12 @@ public class Q00140_ShadowFoxPart2 extends Quest
 							case 3:
 								htmltext = "30895-08.html";
 								break;
-							case 4:
-							{
-								if (st.isMemoState(0))
-								{
+							case 4: {
+								if (st.isMemoState(0)) {
 									takeItems(player, CRYPTOGRAM_OF_THE_GODDESS_SWORD, -1);
 									st.setMemoState(1);
 									htmltext = "30895-09.html";
-								}
-								else
-								{
+								} else {
 									htmltext = "30895-10.html";
 								}
 								break;
@@ -239,10 +198,8 @@ public class Q00140_ShadowFoxPart2 extends Quest
 						}
 						break;
 					}
-					case XENOVIA:
-					{
-						switch (st.getCond())
-						{
+					case XENOVIA: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30912-01.html";
 								break;
@@ -257,12 +214,11 @@ public class Q00140_ShadowFoxPart2 extends Quest
 								break;
 						}
 					}
-						break;
+					break;
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

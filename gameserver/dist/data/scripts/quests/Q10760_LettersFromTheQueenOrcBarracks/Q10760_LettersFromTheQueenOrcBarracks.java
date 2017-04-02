@@ -24,15 +24,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Letters from the Queen: Orc Barracks (10760)
+ *
  * @author malyelfik
  */
-public class Q10760_LettersFromTheQueenOrcBarracks extends LetterQuest
-{
+public class Q10760_LettersFromTheQueenOrcBarracks extends LetterQuest {
 	// NPC
 	private static final int LEVIAN = 30037;
 	private static final int PIOTUR = 30597;
@@ -44,9 +43,8 @@ public class Q10760_LettersFromTheQueenOrcBarracks extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 30;
 	private static final int MAX_LEVEL = 39;
-	
-	public Q10760_LettersFromTheQueenOrcBarracks()
-	{
+
+	public Q10760_LettersFromTheQueenOrcBarracks() {
 		super(10760);
 		addTalkId(LEVIAN, PIOTUR);
 		setIsErtheiaQuest(true);
@@ -55,46 +53,36 @@ public class Q10760_LettersFromTheQueenOrcBarracks extends LetterQuest
 		setStartQuestSound("Npcdialog1.serenia_quest_2");
 		registerQuestItems(SOE_GLUDIN_VILLAGE, SOE_ORC_BARRACKS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30037-02.html":
 			case "30597-02.html":
 				break;
-			case "30037-03.html":
-			{
-				if (qs.isCond(1))
-				{
+			case "30037-03.html": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					giveItems(player, SOE_ORC_BARRACKS, 1);
 					showOnScreenMsg(player, NpcStringId.TRY_USING_THE_TELEPORT_SCROLL_LEVIAN_GAVE_YOU_TO_GO_TO_ORC_BARRACKS, ExShowScreenMessage.TOP_CENTER, 5000);
 				}
 				break;
 			}
-			case "30597-03.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "30597-03.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 242_760);
 						addSp(player, 58);
 						showOnScreenMsg(player, NpcStringId.TRY_TALKING_TO_VORBOS_BY_THE_WELL_NYOU_CAN_RECEIVE_QUEEN_NAVARI_S_NEXT_LETTER_AT_LV_40, ExShowScreenMessage.TOP_CENTER, 8000);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -105,26 +93,20 @@ public class Q10760_LettersFromTheQueenOrcBarracks extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (qs == null)
-		{
+
+		if (qs == null) {
 			return htmltext;
 		}
-		
-		if (qs.isStarted())
-		{
-			if ((npc.getId() == LEVIAN))
-			{
+
+		if (qs.isStarted()) {
+			if ((npc.getId() == LEVIAN)) {
 				htmltext = (qs.isCond(1)) ? "30037-01.html" : "30037-04.html";
-			}
-			else if (qs.isCond(2))
-			{
+			} else if (qs.isCond(2)) {
 				htmltext = "30597-01.html";
 			}
 		}

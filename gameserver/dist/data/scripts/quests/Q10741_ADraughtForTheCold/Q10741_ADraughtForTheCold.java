@@ -28,10 +28,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * A Draught For The Cold (10741)
+ *
  * @author Sdw
  */
-public final class Q10741_ADraughtForTheCold extends Quest
-{
+public final class Q10741_ADraughtForTheCold extends Quest {
 	// NPC's
 	private static final int SIVANTHE = 33951;
 	private static final int LEIRA = 33952;
@@ -46,9 +46,8 @@ public final class Q10741_ADraughtForTheCold extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 10;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10741_ADraughtForTheCold()
-	{
+
+	public Q10741_ADraughtForTheCold() {
 		super(10741);
 		addStartNpc(SIVANTHE);
 		addTalkId(SIVANTHE, LEIRA);
@@ -57,39 +56,30 @@ public final class Q10741_ADraughtForTheCold extends Quest
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33951-00.htm");
 		registerQuestItems(EMPTY_HONEY_JAR, SWEET_HONEY, NUTRITIOUS_MEAT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33951-02.htm":
 				break;
-			case "33951-03.htm":
-			{
+			case "33951-03.htm": {
 				qs.startQuest();
 				giveItems(player, EMPTY_HONEY_JAR, 10);
 				break;
 			}
-			case "33952-02.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33952-02.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 22973);
 						addSp(player, 2);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -100,26 +90,20 @@ public final class Q10741_ADraughtForTheCold extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (npc.getId())
-		{
-			case SIVANTHE:
-			{
-				switch (qs.getState())
-				{
+
+		switch (npc.getId()) {
+			case SIVANTHE: {
+				switch (qs.getState()) {
 					case State.CREATED:
 						htmltext = "33951-01.htm";
 						break;
-					case State.STARTED:
-					{
-						if (qs.isCond(1))
-						{
+					case State.STARTED: {
+						if (qs.isCond(1)) {
 							htmltext = "33951-04.html";
 						}
 						break;
@@ -130,10 +114,8 @@ public final class Q10741_ADraughtForTheCold extends Quest
 				}
 				break;
 			}
-			case LEIRA:
-			{
-				if (qs.isCond(2))
-				{
+			case LEIRA: {
+				if (qs.isCond(2)) {
 					htmltext = "33952-01.html";
 				}
 				break;
@@ -141,35 +123,28 @@ public final class Q10741_ADraughtForTheCold extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
-			switch (npc.getId())
-			{
+		if ((qs != null) && qs.isCond(1)) {
+			switch (npc.getId()) {
 				case HONEY_BEE:
-				case ROBUST_HONEY_BEE:
-				{
-					if (hasQuestItems(killer, EMPTY_HONEY_JAR))
-					{
+				case ROBUST_HONEY_BEE: {
+					if (hasQuestItems(killer, EMPTY_HONEY_JAR)) {
 						takeItems(killer, EMPTY_HONEY_JAR, 1);
 						giveItems(killer, SWEET_HONEY, 1);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 					break;
 				}
-				case KIKU:
-				{
+				case KIKU: {
 					giveItemRandomly(killer, npc, NUTRITIOUS_MEAT, 1, 10, 1.0, true);
 					break;
 				}
 			}
-			
-			if ((getQuestItemsCount(killer, SWEET_HONEY) >= 10) && (getQuestItemsCount(killer, NUTRITIOUS_MEAT) >= 10))
-			{
+
+			if ((getQuestItemsCount(killer, SWEET_HONEY) >= 10) && (getQuestItemsCount(killer, NUTRITIOUS_MEAT) >= 10)) {
 				qs.setCond(2, true);
 			}
 		}

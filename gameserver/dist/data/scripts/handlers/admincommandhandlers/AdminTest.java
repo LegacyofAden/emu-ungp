@@ -18,11 +18,7 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.ServerConfig;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -32,105 +28,71 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 
-/**
- * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
- */
-public class AdminTest implements IAdminCommandHandler
-{
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+public class AdminTest implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_stats",
-		"admin_skill_test",
-		"admin_known"
-	};
-	
+			{
+					"admin_stats",
+					"admin_skill_test",
+					"admin_known"
+			};
+
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.equals("admin_stats"))
-		{
-			for (String line : ThreadPool.getStats())
-			{
-				activeChar.sendMessage(line);
-			}
-		}
-		else if (command.startsWith("admin_skill_test"))
-		{
-			try
-			{
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.equals("admin_stats")) {
+			activeChar.sendMessage(ThreadPool.getInstance().getStats());
+		} else if (command.startsWith("admin_skill_test")) {
+			try {
 				StringTokenizer st = new StringTokenizer(command);
 				st.nextToken();
 				int id = Integer.parseInt(st.nextToken());
-				if (command.startsWith("admin_skill_test"))
-				{
+				if (command.startsWith("admin_skill_test")) {
 					adminTestSkill(activeChar, id, true);
-				}
-				else
-				{
+				} else {
 					adminTestSkill(activeChar, id, false);
 				}
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
+				activeChar.sendMessage("Command format is //skill_test <ID>");
+			} catch (NoSuchElementException nsee) {
 				activeChar.sendMessage("Command format is //skill_test <ID>");
 			}
-			catch (NoSuchElementException nsee)
-			{
-				activeChar.sendMessage("Command format is //skill_test <ID>");
-			}
-		}
-		else if (command.equals("admin_known on"))
-		{
-			ServerConfig.CHECK_KNOWN = true;
-		}
-		else if (command.equals("admin_known off"))
-		{
-			ServerConfig.CHECK_KNOWN = false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param activeChar
 	 * @param id
 	 * @param msu
 	 */
-	private void adminTestSkill(PlayerInstance activeChar, int id, boolean msu)
-	{
+	private void adminTestSkill(PlayerInstance activeChar, int id, boolean msu) {
 		Creature caster;
 		WorldObject target = activeChar.getTarget();
-		if (!(target instanceof Creature))
-		{
+		if (!(target instanceof Creature)) {
 			caster = activeChar;
-		}
-		else
-		{
+		} else {
 			caster = (Creature) target;
 		}
-		
+
 		Skill _skill = SkillData.getInstance().getSkill(id, 1);
-		if (_skill != null)
-		{
+		if (_skill != null) {
 			caster.setTarget(activeChar);
-			if (msu)
-			{
+			if (msu) {
 				caster.broadcastPacket(new MagicSkillUse(caster, activeChar, id, 1, _skill.getHitTime(), _skill.getReuseDelay()));
-			}
-			else
-			{
+			} else {
 				caster.doCast(_skill);
 			}
 		}
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminTest());
 	}
 }

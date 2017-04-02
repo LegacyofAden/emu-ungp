@@ -18,9 +18,7 @@
  */
 package handlers.usercommandhandlers;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-
-import org.l2junity.gameserver.config.PlayerConfig;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
@@ -31,57 +29,47 @@ import org.l2junity.gameserver.model.skills.SkillCastingType;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+
 /**
  * Unstuck user command.
  */
-public class Unstuck implements IUserCommandHandler
-{
+public class Unstuck implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		52
-	};
-	
+			{
+					52
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (activeChar.isJailed())
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (activeChar.isJailed()) {
 			activeChar.sendMessage("You cannot use this function while you are jailed.");
 			return false;
 		}
-		
-		if (activeChar.isInOlympiadMode())
-		{
+
+		if (activeChar.isInOlympiadMode()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_THAT_SKILL_IN_A_OLYMPIAD_MATCH);
 			return false;
 		}
-		
-		if (activeChar.isCastingNow(SkillCaster::isAnyNormalType) || activeChar.isMovementDisabled() || activeChar.isMuted() || activeChar.isAlikeDead() || activeChar.inObserverMode() || activeChar.isCombatFlagEquipped())
-		{
+
+		if (activeChar.isCastingNow(SkillCaster::isAnyNormalType) || activeChar.isMovementDisabled() || activeChar.isMuted() || activeChar.isAlikeDead() || activeChar.inObserverMode() || activeChar.isCombatFlagEquipped()) {
 			return false;
 		}
-		
+
 		Skill escape = SkillData.getInstance().getSkill(2099, 1); // 5 minutes escape
 		Skill GM_escape = SkillData.getInstance().getSkill(2100, 1); // 1 second escape
-		if (activeChar.getAccessLevel().isGm())
-		{
-			if (GM_escape != null)
-			{
+		if (activeChar.getAccessLevel().isGm()) {
+			if (GM_escape != null) {
 				activeChar.doCast(GM_escape);
 				return true;
 			}
 			activeChar.sendMessage("You use Escape: 1 second.");
-		}
-		else if ((PlayerConfig.UNSTUCK_INTERVAL == 300) && (escape != null))
-		{
+		} else if ((PlayerConfig.UNSTUCK_INTERVAL == 300) && (escape != null)) {
 			activeChar.doCast(escape);
 			return true;
-		}
-		else
-		{
+		} else {
 			SkillCaster skillCaster = SkillCaster.castSkill(activeChar, activeChar.getTarget(), escape, null, SkillCastingType.NORMAL, false, false);
-			if (skillCaster == null)
-			{
+			if (skillCaster == null) {
 				activeChar.sendPacket(ActionFailed.get(SkillCastingType.NORMAL));
 				activeChar.getAI().setIntention(AI_INTENTION_ACTIVE);
 				return false;
@@ -89,15 +77,13 @@ public class Unstuck implements IUserCommandHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new Unstuck());
 	}
 }

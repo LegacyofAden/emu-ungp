@@ -27,54 +27,46 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * HpToOwner effect implementation.
+ *
  * @author Sdw
  */
-public final class TickHpToOwner extends AbstractEffect
-{
+public final class TickHpToOwner extends AbstractEffect {
 	private final double _power;
 	private final int _stealAmount;
-	
-	public TickHpToOwner(StatsSet params)
-	{
+
+	public TickHpToOwner(StatsSet params) {
 		_power = params.getDouble("power");
 		_stealAmount = params.getInt("stealAmount");
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (skill.isMagic())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (skill.isMagic()) {
 			// TODO: M.Crit can occur even if this skill is resisted. Only then m.crit damage is applied and not debuff
 			final boolean mcrit = Formulas.calcCrit(skill.getMagicCriticalRate(), caster, target, skill);
-			if (mcrit)
-			{
+			if (mcrit) {
 				double damage = _power * 10; // Tests show that 10 times HP DOT is taken during magic critical.
 				caster.doAttack(damage, target, skill, true, false, true, false);
 			}
 		}
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.DMG_OVER_TIME;
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isDead())
-		{
+	public void tick(Creature caster, Creature target, Skill skill) {
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double damage = _power * getTicksMultiplier();
-		
+
 		caster.doAttack(damage, target, skill, true, false, false, false);
-		if (_stealAmount > 0)
-		{
+		if (_stealAmount > 0) {
 			final double amount = (damage * _stealAmount) / 100;
 			caster.setCurrentHp(caster.getCurrentHp() + amount);
 			caster.setCurrentMp(caster.getCurrentMp() + amount);

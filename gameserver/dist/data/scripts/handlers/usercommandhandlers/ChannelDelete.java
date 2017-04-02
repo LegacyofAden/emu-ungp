@@ -27,48 +27,42 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Channel Delete user command.
+ *
  * @author Chris
  */
-public class ChannelDelete implements IUserCommandHandler
-{
+public class ChannelDelete implements IUserCommandHandler {
 	private static final int[] COMMAND_IDS =
-	{
-		93
-	};
-	
+			{
+					93
+			};
+
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar)
-	{
-		if (id != COMMAND_IDS[0])
-		{
+	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
-		
-		if (activeChar.isInParty())
-		{
-			if (activeChar.getParty().isLeader(activeChar) && activeChar.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar))
-			{
+
+		if (activeChar.isInParty()) {
+			if (activeChar.getParty().isLeader(activeChar) && activeChar.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar)) {
 				CommandChannel channel = activeChar.getParty().getCommandChannel();
-				
+
 				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_COMMAND_CHANNEL_HAS_BEEN_DISBANDED);
 				channel.broadcastPacket(sm);
-				
+
 				channel.disbandChannel();
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public int[] getUserCommandList()
-	{
+	public int[] getUserCommandList() {
 		return COMMAND_IDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		UserCommandHandler.getInstance().registerHandler(new ChannelDelete());
 	}
 }

@@ -30,51 +30,44 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * Fatal Blow effect implementation.
+ *
  * @author Adry_85
  */
-public final class InstantFatalBlow extends AbstractEffect
-{
+public final class InstantFatalBlow extends AbstractEffect {
 	private final double _power;
 	private final double _chance;
 	private final double _criticalChance;
 	private final boolean _overHit;
-	
-	public InstantFatalBlow(StatsSet params)
-	{
+
+	public InstantFatalBlow(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		_chance = params.getDouble("chance", 0);
 		_criticalChance = params.getDouble("criticalChance", 0);
 		_overHit = params.getBoolean("overHit", false);
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && !Formulas.calcPhysicalSkillEvasion(caster, target.asCreature(), skill) && Formulas.calcBlowSuccess(caster, target.asCreature(), skill, _chance);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.PHYSICAL_ATTACK;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (caster.isAlikeDead())
-		{
+		if (caster.isAlikeDead()) {
 			return;
 		}
-		
-		if (_overHit && targetCreature.isAttackable())
-		{
+
+		if (_overHit && targetCreature.isAttackable()) {
 			targetCreature.asAttackable().overhitEnabled(true);
 		}
 
@@ -82,11 +75,10 @@ public final class InstantFatalBlow extends AbstractEffect
 		byte shld = Formulas.calcShldUse(caster, targetCreature);
 		double damage = Formulas.calcBlowDamage(caster, targetCreature, skill, false, _power, shld, ss);
 		boolean crit = Formulas.calcCrit(_criticalChance, caster, targetCreature, skill);
-		if (crit)
-		{
+		if (crit) {
 			damage *= 2;
 		}
-		
+
 		caster.doAttack(damage, targetCreature, skill, false, false, true, false);
 	}
 }

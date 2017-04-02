@@ -27,39 +27,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that allows the player to crystallize items up to a certain grade.
+ *
  * @author Nik
  */
-public final class PumpCrystallize extends AbstractEffect
-{
+public final class PumpCrystallize extends AbstractEffect {
 	private final ItemGrade _grade;
-	
-	public PumpCrystallize(StatsSet params)
-	{
+
+	public PumpCrystallize(StatsSet params) {
 		_grade = params.getEnum("grade", ItemGrade.class);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCrystallizeGrade(_grade);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCrystallizeGrade(null);
 		}
 	}

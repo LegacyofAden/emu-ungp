@@ -18,73 +18,64 @@
  */
 package ai.individual.Other.OlyBuffer;
 
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
-import ai.AbstractNpcAI;
-
 /**
  * Olympiad Buffer AI.
+ *
  * @author St3eT
  */
-public final class OlyBuffer extends AbstractNpcAI
-{
+public final class OlyBuffer extends AbstractNpcAI {
 	// NPC
 	private static final int OLYMPIAD_BUFFER = 36402;
 	// Skills
 	private static final int[] ALLOWED_BUFFS =
-	{
-		14738, // Olympiad - Horn Melody
-		14739, // Olympiad - Drum Melody
-		14740, // Olympiad - Pipe Organ Melody
-		14741, // Olympiad - Guitar Melody
-		14742, // Olympiad - Harp Melody
-		14743, // Olympiad - Lute Melody
-		14744, // Olympiad - Knight's Harmony
-		14745, // Olympiad - Warrior's Harmony
-		14746, // Olympiad - Wizard's Harmony
-	};
-	
-	private OlyBuffer()
-	{
+			{
+					14738, // Olympiad - Horn Melody
+					14739, // Olympiad - Drum Melody
+					14740, // Olympiad - Pipe Organ Melody
+					14741, // Olympiad - Guitar Melody
+					14742, // Olympiad - Harp Melody
+					14743, // Olympiad - Lute Melody
+					14744, // Olympiad - Knight's Harmony
+					14745, // Olympiad - Warrior's Harmony
+					14746, // Olympiad - Wizard's Harmony
+			};
+
+	private OlyBuffer() {
 		addStartNpc(OLYMPIAD_BUFFER);
 		addFirstTalkId(OLYMPIAD_BUFFER);
 		addTalkId(OLYMPIAD_BUFFER);
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (npc.getScriptValue() < 5)
-		{
+		if (npc.getScriptValue() < 5) {
 			htmltext = "OlyBuffer-index.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		if (event.startsWith("giveBuff;") && (npc.getScriptValue() < 5))
-		{
+		if (event.startsWith("giveBuff;") && (npc.getScriptValue() < 5)) {
 			final int buffId = Integer.parseInt(event.replace("giveBuff;", ""));
-			if (ArrayUtil.contains(ALLOWED_BUFFS, buffId))
-			{
+			if (ArrayUtil.contains(ALLOWED_BUFFS, buffId)) {
 				final Skill buff = SkillData.getInstance().getSkill(buffId, 1);
-				if (buff != null)
-				{
+				if (buff != null) {
 					npc.setScriptValue(npc.getScriptValue() + 1);
 					addSkillCastDesire(npc, player, buff, 23);
 					htmltext = "OlyBuffer-afterBuff.html";
 				}
-				
-				if (npc.getScriptValue() >= 5)
-				{
+
+				if (npc.getScriptValue() >= 5) {
 					htmltext = "OlyBuffer-noMore.html";
 					getTimers().addTimer("DELETE_ME", 5000, evnt -> npc.deleteMe());
 				}
@@ -92,9 +83,8 @@ public final class OlyBuffer extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new OlyBuffer();
 	}
 }

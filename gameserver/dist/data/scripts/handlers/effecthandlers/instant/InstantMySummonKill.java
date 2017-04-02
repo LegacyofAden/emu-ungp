@@ -28,31 +28,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Unsummon my servitors effect implementation.
+ *
  * @author Nik
  */
-public final class InstantMySummonKill extends AbstractEffect
-{
-	public InstantMySummonKill(StatsSet params)
-	{
+public final class InstantMySummonKill extends AbstractEffect {
+	public InstantMySummonKill(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
 
-		if (casterPlayer.hasServitors())
-		{
+		if (casterPlayer.hasServitors()) {
 			casterPlayer.getServitors().values().forEach(servitor ->
 			{
 				servitor.abortAttack();
 				servitor.abortCast();
 				servitor.stopAllEffects();
-				
+
 				servitor.unSummon(casterPlayer);
 			});
 		}

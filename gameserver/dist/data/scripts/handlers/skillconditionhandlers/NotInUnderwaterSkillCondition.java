@@ -28,16 +28,13 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 /**
  * @author UnAfraid
  */
-public class NotInUnderwaterSkillCondition implements ISkillCondition
-{
-	public NotInUnderwaterSkillCondition(StatsSet params)
-	{
-		
+public class NotInUnderwaterSkillCondition implements ISkillCondition {
+	public NotInUnderwaterSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return !caster.isInsideZone(ZoneId.WATER);
 	}
 }

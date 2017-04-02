@@ -29,26 +29,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantPcBangPointUp extends AbstractEffect
-{
+public class InstantPcBangPointUp extends AbstractEffect {
 	final private int _amount;
-	
-	public InstantPcBangPointUp(StatsSet params)
-	{
+
+	public InstantPcBangPointUp(StatsSet params) {
 		_amount = params.getInt("amount");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
-		if (targetPlayer.getPcCafePoints() < 200_000)
-		{
+
+		if (targetPlayer.getPcCafePoints() < 200_000) {
 			targetPlayer.increasePcCafePoints(_amount);
 		}
 	}

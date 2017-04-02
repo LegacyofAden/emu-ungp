@@ -18,7 +18,7 @@
  */
 package handlers.effecthandlers.instant;
 
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.enums.MountType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -32,36 +32,27 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantFoodForPet extends AbstractEffect
-{
+public class InstantFoodForPet extends AbstractEffect {
 	private final int _normal;
 	private final int _ride;
 	private final int _wyvern;
-	
-	public InstantFoodForPet(StatsSet params)
-	{
+
+	public InstantFoodForPet(StatsSet params) {
 		_normal = params.getInt("normal", 0);
 		_ride = params.getInt("ride", 0);
 		_wyvern = params.getInt("wyvern", 0);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
-		if (target.isPet())
-		{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
+		if (target.isPet()) {
 			final L2PetInstance targetPet = target.asPet();
 			targetPet.setCurrentFed(targetPet.getCurrentFed() + (_normal * RatesConfig.PET_FOOD_RATE));
-		}
-		else if (target.isPlayer())
-		{
+		} else if (target.isPlayer()) {
 			final PlayerInstance targetPlayer = target.asPlayer();
-			if (targetPlayer.getMountType() == MountType.WYVERN)
-			{
+			if (targetPlayer.getMountType() == MountType.WYVERN) {
 				targetPlayer.setCurrentFeed(targetPlayer.getCurrentFeed() + _wyvern);
-			}
-			else
-			{
+			} else {
 				targetPlayer.setCurrentFeed(targetPlayer.getCurrentFeed() + _ride);
 			}
 		}

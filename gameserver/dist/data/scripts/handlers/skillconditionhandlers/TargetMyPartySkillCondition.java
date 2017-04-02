@@ -28,23 +28,19 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class TargetMyPartySkillCondition implements ISkillCondition
-{
+public class TargetMyPartySkillCondition implements ISkillCondition {
 	final boolean _includeMe;
-	
-	public TargetMyPartySkillCondition(StatsSet params)
-	{
+
+	public TargetMyPartySkillCondition(StatsSet params) {
 		_includeMe = params.getBoolean("includeMe");
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target == null) || !target.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target == null) || !target.isPlayer()) {
 			return false;
 		}
-		
+
 		final Party party = caster.getParty();
 		final Party targetParty = target.getActingPlayer().getParty();
 		return ((party == null) ? (_includeMe && (caster == target)) : (_includeMe ? party == targetParty : (party == targetParty) && (caster != target)));

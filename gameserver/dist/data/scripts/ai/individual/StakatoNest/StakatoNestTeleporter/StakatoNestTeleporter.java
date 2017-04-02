@@ -18,52 +18,45 @@
  */
 package ai.individual.StakatoNest.StakatoNestTeleporter;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
-
-import ai.AbstractNpcAI;
 import quests.Q00240_ImTheOnlyOneYouCanTrust.Q00240_ImTheOnlyOneYouCanTrust;
 
 /**
  * Stakato Nest Teleport AI.
+ *
  * @author Charus
  */
-public final class StakatoNestTeleporter extends AbstractNpcAI
-{
+public final class StakatoNestTeleporter extends AbstractNpcAI {
 	// Locations
 	private final static Location[] LOCS =
-	{
-		new Location(80456, -52322, -5640),
-		new Location(88718, -46214, -4640),
-		new Location(87464, -54221, -5120),
-		new Location(80848, -49426, -5128),
-		new Location(87682, -43291, -4128)
-	};
+			{
+					new Location(80456, -52322, -5640),
+					new Location(88718, -46214, -4640),
+					new Location(87464, -54221, -5120),
+					new Location(80848, -49426, -5128),
+					new Location(87682, -43291, -4128)
+			};
 	// NPC
 	private final static int KINTAIJIN = 32640;
-	
-	private StakatoNestTeleporter()
-	{
+
+	private StakatoNestTeleporter() {
 		addStartNpc(KINTAIJIN);
 		addTalkId(KINTAIJIN);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		int index = Integer.parseInt(event) - 1;
-		
-		if (LOCS.length > index)
-		{
+
+		if (LOCS.length > index) {
 			Location loc = LOCS[index];
-			
-			if (player.getParty() != null)
-			{
-				for (PlayerInstance partyMember : player.getParty().getMembers())
-				{
-					if (partyMember.isInRadius3d(player, 1000))
-					{
+
+			if (player.getParty() != null) {
+				for (PlayerInstance partyMember : player.getParty().getMembers()) {
+					if (partyMember.isInRadius3d(player, 1000)) {
 						partyMember.teleToLocation(loc, true);
 					}
 				}
@@ -72,15 +65,13 @@ public final class StakatoNestTeleporter extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		return ((player.hasQuestCompleted(Q00240_ImTheOnlyOneYouCanTrust.class.getSimpleName())) ? "32640.htm" : "32640-no.htm");
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new StakatoNestTeleporter();
 	}
 }

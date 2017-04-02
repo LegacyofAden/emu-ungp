@@ -26,39 +26,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that allows the player to create dwarven recipe items up to a certain level.
+ *
  * @author Nik
  */
-public final class PumpCreateItem extends AbstractEffect
-{
+public final class PumpCreateItem extends AbstractEffect {
 	private final int _recipeLevel;
-	
-	public PumpCreateItem(StatsSet params)
-	{
+
+	public PumpCreateItem(StatsSet params) {
 		_recipeLevel = params.getInt("value");
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCreateItemLevel(_recipeLevel);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCreateItemLevel(0);
 		}
 	}

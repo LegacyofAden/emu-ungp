@@ -18,48 +18,40 @@
  */
 package ai.spawns;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.l2junity.gameserver.config.TrainingCampConfig;
+import ai.AbstractNpcAI;
+import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 
-import ai.AbstractNpcAI;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Sdw
  */
-public class TrainingCamp extends AbstractNpcAI
-{
+public class TrainingCamp extends AbstractNpcAI {
 	private final Set<SpawnTemplate> _templates = ConcurrentHashMap.newKeySet();
-	
-	private TrainingCamp()
-	{
+
+	private TrainingCamp() {
 	}
-	
+
 	@Override
-	public void onSpawnActivate(SpawnTemplate template)
-	{
-		if (_templates.add(template))
-		{
+	public void onSpawnActivate(SpawnTemplate template) {
+		if (_templates.add(template)) {
 			template.getGroups().forEach(group ->
 			{
-				if (!TrainingCampConfig.ENABLE)
-				{
+				if (!TrainingCampConfig.ENABLE) {
 					group.despawnAll();
 				}
 			});
 		}
 	}
-	
+
 	@Override
-	public void onSpawnDeactivate(SpawnTemplate template)
-	{
+	public void onSpawnDeactivate(SpawnTemplate template) {
 		_templates.remove(template);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new TrainingCamp();
 	}
 }

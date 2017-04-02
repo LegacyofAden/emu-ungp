@@ -30,59 +30,50 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Mana Heal Percent effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantMpPerMax extends AbstractEffect
-{
+public final class InstantMpPerMax extends AbstractEffect {
 	private final double _power;
-	
-	public InstantMpPerMax(StatsSet params)
-	{
+
+	public InstantMpPerMax(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MANAHEAL_PERCENT;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isMpBlocked())
-		{
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isMpBlocked()) {
 			return;
 		}
-		
+
 
 		double amount = 0;
 		double power = _power;
 		boolean full = (power == 100.0);
-		
+
 		amount = full ? targetCreature.getMaxMp() : (targetCreature.getMaxMp() * power) / 100.0;
 		// Prevents overheal
 		amount = Math.min(amount, targetCreature.getMaxRecoverableMp() - targetCreature.getCurrentMp());
-		if (amount != 0)
-		{
+		if (amount != 0) {
 			final double newMp = amount + targetCreature.getCurrentMp();
 			targetCreature.setCurrentMp(newMp, false);
 			targetCreature.broadcastStatusUpdate(caster);
 		}
 		SystemMessage sm;
-		if (caster.getObjectId() != targetCreature.getObjectId())
-		{
+		if (caster.getObjectId() != targetCreature.getObjectId()) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S2_MP_HAS_BEEN_RESTORED_BY_C1);
 			sm.addCharName(caster);
-		}
-		else
-		{
+		} else {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MP_HAS_BEEN_RESTORED);
 		}
 		sm.addInt((int) amount);

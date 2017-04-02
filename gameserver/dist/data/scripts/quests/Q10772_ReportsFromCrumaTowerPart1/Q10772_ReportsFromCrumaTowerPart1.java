@@ -30,15 +30,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10771_VolatilePower.Q10771_VolatilePower;
 
 /**
  * Reports from Cruma Tower, Part 1 (10772)
+ *
  * @author malyelfik
  */
-public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
-{
+public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest {
 	// NPCs
 	private static final int JANSSEN = 30484;
 	private static final int MAGIC_OWL = 33991;
@@ -48,9 +47,8 @@ public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
 	private static final SkillHolder OWL_TELEPORT = new SkillHolder(2588, 1);
 	// Misc
 	private static final int MIN_LEVEL = 45;
-	
-	public Q10772_ReportsFromCrumaTowerPart1()
-	{
+
+	public Q10772_ReportsFromCrumaTowerPart1() {
 		super(10772);
 		addStartNpc(JANSSEN);
 		addTalkId(JANSSEN, MAGIC_OWL);
@@ -58,43 +56,35 @@ public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
 		addCondMinLevel(MIN_LEVEL, "30484-00.htm");
 		addCondCompletedQuest(Q10771_VolatilePower.class.getSimpleName(), "30484-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30484-02.htm":
 			case "30484-03.htm":
 			case "30484-04.htm":
 			case "30484-05.htm":
 			case "33991-02.html":
 				break;
-			case "30484-06.htm":
-			{
+			case "30484-06.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "spawn_owl":
-			{
-				if (qs.isCond(1) && !World.getInstance().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL))
-				{
+			case "spawn_owl": {
+				if (qs.isCond(1) && !World.getInstance().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL)) {
 					addSpawn(MAGIC_OWL, OWL_LOC, true, 20000);
 				}
 				htmltext = null;
 				break;
 			}
-			case "despawn_owl":
-			{
-				if (qs.isCond(1) && (npc != null))
-				{
+			case "despawn_owl": {
+				if (qs.isCond(1) && (npc != null)) {
 					getTimers().addTimer("DESPAWN_OWL", 4000, npc, null);
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.TO_QUEEN_NAVARI_OF_FAERON);
 					npc.doCast(OWL_TELEPORT.getSkill());
@@ -103,19 +93,14 @@ public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
 				htmltext = null;
 				break;
 			}
-			case "30484-09.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30484-09.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 838_290);
 						addSp(player, 30);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -126,17 +111,14 @@ public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == JANSSEN)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == JANSSEN) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "30484-01.htm";
 					break;
@@ -147,23 +129,17 @@ public final class Q10772_ReportsFromCrumaTowerPart1 extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted() && qs.isCond(1))
-		{
+		} else if (qs.isStarted() && qs.isCond(1)) {
 			htmltext = "33991-01.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("DESPAWN_OWL") && (npc != null) && (npc.getId() == MAGIC_OWL))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("DESPAWN_OWL") && (npc != null) && (npc.getId() == MAGIC_OWL)) {
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			super.onTimerEvent(event, params, npc, player);
 		}
 	}

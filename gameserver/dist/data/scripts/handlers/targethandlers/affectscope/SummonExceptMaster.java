@@ -18,8 +18,6 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.util.function.Consumer;
-
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -27,27 +25,26 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.function.Consumer;
+
 /**
  * @author Nik
  */
-public class SummonExceptMaster implements IAffectScopeHandler
-{
+public class SummonExceptMaster implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
 		final int affectRange = skill.getAffectRange();
 		final int affectLimit = skill.getAffectLimit();
-		
-		if (target.isPlayable())
-		{
+
+		if (target.isPlayable()) {
 			final PlayerInstance player = target.getActingPlayer();
 			//@formatter:off
 			player.getServitorsAndPets().stream()
-			.filter(c -> !c.isDead())
-			.filter(c -> affectRange > 0 ? Util.checkIfInRange(affectRange, c, target, true) : true)
-			.filter(c -> skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
-			.limit(affectLimit > 0 ? affectLimit : Long.MAX_VALUE)
-			.forEach(action);
+					.filter(c -> !c.isDead())
+					.filter(c -> affectRange > 0 ? Util.checkIfInRange(affectRange, c, target, true) : true)
+					.filter(c -> skill.getAffectObjectHandler().checkAffectedObject(activeChar, c))
+					.limit(affectLimit > 0 ? affectLimit : Long.MAX_VALUE)
+					.forEach(action);
 			//@formatter:on
 		}
 	}

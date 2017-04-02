@@ -18,25 +18,24 @@
  */
 package quests.Q10292_SevenSignsGirlOfDoubt;
 
-import java.util.concurrent.TimeUnit;
-
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
-import org.l2junity.commons.util.concurrent.ThreadPool;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-
 import quests.Q00198_SevenSignsEmbryo.Q00198_SevenSignsEmbryo;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Seven Signs, Girl of Doubt (10292)
+ *
  * @author Adry_85
  */
-public final class Q10292_SevenSignsGirlOfDoubt extends Quest
-{
+public final class Q10292_SevenSignsGirlOfDoubt extends Quest {
 	// NPCs
 	private static final int HARDIN = 30832;
 	private static final int WOOD = 32593;
@@ -52,17 +51,16 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 	private static final int CREATURE_OF_THE_DUSK1 = 27422;
 	private static final int CREATURE_OF_THE_DUSK2 = 27424;
 	private static final int[] MOBS =
-	{
-		22801, // Cruel Pincer Golem
-		22802, // Cruel Pincer Golem
-		22803, // Cruel Pincer Golem
-		22804, // Horrifying Jackhammer Golem
-		22805, // Horrifying Jackhammer Golem
-		22806, // Horrifying Jackhammer Golem
-	};
-	
-	public Q10292_SevenSignsGirlOfDoubt()
-	{
+			{
+					22801, // Cruel Pincer Golem
+					22802, // Cruel Pincer Golem
+					22803, // Cruel Pincer Golem
+					22804, // Horrifying Jackhammer Golem
+					22805, // Horrifying Jackhammer Golem
+					22806, // Horrifying Jackhammer Golem
+			};
+
+	public Q10292_SevenSignsGirlOfDoubt() {
 		super(10292);
 		addStartNpc(WOOD);
 		addTalkId(WOOD, FRANZ, JAINA, ELCADIA, HARDIN);
@@ -70,73 +68,58 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 		addKillId(CREATURE_OF_THE_DUSK1, CREATURE_OF_THE_DUSK2);
 		registerQuestItems(ELCADIAS_MARK.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32593-04.htm":
-			case "32593-06.htm":
-			{
+			case "32593-06.htm": {
 				htmltext = event;
 				break;
 			}
-			case "32593-05.htm":
-			{
+			case "32593-05.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
 			case "32597-02.html":
-			case "32597-06.html":
-			{
+			case "32597-06.html": {
 				htmltext = event;
 				break;
 			}
-			case "32597-07.html":
-			{
+			case "32597-07.html": {
 				st.setCond(2, true);
 				htmltext = event;
 				break;
 			}
-			case "32784-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "32784-02.html": {
+				if (st.isCond(2)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32784-03.html":
-			{
-				if (st.isCond(2))
-				{
+			case "32784-03.html": {
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32784-06.html":
-			{
-				if (st.isCond(4) && hasItem(player, ELCADIAS_MARK))
-				{
+			case "32784-06.html": {
+				if (st.isCond(4) && hasItem(player, ELCADIAS_MARK)) {
 					playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 					htmltext = event;
 				}
 				break;
 			}
-			case "32784-08.html":
-			{
-				if (st.isCond(4) && hasItem(player, ELCADIAS_MARK))
-				{
+			case "32784-08.html": {
+				if (st.isCond(4) && hasItem(player, ELCADIAS_MARK)) {
 					takeItem(player, ELCADIAS_MARK);
 					st.setCond(5, true);
 					htmltext = event;
@@ -144,33 +127,27 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 				break;
 			}
 			case "32784-12.html":
-			case "32784-13.html":
-			{
-				if (st.isCond(6))
-				{
+			case "32784-13.html": {
+				if (st.isCond(6)) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "32784-14.html":
-			{
-				if (st.isCond(6))
-				{
+			case "32784-14.html": {
+				if (st.isCond(6)) {
 					st.setCond(7, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "SPAWN":
-			{
-				if (st.isCond(5))
-				{
+			case "SPAWN": {
+				if (st.isCond(5)) {
 					isBusy = true;
 					final Npc creature1 = addSpawn(CREATURE_OF_THE_DUSK1, 89440, -238016, -9632, 335, false, 0, false, player.getInstanceId());
 					creature1.setRandomWalking(true);
 					final Npc creature2 = addSpawn(CREATURE_OF_THE_DUSK2, 89524, -238131, -9632, 56, false, 0, false, player.getInstanceId());
 					creature2.setRandomWalking(true);
-					ThreadPool.schedule(() ->
+					ThreadPool.getInstance().scheduleGeneral(() ->
 					{
 						creature1.deleteMe();
 						creature2.deleteMe();
@@ -180,19 +157,15 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 				}
 				break;
 			}
-			case "30832-02.html":
-			{
-				if (st.isCond(7))
-				{
+			case "30832-02.html": {
+				if (st.isCond(7)) {
 					st.setCond(8, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "30832-03.html":
-			{
-				if (st.isCond(8))
-				{
+			case "30832-03.html": {
+				if (st.isCond(8)) {
 					htmltext = event;
 				}
 				break;
@@ -200,122 +173,87 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
-		if (ArrayUtil.contains(MOBS, npc.getId()))
-		{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+		if (ArrayUtil.contains(MOBS, npc.getId())) {
 			final QuestState st = getRandomPartyMemberState(player, 3, 3, npc);
-			if ((st != null) && giveItemRandomly(st.getPlayer(), npc, ELCADIAS_MARK.getId(), 1, ELCADIAS_MARK.getCount(), 1.0, true))
-			{
+			if ((st != null) && giveItemRandomly(st.getPlayer(), npc, ELCADIAS_MARK.getId(), 1, ELCADIAS_MARK.getCount(), 1.0, true)) {
 				st.setCond(4, true);
 			}
-		}
-		else
-		{
+		} else {
 			final QuestState st = getQuestState(player, false);
-			if ((st != null) && st.isCond(5))
-			{
+			if ((st != null) && st.isCond(5)) {
 				final int value = st.getInt("ex") + 1;
 				st.set("ex", value);
-				if (value == 2)
-				{
+				if (value == 2) {
 					st.setCond(6, true);
 				}
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		switch (npc.getId())
-		{
-			case WOOD:
-			{
-				if (st.isCompleted())
-				{
+		switch (npc.getId()) {
+			case WOOD: {
+				if (st.isCompleted()) {
 					htmltext = "32593-02.html";
-				}
-				else if (st.isCreated())
-				{
+				} else if (st.isCreated()) {
 					htmltext = ((player.getLevel() >= MIN_LEVEL) && player.hasQuestCompleted(Q00198_SevenSignsEmbryo.class.getSimpleName())) ? "32593-01.htm" : "32593-03.htm";
-				}
-				else if (st.isStarted())
-				{
+				} else if (st.isStarted()) {
 					htmltext = "32593-07.html";
 				}
 				break;
 			}
-			case FRANZ:
-			{
-				if (st.isCond(1))
-				{
+			case FRANZ: {
+				if (st.isCond(1)) {
 					htmltext = "32597-01.html";
-				}
-				else if (st.isCond(2))
-				{
+				} else if (st.isCond(2)) {
 					htmltext = "32597-03.html";
 				}
 				break;
 			}
-			case ELCADIA:
-			{
-				switch (st.getCond())
-				{
-					case 2:
-					{
+			case ELCADIA: {
+				switch (st.getCond()) {
+					case 2: {
 						htmltext = "32784-01.html";
 						break;
 					}
-					case 3:
-					{
+					case 3: {
 						htmltext = "32784-04.html";
 						break;
 					}
-					case 4:
-					{
-						if (hasItem(player, ELCADIAS_MARK))
-						{
+					case 4: {
+						if (hasItem(player, ELCADIAS_MARK)) {
 							playSound(player, QuestSound.ITEMSOUND_QUEST_MIDDLE);
 							htmltext = "32784-05.html";
 						}
 						break;
 					}
-					case 5:
-					{
-						if (isBusy)
-						{
+					case 5: {
+						if (isBusy) {
 							htmltext = "32784-17.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "32784-07.html";
 						}
 						break;
 					}
-					case 6:
-					{
+					case 6: {
 						htmltext = "32784-11.html";
 						break;
 					}
-					case 7:
-					{
+					case 7: {
 						htmltext = "32784-15.html";
 						break;
 					}
-					case 8:
-					{
-						if (player.isSubClassActive())
-						{
+					case 8: {
+						if (player.isSubClassActive()) {
 							htmltext = "32784-18.html";
-						}
-						else
-						{
+						} else {
 							addExp(player, 10000000);
 							addSp(player, 1000000); // TODO Incorrect SP reward.
 							st.exitQuest(false, true);
@@ -326,14 +264,10 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest
 				}
 				break;
 			}
-			case HARDIN:
-			{
-				if (st.isCond(7))
-				{
+			case HARDIN: {
+				if (st.isCond(7)) {
 					htmltext = "30832-01.html";
-				}
-				else if (st.isCond(8))
-				{
+				} else if (st.isCond(8)) {
 					htmltext = "30832-04.html";
 				}
 				break;

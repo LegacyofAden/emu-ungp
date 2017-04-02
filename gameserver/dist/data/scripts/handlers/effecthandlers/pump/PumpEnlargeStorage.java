@@ -28,46 +28,37 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpEnlargeStorage extends AbstractEffect
-{
+public class PumpEnlargeStorage extends AbstractEffect {
 	private final StorageType _type;
 	private final double _amount;
-	
-	public PumpEnlargeStorage(StatsSet params)
-	{
+
+	public PumpEnlargeStorage(StatsSet params) {
 		_amount = params.getDouble("amount", 0);
 		_type = params.getEnum("type", StorageType.class, StorageType.INVENTORY_NORMAL);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		DoubleStat stat = DoubleStat.INVENTORY_NORMAL;
-		
-		switch (_type)
-		{
-			case TRADE_BUY:
-			{
+
+		switch (_type) {
+			case TRADE_BUY: {
 				stat = DoubleStat.TRADE_BUY;
 				break;
 			}
-			case TRADE_SELL:
-			{
+			case TRADE_SELL: {
 				stat = DoubleStat.TRADE_SELL;
 				break;
 			}
-			case RECIPE_DWARVEN:
-			{
+			case RECIPE_DWARVEN: {
 				stat = DoubleStat.RECIPE_DWARVEN;
 				break;
 			}
-			case RECIPE_COMMON:
-			{
+			case RECIPE_COMMON: {
 				stat = DoubleStat.RECIPE_COMMON;
 				break;
 			}
-			case STORAGE_PRIVATE:
-			{
+			case STORAGE_PRIVATE: {
 				stat = DoubleStat.STORAGE_PRIVATE;
 				break;
 			}

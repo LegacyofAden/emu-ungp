@@ -18,103 +18,84 @@
  */
 package ai.individual.Other.FameManager;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Fame Manager AI.
+ *
  * @author St3eT
  */
-public final class FameManager extends AbstractNpcAI
-{
+public final class FameManager extends AbstractNpcAI {
 	// Npc
 	private static final int[] FAME_MANAGER =
-	{
-		36479, // Rapidus
-		36480, // Scipio
-	};
+			{
+					36479, // Rapidus
+					36480, // Scipio
+			};
 	// Misc
 	private static final int MIN_LVL = 40;
 	private static final int DECREASE_COST = 5000;
 	private static final int REPUTATION_COST = 1000;
 	private static final int MIN_CLAN_LVL = 5;
 	private static final CategoryType[] ALLOWED_CATEGORIES =
-	{
-		CategoryType.THIRD_CLASS_GROUP,
-		CategoryType.FOURTH_CLASS_GROUP,
-		CategoryType.FIFTH_CLASS_GROUP,
-		CategoryType.SIXTH_CLASS_GROUP
-	};
-	
-	private FameManager()
-	{
+			{
+					CategoryType.THIRD_CLASS_GROUP,
+					CategoryType.FOURTH_CLASS_GROUP,
+					CategoryType.FIFTH_CLASS_GROUP,
+					CategoryType.SIXTH_CLASS_GROUP
+			};
+
+	private FameManager() {
 		addStartNpc(FAME_MANAGER);
 		addTalkId(FAME_MANAGER);
 		addFirstTalkId(FAME_MANAGER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "36479.html":
 			case "36479-02.html":
 			case "36479-07.html":
 			case "36480.html":
 			case "36480-02.html":
-			case "36480-07.html":
-			{
+			case "36480-07.html": {
 				htmltext = event;
 				break;
 			}
-			case "decreasePk":
-			{
-				if (player.getPkKills() > 0)
-				{
-					if ((player.getFame() >= DECREASE_COST) && (player.getLevel() >= MIN_LVL) && player.isInOneOfCategory(ALLOWED_CATEGORIES))
-					{
+			case "decreasePk": {
+				if (player.getPkKills() > 0) {
+					if ((player.getFame() >= DECREASE_COST) && (player.getLevel() >= MIN_LVL) && player.isInOneOfCategory(ALLOWED_CATEGORIES)) {
 						player.setFame(player.getFame() - DECREASE_COST);
 						player.setPkKills(player.getPkKills() - 1);
 						player.sendPacket(new UserInfo(player));
 						htmltext = npc.getId() + "-06.html";
-					}
-					else
-					{
+					} else {
 						htmltext = npc.getId() + "-01.html";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = npc.getId() + "-05.html";
 				}
 				break;
 			}
-			case "clanRep":
-			{
-				if ((player.getClan() != null) && (player.getClan().getLevel() >= MIN_CLAN_LVL))
-				{
-					if ((player.getFame() >= REPUTATION_COST) && (player.getLevel() >= MIN_LVL) && player.isInOneOfCategory(ALLOWED_CATEGORIES))
-					{
+			case "clanRep": {
+				if ((player.getClan() != null) && (player.getClan().getLevel() >= MIN_CLAN_LVL)) {
+					if ((player.getFame() >= REPUTATION_COST) && (player.getLevel() >= MIN_LVL) && player.isInOneOfCategory(ALLOWED_CATEGORIES)) {
 						player.setFame(player.getFame() - REPUTATION_COST);
 						player.getClan().addReputationScore(50, true);
 						player.sendPacket(new UserInfo(player));
 						player.sendPacket(SystemMessageId.YOU_HAVE_ACQUIRED_50_CLAN_REPUTATION);
 						htmltext = npc.getId() + "-04.html";
-					}
-					else
-					{
+					} else {
 						htmltext = npc.getId() + "-01.html";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = npc.getId() + "-03.html";
 				}
 				break;
@@ -122,15 +103,13 @@ public final class FameManager extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return ((player.getFame() > 0) && (player.getLevel() >= MIN_LVL) && player.isInOneOfCategory(ALLOWED_CATEGORIES)) ? npc.getId() + ".html" : npc.getId() + "-01.html";
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new FameManager();
 	}
 }

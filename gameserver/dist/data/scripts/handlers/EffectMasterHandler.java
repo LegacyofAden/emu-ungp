@@ -18,57 +18,31 @@
  */
 package handlers;
 
+import handlers.effecthandlers.*;
+import handlers.effecthandlers.consume.*;
+import handlers.effecthandlers.instant.*;
+import handlers.effecthandlers.pump.*;
+import handlers.effecthandlers.tick.*;
 import org.l2junity.gameserver.handler.EffectHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import handlers.effecthandlers.Confuse;
-import handlers.effecthandlers.CounterPhysicalSkill;
-import handlers.effecthandlers.Fear;
-import handlers.effecthandlers.FlyAway;
-import handlers.effecthandlers.ModifyVital;
-import handlers.effecthandlers.OpenChest;
-import handlers.effecthandlers.OpenDoor;
-import handlers.effecthandlers.RechargeVitalPoint;
-import handlers.effecthandlers.ResurrectionSpecial;
-import handlers.effecthandlers.SetHp;
-import handlers.effecthandlers.SilentMove;
-import handlers.effecthandlers.StopConsumeVitalPoint;
-import handlers.effecthandlers.SummonAgathion;
-import handlers.effecthandlers.consume.ConsumeChameleonRest;
-import handlers.effecthandlers.consume.ConsumeFakeDeath;
-import handlers.effecthandlers.consume.ConsumeHp;
-import handlers.effecthandlers.consume.ConsumeMp;
-import handlers.effecthandlers.consume.ConsumeMpByLevel;
-import handlers.effecthandlers.consume.ConsumeRest;
-import handlers.effecthandlers.instant.*;
-import handlers.effecthandlers.pump.*;
-import handlers.effecthandlers.tick.TickCp;
-import handlers.effecthandlers.tick.TickGetEnergy;
-import handlers.effecthandlers.tick.TickHp;
-import handlers.effecthandlers.tick.TickHpFatal;
-import handlers.effecthandlers.tick.TickHpMagic;
-import handlers.effecthandlers.tick.TickHpToOwner;
-import handlers.effecthandlers.tick.TickMp;
-import handlers.effecthandlers.tick.TickSynergySkill;
-
 /**
  * Effect Master handler.
+ *
  * @author NosBit
  */
-public final class EffectMasterHandler
-{
+public final class EffectMasterHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EffectMasterHandler.class);
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		EffectHandler.getInstance().registerHandler("c_chameleon_rest", ConsumeChameleonRest::new);
 		EffectHandler.getInstance().registerHandler("c_fake_death", ConsumeFakeDeath::new);
 		EffectHandler.getInstance().registerHandler("c_hp", ConsumeHp::new);
 		EffectHandler.getInstance().registerHandler("c_mp", ConsumeMp::new);
 		EffectHandler.getInstance().registerHandler("c_mp_by_level", ConsumeMpByLevel::new);
 		EffectHandler.getInstance().registerHandler("c_rest", ConsumeRest::new);
-		
+
 		EffectHandler.getInstance().registerHandler("i_abnormal_time_change", InstantAbnormalTimeChange::new);
 		EffectHandler.getInstance().registerHandler("i_add_hate", InstantAddHate::new);
 		EffectHandler.getInstance().registerHandler("i_add_hate_mymaster", InstantAddHateMyMaster::new);
@@ -207,12 +181,12 @@ public final class EffectMasterHandler
 		EffectHandler.getInstance().registerHandler("i_teleport_to_target", InstantTeleportToTarget::new);
 		EffectHandler.getInstance().registerHandler("i_transfer_hate", InstantTransferHate::new);
 		EffectHandler.getInstance().registerHandler("i_unsummon_agathion", InstantUnsummonAgathion::new);
-		
+
 		EffectHandler.getInstance().registerHandler("p_reduce_cancel", PumpReduceCancel::new);
 		EffectHandler.getInstance().registerHandler("p_reduce_drop_penalty", PumpReduceDropPenalty::new);
 		EffectHandler.getInstance().registerHandler("p_remove_equip_penalty", PumpRemoveEquipPenalty::new);
 		EffectHandler.getInstance().registerHandler("p_ignore_skill", PumpIgnoreSkill::new);
-		
+
 		EffectHandler.getInstance().registerHandler("p_2h_blunt_bonus", PumpTwoHandedBluntBonus::new);
 		EffectHandler.getInstance().registerHandler("p_2h_sword_bonus", PumpTwoHandedSwordBonus::new);
 		EffectHandler.getInstance().registerHandler("p_ability_change", PumpAbilityChange::new);
@@ -398,7 +372,7 @@ public final class EffectMasterHandler
 		EffectHandler.getInstance().registerHandler("p_weight_penalty", PumpWeightPenalty::new);
 		EffectHandler.getInstance().registerHandler("p_world_chat_point", PumpWorldChatPoints::new); // Not confirmed
 		EffectHandler.getInstance().registerHandler("p_wrong_casting", PumpWrongCasting::new);
-		
+
 		EffectHandler.getInstance().registerHandler("t_cp", TickCp::new);
 		EffectHandler.getInstance().registerHandler("t_get_energy", TickGetEnergy::new);
 		EffectHandler.getInstance().registerHandler("t_hp", TickHp::new);
@@ -407,7 +381,7 @@ public final class EffectMasterHandler
 		EffectHandler.getInstance().registerHandler("t_hp_to_owner", TickHpToOwner::new);
 		EffectHandler.getInstance().registerHandler("t_mp", TickMp::new);
 		EffectHandler.getInstance().registerHandler("t_synergy", TickSynergySkill::new); // Custom
-		
+
 		// Rework
 		EffectHandler.getInstance().registerHandler("Confuse", Confuse::new);
 		EffectHandler.getInstance().registerHandler("CounterPhysicalSkill", CounterPhysicalSkill::new);
@@ -425,7 +399,7 @@ public final class EffectMasterHandler
 		EffectHandler.getInstance().registerHandler("VitalityExpRate", PumpVitalityExpRate::new);
 		EffectHandler.getInstance().registerHandler("VitalityPointsRate", PumpVitalityPointsRate::new);
 		EffectHandler.getInstance().registerHandler("VitalityPointUp", InstantRestoreVitalPoint::new);
-		
+
 		LOGGER.info("Loaded {} effect handlers.", EffectHandler.getInstance().size());
 	}
 }

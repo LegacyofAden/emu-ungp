@@ -18,72 +18,23 @@
  */
 package handlers;
 
+import handlers.targethandlers.*;
+import handlers.targethandlers.None;
+import handlers.targethandlers.affectobject.*;
+import handlers.targethandlers.affectscope.*;
 import org.l2junity.gameserver.handler.TargetHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import handlers.targethandlers.AdvanceBase;
-import handlers.targethandlers.Artillery;
-import handlers.targethandlers.DoorTreasure;
-import handlers.targethandlers.Enemy;
-import handlers.targethandlers.EnemyNot;
-import handlers.targethandlers.EnemyOnly;
-import handlers.targethandlers.FortressFlagpole;
-import handlers.targethandlers.Ground;
-import handlers.targethandlers.HolyThing;
-import handlers.targethandlers.Item;
-import handlers.targethandlers.MyMentor;
-import handlers.targethandlers.MyParty;
-import handlers.targethandlers.None;
-import handlers.targethandlers.NpcBody;
-import handlers.targethandlers.Others;
-import handlers.targethandlers.PcBody;
-import handlers.targethandlers.Self;
-import handlers.targethandlers.Summon;
-import handlers.targethandlers.Target;
-import handlers.targethandlers.WyvernTarget;
-import handlers.targethandlers.affectobject.All;
-import handlers.targethandlers.affectobject.Clan;
-import handlers.targethandlers.affectobject.Friend;
-import handlers.targethandlers.affectobject.FriendPc;
-import handlers.targethandlers.affectobject.HiddenPlace;
-import handlers.targethandlers.affectobject.Invisible;
-import handlers.targethandlers.affectobject.NotFriend;
-import handlers.targethandlers.affectobject.NotFriendPc;
-import handlers.targethandlers.affectobject.ObjectDeadNpcBody;
-import handlers.targethandlers.affectobject.UndeadRealEnemy;
-import handlers.targethandlers.affectobject.WyvernObject;
-import handlers.targethandlers.affectscope.BalakasScope;
-import handlers.targethandlers.affectscope.DeadParty;
-import handlers.targethandlers.affectscope.DeadPartyPledge;
-import handlers.targethandlers.affectscope.DeadPledge;
-import handlers.targethandlers.affectscope.DeadUnion;
-import handlers.targethandlers.affectscope.Fan;
-import handlers.targethandlers.affectscope.FanPB;
-import handlers.targethandlers.affectscope.Party;
-import handlers.targethandlers.affectscope.PartyPledge;
-import handlers.targethandlers.affectscope.Pledge;
-import handlers.targethandlers.affectscope.PointBlank;
-import handlers.targethandlers.affectscope.Range;
-import handlers.targethandlers.affectscope.RangeSortByHp;
-import handlers.targethandlers.affectscope.RingRange;
-import handlers.targethandlers.affectscope.Single;
-import handlers.targethandlers.affectscope.Square;
-import handlers.targethandlers.affectscope.SquarePB;
-import handlers.targethandlers.affectscope.StaticObjectScope;
-import handlers.targethandlers.affectscope.SummonExceptMaster;
-import handlers.targethandlers.affectscope.WyvernScope;
-
 /**
  * Target Master handler.
+ *
  * @author Nik
  */
-public final class TargetMasterHandler
-{
+public final class TargetMasterHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetMasterHandler.class);
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		// Target type handlers.
 		TargetHandler.getInstance().registerTargetTypeHandler("ADVANCE_BASE", new AdvanceBase());
 		TargetHandler.getInstance().registerTargetTypeHandler("ARTILLERY", new Artillery());
@@ -105,7 +56,7 @@ public final class TargetMasterHandler
 		TargetHandler.getInstance().registerTargetTypeHandler("SUMMON", new Summon());
 		TargetHandler.getInstance().registerTargetTypeHandler("TARGET", new Target());
 		TargetHandler.getInstance().registerTargetTypeHandler("WYVERN_TARGET", new WyvernTarget());
-		
+
 		// Affect scope handlers.
 		TargetHandler.getInstance().registerAffectScopeHandler("BALAKAS_SCOPE", new BalakasScope());
 		TargetHandler.getInstance().registerAffectScopeHandler("DEAD_PARTY", new DeadParty());
@@ -128,7 +79,7 @@ public final class TargetMasterHandler
 		TargetHandler.getInstance().registerAffectScopeHandler("STATIC_OBJECT_SCOPE", new StaticObjectScope());
 		TargetHandler.getInstance().registerAffectScopeHandler("SUMMON_EXCEPT_MASTER", new SummonExceptMaster());
 		TargetHandler.getInstance().registerAffectScopeHandler("WYVERN_SCOPE", new WyvernScope());
-		
+
 		// Affect object handlers.
 		TargetHandler.getInstance().registerAffectObjectHandler("ALL", new All());
 		TargetHandler.getInstance().registerAffectObjectHandler("CLAN", new Clan());
@@ -141,7 +92,7 @@ public final class TargetMasterHandler
 		TargetHandler.getInstance().registerAffectObjectHandler("OBJECT_DEAD_NPC_BODY", new ObjectDeadNpcBody());
 		TargetHandler.getInstance().registerAffectObjectHandler("UNDEAD_REAL_ENEMY", new UndeadRealEnemy());
 		TargetHandler.getInstance().registerAffectObjectHandler("WYVERN_OBJECT", new WyvernObject());
-		
+
 		LOGGER.info("Loaded {} target type handlers.", TargetHandler.getInstance().getTargetTypeHandlersSize());
 		LOGGER.info("Loaded {} affect scope handlers.", TargetHandler.getInstance().getAffectScopeHandlersSize());
 		LOGGER.info("Loaded {} affect object handlers.", TargetHandler.getInstance().getAffectObjectHandlersSize());

@@ -27,10 +27,10 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Find Glittering Jewelry (35)
+ *
  * @author malyelfik, Gladicek
  */
-public class Q00035_FindGlitteringJewelry extends Quest
-{
+public class Q00035_FindGlitteringJewelry extends Quest {
 	// NPCs
 	private static final int ELLIE = 30091;
 	private static final int FELTON = 30879;
@@ -48,9 +48,8 @@ public class Q00035_FindGlitteringJewelry extends Quest
 	private static final int IRON_ORE_COUNT = 95;
 	private static final int ARMOR_FRAGMENT_COUNT = 405;
 	private static final int ACCESORY_GEM_COUNT = 385;
-	
-	public Q00035_FindGlitteringJewelry()
-	{
+
+	public Q00035_FindGlitteringJewelry() {
 		super(35);
 		addStartNpc(ELLIE);
 		addTalkId(ELLIE, FELTON);
@@ -58,38 +57,29 @@ public class Q00035_FindGlitteringJewelry extends Quest
 		addCondMinLevel(MIN_LEVEL, "30091-02.html");
 		registerQuestItems(ROUGH_JEWEL);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
-			case "30091-03.htm":
-			{
+		switch (event) {
+			case "30091-03.htm": {
 				st.startQuest();
 				break;
 			}
-			case "30879-02.html":
-			{
-				if (st.isCond(1))
-				{
+			case "30879-02.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 				}
 				break;
 			}
-			case "30091-07.html":
-			{
-				if (st.isCond(3))
-				{
-					if (getQuestItemsCount(player, ROUGH_JEWEL) < JEWEL_COUNT)
-					{
+			case "30091-07.html": {
+				if (st.isCond(3)) {
+					if (getQuestItemsCount(player, ROUGH_JEWEL) < JEWEL_COUNT) {
 						htmltext = "30091-08.html";
 						break;
 					}
@@ -98,27 +88,19 @@ public class Q00035_FindGlitteringJewelry extends Quest
 				}
 				break;
 			}
-			case "30091-11.html":
-			{
-				if (st.isCond(4))
-				{
-					if ((getQuestItemsCount(player, IRON_ORE) >= IRON_ORE_COUNT) && (getQuestItemsCount(player, ARMOR_FRAGMENT_LOW_GRADE) >= ARMOR_FRAGMENT_COUNT) && (getQuestItemsCount(player, ACCESORY_GEM_LOW_GRADE) >= ACCESORY_GEM_COUNT))
-					{
-						if ((player.getLevel() >= MIN_LEVEL))
-						{
+			case "30091-11.html": {
+				if (st.isCond(4)) {
+					if ((getQuestItemsCount(player, IRON_ORE) >= IRON_ORE_COUNT) && (getQuestItemsCount(player, ARMOR_FRAGMENT_LOW_GRADE) >= ARMOR_FRAGMENT_COUNT) && (getQuestItemsCount(player, ACCESORY_GEM_LOW_GRADE) >= ACCESORY_GEM_COUNT)) {
+						if ((player.getLevel() >= MIN_LEVEL)) {
 							takeItems(player, IRON_ORE, IRON_ORE_COUNT);
 							takeItems(player, ARMOR_FRAGMENT_LOW_GRADE, ARMOR_FRAGMENT_COUNT);
 							takeItems(player, ACCESORY_GEM_LOW_GRADE, ACCESORY_GEM_COUNT);
 							giveItems(player, JEWEL_BOX, 1);
 							st.exitQuest(false, true);
-						}
-						else
-						{
+						} else {
 							htmltext = getNoQuestLevelRewardMsg(player);
 						}
-					}
-					else
-					{
+					} else {
 						htmltext = "30091-12.html";
 					}
 					break;
@@ -131,58 +113,43 @@ public class Q00035_FindGlitteringJewelry extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
 		final PlayerInstance member = getRandomPartyMember(player, 2);
-		if (member != null)
-		{
+		if (member != null) {
 			final QuestState st = getQuestState(member, false);
-			if ((st.isCond(2) && getRandomBoolean()))
-			{
+			if ((st.isCond(2) && getRandomBoolean())) {
 				giveItems(member, ROUGH_JEWEL, 1);
-				if (getQuestItemsCount(member, ROUGH_JEWEL) >= JEWEL_COUNT)
-				{
+				if (getQuestItemsCount(member, ROUGH_JEWEL) >= JEWEL_COUNT) {
 					st.setCond(3, true);
-				}
-				else
-				{
+				} else {
 					playSound(member, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
 			}
 		}
 		return super.onKill(npc, player, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ELLIE)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ELLIE) {
 					htmltext = "30091-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case ELLIE:
-					{
-						switch (st.getCond())
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case ELLIE: {
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "30091-04.html";
 								break;
@@ -195,14 +162,10 @@ public class Q00035_FindGlitteringJewelry extends Quest
 						}
 						break;
 					}
-					case FELTON:
-					{
-						if (st.isCond(1))
-						{
+					case FELTON: {
+						if (st.isCond(1)) {
 							htmltext = "30879-01.html";
-						}
-						else if (st.isCond(2))
-						{
+						} else if (st.isCond(2)) {
 							htmltext = "30879-03.html";
 						}
 						break;

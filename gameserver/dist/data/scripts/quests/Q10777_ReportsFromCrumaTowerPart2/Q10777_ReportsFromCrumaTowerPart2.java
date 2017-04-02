@@ -30,15 +30,14 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10776_TheWrathOfTheGiants.Q10776_TheWrathOfTheGiants;
 
 /**
  * Reports from Cruma Tower, Part 2 (10777)
+ *
  * @author malyelfik
  */
-public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
-{
+public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest {
 	// NPCs
 	private static final int BELKADHI = 30485;
 	private static final int MAGIC_OWL = 33991;
@@ -48,9 +47,8 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
 	private static final SkillHolder TELEPORT = new SkillHolder(2588, 1);
 	// Misc
 	private static final int MIN_LEVEL = 49;
-	
-	public Q10777_ReportsFromCrumaTowerPart2()
-	{
+
+	public Q10777_ReportsFromCrumaTowerPart2() {
 		super(10777);
 		addStartNpc(BELKADHI);
 		addTalkId(BELKADHI, MAGIC_OWL);
@@ -58,44 +56,36 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
 		addCondMinLevel(MIN_LEVEL, "30485-00.htm");
 		addCondCompletedQuest(Q10776_TheWrathOfTheGiants.class.getSimpleName(), "30485-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "30485-02.htm":
 			case "30485-03.htm":
 			case "30485-04.htm":
 			case "30485-05.htm":
 			case "33991-02.html":
 				break;
-			case "30485-06.htm":
-			{
+			case "30485-06.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "summon":
-			{
-				if (qs.isCond(1) && !World.getInstance().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL))
-				{
+			case "summon": {
+				if (qs.isCond(1) && !World.getInstance().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL)) {
 					final Npc owl = addSpawn(MAGIC_OWL, OWL_LOC);
 					getTimers().addTimer("DESPAWN_OWL", 20000, owl, null);
 				}
 				htmltext = null;
 				break;
 			}
-			case "despawn":
-			{
-				if (qs.isCond(1))
-				{
+			case "despawn": {
+				if (qs.isCond(1)) {
 					getTimers().cancelTimer("DESPAWN_OWL", npc, null);
 					qs.setCond(2, true);
 					npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.TO_QUEEN_NAVARI_OF_FAERON);
@@ -105,19 +95,14 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
 				htmltext = null;
 				break;
 			}
-			case "30485-09.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "30485-09.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 1_257_435);
 						addSp(player, 36);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -128,17 +113,14 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == BELKADHI)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == BELKADHI) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "30485-01.htm";
 					break;
@@ -149,23 +131,17 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest
 					htmltext = getAlreadyCompletedMsg(player);
 					break;
 			}
-		}
-		else if (qs.isStarted() && qs.isCond(1))
-		{
+		} else if (qs.isStarted() && qs.isCond(1)) {
 			htmltext = "33991-01.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if ((npc != null) && (npc.getId() == MAGIC_OWL) && event.equals("DESPAWN_OWL"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if ((npc != null) && (npc.getId() == MAGIC_OWL) && event.equals("DESPAWN_OWL")) {
 			npc.deleteMe();
-		}
-		else
-		{
+		} else {
 			super.onTimerEvent(event, params, npc, player);
 		}
 	}

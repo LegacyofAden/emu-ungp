@@ -26,39 +26,33 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * An effect that allows the player to create common recipe items up to a certain level.
+ *
  * @author Nik
  */
-public final class PumpCreateCommonItem extends AbstractEffect
-{
+public final class PumpCreateCommonItem extends AbstractEffect {
 	private final int _recipeLevel;
-	
-	public PumpCreateCommonItem(StatsSet params)
-	{
+
+	public PumpCreateCommonItem(StatsSet params) {
 		_recipeLevel = params.getInt("value");
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCreateCommonItemLevel(_recipeLevel);
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		final PlayerInstance player = target.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			player.setCreateCommonItemLevel(0);
 		}
 	}

@@ -19,8 +19,8 @@
 package handlers.actionhandlers;
 
 import org.l2junity.commons.util.Rnd;
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.config.PlayerConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.handler.ActionHandler;
 import org.l2junity.gameserver.handler.IActionHandler;
@@ -34,8 +34,7 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.MoveToPawn;
 
-public class NpcAction implements IActionHandler
-{
+public class NpcAction implements IActionHandler {
 	/**
 	 * Manage actions when a player click on the L2Npc.<BR>
 	 * <BR>
@@ -58,78 +57,59 @@ public class NpcAction implements IActionHandler
 	 * <BR>
 	 * <li>Client packet : Action, AttackRequest</li><BR>
 	 * <BR>
+	 *
 	 * @param activeChar The L2PcInstance that start an action on the L2Npc
 	 */
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (!((Npc) target).canTarget(activeChar))
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (!((Npc) target).canTarget(activeChar)) {
 			return false;
 		}
 		activeChar.setLastFolkNPC((Npc) target);
 		// Check if the L2PcInstance already target the L2Npc
-		if (target != activeChar.getTarget())
-		{
+		if (target != activeChar.getTarget()) {
 			// Set the target of the L2PcInstance activeChar
 			activeChar.setTarget(target);
 			// Check if the activeChar is attackable (without a forced attack)
-			if (target.isAutoAttackable(activeChar))
-			{
+			if (target.isAutoAttackable(activeChar)) {
 				((Npc) target).getAI(); // wake up ai
 			}
-		}
-		else if (interact)
-		{
+		} else if (interact) {
 			// Check if the activeChar is attackable (without a forced attack) and isn't dead
-			if (target.isAutoAttackable(activeChar) && !((Creature) target).isAlikeDead())
-			{
+			if (target.isAutoAttackable(activeChar) && !((Creature) target).isAlikeDead()) {
 				// Check the height difference
 				if (Math.abs(activeChar.getZ() - target.getZ()) < 400) // this max heigth difference might need some tweaking
 				{
 					// Set the L2PcInstance Intention to AI_INTENTION_ATTACK
 					activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target);
 					// activeChar.startAttack(this);
-				}
-				else
-				{
+				} else {
 					// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				}
-			}
-			else if (!target.isAutoAttackable(activeChar))
-			{
+			} else if (!target.isAutoAttackable(activeChar)) {
 				// Calculate the distance between the L2PcInstance and the L2Npc
-				if (!((Npc) target).canInteract(activeChar))
-				{
+				if (!((Npc) target).canInteract(activeChar)) {
 					// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 					activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, target);
-				}
-				else
-				{
+				} else {
 					final Npc npc = (Npc) target;
 					// Turn NPC to the player.
 					activeChar.sendPacket(new MoveToPawn(activeChar, npc, 100));
-					if (npc.hasRandomAnimation())
-					{
+					if (npc.hasRandomAnimation()) {
 						npc.onRandomAnimation(Rnd.get(8));
 					}
-					
-					if (npc.hasListener(EventType.ON_NPC_QUEST_START))
-					{
+
+					if (npc.hasListener(EventType.ON_NPC_QUEST_START)) {
 						activeChar.setLastQuestNpcObject(target.getObjectId());
 					}
-					if (npc.hasListener(EventType.ON_NPC_FIRST_TALK))
-					{
+					if (npc.hasListener(EventType.ON_NPC_FIRST_TALK)) {
 						EventDispatcher.getInstance().notifyEventAsync(new OnNpcFirstTalk(npc, activeChar), npc);
-					}
-					else
-					{
+					} else {
 						npc.showChatWindow(activeChar);
 					}
-					
-					if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM())
-					{
+
+					if ((PlayerConfig.PLAYER_MOVEMENT_BLOCK_TIME > 0) && !activeChar.isGM()) {
 						activeChar.updateNotMoveUntil();
 					}
 				}
@@ -137,15 +117,13 @@ public class NpcAction implements IActionHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2Npc;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionHandler.getInstance().registerHandler(new NpcAction());
 	}
 }

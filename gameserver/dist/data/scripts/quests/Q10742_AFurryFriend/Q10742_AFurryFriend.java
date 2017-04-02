@@ -34,10 +34,10 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
  * A Furry Friend (10742)
+ *
  * @author Sdw
  */
-public final class Q10742_AFurryFriend extends Quest
-{
+public final class Q10742_AFurryFriend extends Quest {
 	// NPCs
 	private static final int LEIRA = 33952;
 	private static final int RICKY = 19552;
@@ -49,9 +49,8 @@ public final class Q10742_AFurryFriend extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 11;
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10742_AFurryFriend()
-	{
+
+	public Q10742_AFurryFriend() {
 		super(10742);
 		addStartNpc(LEIRA);
 		addTalkId(LEIRA, KIKU_S_CAVE);
@@ -60,25 +59,21 @@ public final class Q10742_AFurryFriend extends Quest
 		addCondRace(Race.ERTHEIA, "");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "33952-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "33952-02.htm":
 			case "33952-05.html":
 				htmltext = event;
 				break;
-			case "33952-03.htm":
-			{
+			case "33952-03.htm": {
 				qs.startQuest();
 				qs.set("cave", getRandom(3));
 				showOnScreenMsg(player, NpcStringId.FOLLOW_RICKY, ExShowScreenMessage.TOP_CENTER, 10000);
@@ -86,25 +81,20 @@ public final class Q10742_AFurryFriend extends Quest
 				htmltext = event;
 				break;
 			}
-			case "spawn_ricky":
-			{
-				if (qs.isStarted() && qs.isCond(1))
-				{
+			case "spawn_ricky": {
+				if (qs.isStarted() && qs.isCond(1)) {
 					final int caveId = npc.getParameters().getInt("caveId");
 					if (qs.getInt("cave") != caveId) // Wrong cave
 					{
 						addAttackPlayerDesire(addSpawn(KIKU, player.getLocation(), true, 120000), player);
 						showOnScreenMsg(player, NpcStringId.RICKY_IS_NOT_HERE_NTRY_SEARCHING_ANOTHER_KIKU_S_CAVE, ExShowScreenMessage.TOP_CENTER, 8000);
 						htmltext = "33995-02.html";
-					}
-					else
-					{
+					} else {
 						// Check if player has Ricky spawned
-						if (!World.getInstance().getVisibleObjects(player, Npc.class, 500).stream().anyMatch(n -> (n.getId() == RICKY) && (n.getSummoner() == player)))
-						{
+						if (!World.getInstance().getVisibleObjects(player, Npc.class, 500).stream().anyMatch(n -> (n.getId() == RICKY) && (n.getSummoner() == player))) {
 							showOnScreenMsg(player, NpcStringId.TAKE_RICKY_TO_LEIRA_IN_UNDER_2_MINUTES, ExShowScreenMessage.MIDDLE_CENTER, 5000);
 							player.sendPacket(new ExSendUIEvent(player, false, false, 120, 0, NpcStringId.REMAINING_TIME));
-							
+
 							// Spawn Ricky
 							final Npc ricky = addSpawn(RICKY, player, true, 120000);
 							ricky.setSummoner(player);
@@ -112,8 +102,7 @@ public final class Q10742_AFurryFriend extends Quest
 							ricky.setIsRunning(true);
 							ricky.getAI().setIntention(CtrlIntention.AI_INTENTION_FOLLOW, player);
 							startQuestTimer("CHECK_RICKY_DISTANCE", 2500, ricky, player);
-						}
-						else // Already have Ricky
+						} else // Already have Ricky
 						{
 							htmltext = "33995-03.html";
 						}
@@ -121,54 +110,39 @@ public final class Q10742_AFurryFriend extends Quest
 				}
 				break;
 			}
-			case "CHECK_RICKY_DISTANCE":
-			{
-				if (player == null)
-				{
+			case "CHECK_RICKY_DISTANCE": {
+				if (player == null) {
 					startQuestTimer("DESPAWN_RICKY", 2000, npc, null);
-				}
-				else if ((npc != null) && !npc.isDecayed())
-				{
+				} else if ((npc != null) && !npc.isDecayed()) {
 					// Follow was breaking sometimes, making sure it doesn't happen.
 					npc.getAI().setIntention(CtrlIntention.AI_INTENTION_FOLLOW, player);
-					
+
 					// Check Ricky position
 					final double distanceToRicky = player.distance3d(npc);
-					if (distanceToRicky > 350)
-					{
+					if (distanceToRicky > 350) {
 						showOnScreenMsg(player, NpcStringId.YOU_ARE_FAR_FROM_RICKY, ExShowScreenMessage.TOP_CENTER, 5000);
-						if (distanceToRicky > 650)
-						{
+						if (distanceToRicky > 650) {
 							player.sendPacket(new ExSendUIEvent(player, false, false, 0, 0, NpcStringId.REMAINING_TIME));
 							startQuestTimer("DESPAWN_RICKY", 1000, npc, player);
-						}
-						else
-						{
+						} else {
 							startQuestTimer("CHECK_RICKY_DISTANCE", 2500, npc, player);
 						}
-					}
-					else
-					{
+					} else {
 						final Npc leira = World.getInstance().getVisibleObjects(npc, Npc.class, 125).stream().filter(n -> (n.getId() == LEIRA)).findAny().orElse(null);
-						if (leira != null)
-						{
+						if (leira != null) {
 							qs.setCond(2, true);
 							player.sendPacket(new ExSendUIEvent(player, false, false, 0, 0, NpcStringId.REMAINING_TIME));
 							showOnScreenMsg(player, NpcStringId.RICKY_HAS_FOUND_LEIRA, ExShowScreenMessage.MIDDLE_CENTER, 10000);
 							startQuestTimer("DESPAWN_RICKY", 1000, npc, player);
-						}
-						else
-						{
+						} else {
 							startQuestTimer("CHECK_RICKY_DISTANCE", 2500, npc, player);
 						}
 					}
 				}
 				break;
 			}
-			case "DESPAWN_RICKY":
-			{
-				if ((npc != null) && !npc.isDecayed())
-				{
+			case "DESPAWN_RICKY": {
+				if ((npc != null) && !npc.isDecayed()) {
 					npc.deleteMe();
 				}
 				break;
@@ -176,38 +150,27 @@ public final class Q10742_AFurryFriend extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated)
-	{
+	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		if (npc.getId() == LEIRA)
-		{
-			switch (qs.getState())
-			{
+
+		if (npc.getId() == LEIRA) {
+			switch (qs.getState()) {
 				case State.CREATED:
 					htmltext = "33952-01.htm";
 					break;
-				case State.STARTED:
-				{
-					if (qs.isCond(1))
-					{
+				case State.STARTED: {
+					if (qs.isCond(1)) {
 						htmltext = "33952-06.html";
-					}
-					else if (qs.isCond(2))
-					{
-						if (!isSimulated)
-						{
-							if ((player.getLevel() >= MIN_LEVEL))
-							{
+					} else if (qs.isCond(2)) {
+						if (!isSimulated) {
+							if ((player.getLevel() >= MIN_LEVEL)) {
 								addExp(player, 68_007);
 								addSp(player, 5);
 								qs.exitQuest(false, true);
-							}
-							else
-							{
+							} else {
 								htmltext = getNoQuestLevelRewardMsg(player);
 							}
 							break;
@@ -223,17 +186,15 @@ public final class Q10742_AFurryFriend extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		return ((qs != null) && qs.isCond(1)) ? "33995-01.html" : "33995.html";
 	}
-	
+
 	@Override
-	public void onRouteFinished(Npc npc)
-	{
+	public void onRouteFinished(Npc npc) {
 		SuperpointManager.getInstance().cancelMoving(npc);
 		npc.deleteMe();
 	}

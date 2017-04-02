@@ -18,20 +18,19 @@
  */
 package ai.individual.TalkingIsland.GiantSoldiers;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
-
 /**
  * Giant's Soldiers AI.
+ *
  * @author Gladicek
  */
-public final class GiantSoldiers extends AbstractNpcAI
-{
+public final class GiantSoldiers extends AbstractNpcAI {
 	// NPCs
 	private static final int LAKSIAN = 33486;
 	private static final int BELOA = 33487;
@@ -44,110 +43,91 @@ public final class GiantSoldiers extends AbstractNpcAI
 	private static final int CELLPHINE = 33477;
 	// Location
 	private static final Location NEAR_PANTHEON = new Location(-114371, 260183, -1192);
-	
-	public GiantSoldiers()
-	{
+
+	public GiantSoldiers() {
 		addStartNpc(LAKSIAN, BELOA, SKIA, RANLOF, ROVIEL, ASIN, SEKNUS, DRELL, CELLPHINE);
 		addFirstTalkId(LAKSIAN, BELOA, SKIA, RANLOF, ROVIEL, ASIN, SEKNUS, DRELL);
 		addSpawnId(LAKSIAN);
 		addSpawnId(BELOA);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (npc == null)
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (npc == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		
-		switch (event)
-		{
-			case "CHAT_MESSAGE_1A":
-			{
+
+		switch (event) {
+			case "CHAT_MESSAGE_1A": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.WE_SAW_PEOPLE_USE_SAYUNE_OTHER_THAN_THE_GIANT_S_MINIONS, 1000);
 				startQuestTimer("CHAT_MESSAGE_2A", 2000, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_1B":
-			{
+			case "CHAT_MESSAGE_1B": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IT_S_BECAUSE_THEY_HAVE_BECOME_AWAKEN_THE_POWER_OF_THE_GIANT_S, 1000);
 				startQuestTimer("CHAT_MESSAGE_2B", 1500, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_2A":
-			{
+			case "CHAT_MESSAGE_2A": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DUH_YOU_CAN_T_USE_SAYUNE_WITHOUT_POWERS_OF_GIANTS_IN_THE_FIRST_PLACE, 1000);
 				startQuestTimer("CHAT_MESSAGE_3A", 15000, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_2B":
-			{
+			case "CHAT_MESSAGE_2B": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.I_THINK_THAT_S_WHY_MANY_PEOPLE_COME_TO_VISIT_CELPHINE, 1000);
 				startQuestTimer("CHAT_MESSAGE_3B", 15000, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_3A":
-			{
+			case "CHAT_MESSAGE_3A": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.AFTER_YE_SAGIRA_FELL_THERE_WERE_MANY_SACRIFICES_MADE, 1000);
 				startQuestTimer("CHAT_MESSAGE_4A", 1500, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_3B":
-			{
+			case "CHAT_MESSAGE_3B": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DIDN_T_THAT_RELEASE_THE_SEAL_ON_HERMUNCUS, 1000);
 				startQuestTimer("CHAT_MESSAGE_4B", 2000, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_4A":
-			{
+			case "CHAT_MESSAGE_4A": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.THAT_S_THE_RUMOR_BUT_NOTHING_TO_CONFIRM_IT, 1000);
 				startQuestTimer("CHAT_MESSAGE_1A", 15000, npc, null);
 				break;
 			}
-			case "CHAT_MESSAGE_4B":
-			{
+			case "CHAT_MESSAGE_4B": {
 				npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.IT_S_GOT_TO_BE_TRUE_WE_NEED_TO_FIND_IT, 1000);
 				startQuestTimer("CHAT_MESSAGE_1B", 15000, npc, null);
 				break;
 			}
-			case "33485-1.html":
-			{
+			case "33485-1.html": {
 				htmltext = event;
 				break;
 			}
-			case "TELEPORT_OUT":
-			{
+			case "TELEPORT_OUT": {
 				player.teleToLocation(NEAR_PANTHEON);
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		switch (npc.getId())
-		{
-			case LAKSIAN:
-			{
+	public String onSpawn(Npc npc) {
+		switch (npc.getId()) {
+			case LAKSIAN: {
 				startQuestTimer("CHAT_MESSAGE_1A", 1500, npc, null);
 				break;
 			}
-			case BELOA:
-			{
+			case BELOA: {
 				startQuestTimer("CHAT_MESSAGE_1B", 2500, npc, null);
 				break;
 			}
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new GiantSoldiers();
 	}
 }

@@ -36,47 +36,42 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Teleport To Target effect implementation.
+ *
  * @author Didldak, Adry_85
  */
-public final class InstantTeleportToSummon extends AbstractEffect
-{
+public final class InstantTeleportToSummon extends AbstractEffect {
 	private final double _maxDistance;
-	
-	public InstantTeleportToSummon(StatsSet params)
-	{
+
+	public InstantTeleportToSummon(StatsSet params) {
 		_maxDistance = params.getDouble("distance", -1);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
 
 		final Summon summon = targetPlayer.getFirstServitor();
-		if ((summon == null) || ((_maxDistance > 0) && (caster.distance3d(summon) >= _maxDistance)))
-		{
+		if ((summon == null) || ((_maxDistance > 0) && (caster.distance3d(summon) >= _maxDistance))) {
 			return;
 		}
-		
+
 		double px = summon.getX();
 		double py = summon.getY();
 		double ph = Util.convertHeadingToDegree(summon.getHeading());
-		
+
 		ph += 180;
-		if (ph > 360)
-		{
+		if (ph > 360) {
 			ph -= 360;
 		}
-		
+
 		ph = (Math.PI * ph) / 180;
 		double x = px + (25 * Math.cos(ph));
 		double y = py + (25 * Math.sin(ph));
 		double z = summon.getZ();
-		
+
 		final Location loc = GeoData.getInstance().moveCheck(caster.getX(), caster.getY(), caster.getZ(), x, y, z, caster.getInstanceWorld());
 		caster.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 		caster.broadcastPacket(new FlyToLocation(caster, loc.getX(), loc.getY(), loc.getZ(), FlyType.DUMMY));

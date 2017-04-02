@@ -26,33 +26,29 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Servitor stop action player action handler.
+ *
  * @author Nik
  */
-public final class ServitorStop implements IPlayerActionHandler
-{
+public final class ServitorStop implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed)
-	{
-		if (!activeChar.hasServitors())
-		{
+	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+		if (!activeChar.hasServitors()) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_SERVITOR);
 			return;
 		}
-		
+
 		activeChar.getServitors().values().forEach(s ->
 		{
-			if (s.isBetrayed())
-			{
+			if (s.isBetrayed()) {
 				activeChar.sendPacket(SystemMessageId.YOUR_PET_SERVITOR_IS_UNRESPONSIVE_AND_WILL_NOT_OBEY_ANY_ORDERS);
 				return;
 			}
-			
+
 			s.cancelAction();
 		});
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		PlayerActionHandler.getInstance().registerHandler(new ServitorStop());
 	}
 }

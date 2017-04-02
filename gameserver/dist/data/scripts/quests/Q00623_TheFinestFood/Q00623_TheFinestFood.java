@@ -18,21 +18,21 @@
  */
 package quests.Q00623_TheFinestFood;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The Finest Food (623)
+ *
  * @author janiko
  */
-public final class Q00623_TheFinestFood extends Quest
-{
+public final class Q00623_TheFinestFood extends Quest {
 	// NPCs
 	private static final int JEREMY = 31521;
 	// Monsters
@@ -49,78 +49,59 @@ public final class Q00623_TheFinestFood extends Quest
 	private static final ItemHolder DRAGON_NECKLACE = new ItemHolder(6851, 1);
 	// Misc
 	private static final int MIN_LVL = 71;
-	
+
 	private static final Map<Integer, ItemHolder> MONSTER_DROPS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MONSTER_DROPS.put(THERMAL_BUFFALO, BUFFALO_MEAT);
 		MONSTER_DROPS.put(THERMAL_FLAVA, LEAF_OF_FLAVA);
 		MONSTER_DROPS.put(THERMAL_ANTELOPE, HORN_OF_ANTELOPE);
 	}
-	
-	public Q00623_TheFinestFood()
-	{
+
+	public Q00623_TheFinestFood() {
 		super(623);
 		addStartNpc(JEREMY);
 		addTalkId(JEREMY);
 		addKillId(THERMAL_BUFFALO, THERMAL_FLAVA, THERMAL_ANTELOPE);
 		registerQuestItems(LEAF_OF_FLAVA.getId(), BUFFALO_MEAT.getId(), HORN_OF_ANTELOPE.getId());
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
-		if (qs == null)
-		{
+		if (qs == null) {
 			return htmltext;
 		}
-		switch (event)
-		{
-			case "31521-03.htm":
-			{
-				if (qs.isCreated())
-				{
+		switch (event) {
+			case "31521-03.htm": {
+				if (qs.isCreated()) {
 					qs.startQuest();
 					htmltext = event;
 				}
 				break;
 			}
-			case "31521-06.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (hasAllItems(player, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE))
-					{
+			case "31521-06.html": {
+				if (qs.isCond(2)) {
+					if (hasAllItems(player, true, LEAF_OF_FLAVA, BUFFALO_MEAT, HORN_OF_ANTELOPE)) {
 						int random = getRandom(1000);
-						if (random < 120)
-						{
+						if (random < 120) {
 							giveAdena(player, 25000, true);
 							rewardItems(player, RING_OF_AURAKYRA);
-						}
-						else if (random < 240)
-						{
+						} else if (random < 240) {
 							giveAdena(player, 65000, true);
 							rewardItems(player, SEALED_SANDDRAGONS_EARING);
-						}
-						else if (random < 340)
-						{
+						} else if (random < 340) {
 							giveAdena(player, 25000, true);
 							rewardItems(player, DRAGON_NECKLACE);
-						}
-						else if (random < 940)
-						{
+						} else if (random < 940) {
 							giveAdena(player, 73000, true);
 							addExp(player, 230000);
 							addSp(player, 18200); // TODO Incorrect SP reward.
 						}
 						qs.exitQuest(true, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = "31521-07.html";
 					}
 				}
@@ -129,38 +110,27 @@ public final class Q00623_TheFinestFood extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
+	public String onTalk(Npc npc, PlayerInstance talker) {
 		final QuestState qs = getQuestState(talker, true);
 		String htmltext = getNoQuestMsg(talker);
-		switch (npc.getId())
-		{
-			case JEREMY:
-			{
-				if (qs.isCreated())
-				{
+		switch (npc.getId()) {
+			case JEREMY: {
+				if (qs.isCreated()) {
 					htmltext = (talker.getLevel() >= MIN_LVL) ? "31521-01.htm" : "31521-02.htm";
-				}
-				else if (qs.isStarted())
-				{
-					switch (qs.getCond())
-					{
-						case 1:
-						{
+				} else if (qs.isStarted()) {
+					switch (qs.getCond()) {
+						case 1: {
 							htmltext = "31521-04.html";
 							break;
 						}
-						case 2:
-						{
+						case 2: {
 							htmltext = "31521-05.html";
 							break;
 						}
 					}
-				}
-				else if (qs.isCompleted())
-				{
+				} else if (qs.isCompleted()) {
 					htmltext = getAlreadyCompletedMsg(talker);
 				}
 				break;
@@ -168,16 +138,13 @@ public final class Q00623_TheFinestFood extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, 1, 3, npc);
 		final ItemHolder holder = MONSTER_DROPS.get(npc.getId());
-		if ((qs != null) && giveItemRandomly(qs.getPlayer(), npc, holder.getId(), 1, holder.getCount(), 1, true))
-		{
-			if (hasAllItems(qs.getPlayer(), true, BUFFALO_MEAT, HORN_OF_ANTELOPE, LEAF_OF_FLAVA))
-			{
+		if ((qs != null) && giveItemRandomly(qs.getPlayer(), npc, holder.getId(), 1, holder.getCount(), 1, true)) {
+			if (hasAllItems(qs.getPlayer(), true, BUFFALO_MEAT, HORN_OF_ANTELOPE, LEAF_OF_FLAVA)) {
 				qs.setCond(2);
 			}
 		}

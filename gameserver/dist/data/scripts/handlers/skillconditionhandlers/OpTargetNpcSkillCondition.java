@@ -18,29 +18,26 @@
  */
 package handlers.skillconditionhandlers;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.List;
+
 /**
  * @author Sdw
  */
-public class OpTargetNpcSkillCondition implements ISkillCondition
-{
+public class OpTargetNpcSkillCondition implements ISkillCondition {
 	private final List<Integer> _npcId;
-	
-	public OpTargetNpcSkillCondition(StatsSet params)
-	{
+
+	public OpTargetNpcSkillCondition(StatsSet params) {
 		_npcId = params.getList("npcIds", Integer.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		return (target != null) && target.isNpc() && _npcId.contains(target.getId());
 	}
 }

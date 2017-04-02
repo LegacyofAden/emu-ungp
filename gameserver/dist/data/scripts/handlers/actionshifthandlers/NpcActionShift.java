@@ -18,10 +18,9 @@
  */
 package handlers.actionshifthandlers;
 
-import java.util.Set;
-
+import handlers.bypasshandlers.NpcViewMod;
 import org.l2junity.commons.util.CommonUtil;
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.InstanceType;
@@ -39,24 +38,21 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.spawns.NpcSpawnTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
-import handlers.bypasshandlers.NpcViewMod;
+import java.util.Set;
 
-public class NpcActionShift implements IActionShiftHandler
-{
+public class NpcActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
 		// Check if the L2PcInstance is a GM
-		if (activeChar.isGM())
-		{
+		if (activeChar.isGM()) {
 			// Set the target of the L2PcInstance activeChar
 			activeChar.setTarget(target);
-			
+
 			final Npc npc = (Npc) target;
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 			final ClanHall clanHall = ClanHallData.getInstance().getClanHallByNpcId(npc.getId());
 			html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/npcinfo.htm");
-			
+
 			html.replace("%objid%", String.valueOf(target.getObjectId()));
 			html.replace("%class%", target.getClass().getSimpleName());
 			html.replace("%race%", npc.getTemplate().getRace().toString());
@@ -69,7 +65,7 @@ public class NpcActionShift implements IActionShiftHandler
 			html.replace("%hpmax%", String.valueOf(npc.getMaxHp()));
 			html.replace("%mp%", String.valueOf((int) npc.getCurrentMp()));
 			html.replace("%mpmax%", String.valueOf(npc.getMaxMp()));
-			
+
 			html.replace("%patk%", String.valueOf(npc.getPAtk()));
 			html.replace("%matk%", String.valueOf(npc.getMAtk()));
 			html.replace("%pdef%", String.valueOf(npc.getPDef()));
@@ -98,7 +94,7 @@ public class NpcActionShift implements IActionShiftHandler
 			html.replace("%mpRewardTicks%", npc.getTemplate().getMpRewardTicks());
 			html.replace("%mpRewardType%", npc.getTemplate().getMpRewardType().name());
 			html.replace("%mpRewardAffectType%", npc.getTemplate().getMpRewardAffectType().name());
-			
+
 			AttributeType attackAttribute = npc.getAttackElement();
 			html.replace("%ele_atk%", attackAttribute.name());
 			html.replace("%ele_atk_value%", String.valueOf(npc.getAttackElementValue(attackAttribute)));
@@ -108,94 +104,74 @@ public class NpcActionShift implements IActionShiftHandler
 			html.replace("%ele_dearth%", String.valueOf(npc.getDefenseElementValue(AttributeType.EARTH)));
 			html.replace("%ele_dholy%", String.valueOf(npc.getDefenseElementValue(AttributeType.HOLY)));
 			html.replace("%ele_ddark%", String.valueOf(npc.getDefenseElementValue(AttributeType.DARK)));
-			
+
 			final L2Spawn spawn = npc.getSpawn();
-			if (spawn != null)
-			{
+			if (spawn != null) {
 				final NpcSpawnTemplate template = spawn.getNpcSpawnTemplate();
-				if (template != null)
-				{
+				if (template != null) {
 					final String fileName = template.getSpawnTemplate().getPath().toString();
 					html.replace("%spawnfile%", fileName);
 					html.replace("%spawnname%", String.valueOf(template.getSpawnTemplate().getName()));
 					html.replace("%spawngroup%", String.valueOf(template.getGroup().getName()));
-					if (template.getSpawnTemplate().getAI() != null)
-					{
+					if (template.getSpawnTemplate().getAI() != null) {
 						final Quest script = QuestManager.getInstance().getQuest(template.getSpawnTemplate().getAI());
-						if (script != null)
-						{
+						if (script != null) {
 							html.replace("%spawnai%", "<a action=\"bypass -h admin_quest_info " + script.getName() + "\"><font color=\"LEVEL\">" + script.getName() + "</font></a>");
 						}
 					}
 					html.replace("%spawnai%", "<font color=FF0000>" + template.getSpawnTemplate().getAI() + "</font>");
 				}
-				
+
 				html.replace("%spawn%", npc.getSpawn().getX() + " " + npc.getSpawn().getY() + " " + npc.getSpawn().getZ());
 				html.replace("%loc2d%", String.valueOf((int) npc.distance2d(npc.getSpawn())));
 				html.replace("%loc3d%", String.valueOf((int) npc.distance3d(npc.getSpawn())));
-				if (npc.getSpawn().getRespawnMinDelay() == 0)
-				{
+				if (npc.getSpawn().getRespawnMinDelay() == 0) {
 					html.replace("%resp%", "None");
-				}
-				else if (npc.getSpawn().hasRespawnRandom())
-				{
+				} else if (npc.getSpawn().hasRespawnRandom()) {
 					html.replace("%resp%", String.valueOf(npc.getSpawn().getRespawnMinDelay() / 1000) + "-" + String.valueOf((npc.getSpawn().getRespawnMaxDelay() / 1000) + " sec"));
-				}
-				else
-				{
+				} else {
 					html.replace("%resp%", String.valueOf(npc.getSpawn().getRespawnMinDelay() / 1000) + " sec");
 				}
-			}
-			else
-			{
+			} else {
 				html.replace("%spawn%", "<font color=FF0000>null</font>");
 				html.replace("%loc2d%", "<font color=FF0000>--</font>");
 				html.replace("%loc3d%", "<font color=FF0000>--</font>");
 				html.replace("%resp%", "<font color=FF0000>--</font>");
 			}
-			
+
 			html.replace("%spawnfile%", "<font color=FF0000>--</font>");
 			html.replace("%spawnname%", "<font color=FF0000>--</font>");
 			html.replace("%spawngroup%", "<font color=FF0000>--</font>");
 			html.replace("%spawnai%", "<font color=FF0000>--</font>");
-			
-			if (npc.hasAI())
-			{
+
+			if (npc.hasAI()) {
 				Set<Integer> clans = npc.getTemplate().getClans();
 				Set<Integer> ignoreClanNpcIds = npc.getTemplate().getIgnoreClanNpcIds();
 				String clansString = clans != null ? CommonUtil.implode(clans, ", ") : "";
 				String ignoreClanNpcIdsString = ignoreClanNpcIds != null ? CommonUtil.implode(ignoreClanNpcIds, ", ") : "";
-				
+
 				html.replace("%ai_intention%", "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>Intention:</font></td><td align=right width=170>" + String.valueOf(npc.getAI().getIntention().name()) + "</td></tr></table></td></tr>");
 				html.replace("%ai%", "<tr><td><table width=270 border=0><tr><td width=100><font color=FFAA00>AI</font></td><td align=right width=170>" + npc.getAI().getClass().getSimpleName() + "</td></tr></table></td></tr>");
 				html.replace("%ai_type%", "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>AIType</font></td><td align=right width=170>" + String.valueOf(npc.getAiType()) + "</td></tr></table></td></tr>");
 				html.replace("%ai_clan%", "<tr><td><table width=270 border=0><tr><td width=100><font color=FFAA00>Clan & Range:</font></td><td align=right width=170>" + clansString + " " + String.valueOf(npc.getTemplate().getClanHelpRange()) + "</td></tr></table></td></tr>");
 				html.replace("%ai_enemy_clan%", "<tr><td><table width=270 border=0 bgcolor=131210><tr><td width=100><font color=FFAA00>Ignore & Range:</font></td><td align=right width=170>" + ignoreClanNpcIdsString + " " + String.valueOf(npc.getTemplate().getAggroRange()) + "</td></tr></table></td></tr>");
-			}
-			else
-			{
+			} else {
 				html.replace("%ai_intention%", "");
 				html.replace("%ai%", "");
 				html.replace("%ai_type%", "");
 				html.replace("%ai_clan%", "");
 				html.replace("%ai_enemy_clan%", "");
 			}
-			
+
 			final String routeName = SuperpointManager.getInstance().getRouteName(npc);
-			if (!routeName.isEmpty())
-			{
+			if (!routeName.isEmpty()) {
 				html.replace("%route%", "<tr><td><table width=270 border=0><tr><td width=100><font color=LEVEL>Route:</font></td><td align=right width=170>" + routeName + "</td></tr></table></td></tr>");
-			}
-			else
-			{
+			} else {
 				html.replace("%route%", "");
 			}
 			activeChar.sendPacket(html);
-		}
-		else if (NpcConfig.ALT_GAME_VIEWNPC)
-		{
-			if (!target.isNpc())
-			{
+		} else if (NpcConfig.ALT_GAME_VIEWNPC) {
+			if (!target.isNpc()) {
 				return false;
 			}
 			activeChar.setTarget(target);
@@ -203,15 +179,13 @@ public class NpcActionShift implements IActionShiftHandler
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2Npc;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionShiftHandler.getInstance().registerHandler(new NpcActionShift());
 	}
 }

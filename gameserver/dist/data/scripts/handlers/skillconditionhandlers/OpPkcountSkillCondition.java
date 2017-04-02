@@ -28,28 +28,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class OpPkcountSkillCondition implements ISkillCondition
-{
+public class OpPkcountSkillCondition implements ISkillCondition {
 	private final SkillConditionAffectType _affectType;
-	
-	public OpPkcountSkillCondition(StatsSet params)
-	{
+
+	public OpPkcountSkillCondition(StatsSet params) {
 		_affectType = params.getEnum("affectType", SkillConditionAffectType.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		switch (_affectType)
-		{
-			case CASTER:
-			{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		switch (_affectType) {
+			case CASTER: {
 				return caster.isPlayer() && (caster.getActingPlayer().getPkKills() > 0);
 			}
-			case TARGET:
-			{
-				if ((target != null) && target.isPlayer())
-				{
+			case TARGET: {
+				if ((target != null) && target.isPlayer()) {
 					return target.getActingPlayer().getPkKills() > 0;
 				}
 				break;

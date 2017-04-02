@@ -25,33 +25,27 @@ import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class PlayerInstanceActionShift implements IActionShiftHandler
-{
+public class PlayerInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact)
-	{
-		if (activeChar.isGM())
-		{
+	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+		if (activeChar.isGM()) {
 			// Check if the gm already target this l2pcinstance
-			if (activeChar.getTarget() != target)
-			{
+			if (activeChar.getTarget() != target) {
 				// Set the target of the L2PcInstance activeChar
 				activeChar.setTarget(target);
 			}
-			
+
 			AdminCommandHandler.getInstance().useAdminCommand(activeChar, "admin_character_info " + target.getName(), true);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public InstanceType getInstanceType()
-	{
+	public InstanceType getInstanceType() {
 		return InstanceType.L2PcInstance;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		ActionShiftHandler.getInstance().registerHandler(new PlayerInstanceActionShift());
 	}
 }

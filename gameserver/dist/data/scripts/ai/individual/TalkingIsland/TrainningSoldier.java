@@ -18,66 +18,56 @@
  */
 package ai.individual.TalkingIsland;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * Trainning Soldier AI.
+ *
  * @author St3eT
  */
-public final class TrainningSoldier extends AbstractNpcAI
-{
+public final class TrainningSoldier extends AbstractNpcAI {
 	// NPCs
 	private static final int SOLDIER = 33201; // Trainning Soldier
 	private static final int DUMMY = 33023; // Trainning Dummy
-	
-	private TrainningSoldier()
-	{
+
+	private TrainningSoldier() {
 		addSeeCreatureId(SOLDIER);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("START_ATTACK"))
-		{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		if (event.equals("START_ATTACK")) {
 			//@formatter:off
 			final Npc dummy = World.getInstance().getVisibleObjects(npc, Npc.class, 150)
-				.stream()
-				.filter(obj -> (obj.getId() == DUMMY))
-				.findFirst()
-				.orElse(null);
+					.stream()
+					.filter(obj -> (obj.getId() == DUMMY))
+					.findFirst()
+					.orElse(null);
 			//@formatter:on
-			
-			if (dummy != null)
-			{
+
+			if (dummy != null) {
 				addAttackDesire(npc, dummy);
-			}
-			else
-			{
+			} else {
 				startQuestTimer("START_ATTACK", 250, npc, null);
 			}
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer() && (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK))
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer() && (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK)) {
 			startQuestTimer("START_ATTACK", 250, npc, null);
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new TrainningSoldier();
 	}
 }

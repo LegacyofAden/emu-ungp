@@ -24,16 +24,15 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q00237_WindsOfChange.Q00237_WindsOfChange;
 import quests.Q00239_WontYouJoinUs.Q00239_WontYouJoinUs;
 
 /**
  * Success/Failure Of Business (238)
+ *
  * @author Joxit
  */
-public class Q00238_SuccessFailureOfBusiness extends Quest
-{
+public class Q00238_SuccessFailureOfBusiness extends Quest {
 	// NPCs
 	private static final int HELVETICA = 32641;
 	// Mobs
@@ -49,28 +48,24 @@ public class Q00238_SuccessFailureOfBusiness extends Quest
 	private static final int GUARDIAN_SPIRIT_FRAGMENT_NEEDED = 20;
 	private static final int CHANCE_FOR_FRAGMENT = 80;
 	private static final int MIN_LEVEL = 82;
-	
-	public Q00238_SuccessFailureOfBusiness()
-	{
+
+	public Q00238_SuccessFailureOfBusiness() {
 		super(238);
 		addStartNpc(HELVETICA);
 		addTalkId(HELVETICA);
 		addKillId(BRAZIER_OF_PURITY, EVIL_SPIRITS, GUARDIAN_SPIRITS);
 		registerQuestItems(BROKEN_PIECE_OF_MAGIC_FORCE, GUARDIAN_SPIRIT_FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32461-02.htm":
 				htmltext = event;
 				break;
@@ -79,8 +74,7 @@ public class Q00238_SuccessFailureOfBusiness extends Quest
 				htmltext = event;
 				break;
 			case "32461-06.html":
-				if (st.isCond(2))
-				{
+				if (st.isCond(2)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
@@ -88,91 +82,67 @@ public class Q00238_SuccessFailureOfBusiness extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (npc.getId() == BRAZIER_OF_PURITY)
-		{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (npc.getId() == BRAZIER_OF_PURITY) {
 			final PlayerInstance partyMember = getRandomPartyMember(killer, 1);
-			if (partyMember != null)
-			{
+			if (partyMember != null) {
 				final QuestState st = getQuestState(partyMember, false);
-				if (getQuestItemsCount(partyMember, BROKEN_PIECE_OF_MAGIC_FORCE) < BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED)
-				{
+				if (getQuestItemsCount(partyMember, BROKEN_PIECE_OF_MAGIC_FORCE) < BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED) {
 					giveItems(partyMember, BROKEN_PIECE_OF_MAGIC_FORCE, 1);
 				}
-				if (getQuestItemsCount(partyMember, BROKEN_PIECE_OF_MAGIC_FORCE) == BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED)
-				{
+				if (getQuestItemsCount(partyMember, BROKEN_PIECE_OF_MAGIC_FORCE) == BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED) {
 					st.setCond(2, true);
-				}
-				else
-				{
+				} else {
 					playSound(partyMember, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			final PlayerInstance partyMember = getRandomPartyMember(killer, 3);
-			if ((partyMember != null) && (getRandom(100) < CHANCE_FOR_FRAGMENT))
-			{
+			if ((partyMember != null) && (getRandom(100) < CHANCE_FOR_FRAGMENT)) {
 				final QuestState st = getQuestState(partyMember, false);
-				if (getQuestItemsCount(partyMember, GUARDIAN_SPIRIT_FRAGMENT) < GUARDIAN_SPIRIT_FRAGMENT_NEEDED)
-				{
+				if (getQuestItemsCount(partyMember, GUARDIAN_SPIRIT_FRAGMENT) < GUARDIAN_SPIRIT_FRAGMENT_NEEDED) {
 					giveItems(partyMember, GUARDIAN_SPIRIT_FRAGMENT, 1);
 				}
-				if (getQuestItemsCount(partyMember, GUARDIAN_SPIRIT_FRAGMENT) == GUARDIAN_SPIRIT_FRAGMENT_NEEDED)
-				{
+				if (getQuestItemsCount(partyMember, GUARDIAN_SPIRIT_FRAGMENT) == GUARDIAN_SPIRIT_FRAGMENT_NEEDED) {
 					st.setCond(4, true);
-				}
-				else
-				{
+				} else {
 					playSound(partyMember, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
 			}
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker)
-	{
+	public String onTalk(Npc npc, PlayerInstance talker) {
 		String htmltext = getNoQuestMsg(talker);
 		final QuestState st = getQuestState(talker, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
+
+		switch (st.getState()) {
 			case State.COMPLETED:
 				htmltext = "32461-09.html";
 				break;
 			case State.CREATED:
-				if (talker.hasQuestCompleted(Q00239_WontYouJoinUs.class.getSimpleName()))
-				{
+				if (talker.hasQuestCompleted(Q00239_WontYouJoinUs.class.getSimpleName())) {
 					htmltext = "32461-10.html";
-				}
-				else if (talker.hasQuestCompleted(Q00237_WindsOfChange.class.getSimpleName()) && (talker.getLevel() >= MIN_LEVEL) && hasQuestItems(talker, VICINITY_OF_FOS))
-				{
+				} else if (talker.hasQuestCompleted(Q00237_WindsOfChange.class.getSimpleName()) && (talker.getLevel() >= MIN_LEVEL) && hasQuestItems(talker, VICINITY_OF_FOS)) {
 					htmltext = "32461-01.htm";
-				}
-				else
-				{
+				} else {
 					htmltext = "32461-00.html";
 				}
 				break;
 			case State.STARTED:
-				switch (st.getCond())
-				{
+				switch (st.getCond()) {
 					case 1:
 						htmltext = "32461-04.html";
 						break;
 					case 2:
-						if (getQuestItemsCount(talker, BROKEN_PIECE_OF_MAGIC_FORCE) == BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED)
-						{
+						if (getQuestItemsCount(talker, BROKEN_PIECE_OF_MAGIC_FORCE) == BROKEN_PIECE_OF_MAGIC_FORCE_NEEDED) {
 							htmltext = "32461-05.html";
 							takeItems(talker, BROKEN_PIECE_OF_MAGIC_FORCE, -1);
 						}
@@ -181,8 +151,7 @@ public class Q00238_SuccessFailureOfBusiness extends Quest
 						htmltext = "32461-07.html";
 						break;
 					case 4:
-						if (getQuestItemsCount(talker, GUARDIAN_SPIRIT_FRAGMENT) == GUARDIAN_SPIRIT_FRAGMENT_NEEDED)
-						{
+						if (getQuestItemsCount(talker, GUARDIAN_SPIRIT_FRAGMENT) == GUARDIAN_SPIRIT_FRAGMENT_NEEDED) {
 							htmltext = "32461-08.html";
 							giveAdena(talker, 283346, true);
 							takeItems(talker, VICINITY_OF_FOS, 1);

@@ -26,32 +26,28 @@ import org.l2junity.gameserver.model.stats.Formulas;
 
 /**
  * MagicalAttack-damage over time effect implementation.
+ *
  * @author Nik
  */
-public final class TickHpMagic extends AbstractEffect
-{
+public final class TickHpMagic extends AbstractEffect {
 	private final double _power;
-	
-	public TickHpMagic(StatsSet params)
-	{
+
+	public TickHpMagic(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public void tick(Creature caster, Creature effected, Skill skill)
-	{
+	public void tick(Creature caster, Creature effected, Skill skill) {
 		final Creature target = effected;
-		
-		if (target.isDead())
-		{
+
+		if (target.isDead()) {
 			return;
 		}
-		
+
 		double damage = Formulas.calcMagicDam(caster, target, skill, caster.getMAtk(), Math.abs(_power), target.getMDef(), false, false, false); // In retail spiritshots change nothing.
 		damage *= getTicksMultiplier();
-		if (damage >= (effected.getCurrentHp() - 1))
-		{
+		if (damage >= (effected.getCurrentHp() - 1)) {
 			damage = effected.getCurrentHp() - 1;
 		}
 		caster.doAttack(damage, effected, skill, true, false, false, false);

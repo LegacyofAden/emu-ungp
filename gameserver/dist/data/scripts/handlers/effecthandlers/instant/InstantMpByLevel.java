@@ -32,51 +32,44 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Mana Heal By Level effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantMpByLevel extends AbstractEffect
-{
+public final class InstantMpByLevel extends AbstractEffect {
 	private final double _power;
-	
-	public InstantMpByLevel(StatsSet params)
-	{
+
+	public InstantMpByLevel(StatsSet params) {
 		_power = params.getDouble("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.MANAHEAL_BY_LEVEL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead() || targetCreature.isMpBlocked())
-		{
+		if (targetCreature.isDead() || targetCreature.isMpBlocked()) {
 			return;
 		}
 
 		double power = 0;
 		final int levelDiff = targetCreature.getLevel() - skill.getMagicLevel() - 5;
-		if (levelDiff <= 9)
-		{
+		if (levelDiff <= 9) {
 			power = _power * ((10 * (10 - CommonUtil.constrain(levelDiff, 0, 9))) / 100);
 			power = targetCreature.getStat().getValue(DoubleStat.MANA_CHARGE, power);
 		}
-		
+
 		final double healedAmount = CommonUtil.constrain(power, 0, targetCreature.getMaxRecoverableMp() - targetCreature.getCurrentMp());
 		targetCreature.setCurrentMp(targetCreature.getCurrentMp() + healedAmount);
-		
+
 		final SystemMessage sm = SystemMessage.getSystemMessage(!caster.equals(targetCreature) ? SystemMessageId.S2_MP_HAS_BEEN_RESTORED_BY_C1 : SystemMessageId.S1_MP_HAS_BEEN_RESTORED);
-		if (!caster.equals(targetCreature))
-		{
+		if (!caster.equals(targetCreature)) {
 			sm.addCharName(caster);
 		}
 		sm.addInt((int) healedAmount);

@@ -30,68 +30,56 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Heal Percent effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantHpPerMax extends AbstractEffect
-{
+public final class InstantHpPerMax extends AbstractEffect {
 	private final int _power;
-	
-	public InstantHpPerMax(StatsSet params)
-	{
+
+	public InstantHpPerMax(StatsSet params) {
 		_power = params.getInt("power", 0);
 	}
-	
+
 	@Override
-	public L2EffectType getEffectType()
-	{
+	public L2EffectType getEffectType() {
 		return L2EffectType.HEAL;
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
 
-		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked())
-		{
+		if (targetCreature.isDead() || targetCreature.isDoor() || targetCreature.isHpBlocked()) {
 			return;
 		}
 
 		double amount = 0;
 		double power = _power;
 		boolean full = (power == 100.0);
-		
+
 		amount = full ? targetCreature.getMaxHp() : (targetCreature.getMaxHp() * power) / 100.0;
 		// Prevents overheal
 		amount = Math.min(amount, targetCreature.getMaxRecoverableHp() - targetCreature.getCurrentHp());
-		if (amount >= 0)
-		{
-			if (amount != 0)
-			{
+		if (amount >= 0) {
+			if (amount != 0) {
 				final double newHp = amount + targetCreature.getCurrentHp();
 				targetCreature.setCurrentHp(newHp, false);
 				targetCreature.broadcastStatusUpdate(caster);
 			}
-			
+
 			SystemMessage sm;
-			if (caster.getObjectId() != targetCreature.getObjectId())
-			{
+			if (caster.getObjectId() != targetCreature.getObjectId()) {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S2_HP_HAS_BEEN_RESTORED_BY_C1);
 				sm.addCharName(caster);
-			}
-			else
-			{
+			} else {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HP_HAS_BEEN_RESTORED);
 			}
 			sm.addInt((int) amount);
 			targetCreature.sendPacket(sm);
-		}
-		else
-		{
+		} else {
 			final double damage = -amount;
 			targetCreature.reduceCurrentHp(damage, caster, skill, false, false, false, false);
 			caster.sendDamageMessage(targetCreature, skill, (int) damage, false, false);

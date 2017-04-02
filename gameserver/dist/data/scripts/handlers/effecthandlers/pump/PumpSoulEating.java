@@ -34,60 +34,50 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * Soul Eating effect implementation.
+ *
  * @author UnAfraid
  */
-public final class PumpSoulEating extends AbstractEffect
-{
+public final class PumpSoulEating extends AbstractEffect {
 	private final int _expNeeded;
 	private final int _maxSouls;
-	
-	public PumpSoulEating(StatsSet params)
-	{
+
+	public PumpSoulEating(StatsSet params) {
 		_expNeeded = params.getInt("expNeeded");
 		_maxSouls = params.getInt("maxSouls");
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			target.addListener(new ConsumerEventListener(target, EventType.ON_PLAYABLE_EXP_CHANGED, (OnPlayableExpChanged event) -> onExperienceReceived(event.getActiveChar(), (event.getNewExp() - event.getOldExp())), this));
 		}
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
-		if (target.isPlayer())
-		{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
+		if (target.isPlayer()) {
 			target.removeListenerIf(EventType.ON_PLAYABLE_EXP_CHANGED, listener -> listener.getOwner() == this);
 		}
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
+	public void pump(Creature target, Skill skill) {
 		target.getStat().mergeAdd(DoubleStat.MAX_SOULS, _maxSouls);
 	}
-	
-	public void onExperienceReceived(Playable playable, long exp)
-	{
+
+	public void onExperienceReceived(Playable playable, long exp) {
 		// TODO: Verify logic.
-		if (playable.isPlayer() && (exp >= _expNeeded))
-		{
+		if (playable.isPlayer() && (exp >= _expNeeded)) {
 			final PlayerInstance player = playable.getActingPlayer();
 			final int maxSouls = (int) player.getStat().getValue(DoubleStat.MAX_SOULS, 0);
-			if (player.getChargedSouls() >= maxSouls)
-			{
+			if (player.getChargedSouls() >= maxSouls) {
 				playable.sendPacket(SystemMessageId.SOUL_CANNOT_BE_ABSORBED_ANYMORE);
 				return;
 			}
-			
+
 			player.increaseSouls(1);
-			
-			if ((player.getTarget() != null) && player.getTarget().isNpc())
-			{
+
+			if ((player.getTarget() != null) && player.getTarget().isNpc()) {
 				final Npc npc = (Npc) playable.getTarget();
 				player.broadcastPacket(new ExSpawnEmitter(player, npc), 500);
 			}

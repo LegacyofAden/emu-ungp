@@ -18,15 +18,9 @@
  */
 package ai.individual.Other.OlyManager;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.WeekFields;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.config.OlympiadConfig;
+import org.l2junity.core.configs.OlympiadConfig;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.handler.BypassHandler;
@@ -37,29 +31,30 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.entity.Hero;
-import org.l2junity.gameserver.model.olympiad.CompetitionType;
-import org.l2junity.gameserver.model.olympiad.Olympiad;
-import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
-import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
-import org.l2junity.gameserver.model.olympiad.OlympiadManager;
+import org.l2junity.gameserver.model.olympiad.*;
 import org.l2junity.gameserver.network.client.send.ExOlympiadMatchList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.AbstractNpcAI;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Olympiad Manager AI.
+ *
  * @author St3eT
  */
-public final class OlyManager extends AbstractNpcAI implements IBypassHandler
-{
+public final class OlyManager extends AbstractNpcAI implements IBypassHandler {
 	// NPC
 	private static final int MANAGER = 31688;
 	// Misc
 	private static final Map<CategoryType, Integer> EQUIPMENT_MULTISELL = new HashMap<>();
-	
+
 	{
 		EQUIPMENT_MULTISELL.put(CategoryType.SIXTH_SIGEL_GROUP, 917);
 		EQUIPMENT_MULTISELL.put(CategoryType.SIXTH_TIR_GROUP, 918);
@@ -70,55 +65,45 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 		EQUIPMENT_MULTISELL.put(CategoryType.SIXTH_WYNN_GROUP, 922);
 		EQUIPMENT_MULTISELL.put(CategoryType.SIXTH_EOLH_GROUP, 924);
 	}
-	
+
 	private static final String[] BYPASSES =
-	{
-		"watchmatch",
-		"arenachange"
-	};
+			{
+					"watchmatch",
+					"arenachange"
+			};
 	private static final Logger _LOG = LoggerFactory.getLogger(OlyManager.class);
-	
-	private OlyManager()
-	{
+
+	private OlyManager() {
 		addStartNpc(MANAGER);
 		addFirstTalkId(MANAGER);
 		addTalkId(MANAGER);
 		BypassHandler.getInstance().registerHandler(this);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "OlyManager-info.html":
 			case "OlyManager-infoHistory.html":
 			case "OlyManager-infoRules.html":
 			case "OlyManager-infoPoints.html":
 			case "OlyManager-infoPointsCalc.html":
 			case "OlyManager-rank.html":
-			case "OlyManager-rewards.html":
-			{
+			case "OlyManager-rewards.html": {
 				htmltext = event;
 				break;
 			}
-			case "index":
-			{
+			case "index": {
 				htmltext = onFirstTalk(npc, player);
 				break;
 			}
-			case "joinMatch":
-			{
-				if (OlympiadManager.getInstance().isRegistered(player))
-				{
+			case "joinMatch": {
+				if (OlympiadManager.getInstance().isRegistered(player)) {
 					htmltext = "OlyManager-registred.html";
-				}
-				else
-				{
-					switch (LocalDate.now().get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfMonth()))
-					{
+				} else {
+					switch (LocalDate.now().get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfMonth())) {
 						case 1:
 						case 2:
 						case 3: // First 3 weeks of month is 1v1 + 1v1 class matches
@@ -132,7 +117,7 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 							break;
 						}
 					}
-					
+
 					htmltext = htmltext.replace("%olympiad_round%", String.valueOf(Olympiad.getInstance().getPeriod()));
 					htmltext = htmltext.replace("%olympiad_week%", String.valueOf(Olympiad.getInstance().getCurrentCycle()));
 					htmltext = htmltext.replace("%olympiad_participant%", String.valueOf(OlympiadManager.getInstance().getCountOpponents()));
@@ -140,108 +125,71 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 				break;
 			}
 			case "register1v1":
-			case "register1v1class":
-			{
-				if (player.isSubClassActive())
-				{
+			case "register1v1class": {
+				if (player.isSubClassActive()) {
 					htmltext = "OlyManager-subclass.html";
-				}
-				else if (!player.isInCategory(CategoryType.SIXTH_CLASS_GROUP))
-				{
+				} else if (!player.isInCategory(CategoryType.SIXTH_CLASS_GROUP)) {
 					htmltext = "OlyManager-awaken.html";
-				}
-				else if (Olympiad.getInstance().getNoblePoints(player) <= 0)
-				{
+				} else if (Olympiad.getInstance().getNoblePoints(player) <= 0) {
 					htmltext = "OlyManager-noPoints.html";
-				}
-				else if (!player.isInventoryUnder80(false))
-				{
+				} else if (!player.isInventoryUnder80(false)) {
 					player.sendPacket(SystemMessageId.UNABLE_TO_PROCESS_THIS_REQUEST_UNTIL_YOUR_INVENTORY_S_WEIGHT_AND_SLOT_COUNT_ARE_LESS_THAN_80_PERCENT_OF_CAPACITY);
-				}
-				else
-				{
-					if (event.equals("register1v1"))
-					{
+				} else {
+					if (event.equals("register1v1")) {
 						OlympiadManager.getInstance().registerNoble(player, CompetitionType.NON_CLASSED);
-					}
-					else
-					{
+					} else {
 						OlympiadManager.getInstance().registerNoble(player, CompetitionType.CLASSED);
 					}
 				}
 				break;
 			}
-			case "unregister":
-			{
+			case "unregister": {
 				OlympiadManager.getInstance().unRegisterNoble(player);
 				break;
 			}
-			case "calculatePoints":
-			{
+			case "calculatePoints": {
 				final int points = Olympiad.getInstance().getOlympiadTradePoint(player, false);
-				if (points == 0)
-				{
+				if (points == 0) {
 					htmltext = "OlyManager-calculateNoEnough.html";
-				}
-				else if (points < 20)
-				{
-					if (Hero.getInstance().isUnclaimedHero(player.getObjectId()) || Hero.getInstance().isHero(player.getObjectId()))
-					{
+				} else if (points < 20) {
+					if (Hero.getInstance().isUnclaimedHero(player.getObjectId()) || Hero.getInstance().isHero(player.getObjectId())) {
 						htmltext = "OlyManager-calculateEnough.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "OlyManager-calculateNoEnough.html";
 					}
-				}
-				else
-				{
+				} else {
 					htmltext = "OlyManager-calculateEnough.html";
 				}
 				break;
 			}
-			case "calculatePointsDone":
-			{
-				if (player.isInventoryUnder80(false))
-				{
+			case "calculatePointsDone": {
+				if (player.isInventoryUnder80(false)) {
 					final int tradePoints = Olympiad.getInstance().getOlympiadTradePoint(player, true);
-					if (tradePoints > 0)
-					{
+					if (tradePoints > 0) {
 						giveItems(player, OlympiadConfig.ALT_OLY_COMP_RITEM, tradePoints * OlympiadConfig.ALT_OLY_MARK_PER_POINT);
 					}
-				}
-				else
-				{
+				} else {
 					player.sendPacket(SystemMessageId.UNABLE_TO_PROCESS_THIS_REQUEST_UNTIL_YOUR_INVENTORY_S_WEIGHT_AND_SLOT_COUNT_ARE_LESS_THAN_80_PERCENT_OF_CAPACITY);
 				}
 				break;
 			}
-			case "showEquipmentReward":
-			{
+			case "showEquipmentReward": {
 				int multisellId = -1;
-				
-				if (player.getClassId() == ClassId.SAYHA_SEER)
-				{
+
+				if (player.getClassId() == ClassId.SAYHA_SEER) {
 					multisellId = 926;
-				}
-				else if (player.getClassId() == ClassId.EVISCERATOR)
-				{
+				} else if (player.getClassId() == ClassId.EVISCERATOR) {
 					multisellId = 925;
-				}
-				else
-				{
-					for (CategoryType type : EQUIPMENT_MULTISELL.keySet())
-					{
-						if (player.isInCategory(type))
-						{
+				} else {
+					for (CategoryType type : EQUIPMENT_MULTISELL.keySet()) {
+						if (player.isInCategory(type)) {
 							multisellId = EQUIPMENT_MULTISELL.get(type);
 							break;
 						}
 					}
 				}
-				
-				if (multisellId > 0)
-				{
+
+				if (multisellId > 0) {
 					MultisellData.getInstance().separateAndSend(multisellId, player, npc, false);
 				}
 				break;
@@ -286,20 +234,17 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 				final int classId = Integer.parseInt(event.replace("rank_", ""));
 				final List<String> names = Olympiad.getInstance().getClassLeaderBoard(classId);
 				htmltext = getHtm(player.getHtmlPrefix(), "OlyManager-rankDetail.html");
-				
+
 				int index = 1;
-				for (String name : names)
-				{
+				for (String name : names) {
 					htmltext = htmltext.replace("%Rank" + index + "%", String.valueOf(index));
 					htmltext = htmltext.replace("%Name" + index + "%", name);
 					index++;
-					if (index > 15)
-					{
+					if (index > 15) {
 						break;
 					}
 				}
-				for (; index <= 15; index++)
-				{
+				for (; index <= 15; index++) {
 					htmltext = htmltext.replace("%Rank" + index + "%", "");
 					htmltext = htmltext.replace("%Name" + index + "%", "");
 				}
@@ -308,70 +253,50 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		if (!player.isCursedWeaponEquipped())
-		{
+
+		if (!player.isCursedWeaponEquipped()) {
 			htmltext = player.isNoble() ? "OlyManager-noble.html" : "OlyManager-noNoble.html";
-		}
-		else
-		{
+		} else {
 			htmltext = "OlyManager-noCursed.html";
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature bypassOrigin)
-	{
-		try
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature bypassOrigin) {
+		try {
 			final Npc olymanager = activeChar.getLastFolkNPC();
-			
+
 			if (command.startsWith(BYPASSES[0])) // list
 			{
-				if (!Olympiad.getInstance().inCompPeriod())
-				{
+				if (!Olympiad.getInstance().inCompPeriod()) {
 					activeChar.sendPacket(SystemMessageId.THE_OLYMPIAD_GAMES_ARE_NOT_CURRENTLY_IN_PROGRESS);
 					return false;
 				}
-				
+
 				activeChar.sendPacket(new ExOlympiadMatchList());
-			}
-			else
-			{
-				if ((olymanager == null) || (olymanager.getId() != MANAGER) || (!activeChar.inObserverMode() && !activeChar.isInRadius2d(olymanager, 300)))
-				{
+			} else {
+				if ((olymanager == null) || (olymanager.getId() != MANAGER) || (!activeChar.inObserverMode() && !activeChar.isInRadius2d(olymanager, 300))) {
 					return false;
-				}
-				else if (OlympiadManager.getInstance().isRegisteredInComp(activeChar))
-				{
+				} else if (OlympiadManager.getInstance().isRegisteredInComp(activeChar)) {
 					activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_OBSERVE_A_OLYMPIAD_GAMES_MATCH_WHILE_YOU_ARE_ON_THE_WAITING_LIST);
 					return false;
-				}
-				else if (!Olympiad.getInstance().inCompPeriod())
-				{
+				} else if (!Olympiad.getInstance().inCompPeriod()) {
 					activeChar.sendPacket(SystemMessageId.THE_OLYMPIAD_GAMES_ARE_NOT_CURRENTLY_IN_PROGRESS);
 					return false;
-				}
-				else if (activeChar.isOnEvent())
-				{
+				} else if (activeChar.isOnEvent()) {
 					activeChar.sendMessage("You can not observe games while registered on an event");
 					return false;
-				}
-				else
-				{
+				} else {
 					final int arenaId = Integer.parseInt(command.substring(12).trim());
 					final OlympiadGameTask nextArena = OlympiadGameManager.getInstance().getOlympiadTask(arenaId);
-					if (nextArena != null)
-					{
+					if (nextArena != null) {
 						final List<Location> spectatorSpawns = nextArena.getStadium().getZone().getSpectatorSpawns();
-						if (spectatorSpawns.isEmpty())
-						{
+						if (spectatorSpawns.isEmpty()) {
 							_LOG.warn(getClass().getSimpleName() + ": Zone: " + nextArena.getStadium().getZone() + " doesn't have specatator spawns defined!");
 							return false;
 						}
@@ -381,22 +306,18 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler
 				}
 			}
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_LOG.warn("Exception in " + getClass().getSimpleName(), e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return BYPASSES;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new OlyManager();
 	}
 }

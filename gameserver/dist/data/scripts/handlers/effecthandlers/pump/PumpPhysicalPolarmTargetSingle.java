@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-
-import handlers.effecthandlers.AbstractBooleanStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpPhysicalPolarmTargetSingle extends AbstractBooleanStatEffect
-{
-	public PumpPhysicalPolarmTargetSingle(StatsSet params)
-	{
+public class PumpPhysicalPolarmTargetSingle extends AbstractBooleanStatEffect {
+	public PumpPhysicalPolarmTargetSingle(StatsSet params) {
 		super(BooleanStat.PHYSICAL_POLEARM_TARGET_SINGLE);
 	}
 }

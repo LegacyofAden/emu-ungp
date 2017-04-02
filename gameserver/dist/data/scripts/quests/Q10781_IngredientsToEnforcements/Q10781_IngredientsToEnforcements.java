@@ -25,31 +25,29 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-
 import quests.Q10780_AWeakenedBarrier.Q10780_AWeakenedBarrier;
 
 /**
  * Ingredients to Enforcements (10781)
+ *
  * @author malyelfik
  */
-public final class Q10781_IngredientsToEnforcements extends Quest
-{
+public final class Q10781_IngredientsToEnforcements extends Quest {
 	// NPC
 	private static final int BACON = 33846;
 	// Monsters
 	private static final int[] MONSTERS =
-	{
-		23309, // Corpse Looter Stakato
-		23310, // Lesser Laikel
-	};
+			{
+					23309, // Corpse Looter Stakato
+					23310, // Lesser Laikel
+			};
 	// Items
 	private static final int WIND_SPIRIT_FRAGMENT = 39721;
 	// Misc
 	private static final int MIN_LEVEL = 52;
 	private static final int MAX_LEVEL = 58;
-	
-	public Q10781_IngredientsToEnforcements()
-	{
+
+	public Q10781_IngredientsToEnforcements() {
 		super(10781);
 		addStartNpc(BACON);
 		addTalkId(BACON);
@@ -59,40 +57,31 @@ public final class Q10781_IngredientsToEnforcements extends Quest
 		addCondCompletedQuest(Q10780_AWeakenedBarrier.class.getSimpleName(), "33846-01.htm");
 		registerQuestItems(WIND_SPIRIT_FRAGMENT);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33846-03.htm":
 			case "33846-04.htm":
 				break;
-			case "33846-05.htm":
-			{
+			case "33846-05.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "33846-08.html":
-			{
-				if (qs.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33846-08.html": {
+				if (qs.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 19_688_585);
 						addSp(player, 914);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -103,15 +92,13 @@ public final class Q10781_IngredientsToEnforcements extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33846-02.htm";
 				break;
@@ -124,23 +111,17 @@ public final class Q10781_IngredientsToEnforcements extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			final long itemCount = getQuestItemsCount(killer, WIND_SPIRIT_FRAGMENT);
-			if (itemCount < 80)
-			{
+			if (itemCount < 80) {
 				giveItems(killer, WIND_SPIRIT_FRAGMENT, 1);
-				if (getQuestItemsCount(killer, WIND_SPIRIT_FRAGMENT) >= 80)
-				{
+				if (getQuestItemsCount(killer, WIND_SPIRIT_FRAGMENT) >= 80) {
 					qs.setCond(2, true);
-				}
-				else
-				{
+				} else {
 					playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 				}
 			}

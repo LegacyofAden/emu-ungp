@@ -18,7 +18,7 @@
  */
 package quests.Q00061_LawEnforcement;
 
-import org.l2junity.gameserver.config.GeneralConfig;
+import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -31,10 +31,10 @@ import org.l2junity.gameserver.util.Util;
 
 /**
  * Law Enforcement (61)
+ *
  * @author Gladicek
  */
-public final class Q00061_LawEnforcement extends Quest
-{
+public final class Q00061_LawEnforcement extends Quest {
 	// NPCs
 	private static final int LIANE = 32222;
 	private static final int PANTHEON = 32972;
@@ -45,9 +45,8 @@ public final class Q00061_LawEnforcement extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 76;
 	private static final int JUDICATOR = 136;
-	
-	public Q00061_LawEnforcement()
-	{
+
+	public Q00061_LawEnforcement() {
 		super(61);
 		addStartNpc(LIANE);
 		addTalkId(LIANE, PANTHEON, KEKROPUS, EINDBURGH);
@@ -55,19 +54,16 @@ public final class Q00061_LawEnforcement extends Quest
 		addCondRace(Race.KAMAEL, "32222-02.htm");
 		addCondClassId(ClassId.INSPECTOR, "32222-03.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "32222-04.htm":
 			case "32138-02.html":
 			case "32138-03.html":
@@ -81,48 +77,37 @@ public final class Q00061_LawEnforcement extends Quest
 			case "32469-04.html":
 			case "32469-05.html":
 			case "32469-06.html":
-			case "32469-07.html":
-			{
+			case "32469-07.html": {
 				htmltext = event;
 				break;
 			}
-			case "32222-05.html":
-			{
+			case "32222-05.html": {
 				qs.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "teleport":
-			{
-				if (qs.isCond(1))
-				{
+			case "teleport": {
+				if (qs.isCond(1)) {
 					qs.setCond(2, true);
 					player.teleToLocation(MUSEUM);
 				}
 				break;
 			}
-			case "32138-09.html":
-			{
-				if (qs.isCond(2))
-				{
+			case "32138-09.html": {
+				if (qs.isCond(2)) {
 					qs.setCond(3, true);
 				}
 				break;
 			}
 			case "32469-08.html":
-			case "32469-09.html":
-			{
-				if (qs.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "32469-09.html": {
+				if (qs.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						final ClassId newClassId = player.getClassId().getNextClassIds().stream().findFirst().orElse(null);
-						if (newClassId != null)
-						{
+						if (newClassId != null) {
 							final ClassId currentClassId = player.getClassId();
-							
-							if (!newClassId.childOf(currentClassId))
-							{
+
+							if (!newClassId.childOf(currentClassId)) {
 								Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to cheat class transfer for Judicator!", GeneralConfig.DEFAULT_PUNISH);
 							}
 							player.setClassId(JUDICATOR);
@@ -131,9 +116,7 @@ public final class Q00061_LawEnforcement extends Quest
 							qs.exitQuest(false, true);
 							htmltext = event;
 						}
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -142,59 +125,43 @@ public final class Q00061_LawEnforcement extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == LIANE)
-				{
+
+		switch (qs.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == LIANE) {
 					htmltext = "32222-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (npc.getId())
-				{
-					case LIANE:
-					{
-						if (qs.isCond(1))
-						{
+			case State.STARTED: {
+				switch (npc.getId()) {
+					case LIANE: {
+						if (qs.isCond(1)) {
 							htmltext = "32222-06.html";
 						}
 						break;
 					}
-					case PANTHEON:
-					{
-						if (qs.isCond(1))
-						{
+					case PANTHEON: {
+						if (qs.isCond(1)) {
 							htmltext = "32972-01.html";
 						}
 						break;
 					}
-					case KEKROPUS:
-					{
-						if (qs.isCond(2))
-						{
+					case KEKROPUS: {
+						if (qs.isCond(2)) {
 							htmltext = "32138-01.html";
-						}
-						else if (qs.isCond(3))
-						{
+						} else if (qs.isCond(3)) {
 							htmltext = "32138-10.html";
 						}
 						break;
 					}
-					case EINDBURGH:
-					{
-						if (qs.isCond(3))
-						{
+					case EINDBURGH: {
+						if (qs.isCond(3)) {
 							htmltext = "32469-01.html";
 						}
 						break;
@@ -202,8 +169,7 @@ public final class Q00061_LawEnforcement extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
+			case State.COMPLETED: {
 				htmltext = getAlreadyCompletedMsg(player);
 				break;
 			}

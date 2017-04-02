@@ -27,33 +27,28 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 /**
  * Mp Consume Per Level effect implementation.
  */
-public final class ConsumeHp extends AbstractEffect
-{
+public final class ConsumeHp extends AbstractEffect {
 	private final double _power;
-	
-	public ConsumeHp(StatsSet params)
-	{
+
+	public ConsumeHp(StatsSet params) {
 		_power = params.getDouble("power", 0);
 		setTicks(params.getInt("ticks"));
 	}
-	
+
 	@Override
-	public boolean consume(Creature target, Skill skill)
-	{
+	public boolean consume(Creature target, Skill skill) {
 		final double consume = _power * getTicksMultiplier();
 		double hp = target.getCurrentHp();
 		final double maxHp = target.getMaxRecoverableHp();
-		if ((consume > 0) && (hp > maxHp))
-		{
+		if ((consume > 0) && (hp > maxHp)) {
 			return false;
 		}
-		
-		if ((consume < 0) && ((hp + consume) <= 0))
-		{
+
+		if ((consume < 0) && ((hp + consume) <= 0)) {
 			target.sendPacket(SystemMessageId.YOUR_SKILL_HAS_BEEN_CANCELED_DUE_TO_LACK_OF_HP);
 			return false;
 		}
-		
+
 		target.setCurrentHp(Math.min(hp + consume, maxHp));
 		return true;
 	}

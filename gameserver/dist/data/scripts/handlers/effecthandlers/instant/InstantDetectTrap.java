@@ -28,38 +28,32 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Trap Detect effect implementation.
+ *
  * @author UnAfraid
  */
-public final class InstantDetectTrap extends AbstractEffect
-{
+public final class InstantDetectTrap extends AbstractEffect {
 	private final int _power;
-	
-	public InstantDetectTrap(StatsSet params)
-	{
-		if (params.isEmpty())
-		{
+
+	public InstantDetectTrap(StatsSet params) {
+		if (params.isEmpty()) {
 			throw new IllegalArgumentException(getClass().getSimpleName() + ": effect without power!");
 		}
-		
+
 		_power = params.getInt("power");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final L2TrapInstance targetTrap = target.asTrap();
-		if (targetTrap == null)
-		{
+		if (targetTrap == null) {
 			return;
 		}
-		
-		if (targetTrap.isAlikeDead())
-		{
+
+		if (targetTrap.isAlikeDead()) {
 			return;
 		}
-		
-		if (targetTrap.getLevel() <= _power)
-		{
+
+		if (targetTrap.getLevel() <= _power) {
 			targetTrap.setDetected(caster);
 		}
 	}

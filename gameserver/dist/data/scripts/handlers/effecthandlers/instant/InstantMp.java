@@ -30,72 +30,58 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * MP change effect. It is mostly used for potions and static damage.
+ *
  * @author Nik
  */
-public final class InstantMp extends AbstractEffect
-{
+public final class InstantMp extends AbstractEffect {
 	private final int _amount;
 	private final StatModifierType _mode;
-	
-	public InstantMp(StatsSet params)
-	{
+
+	public InstantMp(StatsSet params) {
 		_amount = params.getInt("amount", 0);
 		_mode = params.getEnum("mode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
-		if (targetCreature.isDead() || target.isDoor() || targetCreature.isMpBlocked())
-		{
+
+		if (targetCreature.isDead() || target.isDoor() || targetCreature.isMpBlocked()) {
 			return;
 		}
-		
+
 		double amount = 0;
-		switch (_mode)
-		{
-			case DIFF:
-			{
+		switch (_mode) {
+			case DIFF: {
 				amount = Math.min(_amount, targetCreature.getMaxRecoverableMp() - targetCreature.getCurrentMp());
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				amount = Math.min((targetCreature.getCurrentMp() * _amount) / 100.0, targetCreature.getMaxRecoverableMp() - targetCreature.getCurrentMp());
 				break;
 			}
 		}
-		
-		if (amount >= 0)
-		{
-			if (amount != 0)
-			{
+
+		if (amount >= 0) {
+			if (amount != 0) {
 				final double newMp = amount + targetCreature.getCurrentMp();
 				targetCreature.setCurrentMp(newMp, false);
 				targetCreature.broadcastStatusUpdate(caster);
 			}
-			
+
 			SystemMessage sm;
-			if (!caster.equals(targetCreature))
-			{
+			if (!caster.equals(targetCreature)) {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S2_MP_HAS_BEEN_RESTORED_BY_C1);
 				sm.addCharName(caster);
-			}
-			else
-			{
+			} else {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_MP_HAS_BEEN_RESTORED);
 			}
 			sm.addInt((int) amount);
 			targetCreature.sendPacket(sm);
-		}
-		else
-		{
+		} else {
 			final double damage = -amount;
 			targetCreature.reduceCurrentMp(damage);
 		}

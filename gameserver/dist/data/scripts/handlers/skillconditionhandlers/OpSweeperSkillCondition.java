@@ -18,9 +18,7 @@
  */
 package handlers.skillconditionhandlers;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.l2junity.gameserver.config.NpcConfig;
+import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
@@ -30,46 +28,36 @@ import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * @author Sdw
  */
-public class OpSweeperSkillCondition implements ISkillCondition
-{
-	public OpSweeperSkillCondition(StatsSet params)
-	{
-		
+public class OpSweeperSkillCondition implements ISkillCondition {
+	public OpSweeperSkillCondition(StatsSet params) {
+
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		AtomicBoolean canSweep = new AtomicBoolean(false);
-		if (caster.getActingPlayer() != null)
-		{
+		if (caster.getActingPlayer() != null) {
 			final PlayerInstance sweeper = caster.getActingPlayer();
-			if (skill != null)
-			{
+			if (skill != null) {
 				skill.forEachTargetAffected(sweeper, target, o ->
 				{
-					if (o.isAttackable())
-					{
+					if (o.isAttackable()) {
 						Attackable a = (Attackable) o;
-						if (a.isDead())
-						{
-							if (a.isSpoiled())
-							{
+						if (a.isDead()) {
+							if (a.isSpoiled()) {
 								canSweep.set(a.checkSpoilOwner(sweeper, true));
-								if (canSweep.get())
-								{
+								if (canSweep.get()) {
 									canSweep.set(!a.isOldCorpse(sweeper, NpcConfig.CORPSE_CONSUME_SKILL_ALLOWED_TIME_BEFORE_DECAY, true));
 								}
-								if (canSweep.get())
-								{
+								if (canSweep.get()) {
 									canSweep.set(sweeper.getInventory().checkInventorySlotsAndWeight(a.getSpoilLootItems(), true, true));
 								}
-							}
-							else
-							{
+							} else {
 								sweeper.sendPacket(SystemMessageId.SWEEPER_FAILED_TARGET_NOT_SPOILED);
 							}
 						}

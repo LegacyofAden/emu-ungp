@@ -18,17 +18,11 @@
  */
 package instances.ChambersOfDelusion;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
-
+import instances.AbstractInstance;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
-import org.l2junity.commons.util.concurrent.ThreadPool;
-import org.l2junity.gameserver.config.GeneralConfig;
-import org.l2junity.gameserver.config.RatesConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -42,32 +36,37 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import instances.AbstractInstance;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * Chambers of Delusion.
+ *
  * @author GKR
  */
-public final class ChamberOfDelusion extends AbstractInstance
-{
+public final class ChamberOfDelusion extends AbstractInstance {
 	// NPCs
 	private static final Map<Integer, Integer> ENTRANCE_GATEKEEPER = new HashMap<>();
 	private static final int[] ROOM_GATEKEEPERS = IntStream.range(32664, 32702).toArray();
 	private static final int[] AENKINEL =
-	{
-		25690, // East
-		25691, // West
-		25692, // South
-		25693, // North
-		25694, // Square
-		25695, // Tower
-	};
+			{
+					25690, // East
+					25691, // West
+					25692, // South
+					25693, // North
+					25694, // Square
+					25695, // Tower
+			};
 	private static final int[] BOX =
-	{
-		18838, // East, West, South, North
-		18820, // Square
-		18823, // Tower
-	};
+			{
+					18838, // East, West, South, North
+					18820, // Square
+					18823, // Tower
+			};
 	// Items
 	private static final int ENRIA = 4042;
 	private static final int ASOFE = 4043;
@@ -80,9 +79,8 @@ public final class ChamberOfDelusion extends AbstractInstance
 	// Timers
 	private static final int ROOM_CHANGE_INTERVAL = 480; // 8 min
 	private static final int ROOM_CHANGE_RANDOM_TIME = 120; // 2 min
-	
-	static
-	{
+
+	static {
 		ENTRANCE_GATEKEEPER.put(32658, 127); // East
 		ENTRANCE_GATEKEEPER.put(32659, 128); // West
 		ENTRANCE_GATEKEEPER.put(32660, 129); // South
@@ -90,9 +88,8 @@ public final class ChamberOfDelusion extends AbstractInstance
 		ENTRANCE_GATEKEEPER.put(32662, 131); // Square
 		ENTRANCE_GATEKEEPER.put(32663, 132); // Tower
 	}
-	
-	public ChamberOfDelusion()
-	{
+
+	public ChamberOfDelusion() {
 		super(ENTRANCE_GATEKEEPER.values().stream().mapToInt(Integer::valueOf).toArray());
 		addStartNpc(ENTRANCE_GATEKEEPER.keySet());
 		addStartNpc(ROOM_GATEKEEPERS);
@@ -105,28 +102,22 @@ public final class ChamberOfDelusion extends AbstractInstance
 		addInstanceCreatedId(ENTRANCE_GATEKEEPER.values());
 		addInstanceDestroyId(ENTRANCE_GATEKEEPER.values());
 	}
-	
+
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player)
-	{
+	public void onInstanceCreated(Instance instance, PlayerInstance player) {
 		// Choose start room
 		changeRoom(instance);
-		
+
 		// Start banish task
-		final ScheduledFuture<?> banishTask = ThreadPool.scheduleAtFixedRate(() ->
+		final ScheduledFuture<?> banishTask = ThreadPool.getInstance().scheduleGeneralAtFixedRate(() ->
 		{
-			if (instance.getRemainingTime() < 60000)
-			{
+			if (instance.getRemainingTime() < 60000) {
 				final ScheduledFuture<?> task = instance.getParameters().getObject("banishTask", ScheduledFuture.class);
 				task.cancel(false);
-			}
-			else
-			{
-				for (int objId : instance.getAllowed())
-				{
+			} else {
+				for (int objId : instance.getAllowed()) {
 					final PlayerInstance pl = World.getInstance().getPlayer(objId);
-					if ((pl != null) && pl.isOnline() && !pl.isInParty())
-					{
+					if ((pl != null) && pl.isOnline() && !pl.isInParty()) {
 						instance.finishInstance(0);
 						break;
 					}
@@ -135,103 +126,77 @@ public final class ChamberOfDelusion extends AbstractInstance
 		}, 60000, 60000, TimeUnit.MILLISECONDS);
 		instance.setParameter("banishTask", banishTask);
 	}
-	
+
 	@Override
-	public void onInstanceDestroy(Instance instance)
-	{
+	public void onInstanceDestroy(Instance instance) {
 		// Stop room change task
 		stopRoomChangeTask(instance);
-		
+
 		// Stop banish task
 		final ScheduledFuture<?> banish = instance.getParameters().getObject("banishTask", ScheduledFuture.class);
-		if (banish != null)
-		{
+		if (banish != null) {
 			banish.cancel(true);
 			instance.setParameter("banishTask", null);
 		}
 	}
-	
+
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter)
-	{
+	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
 		// Teleport player to instance
 		super.onEnter(player, instance, firstEnter);
-		
+
 		// Take items
-		if (firstEnter)
-		{
-			if (hasQuestItems(player, DELUSION_MARK))
-			{
+		if (firstEnter) {
+			if (hasQuestItems(player, DELUSION_MARK)) {
 				takeItems(player, DELUSION_MARK, -1);
 			}
-			
-			if (player.getParty().isLeader(player))
-			{
+
+			if (player.getParty().isLeader(player)) {
 				giveItems(player, DELUSION_MARK, 1);
 			}
 		}
 	}
-	
+
 	@Override
-	protected void teleportPlayerIn(PlayerInstance player, Instance instance)
-	{
+	protected void teleportPlayerIn(PlayerInstance player, Instance instance) {
 		final int room = instance.getParameters().getInt("currentRoom");
 		final Location loc = instance.getEnterLocations().get(room);
 		player.teleToLocation(loc, instance);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
+
 		final Instance world = npc.getInstanceWorld();
-		if ((player != null) && (world != null) && ArrayUtil.contains(ROOM_GATEKEEPERS, npc.getId()))
-		{
-			switch (event)
-			{
-				case "next_room":
-				{
-					if (player.isInParty())
-					{
+		if ((player != null) && (world != null) && ArrayUtil.contains(ROOM_GATEKEEPERS, npc.getId())) {
+			switch (event) {
+				case "next_room": {
+					if (player.isInParty()) {
 						htmltext = "no_party.html";
-					}
-					else if (player.getParty().isLeader(player))
-					{
+					} else if (player.getParty().isLeader(player)) {
 						htmltext = "no_leader.html";
-					}
-					else if (!hasQuestItems(player, DELUSION_MARK))
-					{
+					} else if (!hasQuestItems(player, DELUSION_MARK)) {
 						htmltext = "no_item.html";
-					}
-					else
-					{
+					} else {
 						takeItems(player, DELUSION_MARK, 1);
 						stopRoomChangeTask(world);
 						changeRoom(world);
 					}
 					break;
 				}
-				case "go_out":
-				{
-					if (player.isInParty())
-					{
+				case "go_out": {
+					if (player.isInParty()) {
 						htmltext = "no_party.html";
-					}
-					else if (player.getParty().isLeader(player))
-					{
+					} else if (player.getParty().isLeader(player)) {
 						htmltext = "no_leader.html";
-					}
-					else
-					{
+					} else {
 						world.finishInstance(0);
 					}
 					break;
 				}
-				case "look_party":
-				{
-					if (player.isInParty() && world.isAllowed(player))
-					{
+				case "look_party": {
+					if (player.isInParty() && world.isAllowed(player)) {
 						teleportPlayerIn(player, world);
 					}
 					break;
@@ -240,33 +205,27 @@ public final class ChamberOfDelusion extends AbstractInstance
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final int npcId = npc.getId();
-		if (ENTRANCE_GATEKEEPER.containsKey(npcId))
-		{
+		if (ENTRANCE_GATEKEEPER.containsKey(npcId)) {
 			enterInstance(player, npc, ENTRANCE_GATEKEEPER.get(npcId));
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill)
-	{
-		if (!npc.isDead() && ArrayUtil.contains(BOX, npc.getId()) && ((skill.getId() == FAIL_SKILL.getSkillId()) || (skill.getId() == SUCCESS_SKILL.getSkillId())))
-		{
+	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+		if (!npc.isDead() && ArrayUtil.contains(BOX, npc.getId()) && ((skill.getId() == FAIL_SKILL.getSkillId()) || (skill.getId() == SUCCESS_SKILL.getSkillId()))) {
 			npc.doDie(player);
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
+
 	@Override
-	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference)
-	{
-		switch (eventName)
-		{
+	public String onEventReceived(String eventName, Npc sender, Npc receiver, WorldObject reference) {
+		switch (eventName) {
 			case "SCE_LUCKY":
 				receiver.setBusy(true);
 				receiver.doCast(SUCCESS_SKILL.getSkill());
@@ -278,58 +237,44 @@ public final class ChamberOfDelusion extends AbstractInstance
 		}
 		return null;
 	}
-	
+
 	@Override
-	public String onAttack(final Npc npc, final PlayerInstance attacker, final int damage, final boolean isPet, final Skill skill)
-	{
-		if (!npc.isBusy() && (npc.getCurrentHp() < (npc.getMaxHp() / 10)))
-		{
+	public String onAttack(final Npc npc, final PlayerInstance attacker, final int damage, final boolean isPet, final Skill skill) {
+		if (!npc.isBusy() && (npc.getCurrentHp() < (npc.getMaxHp() / 10))) {
 			npc.setBusy(true);
 			if (getRandom(100) < 25) // 25% chance to reward
 			{
-				if (getRandom(100) < 33)
-				{
+				if (getRandom(100) < 33) {
 					npc.dropItem(attacker, ENRIA, (int) (3 * RatesConfig.RATE_QUEST_DROP));
 				}
-				if (getRandom(100) < 50)
-				{
+				if (getRandom(100) < 50) {
 					npc.dropItem(attacker, THONS, (int) (4 * RatesConfig.RATE_QUEST_DROP));
 				}
-				if (getRandom(100) < 50)
-				{
+				if (getRandom(100) < 50) {
 					npc.dropItem(attacker, ASOFE, (int) (4 * RatesConfig.RATE_QUEST_DROP));
 				}
-				if (getRandom(100) < 16)
-				{
+				if (getRandom(100) < 16) {
 					npc.dropItem(attacker, LEONARD, (int) (2 * RatesConfig.RATE_QUEST_DROP));
 				}
 				npc.broadcastEvent("SCE_LUCKY", 2000, null);
 				npc.doCast(SUCCESS_SKILL.getSkill());
-			}
-			else
-			{
+			} else {
 				npc.broadcastEvent("SCE_DREAM_FIRE_IN_THE_HOLE", 2000, null);
 			}
 		}
 		return super.onAttack(npc, attacker, damage, isPet, skill);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isPet)
-	{
+	public String onKill(Npc npc, PlayerInstance player, boolean isPet) {
 		final Instance world = player.getInstanceWorld();
-		if (world != null)
-		{
-			if (isBigChamber(world))
-			{
+		if (world != null) {
+			if (isBigChamber(world)) {
 				world.setReenterTime();
-				if (world.getRemainingTime() > (GeneralConfig.INSTANCE_FINISH_TIME * 60000))
-				{
+				if (world.getRemainingTime() > (GeneralConfig.INSTANCE_FINISH_TIME * 60000)) {
 					world.finishInstance();
 				}
-			}
-			else
-			{
+			} else {
 				stopRoomChangeTask(world);
 				scheduleRoomChange(world, true);
 			}
@@ -337,116 +282,93 @@ public final class ChamberOfDelusion extends AbstractInstance
 		}
 		return super.onKill(npc, player, isPet);
 	}
-	
-	private boolean isBigChamber(Instance world)
-	{
+
+	private boolean isBigChamber(Instance world) {
 		return world.getTemplateParameters().getBoolean("isBigRoom");
 	}
-	
-	private boolean isBossRoom(Instance world, int room)
-	{
+
+	private boolean isBossRoom(Instance world, int room) {
 		return room == (world.getEnterLocations().size() - 1);
 	}
-	
-	protected void changeRoom(Instance world)
-	{
+
+	protected void changeRoom(Instance world) {
 		final StatsSet params = world.getParameters();
 		final List<Location> locations = world.getEnterLocations();
-		
+
 		int newRoom = params.getInt("currentRoom", 0);
-		if (isBigChamber(world))
-		{
+		if (isBigChamber(world)) {
 			// Do nothing, if there are raid room of Sqare or Tower Chamber
-			if (isBossRoom(world, newRoom))
-			{
+			if (isBossRoom(world, newRoom)) {
 				return;
 			}
-			
+
 			// Teleport to raid room 10 min or lesser before instance end time for Tower and Square Chambers
-			else if (world.getRemainingTime() < 600000)
-			{
+			else if (world.getRemainingTime() < 600000) {
 				newRoom = locations.size() - 1;
 			}
 		}
 		// 10% chance for teleport to raid room if not here already for Northern, Southern, Western and Eastern Chambers
-		else if (!isBossRoom(world, newRoom) && (getRandom(100) < 10))
-		{
+		else if (!isBossRoom(world, newRoom) && (getRandom(100) < 10)) {
 			newRoom = locations.size() - 1;
-		}
-		else
-		{
+		} else {
 			// otherwise teleport to another room, except current
-			while (newRoom == params.getInt("currentRoom", 0))
-			{
+			while (newRoom == params.getInt("currentRoom", 0)) {
 				newRoom = getRandom(locations.size() - 1);
 			}
 		}
 		world.setParameter("currentRoom", newRoom);
-		
+
 		// Teleport players into new room
 		world.getPlayers().forEach(p -> teleportPlayerIn(p, world));
-		
+
 		// Do not schedule room change for Square and Tower Chambers, if raid room is reached
-		if (isBigChamber(world) && isBossRoom(world, newRoom))
-		{
+		if (isBigChamber(world) && isBossRoom(world, newRoom)) {
 			// Add 20 min to instance time if raid room is reached
 			world.setDuration((int) (TimeUnit.MILLISECONDS.toMinutes(world.getRemainingTime() + 1200000)));
-			
+
 			// Broadcast instance duration change (NPC message)
 			final int raidGatekeeper = world.getTemplateParameters().getInt("raidGatekeeper");
 			final Npc gatekeeper = world.getNpc(raidGatekeeper);
-			if (gatekeeper != null)
-			{
+			if (gatekeeper != null) {
 				gatekeeper.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.MINUTES_ARE_ADDED_TO_THE_REMAINING_TIME_IN_THE_INSTANT_ZONE);
 			}
-		}
-		else
-		{
+		} else {
 			scheduleRoomChange(world, false);
 		}
 	}
-	
-	protected void scheduleRoomChange(Instance world, boolean bossRoom)
-	{
+
+	protected void scheduleRoomChange(Instance world, boolean bossRoom) {
 		// Schedule next room change only if remaining time is enough
 		final long nextInterval = (bossRoom) ? 60000L : (ROOM_CHANGE_INTERVAL + getRandom(ROOM_CHANGE_RANDOM_TIME)) * 1000L;
-		if (world.getRemainingTime() > nextInterval)
-		{
-			final ScheduledFuture<?> roomChangeTask = ThreadPool.schedule(() ->
+		if (world.getRemainingTime() > nextInterval) {
+			final ScheduledFuture<?> roomChangeTask = ThreadPool.getInstance().scheduleGeneral(() ->
 			{
-				try
-				{
+				try {
 					// Send earthquake packet
-					for (PlayerInstance player : world.getPlayers())
-					{
+					for (PlayerInstance player : world.getPlayers()) {
 						player.sendPacket(new Earthquake(player, 20, 10));
 					}
 					// Wait for a while
 					Thread.sleep(5000);
 					// Change room
 					changeRoom(world);
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					_log.warn("Error occured in room change task: ", e);
 				}
 			}, nextInterval - 5000, TimeUnit.MILLISECONDS);
 			world.setParameter("roomChangeTask", roomChangeTask);
 		}
 	}
-	
-	protected void stopRoomChangeTask(Instance world)
-	{
+
+	protected void stopRoomChangeTask(Instance world) {
 		final ScheduledFuture<?> task = world.getParameters().getObject("roomChangeTask", ScheduledFuture.class);
-		if (task != null)
-		{
+		if (task != null) {
 			task.cancel(true);
 			world.setParameter("roomChangeTask", null);
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ChamberOfDelusion();
 	}
 }

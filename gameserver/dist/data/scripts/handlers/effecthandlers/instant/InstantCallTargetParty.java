@@ -34,92 +34,78 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * GM Effect: Call Target's Party around target effect implementation.
+ *
  * @author Nik
  */
-public final class InstantCallTargetParty extends AbstractEffect
-{
-	public InstantCallTargetParty(StatsSet params)
-	{
+public final class InstantCallTargetParty extends AbstractEffect {
+	public InstantCallTargetParty(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance targetPlayer = target.asPlayer();
-		if (targetPlayer == null)
-		{
+		if (targetPlayer == null) {
 			return;
 		}
-		
+
 		final Party party = targetPlayer.getParty();
-		if (party != null)
-		{
+		if (party != null) {
 			party.getMembers().stream().filter(p -> (p != targetPlayer) && checkSummonTargetStatus(p, caster)).forEach(p -> p.teleToLocation(targetPlayer.getLocation(), true));
 		}
 	}
-	
-	public static boolean checkSummonTargetStatus(PlayerInstance target, Creature activeChar)
-	{
-		if (target == activeChar)
-		{
+
+	public static boolean checkSummonTargetStatus(PlayerInstance target, Creature activeChar) {
+		if (target == activeChar) {
 			return false;
 		}
-		
-		if (target.isAlikeDead())
-		{
+
+		if (target.isAlikeDead()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_DEAD_AT_THE_MOMENT_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInStoreMode())
-		{
+
+		if (target.isInStoreMode()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_CURRENTLY_TRADING_OR_OPERATING_A_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isImmobilized() || target.isInCombat())
-		{
+
+		if (target.isImmobilized() || target.isInCombat()) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED_OR_TELEPORTED);
 			sm.addPcName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInOlympiadMode())
-		{
+
+		if (target.isInOlympiadMode()) {
 			activeChar.sendPacket(SystemMessageId.A_USER_PARTICIPATING_IN_THE_OLYMPIAD_CANNOT_USE_SUMMONING_OR_TELEPORTING);
 			return false;
 		}
-		
-		if (target.isFlyingMounted() || target.isCombatFlagEquipped())
-		{
+
+		if (target.isFlyingMounted() || target.isCombatFlagEquipped()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_USE_SUMMONING_OR_TELEPORTING_IN_THIS_AREA);
 			return false;
 		}
-		
-		if (target.inObserverMode() || OlympiadManager.getInstance().isRegisteredInComp(target))
-		{
+
+		if (target.inObserverMode() || OlympiadManager.getInstance().isRegisteredInComp(target)) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING_OR_TELEPORTING2);
 			sm.addCharName(target);
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
-		if (target.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || target.isInsideZone(ZoneId.JAIL))
-		{
+
+		if (target.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || target.isInsideZone(ZoneId.JAIL)) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING_OR_TELEPORTING);
 			sm.addString(target.getName());
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		
+
 		final Instance instance = activeChar.getInstanceWorld();
-		if ((instance != null) && !instance.isPlayerSummonAllowed())
-		{
+		if ((instance != null) && !instance.isPlayerSummonAllowed()) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_SUMMON_FROM_YOUR_CURRENT_LOCATION);
 			return false;
 		}

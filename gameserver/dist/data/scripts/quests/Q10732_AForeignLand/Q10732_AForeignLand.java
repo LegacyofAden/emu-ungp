@@ -28,49 +28,42 @@ import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
 
 /**
  * A Foreign Land (10732)
+ *
  * @author Sdw
  */
-public final class Q10732_AForeignLand extends Quest
-{
+public final class Q10732_AForeignLand extends Quest {
 	// NPC's
 	private static final int NAVARI = 33931;
 	private static final int GERETH = 33932;
 	// Misc
 	private static final int MAX_LEVEL = 20;
-	
-	public Q10732_AForeignLand()
-	{
+
+	public Q10732_AForeignLand() {
 		super(10732);
 		addStartNpc(NAVARI);
 		addTalkId(NAVARI, GERETH);
 		addCondRace(Race.ERTHEIA, "");
 		addCondMaxLevel(MAX_LEVEL, "33931-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33931-02.htm":
 				break;
-			case "33931-03.htm":
-			{
+			case "33931-03.htm": {
 				qs.startQuest();
 				player.sendPacket(ExShowUsm.ERTHEIA_FIRST_QUEST);
 				break;
 			}
-			case "33932-02.html":
-			{
-				if (qs.isStarted())
-				{
+			case "33932-02.html": {
+				if (qs.isStarted()) {
 					player.sendPacket(new TutorialShowHtml(npc.getObjectId(), "..\\L2Text\\QT_001_Radar_01.htm", TutorialShowHtml.LARGE_WINDOW));
 					addExp(player, 75);
 					addSp(player, 2);
@@ -83,35 +76,26 @@ public final class Q10732_AForeignLand extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
-		if (st.isCompleted())
-		{
+		if (st.isCompleted()) {
 			return getAlreadyCompletedMsg(player);
 		}
-		
+
 		String htmltext = getNoQuestMsg(player);
-		switch (npc.getId())
-		{
-			case NAVARI:
-			{
-				if (st.isCreated())
-				{
+		switch (npc.getId()) {
+			case NAVARI: {
+				if (st.isCreated()) {
 					htmltext = "33931-01.htm";
-				}
-				else if (st.isStarted())
-				{
+				} else if (st.isStarted()) {
 					htmltext = "33931-04.html";
 				}
 				break;
 			}
-			case GERETH:
-			{
-				if (st.isStarted())
-				{
+			case GERETH: {
+				if (st.isStarted()) {
 					htmltext = "33932-01.html";
 				}
 				break;

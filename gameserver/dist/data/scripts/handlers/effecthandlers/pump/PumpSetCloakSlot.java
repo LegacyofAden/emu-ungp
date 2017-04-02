@@ -25,29 +25,25 @@ import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * Enable Cloak effect implementation.
+ *
  * @author Adry_85
  */
-public final class PumpSetCloakSlot extends AbstractEffect
-{
-	public PumpSetCloakSlot(StatsSet params)
-	{
+public final class PumpSetCloakSlot extends AbstractEffect {
+	public PumpSetCloakSlot(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer();
 	}
-	
+
 	@Override
-	public void pumpStart(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().getStat().setCloakSlotStatus(true);
 	}
-	
+
 	@Override
-	public void pumpEnd(Creature caster, Creature target, Skill skill)
-	{
+	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		target.getActingPlayer().getStat().setCloakSlotStatus(false);
 	}
 }

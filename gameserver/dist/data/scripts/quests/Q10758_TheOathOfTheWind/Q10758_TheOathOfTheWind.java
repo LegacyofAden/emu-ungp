@@ -26,24 +26,22 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.Q10757_QuietingTheStorm.Q10757_QuietingTheStorm;
 
 /**
  * The Oath of the Wind (10758)
+ *
  * @author malyelfik
  */
-public final class Q10758_TheOathOfTheWind extends Quest
-{
+public final class Q10758_TheOathOfTheWind extends Quest {
 	// NPC
 	private static final int PIO = 33963;
 	// Monster
 	private static final int WINDIMA = 27522;
 	// Misc
 	private static final int MIN_LEVEL = 28;
-	
-	public Q10758_TheOathOfTheWind()
-	{
+
+	public Q10758_TheOathOfTheWind() {
 		super(10758);
 		addStartNpc(PIO);
 		addTalkId(PIO);
@@ -53,50 +51,39 @@ public final class Q10758_TheOathOfTheWind extends Quest
 		addCondMinLevel(MIN_LEVEL, "33963-00.htm");
 		addCondCompletedQuest(Q10757_QuietingTheStorm.class.getSimpleName(), "33963-00.htm");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, false);
-		if (qs == null)
-		{
+		if (qs == null) {
 			return null;
 		}
-		
+
 		String htmltext = event;
-		switch (event)
-		{
+		switch (event) {
 			case "33963-01.htm":
 			case "33963-02.htm":
 				break;
-			case "33963-03.htm":
-			{
+			case "33963-03.htm": {
 				qs.startQuest();
 				break;
 			}
-			case "SPAWN":
-			{
-				if (qs.isCond(1))
-				{
+			case "SPAWN": {
+				if (qs.isCond(1)) {
 					final Npc mob = addSpawn(WINDIMA, -93427, 89595, -3216, 0, true, 180000);
 					addAttackPlayerDesire(mob, player);
 				}
 				htmltext = null;
 				break;
 			}
-			case "33963-06.html":
-			{
-				if (qs.isCond(2))
-				{
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+			case "33963-06.html": {
+				if (qs.isCond(2)) {
+					if (player.getLevel() >= MIN_LEVEL) {
 						giveStoryQuestReward(npc, player);
 						addExp(player, 561_645);
 						addSp(player, 134);
 						qs.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -107,15 +94,13 @@ public final class Q10758_TheOathOfTheWind extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		
-		switch (qs.getState())
-		{
+
+		switch (qs.getState()) {
 			case State.CREATED:
 				htmltext = "33963-01.htm";
 				break;
@@ -128,20 +113,17 @@ public final class Q10758_TheOathOfTheWind extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.ARGHH);
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
-		if ((qs != null) && qs.isCond(1))
-		{
+		if ((qs != null) && qs.isCond(1)) {
 			qs.setCond(2, true);
 		}
 		npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.I_AM_LOYAL_TO_YOU_MASTER_OF_THE_WINDS_AND_LOYAL_I_SHALL_REMAIN_IF_MY_VERY_SOUL_BETRAYS_ME);

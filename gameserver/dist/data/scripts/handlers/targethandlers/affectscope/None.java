@@ -18,22 +18,21 @@
  */
 package handlers.targethandlers.affectscope;
 
-import java.util.function.Consumer;
-
 import org.l2junity.gameserver.handler.IAffectScopeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.function.Consumer;
+
 /**
  * None affect scope implementation.
+ *
  * @author Nik
  */
-public class None implements IAffectScopeHandler
-{
+public class None implements IAffectScopeHandler {
 	@Override
-	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action)
-	{
-		
+	public void forEachAffected(Creature activeChar, WorldObject target, Skill skill, Consumer<? super WorldObject> action) {
+
 	}
 }

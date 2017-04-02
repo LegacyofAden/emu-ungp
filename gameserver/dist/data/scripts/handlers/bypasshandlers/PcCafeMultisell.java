@@ -24,37 +24,30 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-public class PcCafeMultisell implements IBypassHandler
-{
+public class PcCafeMultisell implements IBypassHandler {
 	private static final String[] COMMANDS =
-	{
-		"pcc_multisell"
-	};
-	
+			{
+					"pcc_multisell"
+			};
+
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target)
-	{
-		try
-		{
+	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+		try {
 			final int listId = Integer.parseInt(command.substring(13).trim());
 			MultisellData.getInstance().separateAndSend(listId, activeChar, null, false);
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			_log.warn("An exception occured when requesting a pcc_multisell", e);
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String[] getBypassList()
-	{
+	public String[] getBypassList() {
 		return COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		BypassHandler.getInstance().registerHandler(new PcCafeMultisell());
 	}
 }

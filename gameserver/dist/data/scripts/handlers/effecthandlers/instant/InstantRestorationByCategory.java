@@ -18,12 +18,6 @@
  */
 package handlers.effecthandlers.instant;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -34,35 +28,35 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * @author Sdw
  */
-public class InstantRestorationByCategory extends AbstractEffect
-{
+public class InstantRestorationByCategory extends AbstractEffect {
 	final private Map<CategoryType, List<ItemHolder>> _products = new EnumMap<>(CategoryType.class);
-	
-	public InstantRestorationByCategory(StatsSet params)
-	{
-		for (StatsSet group : params.getList("categories", StatsSet.class))
-		{
+
+	public InstantRestorationByCategory(StatsSet params) {
+		for (StatsSet group : params.getList("categories", StatsSet.class)) {
 			final List<ItemHolder> items = new ArrayList<>();
-			for (StatsSet item : group.getList(".", StatsSet.class))
-			{
+			for (StatsSet item : group.getList(".", StatsSet.class)) {
 				items.add(new ItemHolder(item.getInt(".id"), item.getInt(".count")));
 			}
 			_products.put(group.getEnum(".category", CategoryType.class), items);
 		}
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		//@formatter:off
 		_products.entrySet().stream()
 				.filter(entry -> casterPlayer.isInCategory(entry.getKey()))

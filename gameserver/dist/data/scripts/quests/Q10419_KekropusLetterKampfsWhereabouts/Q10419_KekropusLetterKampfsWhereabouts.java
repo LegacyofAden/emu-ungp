@@ -26,15 +26,14 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-
 import quests.LetterQuest;
 
 /**
  * Kekropus' Letter: Kampf's Whereabouts (10419)
+ *
  * @author St3eT
  */
-public final class Q10419_KekropusLetterKampfsWhereabouts extends LetterQuest
-{
+public final class Q10419_KekropusLetterKampfsWhereabouts extends LetterQuest {
 	// NPCs
 	private static final int ANDREI = 31292;
 	private static final int HANSEN = 33853;
@@ -48,41 +47,34 @@ public final class Q10419_KekropusLetterKampfsWhereabouts extends LetterQuest
 	// Misc
 	private static final int MIN_LEVEL = 76;
 	private static final int MAX_LEVEL = 80;
-	
-	public Q10419_KekropusLetterKampfsWhereabouts()
-	{
+
+	public Q10419_KekropusLetterKampfsWhereabouts() {
 		super(10419);
 		addTalkId(ANDREI, HANSEN);
 		addSeeCreatureId(INVISIBLE_NPC);
-		
+
 		setIsErtheiaQuest(false);
 		setLevel(MIN_LEVEL, MAX_LEVEL);
 		setStartQuestSound("Npcdialog1.kekrops_quest_9");
 		setStartLocation(SOE_TOWN_OF_GODDARD, TELEPORT_LOC);
 		registerQuestItems(SOE_TOWN_OF_GODDARD, SOE_VARKA_SILENOS_BARRACKS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
-			case "31292-02.html":
-			{
+		switch (event) {
+			case "31292-02.html": {
 				htmltext = event;
 				break;
 			}
-			case "31292-03.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31292-03.html": {
+				if (st.isCond(1)) {
 					takeItems(player, SOE_TOWN_OF_GODDARD, -1);
 					giveItems(player, SOE_VARKA_SILENOS_BARRACKS, 1);
 					st.setCond(2, true);
@@ -90,15 +82,12 @@ public final class Q10419_KekropusLetterKampfsWhereabouts extends LetterQuest
 				}
 				break;
 			}
-			case "33853-02.html":
-			{
-				if (st.isCond(2))
-				{
+			case "33853-02.html": {
+				if (st.isCond(2)) {
 					st.exitQuest(false, true);
 					giveItems(player, EWS, 1);
 					giveStoryQuestReward(npc, player);
-					if (player.getLevel() >= MIN_LEVEL)
-					{
+					if (player.getLevel() >= MIN_LEVEL) {
 						addExp(player, 1_277_640);
 						addSp(player, 306);
 					}
@@ -110,51 +99,41 @@ public final class Q10419_KekropusLetterKampfsWhereabouts extends LetterQuest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
-		
-		if (st == null)
-		{
+
+		if (st == null) {
 			return htmltext;
 		}
-		
-		if (st.isStarted())
-		{
-			if ((npc.getId() == ANDREI) && st.isCond(1))
-			{
+
+		if (st.isStarted()) {
+			if ((npc.getId() == ANDREI) && st.isCond(1)) {
 				htmltext = "31292-01.html";
-			}
-			else if (st.isCond(2))
-			{
+			} else if (st.isCond(2)) {
 				htmltext = npc.getId() == ANDREI ? "31292-04.html" : "33853-01.html";
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon)
-	{
-		if (creature.isPlayer())
-		{
+	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
+		if (creature.isPlayer()) {
 			final PlayerInstance player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
-			
-			if ((st != null) && st.isCond(2))
-			{
+
+			if ((st != null) && st.isCond(2)) {
 				showOnScreenMsg(player, NpcStringId.VARKA_SILENOS_BARRACKS_IS_A_GOOD_HUNTING_ZONE_FOR_LV_76_OR_ABOVE, ExShowScreenMessage.TOP_CENTER, 6000);
 			}
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
-	
+
 	@Override
-	public boolean canShowTutorialMark(PlayerInstance player)
-	{
+	public boolean canShowTutorialMark(PlayerInstance player) {
 		return !player.isInCategory(CategoryType.MAGE_GROUP);
 	}
 }

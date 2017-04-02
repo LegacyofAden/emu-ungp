@@ -30,50 +30,42 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * This class handles following admin commands: - targetsay <message> = makes talk a L2Character
+ *
  * @author nonom
  */
-public class AdminTargetSay implements IAdminCommandHandler
-{
+public class AdminTargetSay implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
-	{
-		"admin_targetsay"
-	};
-	
-	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar)
-	{
-		if (command.startsWith("admin_targetsay"))
-		{
-			try
 			{
+					"admin_targetsay"
+			};
+
+	@Override
+	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+		if (command.startsWith("admin_targetsay")) {
+			try {
 				final WorldObject obj = activeChar.getTarget();
-				if ((obj instanceof L2StaticObjectInstance) || !(obj instanceof Creature))
-				{
+				if ((obj instanceof L2StaticObjectInstance) || !(obj instanceof Creature)) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 					return false;
 				}
-				
+
 				final String message = command.substring(16);
 				final Creature target = (Creature) obj;
 				target.broadcastPacket(new CreatureSay(target.getObjectId(), target.isPlayer() ? ChatType.GENERAL : ChatType.NPC_GENERAL, target.getName(), message));
-			}
-			catch (StringIndexOutOfBoundsException e)
-			{
+			} catch (StringIndexOutOfBoundsException e) {
 				activeChar.sendMessage("Usage: //targetsay <text>");
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminTargetSay());
 	}
 }

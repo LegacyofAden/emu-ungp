@@ -18,10 +18,6 @@
  */
 package handlers.effecthandlers.pump;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -30,58 +26,48 @@ import org.l2junity.gameserver.model.stats.TraitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Defence Trait effect implementation.
+ *
  * @author NosBit
  */
-public final class PumpDefenceTrait extends AbstractEffect
-{
+public final class PumpDefenceTrait extends AbstractEffect {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PumpDefenceTrait.class);
 
 	private final Map<TraitType, Float> _defenceTraits = new HashMap<>();
-	
-	public PumpDefenceTrait(StatsSet params)
-	{
-		if (params.isEmpty())
-		{
+
+	public PumpDefenceTrait(StatsSet params) {
+		if (params.isEmpty()) {
 			LOGGER.warn(getClass().getSimpleName() + ": must have parameters.");
 			return;
 		}
-		
-		for (Entry<String, Object> param : params.getSet().entrySet())
-		{
-			try
-			{
+
+		for (Entry<String, Object> param : params.getSet().entrySet()) {
+			try {
 				final TraitType traitType = TraitType.valueOf(param.getKey());
 				final float value = Float.parseFloat((String) param.getValue());
-				if (value == 0)
-				{
+				if (value == 0) {
 					continue;
 				}
 				_defenceTraits.put(traitType, (value + 100) / 100);
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				LOGGER.warn(getClass().getSimpleName() + ": value of " + param.getKey() + " must be float value " + param.getValue() + " found.");
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOGGER.warn(getClass().getSimpleName() + ": value of L2TraitType enum required but found: " + param.getKey());
 			}
 		}
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		for (Entry<TraitType, Float> trait : _defenceTraits.entrySet())
-		{
-			if (trait.getValue() < 2.0f)
-			{
+	public void pump(Creature target, Skill skill) {
+		for (Entry<TraitType, Float> trait : _defenceTraits.entrySet()) {
+			if (trait.getValue() < 2.0f) {
 				target.getStat().mergeDefenceTrait(trait.getKey(), trait.getValue());
-			}
-			else
-			{
+			} else {
 				target.getStat().mergeInvulnerableTrait(trait.getKey());
 			}
 		}

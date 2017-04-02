@@ -26,57 +26,48 @@ import org.l2junity.gameserver.model.quest.State;
 
 /**
  * Sweet Whispers (15)
+ *
  * @author nonom
  */
-public class Q00015_SweetWhispers extends Quest
-{
+public class Q00015_SweetWhispers extends Quest {
 	// NPCs
 	private static final int VLADIMIR = 31302;
 	private static final int HIERARCH = 31517;
 	private static final int M_NECROMANCER = 31518;
 	// Misc
 	private static final int MIN_LEVEL = 60;
-	
-	public Q00015_SweetWhispers()
-	{
+
+	public Q00015_SweetWhispers() {
 		super(15);
 		addStartNpc(VLADIMIR);
 		addTalkId(VLADIMIR, HIERARCH, M_NECROMANCER);
 		addCondMinLevel(MIN_LEVEL, "31302-00a.html");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "31302-01.html":
 				st.startQuest();
 				break;
 			case "31518-01.html":
-				if (st.isCond(1))
-				{
+				if (st.isCond(1)) {
 					st.setCond(2);
 				}
 				break;
 			case "31517-01.html":
-				if (st.isCond(2))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+				if (st.isCond(2)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 714_215);
 						addSp(player, 171);
 						st.exitQuest(false, true);
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -84,38 +75,31 @@ public class Q00015_SweetWhispers extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
+
 		final int npcId = npc.getId();
-		switch (st.getState())
-		{
+		switch (st.getState()) {
 			case State.CREATED:
-				if (npcId == VLADIMIR)
-				{
+				if (npcId == VLADIMIR) {
 					htmltext = "31302-00.htm";
 				}
 				break;
 			case State.STARTED:
-				switch (npcId)
-				{
+				switch (npcId) {
 					case VLADIMIR:
-						if (st.isCond(1))
-						{
+						if (st.isCond(1)) {
 							htmltext = "31302-01a.html";
 						}
 						break;
 					case M_NECROMANCER:
-						switch (st.getCond())
-						{
+						switch (st.getCond()) {
 							case 1:
 								htmltext = "31518-00.html";
 								break;
@@ -125,8 +109,7 @@ public class Q00015_SweetWhispers extends Quest
 						}
 						break;
 					case HIERARCH:
-						if (st.isCond(2))
-						{
+						if (st.isCond(2)) {
 							htmltext = "31517-00.html";
 						}
 						break;

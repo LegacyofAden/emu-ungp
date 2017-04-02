@@ -31,61 +31,50 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 /**
  * @author Sdw
  */
-public class PumpTwoHandedSwordBonus extends AbstractEffect
-{
+public class PumpTwoHandedSwordBonus extends AbstractEffect {
 	protected final double _pAtkAmount;
 	protected final StatModifierType _pAtkmode;
-	
+
 	protected final double _accuracyAmount;
 	protected final StatModifierType _accuracyMode;
-	
-	public PumpTwoHandedSwordBonus(StatsSet params)
-	{
+
+	public PumpTwoHandedSwordBonus(StatsSet params) {
 		_pAtkAmount = params.getDouble("pAtkAmount", 0);
 		_pAtkmode = params.getEnum("pAtkmode", StatModifierType.class, StatModifierType.DIFF);
-		
+
 		_accuracyAmount = params.getDouble("accuracyAmount", 0);
 		_accuracyMode = params.getEnum("accuracyMode", StatModifierType.class, StatModifierType.DIFF);
 	}
-	
+
 	@Override
-	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill)
-	{
-		if (caster.isPlayer())
-		{
+	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
+		if (caster.isPlayer()) {
 			final Inventory inv = caster.getInventory();
-			
+
 			return ((WeaponType.SWORD.mask() & inv.getWearedMask()) != 0) && ((caster.getActiveWeaponItem().getBodyPart() & L2Item.SLOT_LR_HAND) != 0);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_pAtkmode)
-		{
-			case DIFF:
-			{
+	public void pump(Creature target, Skill skill) {
+		switch (_pAtkmode) {
+			case DIFF: {
 				target.getStat().mergeAdd(DoubleStat.PHYSICAL_ATTACK, _pAtkAmount);
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				target.getStat().mergeMul(DoubleStat.PHYSICAL_ATTACK, (_pAtkAmount / 100) + 1);
 				break;
 			}
 		}
-		
-		switch (_accuracyMode)
-		{
-			case DIFF:
-			{
+
+		switch (_accuracyMode) {
+			case DIFF: {
 				target.getStat().mergeAdd(DoubleStat.ACCURACY_COMBAT, _accuracyAmount);
 				break;
 			}
-			case PER:
-			{
+			case PER: {
 				target.getStat().mergeMul(DoubleStat.ACCURACY_COMBAT, (_accuracyAmount / 100) + 1);
 				break;
 			}

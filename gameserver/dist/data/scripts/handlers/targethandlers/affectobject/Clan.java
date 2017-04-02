@@ -27,30 +27,23 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 /**
  * @author Nik
  */
-public class Clan implements IAffectObjectHandler
-{
+public class Clan implements IAffectObjectHandler {
 	@Override
-	public boolean checkAffectedObject(Creature activeChar, Creature target)
-	{
-		if (activeChar == target)
-		{
+	public boolean checkAffectedObject(Creature activeChar, Creature target) {
+		if (activeChar == target) {
 			return true;
 		}
-		
+
 		PlayerInstance player = activeChar.getActingPlayer();
-		if (player != null)
-		{
+		if (player != null) {
 			L2Clan clan = player.getClan();
-			if (clan != null)
-			{
+			if (clan != null) {
 				return clan == target.getClan();
 			}
-		}
-		else if (activeChar.isNpc() && target.isNpc())
-		{
+		} else if (activeChar.isNpc() && target.isNpc()) {
 			return ((Npc) activeChar).isInMyClan(((Npc) target));
 		}
-		
+
 		return false;
 	}
 }

@@ -18,8 +18,7 @@
  */
 package ai.individual.KartiasLabyrinth;
 
-import java.util.List;
-
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
@@ -29,66 +28,55 @@ import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import ai.AbstractNpcAI;
+import java.util.List;
 
 /**
  * Kartia Support Troop AI.
+ *
  * @author St3eT
  */
-public final class KartiaSupportTroop extends AbstractNpcAI
-{
+public final class KartiaSupportTroop extends AbstractNpcAI {
 	// NPCs
 	private static final int[] SUPPORT_TROOPS =
-	{
-		33642, // Support Troop (Kartia 85)
-		33644, // Support Troop (Kartia 90)
-		33646, // Support Troop (Kartia 95)
-	};
-	
-	private KartiaSupportTroop()
-	{
+			{
+					33642, // Support Troop (Kartia 85)
+					33644, // Support Troop (Kartia 90)
+					33646, // Support Troop (Kartia 95)
+			};
+
+	private KartiaSupportTroop() {
 		addSpawnId(SUPPORT_TROOPS);
 	}
-	
+
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player)
-	{
-		if (event.equals("NPC_SAY"))
-		{
+	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+		if (event.equals("NPC_SAY")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DEFEAT_ALL_THE_MONSTERS);
-		}
-		else if (event.equals("CHECK_TARGET"))
-		{
-			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null))
-			{
+		} else if (event.equals("CHECK_TARGET")) {
+			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
 				final List<L2MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, L2MonsterInstance.class);
-				if (!monsterList.isEmpty())
-				{
+				if (!monsterList.isEmpty()) {
 					final L2MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
-					
-					if (monster.isTargetable() && GeoData.getInstance().canSeeTarget(npc, monster))
-					{
+
+					if (monster.isTargetable() && GeoData.getInstance().canSeeTarget(npc, monster)) {
 						addAttackDesire(npc, monster);
 					}
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (npc.getInstanceWorld() != null)
-		{
+	public String onSpawn(Npc npc) {
+		if (npc.getInstanceWorld() != null) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.VANGUARD_OF_ADEN_WE_HAVE_RETURNED);
 			getTimers().addRepeatingTimer("NPC_SAY", 20000, npc, null);
 			getTimers().addRepeatingTimer("CHECK_TARGET", 1000, npc, null);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new KartiaSupportTroop();
 	}
 }

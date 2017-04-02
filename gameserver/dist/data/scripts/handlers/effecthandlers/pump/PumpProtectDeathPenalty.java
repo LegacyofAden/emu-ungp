@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-
-import handlers.effecthandlers.AbstractBooleanStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpProtectDeathPenalty extends AbstractBooleanStatEffect
-{
-	public PumpProtectDeathPenalty(StatsSet params)
-	{
+public class PumpProtectDeathPenalty extends AbstractBooleanStatEffect {
+	public PumpProtectDeathPenalty(StatsSet params) {
 		super(BooleanStat.PROTECT_DEATH_PENALTY);
 	}
 }

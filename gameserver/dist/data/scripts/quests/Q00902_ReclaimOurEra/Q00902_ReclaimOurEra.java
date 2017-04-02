@@ -18,9 +18,6 @@
  */
 package quests.Q00902_ReclaimOurEra;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -29,12 +26,15 @@ import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.util.Util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Reclaim Our Era (902)
+ *
  * @author netvirus
  */
-public final class Q00902_ReclaimOurEra extends Quest
-{
+public final class Q00902_ReclaimOurEra extends Quest {
 	// Npc
 	private static final int MATHIAS = 31340;
 	// Misc
@@ -46,9 +46,8 @@ public final class Q00902_ReclaimOurEra extends Quest
 	private static final int PROOF_OF_CHALLENGE = 21750;
 	// Monsters
 	private static final Map<Integer, Integer> MONSTER_DROPS = new HashMap<>();
-	
-	static
-	{
+
+	static {
 		MONSTER_DROPS.put(25309, SHATTERED_BONES); // Varka's Hero Shadith
 		MONSTER_DROPS.put(25312, SHATTERED_BONES); // Varka's Commander Mos
 		MONSTER_DROPS.put(25315, SHATTERED_BONES); // Varka's Chief Horus
@@ -61,86 +60,68 @@ public final class Q00902_ReclaimOurEra extends Quest
 		MONSTER_DROPS.put(25670, CANNIBALISTIC_STAKATO_LDR_CLAW); // Cannibalistic Stakato Chief
 		MONSTER_DROPS.put(25701, ANAIS_SCROLL); // Anais - Master of Splendor
 	}
-	
-	public Q00902_ReclaimOurEra()
-	{
+
+	public Q00902_ReclaimOurEra() {
 		super(902);
 		addStartNpc(MATHIAS);
 		addTalkId(MATHIAS);
 		addKillId(MONSTER_DROPS.keySet());
 		registerQuestItems(SHATTERED_BONES, CANNIBALISTIC_STAKATO_LDR_CLAW, ANAIS_SCROLL);
 	}
-	
-	private void giveItem(Npc npc, PlayerInstance player)
-	{
+
+	private void giveItem(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if ((st != null) && (st.isStarted()) && (!st.isCond(5)) && Util.checkIfInRange(1500, npc, player, false))
-		{
+		if ((st != null) && (st.isStarted()) && (!st.isCond(5)) && Util.checkIfInRange(1500, npc, player, false)) {
 			giveItems(player, MONSTER_DROPS.get(npc.getId()), 1);
 			st.setCond(5, true);
 		}
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
 		String htmltext = null;
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (event)
-		{
-			case "31340-04.htm":
-			{
-				if (st.isCreated())
-				{
+
+		switch (event) {
+			case "31340-04.htm": {
+				if (st.isCreated()) {
 					htmltext = event;
 				}
 				break;
 			}
-			case "31340-05.html":
-			{
-				if (st.isCreated())
-				{
+			case "31340-05.html": {
+				if (st.isCreated()) {
 					st.startQuest();
 					htmltext = event;
 				}
 				break;
 			}
-			case "31340-06.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31340-06.html": {
+				if (st.isCond(1)) {
 					st.setCond(2, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31340-07.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31340-07.html": {
+				if (st.isCond(1)) {
 					st.setCond(3, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31340-08.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31340-08.html": {
+				if (st.isCond(1)) {
 					st.setCond(4, true);
 					htmltext = event;
 				}
 				break;
 			}
-			case "31340-10.html":
-			{
-				if (st.isCond(1))
-				{
+			case "31340-10.html": {
+				if (st.isCond(1)) {
 					htmltext = event;
 				}
 				break;
@@ -148,88 +129,65 @@ public final class Q00902_ReclaimOurEra extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
-		if (killer.isInParty())
-		{
-			for (PlayerInstance member : killer.getParty().getMembers())
-			{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+		if (killer.isInParty()) {
+			for (PlayerInstance member : killer.getParty().getMembers()) {
 				giveItem(npc, member);
 			}
-		}
-		else
-		{
+		} else {
 			giveItem(npc, killer);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
-		if (st == null)
-		{
+		if (st == null) {
 			return htmltext;
 		}
-		
-		switch (st.getState())
-		{
-			case State.COMPLETED:
-			{
-				if (!st.isNowAvailable())
-				{
+
+		switch (st.getState()) {
+			case State.COMPLETED: {
+				if (!st.isNowAvailable()) {
 					htmltext = "31340-02.htm";
 					break;
 				}
 				st.setState(State.CREATED);
 			}
-			case State.CREATED:
-			{
+			case State.CREATED: {
 				htmltext = (player.getLevel() >= MIN_LVL) ? "31340-01.htm" : "31340-03.htm";
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
 						htmltext = "31340-09.html";
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						htmltext = "31340-11.html";
 						break;
 					}
-					case 3:
-					{
+					case 3: {
 						htmltext = "31340-12.html";
 						break;
 					}
-					case 4:
-					{
+					case 4: {
 						htmltext = "31340-13.html";
 						break;
 					}
-					case 5:
-					{
-						if (hasQuestItems(player, SHATTERED_BONES))
-						{
+					case 5: {
+						if (hasQuestItems(player, SHATTERED_BONES)) {
 							giveItems(player, PROOF_OF_CHALLENGE, 1);
 							giveAdena(player, 134038, true);
-						}
-						else if (hasQuestItems(player, CANNIBALISTIC_STAKATO_LDR_CLAW))
-						{
+						} else if (hasQuestItems(player, CANNIBALISTIC_STAKATO_LDR_CLAW)) {
 							giveItems(player, PROOF_OF_CHALLENGE, 3);
 							giveAdena(player, 210119, true);
-						}
-						else if (hasQuestItems(player, ANAIS_SCROLL))
-						{
+						} else if (hasQuestItems(player, ANAIS_SCROLL)) {
 							giveItems(player, PROOF_OF_CHALLENGE, 3);
 							giveAdena(player, 348155, true);
 						}

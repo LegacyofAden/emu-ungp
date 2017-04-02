@@ -18,6 +18,7 @@
  */
 package ai.spawns;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.DBSpawnManager;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -32,55 +33,44 @@ import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.AbstractNpcAI;
-
 /**
  * @author UnAfraid
  */
-public final class EilhalderVonHellmann extends AbstractNpcAI
-{
+public final class EilhalderVonHellmann extends AbstractNpcAI {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EilhalderVonHellmann.class);
 	private static final int EILHALDER_VON_HELLMANN = 25328;
 	private NpcSpawnTemplate _template;
-	
-	private EilhalderVonHellmann()
-	{
+
+	private EilhalderVonHellmann() {
 		addSpawnId(EILHALDER_VON_HELLMANN);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		// Spawn that comes from RaidBossSpawnManager
-		if ((npc.getSpawn() == null) || (npc.getSpawn().getNpcSpawnTemplate() == null))
-		{
+		if ((npc.getSpawn() == null) || (npc.getSpawn().getNpcSpawnTemplate() == null)) {
 			getTimers().addTimer("delete", 1000, event -> npc.deleteMe());
 		}
 		return super.onSpawn(npc);
 	}
-	
+
 	@Override
-	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc)
-	{
+	public void onSpawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc) {
 		LOGGER.info("Spawning Night Raid Boss " + npc.getName());
 		DBSpawnManager.getInstance().notifySpawnNightNpc(npc);
 	}
-	
+
 	@Override
-	public void onSpawnDespawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc)
-	{
+	public void onSpawnDespawnNpc(SpawnTemplate template, SpawnGroup group, Npc npc) {
 		LOGGER.info("Despawning Night Raid Boss " + npc.getName());
 	}
-	
+
 	@Override
-	public void onSpawnActivate(SpawnTemplate template)
-	{
-		OUT: for (SpawnGroup group : template.getGroups())
-		{
-			for (NpcSpawnTemplate npc : group.getSpawns())
-			{
-				if (npc.getId() == EILHALDER_VON_HELLMANN)
-				{
+	public void onSpawnActivate(SpawnTemplate template) {
+		OUT:
+		for (SpawnGroup group : template.getGroups()) {
+			for (NpcSpawnTemplate npc : group.getSpawns()) {
+				if (npc.getId() == EILHALDER_VON_HELLMANN) {
 					_template = npc;
 					break OUT;
 				}
@@ -89,36 +79,29 @@ public final class EilhalderVonHellmann extends AbstractNpcAI
 
 		handleBoss(GameTimeManager.getInstance().isNight());
 	}
-	
+
 	@RegisterEvent(EventType.ON_DAY_NIGHT_CHANGE)
 	@RegisterType(ListenerRegisterType.GLOBAL)
-	public void onDayNightChange(OnDayNightChange event)
-	{
+	public void onDayNightChange(OnDayNightChange event) {
 		handleBoss(event.isNight());
 	}
-	
+
 	/**
 	 * @param isNight
 	 */
-	private void handleBoss(boolean isNight)
-	{
-		if (_template == null)
-		{
+	private void handleBoss(boolean isNight) {
+		if (_template == null) {
 			return;
 		}
-		
-		if (isNight)
-		{
+
+		if (isNight) {
 			_template.spawn(null);
-		}
-		else
-		{
+		} else {
 			_template.despawn();
 		}
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new EilhalderVonHellmann();
 	}
 }

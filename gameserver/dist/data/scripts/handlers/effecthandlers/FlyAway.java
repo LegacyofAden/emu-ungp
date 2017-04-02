@@ -34,30 +34,25 @@ import org.l2junity.gameserver.network.client.send.ValidateLocation;
 /**
  * Throw Up effect implementation.
  */
-public final class FlyAway extends AbstractEffect
-{
+public final class FlyAway extends AbstractEffect {
 	private final int _radius;
-	
-	public FlyAway(StatsSet params)
-	{
+
+	public FlyAway(StatsSet params) {
 		_radius = params.getInt("radius");
 	}
-	
+
 	@Override
-	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill)
-	{
+	public boolean calcSuccess(Creature caster, WorldObject target, Skill skill) {
 		return target.isCreature() && Formulas.calcProbability(Double.NaN, caster, (Creature) target, skill);
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final Creature targetCreature = target.asCreature();
-		if (targetCreature == null)
-		{
+		if (targetCreature == null) {
 			return;
 		}
-		
+
 		final double dx = caster.getX() - targetCreature.getX();
 		final double dy = caster.getY() - targetCreature.getY();
 		final double distance = Math.sqrt((dx * dx) + (dy * dy));

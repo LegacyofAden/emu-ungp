@@ -18,18 +18,15 @@
  */
 package handlers.effecthandlers.pump;
 
+import handlers.effecthandlers.AbstractDoubleStatEffect;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-
-import handlers.effecthandlers.AbstractDoubleStatEffect;
 
 /**
  * @author Sdw
  */
-public class PumpHealEffect extends AbstractDoubleStatEffect
-{
-	public PumpHealEffect(StatsSet params)
-	{
+public class PumpHealEffect extends AbstractDoubleStatEffect {
+	public PumpHealEffect(StatsSet params) {
 		super(params, DoubleStat.HEAL_EFFECT);
 	}
 }

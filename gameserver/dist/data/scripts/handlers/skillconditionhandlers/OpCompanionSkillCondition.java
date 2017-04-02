@@ -28,28 +28,21 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class OpCompanionSkillCondition implements ISkillCondition
-{
+public class OpCompanionSkillCondition implements ISkillCondition {
 	private final SkillConditionCompanionType _type;
-	
-	public OpCompanionSkillCondition(StatsSet params)
-	{
+
+	public OpCompanionSkillCondition(StatsSet params) {
 		_type = params.getEnum("type", SkillConditionCompanionType.class);
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if (target != null)
-		{
-			switch (_type)
-			{
-				case PET:
-				{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if (target != null) {
+			switch (_type) {
+				case PET: {
 					return target.isPet();
 				}
-				case MY_SUMMON:
-				{
+				case MY_SUMMON: {
 					return target.isSummon() && (caster.getServitor(target.getObjectId()) != null);
 				}
 			}

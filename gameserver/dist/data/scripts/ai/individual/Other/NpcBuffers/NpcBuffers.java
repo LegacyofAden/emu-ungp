@@ -18,50 +18,42 @@
  */
 package ai.individual.Other.NpcBuffers;
 
-import java.util.concurrent.TimeUnit;
-
-import org.l2junity.commons.util.concurrent.ThreadPool;
+import ai.AbstractNpcAI;
+import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author UnAfraid
  */
-public final class NpcBuffers extends AbstractNpcAI
-{
-	private NpcBuffers()
-	{
-		
-		for (int npcId : NpcBuffersData.getInstance().getNpcBufferIds())
-		{
+public final class NpcBuffers extends AbstractNpcAI {
+	private NpcBuffers() {
+
+		for (int npcId : NpcBuffersData.getInstance().getNpcBufferIds()) {
 			// TODO: Cleanup once npc rework is finished and default html is configurable.
 			addFirstTalkId(npcId);
 			addSpawnId(npcId);
 		}
 	}
-	
+
 	// TODO: Cleanup once npc rework is finished and default html is configurable.
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player)
-	{
+	public String onFirstTalk(Npc npc, PlayerInstance player) {
 		return null;
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
+	public String onSpawn(Npc npc) {
 		final NpcBufferData data = NpcBuffersData.getInstance().getNpcBuffer(npc.getId());
-		for (NpcBufferSkillData skill : data.getSkills())
-		{
-			ThreadPool.schedule(new NpcBufferAI(npc, skill), skill.getInitialDelay(), TimeUnit.MILLISECONDS);
+		for (NpcBufferSkillData skill : data.getSkills()) {
+			ThreadPool.getInstance().scheduleGeneral(new NpcBufferAI(npc, skill), skill.getInitialDelay(), TimeUnit.MILLISECONDS);
 		}
 		return super.onSpawn(npc);
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new NpcBuffers();
 	}
 }

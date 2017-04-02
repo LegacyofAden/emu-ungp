@@ -28,17 +28,13 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author UnAfraid
  */
-public class TargetMyPledgeSkillCondition implements ISkillCondition
-{
-	public TargetMyPledgeSkillCondition(StatsSet params)
-	{
+public class TargetMyPledgeSkillCondition implements ISkillCondition {
+	public TargetMyPledgeSkillCondition(StatsSet params) {
 	}
-	
+
 	@Override
-	public boolean canUse(Creature caster, Skill skill, WorldObject target)
-	{
-		if ((target == null) || !target.isPlayer())
-		{
+	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
+		if ((target == null) || !target.isPlayer()) {
 			return false;
 		}
 		final L2Clan clan = caster.getClan();

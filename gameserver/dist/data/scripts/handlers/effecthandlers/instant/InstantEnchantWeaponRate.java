@@ -28,18 +28,15 @@ import org.l2junity.gameserver.model.skills.Skill;
 /**
  * @author Sdw
  */
-public class InstantEnchantWeaponRate extends AbstractEffect
-{
+public class InstantEnchantWeaponRate extends AbstractEffect {
 	private final double _bonusRate;
-	
-	public InstantEnchantWeaponRate(StatsSet params)
-	{
+
+	public InstantEnchantWeaponRate(StatsSet params) {
 		_bonusRate = params.getDouble("bonusRate");
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		caster.getStat().setSupportItemBonusRate(1 + (_bonusRate / 100d));
 	}
 }

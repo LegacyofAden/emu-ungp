@@ -18,84 +18,73 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 
+import java.util.StringTokenizer;
+
 /**
  * The classical custom L2J implementation of the old //gmspeed GM command.
+ *
  * @author lord_rex (No, it wasn't me at all. Eclipse added my name there.)
  */
-public final class AdminSuperHaste implements IAdminCommandHandler
-{
+public final class AdminSuperHaste implements IAdminCommandHandler {
 	public static final String[] ADMIN_COMMANDS =
-	{
-		"admin_superhaste",
-		"admin_superhaste_menu",
-		"admin_speed",
-		"admin_speed_menu",
-	};
-	
+			{
+					"admin_superhaste",
+					"admin_superhaste_menu",
+					"admin_speed",
+					"admin_speed_menu",
+			};
+
 	private static final int SUPER_HASTE_ID = 7029;
-	
+
 	@Override
-	public boolean useAdminCommand(final String command, final PlayerInstance player)
-	{
+	public boolean useAdminCommand(final String command, final PlayerInstance player) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
-		switch (cmd)
-		{
+		switch (cmd) {
 			case "admin_superhaste":
-			case "admin_speed":
-			{
-				try
-				{
+			case "admin_speed": {
+				try {
 					final int val = Integer.parseInt(st.nextToken());
 					final boolean sendMessage = player.isAffectedBySkill(SUPER_HASTE_ID);
 					player.stopSkillEffects((val == 0) && sendMessage, SUPER_HASTE_ID);
-					if ((val >= 1) && (val <= 4))
-					{
+					if ((val >= 1) && (val <= 4)) {
 						int time = 0;
-						if (st.hasMoreTokens())
-						{
+						if (st.hasMoreTokens()) {
 							time = Integer.parseInt(st.nextToken());
 						}
-						
+
 						final Skill superHasteSkill = SkillData.getInstance().getSkill(SUPER_HASTE_ID, val);
 						superHasteSkill.applyEffects(player, player, true, time);
 					}
-				}
-				catch (final Exception e)
-				{
+				} catch (final Exception e) {
 					player.sendMessage("Usage: //superhaste <Effect level (0-4)> <Time in seconds>");
 				}
-				
+
 				break;
 			}
-			
+
 			case "admin_superhaste_menu":
-			case "admin_speed_menu":
-			{
+			case "admin_speed_menu": {
 				AdminHtml.showAdminHtml(player, "gm_menu.htm");
 				break;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-	public String[] getAdminCommandList()
-	{
+	public String[] getAdminCommandList() {
 		return ADMIN_COMMANDS;
 	}
-	
-	public static void main(final String[] args)
-	{
+
+	public static void main(final String[] args) {
 		AdminCommandHandler.getInstance().registerHandler(new AdminSuperHaste());
 	}
 }

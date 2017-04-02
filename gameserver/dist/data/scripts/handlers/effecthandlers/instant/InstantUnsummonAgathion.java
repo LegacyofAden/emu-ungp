@@ -29,23 +29,20 @@ import org.l2junity.gameserver.network.client.send.ExUserInfoCubic;
 
 /**
  * Unsummon Agathion effect implementation.
+ *
  * @author Zoey76
  */
-public final class InstantUnsummonAgathion extends AbstractEffect
-{
-	public InstantUnsummonAgathion(StatsSet params)
-	{
+public final class InstantUnsummonAgathion extends AbstractEffect {
+	public InstantUnsummonAgathion(StatsSet params) {
 	}
-	
+
 	@Override
-	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item)
-	{
+	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		final PlayerInstance casterPlayer = caster.asPlayer();
-		if (casterPlayer == null)
-		{
+		if (casterPlayer == null) {
 			return;
 		}
-		
+
 		casterPlayer.setAgathionId(0);
 		casterPlayer.sendPacket(new ExUserInfoCubic(casterPlayer));
 		casterPlayer.broadcastCharInfo();

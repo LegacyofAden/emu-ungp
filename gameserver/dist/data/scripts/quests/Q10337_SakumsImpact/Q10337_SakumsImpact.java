@@ -18,9 +18,6 @@
  */
 package quests.Q10337_SakumsImpact;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -30,12 +27,15 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Sakum's Impact (10337)
+ *
  * @author St3eT
  */
-public final class Q10337_SakumsImpact extends Quest
-{
+public final class Q10337_SakumsImpact extends Quest {
 	// NPCs
 	private static final int ADVENTURE_GUILDSMAN = 31795;
 	private static final int SILVAN = 33178;
@@ -47,9 +47,8 @@ public final class Q10337_SakumsImpact extends Quest
 	// Misc
 	private static final int MIN_LEVEL = 28;
 	private static final int MAX_LEVEL = 40;
-	
-	public Q10337_SakumsImpact()
-	{
+
+	public Q10337_SakumsImpact() {
 		super(10337);
 		addStartNpc(ADVENTURE_GUILDSMAN);
 		addTalkId(ADVENTURE_GUILDSMAN, SILVAN, LEF);
@@ -57,53 +56,41 @@ public final class Q10337_SakumsImpact extends Quest
 		addCondNotRace(Race.ERTHEIA, "");
 		addCondLevel(MIN_LEVEL, MAX_LEVEL, "");
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		final QuestState st = getQuestState(player, false);
-		if (st == null)
-		{
+		if (st == null) {
 			return null;
 		}
-		
+
 		String htmltext = null;
-		switch (event)
-		{
+		switch (event) {
 			case "31795-02.htm":
-			case "33178-02.htm":
-			{
+			case "33178-02.htm": {
 				htmltext = event;
 				break;
 			}
-			case "31795-03.htm":
-			{
+			case "31795-03.htm": {
 				st.startQuest();
 				htmltext = event;
 				break;
 			}
-			case "33178-03.htm":
-			{
-				if (st.isCond(1))
-				{
+			case "33178-03.htm": {
+				if (st.isCond(1)) {
 					st.setCond(2);
 					htmltext = event;
 				}
 				break;
 			}
-			case "33510-04.htm":
-			{
-				if (st.isCond(3))
-				{
-					if ((player.getLevel() >= MIN_LEVEL))
-					{
+			case "33510-04.htm": {
+				if (st.isCond(3)) {
+					if ((player.getLevel() >= MIN_LEVEL)) {
 						addExp(player, 1_000_000);
 						addSp(player, 156);
 						st.exitQuest(false, true);
 						htmltext = event;
-					}
-					else
-					{
+					} else {
 						htmltext = getNoQuestLevelRewardMsg(player);
 					}
 				}
@@ -112,31 +99,23 @@ public final class Q10337_SakumsImpact extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
-		
-		switch (st.getState())
-		{
-			case State.CREATED:
-			{
-				if (npc.getId() == ADVENTURE_GUILDSMAN)
-				{
+
+		switch (st.getState()) {
+			case State.CREATED: {
+				if (npc.getId() == ADVENTURE_GUILDSMAN) {
 					htmltext = "31795-01.htm";
 				}
 				break;
 			}
-			case State.STARTED:
-			{
-				switch (st.getCond())
-				{
-					case 1:
-					{
-						switch (npc.getId())
-						{
+			case State.STARTED: {
+				switch (st.getCond()) {
+					case 1: {
+						switch (npc.getId()) {
 							case ADVENTURE_GUILDSMAN:
 								htmltext = "31795-04.htm";
 								break;
@@ -149,10 +128,8 @@ public final class Q10337_SakumsImpact extends Quest
 						}
 						break;
 					}
-					case 2:
-					{
-						switch (npc.getId())
-						{
+					case 2: {
+						switch (npc.getId()) {
 							case ADVENTURE_GUILDSMAN:
 								htmltext = "31795-04.htm";
 								break;
@@ -165,10 +142,8 @@ public final class Q10337_SakumsImpact extends Quest
 						}
 						break;
 					}
-					case 3:
-					{
-						switch (npc.getId())
-						{
+					case 3: {
+						switch (npc.getId()) {
 							case ADVENTURE_GUILDSMAN:
 								htmltext = "31795-04.htm";
 								break;
@@ -184,10 +159,8 @@ public final class Q10337_SakumsImpact extends Quest
 				}
 				break;
 			}
-			case State.COMPLETED:
-			{
-				switch (npc.getId())
-				{
+			case State.COMPLETED: {
+				switch (npc.getId()) {
 					case ADVENTURE_GUILDSMAN:
 						htmltext = "31795-05.htm";
 						break;
@@ -203,34 +176,27 @@ public final class Q10337_SakumsImpact extends Quest
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon)
-	{
+	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
-		
-		if ((st != null) && st.isStarted() && st.isCond(2))
-		{
+
+		if ((st != null) && st.isStarted() && st.isCond(2)) {
 			int killedWarriors = st.getInt("killed_" + SKELETON_WARRIOR);
 			int killedImps = st.getInt("killed_" + RUIN_IMP);
 			int killedBats = st.getInt("killed_" + BAT);
-			
-			switch (npc.getId())
-			{
-				case SKELETON_WARRIOR:
-				{
-					if (killedWarriors < 15)
-					{
+
+			switch (npc.getId()) {
+				case SKELETON_WARRIOR: {
+					if (killedWarriors < 15) {
 						killedWarriors++;
 						st.set("killed_" + SKELETON_WARRIOR, killedWarriors);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
 					}
 					break;
 				}
-				case RUIN_IMP:
-				{
-					if (killedImps < 20)
-					{
+				case RUIN_IMP: {
+					if (killedImps < 20) {
 						killedImps++;
 						st.set("killed_" + RUIN_IMP, killedImps);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
@@ -238,10 +204,8 @@ public final class Q10337_SakumsImpact extends Quest
 					break;
 				}
 				case RUIN_BAT:
-				case BAT:
-				{
-					if (killedBats < 25)
-					{
+				case BAT: {
+					if (killedBats < 25) {
 						killedBats++;
 						st.set("killed_" + BAT, killedBats);
 						playSound(killer, QuestSound.ITEMSOUND_QUEST_ITEMGET);
@@ -249,22 +213,19 @@ public final class Q10337_SakumsImpact extends Quest
 					break;
 				}
 			}
-			
-			if ((killedWarriors == 15) && (killedImps == 20) && (killedBats == 25))
-			{
+
+			if ((killedWarriors == 15) && (killedImps == 20) && (killedBats == 25)) {
 				st.setCond(3, true);
 			}
 			sendNpcLogList(killer);
 		}
 		return super.onKill(npc, killer, isSummon);
 	}
-	
+
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar)
-	{
+	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
 		final QuestState st = getQuestState(activeChar, false);
-		if ((st != null) && st.isStarted() && st.isCond(2))
-		{
+		if ((st != null) && st.isStarted() && st.isCond(2)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(3);
 			npcLogList.add(new NpcLogListHolder(SKELETON_WARRIOR, false, st.getInt("killed_" + SKELETON_WARRIOR)));
 			npcLogList.add(new NpcLogListHolder(RUIN_IMP, false, st.getInt("killed_" + RUIN_IMP)));

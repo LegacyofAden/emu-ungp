@@ -32,31 +32,26 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
  * As for example in retail this effect does reduce reflected damage taken (because it is received damage), as well as it does not decrease reflected damage done,<br>
  * because reflected damage is being calculated with the original attack damage and not this altered one.<br>
  * Multiple values of this effect add-up to each other rather than multiplying with each other. Be careful, there were cases in retail where damage is deacreased to 0.
+ *
  * @author Nik
  */
-public class PumpDamageByAttack extends AbstractEffect
-{
+public class PumpDamageByAttack extends AbstractEffect {
 	private final double _value;
 	private final DamageByAttackType _type;
-	
-	public PumpDamageByAttack(StatsSet params)
-	{
+
+	public PumpDamageByAttack(StatsSet params) {
 		_value = params.getDouble("amount", 0);
 		_type = params.getEnum("type", DamageByAttackType.class, DamageByAttackType.NONE);
 	}
-	
+
 	@Override
-	public void pump(Creature target, Skill skill)
-	{
-		switch (_type)
-		{
-			case PK:
-			{
+	public void pump(Creature target, Skill skill) {
+		switch (_type) {
+			case PK: {
 				target.getStat().mergeAdd(DoubleStat.PVP_DAMAGE_TAKEN, _value);
 				break;
 			}
-			case ENEMY_ALL:
-			{
+			case ENEMY_ALL: {
 				target.getStat().mergeAdd(DoubleStat.PVE_DAMAGE_TAKEN, _value);
 				break;
 			}

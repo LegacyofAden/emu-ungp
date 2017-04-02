@@ -18,22 +18,21 @@
  */
 package ai.individual.FairySettlement.LargeCocoon;
 
+import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.quest.Quest;
-
-import ai.AbstractNpcAI;
 import quests.Q10305_UnstoppableFutileEfforts.Q10305_UnstoppableFutileEfforts;
 
 /**
  * Large Cocoon AI.
+ *
  * @author St3eT
  */
-public final class LargeCocoon extends AbstractNpcAI
-{
+public final class LargeCocoon extends AbstractNpcAI {
 	// NPCs
 	private static final int LARGE_COCOON = 32920;
 	private static final int COCOON = 32919;
@@ -51,43 +50,33 @@ public final class LargeCocoon extends AbstractNpcAI
 	private static final int FAIRY_WIZARD_HARD = 22894;
 	private static final int FAIRY_WITCH = 22907;
 	private static final int FAIRY_WITCH_HARD = 22910;
-	
-	private LargeCocoon()
-	{
+
+	private LargeCocoon() {
 		addStartNpc(COCOON, LARGE_COCOON);
 		addTalkId(COCOON, LARGE_COCOON);
 		addFirstTalkId(COCOON, LARGE_COCOON);
 		addSpawnId(COCOON, LARGE_COCOON);
 		setCreatureAttackedId(this::onCreatureAttacked, LARGE_COCOON);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
-		switch (event)
-		{
-			case "attack":
-			{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+		switch (event) {
+			case "attack": {
 				onCreatureAttacked(new OnCreatureAttacked(player, npc, null));
 				break;
 			}
-			case "attackPowerful":
-			{
+			case "attackPowerful": {
 				// TODO: Quest 466 stuffs
 				final Quest qs10305 = QuestManager.getInstance().getQuest(Q10305_UnstoppableFutileEfforts.class.getSimpleName());
-				if (qs10305 != null)
-				{
+				if (qs10305 != null) {
 					qs10305.notifyEvent("NOTIFY_Q10305", npc, player);
 				}
-				
-				if (getRandom(3) < 1)
-				{
+
+				if (getRandom(3) < 1) {
 					addSpawn(LARGE_CONTAMINED_COCOON, npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 30000);
-				}
-				else
-				{
-					switch (getRandom(6))
-					{
+				} else {
+					switch (getRandom(6)) {
 						case 0:
 							addAttackPlayerDesire(addSpawn(FAIRY_WARRIOR_HARD, npc, false, 90000), player);
 							addAttackPlayerDesire(addSpawn(FAIRY_ROGUE_HARD, npc, false, 90000), player);
@@ -126,17 +115,14 @@ public final class LargeCocoon extends AbstractNpcAI
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
-	
+
 	@Override
-	public String onSpawn(Npc npc)
-	{
-		if (getRandom(3) < 1)
-		{
+	public String onSpawn(Npc npc) {
+		if (getRandom(3) < 1) {
 			addSpawn(COCOON_DESTROYER, npc.getX() + 120, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
 		}
-		
-		switch (getRandom(6))
-		{
+
+		switch (getRandom(6)) {
 			case 0:
 				addSpawn(FAIRY_WARRIOR, npc.getX() + 270, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
 				addSpawn(FAIRY_ROGUE, npc.getX() + 230, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
@@ -162,9 +148,8 @@ public final class LargeCocoon extends AbstractNpcAI
 				addSpawn(FAIRY_WITCH, npc.getX() + 230, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
 				break;
 		}
-		
-		switch (getRandom(6))
-		{
+
+		switch (getRandom(6)) {
 			case 0:
 				addSpawn(FAIRY_ROGUE, npc.getX() - 270, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
 				addSpawn(FAIRY_WARRIOR, npc.getX() - 230, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
@@ -190,9 +175,8 @@ public final class LargeCocoon extends AbstractNpcAI
 				addSpawn(FAIRY_WITCH, npc.getX() - 230, npc.getY(), npc.getZ(), npc.getHeading(), false, 0);
 				break;
 		}
-		
-		switch (getRandom(6))
-		{
+
+		switch (getRandom(6)) {
 			case 0:
 				addSpawn(FAIRY_ROGUE, npc.getX(), npc.getY() + 270, npc.getZ(), npc.getHeading(), false, 0);
 				addSpawn(FAIRY_WARRIOR, npc.getX(), npc.getY() + 230, npc.getZ(), npc.getHeading(), false, 0);
@@ -218,30 +202,24 @@ public final class LargeCocoon extends AbstractNpcAI
 				addSpawn(FAIRY_WITCH, npc.getX(), npc.getY() + 230, npc.getZ(), npc.getHeading(), false, 0);
 				break;
 		}
-		
+
 		return super.onSpawn(npc);
 	}
-	
-	public void onCreatureAttacked(OnCreatureAttacked event)
-	{
+
+	public void onCreatureAttacked(OnCreatureAttacked event) {
 		final Npc npc = (Npc) event.getTarget();
 		final Playable playable = (Playable) event.getAttacker();
-		
+
 		// TODO: Quest 466 stuffs
 		final Quest qs10305 = QuestManager.getInstance().getQuest(Q10305_UnstoppableFutileEfforts.class.getSimpleName());
-		if (qs10305 != null)
-		{
+		if (qs10305 != null) {
 			qs10305.notifyEvent("NOTIFY_Q10305", npc, playable.getActingPlayer());
 		}
-		
-		if (getRandom(3) < 1)
-		{
+
+		if (getRandom(3) < 1) {
 			addSpawn(LARGE_CONTAMINED_COCOON, npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 30000);
-		}
-		else
-		{
-			switch (getRandom(6))
-			{
+		} else {
+			switch (getRandom(6)) {
 				case 0:
 					addAttackPlayerDesire(addSpawn(FAIRY_WARRIOR, npc, false, 90000), playable);
 					addAttackPlayerDesire(addSpawn(FAIRY_ROGUE, npc, false, 90000), playable);
@@ -276,9 +254,8 @@ public final class LargeCocoon extends AbstractNpcAI
 		}
 		npc.deleteMe();
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new LargeCocoon();
 	}
 }
