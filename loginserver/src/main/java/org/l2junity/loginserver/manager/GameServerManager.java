@@ -48,7 +48,7 @@ public class GameServerManager implements IXmlReader {
 
 	protected GameServerManager() {
 		try {
-			parseFile(Paths.get("config/xml/GameServers.xml"));
+			parseFile(Paths.get("configs/xml/GameServers.xml"));
 		} catch (XmlReaderException | IOException e) {
 			log.error("Error loading game servers.", e);
 		}
