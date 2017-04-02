@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @author Sdw
  */
 @Slf4j
-@StartupComponent(value = "Data", dependency = OneDayRewardHandler.class)
+@StartupComponent(value = "Data")
 public class OneDayRewardData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final OneDayRewardData instance = new OneDayRewardData();

@@ -16,33 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
+import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.enums.QuestType;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
+import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
+import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerQuestComplete;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
+
+import java.util.List;
 
 /**
  * @author UnAfraid
  */
-public class QuestOneDayRewardHandler extends AbstractOneDayRewardHandler {
+public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	private final int _amount;
 
-	public QuestOneDayRewardHandler(OneDayRewardDataHolder holder) {
+	public BossOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
 		_amount = holder.getRequiredCompletions();
 	}
 
 	@Override
 	public void init() {
-		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_QUEST_COMPLETE, (OnPlayerQuestComplete event) -> onQuestComplete(event), this));
+		Containers.Monsters().addListener(new ConsumerEventListener(this, EventType.ON_ATTACKABLE_KILL, (OnAttackableKill event) -> onAttackableKill(event), this));
 	}
 
 	@Override
@@ -66,16 +71,28 @@ public class QuestOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		return false;
 	}
 
-	private void onQuestComplete(OnPlayerQuestComplete event) {
-		final PlayerInstance player = event.getActiveChar();
-		if (event.getQuestType() == QuestType.DAILY) {
-			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
-			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
-				if (entry.increaseProgress() >= _amount) {
-					entry.setStatus(OneDayRewardStatus.AVAILABLE);
-				}
-				storePlayerEntry(entry);
+	private void onAttackableKill(OnAttackableKill event) {
+		final Attackable monster = event.getTarget();
+		final PlayerInstance player = event.getAttacker();
+		if (monster.isRaid() && (monster.getInstanceId() > 0) && (player != null)) {
+			final Party party = player.getParty();
+			if (party != null) {
+				final CommandChannel channel = party.getCommandChannel();
+				final List<PlayerInstance> members = channel != null ? channel.getMembers() : party.getMembers();
+				members.stream().filter(member -> member.distance3d(monster) <= PlayerConfig.ALT_PARTY_RANGE).forEach(this::processPlayerProgress);
+			} else {
+				processPlayerProgress(player);
 			}
+		}
+	}
+
+	private void processPlayerProgress(PlayerInstance player) {
+		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
+		if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
+			if (entry.increaseProgress() >= _amount) {
+				entry.setStatus(OneDayRewardStatus.AVAILABLE);
+			}
+			storePlayerEntry(entry);
 		}
 	}
 }

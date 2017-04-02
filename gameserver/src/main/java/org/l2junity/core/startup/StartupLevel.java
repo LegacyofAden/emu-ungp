@@ -23,8 +23,8 @@ public enum StartupLevel implements IStartupLevel {
 	Configure,
 	Threading,
 	Database,
-	Service,
 	Data,
+	Service,
 	Scripts,
 	Network,
 	AfterStart {

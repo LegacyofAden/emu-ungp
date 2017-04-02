@@ -19,11 +19,12 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
 import org.l2junity.gameserver.handler.OneDayRewardHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.holders.ItemHolder;
+import org.l2junity.gameserver.model.onedayreward.OneDayRewardType;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,10 +43,10 @@ public class OneDayRewardDataHolder {
 	private final boolean _isMainClassOnly;
 	private final boolean _isDualClassOnly;
 	private final boolean _isDisplayedWhenNotAvailable;
-	private final AbstractOneDayRewardHandler _handler;
+	private AbstractOneDayRewardHandler _handler;
 
 	public OneDayRewardDataHolder(StatsSet set) {
-		final Function<OneDayRewardDataHolder, AbstractOneDayRewardHandler> handler = OneDayRewardHandler.getInstance().getHandler(set.getString("handler"));
+		final OneDayRewardType oneDayRewardType = set.getEnum("handler", OneDayRewardType.class, OneDayRewardType.none);
 
 		_id = set.getInt("id");
 		_rewardId = set.getInt("reward_id");
@@ -57,7 +58,10 @@ public class OneDayRewardDataHolder {
 		_isMainClassOnly = set.getBoolean("isMainClassOnly", true);
 		_isDualClassOnly = set.getBoolean("isDualClassOnly", false);
 		_isDisplayedWhenNotAvailable = set.getBoolean("isDisplayedWhenNotAvailable", true);
-		_handler = handler != null ? handler.apply(this) : null;
+
+		if (oneDayRewardType != OneDayRewardType.none) {
+			_handler = oneDayRewardType.getNew(this);
+		}
 	}
 
 	public int getId() {

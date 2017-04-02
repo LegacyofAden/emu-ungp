@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.gameserver.handler;
+package org.l2junity.gameserver.model.onedayreward;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;

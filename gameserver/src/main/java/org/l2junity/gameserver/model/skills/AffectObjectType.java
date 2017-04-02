@@ -1,6 +1,5 @@
 package org.l2junity.gameserver.model.skills;
 
-import org.l2junity.gameserver.handler.IAffectObjectHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.affectobjecttypes.*;
 

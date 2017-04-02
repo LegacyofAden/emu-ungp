@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.skills.affectobjecttypes;
 
-import org.l2junity.gameserver.handler.IAffectObjectHandler;
+import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 
 /**

@@ -16,11 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
@@ -30,6 +29,7 @@ import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeStart;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
 
 /**
  * @author UnAfraid

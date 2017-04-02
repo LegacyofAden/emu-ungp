@@ -16,33 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package handlers.onedayrewardshandlers;
+package org.l2junity.gameserver.model.onedayreward.handlers;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.handler.AbstractOneDayRewardHandler;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFishing;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLevelChanged;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
-import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingEndReason;
+import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
 
 /**
- * @author UnAfraid
+ * @author Sdw
  */
-public class FishingOneDayRewardHandler extends AbstractOneDayRewardHandler {
-	private final int _amount;
+public class LevelOneDayRewardHandler extends AbstractOneDayRewardHandler {
+	private final int _level;
 
-	public FishingOneDayRewardHandler(OneDayRewardDataHolder holder) {
+	public LevelOneDayRewardHandler(OneDayRewardDataHolder holder) {
 		super(holder);
-		_amount = holder.getRequiredCompletions();
+		_level = holder.getParams().getInt("level");
 	}
 
 	@Override
 	public void init() {
-		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_FISHING, (OnPlayerFishing event) -> onPlayerFishing(event), this));
+		Containers.Players().addListener(new ConsumerEventListener(this, EventType.ON_PLAYER_LEVEL_CHANGED, (OnPlayerLevelChanged event) -> onPlayerLevelChanged(event), this));
 	}
 
 	@Override
@@ -50,9 +49,8 @@ public class FishingOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		if (entry != null) {
 			switch (entry.getStatus()) {
-				case NOT_AVAILABLE: // Initial state
-				{
-					if (entry.getProgress() >= _amount) {
+				case NOT_AVAILABLE: {
+					if (player.getLevel() >= _level) {
 						entry.setStatus(OneDayRewardStatus.AVAILABLE);
 						storePlayerEntry(entry);
 					}
@@ -66,14 +64,17 @@ public class FishingOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		return false;
 	}
 
-	private void onPlayerFishing(OnPlayerFishing event) {
+	@Override
+	public void reset() {
+		// Level rewards doesn't reset daily
+	}
+
+	private void onPlayerLevelChanged(OnPlayerLevelChanged event) {
 		final PlayerInstance player = event.getActiveChar();
-		if (event.getReason() == FishingEndReason.WIN) {
+		if (player.getLevel() >= _level) {
 			final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
 			if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
-				if (entry.increaseProgress() >= _amount) {
-					entry.setStatus(OneDayRewardStatus.AVAILABLE);
-				}
+				entry.setStatus(OneDayRewardStatus.AVAILABLE);
 				storePlayerEntry(entry);
 			}
 		}
