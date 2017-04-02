@@ -35,8 +35,8 @@ public class StartupManager {
 				SL key = Enum.valueOf(sl, startupAnnotation.value());
 				final StartModule<SL> module = new StartModule<>(key, clazz);
 				startup.put(key, module);
-			} catch (Exception e) {
-				log.error("Error while initializing StartupManager", e);
+			} catch (IllegalArgumentException e) {
+				log.error("Current module hasn't StartupLevel.{}", startupAnnotation.value(), e);
 			}
 		}
 
