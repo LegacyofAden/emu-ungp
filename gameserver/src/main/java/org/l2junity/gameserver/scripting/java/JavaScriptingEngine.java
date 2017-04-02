@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.commons.scripting.java;
+package org.l2junity.gameserver.scripting.java;
 
-import org.l2junity.commons.scripting.AbstractScriptingEngine;
-import org.l2junity.commons.scripting.IExecutionContext;
+import org.l2junity.gameserver.scripting.AbstractScriptingEngine;
+import org.l2junity.gameserver.scripting.IExecutionContext;
 
 import javax.lang.model.SourceVersion;
 import javax.tools.JavaCompiler;

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.handler;
 
 import lombok.Getter;
-import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;

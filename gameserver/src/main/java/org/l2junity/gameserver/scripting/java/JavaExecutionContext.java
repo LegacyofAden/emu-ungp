@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.commons.scripting.java;
+package org.l2junity.gameserver.scripting.java;
 
-import org.l2junity.commons.scripting.AbstractExecutionContext;
-import org.l2junity.commons.scripting.annotations.Disabled;
+import org.l2junity.gameserver.scripting.AbstractExecutionContext;
+import org.l2junity.gameserver.scripting.annotations.Disabled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

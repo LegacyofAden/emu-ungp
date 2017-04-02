@@ -18,7 +18,7 @@
  */
 package cron;
 
-import org.l2junity.commons.scripting.annotations.Disabled;
+import org.l2junity.gameserver.scripting.annotations.Disabled;
 
 @Disabled
 public class Example

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.handler;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
