@@ -22,7 +22,7 @@ bootRepackage.enabled = false
 sourceSets {
 	scripts {
 		java {
-			srcDir('dist/game/data/scripts')
+			srcDir('dist/data/scripts')
 		}
 	}
 }
