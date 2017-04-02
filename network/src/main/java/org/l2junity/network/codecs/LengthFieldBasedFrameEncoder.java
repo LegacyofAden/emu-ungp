@@ -18,22 +18,20 @@
  */
 package org.l2junity.network.codecs;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
+import java.util.List;
+
 /**
  * @author Nos
  */
 @Sharable
-public class LengthFieldBasedFrameEncoder extends MessageToMessageEncoder<ByteBuf>
-{
+public class LengthFieldBasedFrameEncoder extends MessageToMessageEncoder<ByteBuf> {
 	@Override
-	protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out)
-	{
+	protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
 		final ByteBuf buf = ctx.alloc().buffer(2);
 		final short length = (short) (msg.readableBytes() + 2);
 		buf.writeShortLE(length);

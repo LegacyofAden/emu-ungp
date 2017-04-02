@@ -21,8 +21,7 @@ package org.l2junity.network;
 /**
  * @author Nos
  */
-public interface IOutgoingPacket
-{
+public interface IOutgoingPacket {
 	/**
 	 * @param packet the packet writer
 	 * @return {@code true} if packet was writen successfully, {@code false} otherwise.

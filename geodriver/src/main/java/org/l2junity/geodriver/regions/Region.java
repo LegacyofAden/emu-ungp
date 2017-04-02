@@ -18,28 +18,24 @@
  */
 package org.l2junity.geodriver.regions;
 
-import java.nio.ByteBuffer;
-
 import org.l2junity.geodriver.IBlock;
 import org.l2junity.geodriver.IRegion;
 import org.l2junity.geodriver.blocks.ComplexBlock;
 import org.l2junity.geodriver.blocks.FlatBlock;
 import org.l2junity.geodriver.blocks.MultilayerBlock;
 
+import java.nio.ByteBuffer;
+
 /**
  * @author HorridoJoho
  */
-public final class Region implements IRegion
-{
+public final class Region implements IRegion {
 	private final IBlock[] _blocks = new IBlock[IRegion.REGION_BLOCKS];
-	
-	public Region(ByteBuffer bb)
-	{
-		for (int blockOffset = 0; blockOffset < IRegion.REGION_BLOCKS; blockOffset++)
-		{
+
+	public Region(ByteBuffer bb) {
+		for (int blockOffset = 0; blockOffset < IRegion.REGION_BLOCKS; blockOffset++) {
 			int blockType = bb.get();
-			switch (blockType)
-			{
+			switch (blockType) {
 				case IBlock.TYPE_FLAT:
 					_blocks[blockOffset] = new FlatBlock(bb);
 					break;
@@ -54,39 +50,33 @@ public final class Region implements IRegion
 			}
 		}
 	}
-	
-	private IBlock getBlock(int geoX, int geoY)
-	{
+
+	private IBlock getBlock(int geoX, int geoY) {
 		return _blocks[(((geoX / IBlock.BLOCK_CELLS_X) % IRegion.REGION_BLOCKS_X) * IRegion.REGION_BLOCKS_Y) + ((geoY / IBlock.BLOCK_CELLS_Y) % IRegion.REGION_BLOCKS_Y)];
 	}
-	
+
 	@Override
-	public boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe)
-	{
+	public boolean checkNearestNswe(int geoX, int geoY, int worldZ, int nswe) {
 		return getBlock(geoX, geoY).checkNearestNswe(geoX, geoY, worldZ, nswe);
 	}
-	
+
 	@Override
-	public int getNearestZ(int geoX, int geoY, int worldZ)
-	{
+	public int getNearestZ(int geoX, int geoY, int worldZ) {
 		return getBlock(geoX, geoY).getNearestZ(geoX, geoY, worldZ);
 	}
-	
+
 	@Override
-	public int getNextLowerZ(int geoX, int geoY, int worldZ)
-	{
+	public int getNextLowerZ(int geoX, int geoY, int worldZ) {
 		return getBlock(geoX, geoY).getNextLowerZ(geoX, geoY, worldZ);
 	}
-	
+
 	@Override
-	public int getNextHigherZ(int geoX, int geoY, int worldZ)
-	{
+	public int getNextHigherZ(int geoX, int geoY, int worldZ) {
 		return getBlock(geoX, geoY).getNextHigherZ(geoX, geoY, worldZ);
 	}
-	
+
 	@Override
-	public boolean hasGeo()
-	{
+	public boolean hasGeo() {
 		return true;
 	}
 }
