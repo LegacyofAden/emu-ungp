@@ -24,6 +24,8 @@ sourceSets {
 		java {
 			srcDir('dist/data/scripts')
 		}
+		compileClasspath += main.output + sourceSets.main.runtimeClasspath
+		runtimeClasspath += main.output + sourceSets.main.runtimeClasspath
 	}
 }
 
