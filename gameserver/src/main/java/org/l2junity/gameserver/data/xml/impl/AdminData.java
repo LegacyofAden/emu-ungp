@@ -64,9 +64,9 @@ public final class AdminData implements IGameXmlReader {
 	private void reload() {
 		_accessLevels.clear();
 		_adminCommandAccessRights.clear();
-		parseDatapackFile("config/accessLevels.xml");
+		parseDatapackFile("config/xml/accessLevels.xml");
 		log.info("Loaded: " + _accessLevels.size() + " Access Levels.");
-		parseDatapackFile("config/adminCommands.xml");
+		parseDatapackFile("config/xml/adminCommands.xml");
 		log.info("Loaded: " + _adminCommandAccessRights.size() + " Access Commands.");
 	}
 
