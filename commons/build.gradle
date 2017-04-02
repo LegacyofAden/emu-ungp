@@ -25,8 +25,8 @@ dependencies {
 	compile(group: 'org.bitlet', name: 'weupnp', version: '0.1.4')
 	compile(group: 'org.reflections', name: 'reflections', version: '0.9.10')
 	compile(group: 'com.google.guava', name: 'guava', version: '21.0')
-	
-	compile(group: 'com.mchange', name: 'c3p0', version: '0.9.5.2')
+
+	compile(group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1')
 	compile(group: 'org.jdbi', name: 'jdbi', version: '2.78')
 
 	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
