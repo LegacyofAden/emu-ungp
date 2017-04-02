@@ -22,7 +22,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.handler.OneDayRewardHandler;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
