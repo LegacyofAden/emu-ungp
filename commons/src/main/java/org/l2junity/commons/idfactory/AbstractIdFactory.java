@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 
 @Slf4j
-@StartupComponent(value = "Database", dependency = DatabaseFactory.class)
 public abstract class AbstractIdFactory {
 	private final IdFactoryAllocator allocator = new IdFactoryAllocator(Integer.MAX_VALUE);
 	private final CloseableReentrantLock lock = new CloseableReentrantLock();
