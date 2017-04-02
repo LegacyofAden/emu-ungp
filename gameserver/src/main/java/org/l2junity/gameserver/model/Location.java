@@ -18,10 +18,14 @@
  */
 package org.l2junity.gameserver.model;
 
+import java.io.Serializable;
+
+import org.l2junity.commons.math.Point3D;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.interfaces.IPositionable;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Location data transfer object.<br>
@@ -29,23 +33,18 @@ import java.io.Serializable;
  *
  * @author Zoey76
  */
-public class Location implements IPositionable, Serializable {
+public class Location extends Point3D implements IPositionable, Serializable {
 	private static final long serialVersionUID = 9053071440080626121L;
 
-	private double _x;
-	private double _y;
-	private double _z;
-	private int _heading;
+	@Getter @Setter private int heading;
 
 	public Location(double x, double y, double z) {
 		this(x, y, z, 0);
 	}
 
 	public Location(double x, double y, double z, int heading) {
-		_x = x;
-		_y = y;
-		_z = z;
-		_heading = heading;
+		super(x, y, z);
+		this.heading = heading;
 	}
 
 	public Location(ILocational loc) {
@@ -53,54 +52,8 @@ public class Location implements IPositionable, Serializable {
 	}
 
 	public Location(StatsSet set) {
-		_x = set.getInt("x");
-		_y = set.getInt("y");
-		_z = set.getInt("z");
-		_heading = set.getInt("heading", 0);
-	}
-
-	/**
-	 * Get the x coordinate.
-	 *
-	 * @return the x coordinate
-	 */
-	@Override
-	public double getX() {
-		return _x;
-	}
-
-	/**
-	 * Get the y coordinate.
-	 *
-	 * @return the y coordinate
-	 */
-	@Override
-	public double getY() {
-		return _y;
-	}
-
-	/**
-	 * Get the z coordinate.
-	 *
-	 * @return the z coordinate
-	 */
-	@Override
-	public double getZ() {
-		return _z;
-	}
-
-	/**
-	 * Set the x, y, z coordinates.
-	 *
-	 * @param x the x coordinate
-	 * @param y the y coordinate
-	 * @param z the z coordinate
-	 */
-	@Override
-	public void setXYZ(double x, double y, double z) {
-		_x = x;
-		_y = y;
-		_z = z;
+		super(set.getInt("x"), set.getInt("y"), set.getInt("z"));
+		heading = set.getInt("heading", 0);
 	}
 
 	/**
@@ -113,32 +66,12 @@ public class Location implements IPositionable, Serializable {
 		setXYZ(loc.getX(), loc.getY(), loc.getZ());
 	}
 
-	/**
-	 * Get the heading.
-	 *
-	 * @return the heading
-	 */
-	@Override
-	public int getHeading() {
-		return _heading;
-	}
-
-	/**
-	 * Set the heading.
-	 *
-	 * @param heading the heading
-	 */
-	@Override
-	public void setHeading(int heading) {
-		_heading = heading;
-	}
-
 	@Override
 	public void setLocation(Location loc) {
-		_x = loc.getX();
-		_y = loc.getY();
-		_z = loc.getZ();
-		_heading = loc.getHeading();
+		x = loc.getX();
+		y = loc.getY();
+		z = loc.getZ();
+		heading = loc.getHeading();
 	}
 
 	@Override
@@ -152,6 +85,6 @@ public class Location implements IPositionable, Serializable {
 
 	@Override
 	public String toString() {
-		return "[" + getClass().getSimpleName() + "] X: " + getX() + " Y: " + getY() + " Z: " + getZ() + " Heading: " + _heading;
+		return "[" + getClass().getSimpleName() + "] X: " + getX() + " Y: " + getY() + " Z: " + getZ() + " Heading: " + heading;
 	}
 }
