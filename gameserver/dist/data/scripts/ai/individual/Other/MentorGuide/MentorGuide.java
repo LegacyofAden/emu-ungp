@@ -102,7 +102,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 
 	public void load() {
 		try {
-			parseDatapackFile("config/xml/MentorCoins.xml");
+			parseDatapackFile("configs/xml/MentorCoins.xml");
 		} catch (Exception e) {
 			LOGGER.error("Failed loading mentor coins.", e);
 		}

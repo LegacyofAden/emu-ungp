@@ -98,7 +98,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 	public void load() {
 		_classChangeData.clear();
 		try {
-			parseDatapackFile("config/xml/ClassMaster.xml");
+			parseDatapackFile("configs/xml/ClassMaster.xml");
 		} catch (Exception e) {
 			LOGGER.error("Failed loading class master.", e);
 		}
