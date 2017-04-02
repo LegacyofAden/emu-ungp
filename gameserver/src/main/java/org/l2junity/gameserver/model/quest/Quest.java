@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.quest;
 
-import org.l2junity.commons.scripting.ScriptEngineManager;
+import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.xml.impl.FactionData;

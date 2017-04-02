@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.commons.scripting;
+package org.l2junity.gameserver.scripting;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.scripting.java.JavaScriptingEngine;
+import org.l2junity.gameserver.scripting.java.JavaScriptingEngine;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.BasePathProvider;
 import org.l2junity.core.startup.StartupComponent;

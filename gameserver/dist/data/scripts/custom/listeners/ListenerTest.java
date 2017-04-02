@@ -18,7 +18,7 @@
  */
 package custom.listeners;
 
-import org.l2junity.commons.scripting.annotations.Disabled;
+import org.l2junity.gameserver.scripting.annotations.Disabled;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.events.Containers;

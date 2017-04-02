@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.scripting;
 
-import org.l2junity.commons.scripting.ScriptEngineManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

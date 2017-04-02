@@ -16,29 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.commons.scripting;
+package org.l2junity.gameserver.scripting;
 
-import java.util.Arrays;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * @param <T>
  * @author HorridoJoho
  */
-public abstract class AbstractScriptingEngine implements IScriptingEngine {
-	private final String _engineName;
-	private final String _engineVersion;
-	private final String[] _commonFileExtensions;
+public abstract class AbstractExecutionContext<T extends IScriptingEngine> implements IExecutionContext {
+	private final T _engine;
 	private final Map<String, String> _properties;
+	private volatile Path _currentExecutingScipt;
 
-	protected AbstractScriptingEngine(final String engineName, final String engineVersion, final String... commonFileExtensions) {
-		if ((engineName == null) || engineName.isEmpty() || (engineVersion == null) || engineVersion.isEmpty() || (commonFileExtensions == null) || (commonFileExtensions.length == 0)) {
+	protected AbstractExecutionContext(final T engine) {
+		if (engine == null) {
 			throw new IllegalArgumentException();
 		}
-		_engineName = engineName;
-		_engineVersion = engineVersion;
-		_commonFileExtensions = commonFileExtensions;
+		_engine = engine;
 		_properties = new HashMap<>();
+	}
+
+	protected final void setCurrentExecutingScript(final Path currentExecutingScript) {
+		_currentExecutingScipt = currentExecutingScript;
 	}
 
 	@Override
@@ -48,21 +50,19 @@ public abstract class AbstractScriptingEngine implements IScriptingEngine {
 
 	@Override
 	public final String getProperty(final String key) {
+		if (!_properties.containsKey(key)) {
+			return _engine.getProperty(key);
+		}
 		return _properties.get(key);
 	}
 
 	@Override
-	public final String getEngineName() {
-		return _engineName;
+	public final Path getCurrentExecutingScript() {
+		return _currentExecutingScipt;
 	}
 
 	@Override
-	public final String getEngineVersion() {
-		return _engineVersion;
-	}
-
-	@Override
-	public final String[] getCommonFileExtensions() {
-		return Arrays.copyOf(_commonFileExtensions, _commonFileExtensions.length);
+	public final T getScriptingEngine() {
+		return _engine;
 	}
 }

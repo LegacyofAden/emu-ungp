@@ -20,7 +20,6 @@ package org.l2junity.gameserver.scripting;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.scripting.ScriptEngineManager;
 import org.l2junity.commons.util.TimeAmountInterpreter;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
