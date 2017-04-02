@@ -19,7 +19,7 @@
 package ai.individual.Other.CastleCourtMagician;
 
 import ai.AbstractNpcAI;
-import handlers.effecthandlers.instant.InstantCallPc;
+import org.l2junity.gameserver.model.effects.effecttypes.instant.InstantCallPc;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.enums.CategoryType;

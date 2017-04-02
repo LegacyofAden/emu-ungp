@@ -22,8 +22,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.handler.ConditionHandler;
-import org.l2junity.gameserver.handler.IConditionHandler;
+import org.l2junity.gameserver.model.drops.conditions.ExDropConditionType;
+import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.ExtendDropDataHolder;
 import org.l2junity.gameserver.model.holders.ExtendDropItemHolder;
@@ -40,7 +40,7 @@ import java.util.function.Function;
  */
 
 @Slf4j
-@StartupComponent(value = "Data", dependency = ConditionHandler.class)
+@StartupComponent(value = "Data")
 public class ExtendDropData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final ExtendDropData instance = new ExtendDropData();
@@ -71,18 +71,12 @@ public class ExtendDropData implements IGameXmlReader {
 			}));
 			set.set("items", items);
 
-			final List<IConditionHandler> conditions = new ArrayList<>(1);
+			final List<IExDropCondition> conditions = new ArrayList<>(1);
 			forEach(dropNode, "conditions", conditionsNode -> forEach(conditionsNode, "condition", conditionNode ->
 			{
-				final String conditionName = parseString(conditionNode.getAttributes(), "name");
+				final ExDropConditionType exDropConditionType = parseEnum(conditionNode.getAttributes(), ExDropConditionType.class, "name");
 				final StatsSet params = (StatsSet) parseValue(conditionNode);
-				final Function<StatsSet, IConditionHandler> conditionFunction = ConditionHandler.getInstance().getHandlerFactory(conditionName);
-				if (conditionFunction != null) {
-					conditions.add(conditionFunction.apply(params));
-				} else {
-					log.warn("Missing condition for ExtendDrop Id[{}] Condition Name[{}]", set.getInt("id"), conditionName);
-				}
-
+				conditions.add(exDropConditionType.getNew(params));
 			}));
 			set.set("conditions", conditions);
 

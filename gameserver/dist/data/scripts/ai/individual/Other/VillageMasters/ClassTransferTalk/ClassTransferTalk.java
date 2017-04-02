@@ -18,23 +18,22 @@
  */
 package ai.individual.Other.VillageMasters.ClassTransferTalk;
 
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 
-import ai.AbstractNpcAI;
-
 /**
  * This script is not fully retail like because of NCSoft<br>
  * laziness to update every npc dialog (still using old format for class transfer).<br>
  * So some parts of script are done by custom way, so we don't need<br>
  * to copy retail issues/bugs/typos.
+ *
  * @author Gladicek
  */
-public final class ClassTransferTalk extends AbstractNpcAI
-{
+public final class ClassTransferTalk extends AbstractNpcAI {
 	// NPC's
 	// Talking Island Village (Administrative office)
 	private static final int FRANCO = 32153;
@@ -46,39 +45,38 @@ public final class ClassTransferTalk extends AbstractNpcAI
 	private static final int VALFAR = 32146;
 	// @formatter:off
 	private static final int[] FIRST_CLASS_TOWNS =
-	{
-		// Town of Gludio
-		30289, 30288, 30297, 30505, 30504, 30503, 32196,
-		// Town of Dion
-		30070, 30066, 30462, 30508, 30595, 30594, 32199,
-		// Gludin Village
-		30290, 30499, 30498, 30500, 32193, 30373, 30037,
-		// Town of Schuttgard  
-		32095, 32098, 32094, 32092, 32093, 32097, 32202
-	};
+			{
+					// Town of Gludio
+					30289, 30288, 30297, 30505, 30504, 30503, 32196,
+					// Town of Dion
+					30070, 30066, 30462, 30508, 30595, 30594, 32199,
+					// Gludin Village
+					30290, 30499, 30498, 30500, 32193, 30373, 30037,
+					// Town of Schuttgard
+					32095, 32098, 32094, 32092, 32093, 32097, 32202
+			};
 	private static final int[] SECOND_CLASS_TOWNS =
-	{
-		// Town of Goddard
-		31279, 31755, 31276, 32226, 32225, 31272, 31269, 31288, 31285,
-		// Town of Aden
-		30865, 30862, 32221, 32222, 30854, 30857, 30849, 30847, 30845,
-		// Town of Giran
-		30512, 30474, 32213, 32214, 30513, 30511, 30109, 30120, 30115,
-		// Town of Rune
-		31317, 31314, 31324, 31321, 31326, 31336, 31334, 31328, 31331,
-		// Town of Oren
-		30681, 30677, 30676, 30187, 30191, 30195, 32205, 32206,
-		// Heine
-		30905, 30900, 30894, 30897, 32210, 32209, 30913, 30910,
-		// Hunters Village
-		30687, 30685, 32218, 32217, 30694, 30689, 30699, 30704,
-		// Ivory Tower
-		30174, 30175, 30176
-	};
+			{
+					// Town of Goddard
+					31279, 31755, 31276, 32226, 32225, 31272, 31269, 31288, 31285,
+					// Town of Aden
+					30865, 30862, 32221, 32222, 30854, 30857, 30849, 30847, 30845,
+					// Town of Giran
+					30512, 30474, 32213, 32214, 30513, 30511, 30109, 30120, 30115,
+					// Town of Rune
+					31317, 31314, 31324, 31321, 31326, 31336, 31334, 31328, 31331,
+					// Town of Oren
+					30681, 30677, 30676, 30187, 30191, 30195, 32205, 32206,
+					// Heine
+					30905, 30900, 30894, 30897, 32210, 32209, 30913, 30910,
+					// Hunters Village
+					30687, 30685, 32218, 32217, 30694, 30689, 30699, 30704,
+					// Ivory Tower
+					30174, 30175, 30176
+			};
 	// @formatter:on
-	
-	private ClassTransferTalk()
-	{
+
+	private ClassTransferTalk() {
 		addStartNpc(FRANCO, RIVIAN, DEVON, TOOK, KAKAI, MOKA, VALFAR);
 		addStartNpc(FIRST_CLASS_TOWNS);
 		addStartNpc(SECOND_CLASS_TOWNS);
@@ -86,14 +84,12 @@ public final class ClassTransferTalk extends AbstractNpcAI
 		addTalkId(FIRST_CLASS_TOWNS);
 		addTalkId(SECOND_CLASS_TOWNS);
 	}
-	
+
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player)
-	{
+	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
-		switch (event)
-		{
+
+		switch (event) {
 			case "30565-02.html":
 			case "30565-03.html":
 			case "30565-04.html":
@@ -131,43 +127,30 @@ public final class ClassTransferTalk extends AbstractNpcAI
 			case "32160-06.html":
 			case "32160-07.html":
 			case "32160-08.html":
-			case "32160-09.html":
-			{
+			case "32160-09.html": {
 				htmltext = event;
 				break;
 			}
 		}
 		return htmltext;
 	}
-	
+
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player)
-	{
+	public String onTalk(Npc npc, PlayerInstance player) {
 		String htmltext = null;
-		
+
 		// Custom... retail still use old class transfer way for quest
-		if (ArrayUtil.contains(FIRST_CLASS_TOWNS, npc.getId()))
-		{
+		if (ArrayUtil.contains(FIRST_CLASS_TOWNS, npc.getId())) {
 			htmltext = "first_class_transfer.html";
-		}
-		else if (ArrayUtil.contains(SECOND_CLASS_TOWNS, npc.getId()))
-		{
+		} else if (ArrayUtil.contains(SECOND_CLASS_TOWNS, npc.getId())) {
 			htmltext = "second_class_transfer.html";
-		}
-		else
-		{
-			switch (npc.getId())
-			{
-				case FRANCO:
-				{
-					if (player.getRace() == Race.HUMAN)
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+		} else {
+			switch (npc.getId()) {
+				case FRANCO: {
+					if (player.getRace() == Race.HUMAN) {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "32153-02.html";
-						}
-						else
-						{
+						} else {
 							// Custom (missing html for fighters?!)
 							htmltext = "first_class_transfer.html";
 						}
@@ -176,16 +159,11 @@ public final class ClassTransferTalk extends AbstractNpcAI
 					htmltext = "32153-01.html";
 					break;
 				}
-				case RIVIAN:
-				{
-					if (player.getRace() == Race.ELF)
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+				case RIVIAN: {
+					if (player.getRace() == Race.ELF) {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "32147-07.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "32147-02.html";
 						}
 						break;
@@ -193,16 +171,11 @@ public final class ClassTransferTalk extends AbstractNpcAI
 					htmltext = "32147-01.html";
 					break;
 				}
-				case DEVON:
-				{
-					if (player.getRace() == Race.DARK_ELF)
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+				case DEVON: {
+					if (player.getRace() == Race.DARK_ELF) {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "32160-02.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "32160-07.html";
 						}
 						break;
@@ -210,16 +183,11 @@ public final class ClassTransferTalk extends AbstractNpcAI
 					htmltext = "32160-01.html";
 					break;
 				}
-				case TOOK:
-				{
-					if (player.getRace() == Race.ORC)
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+				case TOOK: {
+					if (player.getRace() == Race.ORC) {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "32150-07.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "32150-02.html";
 						}
 						break;
@@ -227,16 +195,11 @@ public final class ClassTransferTalk extends AbstractNpcAI
 					htmltext = "32150-01.html";
 					break;
 				}
-				case KAKAI:
-				{
-					if (player.getRace() == Race.ORC)
-					{
-						if (player.isInCategory(CategoryType.MAGE_GROUP))
-						{
+				case KAKAI: {
+					if (player.getRace() == Race.ORC) {
+						if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 							htmltext = "30565-07.html";
-						}
-						else
-						{
+						} else {
 							htmltext = "30565-02.html";
 						}
 						break;
@@ -244,21 +207,16 @@ public final class ClassTransferTalk extends AbstractNpcAI
 					htmltext = "30565-01.html";
 					break;
 				}
-				case MOKA:
-				{
+				case MOKA: {
 					// Custom because on retail you can access this with every race...
-					if (player.getRace() == Race.DWARF)
-					{
+					if (player.getRace() == Race.DWARF) {
 						htmltext = "32157-01.html";
-					}
-					else
-					{
+					} else {
 						htmltext = "32157-05.html";
 					}
 					break;
 				}
-				case VALFAR:
-				{
+				case VALFAR: {
 					// Retail like
 					htmltext = "first_class_transfer.html";
 					break;
@@ -267,9 +225,8 @@ public final class ClassTransferTalk extends AbstractNpcAI
 		}
 		return htmltext;
 	}
-	
-	public static void main(String[] args)
-	{
+
+	public static void main(String[] args) {
 		new ClassTransferTalk();
 	}
 }

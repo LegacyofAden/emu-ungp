@@ -107,16 +107,6 @@ public final class AdminReload implements IAdminCommandHandler {
 					AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded Crests.");
 					break;
 				}
-				case "effect": {
-					try {
-						ScriptEngineManager.getInstance().executeScript(GameScriptsLoader.SCRIPT_FOLDER, GameScriptsLoader.EFFECT_MASTER_HANDLER_FILE);
-						AdminData.getInstance().broadcastMessageToGMs(activeChar.getName() + ": Reloaded effect master handler.");
-					} catch (Exception e) {
-						LOGGER.warn("Failed executing effect master handler!", e);
-						activeChar.sendMessage("Error reloading effect master handler!");
-					}
-					break;
-				}
 				case "enchant": {
 					try {
 						EnchantItemGroupsData.getInstance().reload();

@@ -25,10 +25,6 @@ import org.l2junity.gameserver.data.xml.impl.EnchantSkillGroupsData;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.*;
-import org.l2junity.gameserver.handler.IAffectObjectHandler;
-import org.l2junity.gameserver.handler.IAffectScopeHandler;
-import org.l2junity.gameserver.handler.ITargetTypeHandler;
-import org.l2junity.gameserver.handler.TargetHandler;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -183,9 +179,9 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 	// Effecting area of the skill, in radius.
 	// The radius center varies according to the _targetType:
 	// "caster" if targetType = AURA/PARTY/CLAN or "target" if targetType = AREA
-	private final ITargetTypeHandler _targetTypeHandler;
-	private final IAffectScopeHandler _affectScopeHandler;
-	private final IAffectObjectHandler _affectObjectHandler;
+	private final TargetType _targetType;
+	private final AffectScopeType _affectAffectScopeType;
+	private final AffectObjectType _affectObjectType;
 	private final int _affectRange;
 	private final int[] _fanRange = new int[4]; // unk;startDegree;fanAffectRange;fanAffectAngle
 	private final int[] _affectLimit = new int[3]; // TODO: Third value is unknown... find it out!
@@ -311,23 +307,9 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 		_reuseDelayGroup = set.getInt("reuseDelayGroup", -1);
 		_reuseHashCode = SkillData.getSkillHashCode(_reuseDelayGroup > 0 ? _reuseDelayGroup : _id, _level, _subLevel);
 
-		final String targetType = set.getString("targetType", "NONE");
-		_targetTypeHandler = TargetHandler.getInstance().getTargetTypeHandler(targetType);
-		if (_targetTypeHandler == null) {
-			throw new RuntimeException("Target Type not found for Skill Id[" + _id + "] Level[" + _level + "] SubLevel[" + _subLevel + "] TargetType[" + targetType + "].");
-		}
-
-		final String affectScope = set.getString("affectScope", "SINGLE");
-		_affectScopeHandler = TargetHandler.getInstance().getAffectScopeHandler(affectScope);
-		if (_affectScopeHandler == null) {
-			throw new RuntimeException("Affect Scope not found for Skill Id[" + _id + "] Level[" + _level + "] SubLevel[" + _subLevel + "] AffectScope[" + affectScope + "].");
-		}
-
-		final String affectObject = set.getString("affectObject", "ALL");
-		_affectObjectHandler = TargetHandler.getInstance().getAffectObjectHandler(affectObject);
-		if (_affectObjectHandler == null) {
-			throw new RuntimeException("Affect Object not found for Skill Id[" + _id + "] Level[" + _level + "] SubLevel[" + _subLevel + "] AffectObject[" + affectObject + "].");
-		}
+		_targetType = set.getEnum("targetType", TargetType.class, TargetType.NONE);
+		_affectAffectScopeType = set.getEnum("affectScope", AffectScopeType.class, AffectScopeType.NONE);
+		_affectObjectType = set.getEnum("affectObject", AffectObjectType.class, AffectObjectType.ALL);
 
 		_affectRange = set.getInt("affectRange", 0);
 
@@ -845,22 +827,22 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 	/**
 	 * @return the target type of the skill : SELF, TARGET, SUMMON, GROUND...
 	 */
-	public ITargetTypeHandler getTargetTypeHandler() {
-		return _targetTypeHandler;
+	public TargetType getTargetType() {
+		return _targetType;
 	}
 
 	/**
 	 * @return the affect scope of the skill : SINGLE, FAN, SQUARE, PARTY, PLEDGE...
 	 */
-	public IAffectScopeHandler getAffectScopeHandler() {
-		return _affectScopeHandler;
+	public AffectScopeType getAffectScopeType() {
+		return _affectAffectScopeType;
 	}
 
 	/**
 	 * @return the affect object of the skill : All, Clan, Friend, NotFriend, Invisible...
 	 */
-	public IAffectObjectHandler getAffectObjectHandler() {
-		return _affectObjectHandler;
+	public AffectObjectType getAffectObjectType() {
+		return _affectObjectType;
 	}
 
 	/**
@@ -1102,7 +1084,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 	 */
 	public WorldObject getTarget(Creature activeChar, WorldObject seletedTarget, boolean forceUse, boolean dontMove, boolean sendMessage) {
 		try {
-			return _targetTypeHandler.getTarget(activeChar, seletedTarget, this, forceUse, dontMove, sendMessage);
+			return _targetType.getTarget(activeChar, seletedTarget, this, forceUse, dontMove, sendMessage);
 		} catch (Exception e) {
 			_log.warn("Exception in Skill.getTarget(): {}", e.getMessage(), e);
 		}
@@ -1119,12 +1101,12 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 		if (target == null) {
 			return null;
 		}
-		activeChar.sendDebugMessage("-> " + this + "\n      TT: " + getTargetTypeHandler() + "\n      AS: " + getAffectScopeHandler() + "\n      AO: " + getAffectObjectHandler(), DebugType.SKILLS);
+		activeChar.sendDebugMessage("-> " + this + "\n      TT: " + getTargetType() + "\n      AS: " + getAffectScopeType() + "\n      AO: " + getAffectObjectType(), DebugType.SKILLS);
 		try {
 			final List<WorldObject> result = new LinkedList<>();
-			_affectScopeHandler.forEachAffected(activeChar, target, this, o -> result.add(o));
+			_affectAffectScopeType.forEachAffected(activeChar, target, this, o -> result.add(o));
 			if (activeChar.isDebug()) {
-				_affectScopeHandler.drawEffected(activeChar, target, this);
+				_affectAffectScopeType.drawEffected(activeChar, target, this);
 			}
 			return result;
 		} catch (Exception e) {
@@ -1145,9 +1127,9 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 		}
 
 		try {
-			_affectScopeHandler.forEachAffected(activeChar, target, this, action);
+			_affectAffectScopeType.forEachAffected(activeChar, target, this, action);
 			if (activeChar.isDebug()) {
-				_affectScopeHandler.drawEffected(activeChar, target, this);
+				_affectAffectScopeType.drawEffected(activeChar, target, this);
 			}
 		} catch (Exception e) {
 			_log.warn("Exception in Skill.forEachTargetAffected(): {}", e.getMessage(), e);

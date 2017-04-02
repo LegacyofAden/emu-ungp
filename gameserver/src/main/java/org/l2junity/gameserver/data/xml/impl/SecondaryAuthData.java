@@ -46,7 +46,7 @@ public class SecondaryAuthData implements IGameXmlReader {
 
 	private SecondaryAuthData() {
 		_forbiddenPasswords.clear();
-		parseDatapackFile("config/xml/SecondaryAuth.xml");
+		parseDatapackFile("configs/xml/SecondaryAuth.xml");
 		log.info("Loaded {} forbidden passwords.", _forbiddenPasswords.size());
 	}
 

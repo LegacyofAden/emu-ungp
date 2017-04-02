@@ -21,6 +21,7 @@ package org.l2junity.gameserver.handler;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.TimeAmountInterpreter;
 import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.PlayerAction;
 import org.l2junity.gameserver.model.WorldObject;
@@ -37,6 +38,7 @@ import java.util.Map;
 /**
  * @author UnAfraid
  */
+@StartupComponent("Scripts")
 public final class AdminCommandHandler implements IHandler<IAdminCommandHandler, String> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminCommandHandler.class);
 

@@ -48,7 +48,7 @@ public final class AbilityPointsData implements IGameXmlReader {
 
 	protected void reload() {
 		_points.clear();
-		parseDatapackFile("config/xml/AbilityPoints.xml");
+		parseDatapackFile("configs/xml/AbilityPoints.xml");
 		LOGGER.info("Loaded: {} range fees.", _points.size());
 	}
 

@@ -50,7 +50,7 @@ public class ClanRewardData implements IGameXmlReader {
 	private final Map<ClanRewardType, List<ClanRewardBonus>> _clanRewards = new ConcurrentHashMap<>();
 
 	private ClanRewardData() {
-		parseDatapackFile("config/xml/ClanReward.xml");
+		parseDatapackFile("configs/xml/ClanReward.xml");
 		for (ClanRewardType type : ClanRewardType.values()) {
 			LOGGER.info("Loaded: {} rewards for {}", _clanRewards.containsKey(type) ? _clanRewards.get(type).size() : 0, type);
 		}

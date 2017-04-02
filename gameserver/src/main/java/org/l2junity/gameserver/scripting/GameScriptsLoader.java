@@ -43,8 +43,6 @@ public final class GameScriptsLoader implements IGameXmlReader {
 	private static final GameScriptsLoader instance = new GameScriptsLoader();
 
 	public static final Path SCRIPT_FOLDER = Paths.get("data", "scripts");
-	public static final Path TARGET_MASTER_HANDLER_FILE = Paths.get("handlers", "TargetMasterHandler.java");
-	public static final Path EFFECT_MASTER_HANDLER_FILE = Paths.get("handlers", "EffectMasterHandler.java");
 	public static final Path SKILL_CONDITION_HANDLER_FILE = Paths.get("handlers", "SkillConditionMasterHandler.java");
 	public static final Path CONDITION_HANDLER_FILE = Paths.get("handlers", "ConditionMasterHandler.java");
 	public static final Path ONE_DAY_REWARD_MASTER_HANDLER = Paths.get("handlers", "OneDayRewardMasterHandler.java");
@@ -56,7 +54,7 @@ public final class GameScriptsLoader implements IGameXmlReader {
 
 		try {
 			// load script configurations
-			parseDatapackFile("config/xml/scripts.xml");
+			parseDatapackFile("configs/xml/scripts.xml");
 			LOGGER.info("Loaded {} files to exclude.", _exclusions.length);
 
 			LOGGER.info("Loading server script(s) ...");

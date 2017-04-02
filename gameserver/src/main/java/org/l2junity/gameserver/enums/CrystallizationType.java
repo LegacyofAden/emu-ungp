@@ -29,7 +29,7 @@ public enum CrystallizationType {
 	NONE,
 	WEAPON,
 	ARMOR,
-	ACCCESORY;
+	ACCESSORY;
 
 	public static CrystallizationType getByItem(L2Item item) {
 		if (item instanceof Weapon) {
@@ -47,7 +47,7 @@ public enum CrystallizationType {
 			case L2Item.SLOT_HAIR:
 			case L2Item.SLOT_HAIR2:
 			case L2Item.SLOT_HAIRALL: {
-				return ACCCESORY;
+				return ACCESSORY;
 			}
 		}
 
