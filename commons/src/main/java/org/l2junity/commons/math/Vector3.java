@@ -155,10 +155,10 @@ public class Vector3 extends Vector2 implements Cloneable {
 	}
 
 	public final Point3D toPoint3() {
-		return new Point3D(getRoundX(), getRoundY(), getRoundZ());
+		return new Point3D(x, y, z);
 	}
 
 	public final Vector2 toVector2() {
-		return new Vector2(this.x, this.y);
+		return new Vector2(x, y);
 	}
 }
