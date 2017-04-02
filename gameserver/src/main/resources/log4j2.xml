@@ -2,11 +2,11 @@
 <Configuration status="INFO" shutdownHook="disable">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%date{HH:mm:ss}] [%level] %logger{1}: %message%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%xEx%n"/>
         </Console>
         <RollingFile name="ConsoleFile" fileName="log/console.log"
                      filePattern="log/$${date:yyyy-MM}/console/console-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] [%thread] [%level] %logger{1.}: %message%n"/>
+            <PatternLayout pattern="%d %-5level %class{36} %L %M - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -15,7 +15,7 @@
         </RollingFile>
         <RollingFile name="AccountingFile" fileName="log/accounting.log"
                      filePattern="log/$${date:yyyy-MM}/accounting/accounting-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -24,7 +24,7 @@
         </RollingFile>
         <RollingFile name="AuditFile" fileName="log/audit.log"
                      filePattern="log/$${date:yyyy-MM}/audit/audit-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -33,7 +33,7 @@
         </RollingFile>
         <RollingFile name="ChatFile" fileName="log/chat.log"
                      filePattern="log/$${date:yyyy-MM}/chat/chat-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -42,7 +42,7 @@
         </RollingFile>
         <RollingFile name="EnchantItemFile" fileName="log/enchant-item.log"
                      filePattern="log/$${date:yyyy-MM}/enchant-item/enchant-item-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -51,7 +51,7 @@
         </RollingFile>
         <RollingFile name="EnchantSkillFile" fileName="log/enchant-skill.log"
                      filePattern="log/$${date:yyyy-MM}/enchant-skill/enchant-skill-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -60,7 +60,7 @@
         </RollingFile>
         <RollingFile name="GMAuditFile" fileName="log/gm-audit.log"
                      filePattern="log/$${date:yyyy-MM}/gm-audit/gm-audit-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -69,7 +69,7 @@
         </RollingFile>
         <RollingFile name="ItemFile" fileName="log/item.log"
                      filePattern="log/$${date:yyyy-MM}/item/item-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
@@ -78,7 +78,7 @@
         </RollingFile>
         <RollingFile name="OlympiadFile" fileName="log/olympiad.log"
                      filePattern="log/$${date:yyyy-MM}/olympiad/olympiad-%date{yyyy-MM-dd}.log">
-            <PatternLayout pattern="[%date] %message%n"/>
+            <PatternLayout pattern="%d - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <TimeBasedTriggeringPolicy />
