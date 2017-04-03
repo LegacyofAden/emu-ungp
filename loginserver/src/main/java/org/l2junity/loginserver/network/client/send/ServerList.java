@@ -18,66 +18,64 @@
  */
 package org.l2junity.loginserver.network.client.send;
 
-import org.l2junity.loginserver.model.GameServer;
-import org.l2junity.loginserver.model.enums.AgeLimit;
-import org.l2junity.loginserver.model.enums.ServerType;
+import org.l2junity.commons.model.GameServer;
+import org.l2junity.commons.model.enums.ServerStatus;
+import org.l2junity.loginserver.manager.LoginServerRMI;
 import org.l2junity.loginserver.network.client.ClientHandler;
 import org.l2junity.network.IOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author NosBit
  */
 public class ServerList implements IOutgoingPacket {
-	private final ClientHandler _client;
+	private final ClientHandler client;
 
 	public ServerList(ClientHandler client) {
-		_client = client;
+		this.client = client;
 	}
 
 	@Override
 	public boolean write(PacketWriter packet) {
-		// TODO: Implement me
 		packet.writeC(0x04);
 
-		Set<GameServer> gameservers = new HashSet<>();
-		gameservers.add(new GameServer((short) 1, "1", true, AgeLimit.EIGHTEEN, new HashSet<>(Arrays.asList(ServerType.FREE))));
-		gameservers.add(new GameServer((short) 2, "2", true, AgeLimit.EIGHTEEN, new HashSet<>(Arrays.asList(ServerType.FREE))));
+		Collection<GameServer> gameservers = LoginServerRMI.getInstance().getGameServers();
+
 		packet.writeC(gameservers.size());
-		packet.writeC(_client.getAccount().getLastServerId());
+
+		boolean isLastServerOn = gameservers.stream().anyMatch(server -> server.getStatus() != ServerStatus.DOWN
+				&& server.getId() == client.getAccount().getLastServerId());
+		packet.writeC(isLastServerOn ? client.getAccount().getLastServerId() : 0);
 
 		for (GameServer gameServer : gameservers) {
 			packet.writeC(gameServer.getId());
 
-			packet.writeC(127); // IP
-			packet.writeC(0); // IP
-			packet.writeC(0); // IP
-			packet.writeC(1); // IP
-			packet.writeD(7777); // Port
+			byte[] raw = gameServer.getAddress().getAddress();
+			packet.writeC(raw[0] & 0xff);
+			packet.writeC(raw[1] & 0xff);
+			packet.writeC(raw[2] & 0xff);
+			packet.writeC(raw[3] & 0xff);
+			packet.writeD(gameServer.getPort());
 
 			packet.writeC(gameServer.getAgeLimit().getAge());
-			packet.writeC(0); // PK Enabled - Unused by client
-			packet.writeH(1); // Player Count
-			packet.writeH(1); // Player Limit
-			packet.writeC(0); // ServerState.OFFLINE(0), ONLINE(1)
+			packet.writeC(0); // isPvp - unused
+			packet.writeH(gameServer.getCurrentOnline());
+			packet.writeH(gameServer.getMaxOnline());
+			packet.writeC(gameServer.getStatus() == ServerStatus.DOWN ? 0 : 1);
 			packet.writeD(gameServer.getServerTypesMask());
 			packet.writeC(0); // Puts [NULL] in front of name due to missing file in NA client
 		}
 
 		packet.writeH(0); // Unused by client
 
-		packet.writeC(2);
-		for (int i = 1; i <= 2; i++) {
-			packet.writeC(i); // Server ID
-			packet.writeC(127); // Character Count
-			packet.writeC(2); // Deleted Character Count
-			for (int j = 1; j <= 2; j++) {
-				packet.writeD(j);
-			}
+		packet.writeC(gameservers.size());
+		for (GameServer server : gameservers) {
+			packet.writeC(server.getId());
+			packet.writeC(0); // Players on account
+			packet.writeC(0); // Players marked to delete
+			// packet.writeC((int) (t - System.currentTimeMillis() / 1000L)) // t - delete time
 		}
 
 		return true;

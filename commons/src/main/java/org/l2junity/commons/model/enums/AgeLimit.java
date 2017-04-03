@@ -16,41 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.loginserver.model.enums;
+package org.l2junity.commons.model.enums;
 
 /**
- * An {@code enum} representing the server types such as Relax, Test, Broad, Create Restrict, Event, Free, World Raid, New and Classic.
+ * An {@code enum} representing the age limit such as None, Fifteen and Eighteen.
  *
- * @author Nos
+ * @author NosBit
  */
-public enum ServerType {
-	RELAX(0x02),
-	TEST(0x04),
-	BROAD(0x08),
-	CREATE_RESTRICT(0x10),
-	EVENT(0x20),
-	FREE(0x40),
-	WORLD_RAID(0x100),
-	NEW(0x200),
-	CLASSIC(0x400);
+public enum AgeLimit {
+	NONE(0),
+	FIFTEEN(15),
+	EIGHTEEN(18);
 
-	private final int _mask;
+	private final int _age;
 
 	/**
-	 * Creates a server type instance.
+	 * Creates an age limit instance.
 	 *
-	 * @param mask the mask
+	 * @param age the age
 	 */
-	ServerType(int mask) {
-		_mask = mask;
+	AgeLimit(int age) {
+		_age = age;
 	}
 
 	/**
-	 * Gets the mask.
+	 * Gets the age.
 	 *
-	 * @return the mask
+	 * @return the age
 	 */
-	public int getMask() {
-		return _mask;
+	public int getAge() {
+		return _age;
 	}
 }
