@@ -1,6 +1,8 @@
 System.setProperty("file.encoding", "UTF-8")
 
-import org.tmatesoft.svn.core.wc.*
+import com.aragost.javahg.Changeset
+import com.aragost.javahg.Repository
+import com.aragost.javahg.commands.ParentsCommand
 
 apply plugin: 'java'
 apply plugin: 'distribution'
@@ -14,7 +16,7 @@ buildscript {
         maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
-        classpath("org.tmatesoft.svnkit:svnkit:+")
+		classpath("com.aragost.javahg:javahg:+")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
         classpath("org.springframework.build.gradle:propdeps-plugin:+")
     }
@@ -54,7 +56,7 @@ subprojects {
     tasks.withType(Jar) {
         manifest {
             attributes('Implementation-Title': project.name,
-                    'Implementation-Version': getSvnRevision(),
+                    'Implementation-Version': getHgRevision(),
                     'Built-Date': new java.util.Date().toString(),
                     'Built-By': System.getProperty('user.name'),
                     'Built-JDK': System.getProperty('java.version'),
@@ -69,16 +71,13 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '3.3'
 }
 
-def getSvnRevision(){
-    try {
-        ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
-        SVNClientManager clientManager = SVNClientManager.newInstance(options);
-        SVNStatusClient statusClient = clientManager.getStatusClient();
-        SVNStatus status = statusClient.doStatus(projectDir, false);
-        SVNRevision revision = status.getRevision();
-        return revision.getNumber();
-    }
-    catch (Exception ignored) {
-        return "DEV"
-    }
+String getHgRevision() {
+	def repo = Repository.open(projectDir)
+	def parentsCommand = new ParentsCommand(repo)
+	List<Changeset> changesets = parentsCommand.execute()
+	if (changesets == null || changesets.size() != 1) {
+		def message = "Exactly one was parent expected. " + changesets
+		throw new Exception(message)
+	}
+	return changesets[0].node
 }
