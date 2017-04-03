@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
@@ -50,8 +50,8 @@ public final class PumpDisarmor extends AbstractEffect {
 		_unequippedItems = new ConcurrentHashMap<>();
 
 		String slot = params.getString("slot", "chest");
-		_slot = ItemTable._slots.getOrDefault(slot, L2Item.SLOT_NONE);
-		if (_slot == L2Item.SLOT_NONE) {
+		_slot = ItemTable._slots.getOrDefault(slot, ItemTemplate.SLOT_NONE);
+		if (_slot == ItemTemplate.SLOT_NONE) {
 			LOGGER.error("Unknown bodypart slot for effect: {}", slot);
 		}
 
@@ -59,7 +59,7 @@ public final class PumpDisarmor extends AbstractEffect {
 
 	@Override
 	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
-		return (_slot != L2Item.SLOT_NONE) && target.isPlayer();
+		return (_slot != ItemTemplate.SLOT_NONE) && target.isPlayer();
 	}
 
 	@Override

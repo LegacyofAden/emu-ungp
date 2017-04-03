@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor.status;
 
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
+import org.l2junity.gameserver.model.actor.instance.NpcInstance;
 
 public class FolkStatus extends NpcStatus {
 	public FolkStatus(Npc activeChar) {
@@ -32,7 +32,7 @@ public class FolkStatus extends NpcStatus {
 	}
 
 	@Override
-	public L2NpcInstance getActiveChar() {
-		return (L2NpcInstance) super.getActiveChar();
+	public NpcInstance getActiveChar() {
+		return (NpcInstance) super.getActiveChar();
 	}
 }

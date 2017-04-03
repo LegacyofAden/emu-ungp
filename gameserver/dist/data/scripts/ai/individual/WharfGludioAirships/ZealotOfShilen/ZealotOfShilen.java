@@ -23,7 +23,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
@@ -54,7 +54,7 @@ public final class ZealotOfShilen extends AbstractNpcAI {
 
 		startQuestTimer("WATCHING", 10000, npc, null, true);
 		if (event.equalsIgnoreCase("WATCHING") && !npc.isAttackingNow()) {
-			World.getInstance().forEachVisibleObject(npc, L2MonsterInstance.class, character ->
+			World.getInstance().forEachVisibleObject(npc, MonsterInstance.class, character ->
 			{
 				if (!character.isDead() && !character.isDecayed()) {
 					npc.setRunning();

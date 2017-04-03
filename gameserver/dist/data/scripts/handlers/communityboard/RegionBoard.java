@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IWriteBoardHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.util.Util;
@@ -58,7 +58,7 @@ public class RegionBoard implements IWriteBoardHandler {
 			final StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < REGIONS.length; i++) {
 				final Castle castle = CastleManager.getInstance().getCastleById(i + 1);
-				final L2Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
+				final Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
 				String link = list.replaceAll("%region_id%", String.valueOf(i));
 				link = link.replace("%region_name%", String.valueOf(REGIONS[i]));
 				link = link.replace("%region_owning_clan%", (clan != null ? clan.getName() : "NPC"));

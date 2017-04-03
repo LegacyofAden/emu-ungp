@@ -20,12 +20,11 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GameserverConfig;
-import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.model.CharSelectInfoPackage;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.VariationInstance;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -257,7 +256,7 @@ public class CharSelectionInfo implements IClientOutgoingPacket {
 		long deletetime = chardata.getLong("deletetime");
 		if (deletetime > 0) {
 			if (System.currentTimeMillis() > deletetime) {
-				L2Clan clan = ClanTable.getInstance().getClan(chardata.getInt("clanid"));
+				Clan clan = ClanTable.getInstance().getClan(chardata.getInt("clanid"));
 				if (clan != null) {
 					clan.removeClanMember(objectId, 0);
 				}

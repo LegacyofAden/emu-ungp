@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
@@ -84,9 +84,9 @@ public final class KartiaHelperAdolph extends AbstractNpcAI {
 			boolean actionFound = false;
 
 			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
-				final List<L2MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, L2MonsterInstance.class, 500);
+				final List<MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, MonsterInstance.class, 500);
 				if (!monsterList.isEmpty()) {
-					final L2MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
+					final MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
 
 					if (monster.isTargetable() && GeoData.getInstance().canSeeTarget(npc, monster) && !ArrayUtil.contains(MIRRORS, monster.getId())) {
 						actionFound = true;

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.holders.MinionHolder;
@@ -101,7 +101,7 @@ public abstract class AbstractNpcAI extends Quest {
 
 	public void spawnMinions(final Npc npc, final String spawnName) {
 		for (MinionHolder is : npc.getParameters().getMinionList(spawnName)) {
-			addMinion((L2MonsterInstance) npc, is.getId());
+			addMinion((MonsterInstance) npc, is.getId());
 		}
 	}
 

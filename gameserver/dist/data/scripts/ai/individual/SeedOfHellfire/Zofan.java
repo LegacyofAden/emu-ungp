@@ -21,7 +21,7 @@ package ai.individual.SeedOfHellfire;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 
 /**
  * Zofan AI.
@@ -63,7 +63,7 @@ public final class Zofan extends AbstractNpcAI {
 			if (params.getInt("i_childrengarden_guard", 0) == 0) {
 				for (String param : MINION_PARAMS) {
 					if (params.getInt(param, -1) != -1) {
-						addMinion((L2MonsterInstance) npc, params.getInt(param));
+						addMinion((MonsterInstance) npc, params.getInt(param));
 					}
 				}
 			}

@@ -29,8 +29,8 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -265,7 +265,7 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet> {
 
 	public void spawn(Instance instance) {
 		try {
-			final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_id);
+			final NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_id);
 			if (npcTemplate == null) {
 				LOGGER.warn("Attempting to spawn unexisting npc id: {} file: {} spawn: {} group: {}", _id, _spawnTemplate.getFileName(), _spawnTemplate.getName(), _group.getName());
 				return;
@@ -292,7 +292,7 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet> {
 	 * @throws ClassNotFoundException
 	 * @throws SecurityException
 	 */
-	private void spawnNpc(L2NpcTemplate npcTemplate, Instance instance) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException {
+	private void spawnNpc(NpcTemplate npcTemplate, Instance instance) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException {
 		final L2Spawn spawn = new L2Spawn(npcTemplate);
 		final Location loc = getSpawnLocation();
 		if (loc == null) {
@@ -326,7 +326,7 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet> {
 			if (!DBSpawnManager.getInstance().isDefined(_id)) {
 				final Npc spawnedNpc = DBSpawnManager.getInstance().addNewSpawn(spawn, true);
 				if ((spawnedNpc != null) && spawnedNpc.isMonster() && (_minions != null)) {
-					((L2MonsterInstance) spawnedNpc).getMinionList().spawnMinions(_minions);
+					((MonsterInstance) spawnedNpc).getMinionList().spawnMinions(_minions);
 				}
 
 				_spawnedNpcs.add(spawnedNpc);
@@ -334,7 +334,7 @@ public class NpcSpawnTemplate implements Cloneable, IParameterized<StatsSet> {
 		} else {
 			final Npc npc = spawn.doSpawn(_spawnAnimation);
 			if (npc.isMonster() && (_minions != null)) {
-				((L2MonsterInstance) npc).getMinionList().spawnMinions(_minions);
+				((MonsterInstance) npc).getMinionList().spawnMinions(_minions);
 			}
 			_spawnedNpcs.add(npc);
 

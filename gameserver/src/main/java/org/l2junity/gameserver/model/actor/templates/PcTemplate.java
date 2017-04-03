@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * @author mkizub, Zoey76
  */
-public class L2PcTemplate extends L2CharTemplate {
+public class PcTemplate extends CharTemplate {
 	private final ClassId _classId;
 
 	private final float[] _baseHp;
@@ -51,7 +51,7 @@ public class L2PcTemplate extends L2CharTemplate {
 	private final List<Location> _creationPoints;
 	private final Map<Integer, Integer> _baseSlotDef;
 
-	public L2PcTemplate(StatsSet set) {
+	public PcTemplate(StatsSet set) {
 		super(set);
 		_classId = ClassId.getClassId(set.getInt("classId"));
 		setRace(_classId.getRace());

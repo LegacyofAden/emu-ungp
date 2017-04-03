@@ -26,7 +26,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,7 +63,7 @@ public final class SpawnTable {
 	}
 
 	private boolean checkTemplate(int npcId) {
-		L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcId);
+		NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcId);
 		if (npcTemplate == null) {
 			log.warn("Data missing in NPC table for ID: " + npcId + ".");
 			return false;

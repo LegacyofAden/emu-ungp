@@ -195,7 +195,7 @@ public class Siege implements Siegable {
 			Broadcast.toAllOnlinePlayers(sm);
 
 			if (getCastle().getOwnerId() > 0) {
-				L2Clan clan = ClanTable.getInstance().getClan(getCastle().getOwnerId());
+				Clan clan = ClanTable.getInstance().getClan(getCastle().getOwnerId());
 				sm = SystemMessage.getSystemMessage(SystemMessageId.CLAN_S1_IS_VICTORIOUS_OVER_S2_S_CASTLE_SIEGE);
 				sm.addString(clan.getName());
 				sm.addCastleId(getCastle().getResidenceId());
@@ -222,7 +222,7 @@ public class Siege implements Siegable {
 			}
 
 			for (SiegeClan attackerClan : getAttackerClans()) {
-				final L2Clan clan = ClanTable.getInstance().getClan(attackerClan.getClanId());
+				final Clan clan = ClanTable.getInstance().getClan(attackerClan.getClanId());
 				if (clan == null) {
 					continue;
 				}
@@ -236,7 +236,7 @@ public class Siege implements Siegable {
 			}
 
 			for (SiegeClan defenderClan : getDefenderClans()) {
-				final L2Clan clan = ClanTable.getInstance().getClan(defenderClan.getClanId());
+				final Clan clan = ClanTable.getInstance().getClan(defenderClan.getClanId());
 				if (clan == null) {
 					continue;
 				}
@@ -356,7 +356,7 @@ public class Siege implements Siegable {
 				addDefender(sc_newowner, SiegeClanType.OWNER);
 
 				// The player's clan is in an alliance
-				for (L2Clan clan : ClanTable.getInstance().getClanAllies(allyId)) {
+				for (Clan clan : ClanTable.getInstance().getClanAllies(allyId)) {
 					final SiegeClan sc = getAttackerClan(clan.getId());
 					if (sc != null) {
 						removeAttacker(sc);
@@ -396,7 +396,7 @@ public class Siege implements Siegable {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SIEGE_OF_S1_HAS_BEEN_CANCELED_DUE_TO_LACK_OF_INTEREST);
 				} else {
 					sm = SystemMessage.getSystemMessage(SystemMessageId.S1_S_SIEGE_WAS_CANCELED_BECAUSE_THERE_WERE_NO_CLANS_THAT_PARTICIPATED);
-					final L2Clan ownerClan = ClanTable.getInstance().getClan(_firstOwnerClanId);
+					final Clan ownerClan = ClanTable.getInstance().getClan(_firstOwnerClanId);
 					ownerClan.increaseBloodAllianceCount();
 				}
 				sm.addCastleId(getCastle().getResidenceId());
@@ -444,7 +444,7 @@ public class Siege implements Siegable {
 	 */
 	public void announceToPlayer(SystemMessage message, boolean bothSides) {
 		for (SiegeClan siegeClans : getDefenderClans()) {
-			L2Clan clan = ClanTable.getInstance().getClan(siegeClans.getClanId());
+			Clan clan = ClanTable.getInstance().getClan(siegeClans.getClanId());
 			if (clan != null) {
 				clan.getOnlineMembers(0).forEach(message::sendTo);
 			}
@@ -452,7 +452,7 @@ public class Siege implements Siegable {
 
 		if (bothSides) {
 			for (SiegeClan siegeClans : getAttackerClans()) {
-				L2Clan clan = ClanTable.getInstance().getClan(siegeClans.getClanId());
+				Clan clan = ClanTable.getInstance().getClan(siegeClans.getClanId());
 				if (clan != null) {
 					clan.getOnlineMembers(0).forEach(message::sendTo);
 				}
@@ -461,7 +461,7 @@ public class Siege implements Siegable {
 	}
 
 	public void updatePlayerSiegeStateFlags(boolean clear) {
-		L2Clan clan;
+		Clan clan;
 		for (SiegeClan siegeclan : getAttackerClans()) {
 			if (siegeclan == null) {
 				continue;
@@ -549,10 +549,10 @@ public class Siege implements Siegable {
 	 * Return true if clan is attacker<BR>
 	 * <BR>
 	 *
-	 * @param clan The L2Clan of the player
+	 * @param clan The Clan of the player
 	 */
 	@Override
-	public boolean checkIsAttacker(L2Clan clan) {
+	public boolean checkIsAttacker(Clan clan) {
 		return (getAttackerClan(clan) != null);
 	}
 
@@ -560,18 +560,18 @@ public class Siege implements Siegable {
 	 * Return true if clan is defender<BR>
 	 * <BR>
 	 *
-	 * @param clan The L2Clan of the player
+	 * @param clan The Clan of the player
 	 */
 	@Override
-	public boolean checkIsDefender(L2Clan clan) {
+	public boolean checkIsDefender(Clan clan) {
 		return (getDefenderClan(clan) != null);
 	}
 
 	/**
-	 * @param clan The L2Clan of the player
+	 * @param clan The Clan of the player
 	 * @return true if clan is defender waiting approval
 	 */
-	public boolean checkIsDefenderWaiting(L2Clan clan) {
+	public boolean checkIsDefenderWaiting(Clan clan) {
 		return (getDefenderWaitingClan(clan) != null);
 	}
 
@@ -782,7 +782,7 @@ public class Siege implements Siegable {
 	 *
 	 * @param clan clan being removed
 	 */
-	public void removeSiegeClan(L2Clan clan) {
+	public void removeSiegeClan(Clan clan) {
 		if ((clan == null) || (clan.getCastleId() == getCastle().getResidenceId()) || !SiegeManager.getInstance().checkIsRegistered(clan, getCastle().getResidenceId())) {
 			return;
 		}
@@ -938,10 +938,10 @@ public class Siege implements Siegable {
 	}
 
 	/**
-	 * @param clan The L2Clan of the player trying to register
+	 * @param clan The Clan of the player trying to register
 	 * @return true if the clan has already registered to a siege for the same day.
 	 */
-	public boolean checkIfAlreadyRegisteredForSameDay(L2Clan clan) {
+	public boolean checkIfAlreadyRegisteredForSameDay(Clan clan) {
 		for (Siege siege : SiegeManager.getInstance().getSieges()) {
 			if (siege == this) {
 				continue;
@@ -1097,11 +1097,11 @@ public class Siege implements Siegable {
 	 * Save registration to database.<BR>
 	 * <BR>
 	 *
-	 * @param clan                 The L2Clan of player
+	 * @param clan                 The Clan of player
 	 * @param typeId               -1 = owner 0 = defender, 1 = attacker, 2 = defender waiting
 	 * @param isUpdateRegistration
 	 */
-	private void saveSiegeClan(L2Clan clan, byte typeId, boolean isUpdateRegistration) {
+	private void saveSiegeClan(Clan clan, byte typeId, boolean isUpdateRegistration) {
 		if (clan.getCastleId() > 0) {
 			return;
 		}
@@ -1251,7 +1251,7 @@ public class Siege implements Siegable {
 	}
 
 	@Override
-	public final SiegeClan getAttackerClan(L2Clan clan) {
+	public final SiegeClan getAttackerClan(Clan clan) {
 		if (clan == null) {
 			return null;
 		}
@@ -1288,7 +1288,7 @@ public class Siege implements Siegable {
 	}
 
 	@Override
-	public final SiegeClan getDefenderClan(L2Clan clan) {
+	public final SiegeClan getDefenderClan(Clan clan) {
 		if (clan == null) {
 			return null;
 		}
@@ -1313,7 +1313,7 @@ public class Siege implements Siegable {
 		return _attackerClans;
 	}
 
-	public final SiegeClan getDefenderWaitingClan(L2Clan clan) {
+	public final SiegeClan getDefenderWaitingClan(Clan clan) {
 		if (clan == null) {
 			return null;
 		}
@@ -1362,7 +1362,7 @@ public class Siege implements Siegable {
 	}
 
 	@Override
-	public Set<Npc> getFlag(L2Clan clan) {
+	public Set<Npc> getFlag(Clan clan) {
 		if (clan != null) {
 			SiegeClan sc = getAttackerClan(clan);
 			if (sc != null) {

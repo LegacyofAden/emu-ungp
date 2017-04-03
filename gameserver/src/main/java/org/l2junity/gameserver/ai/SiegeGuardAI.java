@@ -93,7 +93,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 	 * <li>The target isn't dead, isn't invulnerable, isn't in silent moving mode AND too far (>100)</li>
 	 * <li>The target is in the actor Aggro range and is at the same height</li>
 	 * <li>The L2PcInstance target has karma (=PK)</li>
-	 * <li>The L2MonsterInstance target is aggressive</li>
+	 * <li>The MonsterInstance target is aggressive</li>
 	 * </ul>
 	 * <B><U> Actor is a L2SiegeGuardInstance</U> :</B>
 	 * <ul>
@@ -105,14 +105,14 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 	 * </ul>
 	 * <B><U> Actor is a L2FriendlyMobInstance</U> :</B>
 	 * <ul>
-	 * <li>The target isn't a Folk, a Door or another L2NpcInstance</li>
+	 * <li>The target isn't a Folk, a Door or another NpcInstance</li>
 	 * <li>The target isn't dead, isn't invulnerable, isn't in silent moving mode AND too far (>100)</li>
 	 * <li>The target is in the actor Aggro range and is at the same height</li>
 	 * <li>The L2PcInstance target has karma (=PK)</li>
 	 * </ul>
-	 * <B><U> Actor is a L2MonsterInstance</U> :</B>
+	 * <B><U> Actor is a MonsterInstance</U> :</B>
 	 * <ul>
-	 * <li>The target isn't a Folk, a Door or another L2NpcInstance</li>
+	 * <li>The target isn't a Folk, a Door or another NpcInstance</li>
 	 * <li>The target isn't dead, isn't invulnerable, isn't in silent moving mode AND too far (>100)</li>
 	 * <li>The target is in the actor Aggro range and is at the same height</li>
 	 * <li>The actor is Aggressive</li>
@@ -346,7 +346,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 		}
 
 		// Go through all L2Character that belong to its faction
-		// for (L2Character cha : _actor.getKnownList().getKnownCharactersInRadius(((L2NpcInstance) _actor).getFactionRange()+_actor.getTemplate().collisionRadius))
+		// for (L2Character cha : _actor.getKnownList().getKnownCharactersInRadius(((NpcInstance) _actor).getFactionRange()+_actor.getTemplate().collisionRadius))
 		for (Creature cha : World.getInstance().getVisibleObjects(_actor, Creature.class, 1000)) {
 			if (!cha.isNpc()) {
 				if (_selfAnalysis.hasHealOrResurrect && cha.isPlayer() && (((Npc) _actor).getCastle().getSiege().checkIsDefender(cha.getClan()))) {

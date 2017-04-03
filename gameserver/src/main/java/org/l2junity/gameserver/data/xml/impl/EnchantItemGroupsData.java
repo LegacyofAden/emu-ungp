@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.RangeChanceHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.enchant.EnchantItemGroup;
 import org.l2junity.gameserver.model.items.enchant.EnchantRateItem;
 import org.l2junity.gameserver.model.items.enchant.EnchantScrollGroup;
@@ -125,7 +125,7 @@ public final class EnchantItemGroupsData implements IGameXmlReader {
 		return _itemGroups.size() + _scrollGroups.size();
 	}
 
-	public EnchantItemGroup getItemGroup(L2Item item, int scrollGroup) {
+	public EnchantItemGroup getItemGroup(ItemTemplate item, int scrollGroup) {
 		final EnchantScrollGroup group = _scrollGroups.get(scrollGroup);
 		final EnchantRateItem rateGroup = group.getRateGroup(item);
 		return rateGroup != null ? _itemGroups.get(rateGroup.getName()) : null;

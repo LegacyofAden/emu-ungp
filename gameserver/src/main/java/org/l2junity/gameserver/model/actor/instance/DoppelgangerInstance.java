@@ -25,7 +25,7 @@ import org.l2junity.gameserver.ai.DoppelgangerAI;
 import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -44,7 +44,7 @@ public class DoppelgangerInstance extends Npc {
 
 	private boolean _copySummonerEffects = true;
 
-	public DoppelgangerInstance(L2NpcTemplate template, Player owner) {
+	public DoppelgangerInstance(NpcTemplate template, Player owner) {
 		super(template);
 
 		setSummoner(owner);

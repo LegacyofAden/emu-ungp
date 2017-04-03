@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.skills.conditiontypes;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -36,7 +36,7 @@ public class ConsumeBodySkillCondition implements ISkillCondition {
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		if ((target != null) && target.isMonster()) {
-			final L2MonsterInstance monster = (L2MonsterInstance) target;
+			final MonsterInstance monster = (MonsterInstance) target;
 			if (monster.isDead() && monster.isSpawned()) {
 				return true;
 			}

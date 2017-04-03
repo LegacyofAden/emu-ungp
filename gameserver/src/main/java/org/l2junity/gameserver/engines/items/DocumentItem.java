@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.conditions.*;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.functions.FuncTemplate;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public final class DocumentItem implements IGameXmlReader {
 	protected final Logger _log = LoggerFactory.getLogger(getClass());
 	private final File _file;
 	private Item _currentItem = null;
-	private final List<L2Item> _itemsInFile = new LinkedList<>();
+	private final List<ItemTemplate> _itemsInFile = new LinkedList<>();
 
 	/**
 	 * @param file
@@ -170,8 +170,8 @@ public final class DocumentItem implements IGameXmlReader {
 		}
 
 		try {
-			final Constructor<?> itemClass = Class.forName(L2Item.class.getPackage().getName() + "." + _currentItem.type).getConstructor(StatsSet.class);
-			_currentItem.item = (L2Item) itemClass.newInstance(_currentItem.set);
+			final Constructor<?> itemClass = Class.forName(ItemTemplate.class.getPackage().getName() + "." + _currentItem.type).getConstructor(StatsSet.class);
+			_currentItem.item = (ItemTemplate) itemClass.newInstance(_currentItem.set);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e);
 		}
@@ -180,7 +180,7 @@ public final class DocumentItem implements IGameXmlReader {
 	/**
 	 * @return
 	 */
-	public List<L2Item> getItemList() {
+	public List<ItemTemplate> getItemList() {
 		return _itemsInFile;
 	}
 

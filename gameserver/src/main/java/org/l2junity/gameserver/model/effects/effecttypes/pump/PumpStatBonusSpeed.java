@@ -22,7 +22,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -69,7 +69,7 @@ public class PumpStatBonusSpeed extends AbstractEffect {
 
 				boolean chestOk = (_armorTypesMask & chest.getItem().getItemMask()) != 0;
 
-				if (chest.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) {
+				if (chest.getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR) {
 					return chestOk;
 				}
 

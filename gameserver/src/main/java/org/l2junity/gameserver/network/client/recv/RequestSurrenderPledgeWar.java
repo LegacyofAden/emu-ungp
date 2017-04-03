@@ -19,11 +19,11 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -49,13 +49,13 @@ public final class RequestSurrenderPledgeWar implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan myClan = activeChar.getClan();
+		final Clan myClan = activeChar.getClan();
 		if (myClan == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_IN_A_CLAN);
 			return;
 		}
 
-		final L2Clan targetClan = ClanTable.getInstance().getClanByName(_pledgeName);
+		final Clan targetClan = ClanTable.getInstance().getClanByName(_pledgeName);
 		if (targetClan == null) {
 			activeChar.sendPacket(SystemMessageId.THAT_CLAN_DOES_NOT_EXIST);
 			return;

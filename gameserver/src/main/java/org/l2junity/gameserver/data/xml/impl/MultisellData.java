@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.*;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.network.client.send.MultiSellList;
 import org.l2junity.gameserver.util.Util;
 import org.w3c.dom.Document;
@@ -218,7 +218,7 @@ public final class MultisellData implements IGameXmlReader {
 			return true;
 		}
 
-		final L2Item template = ItemTable.getInstance().getTemplate(holder.getId());
+		final ItemTemplate template = ItemTable.getInstance().getTemplate(holder.getId());
 		return (template != null) && (template.isStackable() ? (holder.getCount() >= 1) : (holder.getCount() == 1));
 	}
 }

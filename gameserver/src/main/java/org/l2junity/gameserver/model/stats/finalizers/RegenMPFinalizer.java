@@ -25,7 +25,7 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
 import org.l2junity.gameserver.model.residences.ResidenceFunction;
@@ -119,7 +119,7 @@ public class RegenMPFinalizer implements IStatsFunction {
 			// Add MEN bonus
 			baseValue *= creature.getLevelMod() * BaseStats.MEN.calcBonus(creature);
 		} else if (creature.isPet()) {
-			baseValue = ((L2PetInstance) creature).getPetLevelData().getPetRegenMP() * NpcConfig.PET_MP_REGEN_MULTIPLIER;
+			baseValue = ((PetInstance) creature).getPetLevelData().getPetRegenMP() * NpcConfig.PET_MP_REGEN_MULTIPLIER;
 		}
 
 		return DoubleStat.defaultValue(creature, stat, baseValue);

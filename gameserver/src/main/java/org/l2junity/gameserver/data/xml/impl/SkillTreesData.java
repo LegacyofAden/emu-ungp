@@ -25,7 +25,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.SubclassType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -852,7 +852,7 @@ public final class SkillTreesData implements IGameXmlReader {
 	 * @param clan the pledge skill learning clan
 	 * @return all the available Pledge skills for a given {@code clan}
 	 */
-	public List<SkillLearn> getAvailablePledgeSkills(L2Clan clan) {
+	public List<SkillLearn> getAvailablePledgeSkills(Clan clan) {
 		final List<SkillLearn> result = new ArrayList<>();
 
 		for (SkillLearn skill : _pledgeSkillTree.values()) {
@@ -877,7 +877,7 @@ public final class SkillTreesData implements IGameXmlReader {
 	 * @param includeSquad if squad skill will be added too
 	 * @return all the available pledge skills for a given {@code clan}
 	 */
-	public Map<Integer, SkillLearn> getMaxPledgeSkills(L2Clan clan, boolean includeSquad) {
+	public Map<Integer, SkillLearn> getMaxPledgeSkills(Clan clan, boolean includeSquad) {
 		final Map<Integer, SkillLearn> result = new HashMap<>();
 		for (SkillLearn skill : _pledgeSkillTree.values()) {
 			if (!skill.isResidencialSkill() && (clan.getLevel() >= skill.getGetLevel())) {
@@ -907,7 +907,7 @@ public final class SkillTreesData implements IGameXmlReader {
 	 * @param clan the sub-pledge skill learning clan
 	 * @return all the available Sub-Pledge skills for a given {@code clan}
 	 */
-	public List<SkillLearn> getAvailableSubPledgeSkills(L2Clan clan) {
+	public List<SkillLearn> getAvailableSubPledgeSkills(Clan clan) {
 		final List<SkillLearn> result = new ArrayList<>();
 		for (SkillLearn skill : _subPledgeSkillTree.values()) {
 			if ((clan.getLevel() >= skill.getGetLevel()) && clan.isLearnableSubSkill(skill.getSkillId(), skill.getSkillLevel())) {

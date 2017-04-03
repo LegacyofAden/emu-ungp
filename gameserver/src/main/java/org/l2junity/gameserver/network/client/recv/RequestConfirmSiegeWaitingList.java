@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -67,7 +67,7 @@ public final class RequestConfirmSiegeWaitingList implements IClientIncomingPack
 			return;
 		}
 
-		L2Clan clan = ClanTable.getInstance().getClan(_clanId);
+		Clan clan = ClanTable.getInstance().getClan(_clanId);
 		if (clan == null) {
 			return;
 		}

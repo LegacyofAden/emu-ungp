@@ -52,7 +52,7 @@ public final class ClanWar {
 	private final AtomicInteger _attackerKillCount = new AtomicInteger();
 	private final AtomicInteger _attackedKillCount = new AtomicInteger();
 
-	public ClanWar(L2Clan attacker, L2Clan attacked) {
+	public ClanWar(Clan attacker, Clan attacked) {
 		_attackerClanId = attacker.getId();
 		_attackedClanId = attacked.getId();
 		_startTime = System.currentTimeMillis();
@@ -61,7 +61,7 @@ public final class ClanWar {
 		_cancelTask = ThreadPool.getInstance().scheduleGeneral(this::clanWarTimeout, (_startTime + TIME_TO_CANCEL_NON_MUTUAL_CLAN_WAR) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
-	public ClanWar(L2Clan attacker, L2Clan attacked, int attackerKillCount, int attackedKillCount, int winnerClan, long startTime, long endTime, ClanWarState state) {
+	public ClanWar(Clan attacker, Clan attacked, int attackerKillCount, int attackedKillCount, int winnerClan, long startTime, long endTime, ClanWarState state) {
 		_attackerClanId = attacker.getId();
 		_attackedClanId = attacked.getId();
 		_startTime = startTime;
@@ -90,8 +90,8 @@ public final class ClanWar {
 	}
 
 	public void declareWar() {
-		final L2Clan attacker = ClanTable.getInstance().getClan(_attackerClanId);
-		final L2Clan attacked = ClanTable.getInstance().getClan(_attackedClanId);
+		final Clan attacker = ClanTable.getInstance().getClan(_attackerClanId);
+		final Clan attacked = ClanTable.getInstance().getClan(_attackedClanId);
 
 		if ((attacker != null) && (attacked != null)) {
 			attacker.addWar(attacked.getId(), this);
@@ -114,8 +114,8 @@ public final class ClanWar {
 	}
 
 	public void onKill(Player killer, Player victim) {
-		final L2Clan victimClan = victim.getClan();
-		final L2Clan killerClan = killer.getClan();
+		final Clan victimClan = victim.getClan();
+		final Clan killerClan = killer.getClan();
 
 		// Reputation increase by killing an enemy (over level 4) in a clan war under the condition of mutual war declaration
 		if ((victim.getLevel() > 4) && (_state == ClanWarState.MUTUAL)) {
@@ -172,8 +172,8 @@ public final class ClanWar {
 		}
 	}
 
-	public void cancel(Player player, L2Clan cancelor) {
-		final L2Clan winnerClan = cancelor.getId() == _attackerClanId ? ClanTable.getInstance().getClan(_attackedClanId) : ClanTable.getInstance().getClan(_attackerClanId);
+	public void cancel(Player player, Clan cancelor) {
+		final Clan winnerClan = cancelor.getId() == _attackerClanId ? ClanTable.getInstance().getClan(_attackedClanId) : ClanTable.getInstance().getClan(_attackerClanId);
 
 		if (cancelor.getReputationScore() > 5000) {
 			cancelor.takeReputationScore(5000, true);
@@ -201,8 +201,8 @@ public final class ClanWar {
 	}
 
 	public void clanWarTimeout() {
-		final L2Clan attackerClan = ClanTable.getInstance().getClan(_attackerClanId);
-		final L2Clan attackedClan = ClanTable.getInstance().getClan(_attackedClanId);
+		final Clan attackerClan = ClanTable.getInstance().getClan(_attackerClanId);
+		final Clan attackedClan = ClanTable.getInstance().getClan(_attackedClanId);
 
 		if ((attackerClan != null) && (attackedClan != null)) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.A_CLAN_WAR_DECLARED_BY_CLAN_S1_WAS_CANCELLED);
@@ -225,7 +225,7 @@ public final class ClanWar {
 		}
 	}
 
-	public void mutualClanWarAccepted(L2Clan attacker, L2Clan attacked) {
+	public void mutualClanWarAccepted(Clan attacker, Clan attacked) {
 		_state = ClanWarState.MUTUAL;
 
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.A_CLAN_WAR_WITH_CLAN_S1_HAS_STARTED_THE_CLAN_THAT_CANCELS_THE_WAR_FIRST_WILL_LOSE_5_000_CLAN_REPUTATION_ANY_CLAN_THAT_CANCELS_THE_WAR_WILL_BE_UNABLE_TO_DECLARE_A_WAR_FOR_1_WEEK_IF_YOUR_CLAN_MEMBER_GETS_KILLED_BY_THE_OTHER_CLAN_XP_DECREASES_BY_1_4_OF_THE_AMOUNT_THAT_DECREASES_IN_THE_HUNTING_GROUND);
@@ -244,11 +244,11 @@ public final class ClanWar {
 		}
 	}
 
-	public int getKillDifference(L2Clan clan) {
+	public int getKillDifference(Clan clan) {
 		return _attackerClanId == clan.getId() ? _attackerKillCount.get() - _attackedKillCount.get() : _attackedKillCount.get() - _attackerKillCount.get();
 	}
 
-	public ClanWarState getClanWarState(L2Clan clan) {
+	public ClanWarState getClanWarState(Clan clan) {
 		if (_winnerClanId > 0) {
 			return _winnerClanId == clan.getId() ? ClanWarState.WIN : ClanWarState.LOSS;
 		}
@@ -295,7 +295,7 @@ public final class ClanWar {
 		return (int) TimeUnit.SECONDS.convert(_startTime + TIME_TO_CANCEL_NON_MUTUAL_CLAN_WAR, TimeUnit.MILLISECONDS);
 	}
 
-	public L2Clan getOpposingClan(L2Clan clan) {
+	public Clan getOpposingClan(Clan clan) {
 		return _attackerClanId == clan.getId() ? ClanTable.getInstance().getClan(_attackedClanId) : ClanTable.getInstance().getClan(_attackerClanId);
 	}
 

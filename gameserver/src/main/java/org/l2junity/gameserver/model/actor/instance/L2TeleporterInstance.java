@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.TeleportType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -47,7 +47,7 @@ public final class L2TeleporterInstance extends Npc {
 					CommonSkill.NATIVE_TRANSFORM
 			};
 
-	public L2TeleporterInstance(L2NpcTemplate template) {
+	public L2TeleporterInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2TeleporterInstance);
 	}

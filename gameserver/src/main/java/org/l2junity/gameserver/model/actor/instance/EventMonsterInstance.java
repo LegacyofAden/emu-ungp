@@ -19,12 +19,12 @@
 package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * @author Gnacik
  */
-public class L2EventMonsterInstance extends L2MonsterInstance {
+public class EventMonsterInstance extends MonsterInstance {
 	// Block offensive skills usage on event mobs
 	// mainly for AoE skills, disallow kill many event mobs
 	// with one skill
@@ -35,7 +35,7 @@ public class L2EventMonsterInstance extends L2MonsterInstance {
 	// Todo: Some mobs need protect drop for spawner
 	public boolean drop_on_ground = false;
 
-	public L2EventMonsterInstance(L2NpcTemplate template) {
+	public EventMonsterInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2EventMobInstance);
 	}

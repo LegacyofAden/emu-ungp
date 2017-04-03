@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2DecoyInstance;
 import org.l2junity.gameserver.model.actor.instance.L2EffectPointInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -79,7 +79,7 @@ public final class InstantSummonNpc extends AbstractEffect {
 			return;
 		}
 
-		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_npcId);
+		final NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(_npcId);
 		if (npcTemplate == null) {
 			LOGGER.warn("Spawn of the nonexisting NPC ID: {}, skill ID: {}", _npcId, skill.getId());
 			return;

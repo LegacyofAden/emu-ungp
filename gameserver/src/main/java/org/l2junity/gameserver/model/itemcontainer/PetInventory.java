@@ -20,19 +20,19 @@ package org.l2junity.gameserver.model.itemcontainer;
 
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 public class PetInventory extends Inventory {
-	private final L2PetInstance _owner;
+	private final PetInstance _owner;
 
-	public PetInventory(L2PetInstance owner) {
+	public PetInventory(PetInstance owner) {
 		_owner = owner;
 	}
 
 	@Override
-	public L2PetInstance getOwner() {
+	public PetInstance getOwner() {
 		return _owner;
 	}
 
@@ -74,7 +74,7 @@ public class PetInventory extends Inventory {
 
 	public boolean validateWeight(ItemInstance item, long count) {
 		int weight = 0;
-		L2Item template = ItemTable.getInstance().getTemplate(item.getId());
+		ItemTemplate template = ItemTable.getInstance().getTemplate(item.getId());
 		if (template == null) {
 			return false;
 		}

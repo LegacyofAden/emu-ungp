@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -53,7 +53,7 @@ public final class RequestJoinAlly implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 
 		if (clan == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_A_CLAN_MEMBER_AND_CANNOT_PERFORM_THIS_ACTION);

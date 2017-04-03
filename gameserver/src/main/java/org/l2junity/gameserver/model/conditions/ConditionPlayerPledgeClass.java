@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.conditions;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
@@ -46,7 +46,7 @@ public final class ConditionPlayerPledgeClass extends Condition {
 	 * @return true, if successful
 	 */
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, ItemTemplate item) {
 		if ((effector.getActingPlayer() == null) || (effector.getActingPlayer().getClan() == null)) {
 			return false;
 		}

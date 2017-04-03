@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -71,7 +71,7 @@ public final class PlainsOfDion extends AbstractNpcAI {
 				npc.broadcastSay(ChatType.NPC_GENERAL, MONSTERS_MSG[i]);
 			}
 
-			World.getInstance().forEachVisibleObjectInRadius(npc, L2MonsterInstance.class, npc.getTemplate().getClanHelpRange(), obj ->
+			World.getInstance().forEachVisibleObjectInRadius(npc, MonsterInstance.class, npc.getTemplate().getClanHelpRange(), obj ->
 			{
 				if (ArrayUtil.contains(DELU_LIZARDMEN, obj.getId()) && !obj.isAttackingNow() && !obj.isDead() && GeoData.getInstance().canSeeTarget(npc, obj)) {
 					addAttackPlayerDesire(obj, player);

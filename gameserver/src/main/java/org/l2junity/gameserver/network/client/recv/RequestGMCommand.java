@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -52,7 +52,7 @@ public final class RequestGMCommand implements IClientIncomingPacket {
 
 		Player player = World.getInstance().getPlayer(_targetName);
 
-		L2Clan clan = ClanTable.getInstance().getClanByName(_targetName);
+		Clan clan = ClanTable.getInstance().getClanByName(_targetName);
 
 		// player name was incorrect?
 		if ((player == null) && ((clan == null) || (_command != 6))) {

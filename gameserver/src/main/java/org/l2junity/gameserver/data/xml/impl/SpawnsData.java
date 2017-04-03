@@ -25,7 +25,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.ChanceLocation;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.model.interfaces.IParameterized;
 import org.l2junity.gameserver.model.interfaces.ITerritorized;
@@ -176,7 +176,7 @@ public class SpawnsData implements IGameXmlReader {
 	 */
 	private void parseNpc(Node n, SpawnTemplate spawnTemplate, SpawnGroup group) {
 		final NpcSpawnTemplate npcTemplate = new NpcSpawnTemplate(spawnTemplate, group, new StatsSet(parseAttributes(n)));
-		final L2NpcTemplate template = NpcData.getInstance().getTemplate(npcTemplate.getId());
+		final NpcTemplate template = NpcData.getInstance().getTemplate(npcTemplate.getId());
 		if (template == null) {
 			log.warn("Requested spawn for non existing npc: {} in file: {}", npcTemplate.getId(), spawnTemplate.getFileName());
 			return;

@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.ExtractableProduct;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.EtcItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -70,7 +70,7 @@ public class ExtractableItems implements IItemHandler {
 					continue;
 				}
 
-				final L2Item itemTemplate = ItemTable.getInstance().getTemplate(expi.getId());
+				final ItemTemplate itemTemplate = ItemTable.getInstance().getTemplate(expi.getId());
 				if (itemTemplate == null) {
 					continue;
 				}

@@ -35,7 +35,7 @@ import org.l2junity.gameserver.model.drops.DropListScope;
 import org.l2junity.gameserver.model.drops.GeneralDropItem;
 import org.l2junity.gameserver.model.drops.GroupedGeneralDropItem;
 import org.l2junity.gameserver.model.drops.IDropItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.HtmlUtil;
 import org.l2junity.gameserver.util.Util;
@@ -352,7 +352,7 @@ public class NpcViewMod implements IBypassHandler {
 			final IDropItem dropItem = dropList.get(i);
 			if (dropItem instanceof GeneralDropItem) {
 				final GeneralDropItem generalDropItem = (GeneralDropItem) dropItem;
-				final L2Item item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
+				final ItemTemplate item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
 				sb.append("<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">");
 				sb.append("<tr><td width=32 valign=top>");
 				sb.append("<img src=\"" + item.getIcon() + "\" width=32 height=32>");
@@ -380,7 +380,7 @@ public class NpcViewMod implements IBypassHandler {
 				final GroupedGeneralDropItem generalGroupedDropItem = (GroupedGeneralDropItem) dropItem;
 				if (generalGroupedDropItem.getItems().size() == 1) {
 					final GeneralDropItem generalDropItem = generalGroupedDropItem.getItems().get(0);
-					final L2Item item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
+					final ItemTemplate item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
 					sb.append("<table width=332 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">");
 					sb.append("<tr><td width=32 valign=top>");
 					sb.append("<img src=\"" + item.getIcon() + "\" width=32 height=32>");
@@ -415,7 +415,7 @@ public class NpcViewMod implements IBypassHandler {
 					sb.append("%</td></tr></table><br>");
 
 					for (GeneralDropItem generalDropItem : generalGroupedDropItem.getItems()) {
-						final L2Item item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
+						final ItemTemplate item = ItemTable.getInstance().getTemplate(generalDropItem.getItemId());
 						sb.append("<table width=291 cellpadding=2 cellspacing=0 background=\"L2UI_CT1.Windows.Windows_DF_TooltipBG\">");
 						sb.append("<tr><td width=32 valign=top>");
 						sb.append("<img src=\"" + item.getIcon() + "\" width=32 height=32>");

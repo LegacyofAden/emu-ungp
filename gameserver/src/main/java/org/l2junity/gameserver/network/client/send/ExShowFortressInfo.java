@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -43,7 +43,7 @@ public class ExShowFortressInfo implements IClientOutgoingPacket {
 		final Collection<Fort> forts = FortManager.getInstance().getForts();
 		packet.writeD(forts.size());
 		for (Fort fort : forts) {
-			final L2Clan clan = fort.getOwnerClan();
+			final Clan clan = fort.getOwnerClan();
 			packet.writeD(fort.getResidenceId());
 			packet.writeS(clan != null ? clan.getName() : "");
 			packet.writeD(fort.getSiege().isInProgress() ? 0x01 : 0x00);

@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -29,9 +29,9 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 public class OnPlayerClanLeaderChange implements IBaseEvent {
 	private final ClanMember _oldLeader;
 	private final ClanMember _newLeader;
-	private final L2Clan _clan;
+	private final Clan _clan;
 
-	public OnPlayerClanLeaderChange(ClanMember oldLeader, ClanMember newLeader, L2Clan clan) {
+	public OnPlayerClanLeaderChange(ClanMember oldLeader, ClanMember newLeader, Clan clan) {
 		_oldLeader = oldLeader;
 		_newLeader = newLeader;
 		_clan = clan;
@@ -45,7 +45,7 @@ public class OnPlayerClanLeaderChange implements IBaseEvent {
 		return _newLeader;
 	}
 
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 

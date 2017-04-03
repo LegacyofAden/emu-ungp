@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -76,7 +76,7 @@ public final class CastleMercenaryManager extends AbstractNpcAI {
 			}
 			case "buy": {
 				final int listId = Integer.parseInt(npc.getId() + st.nextToken());
-				((L2MerchantInstance) npc).showBuyWindow(player, listId, false);
+				((MerchantInstance) npc).showBuyWindow(player, listId, false);
 				break;
 			}
 			case "main": {

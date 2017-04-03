@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.enchant.EnchantItemGroup;
 import org.l2junity.gameserver.model.items.enchant.EnchantResultType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -154,7 +154,7 @@ public class InstantEnchantArmor extends AbstractEffect {
 					break;
 				}
 				case SUCCESS: {
-					final L2Item it = itemToEnchant.getItem();
+					final ItemTemplate it = itemToEnchant.getItem();
 					itemToEnchant.setEnchantLevel(itemToEnchant.getEnchantLevel() + 1);
 					itemToEnchant.updateDatabase();
 					casterPlayer.sendPacket(new EnchantResult(EnchantResult.SUCCESS, itemToEnchant));

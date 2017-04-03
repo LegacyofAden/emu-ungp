@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.SiegeCastleConfig;
 import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.TowerSpawn;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -116,11 +116,11 @@ public final class SiegeManager {
 	}
 
 	/**
-	 * @param clan     The L2Clan of the player
+	 * @param clan     The Clan of the player
 	 * @param castleid
 	 * @return true if the clan is registered or owner of a castle
 	 */
-	public final boolean checkIsRegistered(L2Clan clan, int castleid) {
+	public final boolean checkIsRegistered(Clan clan, int castleid) {
 		if (clan == null) {
 			return false;
 		}

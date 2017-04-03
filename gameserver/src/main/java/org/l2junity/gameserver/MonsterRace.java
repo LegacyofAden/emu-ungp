@@ -21,7 +21,7 @@ package org.l2junity.gameserver;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class MonsterRace {
 				break;
 			}
 			try {
-				L2NpcTemplate template = NpcData.getInstance().getTemplate(id + random);
+				NpcTemplate template = NpcData.getInstance().getTemplate(id + random);
 				Constructor<?> constructor = Class.forName("org.l2junity.gameserver.model.actor.instance." + template.getType() + "Instance").getConstructors()[0];
 				_monsters[i] = (Npc) constructor.newInstance(template);
 			} catch (Exception e) {

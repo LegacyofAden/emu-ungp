@@ -25,14 +25,14 @@ import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.Product;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.Armor;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
@@ -124,7 +124,7 @@ public final class RequestPreviewItem implements IClientIncomingPacket {
 		// Check current target of the player and the INTERACTION_DISTANCE
 		WorldObject target = activeChar.getTarget();
 		if (!activeChar.isGM() && ((target == null // No target (i.e. GM Shop)
-		) || !((target instanceof L2MerchantInstance)) // Target not a merchant
+		) || !((target instanceof MerchantInstance)) // Target not a merchant
 				|| !activeChar.isInRadius2d(target, Npc.INTERACTION_DISTANCE) // Distance is too far
 		)) {
 			return;
@@ -136,7 +136,7 @@ public final class RequestPreviewItem implements IClientIncomingPacket {
 		}
 
 		// Get the current merchant targeted by the player
-		final L2MerchantInstance merchant = (target instanceof L2MerchantInstance) ? (L2MerchantInstance) target : null;
+		final MerchantInstance merchant = (target instanceof MerchantInstance) ? (MerchantInstance) target : null;
 		if (merchant == null) {
 			_log.warn("Null merchant!");
 			return;
@@ -160,7 +160,7 @@ public final class RequestPreviewItem implements IClientIncomingPacket {
 				return;
 			}
 
-			L2Item template = product.getItem();
+			ItemTemplate template = product.getItem();
 			if (template == null) {
 				continue;
 			}

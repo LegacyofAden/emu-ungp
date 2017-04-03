@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -66,7 +66,7 @@ public class SiegeInfo implements IClientOutgoingPacket {
 			packet.writeD(((ownerId == _player.getClanId()) && (_player.isClanLeader())) ? 0x01 : 0x00);
 			packet.writeD(ownerId);
 			if (ownerId > 0) {
-				L2Clan owner = ClanTable.getInstance().getClan(ownerId);
+				Clan owner = ClanTable.getInstance().getClan(ownerId);
 				if (owner != null) {
 					packet.writeS(owner.getName()); // Clan Name
 					packet.writeS(owner.getLeaderName()); // Clan Leader Name

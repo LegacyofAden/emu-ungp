@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.html.PageBuilder;
@@ -390,8 +390,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 			}
 		} else if (command.startsWith("admin_fullfood")) {
 			WorldObject target = activeChar.getTarget();
-			if (target instanceof L2PetInstance) {
-				L2PetInstance targetPet = (L2PetInstance) target;
+			if (target instanceof PetInstance) {
+				PetInstance targetPet = (PetInstance) target;
 				targetPet.setCurrentFed(targetPet.getMaxFed());
 				targetPet.broadcastStatusUpdate();
 			} else {
@@ -512,8 +512,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 			}
 		} else if (command.startsWith("admin_summon_setlvl")) {
 			WorldObject target = activeChar.getTarget();
-			if (target instanceof L2PetInstance) {
-				L2PetInstance pet = (L2PetInstance) target;
+			if (target instanceof PetInstance) {
+				PetInstance pet = (PetInstance) target;
 				try {
 					String val = command.substring(20);
 					int level = Integer.parseInt(val);
@@ -540,8 +540,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				target = activeChar.getTarget();
 			}
 
-			if (target instanceof L2PetInstance) {
-				activeChar.sendPacket(new GMViewItemList((L2PetInstance) target));
+			if (target instanceof PetInstance) {
+				activeChar.sendPacket(new GMViewItemList((PetInstance) target));
 			} else {
 				activeChar.sendMessage("Usable only with Pets");
 			}
@@ -1205,8 +1205,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 		} else {
 			html.replace("%inv%", "none");
 		}
-		if (target instanceof L2PetInstance) {
-			html.replace("%food%", ((L2PetInstance) target).getCurrentFed() + "/" + ((L2PetInstance) target).getPetLevelData().getPetMaxFeed());
+		if (target instanceof PetInstance) {
+			html.replace("%food%", ((PetInstance) target).getCurrentFed() + "/" + ((PetInstance) target).getPetLevelData().getPetMaxFeed());
 			html.replace("%load%", target.getInventory().getTotalWeight() + "/" + target.getMaxLoad());
 		} else {
 			html.replace("%food%", "N/A");

@@ -30,7 +30,7 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -702,7 +702,7 @@ public class Party extends AbstractPlayerGroup {
 	 * Distribute Experience and SP rewards to L2PcInstance Party members in the known area of the last attacker.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B>
-	 * <li>Get the L2PcInstance owner of the L2ServitorInstance (if necessary)</li>
+	 * <li>Get the L2PcInstance owner of the ServitorInstance (if necessary)</li>
 	 * <li>Calculate the Experience and SP reward distribution rate</li>
 	 * <li>Add Experience and SP to the L2PcInstance</li><BR>
 	 *
@@ -734,7 +734,7 @@ public class Party extends AbstractPlayerGroup {
 				// The servitor penalty
 				float penalty = 1;
 
-				final L2ServitorInstance summon = member.getServitors().values().stream().map(L2ServitorInstance.class::cast).filter(s -> s.getExpMultiplier() < 1).findFirst().orElse(null);
+				final ServitorInstance summon = member.getServitors().values().stream().map(ServitorInstance.class::cast).filter(s -> s.getExpMultiplier() < 1).findFirst().orElse(null);
 				if (summon != null) {
 					penalty = summon.getExpMultiplier();
 				}
@@ -753,7 +753,7 @@ public class Party extends AbstractPlayerGroup {
 
 				exp = calculateExpSpPartyCutoff(member.getActingPlayer(), topLvl, exp, sp, target.useVitalityRate());
 				if (exp > 0) {
-					final L2Clan clan = member.getClan();
+					final Clan clan = member.getClan();
 					if (clan != null) {
 						double finalExp = exp;
 						if (target.useVitalityRate()) {

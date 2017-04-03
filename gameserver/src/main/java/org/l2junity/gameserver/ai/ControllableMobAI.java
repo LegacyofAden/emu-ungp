@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
+import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
@@ -160,7 +160,7 @@ public final class ControllableMobAI extends AttackableAI {
 
 		setTarget(target);
 		// as a response, we put the target in a forcedattack mode
-		L2ControllableMobInstance theTarget = (L2ControllableMobInstance) target;
+		ControllableMobInstance theTarget = (ControllableMobInstance) target;
 		ControllableMobAI ctrlAi = (ControllableMobAI) theTarget.getAI();
 		ctrlAi.forceAttack(_actor);
 
@@ -375,11 +375,11 @@ public final class ControllableMobAI extends AttackableAI {
 		return !potentialTarget.isEmpty() ? potentialTarget.get(Rnd.nextInt(potentialTarget.size())) : null;
 	}
 
-	private L2ControllableMobInstance findNextGroupTarget() {
+	private ControllableMobInstance findNextGroupTarget() {
 		return getGroupTarget().getRandomMob();
 	}
 
-	public ControllableMobAI(L2ControllableMobInstance controllableMob) {
+	public ControllableMobAI(ControllableMobInstance controllableMob) {
 		super(controllableMob);
 		setAlternateAI(AI_IDLE);
 	}

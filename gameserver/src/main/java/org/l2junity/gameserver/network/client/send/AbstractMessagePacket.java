@@ -24,8 +24,8 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -213,7 +213,7 @@ public abstract class AbstractMessagePacket<T extends AbstractMessagePacket<?>> 
 		return addNpcName(npc.getId());
 	}
 
-	public final T addNpcName(final L2NpcTemplate template) {
+	public final T addNpcName(final NpcTemplate template) {
 		if (template.isUsingServerSideName()) {
 			return addString(template.getName());
 		}
@@ -229,12 +229,12 @@ public abstract class AbstractMessagePacket<T extends AbstractMessagePacket<?>> 
 		return addItemName(item.getId());
 	}
 
-	public T addItemName(final L2Item item) {
+	public T addItemName(final ItemTemplate item) {
 		return addItemName(item.getId());
 	}
 
 	public final T addItemName(final int id) {
-		final L2Item item = ItemTable.getInstance().getTemplate(id);
+		final ItemTemplate item = ItemTable.getInstance().getTemplate(id);
 		if (item.getDisplayId() != id) {
 			return addString(item.getName());
 		}

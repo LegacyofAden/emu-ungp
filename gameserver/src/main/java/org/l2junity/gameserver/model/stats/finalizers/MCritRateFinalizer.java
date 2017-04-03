@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -37,7 +37,7 @@ public class MCritRateFinalizer implements IStatsFunction {
 
 		double baseValue = calcEquippedItemsBaseValue(creature, stat);
 		if (creature.isPlayer()) {
-			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_LEGS);
+			baseValue += calcEnchantBodyPart(creature, ItemTemplate.SLOT_LEGS);
 		}
 
 		final double witBonus = creature.getWIT() > 0 ? BaseStats.WIT.calcBonus(creature) : 1.;

@@ -19,7 +19,7 @@
 package quests.Q00511_AwlUnderFoot;
 
 import org.l2junity.gameserver.enums.QuestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -104,7 +104,7 @@ public final class Q00511_AwlUnderFoot extends Quest {
 
 		if (qs.isCreated()) {
 			final Fort fort = npc.getFort();
-			final L2Clan clan = player.getClan();
+			final Clan clan = player.getClan();
 			htmltext = ((fort != null) && (clan != null) && (clan.getFortId() == fort.getResidenceId())) ? "Warden-01.htm" : "Warden-00b.htm";
 		} else {
 			final long itemCount = getQuestItemsCount(player, MARK);

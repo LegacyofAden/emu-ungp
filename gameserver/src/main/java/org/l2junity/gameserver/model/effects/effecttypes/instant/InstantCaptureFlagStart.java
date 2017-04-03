@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.effects.effecttypes.instant;
 
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -46,7 +46,7 @@ public final class InstantCaptureFlagStart extends AbstractEffect {
 		}
 
 		final Fort fort = FortManager.getInstance().getFort(caster);
-		final L2Clan clan = caster.getClan();
+		final Clan clan = caster.getClan();
 		if ((fort != null) && (clan != null)) {
 			fort.getSiege().announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_TRYING_TO_DISPLAY_A_FLAG), clan.getName());
 		}

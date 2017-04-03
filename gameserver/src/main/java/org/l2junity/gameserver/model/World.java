@@ -106,7 +106,7 @@ public final class World {
 	/**
 	 * Map with the pets instances and their owner ID.
 	 */
-	private final Map<Integer, L2PetInstance> _petsInstance = new ConcurrentHashMap<>();
+	private final Map<Integer, PetInstance> _petsInstance = new ConcurrentHashMap<>();
 
 	private final AtomicInteger _partyNumber = new AtomicInteger();
 	private final AtomicInteger _memberInPartyNumber = new AtomicInteger();
@@ -234,7 +234,7 @@ public final class World {
 	 * @param ownerId ID of the owner
 	 * @return the pet instance from the given ownerId.
 	 */
-	public L2PetInstance getPet(int ownerId) {
+	public PetInstance getPet(int ownerId) {
 		return _petsInstance.get(ownerId);
 	}
 
@@ -242,10 +242,10 @@ public final class World {
 	 * Add the given pet instance from the given ownerId.
 	 *
 	 * @param ownerId ID of the owner
-	 * @param pet     L2PetInstance of the pet
+	 * @param pet     PetInstance of the pet
 	 * @return
 	 */
-	public L2PetInstance addPet(int ownerId, L2PetInstance pet) {
+	public PetInstance addPet(int ownerId, PetInstance pet) {
 		return _petsInstance.put(ownerId, pet);
 	}
 

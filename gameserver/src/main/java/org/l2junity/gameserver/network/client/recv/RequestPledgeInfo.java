@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PledgeInfo;
@@ -42,7 +42,7 @@ public final class RequestPledgeInfo implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = ClanTable.getInstance().getClan(_clanId);
+		final Clan clan = ClanTable.getInstance().getClan(_clanId);
 		if (clan == null) {
 			return; // we have no clan data ?!? should not happen
 		}

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.TeleportType;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -35,8 +35,8 @@ import java.util.StringTokenizer;
  *
  * @version $Revision$ $Date$
  */
-public class L2DoormenInstance extends L2NpcInstance {
-	public L2DoormenInstance(L2NpcTemplate template) {
+public class DoormenInstance extends NpcInstance {
+	public DoormenInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2DoormenInstance);
 	}

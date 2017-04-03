@@ -326,18 +326,18 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * Verify if object is instance of L2MonsterInstance.
+	 * Verify if object is instance of MonsterInstance.
 	 *
-	 * @return {@code true} if object is instance of L2MonsterInstance, {@code false} otherwise
+	 * @return {@code true} if object is instance of MonsterInstance, {@code false} otherwise
 	 */
 	public boolean isMonster() {
 		return false;
 	}
 
 	/**
-	 * @return {@link L2MonsterInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link MonsterInstance} instance if current object is such, {@code null} otherwise.
 	 */
-	public L2MonsterInstance asMonster() {
+	public MonsterInstance asMonster() {
 		return null;
 	}
 
@@ -358,18 +358,18 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * Verify if object is instance of L2PetInstance.
+	 * Verify if object is instance of PetInstance.
 	 *
-	 * @return {@code true} if object is instance of L2PetInstance, {@code false} otherwise
+	 * @return {@code true} if object is instance of PetInstance, {@code false} otherwise
 	 */
 	public boolean isPet() {
 		return false;
 	}
 
 	/**
-	 * @return {@link L2PetInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link PetInstance} instance if current object is such, {@code null} otherwise.
 	 */
-	public L2PetInstance asPet() {
+	public PetInstance asPet() {
 		return null;
 	}
 
@@ -406,18 +406,18 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * Verify if object is instance of L2ServitorInstance.
+	 * Verify if object is instance of ServitorInstance.
 	 *
-	 * @return {@code true} if object is instance of L2ServitorInstance, {@code false} otherwise
+	 * @return {@code true} if object is instance of ServitorInstance, {@code false} otherwise
 	 */
 	public boolean isServitor() {
 		return false;
 	}
 
 	/**
-	 * @return {@link L2ServitorInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link ServitorInstance} instance if current object is such, {@code null} otherwise.
 	 */
-	public L2ServitorInstance asServitor() {
+	public ServitorInstance asServitor() {
 		return null;
 	}
 

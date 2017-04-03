@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Tower;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.zone.ZoneType;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class L2FlameTowerInstance extends Tower {
 	private int _upgradeLevel = 0;
 	private List<Integer> _zoneList;
 
-	public L2FlameTowerInstance(L2NpcTemplate template) {
+	public L2FlameTowerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FlameTowerInstance);
 	}

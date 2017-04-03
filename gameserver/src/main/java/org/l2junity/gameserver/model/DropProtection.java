@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.concurrent.ScheduledFuture;
@@ -70,7 +70,7 @@ public class DropProtection implements Runnable {
 		return false;
 	}
 
-	public boolean tryPickUp(L2PetInstance pet) {
+	public boolean tryPickUp(PetInstance pet) {
 		return tryPickUp(pet.getOwner());
 	}
 

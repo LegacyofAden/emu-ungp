@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -51,7 +51,7 @@ public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket {
 		_race = member.getRaceOrdinal();
 		_sex = member.getSex() ? 1 : 0;
 		_onlineStatus = member.getOnlineStatus();
-		if (_pledgeType == L2Clan.SUBUNIT_ACADEMY) {
+		if (_pledgeType == Clan.SUBUNIT_ACADEMY) {
 			_hasSponsor = member.getSponsor() != 0 ? 1 : 0;
 		} else {
 			_hasSponsor = 0;

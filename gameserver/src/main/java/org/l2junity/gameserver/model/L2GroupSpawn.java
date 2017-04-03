@@ -20,17 +20,17 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * @author littlecrow A special spawn implementation to spawn controllable mob
  */
 public class L2GroupSpawn extends L2Spawn {
 	private static final long serialVersionUID = 4168058788708225067L;
-	private final L2NpcTemplate _template;
+	private final NpcTemplate _template;
 
-	public L2GroupSpawn(L2NpcTemplate mobTemplate) throws SecurityException, ClassNotFoundException, NoSuchMethodException {
+	public L2GroupSpawn(NpcTemplate mobTemplate) throws SecurityException, ClassNotFoundException, NoSuchMethodException {
 		super(mobTemplate);
 		_template = mobTemplate;
 
@@ -59,7 +59,7 @@ public class L2GroupSpawn extends L2Spawn {
 			newlocy = getY();
 			newlocz = getZ();
 
-			final Npc mob = new L2ControllableMobInstance(_template);
+			final Npc mob = new ControllableMobInstance(_template);
 			mob.setCurrentHpMp(mob.getMaxHp(), mob.getMaxMp());
 
 			if (getHeading() == -1) {

@@ -50,7 +50,7 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.Armor;
 import org.l2junity.gameserver.model.items.EtcItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.appearance.AppearanceStone;
 import org.l2junity.gameserver.model.items.enchant.attribute.AttributeHolder;
@@ -120,9 +120,9 @@ public final class ItemInstance extends WorldObject {
 	private final int _itemId;
 
 	/**
-	 * Object L2Item associated to the item
+	 * Object ItemTemplate associated to the item
 	 */
-	private final L2Item _item;
+	private final ItemTemplate _item;
 
 	/**
 	 * Location of the item : Inventory, PaperDoll, WareHouse
@@ -222,12 +222,12 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	/**
-	 * Constructor of the L2ItemInstance from the objetId and the description of the item given by the L2Item.
+	 * Constructor of the L2ItemInstance from the objetId and the description of the item given by the ItemTemplate.
 	 *
 	 * @param objectId : int designating the ID of the object in the world
-	 * @param item     : L2Item containing informations of the item
+	 * @param item     : ItemTemplate containing informations of the item
 	 */
-	public ItemInstance(int objectId, L2Item item) {
+	public ItemInstance(int objectId, ItemTemplate item) {
 		super(objectId);
 		setInstanceType(InstanceType.L2ItemInstance);
 		_itemId = item.getId();
@@ -525,7 +525,7 @@ public final class ItemInstance extends WorldObject {
 	 * @return boolean
 	 */
 	public boolean isEquipable() {
-		return _item.getBodyPart() != L2Item.SLOT_NONE;
+		return _item.getBodyPart() != ItemTemplate.SLOT_NONE;
 	}
 
 	/**
@@ -550,9 +550,9 @@ public final class ItemInstance extends WorldObject {
 	/**
 	 * Returns the characteristics of the item
 	 *
-	 * @return L2Item
+	 * @return ItemTemplate
 	 */
-	public L2Item getItem() {
+	public ItemTemplate getItem() {
 		return _item;
 	}
 
@@ -816,7 +816,7 @@ public final class ItemInstance extends WorldObject {
 		final Summon pet = player.getPet();
 
 		return ((!isEquipped()) // Not equipped
-				&& ((getItem().getType2() != L2Item.TYPE2_MONEY) || (getItem().getType1() != L2Item.TYPE1_SHIELD_ARMOR)) // not money, not shield
+				&& ((getItem().getType2() != ItemTemplate.TYPE2_MONEY) || (getItem().getType1() != ItemTemplate.TYPE1_SHIELD_ARMOR)) // not money, not shield
 				&& ((pet == null) || (getObjectId() != pet.getControlObjectId())) // Not Control item of currently summoned pet
 				&& !(player.isProcessingItem(getObjectId())) // Not momentarily used enchant scroll
 				&& (allowAdena || (getId() != Inventory.ADENA_ID)) // Not Adena

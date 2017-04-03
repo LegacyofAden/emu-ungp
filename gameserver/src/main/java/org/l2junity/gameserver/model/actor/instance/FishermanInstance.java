@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.actor.instance;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.network.client.send.ExAcquirableSkillListByClass;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -29,8 +29,8 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 import java.util.List;
 
-public final class L2FishermanInstance extends L2MerchantInstance {
-	public L2FishermanInstance(L2NpcTemplate template) {
+public final class FishermanInstance extends MerchantInstance {
+	public FishermanInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FishermanInstance);
 	}

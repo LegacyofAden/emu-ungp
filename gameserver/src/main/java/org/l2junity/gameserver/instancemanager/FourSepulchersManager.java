@@ -35,7 +35,7 @@ import org.l2junity.gameserver.instancemanager.tasks.FourSepulchersChangeWarmUpT
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2SepulcherMonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.SepulcherMonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2SepulcherNpcInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -134,11 +134,11 @@ public final class FourSepulchersManager {
 	protected Map<Integer, L2Spawn> _mysteriousBoxSpawns = new HashMap<>();
 	protected Map<Integer, L2Spawn> _shadowSpawns = new HashMap<>();
 	protected Map<Integer, Set<L2Spawn>> _dukeFinalMobs = new HashMap<>();
-	protected Map<Integer, Set<L2SepulcherMonsterInstance>> _dukeMobs = new HashMap<>();
+	protected Map<Integer, Set<SepulcherMonsterInstance>> _dukeMobs = new HashMap<>();
 	protected Map<Integer, Set<L2Spawn>> _emperorsGraveNpcs = new HashMap<>();
 	protected Map<Integer, Set<L2Spawn>> _magicalMonsters = new HashMap<>();
 	protected Map<Integer, Set<L2Spawn>> _physicalMonsters = new HashMap<>();
-	protected Map<Integer, Set<L2SepulcherMonsterInstance>> _viscountMobs = new HashMap<>();
+	protected Map<Integer, Set<SepulcherMonsterInstance>> _viscountMobs = new HashMap<>();
 
 	protected Set<L2Spawn> _physicalSpawns;
 	protected Set<L2Spawn> _magicalSpawns;
@@ -913,7 +913,7 @@ public final class FourSepulchersManager {
 		}
 
 		Set<L2Spawn> monsterList;
-		Set<L2SepulcherMonsterInstance> mobs = ConcurrentHashMap.newKeySet();
+		Set<SepulcherMonsterInstance> mobs = ConcurrentHashMap.newKeySet();
 		L2Spawn keyBoxMobSpawn;
 
 		if (Rnd.get(2) == 0) {
@@ -944,7 +944,7 @@ public final class FourSepulchersManager {
 					}
 				}
 
-				L2SepulcherMonsterInstance mob = null;
+				SepulcherMonsterInstance mob = null;
 
 				if (spawnKeyBoxMob) {
 					try {
@@ -953,7 +953,7 @@ public final class FourSepulchersManager {
 						keyBoxMobSpawn.setXYZ(spawnDat);
 						keyBoxMobSpawn.setRespawnDelay(3600);
 						SpawnTable.getInstance().addNewSpawn(keyBoxMobSpawn, false);
-						mob = (L2SepulcherMonsterInstance) keyBoxMobSpawn.doSpawn();
+						mob = (SepulcherMonsterInstance) keyBoxMobSpawn.doSpawn();
 						keyBoxMobSpawn.stopRespawn();
 					} catch (Exception e) {
 						log.warn("SpawnMonster: Spawn could not be initialized: ", e);
@@ -961,7 +961,7 @@ public final class FourSepulchersManager {
 
 					spawnedKeyBoxMob = true;
 				} else {
-					mob = (L2SepulcherMonsterInstance) spawnDat.doSpawn();
+					mob = (SepulcherMonsterInstance) spawnDat.doSpawn();
 					spawnDat.stopRespawn();
 				}
 
@@ -1001,12 +1001,12 @@ public final class FourSepulchersManager {
 	}
 
 	public synchronized boolean isViscountMobsAnnihilated(int npcId) {
-		Set<L2SepulcherMonsterInstance> mobs = _viscountMobs.get(npcId);
+		Set<SepulcherMonsterInstance> mobs = _viscountMobs.get(npcId);
 		if (mobs == null) {
 			return true;
 		}
 
-		for (L2SepulcherMonsterInstance mob : mobs) {
+		for (SepulcherMonsterInstance mob : mobs) {
 			if (!mob.isDead()) {
 				return false;
 			}
@@ -1016,12 +1016,12 @@ public final class FourSepulchersManager {
 	}
 
 	public synchronized boolean isDukeMobsAnnihilated(int npcId) {
-		Set<L2SepulcherMonsterInstance> mobs = _dukeMobs.get(npcId);
+		Set<SepulcherMonsterInstance> mobs = _dukeMobs.get(npcId);
 		if (mobs == null) {
 			return true;
 		}
 
-		for (L2SepulcherMonsterInstance mob : mobs) {
+		for (SepulcherMonsterInstance mob : mobs) {
 			if (!mob.isDead()) {
 				return false;
 			}
@@ -1074,7 +1074,7 @@ public final class FourSepulchersManager {
 		Set<L2Spawn> monsterList = _dukeFinalMobs.get(npcId);
 		if (monsterList != null) {
 			for (L2Spawn spawnDat : monsterList) {
-				L2SepulcherMonsterInstance mob = (L2SepulcherMonsterInstance) spawnDat.doSpawn();
+				SepulcherMonsterInstance mob = (SepulcherMonsterInstance) spawnDat.doSpawn();
 				spawnDat.stopRespawn();
 
 				if (mob != null) {
@@ -1126,7 +1126,7 @@ public final class FourSepulchersManager {
 
 		L2Spawn spawnDat = _shadowSpawns.get(npcId);
 		if (spawnDat != null) {
-			L2SepulcherMonsterInstance mob = (L2SepulcherMonsterInstance) spawnDat.doSpawn();
+			SepulcherMonsterInstance mob = (SepulcherMonsterInstance) spawnDat.doSpawn();
 			spawnDat.stopRespawn();
 
 			if (mob != null) {

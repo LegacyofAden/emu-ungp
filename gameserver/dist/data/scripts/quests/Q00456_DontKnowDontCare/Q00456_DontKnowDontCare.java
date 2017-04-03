@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -309,7 +309,7 @@ public final class Q00456_DontKnowDontCare extends Quest {
 		}
 
 		giveItems(player, reward, count);
-		final L2Item item = ItemTable.getInstance().getTemplate(reward);
+		final ItemTemplate item = ItemTable.getInstance().getTemplate(reward);
 		npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.S1_RECEIVED_A_S2_ITEM_AS_A_REWARD_FROM_THE_SEPARATED_SOUL, player.getName(), item.getName());
 	}
 }

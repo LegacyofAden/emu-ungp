@@ -23,7 +23,7 @@ import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -88,7 +88,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 
 	@ScheduleTarget
 	private void onClanLeaderApply() {
-		for (L2Clan clan : ClanTable.getInstance().getClans()) {
+		for (Clan clan : ClanTable.getInstance().getClans()) {
 			if (clan.getNewLeaderId() != 0) {
 				final ClanMember member = clan.getClanMember(clan.getNewLeaderId());
 				if (member == null) {
@@ -128,7 +128,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 	}
 
 	private void resetClanBonus() {
-		ClanTable.getInstance().getClans().forEach(L2Clan::resetClanBonus);
+		ClanTable.getInstance().getClans().forEach(Clan::resetClanBonus);
 		LOGGER.info("Daily clan bonus has been resetted.");
 	}
 

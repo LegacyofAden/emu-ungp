@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
 import org.l2junity.gameserver.network.client.send.primeshop.ExBRProductInfo;
@@ -86,7 +86,7 @@ public class PrimeShopData implements IGameXmlReader {
 									final int itemId = parseInteger(attrs, "itemId");
 									final int count = parseInteger(attrs, "count");
 
-									final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+									final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 									if (item == null) {
 										log.error("Item template null for itemId: {} brId: {}", itemId, set.getInt("id"));
 										return;

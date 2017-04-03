@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.MountType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -46,7 +46,7 @@ public class InstantFoodForPet extends AbstractEffect {
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
 		if (target.isPet()) {
-			final L2PetInstance targetPet = target.asPet();
+			final PetInstance targetPet = target.asPet();
 			targetPet.setCurrentFed(targetPet.getCurrentFed() + (_normal * RatesConfig.PET_FOOD_RATE));
 		} else if (target.isPlayer()) {
 			final Player targetPlayer = target.asPlayer();

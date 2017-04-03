@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.ClanHallGrade;
 import org.l2junity.gameserver.enums.ClanHallType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
@@ -139,7 +139,7 @@ public final class ClanHallData implements IGameXmlReader {
 		return _clanHalls.values().stream().filter(ch -> ch.getNpcs().contains(npcId)).findFirst().orElse(null);
 	}
 
-	public ClanHall getClanHallByClan(L2Clan clan) {
+	public ClanHall getClanHallByClan(Clan clan) {
 		return _clanHalls.values().stream().filter(ch -> ch.getOwner() == clan).findFirst().orElse(null);
 	}
 

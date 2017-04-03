@@ -43,7 +43,7 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.holders.SkillUseHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ActionType;
@@ -205,7 +205,7 @@ public class SkillCaster implements Runnable {
 		}
 
 		// Reduce talisman mana on skill use
-		if ((_skill.getReferenceItemId() > 0) && (ItemTable.getInstance().getTemplate(_skill.getReferenceItemId()).getBodyPart() == L2Item.SLOT_DECO)) {
+		if ((_skill.getReferenceItemId() > 0) && (ItemTable.getInstance().getTemplate(_skill.getReferenceItemId()).getBodyPart() == ItemTemplate.SLOT_DECO)) {
 			ItemInstance talisman = caster.getInventory().getItems(i -> i.getId() == _skill.getReferenceItemId(), ItemInstance::isEquipped).stream().findAny().orElse(null);
 			if (talisman != null) {
 				talisman.decreaseMana(false, talisman.useSkillDisTime());
@@ -276,7 +276,7 @@ public class SkillCaster implements Runnable {
 
 		if (caster.isPlayer()) {
 			final Player player = caster.getActingPlayer();
-			final L2Clan clan = player.getClan();
+			final Clan clan = player.getClan();
 
 			// Consume fame points
 			if (_skill.getPvPPointConsume() > 0) {
@@ -838,7 +838,7 @@ public class SkillCaster implements Runnable {
 
 			// Consume clan reputation points
 			if ((skill.getPledgeNvConsume() > 0) && (player.getClan() != null)) {
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan.getReputationScore() < skill.getPledgeNvConsume()) {
 					player.sendPacket(SystemMessageId.THE_CLAN_REPUTATION_IS_TOO_LOW);
 					return false;

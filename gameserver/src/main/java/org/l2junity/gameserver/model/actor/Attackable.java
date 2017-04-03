@@ -55,17 +55,17 @@ import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.AggroInfo;
 import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.DamageDoneInfo;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.AttackableStatus;
 import org.l2junity.gameserver.model.actor.tasks.attackable.CommandChannelTimer;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.drops.DropListScope;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -73,7 +73,7 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAggro
 import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAttack;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
 import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
@@ -118,7 +118,7 @@ public class Attackable extends Npc {
 	private boolean _mustGiveExpSp;
 
 	/**
-	 * Constructor of L2Attackable (use L2Character and L2NpcInstance constructor).<br>
+	 * Constructor of L2Attackable (use L2Character and NpcInstance constructor).<br>
 	 * Actions:<br>
 	 * Call the L2Character constructor to set the _template of the L2Attackable (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)<br>
 	 * Set the name of the L2Attackable<br>
@@ -126,7 +126,7 @@ public class Attackable extends Npc {
 	 *
 	 * @param template the template to apply to the NPC.
 	 */
-	public Attackable(L2NpcTemplate template) {
+	public Attackable(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.Attackable);
 		setIsInvul(false);
@@ -234,9 +234,9 @@ public class Attackable extends Npc {
 			addDamage(attacker, (int) value, skill);
 		}
 
-		// If this L2Attackable is a L2MonsterInstance and it has spawned minions, call its minions to battle
+		// If this L2Attackable is a MonsterInstance and it has spawned minions, call its minions to battle
 		if (isMonster()) {
-			L2MonsterInstance master = (L2MonsterInstance) this;
+			MonsterInstance master = (MonsterInstance) this;
 
 			if (master.hasMinions()) {
 				master.getMinionList().onAssist(this, attacker);
@@ -264,14 +264,14 @@ public class Attackable extends Npc {
 	 * Actions:<br>
 	 * Distribute Exp and SP rewards to L2PcInstance (including Summon owner) that hit the L2Attackable and to their Party members<br>
 	 * Notify the Quest Engine of the L2Attackable death if necessary.<br>
-	 * Kill the L2NpcInstance (the corpse disappeared after 7 seconds)<br>
-	 * Caution: This method DOESN'T GIVE rewards to L2PetInstance.
+	 * Kill the NpcInstance (the corpse disappeared after 7 seconds)<br>
+	 * Caution: This method DOESN'T GIVE rewards to PetInstance.
 	 *
 	 * @param killer The L2Character that has killed the L2Attackable
 	 */
 	@Override
 	public boolean doDie(Creature killer) {
-		// Kill the L2NpcInstance (the corpse disappeared after 7 seconds)
+		// Kill the NpcInstance (the corpse disappeared after 7 seconds)
 		if (!super.doDie(killer)) {
 			return false;
 		}
@@ -283,7 +283,7 @@ public class Attackable extends Npc {
 
 		// Notify to minions if there are.
 		if (isMonster()) {
-			final L2MonsterInstance mob = (L2MonsterInstance) this;
+			final MonsterInstance mob = (MonsterInstance) this;
 			if ((mob.getLeader() != null) && mob.getLeader().hasMinions()) {
 				final int respawnTime = NpcConfig.MINIONS_RESPAWN_TIME.containsKey(getId()) ? NpcConfig.MINIONS_RESPAWN_TIME.get(getId()) * 1000 : -1;
 				mob.getLeader().getMinionList().onMinionDie(mob, respawnTime);
@@ -300,10 +300,10 @@ public class Attackable extends Npc {
 	/**
 	 * Distribute Exp and SP rewards to L2PcInstance (including Summon owner) that hit the L2Attackable and to their Party members.<br>
 	 * Actions:<br>
-	 * Get the L2PcInstance owner of the L2ServitorInstance (if necessary) and L2Party in progress.<br>
+	 * Get the L2PcInstance owner of the ServitorInstance (if necessary) and L2Party in progress.<br>
 	 * Calculate the Experience and SP rewards in function of the level difference.<br>
 	 * Add Exp and SP rewards to L2PcInstance (including Summon penalty) and to Party members in the known area of the last attacker.<br>
-	 * Caution : This method DOESN'T GIVE rewards to L2PetInstance.
+	 * Caution : This method DOESN'T GIVE rewards to PetInstance.
 	 *
 	 * @param lastAttacker The L2Character that has killed the L2Attackable
 	 */
@@ -414,7 +414,7 @@ public class Attackable extends Npc {
 					// If this attacker have servitor, get Exp Penalty applied for the servitor.
 					float penalty = 1;
 
-					final L2ServitorInstance summon = attacker.getServitors().values().stream().map(L2ServitorInstance.class::cast).filter(s -> s.getExpMultiplier() < 1).findFirst().orElse(null);
+					final ServitorInstance summon = attacker.getServitors().values().stream().map(ServitorInstance.class::cast).filter(s -> s.getExpMultiplier() < 1).findFirst().orElse(null);
 					if (summon != null) {
 						penalty = summon.getExpMultiplier();
 					}
@@ -453,7 +453,7 @@ public class Attackable extends Npc {
 
 								attacker.addExpAndSp(exp, sp, useVitalityRate());
 								if (exp > 0) {
-									final L2Clan clan = attacker.getClan();
+									final Clan clan = attacker.getClan();
 									if (clan != null) {
 										double finalExp = exp;
 										if (useVitalityRate()) {
@@ -828,7 +828,7 @@ public class Attackable extends Npc {
 	 * Each Special Event has a start and end date to stop to drop extra Items automatically.<br>
 	 * Actions:<br>
 	 * Manage drop of Special Events created by GM for a defined period.<br>
-	 * Get all possible drops of this L2Attackable from L2NpcTemplate and add it Quest drops.<br>
+	 * Get all possible drops of this L2Attackable from NpcTemplate and add it Quest drops.<br>
 	 * For each possible drops (base + quests), calculate which one must be dropped (random).<br>
 	 * Get each Item quantity dropped (random).<br>
 	 * Create this or these L2ItemInstance corresponding to each Item Identifier dropped.<br>
@@ -838,7 +838,7 @@ public class Attackable extends Npc {
 	 * @param npcTemplate
 	 * @param mainDamageDealer
 	 */
-	public void doItemDrop(L2NpcTemplate npcTemplate, Creature mainDamageDealer) {
+	public void doItemDrop(NpcTemplate npcTemplate, Creature mainDamageDealer) {
 		if (mainDamageDealer == null) {
 			return;
 		}
@@ -861,7 +861,7 @@ public class Attackable extends Npc {
 		Collection<ItemHolder> deathItems = npcTemplate.calculateDrops(DropListScope.DEATH, this, player);
 		if (deathItems != null) {
 			for (ItemHolder drop : deathItems) {
-				L2Item item = ItemTable.getInstance().getTemplate(drop.getId());
+				ItemTemplate item = ItemTable.getInstance().getTemplate(drop.getId());
 				// Check if the autoLoot mode is active
 				if (isFlying() || (!item.hasExImmediateEffect() && ((!isRaid() && PlayerConfig.AUTO_LOOT) || (isRaid() && PlayerConfig.AUTO_LOOT_RAIDS))) || (item.hasExImmediateEffect() && PlayerConfig.AUTO_LOOT_HERBS)) {
 					player.doAutoLoot(this, drop); // Give the item(s) to the L2PcInstance that has killed the L2Attackable
@@ -907,7 +907,7 @@ public class Attackable extends Npc {
 	 * @param npcTemplate      the killed npc template
 	 * @param mainDamageDealer The L2Character that has killed the L2Attackable
 	 */
-	public void doLuckyDrop(L2NpcTemplate npcTemplate, Creature mainDamageDealer) {
+	public void doLuckyDrop(NpcTemplate npcTemplate, Creature mainDamageDealer) {
 		if (mainDamageDealer == null) {
 			return;
 		}
@@ -965,9 +965,9 @@ public class Attackable extends Npc {
 	/**
 	 * @return a copy of dummy items for the spoil loot.
 	 */
-	public List<L2Item> getSpoilLootItems() {
+	public List<ItemTemplate> getSpoilLootItems() {
 		final Collection<ItemHolder> sweepItems = _sweepItems.get();
-		final List<L2Item> lootItems = new LinkedList<>();
+		final List<ItemTemplate> lootItems = new LinkedList<>();
 		if (sweepItems != null) {
 			for (ItemHolder item : sweepItems) {
 				lootItems.add(ItemTable.getInstance().getTemplate(item.getId()));
@@ -1081,10 +1081,10 @@ public class Attackable extends Npc {
 	}
 
 	/**
-	 * Calculate the Experience and SP to distribute to attacker (L2PcInstance, L2ServitorInstance or L2Party) of the L2Attackable.
+	 * Calculate the Experience and SP to distribute to attacker (L2PcInstance, ServitorInstance or L2Party) of the L2Attackable.
 	 *
 	 * @param charLevel   The killer level
-	 * @param damage      The damages given by the attacker (L2PcInstance, L2ServitorInstance or L2Party)
+	 * @param damage      The damages given by the attacker (L2PcInstance, ServitorInstance or L2Party)
 	 * @param totalDamage The total damage done
 	 * @return
 	 */
@@ -1314,10 +1314,10 @@ public class Attackable extends Npc {
 	/**
 	 * Check if the server allows Random Animation.
 	 */
-	// This is located here because L2Monster and L2FriendlyMob both extend this class. The other non-pc instances extend either L2NpcInstance or L2MonsterInstance.
+	// This is located here because L2Monster and L2FriendlyMob both extend this class. The other non-pc instances extend either NpcInstance or MonsterInstance.
 	@Override
 	public boolean hasRandomAnimation() {
-		return ((GeneralConfig.MAX_MONSTER_ANIMATION > 0) && isRandomAnimationEnabled() && !(this instanceof L2GrandBossInstance));
+		return ((GeneralConfig.MAX_MONSTER_ANIMATION > 0) && isRandomAnimationEnabled() && !(this instanceof GrandBossInstance));
 	}
 
 	public void setCommandChannelTimer(CommandChannelTimer commandChannelTimer) {

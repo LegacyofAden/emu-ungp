@@ -24,7 +24,7 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.model.Crest.CrestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -54,7 +54,7 @@ public final class CrestTable {
 	public void reload() {
 		_crests.clear();
 		final Set<Integer> crestsInUse = new HashSet<>();
-		for (L2Clan clan : ClanTable.getInstance().getClans()) {
+		for (Clan clan : ClanTable.getInstance().getClans()) {
 			if (clan.getCrestId() != 0) {
 				crestsInUse.add(clan.getCrestId());
 			}
@@ -100,7 +100,7 @@ public final class CrestTable {
 
 		log.info("Loaded {} Crests.", _crests.size());
 
-		for (L2Clan clan : ClanTable.getInstance().getClans()) {
+		for (Clan clan : ClanTable.getInstance().getClans()) {
 			if (clan.getCrestId() != 0) {
 				if (getCrest(clan.getCrestId()) == null) {
 					log.info("Removing non-existent crest for clan {}, crestId: {}", clan, clan.getCrestId());

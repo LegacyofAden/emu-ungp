@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -48,7 +48,7 @@ public class MDefenseFinalizer implements IStatsFunction {
 		throwIfPresent(base);
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
 		if (creature.isPet()) {
-			final L2PetInstance pet = (L2PetInstance) creature;
+			final PetInstance pet = (PetInstance) creature;
 			baseValue = pet.getPetLevelData().getPetMDef();
 		}
 		baseValue += calcEnchantedItemBonus(creature, stat);

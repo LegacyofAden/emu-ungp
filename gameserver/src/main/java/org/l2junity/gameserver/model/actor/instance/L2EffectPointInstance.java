@@ -23,13 +23,13 @@ import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 public class L2EffectPointInstance extends Npc {
 	private final Player _owner;
 
-	public L2EffectPointInstance(L2NpcTemplate template, Creature owner) {
+	public L2EffectPointInstance(NpcTemplate template, Creature owner) {
 		super(template);
 		setInstanceType(InstanceType.L2EffectPointInstance);
 		setIsInvul(false);

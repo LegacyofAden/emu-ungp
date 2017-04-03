@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.conditions;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
@@ -40,7 +40,7 @@ public class ConditionPlayerLevel extends Condition {
 	}
 
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, ItemTemplate item) {
 		return effector.getLevel() >= _level;
 	}
 }

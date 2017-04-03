@@ -18,10 +18,10 @@
  */
 package org.l2junity.gameserver.model.skills.affectobjecttypes;
 
+import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.zone.ZoneId;
 
@@ -76,8 +76,8 @@ public class NotFriendPc implements IAffectObjectHandler {
 			}
 
 			// Clan.
-			final L2Clan clan = player.getClan();
-			final L2Clan targetClan = targetPlayer.getClan();
+			final org.l2junity.gameserver.model.Clan clan = player.getClan();
+			final Clan targetClan = targetPlayer.getClan();
 			if (clan != null) {
 				if (clan == targetClan) {
 					return false;

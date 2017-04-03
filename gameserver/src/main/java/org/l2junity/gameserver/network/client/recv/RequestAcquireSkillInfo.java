@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
+import org.l2junity.gameserver.model.actor.instance.NpcInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -72,7 +72,7 @@ public final class RequestAcquireSkillInfo implements IClientIncomingPacket {
 		}
 
 		final Npc trainer = activeChar.getLastFolkNPC();
-		if (!(trainer instanceof L2NpcInstance) && (_skillType != AcquireSkillType.CLASS)) {
+		if (!(trainer instanceof NpcInstance) && (_skillType != AcquireSkillType.CLASS)) {
 			return;
 		}
 

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -38,7 +38,7 @@ public class PCriticalRateFinalizer implements IStatsFunction {
 		double baseValue = calcWeaponBaseValue(creature, stat);
 		if (creature.isPlayer()) {
 			// Enchanted legs bonus
-			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_LEGS);
+			baseValue += calcEnchantBodyPart(creature, ItemTemplate.SLOT_LEGS);
 		}
 		final double dexBonus = creature.getDEX() > 0 ? BaseStats.DEX.calcBonus(creature) : 1.;
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue * dexBonus * 10), 0, PlayerConfig.MAX_PCRIT_RATE);

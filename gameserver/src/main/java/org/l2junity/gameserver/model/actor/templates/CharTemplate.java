@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author Zoey76
  */
-public class L2CharTemplate extends ListenersContainer {
+public class CharTemplate extends ListenersContainer {
 	// BaseStats
 	private WeaponType _baseAttackType;
 
@@ -57,7 +57,7 @@ public class L2CharTemplate extends ListenersContainer {
 	 */
 	private Race _race;
 
-	public L2CharTemplate(StatsSet set) {
+	public CharTemplate(StatsSet set) {
 		set(set);
 	}
 
@@ -485,7 +485,7 @@ public class L2CharTemplate extends ListenersContainer {
 	}
 
 	/**
-	 * Overridden in L2NpcTemplate
+	 * Overridden in NpcTemplate
 	 *
 	 * @return the characters skills
 	 */

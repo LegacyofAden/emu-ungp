@@ -27,7 +27,7 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,7 +79,7 @@ public class GeneralDropItem implements IDropItem {
 			// individual amount list multiplier
 			multiplier *= individualDropAmountMultiplier;
 		} else {
-			final L2Item item = ItemTable.getInstance().getTemplate(getItemId());
+			final ItemTemplate item = ItemTable.getInstance().getTemplate(getItemId());
 			// global amount multiplier
 			if ((item != null) && item.hasExImmediateEffect()) {
 				// global herb amount multiplier
@@ -171,7 +171,7 @@ public class GeneralDropItem implements IDropItem {
 		if (individualDropChanceMultiplier != null) {
 			multiplier *= individualDropChanceMultiplier;
 		} else {
-			final L2Item item = ItemTable.getInstance().getTemplate(getItemId());
+			final ItemTemplate item = ItemTable.getInstance().getTemplate(getItemId());
 			if ((item != null) && item.hasExImmediateEffect()) {
 				multiplier *= RatesConfig.RATE_HERB_DROP_CHANCE_MULTIPLIER;
 			} else {

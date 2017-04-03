@@ -20,8 +20,8 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -64,7 +64,7 @@ public final class RequestJoinSiege implements IClientIncomingPacket {
 			return;
 		}
 
-		L2Clan clan = activeChar.getClan();
+		Clan clan = activeChar.getClan();
 		if (clan == null) {
 			return;
 		}

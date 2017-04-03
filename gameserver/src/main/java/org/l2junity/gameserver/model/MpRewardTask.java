@@ -26,7 +26,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * @author UnAfraid
@@ -38,7 +38,7 @@ public class MpRewardTask {
 	private final Creature _creature;
 
 	public MpRewardTask(Creature creature, Npc npc) {
-		final L2NpcTemplate template = npc.getTemplate();
+		final NpcTemplate template = npc.getTemplate();
 		_creature = creature;
 		_count = new AtomicInteger(template.getMpRewardTicks());
 		_value = calculateBaseValue(npc, creature);
@@ -51,7 +51,7 @@ public class MpRewardTask {
 	 * @return
 	 */
 	private double calculateBaseValue(Npc npc, Creature creature) {
-		final L2NpcTemplate template = npc.getTemplate();
+		final NpcTemplate template = npc.getTemplate();
 		switch (template.getMpRewardType()) {
 			case PER: {
 				return (creature.getMaxMp() * (template.getMpRewardValue() / 100)) / template.getMpRewardTicks();

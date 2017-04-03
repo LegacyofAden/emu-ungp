@@ -24,10 +24,10 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.CropProcure;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.UniqueItemHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -86,7 +86,7 @@ public class RequestProcureCropList implements IClientIncomingPacket {
 		}
 
 		final Npc manager = player.getLastFolkNPC();
-		if (!(manager instanceof L2MerchantInstance) || !manager.canInteract(player)) {
+		if (!(manager instanceof MerchantInstance) || !manager.canInteract(player)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
@@ -111,7 +111,7 @@ public class RequestProcureCropList implements IClientIncomingPacket {
 				return;
 			}
 
-			final L2Item template = ItemTable.getInstance().getTemplate(i.getRewardId());
+			final ItemTemplate template = ItemTable.getInstance().getTemplate(i.getRewardId());
 			weight += (i.getCount() * template.getWeight());
 
 			if (!template.isStackable()) {

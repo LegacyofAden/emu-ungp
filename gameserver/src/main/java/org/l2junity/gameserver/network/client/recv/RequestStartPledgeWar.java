@@ -20,10 +20,10 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -47,7 +47,7 @@ public final class RequestStartPledgeWar implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clanDeclaringWar = player.getClan();
+		final Clan clanDeclaringWar = player.getClan();
 		if (clanDeclaringWar == null) {
 			return;
 		}
@@ -66,7 +66,7 @@ public final class RequestStartPledgeWar implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clanDeclaredWar = ClanTable.getInstance().getClanByName(_pledgeName);
+		final Clan clanDeclaredWar = ClanTable.getInstance().getClanByName(_pledgeName);
 		if (clanDeclaredWar == null) {
 			client.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.A_CLAN_WAR_CANNOT_BE_DECLARED_AGAINST_A_CLAN_THAT_DOES_NOT_EXIST));
 			client.sendPacket(ActionFailed.STATIC_PACKET);

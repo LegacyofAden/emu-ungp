@@ -23,7 +23,7 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 
 import java.util.concurrent.TimeUnit;
@@ -32,23 +32,23 @@ import java.util.concurrent.TimeUnit;
  * This class manages all RaidBoss.<br>
  * In a group mob, there are one master called RaidBoss and several slaves called Minions.
  */
-public class L2RaidBossInstance extends L2MonsterInstance {
+public class RaidBossInstance extends MonsterInstance {
 	private static final int RAIDBOSS_MAINTENANCE_INTERVAL = 30000; // 30 sec
 
 	private boolean _useRaidCurse = true;
 
 	/**
-	 * Constructor of L2RaidBossInstance (use L2Character and L2NpcInstance constructor).<br>
+	 * Constructor of RaidBossInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
-	 * <li>Call the L2Character constructor to set the _template of the L2RaidBossInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
-	 * <li>Set the name of the L2RaidBossInstance</li>
+	 * <li>Call the L2Character constructor to set the _template of the RaidBossInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
+	 * <li>Set the name of the RaidBossInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2RaidBossInstance(L2NpcTemplate template) {
+	public RaidBossInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2RaidBossInstance);
 		setIsRaid(true);

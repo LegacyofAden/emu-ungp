@@ -21,7 +21,7 @@ package handlers.bypasshandlers;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.StringTokenizer;
@@ -34,7 +34,7 @@ public class Buy implements IBypassHandler {
 
 	@Override
 	public boolean useBypass(String command, Player activeChar, Creature target) {
-		if (!(target instanceof L2MerchantInstance)) {
+		if (!(target instanceof MerchantInstance)) {
 			return false;
 		}
 
@@ -46,7 +46,7 @@ public class Buy implements IBypassHandler {
 				return false;
 			}
 
-			((L2MerchantInstance) target).showBuyWindow(activeChar, Integer.parseInt(st.nextToken()));
+			((MerchantInstance) target).showBuyWindow(activeChar, Integer.parseInt(st.nextToken()));
 			return true;
 		} catch (Exception e) {
 			_log.warn("Exception in " + getClass().getSimpleName(), e);

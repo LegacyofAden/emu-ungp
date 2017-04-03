@@ -61,7 +61,7 @@ import org.l2junity.gameserver.model.actor.instance.*;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.NpcStatus;
 import org.l2junity.gameserver.model.actor.tasks.npc.RandomAnimationTask;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -110,7 +110,7 @@ public class Npc extends Creature {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Npc.class);
 
 	/**
-	 * The interaction distance of the L2NpcInstance(is used as offset in MovetoLocation method)
+	 * The interaction distance of the NpcInstance(is used as offset in MovetoLocation method)
 	 */
 	public static final int INTERACTION_DISTANCE = 250;
 	/**
@@ -118,11 +118,11 @@ public class Npc extends Creature {
 	 */
 	public static final int RANDOM_ITEM_DROP_LIMIT = 70;
 	/**
-	 * The L2Spawn object that manage this L2NpcInstance
+	 * The L2Spawn object that manage this NpcInstance
 	 */
 	private L2Spawn _spawn;
 	/**
-	 * The flag to specify if this L2NpcInstance is busy
+	 * The flag to specify if this NpcInstance is busy
 	 */
 	private boolean _isBusy = false;
 	/**
@@ -177,7 +177,7 @@ public class Npc extends Creature {
 	private TaxZone _taxZone = null;
 
 	/**
-	 * Constructor of L2NpcInstance (use L2Character constructor).<br>
+	 * Constructor of NpcInstance (use L2Character constructor).<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
 	 * <li>Call the L2Character constructor to set the _template of the L2Character (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
@@ -185,9 +185,9 @@ public class Npc extends Creature {
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
 	 *
-	 * @param template The L2NpcTemplate to apply to the NPC
+	 * @param template The NpcTemplate to apply to the NPC
 	 */
-	public Npc(L2NpcTemplate template) {
+	public Npc(NpcTemplate template) {
 		// Call the L2Character constructor to set the _template of the L2Character, copy skills from template to object
 		// and link _calculators to NPC_STD_CALCULATOR
 		super(template);
@@ -229,12 +229,12 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Send a packet SocialAction to all L2PcInstance in the _KnownPlayers of the L2NpcInstance and create a new RandomAnimation Task.
+	 * Send a packet SocialAction to all L2PcInstance in the _KnownPlayers of the NpcInstance and create a new RandomAnimation Task.
 	 *
 	 * @param animationId
 	 */
 	public void onRandomAnimation(int animationId) {
-		// Send a packet SocialAction to all L2PcInstance in the _KnownPlayers of the L2NpcInstance
+		// Send a packet SocialAction to all L2PcInstance in the _KnownPlayers of the NpcInstance
 		long now = System.currentTimeMillis();
 		if ((now - _lastSocialBroadcast) > MINIMUM_SOCIAL_INTERVAL) {
 			_lastSocialBroadcast = now;
@@ -290,11 +290,11 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Return the L2NpcTemplate of the L2NpcInstance.
+	 * Return the NpcTemplate of the NpcInstance.
 	 */
 	@Override
-	public final L2NpcTemplate getTemplate() {
-		return (L2NpcTemplate) super.getTemplate();
+	public final NpcTemplate getTemplate() {
+		return (NpcTemplate) super.getTemplate();
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Return the Level of this L2NpcInstance contained in the L2NpcTemplate.
+	 * Return the Level of this NpcInstance contained in the NpcTemplate.
 	 */
 	@Override
 	public final int getLevel() {
@@ -328,7 +328,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the Aggro Range of this L2NpcInstance either contained in the L2NpcTemplate, or overriden by spawnlist AI value.
+	 * @return the Aggro Range of this NpcInstance either contained in the NpcTemplate, or overriden by spawnlist AI value.
 	 */
 	public int getAggroRange() {
 		return getTemplate().getAggroRange();
@@ -343,7 +343,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Return True if this L2NpcInstance is undead in function of the L2NpcTemplate.
+	 * Return True if this NpcInstance is undead in function of the NpcTemplate.
 	 */
 	@Override
 	public boolean isUndead() {
@@ -351,7 +351,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Send a packet NpcInfo with state of abnormal effect to all L2PcInstance in the _KnownPlayers of the L2NpcInstance.
+	 * Send a packet NpcInfo with state of abnormal effect to all L2PcInstance in the _KnownPlayers of the NpcInstance.
 	 */
 	@Override
 	public void updateAbnormalVisualEffects() {
@@ -385,7 +385,7 @@ public class Npc extends Creature {
 			}
 
 			// Chaos NPCs attack everything except clan.
-			if (((L2NpcTemplate) attacker.getTemplate()).isChaos()) {
+			if (((NpcTemplate) attacker.getTemplate()).isChaos()) {
 				return true;
 			}
 
@@ -401,14 +401,14 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the Identifier of the item in the left hand of this L2NpcInstance contained in the L2NpcTemplate.
+	 * @return the Identifier of the item in the left hand of this NpcInstance contained in the NpcTemplate.
 	 */
 	public int getLeftHandItem() {
 		return _currentLHandId;
 	}
 
 	/**
-	 * @return the Identifier of the item in the right hand of this L2NpcInstance contained in the L2NpcTemplate.
+	 * @return the Identifier of the item in the right hand of this NpcInstance contained in the NpcTemplate.
 	 */
 	public int getRightHandItem() {
 		return _currentRHandId;
@@ -419,7 +419,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the busy status of this L2NpcInstance.
+	 * @return the busy status of this NpcInstance.
 	 */
 	public final boolean isBusy() {
 		return _isBusy;
@@ -515,7 +515,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the nearest L2Castle this L2NpcInstance belongs to. Otherwise null.
+	 * @return the nearest L2Castle this NpcInstance belongs to. Otherwise null.
 	 */
 	public final Castle getCastle() {
 		return CastleManager.getInstance().findNearestCastle(this);
@@ -536,7 +536,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the nearest L2Fort this L2NpcInstance belongs to. Otherwise null.
+	 * @return the nearest L2Fort this NpcInstance belongs to. Otherwise null.
 	 */
 	public final Fort getFort() {
 		return FortManager.getInstance().findNearestFort(this);
@@ -553,7 +553,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Open a quest or chat window on client with the text of the L2NpcInstance in function of the command.<br>
+	 * Open a quest or chat window on client with the text of the NpcInstance in function of the command.<br>
 	 * <B><U> Example of use </U> :</B>
 	 * <ul>
 	 * <li>Client packet : RequestBypassToServer</li>
@@ -583,7 +583,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Return the weapon item equipped in the right hand of the L2NpcInstance or null.
+	 * Return the weapon item equipped in the right hand of the NpcInstance or null.
 	 */
 	@Override
 	public Weapon getActiveWeaponItem() {
@@ -599,7 +599,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Return the weapon item equipped in the left hand of the L2NpcInstance or null.
+	 * Return the weapon item equipped in the left hand of the NpcInstance or null.
 	 */
 	@Override
 	public Weapon getSecondaryWeaponItem() {
@@ -614,7 +614,7 @@ public class Npc extends Creature {
 	 * <li>if the file doesn't exist on the server : <B>data/html/npcdefault.htm</B> (message : "I have nothing to say to you")</li>
 	 * </ul>
 	 *
-	 * @param npcId The Identifier of the L2NpcInstance whose text must be display
+	 * @param npcId The Identifier of the NpcInstance whose text must be display
 	 * @param val   The number of the page to display
 	 * @return the pathfile of the selected HTML file in function of the npcId and of the page number.
 	 */
@@ -659,16 +659,16 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Open a chat window on client with the text of the L2NpcInstance.<br>
+	 * Open a chat window on client with the text of the NpcInstance.<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
 	 * <li>Get the text of the selected HTML file in function of the npcId and of the page number</li>
-	 * <li>Send a Server->Client NpcHtmlMessage containing the text of the L2NpcInstance to the L2PcInstance</li>
+	 * <li>Send a Server->Client NpcHtmlMessage containing the text of the NpcInstance to the L2PcInstance</li>
 	 * <li>Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet</li>
 	 * </ul>
 	 *
-	 * @param player The L2PcInstance that talk with the L2NpcInstance
-	 * @param val    The number of the page of the L2NpcInstance to display
+	 * @param player The L2PcInstance that talk with the NpcInstance
+	 * @param val    The number of the page of the NpcInstance to display
 	 */
 	public void showChatWindow(Player player, int val) {
 		if (!isTalkable()) {
@@ -677,7 +677,7 @@ public class Npc extends Creature {
 		}
 
 		if (player.getReputation() < 0) {
-			if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (this instanceof L2MerchantInstance)) {
+			if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (this instanceof MerchantInstance)) {
 				if (showPkDenyChatWindow(player, "merchant")) {
 					return;
 				}
@@ -685,11 +685,11 @@ public class Npc extends Creature {
 				if (showPkDenyChatWindow(player, "teleporter")) {
 					return;
 				}
-			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_WAREHOUSE && (this instanceof L2WarehouseInstance)) {
+			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_WAREHOUSE && (this instanceof WarehouseInstance)) {
 				if (showPkDenyChatWindow(player, "warehouse")) {
 					return;
 				}
-			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (this instanceof L2FishermanInstance)) {
+			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_SHOP && (this instanceof FishermanInstance)) {
 				if (showPkDenyChatWindow(player, "fisherman")) {
 					return;
 				}
@@ -745,7 +745,7 @@ public class Npc extends Creature {
 				break;
 		}
 
-		// Send a Server->Client NpcHtmlMessage containing the text of the L2NpcInstance to the L2PcInstance
+		// Send a Server->Client NpcHtmlMessage containing the text of the NpcInstance to the L2PcInstance
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
@@ -758,11 +758,11 @@ public class Npc extends Creature {
 	/**
 	 * Open a chat window on client with the text specified by the given file name and path, relative to the datapack root.
 	 *
-	 * @param player   The L2PcInstance that talk with the L2NpcInstance
+	 * @param player   The L2PcInstance that talk with the NpcInstance
 	 * @param filename The filename that contains the text to send
 	 */
 	public void showChatWindow(Player player, String filename) {
-		// Send a Server->Client NpcHtmlMessage containing the text of the L2NpcInstance to the L2PcInstance
+		// Send a Server->Client NpcHtmlMessage containing the text of the NpcInstance to the L2PcInstance
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
@@ -791,10 +791,10 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Kill the L2NpcInstance (the corpse disappeared after 7 seconds).<br>
+	 * Kill the NpcInstance (the corpse disappeared after 7 seconds).<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
-	 * <li>Create a DecayTask to remove the corpse of the L2NpcInstance after 7 seconds</li>
+	 * <li>Create a DecayTask to remove the corpse of the NpcInstance after 7 seconds</li>
 	 * <li>Set target to null and cancel Attack or Cast</li>
 	 * <li>Stop movement</li>
 	 * <li>Stop HP/MP/CP Regeneration task</li>
@@ -856,9 +856,9 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Set the spawn of the L2NpcInstance.
+	 * Set the spawn of the NpcInstance.
 	 *
-	 * @param spawn The L2Spawn that manage the L2NpcInstance
+	 * @param spawn The L2Spawn that manage the NpcInstance
 	 */
 	public void setSpawn(L2Spawn spawn) {
 		_spawn = spawn;
@@ -930,10 +930,10 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Remove the L2NpcInstance from the world and update its spawn object (for a complete removal use the deleteMe method).<br>
+	 * Remove the NpcInstance from the world and update its spawn object (for a complete removal use the deleteMe method).<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
-	 * <li>Remove the L2NpcInstance from the world when the decay task is launched</li>
+	 * <li>Remove the NpcInstance from the world when the decay task is launched</li>
 	 * <li>Decrease its spawn counter</li>
 	 * <li>Manage Siege task (killFlag, killCT)</li>
 	 * </ul>
@@ -947,7 +947,7 @@ public class Npc extends Creature {
 		}
 		setDecayed(true);
 
-		// Remove the L2NpcInstance from the world when the decay task is launched
+		// Remove the NpcInstance from the world when the decay task is launched
 		super.onDecay();
 
 		// Decrease its spawn counter
@@ -969,11 +969,11 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Remove PROPERLY the L2NpcInstance from the world.<br>
+	 * Remove PROPERLY the NpcInstance from the world.<br>
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
-	 * <li>Remove the L2NpcInstance from the world and update its spawn object</li>
-	 * <li>Remove all L2Object from _knownObjects and _knownPlayer of the L2NpcInstance then cancel Attack or Cast and notify AI</li>
+	 * <li>Remove the NpcInstance from the world and update its spawn object</li>
+	 * <li>Remove all L2Object from _knownObjects and _knownPlayer of the NpcInstance then cancel Attack or Cast and notify AI</li>
 	 * <li>Remove L2Object object from _allObjects of L2World</li>
 	 * </ul>
 	 * <FONT COLOR=#FF0000><B><U>Caution</U>: This method DOESN'T SEND Server->Client packets to players</B></FONT><br>
@@ -997,7 +997,7 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * @return the L2Spawn object that manage this L2NpcInstance.
+	 * @return the L2Spawn object that manage this NpcInstance.
 	 */
 	public L2Spawn getSpawn() {
 		return _spawn;

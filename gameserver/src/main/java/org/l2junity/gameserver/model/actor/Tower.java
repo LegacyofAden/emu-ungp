@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.actor;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 /**
@@ -30,7 +30,7 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
  * @author Zoey76
  */
 public abstract class Tower extends Npc {
-	public Tower(L2NpcTemplate template) {
+	public Tower(NpcTemplate template) {
 		super(template);
 		setIsInvul(false);
 	}

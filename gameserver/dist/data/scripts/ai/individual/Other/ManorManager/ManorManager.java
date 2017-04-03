@@ -23,7 +23,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -127,7 +127,7 @@ public final class ManorManager extends AbstractNpcAI {
 				player.sendPacket(new ExShowManorDefaultInfo(false));
 				break;
 			case 6: // Buy harvester
-				((L2MerchantInstance) npc).showBuyWindow(player, 300000 + npc.getId());
+				((MerchantInstance) npc).showBuyWindow(player, 300000 + npc.getId());
 				break;
 			case 9: // Edit sales (Crop sales)
 				player.sendPacket(new ExShowProcureCropDetail(evt.getManorId()));

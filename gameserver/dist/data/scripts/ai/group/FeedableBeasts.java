@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2TamedBeastInstance;
+import org.l2junity.gameserver.model.actor.instance.TamedBeastInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -397,12 +397,12 @@ public final class FeedableBeasts extends AbstractNpcAI {
 		// player might have and initialize the Tamed Beast.
 		if (ArrayUtil.contains(TAMED_BEASTS, nextNpcId)) {
 			if ((player.getTrainedBeasts() != null) && !player.getTrainedBeasts().isEmpty()) {
-				for (L2TamedBeastInstance oldTrained : player.getTrainedBeasts()) {
+				for (TamedBeastInstance oldTrained : player.getTrainedBeasts()) {
 					oldTrained.deleteMe();
 				}
 			}
 
-			final L2TamedBeastInstance nextNpc = new L2TamedBeastInstance(nextNpcId, player, food - FOODSKILLDIFF, npc.getX(), npc.getY(), npc.getZ());
+			final TamedBeastInstance nextNpc = new TamedBeastInstance(nextNpcId, player, food - FOODSKILLDIFF, npc.getX(), npc.getY(), npc.getZ());
 			nextNpc.setRunning();
 			Q00020_BringUpWithLove.checkJewelOfInnocence(player);
 
@@ -531,8 +531,8 @@ public final class FeedableBeasts extends AbstractNpcAI {
 			if (getRandom(100) < GROWTH_CAPABLE_MOBS.get(npcId).getChance()) {
 				spawnNext(npc, growthLevel, caster, food);
 			}
-		} else if (ArrayUtil.contains(TAMED_BEASTS, npcId) && (npc instanceof L2TamedBeastInstance)) {
-			L2TamedBeastInstance beast = ((L2TamedBeastInstance) npc);
+		} else if (ArrayUtil.contains(TAMED_BEASTS, npcId) && (npc instanceof TamedBeastInstance)) {
+			TamedBeastInstance beast = ((TamedBeastInstance) npc);
 			if (skillId == beast.getFoodType()) {
 				beast.onReceiveFood();
 				NpcStringId message = TAMED_TEXT[getRandom(TAMED_TEXT.length)];

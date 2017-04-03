@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.CharInfo;
@@ -34,7 +34,7 @@ import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 public class L2DecoyInstance extends Npc {
 	private final Player _owner;
 
-	public L2DecoyInstance(L2NpcTemplate template, Player owner, int totalLifeTime) {
+	public L2DecoyInstance(NpcTemplate template, Player owner, int totalLifeTime) {
 		super(template);
 		setInstanceType(InstanceType.L2DecoyInstance);
 		_owner = owner;

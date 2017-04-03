@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.tasks.npc.trap.TrapTask;
 import org.l2junity.gameserver.model.actor.tasks.npc.trap.TrapTriggerTask;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnTrapAction;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -64,7 +64,7 @@ public final class L2TrapInstance extends Npc {
 	// Tasks
 	private ScheduledFuture<?> _trapTask = null;
 
-	public L2TrapInstance(L2NpcTemplate template, int instanceId) {
+	public L2TrapInstance(NpcTemplate template, int instanceId) {
 		super(template);
 		setInstanceType(InstanceType.L2TrapInstance);
 		setInstanceById(instanceId);
@@ -80,7 +80,7 @@ public final class L2TrapInstance extends Npc {
 		}
 	}
 
-	public L2TrapInstance(L2NpcTemplate template, Player owner) {
+	public L2TrapInstance(NpcTemplate template, Player owner) {
 		this(template, owner.getInstanceId());
 		_owner = owner;
 	}
@@ -249,7 +249,7 @@ public final class L2TrapInstance extends Npc {
 			OlympiadGameManager.getInstance().notifyCompetitorDamage(getOwner(), damage);
 		}
 
-		if (target.isHpBlocked() && !(target instanceof L2NpcInstance)) {
+		if (target.isHpBlocked() && !(target instanceof NpcInstance)) {
 			_owner.sendPacket(SystemMessageId.THE_ATTACK_HAS_BEEN_BLOCKED);
 		} else {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_INFLICTED_S3_DAMAGE_ON_C2_S4);

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.ItemHolder;
@@ -48,7 +48,7 @@ public final class InstantHarvesting extends AbstractEffect {
 			return;
 		}
 
-		final L2MonsterInstance targetMonster = target.asMonster();
+		final MonsterInstance targetMonster = target.asMonster();
 		if (targetMonster == null) {
 			casterPlayer.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
@@ -103,7 +103,7 @@ public final class InstantHarvesting extends AbstractEffect {
 		}
 	}
 
-	private static boolean calcSuccess(Player activeChar, L2MonsterInstance target) {
+	private static boolean calcSuccess(Player activeChar, MonsterInstance target) {
 		final int levelPlayer = activeChar.getLevel();
 		final int levelTarget = target.getLevel();
 

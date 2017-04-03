@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
@@ -53,11 +53,11 @@ public class MyPetSummonInfo implements IClientOutgoingPacket {
 		_flyWalkSpd = summon.isFlying() ? _walkSpd : 0;
 		_val = val;
 		if (summon.isPet()) {
-			final L2PetInstance pet = (L2PetInstance) _summon;
+			final PetInstance pet = (PetInstance) _summon;
 			_curFed = pet.getCurrentFed(); // how fed it is
 			_maxFed = pet.getMaxFed(); // max fed it can be
 		} else if (summon.isServitor()) {
-			final L2ServitorInstance sum = (L2ServitorInstance) _summon;
+			final ServitorInstance sum = (ServitorInstance) _summon;
 			_curFed = sum.getLifeTimeRemaining();
 			_maxFed = sum.getLifeTime();
 		}

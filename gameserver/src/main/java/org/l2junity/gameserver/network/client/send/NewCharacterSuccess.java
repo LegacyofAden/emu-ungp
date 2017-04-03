@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
+import org.l2junity.gameserver.model.actor.templates.PcTemplate;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class NewCharacterSuccess implements IClientOutgoingPacket {
-	private final List<L2PcTemplate> _chars = new ArrayList<>();
+	private final List<PcTemplate> _chars = new ArrayList<>();
 
-	public void addChar(L2PcTemplate template) {
+	public void addChar(PcTemplate template) {
 		_chars.add(template);
 	}
 
@@ -37,7 +37,7 @@ public final class NewCharacterSuccess implements IClientOutgoingPacket {
 		OutgoingPackets.NEW_CHARACTER_SUCCESS.writeId(packet);
 
 		packet.writeD(_chars.size());
-		for (L2PcTemplate chr : _chars) {
+		for (PcTemplate chr : _chars) {
 			if (chr == null) {
 				continue;
 			}

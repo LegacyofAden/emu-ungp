@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
@@ -261,7 +261,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 		switch (seedType) {
 			case ANNIHILATION_BISTAKON: {
 				if (getRandom(100) < 50) {
-					final L2MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[0][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[0].length)]);
+					final MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[0][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[0].length)]);
 					mob.setRunning();
 					mob.addDamageHate(player, 0, 999);
 					mob.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, player);
@@ -270,7 +270,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 			}
 			case ANNIHILATION_REPTILIKON: {
 				if (getRandom(100) < 50) {
-					final L2MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[1][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[1].length)]);
+					final MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[1][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[1].length)]);
 					mob.setRunning();
 					mob.addDamageHate(player, 0, 999);
 					mob.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, player);
@@ -279,7 +279,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 			}
 			case ANNIHILATION_COKRAKON: {
 				if (getRandom(100) < 50) {
-					final L2MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[2][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[2].length)]);
+					final MonsterInstance mob = spawnSupriseMob(seedEnergy, ANNIHILATION_SUPRISE_MOB_IDS[2][getRandom(ANNIHILATION_SUPRISE_MOB_IDS[2].length)]);
 					mob.setRunning();
 					mob.addDamageHate(player, 0, 999);
 					mob.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, player);
@@ -289,8 +289,8 @@ public final class EnergySeeds extends AbstractNpcAI {
 		}
 	}
 
-	private L2MonsterInstance spawnSupriseMob(Npc energy, int npcId) {
-		final L2MonsterInstance monster = (L2MonsterInstance) addSpawn(npcId, energy, false, 30000, true, energy.getInstanceId());
+	private MonsterInstance spawnSupriseMob(Npc energy, int npcId) {
+		final MonsterInstance monster = (MonsterInstance) addSpawn(npcId, energy, false, 30000, true, energy.getInstanceId());
 		startQuestTimer("DeSpawnTask", 30000, monster, null);
 		return monster;
 	}

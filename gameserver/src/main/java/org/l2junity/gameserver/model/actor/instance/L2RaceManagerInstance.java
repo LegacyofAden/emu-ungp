@@ -24,7 +24,7 @@ import org.l2junity.gameserver.MonsterRace;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.*;
@@ -84,7 +84,7 @@ public class L2RaceManagerInstance extends Npc {
 					100000
 			};
 
-	public L2RaceManagerInstance(L2NpcTemplate template) {
+	public L2RaceManagerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2RaceManagerInstance);
 		if (_notInitialized) {

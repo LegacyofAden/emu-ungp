@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -35,12 +35,12 @@ public class PetStatusUpdate implements IClientOutgoingPacket {
 
 	public PetStatusUpdate(Summon summon) {
 		_summon = summon;
-		if (_summon instanceof L2PetInstance) {
-			L2PetInstance pet = (L2PetInstance) _summon;
+		if (_summon instanceof PetInstance) {
+			PetInstance pet = (PetInstance) _summon;
 			_curFed = pet.getCurrentFed(); // how fed it is
 			_maxFed = pet.getMaxFed(); // max fed it can be
-		} else if (_summon instanceof L2ServitorInstance) {
-			L2ServitorInstance sum = (L2ServitorInstance) _summon;
+		} else if (_summon instanceof ServitorInstance) {
+			ServitorInstance sum = (ServitorInstance) _summon;
 			_curFed = sum.getLifeTimeRemaining();
 			_maxFed = sum.getLifeTime();
 		}

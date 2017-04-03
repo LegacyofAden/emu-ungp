@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.L2ControllableAirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.ExAirShipTeleportList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class AirShipManager {
 	private static final String ADD_DB = "INSERT INTO airships (owner_id,fuel) VALUES (?,?)";
 	private static final String UPDATE_DB = "UPDATE airships SET fuel=? WHERE owner_id=?";
 
-	private L2CharTemplate _airShipTemplate = null;
+	private CharTemplate _airShipTemplate = null;
 	private final Map<Integer, StatsSet> _airShipsInfo = new HashMap<>();
 	private final Map<Integer, L2AirShipInstance> _airShips = new HashMap<>();
 	private final Map<Integer, AirShipTeleportList> _teleports = new HashMap<>();
@@ -90,7 +90,7 @@ public class AirShipManager {
 		npcDat.set("baseMpReg", 3.e-3f);
 		npcDat.set("basePDef", 100);
 		npcDat.set("baseMDef", 100);
-		_airShipTemplate = new L2CharTemplate(npcDat);
+		_airShipTemplate = new CharTemplate(npcDat);
 
 		load();
 	}

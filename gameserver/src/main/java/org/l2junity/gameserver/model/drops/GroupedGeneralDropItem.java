@@ -25,9 +25,9 @@ import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2RaidBossInstance;
+import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,7 +74,7 @@ public class GroupedGeneralDropItem implements IDropItem {
 	 */
 	public double getChance(Creature victim, Creature killer) {
 		for (final GeneralDropItem gdi : getItems()) {
-			final L2Item item = ItemTable.getInstance().getTemplate(gdi.getItemId());
+			final ItemTemplate item = ItemTable.getInstance().getTemplate(gdi.getItemId());
 			if ((item == null) || !item.hasExImmediateEffect()) {
 				return getChance() * getChanceMultiplier(killer) * getGlobalChanceMultiplier();
 			}
@@ -109,7 +109,7 @@ public class GroupedGeneralDropItem implements IDropItem {
 	public Collection<ItemHolder> calculateDrops(Creature victim, Creature killer) {
 		final int levelDifference = victim.getLevel() - killer.getLevel();
 		double chanceModifier;
-		if (victim instanceof L2RaidBossInstance) {
+		if (victim instanceof RaidBossInstance) {
 			chanceModifier = Math.max(0, Math.min(1, (levelDifference * 0.15) + 1));
 		} else {
 			chanceModifier = 1;

@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.appearance.PcAppearance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.eventengine.AbstractEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -62,7 +62,7 @@ public class CeremonyOfChaosEvent extends AbstractEvent<CeremonyOfChaosMember> {
 
 	private final int _id;
 	private final Instance _instance;
-	private final Set<L2MonsterInstance> _monsters = ConcurrentHashMap.newKeySet();
+	private final Set<MonsterInstance> _monsters = ConcurrentHashMap.newKeySet();
 	private long _battleStartTime = 0;
 
 	public CeremonyOfChaosEvent(int id, InstanceTemplate template) {
@@ -85,7 +85,7 @@ public class CeremonyOfChaosEvent extends AbstractEvent<CeremonyOfChaosMember> {
 		return _instance;
 	}
 
-	public Set<L2MonsterInstance> getMonsters() {
+	public Set<MonsterInstance> getMonsters() {
 		return _monsters;
 	}
 

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.effects.effecttypes.instant;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -51,7 +51,7 @@ public class InstantPledgeSendSystemMessage extends AbstractEffect {
 			return;
 		}
 
-		final L2Clan clan = casterPlayer.getClan();
+		final Clan clan = casterPlayer.getClan();
 		if (clan != null) {
 			clan.broadcastToOnlineMembers(_message);
 		}

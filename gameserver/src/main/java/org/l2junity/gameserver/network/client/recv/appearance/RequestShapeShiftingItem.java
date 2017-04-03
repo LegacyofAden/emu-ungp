@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ShapeShiftingItemRequest;
 import org.l2junity.gameserver.model.holders.AppearanceHolder;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.appearance.AppearanceStone;
 import org.l2junity.gameserver.model.items.appearance.AppearanceType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -160,7 +160,7 @@ public class RequestShapeShiftingItem implements IClientIncomingPacket {
 				return;
 			}
 
-			if ((extractItem.getItem().getBodyPart() != targetItem.getItem().getBodyPart()) && ((extractItem.getItem().getBodyPart() != L2Item.SLOT_FULL_ARMOR) || (targetItem.getItem().getBodyPart() != L2Item.SLOT_CHEST))) {
+			if ((extractItem.getItem().getBodyPart() != targetItem.getItem().getBodyPart()) && ((extractItem.getItem().getBodyPart() != ItemTemplate.SLOT_FULL_ARMOR) || (targetItem.getItem().getBodyPart() != ItemTemplate.SLOT_CHEST))) {
 				client.sendPacket(ExShapeShiftingResult.CLOSE);
 				player.removeRequest(ShapeShiftingItemRequest.class);
 				return;

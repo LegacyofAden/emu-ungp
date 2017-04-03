@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.l2junity.commons.idfactory.AbstractIdFactory;
 import org.l2junity.commons.idfactory.DefaultIdFactory;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 import lombok.Getter;
@@ -89,9 +89,9 @@ public class WorldManager {
 		return null;
 	}
 	
-	public L2PetInstance getPet(int ownerObjectId) {
+	public PetInstance getPet(int ownerObjectId) {
 		for(GameWorld world : worlds.values()) {
-			final L2PetInstance pet = world.getPet(ownerObjectId);
+			final PetInstance pet = world.getPet(ownerObjectId);
 			if(pet != null) {
 				return pet;
 			}

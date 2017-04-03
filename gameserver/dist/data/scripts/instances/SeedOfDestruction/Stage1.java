@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -393,7 +393,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 			startQuestTimer("Spawn", 10000, npc, null, true);
 		} else if (npcId == TIAT) {
 			for (int i = 0; i < TIAT_GUARD_NUMBER; i++) {
-				addMinion((L2MonsterInstance) npc, TIAT_GUARD);
+				addMinion((MonsterInstance) npc, TIAT_GUARD);
 			}
 		}
 	}
@@ -526,7 +526,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 							world.finishInstance();
 							GraciaSeedsManager.getInstance().increaseSoDTiatKilled();
 						} else if (npc.getId() == TIAT_GUARD) {
-							addMinion(((L2MonsterInstance) npc).getLeader(), TIAT_GUARD);
+							addMinion(((MonsterInstance) npc).getLeader(), TIAT_GUARD);
 						}
 					}
 				}

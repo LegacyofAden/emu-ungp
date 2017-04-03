@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Vehicle;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.*;
 
 /**
@@ -32,7 +32,7 @@ import org.l2junity.gameserver.network.client.send.*;
  * @author DrHouse, DS
  */
 public class L2AirShipInstance extends Vehicle {
-	public L2AirShipInstance(L2CharTemplate template) {
+	public L2AirShipInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2AirShipInstance);
 		setAI(new AirShipAI(this));

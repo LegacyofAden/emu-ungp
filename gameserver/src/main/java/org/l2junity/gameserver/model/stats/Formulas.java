@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.items.Armor;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
@@ -467,7 +467,7 @@ public final class Formulas {
 	 * @return
 	 */
 	public static byte calcShldUse(Creature attacker, Creature target, boolean sendSysMsg) {
-		final L2Item item = target.getSecondaryWeaponItem();
+		final ItemTemplate item = target.getSecondaryWeaponItem();
 		if ((item == null) || !(item instanceof Armor) || (((Armor) item).getItemType() == ArmorType.SIGIL)) {
 			return 0;
 		}

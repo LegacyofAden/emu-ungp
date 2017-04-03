@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
@@ -104,7 +104,7 @@ public class AdminMenu implements IAdminCommandHandler {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 					return true;
 				}
-				L2Clan clan = player.getClan();
+				Clan clan = player.getClan();
 				if (clan == null) {
 					activeChar.sendMessage("Player is not in a clan.");
 					teleportCharacter(player, activeChar.getLocation(), activeChar, "Admin is teleporting you.");

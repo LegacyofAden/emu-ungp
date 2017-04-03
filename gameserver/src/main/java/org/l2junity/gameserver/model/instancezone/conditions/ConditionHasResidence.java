@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.instancezone.conditions;
 
 import org.l2junity.gameserver.enums.ResidenceType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -37,7 +37,7 @@ public final class ConditionHasResidence extends Condition {
 
 	@Override
 	protected boolean test(Player player, Npc npc) {
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		if (clan == null) {
 			return false;
 		}

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.primeshop;
 
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 
 import java.util.List;
 
@@ -97,7 +97,7 @@ public class PrimeShopGroup {
 	public long getCount() {
 		return _items.stream().mapToLong(item ->
 		{
-			final L2Item itemTemplate = ItemTable.getInstance().getTemplate(item.getId());
+			final ItemTemplate itemTemplate = ItemTable.getInstance().getTemplate(item.getId());
 			return ((itemTemplate != null) && itemTemplate.isStackable()) ? 1 : item.getCount();
 		}).sum();
 	}

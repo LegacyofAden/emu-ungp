@@ -35,10 +35,10 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.L2RaidBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -403,11 +403,11 @@ public class AdminTeleport implements IAdminCommandHandler {
 
 	private void recallNPC(Player activeChar) {
 		WorldObject obj = activeChar.getTarget();
-		if ((obj instanceof Npc) && !((Npc) obj).isMinion() && !(obj instanceof L2RaidBossInstance) && !(obj instanceof L2GrandBossInstance)) {
+		if ((obj instanceof Npc) && !((Npc) obj).isMinion() && !(obj instanceof RaidBossInstance) && !(obj instanceof GrandBossInstance)) {
 			Npc target = (Npc) obj;
 
 			int monsterTemplate = target.getTemplate().getId();
-			L2NpcTemplate template1 = NpcData.getInstance().getTemplate(monsterTemplate);
+			NpcTemplate template1 = NpcData.getInstance().getTemplate(monsterTemplate);
 			if (template1 == null) {
 				activeChar.sendMessage("Incorrect monster template.");
 				_log.warn("ERROR: NPC " + target.getObjectId() + " has a 'null' template.");
@@ -448,8 +448,8 @@ public class AdminTeleport implements IAdminCommandHandler {
 				activeChar.sendMessage("Target is not in game.");
 			}
 
-		} else if (obj instanceof L2RaidBossInstance) {
-			L2RaidBossInstance target = (L2RaidBossInstance) obj;
+		} else if (obj instanceof RaidBossInstance) {
+			RaidBossInstance target = (RaidBossInstance) obj;
 			L2Spawn spawn = target.getSpawn();
 			double curHP = target.getCurrentHp();
 			double curMP = target.getCurrentMp();

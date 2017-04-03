@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.skills.conditiontypes;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -37,7 +37,7 @@ public class OpPledgeSkillCondition implements ISkillCondition {
 
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
-		final L2Clan clan = caster.getClan();
+		final Clan clan = caster.getClan();
 		return (clan != null) && (clan.getLevel() >= _level);
 	}
 }

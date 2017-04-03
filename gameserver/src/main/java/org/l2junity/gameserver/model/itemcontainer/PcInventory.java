@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemAd
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemDestroy;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemDrop;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerItemTransfer;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
 import org.l2junity.gameserver.model.variables.ItemVariables;
@@ -702,11 +702,11 @@ public class PcInventory extends Inventory {
 	 * @param sendSkillMessage if {@code true} will send a message of skill not available.
 	 * @return {@code true} if the inventory isn't full after taking new items and items weight add to current load doesn't exceed max weight load.
 	 */
-	public boolean checkInventorySlotsAndWeight(List<L2Item> itemList, boolean sendMessage, boolean sendSkillMessage) {
+	public boolean checkInventorySlotsAndWeight(List<ItemTemplate> itemList, boolean sendMessage, boolean sendSkillMessage) {
 		int lootWeight = 0;
 		int requiredSlots = 0;
 		if (itemList != null) {
-			for (L2Item item : itemList) {
+			for (ItemTemplate item : itemList) {
 				// If the item is not stackable or is stackable and not present in inventory, will need a slot.
 				if (!item.isStackable() || (getInventoryItemCount(item.getId(), -1) <= 0)) {
 					requiredSlots++;

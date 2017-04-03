@@ -52,7 +52,7 @@ import org.l2junity.gameserver.model.actor.request.SayuneRequest;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 import org.l2junity.gameserver.model.actor.status.PcStatus;
 import org.l2junity.gameserver.model.actor.tasks.player.*;
-import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
+import org.l2junity.gameserver.model.actor.templates.PcTemplate;
 import org.l2junity.gameserver.model.actor.transform.Transform;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.base.SubClass;
@@ -423,7 +423,7 @@ public final class Player extends Playable {
 	/**
 	 * The Pet of the L2PcInstance
 	 */
-	private L2PetInstance _pet = null;
+	private PetInstance _pet = null;
 	/**
 	 * Servitors of the L2PcInstance
 	 */
@@ -434,7 +434,7 @@ public final class Player extends Playable {
 	private int _agathionId = 0;
 	// apparently, a L2PcInstance CAN have both a summon AND a tamed beast at the same time!!
 	// after Freya players can control more than one tamed beast
-	private volatile Set<L2TamedBeastInstance> _tamedBeast = null;
+	private volatile Set<TamedBeastInstance> _tamedBeast = null;
 
 	// client radar
 	// TODO: This needs to be better integrated and saved/loaded
@@ -451,7 +451,7 @@ public final class Player extends Playable {
 	/**
 	 * The Clan object of the L2PcInstance
 	 */
-	private L2Clan _clan;
+	private Clan _clan;
 
 	/**
 	 * Apprentice and Sponsor IDs
@@ -731,13 +731,13 @@ public final class Player extends Playable {
 	 * <li>Add the player in the characters table of the database</li>
 	 * </ul>
 	 *
-	 * @param template    The L2PcTemplate to apply to the L2PcInstance
+	 * @param template    The PcTemplate to apply to the L2PcInstance
 	 * @param accountName The name of the L2PcInstance
 	 * @param name        The name of the L2PcInstance
 	 * @param app         the player's appearance
 	 * @return The L2PcInstance added to the database or null
 	 */
-	public static Player create(L2PcTemplate template, String accountName, String name, PcAppearance app) {
+	public static Player create(PcTemplate template, String accountName, String name, PcAppearance app) {
 		// Create a new L2PcInstance with an account name
 		Player player = new Player(template, accountName, app);
 		// Set the name of the L2PcInstance
@@ -776,9 +776,9 @@ public final class Player extends Playable {
 	}
 
 	public int getRelation(Player target) {
-		final L2Clan clan = getClan();
+		final Clan clan = getClan();
 		final Party party = getParty();
-		final L2Clan targetClan = target.getClan();
+		final Clan targetClan = target.getClan();
 		int result = 0;
 
 		if (clan != null) {
@@ -909,11 +909,11 @@ public final class Player extends Playable {
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method SET the level of the L2PcInstance to 1</B></FONT>
 	 *
 	 * @param objectId    Identifier of the object to initialized
-	 * @param template    The L2PcTemplate to apply to the L2PcInstance
+	 * @param template    The PcTemplate to apply to the L2PcInstance
 	 * @param accountName The name of the account including this L2PcInstance
 	 * @param app
 	 */
-	private Player(int objectId, L2PcTemplate template, String accountName, PcAppearance app) {
+	private Player(int objectId, PcTemplate template, String accountName, PcAppearance app) {
 		super(objectId, template);
 		setInstanceType(InstanceType.L2PcInstance);
 		super.initCharStatusUpdateValues();
@@ -941,7 +941,7 @@ public final class Player extends Playable {
 	 * @param accountName the account name
 	 * @param app         the player appearance
 	 */
-	private Player(L2PcTemplate template, String accountName, PcAppearance app) {
+	private Player(PcTemplate template, String accountName, PcAppearance app) {
 		this(IdFactory.getInstance().getNextId(), template, accountName, app);
 	}
 
@@ -978,18 +978,18 @@ public final class Player extends Playable {
 	}
 
 	/**
-	 * @return the base L2PcTemplate link to the L2PcInstance.
+	 * @return the base PcTemplate link to the L2PcInstance.
 	 */
-	public final L2PcTemplate getBaseTemplate() {
+	public final PcTemplate getBaseTemplate() {
 		return PlayerTemplateData.getInstance().getTemplate(_baseClass);
 	}
 
 	/**
-	 * @return the L2PcTemplate link to the L2PcInstance.
+	 * @return the PcTemplate link to the L2PcInstance.
 	 */
 	@Override
-	public final L2PcTemplate getTemplate() {
-		return (L2PcTemplate) super.getTemplate();
+	public final PcTemplate getTemplate() {
+		return (PcTemplate) super.getTemplate();
 	}
 
 	/**
@@ -1732,7 +1732,7 @@ public final class Player extends Playable {
 
 			int slot = getInventory().getSlotFromItem(item);
 			// we can't unequip talisman by body slot
-			if ((slot == L2Item.SLOT_DECO) || (slot == L2Item.SLOT_BROOCH_JEWEL)) {
+			if ((slot == ItemTemplate.SLOT_DECO) || (slot == ItemTemplate.SLOT_BROOCH_JEWEL)) {
 				items = getInventory().unEquipItemInSlotAndRecord(item.getLocationSlot());
 			} else {
 				items = getInventory().unEquipItemInBodySlotAndRecord(slot);
@@ -1754,7 +1754,7 @@ public final class Player extends Playable {
 				// Consume mana - will start a task if required; returns if item is not a shadow item
 				item.decreaseMana(false);
 
-				if ((item.getItem().getBodyPart() & L2Item.SLOT_MULTI_ALLWEAPON) != 0) {
+				if ((item.getItem().getBodyPart() & ItemTemplate.SLOT_MULTI_ALLWEAPON) != 0) {
 					rechargeShots(true, true, false);
 				}
 			} else {
@@ -1839,7 +1839,7 @@ public final class Player extends Playable {
 	}
 
 	/**
-	 * @return the ClassId object of the L2PcInstance contained in L2PcTemplate.
+	 * @return the ClassId object of the L2PcInstance contained in PcTemplate.
 	 */
 	public ClassId getClassId() {
 		return getTemplate().getClassId();
@@ -1848,7 +1848,7 @@ public final class Player extends Playable {
 	/**
 	 * Set the template of the L2PcInstance.
 	 *
-	 * @param Id The Identifier of the L2PcTemplate to set to the L2PcInstance
+	 * @param Id The Identifier of the PcTemplate to set to the L2PcInstance
 	 */
 	public void setClassId(int Id) {
 		if (!_subclassLock.tryLock()) {
@@ -1943,39 +1943,39 @@ public final class Player extends Playable {
 		Weapon weaponItem = null;
 		if ((classId >= 0x00) && (classId <= 0x09)) {
 			// human fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(246);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(246);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x0a) && (classId <= 0x11)) {
 			// human mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(251);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(251);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x12) && (classId <= 0x18)) {
 			// elven fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(244);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(244);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x19) && (classId <= 0x1e)) {
 			// elven mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(249);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(249);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x1f) && (classId <= 0x25)) {
 			// dark elven fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(245);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(245);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x26) && (classId <= 0x2b)) {
 			// dark elven mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(250);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(250);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x2c) && (classId <= 0x30)) {
 			// orc fighter fists
-			L2Item temp = ItemTable.getInstance().getTemplate(248);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(248);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x31) && (classId <= 0x34)) {
 			// orc mage fists
-			L2Item temp = ItemTable.getInstance().getTemplate(252);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(252);
 			weaponItem = (Weapon) temp;
 		} else if ((classId >= 0x35) && (classId <= 0x39)) {
 			// dwarven fists
-			L2Item temp = ItemTable.getInstance().getTemplate(247);
+			ItemTemplate temp = ItemTable.getInstance().getTemplate(247);
 			weaponItem = (Weapon) temp;
 		}
 
@@ -2016,7 +2016,7 @@ public final class Player extends Playable {
 
 		// Add clan skills
 		if (getClan() != null) {
-			L2Clan clan = getClan();
+			Clan clan = getClan();
 			clan.addSkillEffects(this);
 
 			if ((clan.getLevel() >= SiegeManager.getInstance().getSiegeClanMinLevel()) && isClanLeader()) {
@@ -2142,7 +2142,7 @@ public final class Player extends Playable {
 	 * @return true if this L2PcInstance is a clan leader in ownership of the passed castle
 	 */
 	public boolean isCastleLord(int castleId) {
-		L2Clan clan = getClan();
+		Clan clan = getClan();
 
 		// player has clan and is the clan leader, check the castle info
 		if ((clan != null) && (clan.getLeader().getPlayerInstance() == this)) {
@@ -2663,7 +2663,7 @@ public final class Player extends Playable {
 
 	public ItemInstance addItem(String process, int itemId, long count, WorldObject reference, boolean sendMessage, boolean sendInventoryUpdate) {
 		if (count > 0) {
-			final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+			final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 			if (item == null) {
 				LOGGER.error("Item doesn't exist so cannot be added. Item ID: " + itemId);
 				return null;
@@ -4009,7 +4009,7 @@ public final class Player extends Playable {
 			}
 		}
 		if (armor != null) {
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.HEAVY))) {
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.HEAVY))) {
 				return true;
 			}
 		}
@@ -4026,7 +4026,7 @@ public final class Player extends Playable {
 			}
 		}
 		if (armor != null) {
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.LIGHT))) {
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.LIGHT))) {
 				return true;
 			}
 		}
@@ -4043,7 +4043,7 @@ public final class Player extends Playable {
 			}
 		}
 		if (armor != null) {
-			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.MAGIC))) {
+			if (((getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR) && (armor.getItemType() == ArmorType.MAGIC))) {
 				return true;
 			}
 		}
@@ -4059,11 +4059,11 @@ public final class Player extends Playable {
 	}
 
 	/**
-	 * Return the secondary L2Item item (always equiped in the left hand).<BR>
+	 * Return the secondary ItemTemplate item (always equiped in the left hand).<BR>
 	 * Arrows, Shield..<BR>
 	 */
 	@Override
-	public L2Item getSecondaryWeaponItem() {
+	public ItemTemplate getSecondaryWeaponItem() {
 		final ItemInstance item = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
 		if (item != null) {
 			return item.getItem();
@@ -4119,7 +4119,7 @@ public final class Player extends Playable {
 					onDieDropItem(killer); // Check if any item should be dropped
 
 					if (!insidePvpZone && (pk != null)) {
-						final L2Clan pkClan = pk.getClan();
+						final Clan pkClan = pk.getClan();
 						if ((pkClan != null) && (getClan() != null) && !isAcademyMember() && !(pk.isAcademyMember())) {
 							final ClanWar clanWar = _clan.getWarWith(pkClan.getId());
 							if ((clanWar != null) && AntiFeedManager.getInstance().check(killer, this)) {
@@ -4215,7 +4215,7 @@ public final class Player extends Playable {
 					if (itemDrop.isShadowItem() || // Dont drop Shadow Items
 							itemDrop.isTimeLimitedItem() || // Dont drop Time Limited Items
 							!itemDrop.isDropable() || (itemDrop.getId() == Inventory.ADENA_ID) || // Adena
-							(itemDrop.getItem().getType2() == L2Item.TYPE2_QUEST) || // Quest Items
+							(itemDrop.getItem().getType2() == ItemTemplate.TYPE2_QUEST) || // Quest Items
 							((pet != null) && (pet.getControlObjectId() == itemDrop.getId())) || // Control Item of active pet
 							(Arrays.binarySearch(PvpConfig.KARMA_LIST_NONDROPPABLE_ITEMS, itemDrop.getId()) >= 0) || // Item listed in the non droppable item list
 							(Arrays.binarySearch(PvpConfig.KARMA_LIST_NONDROPPABLE_PET_ITEMS, itemDrop.getId()) >= 0 // Item listed in the non droppable pet item list
@@ -4225,7 +4225,7 @@ public final class Player extends Playable {
 
 					if (itemDrop.isEquipped()) {
 						// Set proper chance according to Item type of equipped Item
-						itemDropPercent = itemDrop.getItem().getType2() == L2Item.TYPE2_WEAPON ? dropEquipWeapon : dropEquip;
+						itemDropPercent = itemDrop.getItem().getType2() == ItemTemplate.TYPE2_WEAPON ? dropEquipWeapon : dropEquip;
 						getInventory().unEquipItemInSlot(itemDrop.getLocationSlot());
 					} else {
 						itemDropPercent = dropItem; // Item in inventory
@@ -4278,8 +4278,8 @@ public final class Player extends Playable {
 		// If both players are in SIEGE zone just increase siege kills/deaths
 		if (player.isInsideZone(ZoneId.SIEGE) && killedPlayer.isInsideZone(ZoneId.SIEGE)) {
 			if ((player.getSiegeState() > 0) && (killedPlayer.getSiegeState() > 0) && (player.getSiegeState() != killedPlayer.getSiegeState())) {
-				final L2Clan killerClan = player.getClan();
-				final L2Clan targetClan = killedPlayer.getClan();
+				final Clan killerClan = player.getClan();
+				final Clan targetClan = killedPlayer.getClan();
 				if ((killerClan != null) && (targetClan != null)) {
 					killerClan.addSiegeKill();
 					targetClan.addSiegeDeath();
@@ -4445,7 +4445,7 @@ public final class Player extends Playable {
 	}
 
 	@Override
-	public L2PetInstance getPet() {
+	public PetInstance getPet() {
 		return _pet;
 	}
 
@@ -4471,7 +4471,7 @@ public final class Player extends Playable {
 		final List<Summon> summons = new ArrayList<>();
 		summons.addAll(getServitors().values());
 
-		final L2PetInstance pet = getPet();
+		final PetInstance pet = getPet();
 		if (pet != null) {
 			summons.add(pet);
 		}
@@ -4491,7 +4491,7 @@ public final class Player extends Playable {
 	 *
 	 * @param pet
 	 */
-	public void setPet(L2PetInstance pet) {
+	public void setPet(PetInstance pet) {
 		_pet = pet;
 	}
 
@@ -4509,7 +4509,7 @@ public final class Player extends Playable {
 	/**
 	 * @return the L2Summon of the L2PcInstance or null.
 	 */
-	public Set<L2TamedBeastInstance> getTrainedBeasts() {
+	public Set<TamedBeastInstance> getTrainedBeasts() {
 		return _tamedBeast;
 	}
 
@@ -4518,7 +4518,7 @@ public final class Player extends Playable {
 	 *
 	 * @param tamedBeast
 	 */
-	public void addTrainedBeast(L2TamedBeastInstance tamedBeast) {
+	public void addTrainedBeast(TamedBeastInstance tamedBeast) {
 		if (_tamedBeast == null) {
 			synchronized (this) {
 				if (_tamedBeast == null) {
@@ -4784,7 +4784,7 @@ public final class Player extends Playable {
 	 *
 	 * @param clan
 	 */
-	public void setClan(L2Clan clan) {
+	public void setClan(Clan clan) {
 		_clan = clan;
 		setTitle("");
 
@@ -4813,7 +4813,7 @@ public final class Player extends Playable {
 	 * @return the _clan object of the L2PcInstance.
 	 */
 	@Override
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 
@@ -5359,7 +5359,7 @@ public final class Player extends Playable {
 				if (rset.next()) {
 					final int activeClassId = rset.getInt("classid");
 					final boolean female = rset.getInt("sex") != Sex.MALE.ordinal();
-					final L2PcTemplate template = PlayerTemplateData.getInstance().getTemplate(activeClassId);
+					final PcTemplate template = PlayerTemplateData.getInstance().getTemplate(activeClassId);
 					final PcAppearance app = new PcAppearance(rset.getByte("face"), rset.getByte("hairColor"), rset.getByte("hairStyle"), female);
 
 					player = new Player(objectId, template, rset.getString("account_name"), app);
@@ -6609,7 +6609,7 @@ public final class Player extends Playable {
 	 * <B><U>Actions</U>:</B>
 	 * <ul>
 	 * <li>Check if the attacker isn't the L2PcInstance Pet</li>
-	 * <li>Check if the attacker is L2MonsterInstance</li>
+	 * <li>Check if the attacker is MonsterInstance</li>
 	 * <li>If the attacker is a L2PcInstance, check if it is not in the same party</li>
 	 * <li>Check if the L2PcInstance has Karma</li>
 	 * <li>If the attacker is a L2PcInstance, check if it is not in the same siege clan (Attacker, Defender)</li>
@@ -6641,7 +6641,7 @@ public final class Player extends Playable {
 			return false;
 		}
 
-		// Check if the attacker is a L2MonsterInstance
+		// Check if the attacker is a MonsterInstance
 		if (attacker.isMonster()) {
 			return true;
 		}
@@ -6677,8 +6677,8 @@ public final class Player extends Playable {
 
 			// Get L2PcInstance
 			final Player attackerPlayer = attacker.getActingPlayer();
-			final L2Clan clan = getClan();
-			final L2Clan attackerClan = attackerPlayer.getClan();
+			final Clan clan = getClan();
+			final Clan attackerClan = attackerPlayer.getClan();
 			if (clan != null) {
 				Siege siege = SiegeManager.getInstance().getSiege(getX(), getY(), getZ());
 				if (siege != null) {
@@ -7163,7 +7163,7 @@ public final class Player extends Playable {
 	}
 
 	/**
-	 * Cancel autoshot for all shots matching crystaltype {@link L2Item#getCrystalType()}.
+	 * Cancel autoshot for all shots matching crystaltype {@link ItemTemplate#getCrystalType()}.
 	 *
 	 * @param crystalType int type to disable
 	 */
@@ -7695,7 +7695,7 @@ public final class Player extends Playable {
 
 	@Override
 	public boolean isAcademyMember() {
-		return getPledgeType() == L2Clan.SUBUNIT_ACADEMY;
+		return getPledgeType() == Clan.SUBUNIT_ACADEMY;
 	}
 
 	@Override
@@ -7956,7 +7956,7 @@ public final class Player extends Playable {
 	private void setClassTemplate(int classId) {
 		_activeClass = classId;
 
-		final L2PcTemplate pcTemplate = PlayerTemplateData.getInstance().getTemplate(classId);
+		final PcTemplate pcTemplate = PlayerTemplateData.getInstance().getTemplate(classId);
 		if (pcTemplate == null) {
 			LOGGER.error("Missing template for classId: " + classId);
 			throw new Error();
@@ -8425,7 +8425,7 @@ public final class Player extends Playable {
 
 		// Trained beast is lost after teleport
 		if (getTrainedBeasts() != null) {
-			for (L2TamedBeastInstance tamedBeast : getTrainedBeasts()) {
+			for (TamedBeastInstance tamedBeast : getTrainedBeasts()) {
 				tamedBeast.deleteMe();
 			}
 			getTrainedBeasts().clear();
@@ -8510,7 +8510,7 @@ public final class Player extends Playable {
 
 		// notify the tamed beast of attacks
 		if (getTrainedBeasts() != null) {
-			for (L2TamedBeastInstance tamedBeast : getTrainedBeasts()) {
+			for (TamedBeastInstance tamedBeast : getTrainedBeasts()) {
 				tamedBeast.onOwnerGotAttacked(attacker);
 			}
 		}
@@ -9440,7 +9440,7 @@ public final class Player extends Playable {
 				sendInventoryUpdate(iu);
 
 				SystemMessage sm = null;
-				if (equippedItem.getItem().getBodyPart() == L2Item.SLOT_BACK) {
+				if (equippedItem.getItem().getBodyPart() == ItemTemplate.SLOT_BACK) {
 					sendPacket(SystemMessageId.YOUR_CLOAK_HAS_BEEN_UNEQUIPPED_BECAUSE_YOUR_ARMOR_SET_IS_NO_LONGER_COMPLETE);
 					return;
 				}
@@ -9537,7 +9537,7 @@ public final class Player extends Playable {
 		}
 		if (hasPet()) {
 			final Summon pet = getPet();
-			setCurrentFeed(((L2PetInstance) pet).getCurrentFed());
+			setCurrentFeed(((PetInstance) pet).getCurrentFed());
 			_controlItemId = pet.getControlObjectId();
 			sendPacket(new SetupGauge(3, (getCurrentFeed() * 10000) / getFeedConsume(), (getMaxFeed() * 10000) / getFeedConsume()));
 			if (!isDead()) {
@@ -11266,7 +11266,7 @@ public final class Player extends Playable {
 	}
 
 	private void updateOnlineTime() {
-		final L2Clan clan = getClan();
+		final Clan clan = getClan();
 		if (clan != null) {
 			clan.addMemberOnlineTime(this);
 		}

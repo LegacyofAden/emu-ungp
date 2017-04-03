@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -37,7 +37,7 @@ public class MaxMpFinalizer implements IStatsFunction {
 
 		double baseValue = creature.getStat().getValue(DoubleStat.MAX_MP_ADD, calcEquippedItemsBaseValue(creature, stat));
 		if (creature.isPet()) {
-			final L2PetInstance pet = (L2PetInstance) creature;
+			final PetInstance pet = (PetInstance) creature;
 			baseValue += pet.getPetLevelData().getPetMaxMP();
 		} else if (creature.isPlayer()) {
 			final Player player = creature.getActingPlayer();

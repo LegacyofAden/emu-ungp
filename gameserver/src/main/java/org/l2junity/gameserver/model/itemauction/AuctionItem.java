@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.itemauction;
 
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 /**
@@ -44,7 +44,7 @@ public final class AuctionItem {
 	}
 
 	public final boolean checkItemExists() {
-		final L2Item item = ItemTable.getInstance().getTemplate(_itemId);
+		final ItemTemplate item = ItemTable.getInstance().getTemplate(_itemId);
 		if (item == null) {
 			return false;
 		}

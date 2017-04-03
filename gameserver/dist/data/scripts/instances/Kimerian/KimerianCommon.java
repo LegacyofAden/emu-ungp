@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
@@ -99,7 +99,7 @@ public final class KimerianCommon extends AbstractInstance {
 							addMoveToDesire(npc, new Location(player.getX() + getRandom(-100, 100), player.getY() + getRandom(-100, 100), player.getZ() + 50), 23);
 						} else if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
 							final Creature monster = (Creature) player.getTarget();
-							if ((monster != null) && (monster instanceof L2MonsterInstance) && player.isInCombat()) {
+							if ((monster != null) && (monster instanceof MonsterInstance) && player.isInCombat()) {
 								addAttackDesire(npc, monster);
 							}
 						}

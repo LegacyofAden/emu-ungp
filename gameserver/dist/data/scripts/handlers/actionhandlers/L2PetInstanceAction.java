@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.ActionHandler;
 import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonTalk;
@@ -41,10 +41,10 @@ public class L2PetInstanceAction implements IActionHandler {
 			return false;
 		}
 
-		boolean isOwner = activeChar.getObjectId() == ((L2PetInstance) target).getOwner().getObjectId();
+		boolean isOwner = activeChar.getObjectId() == ((PetInstance) target).getOwner().getObjectId();
 
-		if (isOwner && (activeChar != ((L2PetInstance) target).getOwner())) {
-			((L2PetInstance) target).updateRefOwner(activeChar);
+		if (isOwner && (activeChar != ((PetInstance) target).getOwner())) {
+			((PetInstance) target).updateRefOwner(activeChar);
 		}
 		if (activeChar.getTarget() != target) {
 			// Set the target of the L2PcInstance activeChar
@@ -64,7 +64,7 @@ public class L2PetInstanceAction implements IActionHandler {
 				}
 			} else {
 				if (isOwner) {
-					activeChar.sendPacket(new PetStatusShow((L2PetInstance) target));
+					activeChar.sendPacket(new PetStatusShow((PetInstance) target));
 
 					// Notify to scripts
 					EventDispatcher.getInstance().notifyEventAsync(new OnPlayerSummonTalk((Summon) target), (Summon) target);

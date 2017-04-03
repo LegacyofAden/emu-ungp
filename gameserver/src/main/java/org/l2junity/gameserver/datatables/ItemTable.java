@@ -32,13 +32,13 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.instance.L2EventMonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.EventMonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.item.OnItemCreate;
 import org.l2junity.gameserver.model.items.Armor;
 import org.l2junity.gameserver.model.items.EtcItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
@@ -69,47 +69,47 @@ public class ItemTable {
 
 	public static final Map<String, Integer> _slots = new HashMap<>();
 
-	private L2Item[] _allTemplates;
+	private ItemTemplate[] _allTemplates;
 
 	static {
-		_slots.put("shirt", L2Item.SLOT_UNDERWEAR);
-		_slots.put("lbracelet", L2Item.SLOT_L_BRACELET);
-		_slots.put("rbracelet", L2Item.SLOT_R_BRACELET);
-		_slots.put("talisman", L2Item.SLOT_DECO);
-		_slots.put("chest", L2Item.SLOT_CHEST);
-		_slots.put("fullarmor", L2Item.SLOT_FULL_ARMOR);
-		_slots.put("head", L2Item.SLOT_HEAD);
-		_slots.put("hair", L2Item.SLOT_HAIR);
-		_slots.put("hairall", L2Item.SLOT_HAIRALL);
-		_slots.put("underwear", L2Item.SLOT_UNDERWEAR);
-		_slots.put("back", L2Item.SLOT_BACK);
-		_slots.put("neck", L2Item.SLOT_NECK);
-		_slots.put("legs", L2Item.SLOT_LEGS);
-		_slots.put("feet", L2Item.SLOT_FEET);
-		_slots.put("gloves", L2Item.SLOT_GLOVES);
-		_slots.put("chest,legs", L2Item.SLOT_CHEST | L2Item.SLOT_LEGS);
-		_slots.put("belt", L2Item.SLOT_BELT);
-		_slots.put("rhand", L2Item.SLOT_R_HAND);
-		_slots.put("lhand", L2Item.SLOT_L_HAND);
-		_slots.put("lrhand", L2Item.SLOT_LR_HAND);
-		_slots.put("rear;lear", L2Item.SLOT_R_EAR | L2Item.SLOT_L_EAR);
-		_slots.put("rfinger;lfinger", L2Item.SLOT_R_FINGER | L2Item.SLOT_L_FINGER);
-		_slots.put("wolf", L2Item.SLOT_WOLF);
-		_slots.put("greatwolf", L2Item.SLOT_GREATWOLF);
-		_slots.put("hatchling", L2Item.SLOT_HATCHLING);
-		_slots.put("strider", L2Item.SLOT_STRIDER);
-		_slots.put("babypet", L2Item.SLOT_BABYPET);
-		_slots.put("brooch", L2Item.SLOT_BROOCH);
-		_slots.put("brooch_jewel", L2Item.SLOT_BROOCH_JEWEL);
-		_slots.put("none", L2Item.SLOT_NONE);
+		_slots.put("shirt", ItemTemplate.SLOT_UNDERWEAR);
+		_slots.put("lbracelet", ItemTemplate.SLOT_L_BRACELET);
+		_slots.put("rbracelet", ItemTemplate.SLOT_R_BRACELET);
+		_slots.put("talisman", ItemTemplate.SLOT_DECO);
+		_slots.put("chest", ItemTemplate.SLOT_CHEST);
+		_slots.put("fullarmor", ItemTemplate.SLOT_FULL_ARMOR);
+		_slots.put("head", ItemTemplate.SLOT_HEAD);
+		_slots.put("hair", ItemTemplate.SLOT_HAIR);
+		_slots.put("hairall", ItemTemplate.SLOT_HAIRALL);
+		_slots.put("underwear", ItemTemplate.SLOT_UNDERWEAR);
+		_slots.put("back", ItemTemplate.SLOT_BACK);
+		_slots.put("neck", ItemTemplate.SLOT_NECK);
+		_slots.put("legs", ItemTemplate.SLOT_LEGS);
+		_slots.put("feet", ItemTemplate.SLOT_FEET);
+		_slots.put("gloves", ItemTemplate.SLOT_GLOVES);
+		_slots.put("chest,legs", ItemTemplate.SLOT_CHEST | ItemTemplate.SLOT_LEGS);
+		_slots.put("belt", ItemTemplate.SLOT_BELT);
+		_slots.put("rhand", ItemTemplate.SLOT_R_HAND);
+		_slots.put("lhand", ItemTemplate.SLOT_L_HAND);
+		_slots.put("lrhand", ItemTemplate.SLOT_LR_HAND);
+		_slots.put("rear;lear", ItemTemplate.SLOT_R_EAR | ItemTemplate.SLOT_L_EAR);
+		_slots.put("rfinger;lfinger", ItemTemplate.SLOT_R_FINGER | ItemTemplate.SLOT_L_FINGER);
+		_slots.put("wolf", ItemTemplate.SLOT_WOLF);
+		_slots.put("greatwolf", ItemTemplate.SLOT_GREATWOLF);
+		_slots.put("hatchling", ItemTemplate.SLOT_HATCHLING);
+		_slots.put("strider", ItemTemplate.SLOT_STRIDER);
+		_slots.put("babypet", ItemTemplate.SLOT_BABYPET);
+		_slots.put("brooch", ItemTemplate.SLOT_BROOCH);
+		_slots.put("brooch_jewel", ItemTemplate.SLOT_BROOCH_JEWEL);
+		_slots.put("none", ItemTemplate.SLOT_NONE);
 
 		// retail compatibility
-		_slots.put("onepiece", L2Item.SLOT_FULL_ARMOR);
-		_slots.put("hair2", L2Item.SLOT_HAIR2);
-		_slots.put("dhair", L2Item.SLOT_HAIRALL);
-		_slots.put("alldress", L2Item.SLOT_ALLDRESS);
-		_slots.put("deco1", L2Item.SLOT_DECO);
-		_slots.put("waist", L2Item.SLOT_BELT);
+		_slots.put("onepiece", ItemTemplate.SLOT_FULL_ARMOR);
+		_slots.put("hair2", ItemTemplate.SLOT_HAIR2);
+		_slots.put("dhair", ItemTemplate.SLOT_HAIRALL);
+		_slots.put("alldress", ItemTemplate.SLOT_ALLDRESS);
+		_slots.put("deco1", ItemTemplate.SLOT_DECO);
+		_slots.put("waist", ItemTemplate.SLOT_BELT);
 	}
 
 	protected ItemTable() {
@@ -117,12 +117,12 @@ public class ItemTable {
 	}
 
 	public void reload() {
-		final List<L2Item> allItems = loadItems();
+		final List<ItemTemplate> allItems = loadItems();
 		int highest = 0;
 		int etcItems = 0;
 		int armors = 0;
 		int weapons = 0;
-		for (L2Item item : allItems) {
+		for (ItemTemplate item : allItems) {
 			if (highest < item.getId()) {
 				highest = item.getId();
 			}
@@ -137,7 +137,7 @@ public class ItemTable {
 		}
 
 		// Build lookup table.
-		_allTemplates = new L2Item[highest + 1];
+		_allTemplates = new ItemTemplate[highest + 1];
 		allItems.forEach(i -> _allTemplates[i.getId()] = i);
 
 		log.info("Highest Item Id used: {}.", highest);
@@ -147,8 +147,8 @@ public class ItemTable {
 		log.info("Loaded {} Item(s) in total.", (etcItems + armors + weapons));
 	}
 
-	private static List<L2Item> loadItems() {
-		final List<L2Item> list = new ArrayList<>();
+	private static List<ItemTemplate> loadItems() {
+		final List<ItemTemplate> list = new ArrayList<>();
 
 		list.addAll(loadItems(Paths.get("data/stats/items")));
 
@@ -159,8 +159,8 @@ public class ItemTable {
 		return list;
 	}
 
-	private static List<L2Item> loadItems(final Path path) {
-		final List<L2Item> list = new ArrayList<>();
+	private static List<ItemTemplate> loadItems(final Path path) {
+		final List<ItemTemplate> list = new ArrayList<>();
 		try {
 			Files.walkFileTree(path, EnumSet.noneOf(FileVisitOption.class), 1/* Non-recursive load, because of custom sub-directory. */, new SimpleFileVisitor<Path>() {
 				@Override
@@ -186,9 +186,9 @@ public class ItemTable {
 	 * Returns the item corresponding to the item ID
 	 *
 	 * @param id : int designating the item
-	 * @return L2Item
+	 * @return ItemTemplate
 	 */
-	public L2Item getTemplate(int id) {
+	public ItemTemplate getTemplate(int id) {
 		if ((id >= _allTemplates.length) || (id < 0)) {
 			return null;
 		}
@@ -225,7 +225,7 @@ public class ItemTable {
 					item.setItemLootShedule(itemLootShedule);
 					item.setInstance(actor.getInstanceWorld());
 				}
-			} else if (!PlayerConfig.AUTO_LOOT || ((reference instanceof L2EventMonsterInstance) && ((L2EventMonsterInstance) reference).eventDropOnGround())) {
+			} else if (!PlayerConfig.AUTO_LOOT || ((reference instanceof EventMonsterInstance) && ((EventMonsterInstance) reference).eventDropOnGround())) {
 				item.setOwnerId(actor.getObjectId());
 				itemLootShedule = ThreadPool.getInstance().scheduleGeneral(new ResetOwner(item), 15000, TimeUnit.MILLISECONDS);
 				item.setItemLootShedule(itemLootShedule);
@@ -357,7 +357,7 @@ public class ItemTable {
 		}
 	}
 
-	public L2Item[] getAllItems() {
+	public ItemTemplate[] getAllItems() {
 		return _allTemplates;
 	}
 

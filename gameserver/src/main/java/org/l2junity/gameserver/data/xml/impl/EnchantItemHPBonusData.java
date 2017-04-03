@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.CrystalType;
 import org.w3c.dom.Document;
@@ -87,7 +87,7 @@ public class EnchantItemHPBonusData implements IGameXmlReader {
 	 * @return the HP bonus
 	 */
 	public final int getHPBonus(ItemInstance item) {
-		if ((item.getOlyEnchantLevel() <= 0) || (item.getItem().getType2() != L2Item.TYPE2_SHIELD_ARMOR)) {
+		if ((item.getOlyEnchantLevel() <= 0) || (item.getItem().getType2() != ItemTemplate.TYPE2_SHIELD_ARMOR)) {
 			return 0;
 		}
 
@@ -97,7 +97,7 @@ public class EnchantItemHPBonusData implements IGameXmlReader {
 		}
 
 		final int bonus = values.get(Math.min(item.getOlyEnchantLevel(), values.size()) - 1);
-		if (item.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR) {
+		if (item.getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR) {
 			return (int) (bonus * FULL_ARMOR_MODIFIER);
 		}
 		return bonus;

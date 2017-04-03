@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -72,7 +72,7 @@ public final class Core extends AbstractNpcAI {
 				startQuestTimer("core_unlock", temp, null, null);
 			} else {
 				// the time has already expired while the server was offline. Immediately spawn Core.
-				L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0);
+				GrandBossInstance core = (GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0);
 				GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
 				spawnBoss(core);
 			}
@@ -84,7 +84,7 @@ public final class Core extends AbstractNpcAI {
 			final int heading = info.getInt("heading");
 			final double hp = info.getDouble("currentHP");
 			final double mp = info.getDouble("currentMP");
-			final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0);
+			final GrandBossInstance core = (GrandBossInstance) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0);
 			core.setCurrentHpMp(hp, mp);
 			spawnBoss(core);
 		}
@@ -95,7 +95,7 @@ public final class Core extends AbstractNpcAI {
 		GlobalVariablesManager.getInstance().set(GlobalVariablesManager.CORE_ATTACKED_VAR, _firstAttacked);
 	}
 
-	public void spawnBoss(L2GrandBossInstance npc) {
+	public void spawnBoss(GrandBossInstance npc) {
 		GrandBossManager.getInstance().addBoss(npc);
 		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 		// Spawn minions
@@ -124,7 +124,7 @@ public final class Core extends AbstractNpcAI {
 	@Override
 	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equalsIgnoreCase("core_unlock")) {
-			L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0);
+			GrandBossInstance core = (GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0);
 			GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
 			spawnBoss(core);
 		} else if (event.equalsIgnoreCase("spawn_minion")) {

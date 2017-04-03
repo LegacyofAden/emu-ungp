@@ -25,13 +25,13 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.SeedProduction;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -99,7 +99,7 @@ public class RequestBuySeed implements IClientIncomingPacket {
 		}
 
 		final Npc manager = player.getLastFolkNPC();
-		if (!(manager instanceof L2MerchantInstance) || !manager.canInteract(player) || (manager.getParameters().getInt("manor_id", -1) != _manorId)) {
+		if (!(manager instanceof MerchantInstance) || !manager.canInteract(player) || (manager.getParameters().getInt("manor_id", -1) != _manorId)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
@@ -125,7 +125,7 @@ public class RequestBuySeed implements IClientIncomingPacket {
 			}
 
 			// Calculate weight
-			final L2Item template = ItemTable.getInstance().getTemplate(ih.getId());
+			final ItemTemplate template = ItemTable.getInstance().getTemplate(ih.getId());
 			totalWeight += ih.getCount() * template.getWeight();
 
 			// Calculate slots

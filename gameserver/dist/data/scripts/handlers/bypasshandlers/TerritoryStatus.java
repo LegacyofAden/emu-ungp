@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -45,7 +45,7 @@ public class TerritoryStatus implements IBypassHandler {
 		{
 			if (npc.getCastle().getOwnerId() > 0) {
 				html.setFile(activeChar.getHtmlPrefix(), "territorystatus.htm");
-				L2Clan clan = ClanTable.getInstance().getClan(npc.getCastle().getOwnerId());
+				Clan clan = ClanTable.getInstance().getClan(npc.getCastle().getOwnerId());
 				html.replace("%clanname%", clan.getName());
 				html.replace("%clanleadername%", clan.getLeaderName());
 			} else {

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.enums.ResidenceType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -42,7 +42,7 @@ public class OpHomeSkillCondition implements ISkillCondition {
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		if (caster.isPlayer()) {
-			final L2Clan clan = caster.getActingPlayer().getClan();
+			final Clan clan = caster.getActingPlayer().getClan();
 			if (clan != null) {
 				switch (_type) {
 					case CASTLE: {

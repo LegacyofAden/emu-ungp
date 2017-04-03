@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.CommonSkill;
@@ -43,7 +43,7 @@ public final class PetSkillUse implements IPlayerActionHandler {
 			return;
 		}
 
-		final L2PetInstance pet = activeChar.getPet();
+		final PetInstance pet = activeChar.getPet();
 		if (pet == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_PET);
 		} else if (pet.isUncontrollable()) {
@@ -66,7 +66,7 @@ public final class PetSkillUse implements IPlayerActionHandler {
 		}
 	}
 
-	private static OptionalInt getStep(L2PetInstance pet) {
+	private static OptionalInt getStep(PetInstance pet) {
 		OptionalInt step = OptionalInt.empty();
 		for (int i = 0; i < 7; i++) {
 			final int level = pet.getTemplate().getParameters().getInt("lv_step" + i, 0);
@@ -77,7 +77,7 @@ public final class PetSkillUse implements IPlayerActionHandler {
 		return step;
 	}
 
-	private static Optional<SkillHolder> getSkill(L2PetInstance pet, int step, int skillId) {
+	private static Optional<SkillHolder> getSkill(PetInstance pet, int step, int skillId) {
 		final StatsSet params = pet.getTemplate().getParameters();
 		Optional<SkillHolder> skill = Optional.empty();
 

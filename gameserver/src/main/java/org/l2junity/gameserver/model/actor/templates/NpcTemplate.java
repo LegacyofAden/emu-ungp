@@ -36,7 +36,7 @@ import java.util.*;
  *
  * @author NosBit
  */
-public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable {
+public final class NpcTemplate extends CharTemplate implements IIdentifiable {
 	private int _id;
 	private int _displayId;
 	private byte _level;
@@ -104,7 +104,7 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	 *
 	 * @param set The StatsSet object to transfer data to the method
 	 */
-	public L2NpcTemplate(StatsSet set) {
+	public NpcTemplate(StatsSet set) {
 		super(set);
 	}
 
@@ -568,7 +568,7 @@ public final class L2NpcTemplate extends L2CharTemplate implements IIdentifiable
 	 * @return {@code true} if the object can be assigned to the class, {@code false} otherwise
 	 */
 	public static boolean isAssignableTo(Object obj, Class<?> clazz) {
-		return L2NpcTemplate.isAssignableTo(obj.getClass(), clazz);
+		return NpcTemplate.isAssignableTo(obj.getClass(), clazz);
 	}
 
 	public List<Integer> getExtendDrop() {

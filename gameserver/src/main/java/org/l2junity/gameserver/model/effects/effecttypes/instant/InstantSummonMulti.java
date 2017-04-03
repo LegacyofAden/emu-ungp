@@ -24,9 +24,9 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -68,8 +68,8 @@ public final class InstantSummonMulti extends AbstractEffect {
 		if ((casterPlayer.getSummonPoints() + _summonPoints) > casterPlayer.getMaxSummonPoints()) {
 			return;
 		}
-		final L2NpcTemplate template = NpcData.getInstance().getTemplate(_npcId);
-		final L2ServitorInstance summon = new L2ServitorInstance(template, casterPlayer);
+		final NpcTemplate template = NpcData.getInstance().getTemplate(_npcId);
+		final ServitorInstance summon = new ServitorInstance(template, casterPlayer);
 		final int consumeItemInterval = (_consumeItemInterval > 0 ? _consumeItemInterval : (template.getRace() != Race.SIEGE_WEAPON ? 240 : 60)) * 1000;
 
 		summon.setName(template.getName());

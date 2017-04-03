@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
@@ -57,7 +57,7 @@ public final class ConditionSiegeZone extends Condition {
 	}
 
 	@Override
-	public boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item) {
+	public boolean testImpl(Creature effector, Creature effected, Skill skill, ItemTemplate item) {
 		Creature target = _self ? effector : effected;
 		Castle castle = CastleManager.getInstance().getCastle(target);
 		Fort fort = FortManager.getInstance().getFort(target);

@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.L2Clan.SubPledge;
+import org.l2junity.gameserver.model.Clan;
+import org.l2junity.gameserver.model.Clan.SubPledge;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -28,9 +28,9 @@ import org.l2junity.network.PacketWriter;
  */
 public class PledgeReceiveSubPledgeCreated implements IClientOutgoingPacket {
 	private final SubPledge _subPledge;
-	private final L2Clan _clan;
+	private final Clan _clan;
 
-	public PledgeReceiveSubPledgeCreated(SubPledge subPledge, L2Clan clan) {
+	public PledgeReceiveSubPledgeCreated(SubPledge subPledge, Clan clan) {
 		_subPledge = subPledge;
 		_clan = clan;
 	}
@@ -48,7 +48,7 @@ public class PledgeReceiveSubPledgeCreated implements IClientOutgoingPacket {
 
 	private String getLeaderName() {
 		int LeaderId = _subPledge.getLeaderId();
-		if ((_subPledge.getId() == L2Clan.SUBUNIT_ACADEMY) || (LeaderId == 0)) {
+		if ((_subPledge.getId() == Clan.SUBUNIT_ACADEMY) || (LeaderId == 0)) {
 			return "";
 		} else if (_clan.getClanMember(LeaderId) == null) {
 			_log.warn("SubPledgeLeader: " + LeaderId + " is missing from clan: " + _clan.getName() + "[" + _clan.getId() + "]");

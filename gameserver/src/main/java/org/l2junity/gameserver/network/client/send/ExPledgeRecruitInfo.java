@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.clan.entry.PledgeRecruitInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,7 +30,7 @@ import org.l2junity.network.PacketWriter;
  */
 public class ExPledgeRecruitInfo implements IClientOutgoingPacket {
 	private final PledgeRecruitInfo _pledgeRecruitInfo;
-	private final L2Clan _clan;
+	private final Clan _clan;
 
 	public ExPledgeRecruitInfo(int clanId) {
 		_pledgeRecruitInfo = ClanEntryManager.getInstance().getClanById(clanId);

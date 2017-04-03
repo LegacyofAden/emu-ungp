@@ -21,8 +21,8 @@ package ai.individual.Other.ClanHallAuctioneer;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
 import org.l2junity.gameserver.instancemanager.ClanHallAuctionManager;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.clanhallauction.Bidder;
@@ -80,7 +80,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 				break;
 			}
 			case "cancelBid": {
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan == null) {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_PARTICIPATE_IN_AN_AUCTION);
 					return htmltext;
@@ -105,7 +105,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 				break;
 			}
 			case "cancel": {
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan == null) {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_PARTICIPATE_IN_AN_AUCTION);
 					return htmltext;
@@ -131,7 +131,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 			}
 			case "rebid": {
 				if (player.hasClanPrivilege(ClanPrivilege.CH_AUCTION)) {
-					final L2Clan clan = player.getClan();
+					final Clan clan = player.getClan();
 					final ClanHallAuction clanHallAuction = ClanHallAuctionManager.getInstance().getClanHallAuctionByClan(clan);
 					if (clanHallAuction != null) {
 						final DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
@@ -148,7 +148,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 				break;
 			}
 			case "my_auction": {
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan == null) {
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_PARTICIPATE_IN_AN_AUCTION);
 					return htmltext;
@@ -168,7 +168,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 				// THE_CLAN_DOES_NOT_OWN_A_CLAN_HALL
 
 				final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallAuction.getClanHallId());
-				final L2Clan owner = clanHall.getOwner();
+				final Clan owner = clanHall.getOwner();
 				final long remainingTime = clanHallAuction.getRemaingTime();
 				final Instant endTime = Instant.ofEpochMilli(System.currentTimeMillis() + remainingTime);
 
@@ -216,7 +216,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 			final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallId);
 			if (clanHall != null) {
 				final ClanHallAuction clanHallAuction = ClanHallAuctionManager.getInstance().getClanHallAuctionById(clanHallId);
-				final L2Clan owner = clanHall.getOwner();
+				final Clan owner = clanHall.getOwner();
 				final long remainingTime = clanHallAuction.getRemaingTime();
 				final Instant endTime = Instant.ofEpochMilli(System.currentTimeMillis() + remainingTime);
 				final DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
@@ -283,7 +283,7 @@ public final class ClanHallAuctioneer extends AbstractNpcAI {
 			if (clanHall == null) {
 				return;
 			}
-			final L2Clan clan = player.getClan();
+			final Clan clan = player.getClan();
 			if (clan == null) {
 				player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_PARTICIPATE_IN_AN_AUCTION);
 				return;

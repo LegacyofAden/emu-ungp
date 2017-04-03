@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
 
@@ -38,7 +38,7 @@ public class MEvasionRateFinalizer implements IStatsFunction {
 
 		if (creature.isPlayer()) {
 			// Enchanted helm bonus
-			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_HEAD);
+			baseValue += calcEnchantBodyPart(creature, ItemTemplate.SLOT_HEAD);
 		}
 
 		return validateValue(creature, DoubleStat.defaultValue(creature, stat, baseValue + (Math.sqrt(creature.getWIT()) * 3) + (creature.getLevel() * 2)), Double.NEGATIVE_INFINITY, PlayerConfig.MAX_EVASION);

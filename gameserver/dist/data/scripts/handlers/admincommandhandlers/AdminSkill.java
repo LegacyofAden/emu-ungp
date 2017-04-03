@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -246,7 +246,7 @@ public class AdminSkill implements IAdminCommandHandler {
 		}
 
 		final Player player = target.getActingPlayer();
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 
 		if (clan == null) {
 			activeChar.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
@@ -515,7 +515,7 @@ public class AdminSkill implements IAdminCommandHandler {
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_CLAN_SKILL_S1_HAS_BEEN_ADDED);
 		sm.addSkillName(skill);
 		player.sendPacket(sm);
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		clan.broadcastToOnlineMembers(sm);
 		clan.addNewSkill(skill);
 		activeChar.sendMessage("You gave the Clan Skill: " + skillname + " to the clan " + clan.getName() + ".");

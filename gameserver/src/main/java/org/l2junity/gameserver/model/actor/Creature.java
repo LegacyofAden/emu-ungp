@@ -72,24 +72,14 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.TimersManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.AccessLevel;
-import org.l2junity.gameserver.model.CharEffectList;
-import org.l2junity.gameserver.model.CreatureContainer;
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.TeleportWhereType;
-import org.l2junity.gameserver.model.TimeStamp;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.WorldRegion;
+import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
 import org.l2junity.gameserver.model.actor.status.CharStatus;
 import org.l2junity.gameserver.model.actor.tasks.character.HitTask;
 import org.l2junity.gameserver.model.actor.tasks.character.NotifyAITask;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.actor.transform.Transform;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.debugger.Debugger;
@@ -115,7 +105,7 @@ import org.l2junity.gameserver.model.interfaces.IDeletable;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.interfaces.ISkillsHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
@@ -177,7 +167,7 @@ import org.slf4j.LoggerFactory;
  * <li>L2Vehicle</li>
  * </ul>
  * <br>
- * <b>Concept of L2CharTemplate:</b><br>
+ * <b>Concept of CharTemplate:</b><br>
  * Each L2Character owns generic and static properties (ex : all Keltir have the same number of HP...).<br>
  * All of those properties are stored in a different template for each type of L2Character.<br>
  * Each template is loaded once in the server cache memory (reduce memory use).<br>
@@ -205,7 +195,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 
 	private CharStat _stat;
 	private CharStatus _status;
-	private L2CharTemplate _template; // The link on the L2CharTemplate object containing generic and static properties of this L2Character type (ex : Max HP, Speed...)
+	private CharTemplate _template; // The link on the CharTemplate object containing generic and static properties of this L2Character type (ex : Max HP, Speed...)
 	private String _title;
 
 	public static final double MAX_HP_BAR_PX = 352.0;
@@ -306,7 +296,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @param template the creature template
 	 */
-	public Creature(L2CharTemplate template) {
+	public Creature(CharTemplate template) {
 		this(IdFactory.getInstance().getNextId(), template);
 	}
 
@@ -327,9 +317,9 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * </ul>
 	 *
 	 * @param objectId Identifier of the object to initialized
-	 * @param template The L2CharTemplate to apply to the object
+	 * @param template The CharTemplate to apply to the object
 	 */
-	public Creature(int objectId, L2CharTemplate template) {
+	public Creature(int objectId, CharTemplate template) {
 		super(objectId);
 		if (template == null) {
 			throw new NullPointerException("Template is null!");
@@ -344,7 +334,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		if (isNpc()) {
 			// Copy the skills of the L2NPCInstance from its template to the L2Character Instance
 			// The skills list can be affected by spell effects so it's necessary to make a copy
-			// to avoid that a spell affecting a L2NpcInstance, affects others L2NPCInstance of the same type too.
+			// to avoid that a spell affecting a NpcInstance, affects others L2NPCInstance of the same type too.
 			for (Skill skill : template.getSkills().values()) {
 				addSkill(skill);
 			}
@@ -1052,7 +1042,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			}
 
 			final boolean wasSSCharged = isChargedShot(ShotType.SOULSHOTS); // Verify if soulshots are charged.
-			final boolean isTwoHanded = (weaponItem != null) && (weaponItem.getBodyPart() == L2Item.SLOT_LR_HAND);
+			final boolean isTwoHanded = (weaponItem != null) && (weaponItem.getBodyPart() == ItemTemplate.SLOT_LR_HAND);
 			final int atkSpd = getPAtkSpd();
 			final int ssGrade = (weaponItem != null) ? weaponItem.getItemGrade().ordinal() : 0;
 			final int timeAtk = Formulas.calculateTimeBetweenAttacks(atkSpd);
@@ -2138,7 +2128,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		_status = value;
 	}
 
-	public L2CharTemplate getTemplate() {
+	public CharTemplate getTemplate() {
 		return _template;
 	}
 
@@ -2152,7 +2142,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @param template
 	 */
-	protected final void setTemplate(L2CharTemplate template) {
+	protected final void setTemplate(CharTemplate template) {
 		_template = template;
 	}
 
@@ -3287,7 +3277,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * Add Exp and Sp to the L2Character.<br>
 	 * <B><U> Overridden in </U> :</B>
 	 * <li>L2PcInstance</li>
-	 * <li>L2PetInstance</li>
+	 * <li>PetInstance</li>
 	 *
 	 * @param addToExp
 	 * @param addToSp
@@ -3324,9 +3314,9 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * <B><U> Overridden in </U> :</B>
 	 * <li>L2PcInstance</li>
 	 *
-	 * @return the secondary {@link L2Item} item (always equiped in the left hand).
+	 * @return the secondary {@link ItemTemplate} item (always equiped in the left hand).
 	 */
-	public abstract L2Item getSecondaryWeaponItem();
+	public abstract ItemTemplate getSecondaryWeaponItem();
 
 	/**
 	 * Manage hit process (called by Hit Task).<br>
@@ -4356,7 +4346,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @return the clan of current character.
 	 */
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return null;
 	}
 

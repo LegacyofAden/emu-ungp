@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.appearance.PcAppearance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
-import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
+import org.l2junity.gameserver.model.actor.templates.PcTemplate;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -131,7 +131,7 @@ public final class CharacterCreate implements IClientIncomingPacket {
 		}
 
 		Player newChar = null;
-		L2PcTemplate template = null;
+		PcTemplate template = null;
 
 		/*
 		 * DrHouse: Since checks for duplicate names are done using SQL, lock must be held until data is written to DB as well.
@@ -179,7 +179,7 @@ public final class CharacterCreate implements IClientIncomingPacket {
 			newChar.addAdena("Init", PlayerConfig.STARTING_ADENA, null, false);
 		}
 
-		final L2PcTemplate template = newChar.getTemplate();
+		final PcTemplate template = newChar.getTemplate();
 		Location createLoc = template.getCreationPoint();
 		newChar.setXYZInvisible(createLoc.getX(), createLoc.getY(), createLoc.getZ());
 		newChar.setTitle("");

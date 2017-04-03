@@ -23,8 +23,8 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.instance.NpcInstance;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.interfaces.INamable;
@@ -39,10 +39,10 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class manages the spawn and respawn of a group of L2NpcInstance that are in the same are and have the same type.<br>
+ * This class manages the spawn and respawn of a group of NpcInstance that are in the same are and have the same type.<br>
  * <B><U>Concept</U>:</B><br>
- * L2NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an exact position.<br>
- * The heading of the L2NpcInstance can be a random heading if not defined (value= -1) or an exact heading (ex : merchant...).
+ * NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an exact position.<br>
+ * The heading of the NpcInstance can be a random heading if not defined (value= -1) or an exact heading (ex : merchant...).
  *
  * @author Nightmare
  */
@@ -56,15 +56,15 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	 */
 	private String _name;
 	/**
-	 * The link on the L2NpcTemplate object containing generic and static properties of this spawn (ex : RewardExp, RewardSP, AggroRange...)
+	 * The link on the NpcTemplate object containing generic and static properties of this spawn (ex : RewardExp, RewardSP, AggroRange...)
 	 */
-	private L2NpcTemplate _template;
+	private NpcTemplate _template;
 	/**
-	 * The maximum number of L2NpcInstance that can manage this L2Spawn
+	 * The maximum number of NpcInstance that can manage this L2Spawn
 	 */
 	private int _maximumCount;
 	/**
-	 * The current number of L2NpcInstance managed by this L2Spawn
+	 * The current number of NpcInstance managed by this L2Spawn
 	 */
 	private int _currentCount;
 	/**
@@ -72,7 +72,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	 */
 	protected int _scheduledCount;
 	/**
-	 * The identifier of the location area where L2NpcInstance can be spwaned
+	 * The identifier of the location area where NpcInstance can be spwaned
 	 */
 	private int _locationId;
 	private int _instanceId = 0;
@@ -85,11 +85,11 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	 */
 	private int _respawnMaxDelay;
 	/**
-	 * The generic constructor of L2NpcInstance managed by this L2Spawn
+	 * The generic constructor of NpcInstance managed by this L2Spawn
 	 */
 	private Constructor<? extends Npc> _constructor;
 	/**
-	 * If True a L2NpcInstance is respawned each time that another is killed
+	 * If True a NpcInstance is respawned each time that another is killed
 	 */
 	private boolean _doRespawn;
 	/**
@@ -126,24 +126,24 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	 * Constructor of L2Spawn.<br>
 	 * <B><U>Concept</U>:</B><br>
 	 * Each L2Spawn owns generic and static properties (ex : RewardExp, RewardSP, AggroRange...).<br>
-	 * All of those properties are stored in a different L2NpcTemplate for each type of L2Spawn. Each template is loaded once in the server cache memory (reduce memory use).<br>
+	 * All of those properties are stored in a different NpcTemplate for each type of L2Spawn. Each template is loaded once in the server cache memory (reduce memory use).<br>
 	 * When a new instance of L2Spawn is created, server just create a link between the instance and the template.<br>
-	 * This link is stored in <B>_template</B> Each L2NpcInstance is linked to a L2Spawn that manages its spawn and respawn (delay, location...).<br>
-	 * This link is stored in <B>_spawn</B> of the L2NpcInstance.<br>
+	 * This link is stored in <B>_template</B> Each NpcInstance is linked to a L2Spawn that manages its spawn and respawn (delay, location...).<br>
+	 * This link is stored in <B>_spawn</B> of the NpcInstance.<br>
 	 * <B><U> Actions</U>:</B><br>
 	 * <ul>
 	 * <li>Set the _template of the L2Spawn</li>
-	 * <li>Calculate the implementationName used to generate the generic constructor of L2NpcInstance managed by this L2Spawn</li>
-	 * <li>Create the generic constructor of L2NpcInstance managed by this L2Spawn</li>
+	 * <li>Calculate the implementationName used to generate the generic constructor of NpcInstance managed by this L2Spawn</li>
+	 * <li>Create the generic constructor of NpcInstance managed by this L2Spawn</li>
 	 * </ul>
 	 *
-	 * @param template The L2NpcTemplate to link to this L2Spawn
+	 * @param template The NpcTemplate to link to this L2Spawn
 	 * @throws SecurityException
 	 * @throws ClassNotFoundException
 	 * @throws NoSuchMethodException
 	 * @throws ClassCastException     when template type is not subclass of L2Npc
 	 */
-	public L2Spawn(L2NpcTemplate template) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException {
+	public L2Spawn(NpcTemplate template) throws SecurityException, ClassNotFoundException, NoSuchMethodException, ClassCastException {
 		super(0, 0, 0);
 		// Set the _template of the L2Spawn
 		_template = template;
@@ -155,7 +155,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		String className = "org.l2junity.gameserver.model.actor.instance." + _template.getType() + "Instance";
 
 		// Create the generic constructor of L2Npc managed by this L2Spawn
-		_constructor = Class.forName(className).asSubclass(Npc.class).getConstructor(L2NpcTemplate.class);
+		_constructor = Class.forName(className).asSubclass(Npc.class).getConstructor(NpcTemplate.class);
 	}
 
 	/**
@@ -174,11 +174,11 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		String className = "org.l2junity.gameserver.model.actor.instance." + _template.getType() + "Instance";
 
 		// Create the generic constructor of L2Npc managed by this L2Spawn
-		_constructor = Class.forName(className).asSubclass(Npc.class).getConstructor(L2NpcTemplate.class);
+		_constructor = Class.forName(className).asSubclass(Npc.class).getConstructor(NpcTemplate.class);
 	}
 
 	/**
-	 * @return the maximum number of L2NpcInstance that this L2Spawn can manage.
+	 * @return the maximum number of NpcInstance that this L2Spawn can manage.
 	 */
 	public int getAmount() {
 		return _maximumCount;
@@ -202,7 +202,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * @return the Identifier of the location area where L2NpcInstance can be spwaned.
+	 * @return the Identifier of the location area where NpcInstance can be spwaned.
 	 */
 	public int getLocationId() {
 		return _locationId;
@@ -233,7 +233,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Set the maximum number of L2NpcInstance that this L2Spawn can manage.
+	 * Set the maximum number of NpcInstance that this L2Spawn can manage.
 	 *
 	 * @param amount
 	 */
@@ -242,7 +242,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Set the Identifier of the location area where L2NpcInstance can be spawned.
+	 * Set the Identifier of the location area where NpcInstance can be spawned.
 	 *
 	 * @param id
 	 */
@@ -269,8 +269,8 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Decrease the current number of L2NpcInstance of this L2Spawn and if necessary create a SpawnTask to launch after the respawn Delay. <B><U> Actions</U> :</B>
-	 * <li>Decrease the current number of L2NpcInstance of this L2Spawn</li>
+	 * Decrease the current number of NpcInstance of this L2Spawn and if necessary create a SpawnTask to launch after the respawn Delay. <B><U> Actions</U> :</B>
+	 * <li>Decrease the current number of NpcInstance of this L2Spawn</li>
 	 * <li>Check if respawn is possible to prevent multiple respawning caused by lag</li>
 	 * <li>Update the current number of SpawnTask in progress or stand by of this L2Spawn</li>
 	 * <li>Create a new SpawnTask to launch after the respawn Delay</li> <FONT COLOR=#FF0000><B> <U>Caution</U> : A respawn is possible ONLY if _doRespawn=True and _scheduledCount + _currentCount < _maximumCount</B></FONT>
@@ -283,7 +283,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 			return;
 		}
 
-		// Decrease the current number of L2NpcInstance of this L2Spawn
+		// Decrease the current number of NpcInstance of this L2Spawn
 		_currentCount--;
 
 		// Remove this NPC from list of spawned
@@ -303,7 +303,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	/**
 	 * Create the initial spawning and set _doRespawn to False, if respawn time set to 0, or set it to True otherwise.
 	 *
-	 * @return The number of L2NpcInstance that were spawned
+	 * @return The number of NpcInstance that were spawned
 	 */
 	public int init() {
 		while (_currentCount < _maximumCount) {
@@ -315,7 +315,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Create a {@link L2NpcInstance} in this L2Spawn.
+	 * Create a {@link NpcInstance} in this L2Spawn.
 	 *
 	 * @param val
 	 * @return
@@ -350,22 +350,22 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Create the L2NpcInstance, add it to the world and lauch its OnSpawn action.<br>
+	 * Create the NpcInstance, add it to the world and lauch its OnSpawn action.<br>
 	 * <B><U>Concept</U>:</B><br>
-	 * L2NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an exact position.<br>
-	 * The heading of the L2NpcInstance can be a random heading if not defined (value= -1) or an exact heading (ex : merchant...).<br>
+	 * NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an exact position.<br>
+	 * The heading of the NpcInstance can be a random heading if not defined (value= -1) or an exact heading (ex : merchant...).<br>
 	 * <B><U>Actions for an random spawn into location area</U>:<I> (if Locx=0 and Locy=0)</I></B>
 	 * <ul>
-	 * <li>Get L2NpcInstance Init parameters and its generate an Identifier</li>
-	 * <li>Call the constructor of the L2NpcInstance</li>
+	 * <li>Get NpcInstance Init parameters and its generate an Identifier</li>
+	 * <li>Call the constructor of the NpcInstance</li>
 	 * <li>Calculate the random position in the location area (if Locx=0 and Locy=0) or get its exact position from the L2Spawn</li>
-	 * <li>Set the position of the L2NpcInstance</li>
-	 * <li>Set the HP and MP of the L2NpcInstance to the max</li>
-	 * <li>Set the heading of the L2NpcInstance (random heading if not defined : value=-1)</li>
-	 * <li>Link the L2NpcInstance to this L2Spawn</li>
-	 * <li>Init other values of the L2NpcInstance (ex : from its L2CharTemplate for INT, STR, DEX...) and add it in the world</li>
-	 * <li>Launch the action OnSpawn fo the L2NpcInstance</li>
-	 * <li>Increase the current number of L2NpcInstance managed by this L2Spawn</li>
+	 * <li>Set the position of the NpcInstance</li>
+	 * <li>Set the HP and MP of the NpcInstance to the max</li>
+	 * <li>Set the heading of the NpcInstance (random heading if not defined : value=-1)</li>
+	 * <li>Link the NpcInstance to this L2Spawn</li>
+	 * <li>Init other values of the NpcInstance (ex : from its CharTemplate for INT, STR, DEX...) and add it in the world</li>
+	 * <li>Launch the action OnSpawn fo the NpcInstance</li>
+	 * <li>Increase the current number of NpcInstance managed by this L2Spawn</li>
 	 * </ul>
 	 *
 	 * @param isSummonSpawn
@@ -403,7 +403,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		double newlocy = 0;
 		double newlocz = 0;
 
-		// If Locx and Locy are not defined, the L2NpcInstance must be spawned in an area defined by location or spawn territory
+		// If Locx and Locy are not defined, the NpcInstance must be spawned in an area defined by location or spawn territory
 		// New method
 		if (_spawnTemplate != null) {
 			final Location loc = _spawnTemplate.getSpawnLocation();
@@ -415,7 +415,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 			LOGGER.warn("NPC {} doesn't have spawn location!", npc);
 			return null;
 		} else {
-			// The L2NpcInstance is spawned at the exact position (Lox, Locy, Locz)
+			// The NpcInstance is spawned at the exact position (Lox, Locy, Locz)
 			newlocx = getX();
 			newlocy = getY();
 			newlocz = getZ();
@@ -429,7 +429,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		// Set is not random walk default value
 		npc.setRandomWalking(getRandomWalking());
 
-		// Set the heading of the L2NpcInstance (random heading if not defined)
+		// Set the heading of the NpcInstance (random heading if not defined)
 		if (getHeading() == -1) {
 			npc.setHeading(Rnd.nextInt(61794));
 		} else {
@@ -439,7 +439,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		// Reset some variables
 		npc.onRespawn();
 
-		// Link the L2NpcInstance to this L2Spawn
+		// Link the NpcInstance to this L2Spawn
 		npc.setSpawn(this);
 
 		// Spawn NPC
@@ -521,7 +521,7 @@ public class L2Spawn extends Location implements IIdentifiable, INamable {
 		}
 	}
 
-	public L2NpcTemplate getTemplate() {
+	public NpcTemplate getTemplate() {
 		return _template;
 	}
 

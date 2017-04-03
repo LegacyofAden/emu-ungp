@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.ClanHallGrade;
 import org.l2junity.gameserver.enums.ClanHallType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -69,7 +69,7 @@ public final class ClanHall extends AbstractResidence {
 	private final Location _ownerLocation;
 	private final Location _banishLocation;
 	// Dynamic parameters
-	private L2Clan _owner = null;
+	private Clan _owner = null;
 	private long _paidUntil = 0;
 	protected ScheduledFuture<?> _checkPaymentTask = null;
 
@@ -196,22 +196,22 @@ public final class ClanHall extends AbstractResidence {
 	}
 
 	/**
-	 * Gets the {@link L2Clan} which own this {@link ClanHall}.
+	 * Gets the {@link Clan} which own this {@link ClanHall}.
 	 *
-	 * @return {@link L2Clan} which own this {@link ClanHall}
+	 * @return {@link Clan} which own this {@link ClanHall}
 	 */
-	public L2Clan getOwner() {
+	public Clan getOwner() {
 		return _owner;
 	}
 
 	/**
-	 * Gets the {@link L2Clan} ID which own this {@link ClanHall}.
+	 * Gets the {@link Clan} ID which own this {@link ClanHall}.
 	 *
-	 * @return the {@link L2Clan} ID which own this {@link ClanHall}
+	 * @return the {@link Clan} ID which own this {@link ClanHall}
 	 */
 	@Override
 	public int getOwnerId() {
-		final L2Clan owner = _owner;
+		final Clan owner = _owner;
 		return (owner != null) ? owner.getId() : 0;
 	}
 
@@ -227,9 +227,9 @@ public final class ClanHall extends AbstractResidence {
 	/**
 	 * Set the clan as owner of clan hall
 	 *
-	 * @param clan the L2Clan object
+	 * @param clan the Clan object
 	 */
-	public void setOwner(L2Clan clan) {
+	public void setOwner(Clan clan) {
 		if (clan != null) {
 			_owner = clan;
 			clan.setHideoutId(getResidenceId());
@@ -307,7 +307,7 @@ public final class ClanHall extends AbstractResidence {
 	class CheckPaymentTask implements Runnable {
 		@Override
 		public void run() {
-			final L2Clan clan = getOwner();
+			final Clan clan = getOwner();
 			if (clan != null) {
 				if (clan.getWarehouse().getAdena() < getLease()) {
 					if (getCostFailDay() > 8) {

@@ -73,7 +73,7 @@ public final class DoorData implements IGameXmlReader {
 
 	public StatsSet parseDoor(Node doorNode) {
 		final StatsSet params = new StatsSet(parseAttributes(doorNode));
-		params.set("baseHpMax", 1); // Avoid doors without HP value created dead due to default value 0 in L2CharTemplate
+		params.set("baseHpMax", 1); // Avoid doors without HP value created dead due to default value 0 in CharTemplate
 
 		forEach(doorNode, IXmlReader::isNode, innerDoorNode ->
 		{

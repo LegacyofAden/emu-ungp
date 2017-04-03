@@ -38,7 +38,7 @@ import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseItem;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.EtcItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ActionType;
 import org.l2junity.gameserver.model.stats.BooleanStat;
@@ -190,9 +190,9 @@ public final class UseItem implements IClientIncomingPacket {
 			}
 
 			switch (item.getItem().getBodyPart()) {
-				case L2Item.SLOT_LR_HAND:
-				case L2Item.SLOT_L_HAND:
-				case L2Item.SLOT_R_HAND: {
+				case ItemTemplate.SLOT_LR_HAND:
+				case ItemTemplate.SLOT_L_HAND:
+				case ItemTemplate.SLOT_R_HAND: {
 					// Prevent players to equip weapon while wearing combat flag
 					if ((activeChar.getActiveWeaponItem() != null) && (activeChar.getActiveWeaponItem().getId() == 9819)) {
 						activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
@@ -210,14 +210,14 @@ public final class UseItem implements IClientIncomingPacket {
 					}
 					break;
 				}
-				case L2Item.SLOT_DECO: {
+				case ItemTemplate.SLOT_DECO: {
 					if (!item.isEquipped() && (activeChar.getInventory().getTalismanSlots() == 0)) {
 						activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
 						return;
 					}
 					break;
 				}
-				case L2Item.SLOT_BROOCH_JEWEL: {
+				case ItemTemplate.SLOT_BROOCH_JEWEL: {
 					if (!item.isEquipped() && (activeChar.getInventory().getBroochJewelSlots() == 0)) {
 						final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_CANNOT_EQUIP_S1_WITHOUT_EQUIPPING_A_BROOCH);
 						sm.addItemName(item);

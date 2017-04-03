@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.clan.entry.PledgeRecruitInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -60,7 +60,7 @@ public class ExPledgeRecruitBoardSearch implements IClientOutgoingPacket {
 			packet.writeD(_clanList.get(i).getClan().getAllyId());
 		}
 		for (int i = _startIndex; i < _endIndex; i++) {
-			final L2Clan clan = _clanList.get(i).getClan();
+			final Clan clan = _clanList.get(i).getClan();
 			packet.writeD(clan.getAllyCrestId());
 			packet.writeD(clan.getCrestId());
 			packet.writeS(clan.getName());

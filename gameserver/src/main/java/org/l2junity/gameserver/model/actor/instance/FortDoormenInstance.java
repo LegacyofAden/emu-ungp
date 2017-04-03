@@ -19,14 +19,14 @@
 package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 import java.util.StringTokenizer;
 
-public class L2FortDoormenInstance extends L2DoormenInstance {
-	public L2FortDoormenInstance(L2NpcTemplate template) {
+public class FortDoormenInstance extends DoormenInstance {
+	public FortDoormenInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortDoormenInstance);
 	}

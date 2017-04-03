@@ -25,8 +25,8 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -59,7 +59,7 @@ public class AdminClan implements IAdminCommandHandler {
 					break;
 				}
 
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan == null) {
 					activeChar.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
 					return false;
@@ -87,7 +87,7 @@ public class AdminClan implements IAdminCommandHandler {
 					break;
 				}
 
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if (clan == null) {
 					activeChar.sendPacket(SystemMessageId.THE_TARGET_MUST_BE_A_CLAN_MEMBER);
 					return false;
@@ -107,7 +107,7 @@ public class AdminClan implements IAdminCommandHandler {
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 				html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/clanchanges.htm"));
 				StringBuilder sb = new StringBuilder();
-				for (L2Clan clan : ClanTable.getInstance().getClans()) {
+				for (Clan clan : ClanTable.getInstance().getClans()) {
 					if (clan.getNewLeaderId() != 0) {
 						sb.append("<tr>");
 						sb.append("<td>" + clan.getName() + "</td>");
@@ -128,7 +128,7 @@ public class AdminClan implements IAdminCommandHandler {
 					}
 					int clanId = Integer.parseInt(token);
 
-					final L2Clan clan = ClanTable.getInstance().getClan(clanId);
+					final Clan clan = ClanTable.getInstance().getClan(clanId);
 					if (clan == null) {
 						break;
 					}

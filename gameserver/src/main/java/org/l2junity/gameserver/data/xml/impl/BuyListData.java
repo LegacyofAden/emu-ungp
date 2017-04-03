@@ -27,7 +27,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.buylist.Product;
 import org.l2junity.gameserver.model.buylist.ProductList;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 
@@ -108,7 +108,7 @@ public final class BuyListData implements IGameXmlReader {
 							final NamedNodeMap attrs = node.getAttributes();
 
 							final int itemId = parseInteger(attrs, "id");
-							final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+							final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 							if (item != null) {
 								final long price = parseLong(attrs, "price", -1L);
 								final long restockDelay = parseLong(attrs, "restock_delay", -1L);

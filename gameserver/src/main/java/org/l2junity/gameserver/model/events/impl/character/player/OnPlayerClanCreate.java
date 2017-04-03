@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  */
 public class OnPlayerClanCreate implements IBaseEvent {
 	private final Player _activeChar;
-	private final L2Clan _clan;
+	private final Clan _clan;
 
-	public OnPlayerClanCreate(Player activeChar, L2Clan clan) {
+	public OnPlayerClanCreate(Player activeChar, Clan clan) {
 		_activeChar = activeChar;
 		_clan = clan;
 	}
@@ -39,7 +39,7 @@ public class OnPlayerClanCreate implements IBaseEvent {
 		return _activeChar;
 	}
 
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 

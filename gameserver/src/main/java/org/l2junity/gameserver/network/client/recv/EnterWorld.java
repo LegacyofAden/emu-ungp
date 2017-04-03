@@ -33,7 +33,7 @@ import org.l2junity.gameserver.enums.PcCafeConsumeType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.SubclassInfoType;
 import org.l2junity.gameserver.instancemanager.*;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.World;
@@ -170,7 +170,7 @@ public class EnterWorld implements IClientIncomingPacket {
 		boolean showClanNotice = false;
 
 		// Clan related checks are here
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 		if (clan != null) {
 			notifyClanMembers(activeChar);
 			notifySponsorOrApprentice(activeChar);
@@ -450,7 +450,7 @@ public class EnterWorld implements IClientIncomingPacket {
 	 * @param activeChar
 	 */
 	private void notifyClanMembers(Player activeChar) {
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 		if (clan != null) {
 			clan.getClanMember(activeChar.getObjectId()).setPlayerInstance(activeChar);
 

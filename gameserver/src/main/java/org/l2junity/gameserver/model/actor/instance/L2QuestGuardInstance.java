@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.actor.instance;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAttack;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
@@ -36,7 +36,7 @@ public final class L2QuestGuardInstance extends L2GuardInstance {
 	private boolean _isAutoAttackable = true;
 	private boolean _isPassive = false;
 
-	public L2QuestGuardInstance(L2NpcTemplate template) {
+	public L2QuestGuardInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2QuestGuardInstance);
 	}
@@ -52,7 +52,7 @@ public final class L2QuestGuardInstance extends L2GuardInstance {
 
 	@Override
 	public boolean doDie(Creature killer) {
-		// Kill the L2NpcInstance (the corpse disappeared after 7 seconds)
+		// Kill the NpcInstance (the corpse disappeared after 7 seconds)
 		if (!super.doDie(killer)) {
 			return false;
 		}

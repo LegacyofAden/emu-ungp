@@ -25,8 +25,8 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public class AdminKill implements IAdminCommandHandler {
 							int radius = Integer.parseInt(st.nextToken());
 							World.getInstance().forEachVisibleObjectInRadius(plyr, Creature.class, radius, knownChar ->
 							{
-								if ((knownChar instanceof L2ControllableMobInstance) || (knownChar instanceof FriendlyNpcInstance) || (knownChar == activeChar)) {
+								if ((knownChar instanceof ControllableMobInstance) || (knownChar instanceof FriendlyNpcInstance) || (knownChar == activeChar)) {
 									return;
 								}
 
@@ -85,7 +85,7 @@ public class AdminKill implements IAdminCommandHandler {
 
 						World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, wo ->
 						{
-							if ((wo instanceof L2ControllableMobInstance) || (wo instanceof FriendlyNpcInstance)) {
+							if ((wo instanceof ControllableMobInstance) || (wo instanceof FriendlyNpcInstance)) {
 								return;
 							}
 							kill(activeChar, wo);
@@ -100,7 +100,7 @@ public class AdminKill implements IAdminCommandHandler {
 				}
 			} else {
 				WorldObject obj = activeChar.getTarget();
-				if ((obj instanceof L2ControllableMobInstance) || !(obj instanceof Creature)) {
+				if ((obj instanceof ControllableMobInstance) || !(obj instanceof Creature)) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				} else {
 					kill(activeChar, (Creature) obj);

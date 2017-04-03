@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.MobGroupTable;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.SetupGauge;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -213,7 +213,7 @@ public class AdminMobGroup implements IAdminCommandHandler {
 			return;
 		}
 
-		L2NpcTemplate template = NpcData.getInstance().getTemplate(templateId);
+		NpcTemplate template = NpcData.getInstance().getTemplate(templateId);
 
 		if (template == null) {
 			activeChar.sendMessage("Invalid NPC ID specified.");

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /**
  * @author Vice, Zoey76
  */
-public class L2FortLogisticsInstance extends L2MerchantInstance {
+public class FortLogisticsInstance extends MerchantInstance {
 	private static final int[] SUPPLY_BOX_IDS =
 			{
 					35665,
@@ -55,7 +55,7 @@ public class L2FortLogisticsInstance extends L2MerchantInstance {
 					36363
 			};
 
-	public L2FortLogisticsInstance(L2NpcTemplate template) {
+	public FortLogisticsInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortLogisticsInstance);
 	}
@@ -116,8 +116,8 @@ public class L2FortLogisticsInstance extends L2MerchantInstance {
 					final int level = getFort().getSupplyLvL();
 					if (level > 0) {
 						// spawn box
-						L2NpcTemplate BoxTemplate = NpcData.getInstance().getTemplate(SUPPLY_BOX_IDS[level - 1]);
-						L2MonsterInstance box = new L2MonsterInstance(BoxTemplate);
+						NpcTemplate BoxTemplate = NpcData.getInstance().getTemplate(SUPPLY_BOX_IDS[level - 1]);
+						MonsterInstance box = new MonsterInstance(BoxTemplate);
 						box.setCurrentHp(box.getMaxHp());
 						box.setCurrentMp(box.getMaxMp());
 						box.setHeading(0);

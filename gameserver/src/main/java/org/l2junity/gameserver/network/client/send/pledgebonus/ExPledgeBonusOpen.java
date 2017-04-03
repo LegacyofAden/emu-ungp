@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.pledgebonus;
 
 import org.l2junity.gameserver.data.xml.impl.ClanRewardData;
 import org.l2junity.gameserver.enums.ClanRewardType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.pledge.ClanRewardBonus;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -43,7 +43,7 @@ public class ExPledgeBonusOpen implements IClientOutgoingPacket {
 
 	@Override
 	public boolean write(PacketWriter packet) {
-		final L2Clan clan = _player.getClan();
+		final Clan clan = _player.getClan();
 		if (clan == null) {
 			LOGGER.warn("Player: {} attempting to write to a null clan!", _player);
 			return false;

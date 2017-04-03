@@ -23,12 +23,12 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PlayableStat;
 import org.l2junity.gameserver.model.actor.status.PlayableStatus;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureKilled;
@@ -61,15 +61,15 @@ public abstract class Playable extends Creature {
 	 * </ul>
 	 *
 	 * @param objectId the object id
-	 * @param template The L2CharTemplate to apply to the L2Playable
+	 * @param template The CharTemplate to apply to the L2Playable
 	 */
-	public Playable(int objectId, L2CharTemplate template) {
+	public Playable(int objectId, CharTemplate template) {
 		super(objectId, template);
 		setInstanceType(InstanceType.L2Playable);
 		setIsInvul(false);
 	}
 
-	public Playable(L2CharTemplate template) {
+	public Playable(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2Playable);
 		setIsInvul(false);
@@ -194,7 +194,7 @@ public abstract class Playable extends Creature {
 			return false;
 		}
 
-		final L2Clan playerClan = player.getClan();
+		final Clan playerClan = player.getClan();
 
 		if ((playerClan != null) && !player.isAcademyMember() && !target.isAcademyMember()) {
 			final ClanWar war = playerClan.getWarWith(target.getClanId());

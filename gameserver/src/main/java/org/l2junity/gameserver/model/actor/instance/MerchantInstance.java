@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.BuyList;
@@ -35,10 +35,10 @@ import org.slf4j.LoggerFactory;
  *
  * @version $Revision: 1.10.4.9 $ $Date: 2005/04/11 10:06:08 $
  */
-public class L2MerchantInstance extends L2NpcInstance {
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2MerchantInstance.class);
+public class MerchantInstance extends NpcInstance {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MerchantInstance.class);
 
-	public L2MerchantInstance(L2NpcTemplate template) {
+	public MerchantInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2MerchantInstance);
 	}

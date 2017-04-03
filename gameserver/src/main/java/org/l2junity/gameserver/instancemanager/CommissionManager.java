@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.commission.CommissionItem;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.Mail;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.commission.*;
 import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionList.CommissionListReplyType;
@@ -111,7 +111,7 @@ public final class CommissionManager {
 	 * @param player the player
 	 * @param filter the filter
 	 */
-	public void showAuctions(Player player, Predicate<L2Item> filter) {
+	public void showAuctions(Player player, Predicate<ItemTemplate> filter) {
 		//@formatter:off
 		final List<CommissionItem> commissionItems = _commissionItems.values().stream()
 				.filter(c -> filter.test(c.getItemInfo().getItem()))

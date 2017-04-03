@@ -20,7 +20,7 @@ package quests.Q00508_AClansReputation;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -151,7 +151,7 @@ public class Q00508_AClansReputation extends Quest {
 			return htmltext;
 		}
 
-		L2Clan clan = player.getClan();
+		Clan clan = player.getClan();
 		switch (st.getState()) {
 			case State.CREATED:
 				htmltext = ((clan == null) || !player.isClanLeader() || (clan.getLevel() < 5)) ? "30868-0a.htm" : "30868-0b.htm";

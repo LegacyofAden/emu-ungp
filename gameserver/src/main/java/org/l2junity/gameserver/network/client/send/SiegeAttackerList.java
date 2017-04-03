@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -65,7 +65,7 @@ public final class SiegeAttackerList implements IClientOutgoingPacket {
 		packet.writeD(0x00); // 0
 		int size = _castle.getSiege().getAttackerClans().size();
 		if (size > 0) {
-			L2Clan clan;
+			Clan clan;
 
 			packet.writeD(size);
 			packet.writeD(size);

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.QuestState;
 
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author sandman
  */
-public class L2SepulcherMonsterInstance extends L2MonsterInstance {
+public class SepulcherMonsterInstance extends MonsterInstance {
 	protected static final SkillHolder FAKE_PETRIFICATION = new SkillHolder(4616, 1);
 
 	public int mysteriousBoxId = 0;
@@ -43,7 +43,7 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 	protected Future<?> _changeImmortalTask = null;
 	protected Future<?> _onDeadEventTask = null;
 
-	public L2SepulcherMonsterInstance(L2NpcTemplate template) {
+	public SepulcherMonsterInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2SepulcherMonsterInstance);
 		setShowSummonAnimation(true);
@@ -307,9 +307,9 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 	}
 
 	private class VictimShout implements Runnable {
-		private final L2SepulcherMonsterInstance _activeChar;
+		private final SepulcherMonsterInstance _activeChar;
 
-		public VictimShout(L2SepulcherMonsterInstance activeChar) {
+		public VictimShout(SepulcherMonsterInstance activeChar) {
 			_activeChar = activeChar;
 		}
 
@@ -328,9 +328,9 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 	}
 
 	private class VictimSpawnKeyBox implements Runnable {
-		private final L2SepulcherMonsterInstance _activeChar;
+		private final SepulcherMonsterInstance _activeChar;
 
-		public VictimSpawnKeyBox(L2SepulcherMonsterInstance activeChar) {
+		public VictimSpawnKeyBox(SepulcherMonsterInstance activeChar) {
 			_activeChar = activeChar;
 		}
 
@@ -354,9 +354,9 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 	}
 
 	private static class OnDeadEvent implements Runnable {
-		L2SepulcherMonsterInstance _activeChar;
+		SepulcherMonsterInstance _activeChar;
 
-		public OnDeadEvent(L2SepulcherMonsterInstance activeChar) {
+		public OnDeadEvent(SepulcherMonsterInstance activeChar) {
 			_activeChar = activeChar;
 		}
 
@@ -454,9 +454,9 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 	}
 
 	private static class ChangeImmortal implements Runnable {
-		L2SepulcherMonsterInstance activeChar;
+		SepulcherMonsterInstance activeChar;
 
-		public ChangeImmortal(L2SepulcherMonsterInstance mob) {
+		public ChangeImmortal(SepulcherMonsterInstance mob) {
 			activeChar = mob;
 		}
 

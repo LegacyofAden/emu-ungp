@@ -33,7 +33,7 @@ import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.spawns.NpcSpawnTemplate;
 
 import java.sql.Connection;
@@ -90,7 +90,7 @@ public class DBSpawnManager {
 			 PreparedStatement statement = con.prepareStatement("SELECT * FROM npc_respawns");
 			 ResultSet rset = statement.executeQuery()) {
 			while (rset.next()) {
-				final L2NpcTemplate template = getValidTemplate(rset.getInt("id"));
+				final NpcTemplate template = getValidTemplate(rset.getInt("id"));
 				if (template != null) {
 					final L2Spawn spawn = new L2Spawn(template);
 					spawn.setXYZ(rset.getInt("x"), rset.getInt("y"), rset.getInt("z"));
@@ -458,7 +458,7 @@ public class DBSpawnManager {
 	 * @param npcId the npc id
 	 * @return the valid template
 	 */
-	public L2NpcTemplate getValidTemplate(int npcId) {
+	public NpcTemplate getValidTemplate(int npcId) {
 		return NpcData.getInstance().getTemplate(npcId);
 	}
 

@@ -19,9 +19,9 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExPledgeCount;
@@ -58,7 +58,7 @@ public final class RequestOustPledgeMember implements IClientIncomingPacket {
 			return;
 		}
 
-		L2Clan clan = activeChar.getClan();
+		Clan clan = activeChar.getClan();
 
 		ClanMember member = clan.getClanMember(_target);
 		if (member == null) {

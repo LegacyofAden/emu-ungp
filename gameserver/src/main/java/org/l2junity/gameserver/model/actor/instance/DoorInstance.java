@@ -29,7 +29,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -243,12 +243,12 @@ public final class DoorInstance extends Creature {
 		final boolean isFort = ((getFort() != null) && (getFort().getResidenceId() > 0) && getFort().getZone().isActive());
 
 		if (isFort) {
-			L2Clan clan = actingPlayer.getClan();
+			Clan clan = actingPlayer.getClan();
 			if ((clan != null) && (clan == getFort().getOwnerClan())) {
 				return false;
 			}
 		} else if (isCastle) {
-			L2Clan clan = actingPlayer.getClan();
+			Clan clan = actingPlayer.getClan();
 			if ((clan != null) && (clan.getId() == getCastle().getOwnerId())) {
 				return false;
 			}
@@ -435,7 +435,7 @@ public final class DoorInstance extends Creature {
 				return;
 			}
 
-			final L2ServitorInstance servitor = (L2ServitorInstance) attacker;
+			final ServitorInstance servitor = (ServitorInstance) attacker;
 			if (servitor.getTemplate().getRace() != Race.SIEGE_WEAPON) {
 				return;
 			}

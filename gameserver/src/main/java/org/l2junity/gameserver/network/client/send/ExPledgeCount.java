@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -28,7 +28,7 @@ import org.l2junity.network.PacketWriter;
 public class ExPledgeCount implements IClientOutgoingPacket {
 	private final int _count;
 
-	public ExPledgeCount(L2Clan clan) {
+	public ExPledgeCount(Clan clan) {
 		_count = clan.getOnlineMembersCount();
 	}
 
