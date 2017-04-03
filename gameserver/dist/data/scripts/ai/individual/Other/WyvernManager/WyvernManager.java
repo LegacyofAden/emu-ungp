@@ -108,9 +108,9 @@ public final class WyvernManager extends AbstractNpcAI {
 				player.mount(WYVERN, 0, true);
 				return "wyvernmanager-04.html";
 			}
-			return replacePart(player.getHtmlPrefix(), "wyvernmanager-06.html");
+			return replacePart(player.getLang(), "wyvernmanager-06.html");
 		}
-		return replacePart(player.getHtmlPrefix(), "wyvernmanager-05.html");
+		return replacePart(player.getLang(), "wyvernmanager-05.html");
 	}
 
 	private boolean isOwnerClan(Npc npc, PlayerInstance player) {
@@ -187,16 +187,16 @@ public final class WyvernManager extends AbstractNpcAI {
 				if (!isOwnerClan(npc, player)) {
 					htmltext = "wyvernmanager-02.html";
 				} else if (FeatureConfig.ALLOW_WYVERN_ALWAYS) {
-					htmltext = replaceAll(npc, player.getHtmlPrefix());
+					htmltext = replaceAll(npc, player.getLang());
 				} else if (MANAGERS.get(npc.getId()) == ManagerType.CASTLE) {
 					htmltext = "wyvernmanager-dusk.html";
 				} else {
-					htmltext = replaceAll(npc, player.getHtmlPrefix());
+					htmltext = replaceAll(npc, player.getLang());
 				}
 				break;
 			}
 			case "Help": {
-				htmltext = MANAGERS.get(npc.getId()) == ManagerType.CASTLE ? replacePart(player.getHtmlPrefix(), "wyvernmanager-03.html") : replacePart(player.getHtmlPrefix(), "wyvernmanager-03b.html");
+				htmltext = MANAGERS.get(npc.getId()) == ManagerType.CASTLE ? replacePart(player.getLang(), "wyvernmanager-03.html") : replacePart(player.getLang(), "wyvernmanager-03b.html");
 				break;
 			}
 			case "RideWyvern": {
@@ -226,12 +226,12 @@ public final class WyvernManager extends AbstractNpcAI {
 			htmltext = "wyvernmanager-02.html";
 		} else {
 			if (FeatureConfig.ALLOW_WYVERN_ALWAYS) {
-				htmltext = replaceAll(npc, player.getHtmlPrefix());
+				htmltext = replaceAll(npc, player.getLang());
 			} else {
 				if (MANAGERS.get(npc.getId()) == ManagerType.CASTLE) {
 					htmltext = "wyvernmanager-dusk.html";
 				} else {
-					htmltext = replaceAll(npc, player.getHtmlPrefix());
+					htmltext = replaceAll(npc, player.getLang());
 				}
 			}
 		}

@@ -663,7 +663,7 @@ public final class Raina extends AbstractNpcAI {
 
 	private NpcHtmlMessage getNpcHtmlMessage(PlayerInstance player, Npc npc, String fileName) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-		final String text = getHtm(player.getHtmlPrefix(), fileName);
+		final String text = getHtm(player.getLang(), fileName);
 		if (text == null) {
 			_log.info("Cannot find HTML file for " + Raina.class.getSimpleName() + " AI: " + fileName);
 			return null;

@@ -1300,7 +1300,7 @@ public final class FourSepulchersManager {
 
 	public void showHtmlFile(PlayerInstance player, String file, Npc npc, PlayerInstance member) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-		html.setFile(player.getHtmlPrefix(), "SepulcherNpc/" + file);
+		html.setFile(player.getLang(), "SepulcherNpc/" + file);
 		if (member != null) {
 			html.replace("%member%", member.getName());
 		}

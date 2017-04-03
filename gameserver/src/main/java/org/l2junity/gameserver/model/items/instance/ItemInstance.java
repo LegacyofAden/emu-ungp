@@ -1746,7 +1746,7 @@ public final class ItemInstance extends WorldObject {
 		// If no command, open default html and replace objectId.
 		if (command == null) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, getId());
-			html.setFile(activeChar.getHtmlPrefix(), getItem().getHtml());
+			html.setFile(activeChar.getLang(), getItem().getHtml());
 			html.replace("%objectId%", getObjectId());
 			activeChar.sendPacket(html);
 		} else if (command.startsWith("Quest")) {
@@ -1761,7 +1761,7 @@ public final class ItemInstance extends WorldObject {
 			// Check if nobody is trying to get out of html folder
 			if (path.indexOf("..") == -1) {
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, getId());
-				html.setFile(activeChar.getHtmlPrefix(), "item/" + path);
+				html.setFile(activeChar.getLang(), "item/" + path);
 				html.replace("%objectId%", getObjectId());
 				activeChar.sendPacket(html);
 			}

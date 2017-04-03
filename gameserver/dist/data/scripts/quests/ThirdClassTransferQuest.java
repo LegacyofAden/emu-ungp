@@ -305,7 +305,7 @@ public abstract class ThirdClassTransferQuest extends Quest {
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
-			player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popupInvite.html")));
+			player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popupInvite.html")));
 		}
 	}
 

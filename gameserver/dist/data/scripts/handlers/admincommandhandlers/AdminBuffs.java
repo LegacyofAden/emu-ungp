@@ -281,7 +281,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/getbuffs.htm");
+		html.setFile(activeChar.getHtmlPrefix(), "admin/getbuffs.htm");
 
 		if (result.getPages() > 0) {
 			html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");

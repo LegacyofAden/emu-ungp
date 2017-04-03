@@ -110,7 +110,7 @@ public final class Q10390_KekropusLetter extends Quest {
 			}
 			case "popup-letter.html": {
 				if (st.isCond(1)) {
-					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), event)));
+					player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), event)));
 					player.sendPacket(new PlaySound(3, "Npcdialog1.kekrops_quest_1", 0, 0, 0, 0, 0));
 					st.setCond(2);
 				}

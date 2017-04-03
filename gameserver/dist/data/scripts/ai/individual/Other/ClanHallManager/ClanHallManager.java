@@ -152,7 +152,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 							final ResidenceFunction hpFunc = clanHall.getFunction(ResidenceFunctionType.HP_REGEN);
 							final ResidenceFunction mpFunc = clanHall.getFunction(ResidenceFunctionType.MP_REGEN);
 							final ResidenceFunction xpFunc = clanHall.getFunction(ResidenceFunctionType.EXP_RESTORE);
-							htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-09.html");
+							htmltext = getHtm(player.getLang(), "ClanHallManager-09.html");
 							htmltext = htmltext.replaceAll("%hpFunction%", hpFunc != null ? String.valueOf((int) hpFunc.getValue()) : "0");
 							htmltext = htmltext.replaceAll("%mpFunction%", mpFunc != null ? String.valueOf((int) mpFunc.getValue()) : "0");
 							htmltext = htmltext.replaceAll("%resFunction%", xpFunc != null ? String.valueOf((int) xpFunc.getValue()) : "0");
@@ -182,19 +182,19 @@ public final class ClanHallManager extends AbstractNpcAI {
 									final int buffLevel = clanHall.getFunctionLevel(ResidenceFunctionType.BUFF);
 									if (buffLevel > 0) {
 										if (!st.hasMoreTokens()) {
-											htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-funcBuffs_" + buffLevel + ".html");
+											htmltext = getHtm(player.getLang(), "ClanHallManager-funcBuffs_" + buffLevel + ".html");
 											htmltext = htmltext.replaceAll("%manaLeft%", Integer.toString((int) npc.getCurrentMp()));
 										} else {
 											final String[] skillData = st.nextToken().split("_");
 											final SkillHolder skill = new SkillHolder(Integer.parseInt(skillData[0]), Integer.parseInt(skillData[1]));
 											if (ArrayUtil.contains(ALLOWED_BUFFS, skill.getSkillId())) {
 												if (npc.getCurrentMp() < (npc.getStat().getMpConsume(skill.getSkill()) + npc.getStat().getMpInitialConsume(skill.getSkill()))) {
-													htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-funcBuffsNoMp.html");
+													htmltext = getHtm(player.getLang(), "ClanHallManager-funcBuffsNoMp.html");
 												} else if (npc.isSkillDisabled(skill.getSkill())) {
-													htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-funcBuffsNoReuse.html");
+													htmltext = getHtm(player.getLang(), "ClanHallManager-funcBuffsNoReuse.html");
 												} else {
 													castSkill(npc, player, skill);
-													htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-funcBuffsDone.html");
+													htmltext = getHtm(player.getLang(), "ClanHallManager-funcBuffsDone.html");
 												}
 												htmltext = htmltext.replaceAll("%manaLeft%", Integer.toString((int) npc.getCurrentMp()));
 											}
@@ -225,7 +225,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 					break;
 				}
 				case "warehouse": {
-					htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-10.html");
+					htmltext = getHtm(player.getLang(), "ClanHallManager-10.html");
 					htmltext = htmltext.replaceAll("%lease%", String.valueOf(clanHall.getLease()));
 					htmltext = htmltext.replaceAll("%payDate%", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(clanHall.getNextPayment())));
 					break;
@@ -237,21 +237,21 @@ public final class ClanHallManager extends AbstractNpcAI {
 						} else {
 							switch (st.nextToken()) {
 								case "recovery": {
-									htmltext = getHtm(player.getHtmlPrefix(), clanHall.getGrade() == ClanHallGrade.GRADE_S ? "ClanHallManager-manageFuncRecoverySGrade.html" : "ClanHallManager-manageFuncRecoveryBGrade.html");
+									htmltext = getHtm(player.getLang(), clanHall.getGrade() == ClanHallGrade.GRADE_S ? "ClanHallManager-manageFuncRecoverySGrade.html" : "ClanHallManager-manageFuncRecoveryBGrade.html");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.HP_REGEN), htmltext, "HP");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.MP_REGEN), htmltext, "MP");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.EXP_RESTORE), htmltext, "XP");
 									break;
 								}
 								case "other": {
-									htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-manageFuncOther.html");
+									htmltext = getHtm(player.getLang(), "ClanHallManager-manageFuncOther.html");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.TELEPORT), htmltext, "TP");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.BUFF), htmltext, "BUFF");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.ITEM), htmltext, "ITEM");
 									break;
 								}
 								case "decor": {
-									htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-manageFuncDecor.html");
+									htmltext = getHtm(player.getLang(), "ClanHallManager-manageFuncDecor.html");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.CURTAIN), htmltext, "CURTAIN");
 									htmltext = getFunctionInfo(clanHall.getFunction(ResidenceFunctionType.PLATFORM), htmltext, "PODIUM");
 									break;
@@ -264,12 +264,12 @@ public final class ClanHallManager extends AbstractNpcAI {
 										final ResidenceFunction oldFunc = clanHall.getFunction(funcId, funcLv);
 										if (oldFunc != null) {
 											final int funcVal = (int) oldFunc.getTemplate().getValue();
-											htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-manageFuncAlreadySet.html");
+											htmltext = getHtm(player.getLang(), "ClanHallManager-manageFuncAlreadySet.html");
 											htmltext = htmltext.replaceAll("%funcEffect%", "<fstring p1=\"" + (funcVal > 0 ? funcVal : oldFunc.getLevel()) + "\">" + (funcVal > 0 ? NpcStringId.S1.getId() : NpcStringId.STAGE_S1.getId()) + "</fstring>");
 										} else if ((funcId >= 1) && (funcId <= 8)) {
 											final ResidenceFunctionTemplate template = ResidenceFunctionsData.getInstance().getFunction(funcId, funcLv);
 											if (template != null) {
-												htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-funcConfirm" + funcId + ".html");
+												htmltext = getHtm(player.getLang(), "ClanHallManager-funcConfirm" + funcId + ".html");
 												htmltext = htmltext.replaceAll("%funcId%", String.valueOf(funcId));
 												htmltext = htmltext.replaceAll("%funcLv%", String.valueOf(funcLv));
 												htmltext = htmltext.replaceAll("%funcCost%", "<fstring p1=\"" + template.getCost().getCount() + "\" p2=\"" + template.getDurationAsDays() + "\">" + NpcStringId.FONT_COLOR_FFAABB_S1_FONT_ADENA_S2_DAY_S.getId() + "</fstring>");
@@ -305,7 +305,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 										final ResidenceFunctionType funcType = ResidenceFunctionType.valueOf(st.nextToken());
 										if (funcType != null) {
 											if (act.equals("confirm")) {
-												htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-removeFunctionConfirm.html");
+												htmltext = getHtm(player.getLang(), "ClanHallManager-removeFunctionConfirm.html");
 												htmltext = htmltext.replaceAll("%FUNC_TYPE%", funcType.toString());
 											} else if (act.equals("remove")) {
 												final ResidenceFunction func = clanHall.getFunction(funcType);
@@ -348,7 +348,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 			if (clanHall.getCostFailDay() == 0) {
 				htmltext = "ClanHallManager-01.html";
 			} else {
-				htmltext = getHtm(player.getHtmlPrefix(), "ClanHallManager-02.html");
+				htmltext = getHtm(player.getLang(), "ClanHallManager-02.html");
 				htmltext = htmltext.replaceAll("%costFailDayLeft%", Integer.toString((8 - clanHall.getCostFailDay())));
 			}
 		} else {

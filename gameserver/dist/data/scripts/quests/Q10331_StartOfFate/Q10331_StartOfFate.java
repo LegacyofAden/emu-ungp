@@ -430,7 +430,7 @@ public final class Q10331_StartOfFate extends Quest {
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
 			final PlayerInstance player = event.getActiveChar();
-			player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup.html")));
+			player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popup.html")));
 		}
 	}
 

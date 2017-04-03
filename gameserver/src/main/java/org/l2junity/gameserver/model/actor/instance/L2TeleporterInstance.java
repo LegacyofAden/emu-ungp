@@ -153,7 +153,7 @@ public final class L2TeleporterInstance extends Npc {
 
 	private void sendHtmlMessage(PlayerInstance player, String filename) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcname%", getName());
 		player.sendPacket(html);

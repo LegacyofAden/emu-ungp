@@ -48,7 +48,7 @@ public class Debug {
 		}
 
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(creature.getActingPlayer().getHtmlPrefix(), "admin/statsdebug.htm");
+		msg.setFile(creature.getActingPlayer().getLang(), "admin/statsdebug.htm");
 		msg.replace("%stat%", String.valueOf(stat));
 		msg.replace("%mulValue%", CommonUtil.formatDouble(creature.getStat().getMul(stat), "#.##"));
 		msg.replace("%addValue%", creature.getStat().getAdd(stat));
@@ -71,7 +71,7 @@ public class Debug {
 		}
 
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(attacker.getActingPlayer().getHtmlPrefix(), "admin/skilldebug.htm");
+		msg.setFile(attacker.getActingPlayer().getLang(), "admin/skilldebug.htm");
 		msg.replace("%patk%", target.getPAtk());
 		msg.replace("%matk%", target.getMAtk());
 		msg.replace("%pdef%", target.getPDef());
@@ -108,7 +108,7 @@ public class Debug {
 		}
 
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
-		msg.setFile(player.getHtmlPrefix(), "admin/itemdebug.htm");
+		msg.setFile(player.getLang(), "admin/itemdebug.htm");
 		msg.replace("%itemName%", item.getName());
 		msg.replace("%itemSlot%", getBodyPart(item.getItem().getBodyPart()));
 		msg.replace("%itemType%", item.isArmor() ? "Armor" : item.isWeapon() ? "Weapon" : "Etc");

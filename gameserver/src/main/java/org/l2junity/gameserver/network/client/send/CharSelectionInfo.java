@@ -296,14 +296,6 @@ public class CharSelectionInfo implements IClientOutgoingPacket {
 		charInfopackage.setY(chardata.getInt("y"));
 		charInfopackage.setZ(chardata.getInt("z"));
 
-		if (L2JModsConfig.L2JMOD_MULTILANG_ENABLE) {
-			String lang = chardata.getString("language");
-			if (!L2JModsConfig.L2JMOD_MULTILANG_ALLOWED.contains(lang)) {
-				lang = L2JModsConfig.L2JMOD_MULTILANG_DEFAULT;
-			}
-			charInfopackage.setHtmlPrefix("data/lang/" + lang + "/");
-		}
-
 		// if is in subclass, load subclass exp, sp, lvl info
 		if (baseClassId != activeClassId) {
 			loadCharacterSubclassInfo(charInfopackage, objectId, activeClassId);

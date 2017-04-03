@@ -18,6 +18,7 @@
  */
 package org.l2junity.gameserver.model.quest;
 
+import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.HtmRepository;
@@ -2131,7 +2132,7 @@ public class Quest extends AbstractScript implements IIdentifiable {
 		final boolean isQuestWindow = !filename.endsWith(".html");
 
 		// Create handler to file linked to the quest
-		final String content = getHtm(player.getHtmlPrefix(), filename);
+		final String content = getHtm(player.getLang(), filename);
 
 		// Send message to client if message not empty
 		if (content != null) {
@@ -2170,11 +2171,11 @@ public class Quest extends AbstractScript implements IIdentifiable {
 	}
 
 	/**
-	 * @param prefix   player's language prefix.
+	 * @param lang   player's language
 	 * @param fileName the html file to be get.
 	 * @return the HTML file contents
 	 */
-	public String getHtm(String prefix, String fileName) {
+	public String getHtm(Language lang, String fileName) {
 		return "Wait for retail html implement";
 	}
 

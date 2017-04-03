@@ -67,7 +67,7 @@ public final class AdminReload implements IAdminCommandHandler {
 		final String actualCommand = st.nextToken();
 		if (actualCommand.equalsIgnoreCase("admin_reload")) {
 			if (!st.hasMoreTokens()) {
-				showPage(activeChar, "data/html/admin/reload.htm");
+				showPage(activeChar, "admin/reload.htm");
 				activeChar.sendMessage(RELOAD_USAGE);
 				return true;
 			}

@@ -220,7 +220,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 
 	private NpcHtmlMessage getNpcHtmlMessage(PlayerInstance player, Npc npc, String fileName) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-		final String text = getHtm(player.getHtmlPrefix(), fileName);
+		final String text = getHtm(player.getLang(), fileName);
 		if (text == null) {
 			_log.info("Cannot find HTML file for " + Q10814_BefittingOfTheStatus.class.getSimpleName() + " Quest: " + fileName);
 			return null;

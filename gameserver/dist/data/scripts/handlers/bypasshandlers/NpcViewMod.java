@@ -165,7 +165,7 @@ public class NpcViewMod implements IBypassHandler {
 
 	public static void sendNpcView(PlayerInstance activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/mods/NpcView/Info.htm");
+		html.setFile(activeChar.getLang(), "mods/NpcView/Info.htm");
 		html.replace("%name%", npc.getName());
 		html.replace("%hpGauge%", HtmlUtil.getHpGauge(250, (long) npc.getCurrentHp(), npc.getMaxHp(), false));
 		html.replace("%mpGauge%", HtmlUtil.getMpGauge(250, (long) npc.getCurrentMp(), npc.getMaxMp(), false));
@@ -230,7 +230,7 @@ public class NpcViewMod implements IBypassHandler {
 
 	public static void sendNpcSkillView(PlayerInstance activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/mods/NpcView/Skills.htm");
+		html.setFile(activeChar.getLang(), "mods/NpcView/Skills.htm");
 
 		final StringBuilder sb = new StringBuilder();
 
@@ -261,7 +261,7 @@ public class NpcViewMod implements IBypassHandler {
 
 	public static void sendAggroListView(PlayerInstance activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/mods/NpcView/AggroList.htm");
+		html.setFile(activeChar.getLang(), "mods/NpcView/AggroList.htm");
 
 		final StringBuilder sb = new StringBuilder();
 

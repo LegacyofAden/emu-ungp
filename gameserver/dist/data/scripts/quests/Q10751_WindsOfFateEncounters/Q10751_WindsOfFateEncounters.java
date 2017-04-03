@@ -364,7 +364,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 			final QuestState qs = getQuestState(player, false);
 			if (qs == null) {
 				player.sendPacket(new PlaySound(3, "Npcdialog1.serenia_quest_12", 0, 0, 0, 0, 0));
-				player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup.html")));
+				player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popup.html")));
 			}
 		}
 	}

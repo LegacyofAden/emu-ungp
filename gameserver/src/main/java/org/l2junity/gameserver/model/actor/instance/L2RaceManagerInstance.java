@@ -268,7 +268,7 @@ public class L2RaceManagerInstance extends Npc {
 		String filename, search;
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		filename = getHtmlPath(npcId, 5);
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		for (int i = 0; i < 8; i++) {
 			int n = i + 1;
 			search = "Mob" + n;
@@ -285,7 +285,7 @@ public class L2RaceManagerInstance extends Npc {
 		String filename, search;
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		filename = getHtmlPath(npcId, 6);
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		for (int i = 0; i < 8; i++) {
 			int n = i + 1;
 			search = "Mob" + n;
@@ -306,7 +306,7 @@ public class L2RaceManagerInstance extends Npc {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		if (val < 10) {
 			filename = getHtmlPath(npcId, 2);
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 			for (int i = 0; i < 8; i++) {
 				int n = i + 1;
 				search = "Mob" + n;
@@ -324,7 +324,7 @@ public class L2RaceManagerInstance extends Npc {
 				return;
 			}
 			filename = getHtmlPath(npcId, 3);
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 			html.replace("0place", "" + player.getRace(0));
 			search = "Mob1";
 			replace = MonsterRace.getInstance().getMonsters()[player.getRace(0) - 1].getTemplate().getName();
@@ -341,7 +341,7 @@ public class L2RaceManagerInstance extends Npc {
 				return;
 			}
 			filename = getHtmlPath(npcId, 4);
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 			html.replace("0place", "" + player.getRace(0));
 			search = "Mob1";
 			replace = MonsterRace.getInstance().getMonsters()[player.getRace(0) - 1].getTemplate().getName();

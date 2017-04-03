@@ -49,7 +49,7 @@ public class DoorInstanceActionShift implements IActionShiftHandler {
 			final Castle castle = door.getCastle();
 			activeChar.sendPacket(new StaticObject(door, activeChar.isGM()));
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-			html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/doorinfo.htm");
+			html.setFile(activeChar.getHtmlPrefix(), "admin/doorinfo.htm");
 			// Hp / MP
 			html.replace("%hpGauge%", HtmlUtil.getHpGauge(250, (long) door.getCurrentHp(), door.getMaxHp(), false));
 			html.replace("%mpGauge%", HtmlUtil.getMpGauge(250, (long) door.getCurrentMp(), door.getMaxMp(), false));

@@ -52,7 +52,7 @@ public class AdminPcCondOverride implements IAdminCommandHandler {
 			{
 				case "admin_exceptions": {
 					final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-					msg.setFile(activeChar.getHtmlPrefix(), "data/html/admin/cond_override.htm");
+					msg.setFile(activeChar.getHtmlPrefix(), "admin/cond_override.htm");
 					StringBuilder sb = new StringBuilder();
 					for (PcCondOverride ex : PcCondOverride.values()) {
 						sb.append("<tr><td fixwidth=\"180\">" + ex.getDescription() + ":</td><td><a action=\"bypass -h admin_set_exception " + ex.ordinal() + "\">" + (activeChar.canOverrideCond(ex) ? "Disable" : "Enable") + "</a></td></tr>");

@@ -53,7 +53,7 @@ public class RequestCuriousHouseHtml implements IClientIncomingPacket {
 
 		if (CeremonyOfChaosManager.getInstance().canRegister(player, true)) {
 			final NpcHtmlMessage message = new NpcHtmlMessage(0);
-			message.setFile(player.getHtmlPrefix(), "CeremonyOfChaos/invite.htm");
+			message.setFile(player.getLang(), "CeremonyOfChaos/invite.htm");
 			player.sendPacket(message);
 		}
 	}

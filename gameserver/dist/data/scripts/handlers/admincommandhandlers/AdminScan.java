@@ -147,7 +147,7 @@ public class AdminScan implements IAdminCommandHandler {
 	private void sendNpcList(PlayerInstance activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser) {
 		final BypassBuilder bypassParser = createBypassBuilder(parser, "bypass -h admin_scan");
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/scan.htm");
+		html.setFile(activeChar.getHtmlPrefix(), "admin/scan.htm");
 
 		//@formatter:off
 		final PageResult result = PageBuilder.newBuilder(World.getInstance().getVisibleObjects(activeChar, Npc.class, radius, condition), 15, bypassParser.toString())
