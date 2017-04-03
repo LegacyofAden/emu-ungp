@@ -73,17 +73,21 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 		if (gameservers.containsKey(registeringServer.getId())) {
 			GameServerInfo gameServerInfo = gameservers.get(registeringServer.getId());
 			if (!gameServerInfo.isShowing()) {
+				log.warn("Connection attempt from disabled by config gameserver (id {}).", registeringServer.getId());
 				return RegisterResult.DISABLED_SERVER;
 			}
 			else if (gameservers.values().stream().anyMatch(server -> server.getId() == registeringServer.getId() && server.getConnection() != null)) {
+				log.warn("Gameserver with id {} already registered.", registeringServer.getId());
 				return RegisterResult.ALREADY_REGISTERED;
 			}
 			else {
 				gameServerInfo.update(connection, registeringServer);
+				log.info("Gameserver with id {} registered successfully.", registeringServer.getId());
 				return RegisterResult.SUCCESS;
 			}
 		}
 		else {
+			log.warn("Unknown gameserver with id {} trying to connect.", registeringServer.getId());
 			return RegisterResult.UNKNOWN_SERVER;
 		}
 	}
