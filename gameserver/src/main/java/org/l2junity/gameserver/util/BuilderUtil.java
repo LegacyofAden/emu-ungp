@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.util;
 
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
 
@@ -37,7 +37,7 @@ public final class BuilderUtil {
 	 * @param player
 	 * @param message
 	 */
-	public static void sendSysMessage(final PlayerInstance player, final String message) {
+	public static void sendSysMessage(final Player player, final String message) {
 		player.sendPacket(new CreatureSay(0, ChatType.GENERAL, "SYS", message));
 	}
 
@@ -48,7 +48,7 @@ public final class BuilderUtil {
 	 * @param hide
 	 * @return {@code true} if hide state was changed, otherwise {@code false}
 	 */
-	public static boolean setHiding(final PlayerInstance player, final boolean hide) {
+	public static boolean setHiding(final Player player, final boolean hide) {
 		if (player.isInvisible() && hide) {
 			// already hiding
 			return false;

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.HtmlActionScope;
 import org.l2junity.gameserver.model.Language;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.util.Util;
 
 /**
@@ -122,7 +122,7 @@ public abstract class AbstractHtmlPacket implements IClientOutgoingPacket {
 	}
 
 	@Override
-	public final void runImpl(PlayerInstance player) {
+	public final void runImpl(Player player) {
 		if (player == null) {
 			return;
 		}

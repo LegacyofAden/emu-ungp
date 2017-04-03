@@ -29,7 +29,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
 import org.l2junity.gameserver.model.residences.ResidenceFunction;
@@ -62,7 +62,7 @@ public class RegenHPFinalizer implements IStatsFunction {
 		}
 
 		if (creature.isPlayer()) {
-			PlayerInstance player = creature.getActingPlayer();
+			Player player = creature.getActingPlayer();
 
 			baseValue *= calcSiegeRegenModifier(player);
 
@@ -133,7 +133,7 @@ public class RegenHPFinalizer implements IStatsFunction {
 		return DoubleStat.defaultValue(creature, stat, baseValue * creature.getLevelMod() * (creature.getCON() > 0 ? BaseStats.CON.calcBonus(creature) : 1.));
 	}
 
-	private static double calcSiegeRegenModifier(PlayerInstance activeChar) {
+	private static double calcSiegeRegenModifier(Player activeChar) {
 		if ((activeChar == null) || (activeChar.getClan() == null)) {
 			return 1;
 		}

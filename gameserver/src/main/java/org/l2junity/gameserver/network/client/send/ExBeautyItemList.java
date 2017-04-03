@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.BeautyShopData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.beautyshop.BeautyData;
 import org.l2junity.gameserver.model.beautyshop.BeautyItem;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -41,7 +41,7 @@ public class ExBeautyItemList implements IClientOutgoingPacket {
 	private static final int FACE_TYPE = 1;
 	private static final int COLOR_TYPE = 2;
 
-	public ExBeautyItemList(PlayerInstance activeChar) {
+	public ExBeautyItemList(Player activeChar) {
 		_beautyData = BeautyShopData.getInstance().getBeautyData(activeChar.getRace(), activeChar.getAppearance().getSexType());
 
 		for (BeautyItem hair : _beautyData.getHairList().values()) {

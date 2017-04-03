@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.instancemanager;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.timers.TimerHolder;
 
 import java.util.Map;
@@ -38,7 +38,7 @@ public class TimersManager {
 			_timers.computeIfAbsent(npc.getObjectId(), key -> ConcurrentHashMap.newKeySet()).add(timer);
 		}
 
-		final PlayerInstance player = timer.getPlayer();
+		final Player player = timer.getPlayer();
 		if (player != null) {
 			_timers.computeIfAbsent(player.getObjectId(), key -> ConcurrentHashMap.newKeySet()).add(timer);
 		}

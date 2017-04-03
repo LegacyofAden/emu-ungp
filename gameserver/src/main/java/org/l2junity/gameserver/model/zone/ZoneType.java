@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureZoneEnter;
@@ -196,7 +196,7 @@ public abstract class ZoneType extends ListenersContainer {
 			return false;
 		}
 
-		if (character instanceof PlayerInstance) {
+		if (character instanceof Player) {
 			// Check class type
 			if (_classType != 0) {
 				if (character.isInCategory(CategoryType.MAGE_GROUP)) {
@@ -229,7 +229,7 @@ public abstract class ZoneType extends ListenersContainer {
 				boolean ok = false;
 
 				for (int _clas : _class) {
-					if (((PlayerInstance) character).getClassId().ordinal() == _clas) {
+					if (((Player) character).getClassId().ordinal() == _clas) {
 						ok = true;
 						break;
 					}
@@ -426,10 +426,10 @@ public abstract class ZoneType extends ListenersContainer {
 	public void onReviveInside(Creature character) {
 	}
 
-	public void onPlayerLoginInside(PlayerInstance player) {
+	public void onPlayerLoginInside(Player player) {
 	}
 
-	public void onPlayerLogoutInside(PlayerInstance player) {
+	public void onPlayerLogoutInside(Player player) {
 	}
 
 	public Map<Integer, Creature> getCharacters() {
@@ -440,8 +440,8 @@ public abstract class ZoneType extends ListenersContainer {
 		return _characterList.values();
 	}
 
-	public List<PlayerInstance> getPlayersInside() {
-		List<PlayerInstance> players = new ArrayList<>();
+	public List<Player> getPlayersInside() {
+		List<Player> players = new ArrayList<>();
 		for (Creature ch : _characterList.values()) {
 			if ((ch != null) && ch.isPlayer()) {
 				players.add(ch.getActingPlayer());
@@ -528,7 +528,7 @@ public abstract class ZoneType extends ListenersContainer {
 				.filter(Objects::nonNull)
 				.filter(WorldObject::isPlayer)
 				.map(WorldObject::getActingPlayer)
-				.filter(PlayerInstance::isOnline)
+				.filter(Player::isOnline)
 				.forEach(player -> player.teleToLocation(TeleportWhereType.TOWN));
 		//@formatter:off
 	}
@@ -543,7 +543,7 @@ public abstract class ZoneType extends ListenersContainer {
 
 		for (Creature character : getCharactersInside()) {
 			if ((character != null) && character.isPlayer()) {
-				PlayerInstance player = character.getActingPlayer();
+				Player player = character.getActingPlayer();
 				if (player.isOnline()) {
 					player.teleToLocation(loc);
 				}

@@ -43,7 +43,7 @@ public class CommissionManagerInstance extends Npc {
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		if (command.equalsIgnoreCase("show_commission")) {
 			player.sendPacket(ExShowCommission.STATIC_PACKET);
 		} else {

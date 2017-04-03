@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -57,7 +57,7 @@ public final class RequestPostAttachment implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -201,7 +201,7 @@ public final class RequestPostAttachment implements IClientIncomingPacket {
 		msg.removeAttachments();
 
 		SystemMessage sm;
-		final PlayerInstance sender = World.getInstance().getPlayer(msg.getSenderId());
+		final Player sender = World.getInstance().getPlayer(msg.getSenderId());
 		if (adena > 0) {
 			if (sender != null) {
 				sender.addAdena("PayMail", adena, activeChar, false);

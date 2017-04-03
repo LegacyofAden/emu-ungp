@@ -43,7 +43,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 	}
 
 	@Override
-	public void showChatWindow(PlayerInstance player) {
+	public void showChatWindow(Player player) {
 		String filename = "petmanager/" + getId() + ".htm";
 		if ((getId() == 36478) && player.hasSummon()) {
 			filename = "petmanager/restore-unsummonpet.htm";
@@ -57,7 +57,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		if (command.startsWith("exchange")) {
 			String[] params = command.split(" ");
 			int val = Integer.parseInt(params[1]);
@@ -135,7 +135,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 		}
 	}
 
-	public final void exchange(PlayerInstance player, int itemIdtake, int itemIdgive) {
+	public final void exchange(Player player, int itemIdtake, int itemIdgive) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		if (player.destroyItemByItemId("Consume", itemIdtake, 1, this, true)) {
 			player.addItem("", itemIdgive, 1, this, true);

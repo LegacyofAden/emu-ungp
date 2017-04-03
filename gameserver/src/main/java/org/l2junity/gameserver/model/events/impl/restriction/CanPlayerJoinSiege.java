@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,15 +26,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author lord_rex
  */
 public final class CanPlayerJoinSiege implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _castleId;
 
-	public CanPlayerJoinSiege(PlayerInstance activeChar, int castleId) {
+	public CanPlayerJoinSiege(Player activeChar, int castleId) {
 		_activeChar = activeChar;
 		_castleId = castleId;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

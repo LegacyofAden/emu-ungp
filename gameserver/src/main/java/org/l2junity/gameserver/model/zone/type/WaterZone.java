@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.zone.type;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.NpcInfo;
@@ -38,14 +38,14 @@ public class WaterZone extends ZoneType {
 
 		// TODO: update to only send speed status when that packet is known
 		if (character.isPlayer()) {
-			PlayerInstance player = character.getActingPlayer();
+			Player player = character.getActingPlayer();
 			if (player.checkTransformed(transform -> !transform.canSwim())) {
 				character.stopTransformation(true);
 			} else {
 				player.broadcastUserInfo();
 			}
 		} else if (character.isNpc()) {
-			World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
+			World.getInstance().forEachVisibleObject(character, Player.class, player ->
 			{
 				if (character.getRunSpeed() == 0) {
 					player.sendPacket(new ServerObjectInfo((Npc) character, player));
@@ -64,7 +64,7 @@ public class WaterZone extends ZoneType {
 		if (character.isPlayer()) {
 			character.getActingPlayer().broadcastUserInfo();
 		} else if (character.isNpc()) {
-			World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
+			World.getInstance().forEachVisibleObject(character, Player.class, player ->
 			{
 				if (character.getRunSpeed() == 0) {
 					player.sendPacket(new ServerObjectInfo((Npc) character, player));

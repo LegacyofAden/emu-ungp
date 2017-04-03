@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.tasks.player;
 
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Task dedicated to put player to stand up.
@@ -27,9 +27,9 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
  * @author UnAfraid
  */
 public class StandUpTask implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public StandUpTask(PlayerInstance player) {
+	public StandUpTask(Player player) {
 		_player = player;
 	}
 

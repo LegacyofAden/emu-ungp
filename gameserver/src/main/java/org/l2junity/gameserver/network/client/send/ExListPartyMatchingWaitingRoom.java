@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -38,10 +38,10 @@ import java.util.concurrent.TimeUnit;
 public class ExListPartyMatchingWaitingRoom implements IClientOutgoingPacket {
 	private static final int NUM_PER_PAGE = 64;
 	private final int _size;
-	private final List<PlayerInstance> _players = new LinkedList<>();
+	private final List<Player> _players = new LinkedList<>();
 
-	public ExListPartyMatchingWaitingRoom(PlayerInstance player, int page, int minLevel, int maxLevel, List<ClassId> classIds, String query) {
-		final List<PlayerInstance> players = MatchingRoomManager.getInstance().getPlayerInWaitingList(minLevel, maxLevel, classIds, query);
+	public ExListPartyMatchingWaitingRoom(Player player, int page, int minLevel, int maxLevel, List<ClassId> classIds, String query) {
+		final List<Player> players = MatchingRoomManager.getInstance().getPlayerInWaitingList(minLevel, maxLevel, classIds, query);
 
 		_size = players.size();
 		final int startIndex = (page - 1) * NUM_PER_PAGE;
@@ -60,7 +60,7 @@ public class ExListPartyMatchingWaitingRoom implements IClientOutgoingPacket {
 
 		packet.writeD(_size);
 		packet.writeD(_players.size());
-		for (PlayerInstance player : _players) {
+		for (Player player : _players) {
 			packet.writeS(player.getName());
 			packet.writeD(player.getClassId().getId());
 			packet.writeD(player.getLevel());

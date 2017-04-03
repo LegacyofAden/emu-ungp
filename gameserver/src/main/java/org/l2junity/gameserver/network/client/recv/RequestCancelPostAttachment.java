@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -50,7 +50,7 @@ public final class RequestCancelPostAttachment implements IClientIncomingPacket 
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL || !GeneralConfig.ALLOW_ATTACHMENTS) {
 			return;
 		}
@@ -175,7 +175,7 @@ public final class RequestCancelPostAttachment implements IClientIncomingPacket 
 			activeChar.sendItemList(false);
 		}
 
-		final PlayerInstance receiver = World.getInstance().getPlayer(msg.getReceiverId());
+		final Player receiver = World.getInstance().getPlayer(msg.getReceiverId());
 		if (receiver != null) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANCELED_THE_SENT_MAIL);
 			sm.addCharName(activeChar);

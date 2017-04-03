@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.Henna;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -33,10 +33,10 @@ import java.util.List;
  * @author KenM, Zoey76
  */
 public final class GMHennaInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final List<Henna> _hennas = new ArrayList<>();
 
-	public GMHennaInfo(PlayerInstance player) {
+	public GMHennaInfo(Player player) {
 		_activeChar = player;
 		for (Henna henna : _activeChar.getHennaList()) {
 			if (henna != null) {

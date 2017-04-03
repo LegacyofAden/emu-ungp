@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.AccessLevel;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -43,13 +43,13 @@ public final class AdminChangeAccessLevel implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		String[] parts = command.split(" ");
 		if (parts.length == 2) {
 			try {
 				int lvl = Integer.parseInt(parts[1]);
-				if (activeChar.getTarget() instanceof PlayerInstance) {
-					onlineChange(activeChar, (PlayerInstance) activeChar.getTarget(), lvl);
+				if (activeChar.getTarget() instanceof Player) {
+					onlineChange(activeChar, (Player) activeChar.getTarget(), lvl);
 				} else {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 				}
@@ -59,7 +59,7 @@ public final class AdminChangeAccessLevel implements IAdminCommandHandler {
 		} else if (parts.length == 3) {
 			String name = parts[1];
 			int lvl = Integer.parseInt(parts[2]);
-			PlayerInstance player = World.getInstance().getPlayer(name);
+			Player player = World.getInstance().getPlayer(name);
 			if (player != null) {
 				onlineChange(activeChar, player, lvl);
 			} else {
@@ -96,7 +96,7 @@ public final class AdminChangeAccessLevel implements IAdminCommandHandler {
 	 * @param player     the online target
 	 * @param lvl        the access level
 	 */
-	private static void onlineChange(PlayerInstance activeChar, PlayerInstance player, int lvl) {
+	private static void onlineChange(Player activeChar, Player player, int lvl) {
 		if (lvl >= 0) {
 			final AccessLevel acccessLevel = AdminData.getInstance().getAccessLevel(lvl);
 			if (acccessLevel != null) {

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Task dedicated to dismount player from rented pet.
@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
  * @author UnAfraid
  */
 public class RentPetTask implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public RentPetTask(PlayerInstance player) {
+	public RentPetTask(Player player) {
 		_player = player;
 	}
 

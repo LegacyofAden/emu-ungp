@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.Earthquake;
@@ -74,7 +74,7 @@ public final class Cannon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		if (event.equals("useCannonBall")) {
@@ -95,7 +95,7 @@ public final class Cannon extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		switch (event) {
 			case "CANNON_RECHARGE": {
 				npc.setScriptValue(1);
@@ -133,7 +133,7 @@ public final class Cannon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (npc.getVariables().getBoolean("DROP_MEMORY_FRAGMENT", false)) {
 			npc.dropItem(killer, MEMORY_FRAGMENT, 1);
 			npc.dropItem(killer, F_MEMORY_FRAGMENT, 1);
@@ -150,7 +150,7 @@ public final class Cannon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if (skill.getId() == PRESENT_SKILL.getSkillId()) {
 			final StatsSet npcParams = npc.getParameters();
 
@@ -163,7 +163,7 @@ public final class Cannon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "cannon.html";
 	}
 

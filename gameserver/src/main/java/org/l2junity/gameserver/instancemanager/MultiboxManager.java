@@ -24,7 +24,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.xml.impl.MultiboxData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogout;
@@ -152,7 +152,7 @@ public class MultiboxManager {
 	}
 
 	private void onPlayerLogout(OnPlayerLogout event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final L2GameClient client = event.getClient();
 		if ((player == null) || (client == null)) {
 			log.warn("Player or client is null, {}, {}", player, client);

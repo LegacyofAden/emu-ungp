@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.AbilityPointsData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -40,7 +40,7 @@ public class ExAcquireAPSkillList implements IClientOutgoingPacket {
 	private final boolean _enable;
 	private final List<Skill> _skills = new ArrayList<>();
 
-	public ExAcquireAPSkillList(PlayerInstance activeChar) {
+	public ExAcquireAPSkillList(Player activeChar) {
 		_abilityPoints = activeChar.getAbilityPoints();
 		_usedAbilityPoints = activeChar.getAbilityPointsUsed();
 		_price = AbilityPointsData.getInstance().getPrice(_abilityPoints);

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
@@ -61,7 +61,7 @@ public class AdminQuest implements IAdminCommandHandler {
 	}
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_quest_reload")) {
 			StringTokenizer st = new StringTokenizer(command);
 			st.nextToken(); // skip command token
@@ -243,7 +243,7 @@ public class AdminQuest implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void showDir(String dir, PlayerInstance activeChar) {
+	private void showDir(String dir, Player activeChar) {
 		String replace = null;
 		File path;
 		String currentPath = "/";

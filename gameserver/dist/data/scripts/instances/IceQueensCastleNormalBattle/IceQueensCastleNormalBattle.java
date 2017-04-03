@@ -152,7 +152,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterEasy")) {
 			enterInstance(player, npc, TEMPLATE_ID_EASY);
 		} else if (event.equals("enterHardcore")) {
@@ -176,7 +176,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 							}
 
 							if (!isHard(world)) {
-								for (PlayerInstance players : world.getPlayers()) {
+								for (Player players : world.getPlayers()) {
 									if (!players.isDead()) {
 										final QuestState qs = player.getQuestState(Q10286_ReunionWithSirra.class.getSimpleName());
 										if ((qs != null) && qs.isStarted() && qs.isCond(5)) {
@@ -300,7 +300,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 					}
 					case "STAGE_3_START": {
 						final boolean isHardMode = isHard(world);
-						for (PlayerInstance players : world.getPlayers()) {
+						for (Player players : world.getPlayers()) {
 							players.broadcastPacket(ExChangeClientEffectInfo.STATIC_FREYA_DESTROYED);
 							for (int emmiterId : EMMITERS) {
 								players.sendPacket(new OnEventTrigger(emmiterId, true));
@@ -363,7 +363,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						break;
 					}
 					case "SPAWN_SUPPORT": {
-						for (PlayerInstance players : world.getPlayers()) {
+						for (Player players : world.getPlayers()) {
 							players.setIsInvul(false);
 						}
 						freya.setIsInvul(false);
@@ -511,7 +511,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 							freya.decayMe();
 						}
 
-						for (PlayerInstance players : world.getPlayers()) {
+						for (Player players : world.getPlayers()) {
 							players.broadcastPacket(ExChangeClientEffectInfo.STATIC_FREYA_DEFAULT);
 						}
 						world.destroy();
@@ -530,7 +530,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						final Attackable mob = (Attackable) npc;
 						mob.clearAggroList();
 
-						World.getInstance().forEachVisibleObjectInRadius(npc, PlayerInstance.class, 1000, characters ->
+						World.getInstance().forEachVisibleObjectInRadius(npc, Player.class, 1000, characters ->
 						{
 							mob.addDamageHate(characters, 0, getRandom(10000, 20000));
 						});
@@ -601,7 +601,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			if (npc.getId() == SUPP_JINIA) {
@@ -620,7 +620,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			final StatsSet params = world.getParameters();
@@ -696,7 +696,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						world.setParameter("isSupportActive", true);
 						freya.setIsInvul(true);
 						freya.disableCoreAI(true);
-						for (PlayerInstance players : world.getPlayers()) {
+						for (Player players : world.getPlayers()) {
 							players.setIsInvul(true);
 							players.abortAttack();
 						}
@@ -841,7 +841,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (npc.getId()) {
@@ -874,7 +874,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			final StatsSet params = world.getParameters();
@@ -943,7 +943,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 
 		if (firstEnter) {
@@ -955,10 +955,10 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	private void manageRandomAttack(Instance world, Npc mob) {
-		final List<PlayerInstance> players = world.getPlayers().stream().filter(p -> !p.isDead() && !p.isInvisible()).collect(Collectors.toList());
+		final List<Player> players = world.getPlayers().stream().filter(p -> !p.isDead() && !p.isInvisible()).collect(Collectors.toList());
 		Collections.shuffle(players);
 
-		final PlayerInstance target = (!players.isEmpty()) ? players.get(0) : null;
+		final Player target = (!players.isEmpty()) ? players.get(0) : null;
 		if (target != null) {
 			((Attackable) mob).addDamageHate(target, 0, 999);
 			mob.setIsRunning(true);
@@ -980,7 +980,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 	}
 
 	private void manageTimer(Instance world, int time, NpcStringId npcStringId) {
-		for (PlayerInstance p : world.getPlayers()) {
+		for (Player p : world.getPlayers()) {
 			p.sendPacket(new ExSendUIEvent(p, false, false, time, 0, npcStringId));
 		}
 	}
@@ -991,7 +991,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 
 	private void manageMovie(Instance world, Movie movie) {
 		final Npc controller = world.getParameters().getObject("controller", Npc.class);
-		playMovie(World.getInstance().getVisibleObjects(controller, PlayerInstance.class, 8000), movie);
+		playMovie(World.getInstance().getVisibleObjects(controller, Player.class, 8000), movie);
 	}
 
 	private List<Npc> getKnightStatues(Instance world) {

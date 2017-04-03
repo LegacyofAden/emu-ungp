@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ExGetPremiumItemList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -73,7 +73,7 @@ public final class DimensionalMerchant extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {
@@ -138,7 +138,7 @@ public final class DimensionalMerchant extends AbstractNpcAI {
 		return htmltext;
 	}
 
-	private String giveMinion(PlayerInstance player, String event, int couponId, int eventCouponId) {
+	private String giveMinion(Player player, String event, int couponId, int eventCouponId) {
 		if (hasAtLeastOneQuestItem(player, couponId, eventCouponId)) {
 			takeItems(player, (hasQuestItems(player, eventCouponId) ? eventCouponId : couponId), 1);
 			final int minionId = MINION_EXCHANGE.get(event);

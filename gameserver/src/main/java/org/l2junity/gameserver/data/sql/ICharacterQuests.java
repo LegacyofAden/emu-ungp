@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.data.sql;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 
 /**
@@ -34,7 +34,7 @@ public interface ICharacterQuests {
 	 *
 	 * @param player player which request fetch
 	 */
-	void loadPlayerQuests(PlayerInstance player);
+	void loadPlayerQuests(Player player);
 
 	/**
 	 * Insert or update player's quest variable depending on {@code created} parameter.

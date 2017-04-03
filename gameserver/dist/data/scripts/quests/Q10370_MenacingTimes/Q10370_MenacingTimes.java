@@ -20,7 +20,7 @@ package quests.Q10370_MenacingTimes;
 
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -78,7 +78,7 @@ public class Q10370_MenacingTimes extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -125,7 +125,7 @@ public class Q10370_MenacingTimes extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
 		if (st == null) {
@@ -348,10 +348,10 @@ public class Q10370_MenacingTimes extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState st = getRandomPartyMemberState(killer, 3, 2, npc);
 		if ((st != null) && !st.isCompleted() && (npc.distance3d(killer) <= 1500)) {
-			final PlayerInstance player = st.getPlayer();
+			final Player player = st.getPlayer();
 			giveItemRandomly(player, npc, REMNANT_ASHES, 1, 0, MONSTER_DROP_CHANCES.get(npc.getId()), true);
 			if (getQuestItemsCount(player, REMNANT_ASHES) >= 30) {
 				st.setCond(4, true);
@@ -360,7 +360,7 @@ public class Q10370_MenacingTimes extends Quest {
 		return super.onKill(npc, killer, isSummon);
 	}
 
-	public boolean checkLevel(PlayerInstance player) {
+	public boolean checkLevel(Player player) {
 		final int level = player.getLevel();
 		if ((level >= MIN_LVL) && (level <= MAX_LVL)) {
 			return true;

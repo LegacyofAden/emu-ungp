@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.instancezone.conditions;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -45,12 +45,12 @@ public final class ConditionItem extends Condition {
 	}
 
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc) {
+	protected boolean test(Player player, Npc npc) {
 		return player.getInventory().getInventoryItemCount(_itemId, -1) >= _count;
 	}
 
 	@Override
-	protected void onSuccess(PlayerInstance player) {
+	protected void onSuccess(Player player) {
 		if (_take) {
 			player.destroyItemByItemId("InstanceConditionDestroy", _itemId, _count, null, true);
 		}

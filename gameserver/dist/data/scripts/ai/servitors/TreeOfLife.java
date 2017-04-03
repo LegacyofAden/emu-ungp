@@ -23,7 +23,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Tree of Life AI.
@@ -51,7 +51,7 @@ public final class TreeOfLife extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (player != null) {
 			final Summon summon = player.getFirstServitor();
 			if (event.equals("HEAL") && (summon != null) && ArrayUtil.contains(TREE_OF_LIFE, summon.getId())) {

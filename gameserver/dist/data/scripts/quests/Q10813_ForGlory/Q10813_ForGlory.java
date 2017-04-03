@@ -21,7 +21,7 @@ package quests.Q10813_ForGlory;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -58,7 +58,7 @@ public final class Q10813_ForGlory extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -101,7 +101,7 @@ public final class Q10813_ForGlory extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -126,7 +126,7 @@ public final class Q10813_ForGlory extends Quest {
 		return htmltext;
 	}
 
-	private void manageQuestProgress(PlayerInstance player) {
+	private void manageQuestProgress(Player player) {
 		if (player != null) {
 			final QuestState qs = getQuestState(player, false);
 

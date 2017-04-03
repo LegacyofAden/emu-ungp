@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.handler;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Community Board interface.
@@ -37,5 +37,5 @@ public interface IWriteBoardHandler extends IParseBoardHandler {
 	 * @param arg5   the fifth argument
 	 * @return
 	 */
-	boolean writeCommunityBoardCommand(PlayerInstance player, String arg1, String arg2, String arg3, String arg4, String arg5);
+	boolean writeCommunityBoardCommand(Player player, String arg1, String arg2, String arg3, String arg4, String arg5);
 }

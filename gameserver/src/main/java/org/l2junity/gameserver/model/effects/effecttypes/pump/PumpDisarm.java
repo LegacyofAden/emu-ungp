@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
@@ -42,7 +42,7 @@ public final class PumpDisarm extends AbstractBooleanStatEffect {
 
 	@Override
 	public void pumpStart(Creature caster, Creature target, Skill skill) {
-		final PlayerInstance player = target.getActingPlayer();
+		final Player player = target.getActingPlayer();
 		if (player != null) {
 			player.unequipWeapon();
 		}

@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2BlockInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -42,7 +42,7 @@ public class EventItem implements IItemHandler {
 
 		boolean used = false;
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 
 		final int itemId = item.getId();
 		switch (itemId) {
@@ -58,7 +58,7 @@ public class EventItem implements IItemHandler {
 		return used;
 	}
 
-	private final boolean useBlockCheckerItem(final PlayerInstance castor, ItemInstance item) {
+	private final boolean useBlockCheckerItem(final Player castor, ItemInstance item) {
 		final int blockCheckerArena = castor.getBlockCheckerArena();
 		if (blockCheckerArena == -1) {
 			SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
@@ -81,7 +81,7 @@ public class EventItem implements IItemHandler {
 		final ArenaParticipantsHolder holder = HandysBlockCheckerManager.getInstance().getHolder(blockCheckerArena);
 		if (holder != null) {
 			final int team = holder.getPlayerTeam(castor);
-			World.getInstance().forEachVisibleObjectInRadius(block, PlayerInstance.class, sk.getEffectRange(), pc ->
+			World.getInstance().forEachVisibleObjectInRadius(block, Player.class, sk.getEffectRange(), pc ->
 			{
 				final int enemyTeam = holder.getPlayerTeam(pc);
 				if ((enemyTeam != -1) && (enemyTeam != team)) {

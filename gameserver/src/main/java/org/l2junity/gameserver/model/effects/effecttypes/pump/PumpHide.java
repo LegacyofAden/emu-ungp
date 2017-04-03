@@ -22,7 +22,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -59,7 +59,7 @@ public final class PumpHide extends AbstractEffect {
 	@Override
 	public void pumpEnd(Creature caster, Creature target, Skill skill) {
 		if (target.isPlayer()) {
-			PlayerInstance activeChar = target.getActingPlayer();
+			Player activeChar = target.getActingPlayer();
 			if (!activeChar.inObserverMode()) {
 				activeChar.setInvisible(false);
 			}

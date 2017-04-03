@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.fishing;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -49,10 +49,10 @@ public class ExFishingEnd implements IClientOutgoingPacket {
 		ERROR;
 	}
 
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final FishingEndReason _reason;
 
-	public ExFishingEnd(PlayerInstance player, FishingEndReason reason) {
+	public ExFishingEnd(Player player, FishingEndReason reason) {
 		_player = player;
 		_reason = reason;
 	}

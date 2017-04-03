@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.enums.ExManagePartyRoomMemberType;
 import org.l2junity.gameserver.enums.MatchingMemberType;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.CommandChannelMatchingRoom;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,11 +30,11 @@ import org.l2junity.network.PacketWriter;
  * @author Gnacik
  */
 public class ExManageMpccRoomMember implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final MatchingMemberType _memberType;
 	private final ExManagePartyRoomMemberType _type;
 
-	public ExManageMpccRoomMember(PlayerInstance player, CommandChannelMatchingRoom room, ExManagePartyRoomMemberType mode) {
+	public ExManageMpccRoomMember(Player player, CommandChannelMatchingRoom room, ExManagePartyRoomMemberType mode) {
 		_activeChar = player;
 		_memberType = room.getMemberType(player);
 		_type = mode;

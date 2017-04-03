@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -39,7 +39,7 @@ public class PartyMemberPosition implements IClientOutgoingPacket {
 
 	public void reuse(Party party) {
 		locations.clear();
-		for (PlayerInstance member : party.getMembers()) {
+		for (Player member : party.getMembers()) {
 			if (member == null) {
 				continue;
 			}

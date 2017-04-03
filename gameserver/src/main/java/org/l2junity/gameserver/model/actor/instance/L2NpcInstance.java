@@ -58,7 +58,7 @@ public class L2NpcInstance extends Npc {
 	 * @param npc     the last folk.
 	 * @param classId player's active class id.
 	 */
-	public static void showSkillList(PlayerInstance player, Npc npc, ClassId classId) {
+	public static void showSkillList(Player player, Npc npc, ClassId classId) {
 		final int npcId = npc.getTemplate().getId();
 		if (npcId == 32611) // Tolonis (Officer)
 		{

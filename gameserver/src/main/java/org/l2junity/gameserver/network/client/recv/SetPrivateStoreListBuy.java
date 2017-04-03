@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.TradeItem;
 import org.l2junity.gameserver.model.TradeList;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -122,7 +122,7 @@ public final class SetPrivateStoreListBuy implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

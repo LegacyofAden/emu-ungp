@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PlayableStat;
 import org.l2junity.gameserver.model.actor.status.PlayableStatus;
 import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
@@ -51,7 +51,7 @@ import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
  */
 public abstract class Playable extends Creature {
 	private Creature _lockedTarget = null;
-	private PlayerInstance transferDmgTo = null;
+	private Player transferDmgTo = null;
 
 	/**
 	 * Constructor of L2Playable.<br>
@@ -137,7 +137,7 @@ public abstract class Playable extends Creature {
 			deleteBuffs = false;
 		}
 		if (isPlayer()) {
-			PlayerInstance activeChar = getActingPlayer();
+			Player activeChar = getActingPlayer();
 
 			if (activeChar.hasCharmOfCourage()) {
 				if (activeChar.isInSiege()) {
@@ -166,7 +166,7 @@ public abstract class Playable extends Creature {
 		}
 
 		if (killer != null) {
-			final PlayerInstance killerPlayer = killer.getActingPlayer();
+			final Player killerPlayer = killer.getActingPlayer();
 			if ((killerPlayer != null) && isPlayable()) {
 				killerPlayer.onPlayerKill(this);
 			}
@@ -177,8 +177,8 @@ public abstract class Playable extends Creature {
 		return true;
 	}
 
-	public boolean checkIfPvP(PlayerInstance target) {
-		final PlayerInstance player = getActingPlayer();
+	public boolean checkIfPvP(Player target) {
+		final Player player = getActingPlayer();
 
 		if ((player == null) || (target == null) || (player == target)) {
 			return true;
@@ -244,11 +244,11 @@ public abstract class Playable extends Creature {
 		_lockedTarget = cha;
 	}
 
-	public void setTransferDamageTo(PlayerInstance val) {
+	public void setTransferDamageTo(Player val) {
 		transferDmgTo = val;
 	}
 
-	public PlayerInstance getTransferingDamageTo() {
+	public Player getTransferingDamageTo() {
 		return transferDmgTo;
 	}
 

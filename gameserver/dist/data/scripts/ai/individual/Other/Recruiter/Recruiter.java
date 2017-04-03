@@ -23,7 +23,7 @@ import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -62,7 +62,7 @@ public final class Recruiter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		if (!TrainingCampConfig.ENABLE || !checkConditions(player)) {
@@ -175,11 +175,11 @@ public final class Recruiter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "4378.htm";
 	}
 
-	private boolean checkConditions(PlayerInstance player) {
+	private boolean checkConditions(Player player) {
 		if (player.getLevel() <= TrainingCampConfig.MIN_LEVEL) {
 			final SystemMessage sysMsg = SystemMessage.getSystemMessage(SystemMessageId.LV_S1_OR_ABOVE).addInt(TrainingCampConfig.MIN_LEVEL);
 			player.sendPacket(sysMsg);
@@ -225,7 +225,7 @@ public final class Recruiter extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	private void onPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final TrainingHolder holder = player.getAccountVariables().getObject(AccountVariables.TRAINING_CAMP, TrainingHolder.class);
 		if (holder == null) {
 			return;
@@ -249,7 +249,7 @@ public final class Recruiter extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_LOGOUT)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	private void onPlayerLogout(OnPlayerLogout event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final TrainingHolder holder = player.getAccountVariables().getObject(AccountVariables.TRAINING_CAMP, TrainingHolder.class);
 		if (holder == null) {
 			return;

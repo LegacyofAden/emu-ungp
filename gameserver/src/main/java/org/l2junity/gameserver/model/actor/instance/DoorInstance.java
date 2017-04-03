@@ -236,7 +236,7 @@ public final class DoorInstance extends Creature {
 			return false;
 		}
 
-		final PlayerInstance actingPlayer = attacker.getActingPlayer();
+		final Player actingPlayer = attacker.getActingPlayer();
 
 		// Attackable only during siege by everyone (not owner)
 		final boolean isCastle = ((getCastle() != null) && (getCastle().getResidenceId() > 0) && getCastle().getZone().isActive());
@@ -281,7 +281,7 @@ public final class DoorInstance extends Creature {
 
 	@Override
 	public void broadcastStatusUpdate(Creature caster) {
-		final Collection<PlayerInstance> knownPlayers = World.getInstance().getVisibleObjects(this, PlayerInstance.class);
+		final Collection<Player> knownPlayers = World.getInstance().getVisibleObjects(this, Player.class);
 		if ((knownPlayers == null) || knownPlayers.isEmpty()) {
 			return;
 		}
@@ -294,7 +294,7 @@ public final class DoorInstance extends Creature {
 			oe = new OnEventTrigger(getEmitter(), getTemplate().isReversed() ? !isOpen() : isOpen());
 		}
 
-		for (PlayerInstance player : knownPlayers) {
+		for (Player player : knownPlayers) {
 			if ((player == null) || !isVisibleFor(player)) {
 				continue;
 			}
@@ -459,7 +459,7 @@ public final class DoorInstance extends Creature {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		if (isVisibleFor(activeChar)) {
 			if (getEmitter() > 0) {
 				activeChar.sendPacket(new OnEventTrigger(getEmitter(), getTemplate().isReversed() ? !isOpen() : isOpen()));

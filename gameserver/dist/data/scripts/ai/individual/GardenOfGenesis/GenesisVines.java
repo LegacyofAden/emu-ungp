@@ -21,7 +21,7 @@ package ai.individual.GardenOfGenesis;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 
@@ -43,7 +43,7 @@ public final class GenesisVines extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("CAST_SKILL") && npc.isScriptValue(1)) {
 			final SkillHolder skill = npc.getId() == VINE ? VINE_SKILL : ROSE_VINE_SKILL;
 			if (SkillCaster.checkUseConditions(npc, skill.getSkill())) {

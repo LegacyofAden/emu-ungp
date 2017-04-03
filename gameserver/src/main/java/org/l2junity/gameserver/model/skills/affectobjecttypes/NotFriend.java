@@ -18,11 +18,11 @@
  */
 package org.l2junity.gameserver.model.skills.affectobjecttypes;
 
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.zone.ZoneId;
 
 /**
@@ -41,8 +41,8 @@ public class NotFriend implements IAffectObjectHandler {
 			return false;
 		}
 
-		final PlayerInstance player = activeChar.getActingPlayer();
-		final PlayerInstance targetPlayer = target.getActingPlayer();
+		final Player player = activeChar.getActingPlayer();
+		final Player targetPlayer = target.getActingPlayer();
 
 		if (player != null) {
 			if (targetPlayer != null) {

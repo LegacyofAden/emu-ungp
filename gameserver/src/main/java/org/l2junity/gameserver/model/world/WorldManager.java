@@ -7,7 +7,7 @@ import org.l2junity.commons.idfactory.AbstractIdFactory;
 import org.l2junity.commons.idfactory.DefaultIdFactory;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import lombok.Getter;
 
@@ -67,9 +67,9 @@ public class WorldManager {
 		return true;
 	}
 	
-	public PlayerInstance getPlayer(int objectId) {
+	public Player getPlayer(int objectId) {
 		for(GameWorld world : worlds.values()) {
-			final PlayerInstance player = world.getPlayer(objectId);
+			final Player player = world.getPlayer(objectId);
 			if(player != null) {
 				return player;
 			}
@@ -78,9 +78,9 @@ public class WorldManager {
 		return null;
 	}
 	
-	public PlayerInstance getPlayer(String nickname) {
+	public Player getPlayer(String nickname) {
 		for(GameWorld world : worlds.values()) {
-			final PlayerInstance player = world.getPlayer(nickname);
+			final Player player = world.getPlayer(nickname);
 			if(player != null) {
 				return player;
 			}

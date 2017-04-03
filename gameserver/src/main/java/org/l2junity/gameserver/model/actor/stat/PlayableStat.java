@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpChanged;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
@@ -70,7 +70,7 @@ public class PlayableStat extends CharStat {
 		}
 
 		if ((getLevel() > oldLevel) && getActiveChar().isPlayer()) {
-			final PlayerInstance activeChar = getActiveChar().getActingPlayer();
+			final Player activeChar = getActiveChar().getActingPlayer();
 			if (SkillTreesData.getInstance().hasAvailableSkills(activeChar, activeChar.getClassId())) {
 				getActiveChar().sendPacket(ExNewSkillToLearnByLevelUp.STATIC_PACKET);
 			}
@@ -125,8 +125,8 @@ public class PlayableStat extends CharStat {
 			setExp(getExpForLevel(getLevel()));
 		}
 
-		if (!levelIncreased && (getActiveChar() instanceof PlayerInstance) && !getActiveChar().isGM() && PlayerConfig.DECREASE_SKILL_LEVEL) {
-			((PlayerInstance) getActiveChar()).checkPlayerSkills();
+		if (!levelIncreased && (getActiveChar() instanceof Player) && !getActiveChar().isGM() && PlayerConfig.DECREASE_SKILL_LEVEL) {
+			((Player) getActiveChar()).checkPlayerSkills();
 		}
 
 		if (!levelIncreased) {

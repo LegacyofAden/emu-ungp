@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.mentoring;
 
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -36,7 +36,7 @@ public class ExMentorList implements IClientOutgoingPacket {
 	private final int _type;
 	private final Collection<Mentee> _mentees;
 
-	public ExMentorList(PlayerInstance activeChar) {
+	public ExMentorList(Player activeChar) {
 		if (activeChar.isMentor()) {
 			_type = 0x01;
 			_mentees = MentorManager.getInstance().getMentees(activeChar.getObjectId());

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.BuffInfo;
@@ -80,7 +80,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -124,7 +124,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		String htmltext = null;
 
@@ -169,7 +169,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -225,7 +225,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -261,7 +261,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			if (getRandom(100) < 6) {
@@ -316,7 +316,7 @@ public final class Nursery extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final Npc gameManager = instance.getNpc(TIE);

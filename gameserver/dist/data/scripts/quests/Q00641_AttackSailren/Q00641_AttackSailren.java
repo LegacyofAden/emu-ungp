@@ -20,7 +20,7 @@ package quests.Q00641_AttackSailren;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -57,7 +57,7 @@ public class Q00641_AttackSailren extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -78,8 +78,8 @@ public class Q00641_AttackSailren extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
-		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
+	public String onKill(Npc npc, Player player, boolean isSummon) {
+		final Player partyMember = getRandomPartyMember(player, 1);
 		if (partyMember != null) {
 			final QuestState st = getQuestState(partyMember, false);
 			if (st != null) {
@@ -95,7 +95,7 @@ public class Q00641_AttackSailren extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
 		if (st == null) {

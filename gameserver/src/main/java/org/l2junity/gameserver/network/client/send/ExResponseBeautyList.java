@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.BeautyShopData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.beautyshop.BeautyItem;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,14 +30,14 @@ import java.util.Map;
  * @author Sdw
  */
 public class ExResponseBeautyList implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _type;
 	private final Map<Integer, BeautyItem> _beautyItem;
 
 	public final static int SHOW_FACESHAPE = 1;
 	public final static int SHOW_HAIRSTYLE = 0;
 
-	public ExResponseBeautyList(PlayerInstance activeChar, int type) {
+	public ExResponseBeautyList(Player activeChar, int type) {
 		_activeChar = activeChar;
 		_type = type;
 		if (type == SHOW_HAIRSTYLE) {

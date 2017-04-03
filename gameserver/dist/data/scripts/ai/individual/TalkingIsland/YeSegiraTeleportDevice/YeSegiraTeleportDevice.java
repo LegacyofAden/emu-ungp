@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -81,7 +81,7 @@ public final class YeSegiraTeleportDevice extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (LOCATIONS.containsKey(event)) {
 			player.teleToLocation(LOCATIONS.get(event), true);
 
@@ -96,7 +96,7 @@ public final class YeSegiraTeleportDevice extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_CREATE)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerCreate(OnPlayerCreate event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if (player.getRace() != Race.ERTHEIA) {
 			player.getVariables().set(PlayerVariables.TI_YESEGIRA_MOVIE, true);
 		}

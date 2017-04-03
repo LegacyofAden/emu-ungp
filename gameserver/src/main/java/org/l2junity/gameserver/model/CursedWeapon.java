@@ -33,7 +33,7 @@ import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.Party.MessageType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.INamable;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -76,7 +76,7 @@ public class CursedWeapon implements INamable {
 	private long _endTime = 0;
 
 	private int _playerId = 0;
-	protected PlayerInstance _player = null;
+	protected Player _player = null;
 	private ItemInstance _item = null;
 	private int _playerReputation = 0;
 	private int _playerPkKills = 0;
@@ -214,11 +214,11 @@ public class CursedWeapon implements INamable {
 		}
 	}
 
-	private void dropIt(Attackable attackable, PlayerInstance player) {
+	private void dropIt(Attackable attackable, Player player) {
 		dropIt(attackable, player, null, true);
 	}
 
-	private void dropIt(Attackable attackable, PlayerInstance player, Creature killer, boolean fromMonster) {
+	private void dropIt(Attackable attackable, Player player, Creature killer, boolean fromMonster) {
 		_isActivated = false;
 
 		if (fromMonster) {
@@ -323,7 +323,7 @@ public class CursedWeapon implements INamable {
 
 	}
 
-	public boolean checkDrop(Attackable attackable, PlayerInstance player) {
+	public boolean checkDrop(Attackable attackable, Player player) {
 		if (Rnd.get(100000) < _dropRate) {
 			// Drop the item
 			dropIt(attackable, player);
@@ -338,7 +338,7 @@ public class CursedWeapon implements INamable {
 		return false;
 	}
 
-	public void activate(PlayerInstance player, ItemInstance item) {
+	public void activate(Player player, ItemInstance item) {
 		// If the player is mounted, attempt to unmount first.
 		// Only allow picking up the cursed weapon if unmounting is successful.
 		if (player.isMounted() && !player.dismount()) {
@@ -514,7 +514,7 @@ public class CursedWeapon implements INamable {
 		_endTime = endTime;
 	}
 
-	public void setPlayer(PlayerInstance player) {
+	public void setPlayer(Player player) {
 		_player = player;
 	}
 
@@ -551,7 +551,7 @@ public class CursedWeapon implements INamable {
 		return _playerId;
 	}
 
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return _player;
 	}
 
@@ -586,7 +586,7 @@ public class CursedWeapon implements INamable {
 		return _endTime - System.currentTimeMillis();
 	}
 
-	public void goTo(PlayerInstance player) {
+	public void goTo(Player player) {
 		if (player == null) {
 			return;
 		}

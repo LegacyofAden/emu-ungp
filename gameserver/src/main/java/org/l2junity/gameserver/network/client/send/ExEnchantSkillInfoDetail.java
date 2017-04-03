@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.EnchantSkillGroupsData;
 import org.l2junity.gameserver.enums.SkillEnchantType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.EnchantSkillHolder;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -38,7 +38,7 @@ public class ExEnchantSkillInfoDetail implements IClientOutgoingPacket {
 	private final int _skillSubLvl;
 	private final EnchantSkillHolder _enchantSkillHolder;
 
-	public ExEnchantSkillInfoDetail(SkillEnchantType type, int skillId, int skillLvl, int skillSubLvl, PlayerInstance player) {
+	public ExEnchantSkillInfoDetail(SkillEnchantType type, int skillId, int skillLvl, int skillSubLvl, Player player) {
 		_type = type;
 		_skillId = skillId;
 		_skillLvl = skillLvl;

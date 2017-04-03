@@ -73,7 +73,7 @@ public class L2ServitorInstance extends Summon implements Runnable {
 
 	private int _referenceSkill;
 
-	public L2ServitorInstance(L2NpcTemplate template, PlayerInstance owner) {
+	public L2ServitorInstance(L2NpcTemplate template, Player owner) {
 		super(template, owner);
 		setInstanceType(InstanceType.L2ServitorInstance);
 		setShowSummonAnimation(true);
@@ -361,7 +361,7 @@ public class L2ServitorInstance extends Summon implements Runnable {
 	}
 
 	@Override
-	public void unSummon(PlayerInstance owner) {
+	public void unSummon(Player owner) {
 		if (_summonLifeTask != null) {
 			_summonLifeTask.cancel(false);
 		}

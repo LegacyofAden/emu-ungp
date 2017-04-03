@@ -21,7 +21,7 @@ package ai.individual.Other.ArenaManager;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -63,7 +63,7 @@ public final class ArenaManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "CPrecovery": {
 				if (player.getAdena() >= CP_COST) {
@@ -100,7 +100,7 @@ public final class ArenaManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if ((player != null) && !player.isInsideZone(ZoneId.PVP)) {
 			if (event.equals("CPrecovery_delay")) {
 				npc.setTarget(player);

@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 import java.util.StringTokenizer;
@@ -41,7 +41,7 @@ public class AdminShutdown implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		st.nextToken();
 
@@ -56,7 +56,7 @@ public class AdminShutdown implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void start(String command, PlayerInstance player, TerminationStatus mode) {
+	private void start(String command, Player player, TerminationStatus mode) {
 		final StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
 
@@ -81,7 +81,7 @@ public class AdminShutdown implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void sendHtmlForm(PlayerInstance activeChar) {
+	private void sendHtmlForm(Player activeChar) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/shutdown.htm");
 		adminReply.replace("%count%", String.valueOf(World.getInstance().getPlayers().size()));

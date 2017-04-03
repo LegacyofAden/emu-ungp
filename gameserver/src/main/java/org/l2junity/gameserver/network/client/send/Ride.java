@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -30,7 +30,7 @@ public final class Ride implements IClientOutgoingPacket {
 	private final int _rideNpcId;
 	private final Location _loc;
 
-	public Ride(PlayerInstance player) {
+	public Ride(Player player) {
 		_objectId = player.getObjectId();
 		_mounted = player.isMounted() ? 1 : 0;
 		_rideType = player.getMountType().ordinal();

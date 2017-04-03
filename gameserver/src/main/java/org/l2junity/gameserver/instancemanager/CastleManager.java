@@ -27,7 +27,7 @@ import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
@@ -174,7 +174,7 @@ public final class CastleManager {
 		if (member == null) {
 			return;
 		}
-		PlayerInstance player = member.getPlayerInstance();
+		Player player = member.getPlayerInstance();
 		int circletId = getCircletByCastleId(castleId);
 
 		if (circletId != 0) {

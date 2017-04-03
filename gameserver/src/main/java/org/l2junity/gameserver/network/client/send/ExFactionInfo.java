@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.FactionData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.FactionHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -28,10 +28,10 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExFactionInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final boolean _open;
 
-	public ExFactionInfo(PlayerInstance player, boolean open) {
+	public ExFactionInfo(Player player, boolean open) {
 		_player = player;
 		_open = open;
 	}

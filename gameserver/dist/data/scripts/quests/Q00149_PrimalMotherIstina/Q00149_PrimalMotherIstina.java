@@ -19,7 +19,7 @@
 package quests.Q00149_PrimalMotherIstina;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -62,7 +62,7 @@ public class Q00149_PrimalMotherIstina extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -107,7 +107,7 @@ public class Q00149_PrimalMotherIstina extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {
@@ -138,12 +138,12 @@ public class Q00149_PrimalMotherIstina extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		npc.getInstanceWorld().getPlayers().forEach(this::giveItem);
 		return super.onKill(npc, killer, isSummon);
 	}
 
-	private void giveItem(PlayerInstance player) {
+	private void giveItem(Player player) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isCond(1) && !hasQuestItems(player, SHILENS_MARK)) {
 			giveItems(player, SHILENS_MARK, 1);

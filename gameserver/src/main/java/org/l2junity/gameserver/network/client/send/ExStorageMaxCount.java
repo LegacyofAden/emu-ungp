@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -39,7 +39,7 @@ public class ExStorageMaxCount implements IClientOutgoingPacket {
 	private final int _inventoryExtraSlots;
 	private final int _inventoryQuestItems;
 
-	public ExStorageMaxCount(PlayerInstance activeChar) {
+	public ExStorageMaxCount(Player activeChar) {
 		_inventory = activeChar.getInventoryLimit();
 		_warehouse = activeChar.getWareHouseLimit();
 		_freight = PlayerConfig.ALT_FREIGHT_SLOTS;

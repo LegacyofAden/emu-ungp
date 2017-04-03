@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -171,7 +171,7 @@ public class FinalEmperialTomb extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 
@@ -217,7 +217,7 @@ public class FinalEmperialTomb extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 
 		if (isInInstance(instance)) {
@@ -259,7 +259,7 @@ public class FinalEmperialTomb extends AbstractInstance {
 	}
 
 	@Override
-	public String onFactionCall(Npc npc, Npc caller, PlayerInstance attacker, boolean isSummon) {
+	public String onFactionCall(Npc npc, Npc caller, Player attacker, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 
 		if (isInInstance(instance)) {
@@ -287,7 +287,7 @@ public class FinalEmperialTomb extends AbstractInstance {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 
 		if (isInInstance(instance)) {
@@ -371,7 +371,7 @@ public class FinalEmperialTomb extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {

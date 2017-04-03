@@ -24,7 +24,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 
 import java.util.Set;
@@ -132,11 +132,11 @@ public final class MobGroup {
 		}
 	}
 
-	public void spawnGroup(PlayerInstance activeChar) {
+	public void spawnGroup(Player activeChar) {
 		spawnGroup(activeChar.getX(), activeChar.getY(), activeChar.getZ());
 	}
 
-	public void teleportGroup(PlayerInstance player) {
+	public void teleportGroup(Player player) {
 		removeDead();
 
 		for (L2ControllableMobInstance mobInst : getMobs()) {
@@ -193,7 +193,7 @@ public final class MobGroup {
 		getMobs().clear();
 	}
 
-	public void killGroup(PlayerInstance activeChar) {
+	public void killGroup(Player activeChar) {
 		removeDead();
 
 		for (L2ControllableMobInstance mobInst : getMobs()) {

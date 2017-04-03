@@ -26,10 +26,8 @@ import org.l2junity.gameserver.data.xml.impl.EnchantItemGroupsData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.scripting.GameScriptsLoader;
-import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +60,7 @@ public final class AdminReload implements IAdminCommandHandler {
 	}
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 		if (actualCommand.equalsIgnoreCase("admin_reload")) {
@@ -123,7 +121,7 @@ public final class AdminReload implements IAdminCommandHandler {
 		return true;
 	}
 
-	private static void showPage(PlayerInstance activeChar, String filename) {
+	private static void showPage(Player activeChar, String filename) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
 		html.setFile(activeChar.getHtmlPrefix(), filename);
 		html.replace("%reloadables%", RELOAD_USAGE);

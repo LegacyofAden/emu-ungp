@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -34,13 +34,13 @@ import java.util.concurrent.TimeUnit;
 public class L2Request {
 	private static final int REQUEST_TIMEOUT = 15; // in secs
 
-	protected PlayerInstance _player;
-	protected PlayerInstance _partner;
+	protected Player _player;
+	protected Player _partner;
 	protected boolean _isRequestor;
 	protected boolean _isAnswerer;
 	protected IClientIncomingPacket _requestPacket;
 
-	public L2Request(PlayerInstance player) {
+	public L2Request(Player player) {
 		_player = player;
 	}
 
@@ -56,14 +56,14 @@ public class L2Request {
 	 *
 	 * @param partner
 	 */
-	private synchronized void setPartner(PlayerInstance partner) {
+	private synchronized void setPartner(Player partner) {
 		_partner = partner;
 	}
 
 	/**
 	 * @return the L2PcInstance member of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
 	 */
-	public PlayerInstance getPartner() {
+	public Player getPartner() {
 		return _partner;
 	}
 
@@ -92,7 +92,7 @@ public class L2Request {
 	 * @param packet
 	 * @return
 	 */
-	public synchronized boolean setRequest(PlayerInstance partner, IClientIncomingPacket packet) {
+	public synchronized boolean setRequest(Player partner, IClientIncomingPacket packet) {
 		if (partner == null) {
 			_player.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return false;

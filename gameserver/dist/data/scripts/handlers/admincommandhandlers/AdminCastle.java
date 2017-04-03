@@ -26,7 +26,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -46,7 +46,7 @@ public final class AdminCastle implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 
@@ -69,7 +69,7 @@ public final class AdminCastle implements IAdminCommandHandler {
 					showCastleMenu(activeChar, castle.getResidenceId());
 				} else {
 					final String action = st.nextToken();
-					final PlayerInstance target = checkTarget(activeChar) ? activeChar.getActingPlayer() : null;
+					final Player target = checkTarget(activeChar) ? activeChar.getActingPlayer() : null;
 					switch (action) {
 						case "showRegWindow": {
 							castle.getSiege().listRegisterClan(activeChar);
@@ -175,7 +175,7 @@ public final class AdminCastle implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void showCastleMenu(PlayerInstance player, int castleId) {
+	private void showCastleMenu(Player player, int castleId) {
 		final Castle castle = CastleManager.getInstance().getCastleById(castleId);
 
 		if (castle != null) {
@@ -191,8 +191,8 @@ public final class AdminCastle implements IAdminCommandHandler {
 		}
 	}
 
-	private boolean checkTarget(PlayerInstance player) {
-		return ((player.getTarget() != null) && player.getTarget().isPlayer() && (((PlayerInstance) player.getTarget()).getClan() != null));
+	private boolean checkTarget(Player player) {
+		return ((player.getTarget() != null) && player.getTarget().isPlayer() && (((Player) player.getTarget()).getClan() != null));
 	}
 
 	@Override

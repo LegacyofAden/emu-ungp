@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.skills.conditiontypes;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -45,7 +45,7 @@ public class OpEncumberedSkillCondition implements ISkillCondition {
 			return false;
 		}
 
-		final PlayerInstance player = caster.getActingPlayer();
+		final Player player = caster.getActingPlayer();
 
 		// GMs in diet mode should skip this check.
 		if (player.getDietMode()) {

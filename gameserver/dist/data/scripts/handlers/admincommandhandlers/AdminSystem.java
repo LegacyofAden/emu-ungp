@@ -24,7 +24,7 @@ import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.SystemUtil;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public final class AdminSystem implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance player) {
+	public boolean useAdminCommand(String command, Player player) {
 		switch (command.toLowerCase()) {
 			case "admin_system_time":
 				for (final String line : SystemUtil.getSystemTime()) {

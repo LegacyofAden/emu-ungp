@@ -23,7 +23,7 @@ import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
@@ -144,7 +144,7 @@ public class AdventureGuildsman extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {
@@ -374,7 +374,7 @@ public class AdventureGuildsman extends AbstractNpcAI {
 		return htmltext;
 	}
 
-	private String applyBuffs(Npc npc, PlayerInstance player, Skill skill) {
+	private String applyBuffs(Npc npc, Player player, Skill skill) {
 		for (SkillHolder holder : GROUP_MELODY) {
 			npc.doInstantCast(player, holder);
 		}
@@ -386,7 +386,7 @@ public class AdventureGuildsman extends AbstractNpcAI {
 		return null;
 	}
 
-	private String applyBuffsGroup(Npc npc, PlayerInstance player, int length) {
+	private String applyBuffsGroup(Npc npc, Player player, int length) {
 		for (SkillHolder holder : GROUP_MELODY) {
 			npc.doInstantCast(player, holder);
 		}
@@ -394,7 +394,7 @@ public class AdventureGuildsman extends AbstractNpcAI {
 		return null;
 	}
 
-	private String tradeItem(PlayerInstance player, int itemId, int points) {
+	private String tradeItem(Player player, int itemId, int points) {
 		if (player.getPcCafePoints() >= 200000) {
 			return "pccafe_help_lottery_fail2.htm";
 		}
@@ -407,7 +407,7 @@ public class AdventureGuildsman extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return player.getLevel() < 40 ? "adventurer_agent_town_77001.htm" : "adventurer_agent_town_77001e.htm";
 	}
 

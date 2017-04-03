@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -48,7 +48,7 @@ public class ExAcquireSkillInfo implements IClientOutgoingPacket {
 	 * @param player
 	 * @param skillLearn the skill learn.
 	 */
-	public ExAcquireSkillInfo(PlayerInstance player, SkillLearn skillLearn) {
+	public ExAcquireSkillInfo(Player player, SkillLearn skillLearn) {
 		_id = skillLearn.getSkillId();
 		_level = skillLearn.getSkillLevel();
 		_dualClassLevel = skillLearn.getDualClassLevel();

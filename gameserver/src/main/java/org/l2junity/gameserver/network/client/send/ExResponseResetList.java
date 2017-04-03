@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,9 +26,9 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExResponseResetList implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public ExResponseResetList(PlayerInstance activeChar) {
+	public ExResponseResetList(Player activeChar) {
 		_activeChar = activeChar;
 	}
 

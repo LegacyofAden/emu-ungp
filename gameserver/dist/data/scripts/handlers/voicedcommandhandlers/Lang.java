@@ -21,7 +21,7 @@ package handlers.voicedcommandhandlers;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.Language;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 import java.util.StringTokenizer;
@@ -33,7 +33,7 @@ public class Lang implements IVoicedCommandHandler {
 			};
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+	public boolean useVoicedCommand(String command, Player activeChar, String params) {
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
 		if (params == null) {
 			final StringBuilder html = new StringBuilder(100);

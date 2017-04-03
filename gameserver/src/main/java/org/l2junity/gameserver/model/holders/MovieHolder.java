@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.gameserver.enums.Movie;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,10 +29,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class MovieHolder {
 	private final Movie _movie;
-	private final List<PlayerInstance> _players;
-	private final List<PlayerInstance> _votedPlayers = new CopyOnWriteArrayList<>();
+	private final List<Player> _players;
+	private final List<Player> _votedPlayers = new CopyOnWriteArrayList<>();
 
-	public MovieHolder(List<PlayerInstance> players, Movie movie) {
+	public MovieHolder(List<Player> players, Movie movie) {
 		_players = players;
 		_movie = movie;
 
@@ -43,7 +43,7 @@ public final class MovieHolder {
 		return _movie;
 	}
 
-	public void playerEscapeVote(PlayerInstance player) {
+	public void playerEscapeVote(Player player) {
 		if (getVotedPlayers().contains(player) || !getPlayers().contains(player) || !getMovie().isEscapable()) {
 			return;
 		}
@@ -51,15 +51,15 @@ public final class MovieHolder {
 		getVotedPlayers().add(player);
 
 		if (((getVotedPlayers().size() * 100) / getPlayers().size()) >= 50) {
-			getPlayers().forEach(PlayerInstance::stopMovie);
+			getPlayers().forEach(Player::stopMovie);
 		}
 	}
 
-	public List<PlayerInstance> getPlayers() {
+	public List<Player> getPlayers() {
 		return _players;
 	}
 
-	public List<PlayerInstance> getVotedPlayers() {
+	public List<Player> getVotedPlayers() {
 		return _votedPlayers;
 	}
 }

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -46,7 +46,7 @@ public final class WareHouseDepositList extends AbstractItemPacket {
 	 */
 	private final int _whType;
 
-	public WareHouseDepositList(PlayerInstance player, int type) {
+	public WareHouseDepositList(Player player, int type) {
 		_whType = type;
 		_playerAdena = player.getAdena();
 		final ItemContainer warehouse = player.getActiveWarehouse();

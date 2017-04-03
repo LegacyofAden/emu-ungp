@@ -20,7 +20,7 @@ package quests.Q00300_HuntingLetoLizardman;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -66,7 +66,7 @@ public final class Q00300_HuntingLetoLizardman extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -103,8 +103,8 @@ public final class Q00300_HuntingLetoLizardman extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
-		final PlayerInstance partyMember = getRandomPartyMember(player, 1);
+	public String onKill(Npc npc, Player player, boolean isSummon) {
+		final Player partyMember = getRandomPartyMember(player, 1);
 		if (partyMember != null) {
 			final QuestState st = getQuestState(partyMember, false);
 			if (st.isCond(1) && (getRandom(1000) < MOBS_SAC.get(npc.getId()))) {
@@ -120,7 +120,7 @@ public final class Q00300_HuntingLetoLizardman extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

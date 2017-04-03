@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.training;
 
 import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -34,7 +34,7 @@ public class ExTrainingZone_Admission implements IClientOutgoingPacket {
 	private final double _maxExp;
 	private final double _maxSp;
 
-	public ExTrainingZone_Admission(PlayerInstance player) {
+	public ExTrainingZone_Admission(Player player) {
 		_timeElapsed = 0;
 		_timeRemaining = TrainingCampConfig.MAX_DURATION;
 		_maxExp = (ExperienceData.getInstance().getExpForLevel(player.getLevel()) * ExperienceData.getInstance().getTrainingRate(player.getLevel())) / TrainingCampConfig.MAX_DURATION;

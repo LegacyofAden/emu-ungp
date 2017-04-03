@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExRotation;
 import org.l2junity.gameserver.network.client.send.SocialAction;
@@ -46,8 +46,8 @@ public class AnswerCoupleAction implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
-		final PlayerInstance target = World.getInstance().getPlayer(_charObjId);
+		final Player activeChar = client.getActiveChar();
+		final Player target = World.getInstance().getPlayer(_charObjId);
 		if ((activeChar == null) || (target == null)) {
 			return;
 		}

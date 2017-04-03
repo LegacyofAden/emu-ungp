@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,12 +29,12 @@ import org.l2junity.network.PacketWriter;
  * @author kerberos, JIV
  */
 public class ExStopMoveInAirShip implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _shipObjId;
 	private final int _h;
 	private final Location _loc;
 
-	public ExStopMoveInAirShip(PlayerInstance player, int shipObjId) {
+	public ExStopMoveInAirShip(Player player, int shipObjId) {
 		_activeChar = player;
 		_shipObjId = shipObjId;
 		_h = player.getHeading();

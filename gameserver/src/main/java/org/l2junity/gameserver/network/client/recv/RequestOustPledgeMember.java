@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExPledgeCount;
 import org.l2junity.gameserver.network.client.send.PledgeShowMemberListDelete;
@@ -41,7 +41,7 @@ public final class RequestOustPledgeMember implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -86,7 +86,7 @@ public final class RequestOustPledgeMember implements IClientIncomingPacket {
 		clan.broadcastToOnlineMembers(new ExPledgeCount(clan));
 
 		if (member.isOnline()) {
-			PlayerInstance player = member.getPlayerInstance();
+			Player player = member.getPlayerInstance();
 			player.sendPacket(SystemMessageId.YOU_HAVE_RECENTLY_BEEN_DISMISSED_FROM_A_CLAN_YOU_ARE_NOT_ALLOWED_TO_JOIN_ANOTHER_CLAN_FOR_24_HOURS);
 		}
 	}

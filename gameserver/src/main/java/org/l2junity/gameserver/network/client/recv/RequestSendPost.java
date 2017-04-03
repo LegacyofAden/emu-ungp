@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.AccessLevel;
 import org.l2junity.gameserver.model.BlockList;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
@@ -100,7 +100,7 @@ public final class RequestSendPost implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -228,7 +228,7 @@ public final class RequestSendPost implements IClientIncomingPacket {
 		}
 	}
 
-	private boolean removeItems(PlayerInstance player, Message msg) {
+	private boolean removeItems(Player player, Message msg) {
 		long currentAdena = player.getAdena();
 		long fee = PlayerConfig.ALT_MESSAGE_FEE;
 

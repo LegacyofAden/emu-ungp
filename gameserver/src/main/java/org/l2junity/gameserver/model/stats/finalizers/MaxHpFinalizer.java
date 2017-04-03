@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.EnchantItemHPBonusData;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -43,7 +43,7 @@ public class MaxHpFinalizer implements IStatsFunction {
 			final L2PetInstance pet = (L2PetInstance) creature;
 			baseValue = pet.getPetLevelData().getPetMaxHP();
 		} else if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			if (player != null) {
 				baseValue = player.getTemplate().getBaseHpMax(player.getLevel());
 

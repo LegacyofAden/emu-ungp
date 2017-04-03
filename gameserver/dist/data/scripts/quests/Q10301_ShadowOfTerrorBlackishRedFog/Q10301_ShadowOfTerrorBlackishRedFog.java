@@ -21,7 +21,7 @@ package quests.Q10301_ShadowOfTerrorBlackishRedFog;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -71,7 +71,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
@@ -118,7 +118,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -154,7 +154,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		final QuestState qs = getQuestState(caster, false);
 		if ((qs != null) && qs.isCond(2) && (skill.getId() == WHISP_SKILL)) {
 			final Npc whisp = addSpawn(WHISP, caster, true, 20000);
@@ -165,7 +165,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final QuestState qs = getQuestState(attacker, false);
 		if ((qs != null) && qs.isCond(2)) {
 			if (getRandom(1000) < 500) {
@@ -180,7 +180,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 
 		if ((qs == null) && (event.getOldLevel() < event.getNewLevel()) && canStartQuest(player)) {
@@ -192,7 +192,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 
 		if ((qs == null) && canStartQuest(player) && !hasQuestItems(player, LADA_LETTER)) {
@@ -204,7 +204,7 @@ public final class Q10301_ShadowOfTerrorBlackishRedFog extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if ((event.getQuestId() == getId()) && canStartQuest(player) && !hasQuestItems(player, LADA_LETTER)) {
 			final String html = getHtm(player.getLang(), "popup.html");
 			player.sendPacket(new TutorialShowHtml(html));

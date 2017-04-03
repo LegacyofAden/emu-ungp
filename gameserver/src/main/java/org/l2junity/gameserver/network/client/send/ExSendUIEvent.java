@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.network.PacketWriter;
@@ -45,7 +45,7 @@ public class ExSendUIEvent implements IClientOutgoingPacket {
 	 * @param endTime
 	 * @param text
 	 */
-	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, String text) {
+	public ExSendUIEvent(Player player, boolean hide, boolean countUp, int startTime, int endTime, String text) {
 		this(player, hide ? 1 : 0, countUp ? 1 : 0, startTime / 60, startTime % 60, endTime / 60, endTime % 60, -1, text);
 	}
 
@@ -58,7 +58,7 @@ public class ExSendUIEvent implements IClientOutgoingPacket {
 	 * @param npcString
 	 * @param params
 	 */
-	public ExSendUIEvent(PlayerInstance player, boolean hide, boolean countUp, int startTime, int endTime, NpcStringId npcString, String... params) {
+	public ExSendUIEvent(Player player, boolean hide, boolean countUp, int startTime, int endTime, NpcStringId npcString, String... params) {
 		this(player, hide ? 1 : 0, countUp ? 1 : 0, startTime / 60, startTime % 60, endTime / 60, endTime % 60, npcString.getId(), params);
 	}
 
@@ -73,7 +73,7 @@ public class ExSendUIEvent implements IClientOutgoingPacket {
 	 * @param npcstringId
 	 * @param params
 	 */
-	public ExSendUIEvent(PlayerInstance player, int type, int countUp, int startTime, int startTime2, int endTime, int endTime2, int npcstringId, String... params) {
+	public ExSendUIEvent(Player player, int type, int countUp, int startTime, int startTime2, int endTime, int endTime2, int npcstringId, String... params) {
 		_objectId = player.getObjectId();
 		_type = type;
 		_countUp = countUp;

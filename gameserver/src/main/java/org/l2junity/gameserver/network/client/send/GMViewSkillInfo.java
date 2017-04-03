@@ -19,7 +19,7 @@
 
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -27,10 +27,10 @@ import org.l2junity.network.PacketWriter;
 import java.util.Collection;
 
 public class GMViewSkillInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Collection<Skill> _skills;
 
-	public GMViewSkillInfo(PlayerInstance cha) {
+	public GMViewSkillInfo(Player cha) {
 		_activeChar = cha;
 		_skills = _activeChar.getSkillList();
 	}

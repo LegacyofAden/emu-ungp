@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model;
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
@@ -46,8 +46,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TradeList {
 	private static final Logger _log = LoggerFactory.getLogger(TradeList.class);
 
-	private final PlayerInstance _owner;
-	private PlayerInstance _partner;
+	private final Player _owner;
+	private Player _partner;
 	private final Set<TradeItem> _items = ConcurrentHashMap.newKeySet();
 	private String _title;
 	private boolean _packaged;
@@ -55,19 +55,19 @@ public class TradeList {
 	private boolean _confirmed = false;
 	private boolean _locked = false;
 
-	public TradeList(PlayerInstance owner) {
+	public TradeList(Player owner) {
 		_owner = owner;
 	}
 
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return _owner;
 	}
 
-	public void setPartner(PlayerInstance partner) {
+	public void setPartner(Player partner) {
 		_partner = partner;
 	}
 
-	public PlayerInstance getPartner() {
+	public Player getPartner() {
 		return _partner;
 	}
 
@@ -442,7 +442,7 @@ public class TradeList {
 	 * @param partnerIU
 	 * @return
 	 */
-	private boolean TransferItems(PlayerInstance partner, InventoryUpdate ownerIU, InventoryUpdate partnerIU) {
+	private boolean TransferItems(Player partner, InventoryUpdate ownerIU, InventoryUpdate partnerIU) {
 		for (TradeItem titem : _items) {
 			ItemInstance oldItem = _owner.getInventory().getItemByObjectId(titem.getObjectId());
 			if (oldItem == null) {
@@ -477,7 +477,7 @@ public class TradeList {
 	 * @param partner
 	 * @return items slots count
 	 */
-	public int countItemsSlots(PlayerInstance partner) {
+	public int countItemsSlots(Player partner) {
 		int slots = 0;
 
 		for (TradeItem item : _items) {
@@ -568,7 +568,7 @@ public class TradeList {
 	 * @param items
 	 * @return int: result of trading. 0 - ok, 1 - canceled (no adena), 2 - failed (item error)
 	 */
-	public synchronized int privateStoreBuy(PlayerInstance player, Set<ItemRequest> items) {
+	public synchronized int privateStoreBuy(Player player, Set<ItemRequest> items) {
 		if (_locked) {
 			return 1;
 		}
@@ -756,7 +756,7 @@ public class TradeList {
 	 * @param requestedItems
 	 * @return : boolean true if success
 	 */
-	public synchronized boolean privateStoreSell(PlayerInstance player, ItemRequest[] requestedItems) {
+	public synchronized boolean privateStoreSell(Player player, ItemRequest[] requestedItems) {
 		if (_locked) {
 			return false;
 		}

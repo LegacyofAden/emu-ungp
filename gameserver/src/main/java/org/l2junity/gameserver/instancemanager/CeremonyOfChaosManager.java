@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
 import org.l2junity.gameserver.model.eventengine.AbstractEventManager;
@@ -118,7 +118,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		}
 
 		setState(CeremonyOfChaosState.REGISTRATION);
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(SystemMessageId.REGISTRATION_FOR_THE_CEREMONY_OF_CHAOS_HAS_BEGUN);
 				if (canRegister(player, false)) {
@@ -135,7 +135,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		}
 
 		setState(CeremonyOfChaosState.PREPARING_FOR_TELEPORT);
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(SystemMessageId.REGISTRATION_FOR_THE_CEREMONY_OF_CHAOS_HAS_ENDED);
 				if (!isRegistered(player)) {
@@ -157,11 +157,11 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		int eventId = 0;
 		int position = 1;
 		CeremonyOfChaosEvent event = null;
-		final List<PlayerInstance> players = getRegisteredPlayers().stream().sorted(Comparator.comparingInt(PlayerInstance::getLevel)).collect(Collectors.toList());
+		final List<Player> players = getRegisteredPlayers().stream().sorted(Comparator.comparingInt(Player::getLevel)).collect(Collectors.toList());
 		final int maxPlayers = getMaxPlayersInArena();
 		final List<Integer> templates = getVariables().getList(INSTANCE_TEMPLATES_KEY, Integer.class);
 
-		for (PlayerInstance player : players) {
+		for (Player player : players) {
 			if (player.isOnline() && canRegister(player, true)) {
 				if ((event == null) || (event.getMembers().size() >= maxPlayers)) {
 					final int template = templates.get(Rnd.get(templates.size()));
@@ -206,7 +206,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		switch (event) {
 			case "count_down": {
 				final int time = params.getInt("time", 0);
@@ -232,7 +232,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	}
 
 	@Override
-	public boolean canRegister(PlayerInstance player, boolean sendMessage) {
+	public boolean canRegister(Player player, boolean sendMessage) {
 		boolean canRegister = true;
 
 		final L2Clan clan = player.getClan();
@@ -301,7 +301,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	@RegisterEvent(EventType.ON_PLAYER_BYPASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	private TerminateReturn OnPlayerBypass(OnPlayerBypass event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if (player == null) {
 			return null;
 		}
@@ -321,7 +321,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	private void OnPlayerLogin(OnPlayerLogin event) {
 		if (getState() == CeremonyOfChaosState.REGISTRATION) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			if (canRegister(player, false)) {
 				player.sendPacket(ExCuriousHouseState.REGISTRATION_PACKET);
 			}
@@ -332,7 +332,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	@RegisterType(ListenerRegisterType.GLOBAL)
 	private void OnPlayerLogout(OnPlayerLogout event) {
 		if (getState() == CeremonyOfChaosState.REGISTRATION) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			if (getRegisteredPlayers().contains(player)) {
 				getRegisteredPlayers().remove(player);
 			}

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.actor.request;
 import org.l2junity.gameserver.data.xml.impl.SayuneData;
 import org.l2junity.gameserver.enums.SayuneType;
 import org.l2junity.gameserver.model.SayuneEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.sayune.ExFlyMove;
 import org.l2junity.gameserver.network.client.send.sayune.ExFlyMoveBroadcast;
 import org.l2junity.gameserver.util.Broadcast;
@@ -36,7 +36,7 @@ public class SayuneRequest extends AbstractRequest {
 	private boolean _isSelecting;
 	private final Deque<SayuneEntry> _possibleEntries = new LinkedList<>();
 
-	public SayuneRequest(PlayerInstance player, int mapId) {
+	public SayuneRequest(Player player, int mapId) {
 		super(player);
 		_mapId = mapId;
 
@@ -60,7 +60,7 @@ public class SayuneRequest extends AbstractRequest {
 		return _possibleEntries.removeFirst();
 	}
 
-	public synchronized void move(PlayerInstance activeChar, int pos) {
+	public synchronized void move(Player activeChar, int pos) {
 		final SayuneEntry map = SayuneData.getInstance().getMap(_mapId);
 		if ((map == null) || map.getInnerEntries().isEmpty()) {
 			activeChar.sendMessage("MapId: " + _mapId + " was not found in the map!");

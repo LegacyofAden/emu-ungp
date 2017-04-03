@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -120,7 +120,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (player == null) {
 			return super.onAdvEvent(event, npc, player);
 		}
@@ -236,7 +236,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState qs = getQuestState(player, true);
 
@@ -360,8 +360,8 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
-		final PlayerInstance partyMember = getRandomPartyMember(killer);
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
+		final Player partyMember = getRandomPartyMember(killer);
 		final QuestState qs = getQuestState(partyMember, false);
 
 		if (canProgress(partyMember) && (qs != null) && qs.isStarted() && (partyMember.distance3d(npc) <= 1500)) {
@@ -409,7 +409,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			final QuestState qs = getQuestState(player, false);
 
 			if ((qs != null) && qs.isStarted()) {
@@ -464,7 +464,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance player, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player player, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (player != null) {
 			switch (npc.getId()) {
 				case INVISIBLE_NPC_NOBLE: {
@@ -519,7 +519,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 
 		if ((qs != null) && qs.isStarted() && qs.isCond(10)) {
@@ -528,7 +528,7 @@ public final class Q10369_NoblesseSoulTesting extends Quest {
 		return super.onFirstTalk(npc, player);
 	}
 
-	public boolean canProgress(PlayerInstance player) {
+	public boolean canProgress(Player player) {
 		return ((player.getLevel() >= MIN_LEVEL) && player.isSubClassActive());
 	}
 }

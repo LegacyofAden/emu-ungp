@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -63,7 +63,7 @@ public final class Q00193_SevenSignsDyingMessage extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if ((npc.getId() == SHILENS_EVIL_THOUGHTS) && "despawn".equals(event)) {
 			if (!npc.isDead()) {
 				isBusy = false;
@@ -177,8 +177,8 @@ public final class Q00193_SevenSignsDyingMessage extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
-		final PlayerInstance partyMember = getRandomPartyMember(player, 4);
+	public String onKill(Npc npc, Player player, boolean isSummon) {
+		final Player partyMember = getRandomPartyMember(player, 4);
 		if (partyMember == null) {
 			return null;
 		}
@@ -198,7 +198,7 @@ public final class Q00193_SevenSignsDyingMessage extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		switch (st.getState()) {

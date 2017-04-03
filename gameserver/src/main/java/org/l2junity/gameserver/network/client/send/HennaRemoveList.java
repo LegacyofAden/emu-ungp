@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.Henna;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -27,9 +27,9 @@ import org.l2junity.network.PacketWriter;
  * @author Zoey76
  */
 public class HennaRemoveList implements IClientOutgoingPacket {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public HennaRemoveList(PlayerInstance player) {
+	public HennaRemoveList(Player player) {
 		_player = player;
 	}
 

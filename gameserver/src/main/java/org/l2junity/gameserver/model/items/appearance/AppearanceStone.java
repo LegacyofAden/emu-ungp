@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.items.appearance;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.AppearanceHolder;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -217,7 +217,7 @@ public class AppearanceStone {
 	 * @param targetItem the item to be modified with this appearance.
 	 * @return {@code true} if the item is valid for appearance change, {@code false} otherwise.
 	 */
-	public boolean checkConditions(PlayerInstance player, ItemInstance targetItem) {
+	public boolean checkConditions(Player player, ItemInstance targetItem) {
 		if (targetItem == null) {
 			return false;
 		}

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -57,7 +57,7 @@ public abstract class LetterQuest extends Quest {
 	 * @param player player trying start quest
 	 * @return {@code true} when additional conditions are met, otherwise {@code false}
 	 */
-	public boolean canShowTutorialMark(PlayerInstance player) {
+	public boolean canShowTutorialMark(Player player) {
 		return true;
 	}
 
@@ -119,14 +119,14 @@ public abstract class LetterQuest extends Quest {
 	}
 
 	@Override
-	public boolean canStartQuest(PlayerInstance player) {
+	public boolean canStartQuest(Player player) {
 		return canShowTutorialMark(player) && super.canStartQuest(player);
 	}
 
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if ((event.getQuestId() == getId()) && canStartQuest(player)) {
 			final String html = getHtm(player.getLang(), "popup.html").replace("%teleport%", getTeleportCommand());
 			final QuestState st = getQuestState(player, true);
@@ -141,7 +141,7 @@ public abstract class LetterQuest extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_BYPASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerBypass(OnPlayerBypass event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 
 		if (event.getCommand().equals(getTeleportCommand())) {
@@ -171,7 +171,7 @@ public abstract class LetterQuest extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 
 		if ((st == null) && (event.getOldLevel() < event.getNewLevel()) && canStartQuest(player)) {
@@ -184,7 +184,7 @@ public abstract class LetterQuest extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 
 		if ((st == null) && canStartQuest(player)) {
@@ -198,7 +198,7 @@ public abstract class LetterQuest extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onQuestAborted(OnPlayerQuestAbort evt) {
 		if (evt.getQuestId() == getId()) {
-			final PlayerInstance player = evt.getActiveChar();
+			final Player player = evt.getActiveChar();
 
 			getQuestState(player, true).startQuest();
 			player.sendPacket(SystemMessageId.THIS_QUEST_CANNOT_BE_DELETED);

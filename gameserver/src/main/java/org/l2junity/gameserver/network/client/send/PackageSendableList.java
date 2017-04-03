@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -34,7 +34,7 @@ public class PackageSendableList extends AbstractItemPacket {
 	private final int _objectId;
 	private final long _adena;
 
-	public PackageSendableList(PlayerInstance player, int objectId) {
+	public PackageSendableList(Player player, int objectId) {
 		_items = player.getInventory().getAvailableItems(true, true, true);
 		_objectId = objectId;
 		_adena = player.getAdena();

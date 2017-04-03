@@ -131,7 +131,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		}
 
 		// Gets the player if there is any.
-		final PlayerInstance player = target.getActingPlayer();
+		final Player player = target.getActingPlayer();
 		if (player != null) {
 			// Don't take the aggro if the GM has the access level below or equal to GM_DONT_TAKE_AGGRO
 			if (!player.getAccessLevel().canTakeAggro()) {
@@ -191,7 +191,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			Attackable npc = getActiveChar();
 			if (!npc.isAlikeDead()) {
 				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
-				if (!World.getInstance().getVisibleObjects(npc, PlayerInstance.class).isEmpty()) {
+				if (!World.getInstance().getVisibleObjects(npc, Player.class).isEmpty()) {
 					intention = AI_INTENTION_ACTIVE;
 				} else {
 					if (npc.getSpawn() != null) {

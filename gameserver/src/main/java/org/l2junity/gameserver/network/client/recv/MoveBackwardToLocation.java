@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.AdminTeleportType;
 import org.l2junity.gameserver.enums.SayuneType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.SayuneEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMoveRequest;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
@@ -75,7 +75,7 @@ public class MoveBackwardToLocation implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

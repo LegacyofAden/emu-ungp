@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.zone.type.SiegeZone;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -41,7 +41,7 @@ public class SiegeStatus implements IUserCommandHandler {
 	private static final String OUTSIDE_SIEGE_ZONE = "No Castle Siege Area";
 
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+	public boolean useUserCommand(int id, Player activeChar) {
 		if (id != COMMAND_IDS[0]) {
 			return false;
 		}
@@ -63,7 +63,7 @@ public class SiegeStatus implements IUserCommandHandler {
 
 			final SiegeZone siegeZone = siege.getCastle().getZone();
 			final StringBuilder sb = new StringBuilder();
-			for (PlayerInstance member : clan.getOnlineMembers(0)) {
+			for (Player member : clan.getOnlineMembers(0)) {
 				sb.append("<tr><td width=170>");
 				sb.append(member.getName());
 				sb.append("</td><td width=100>");

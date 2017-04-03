@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,19 +26,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerDlgAnswer implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _messageId;
 	private final int _answer;
 	private final int _requesterId;
 
-	public OnPlayerDlgAnswer(PlayerInstance activeChar, int messageId, int answer, int requesterId) {
+	public OnPlayerDlgAnswer(Player activeChar, int messageId, int answer, int requesterId) {
 		_activeChar = activeChar;
 		_messageId = messageId;
 		_answer = answer;
 		_requesterId = requesterId;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

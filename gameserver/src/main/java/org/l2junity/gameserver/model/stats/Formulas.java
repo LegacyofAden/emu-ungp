@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.items.Armor;
@@ -497,7 +497,7 @@ public final class Formulas {
 		}
 
 		if (sendSysMsg && target.isPlayer()) {
-			PlayerInstance enemy = target.getActingPlayer();
+			Player enemy = target.getActingPlayer();
 
 			switch (shldSuccess) {
 				case SHIELD_DEFENSE_SUCCEED:
@@ -1392,7 +1392,7 @@ public final class Formulas {
 		return 1;
 	}
 
-	public static double calcSoulBonus(PlayerInstance player, Skill skill) {
+	public static double calcSoulBonus(Player player, Skill skill) {
 		return ((player.getChargedSouls() - skill.getMaxSoulConsumeCount()) * 0.05) + 1.3;
 	}
 }

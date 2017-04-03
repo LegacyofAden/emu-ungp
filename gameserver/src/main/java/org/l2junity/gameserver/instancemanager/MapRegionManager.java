@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -197,7 +197,7 @@ public final class MapRegionManager implements IGameXmlReader {
 	 */
 	public Location getTeleToLocation(Creature activeChar, TeleportWhereType teleportWhere) {
 		if (activeChar.isPlayer()) {
-			final PlayerInstance player = activeChar.getActingPlayer();
+			final Player player = activeChar.getActingPlayer();
 
 			Castle castle = null;
 			Fort fort = null;
@@ -285,7 +285,7 @@ public final class MapRegionManager implements IGameXmlReader {
 				try {
 					final RespawnZone zone = ZoneManager.getInstance().getZone(player, RespawnZone.class);
 					if (zone != null) {
-						return getRestartRegion(activeChar, zone.getRespawnPoint((PlayerInstance) activeChar)).getChaoticSpawnLoc();
+						return getRestartRegion(activeChar, zone.getRespawnPoint((Player) activeChar)).getChaoticSpawnLoc();
 					}
 					return getMapRegion(activeChar).getChaoticSpawnLoc();
 				} catch (Exception e) {
@@ -321,7 +321,7 @@ public final class MapRegionManager implements IGameXmlReader {
 		try {
 			RespawnZone zone = ZoneManager.getInstance().getZone(activeChar, RespawnZone.class);
 			if (zone != null) {
-				return getRestartRegion(activeChar, zone.getRespawnPoint((PlayerInstance) activeChar)).getSpawnLoc();
+				return getRestartRegion(activeChar, zone.getRespawnPoint((Player) activeChar)).getSpawnLoc();
 			}
 			return getMapRegion(activeChar).getSpawnLoc();
 		} catch (Exception e) {
@@ -337,7 +337,7 @@ public final class MapRegionManager implements IGameXmlReader {
 	 */
 	public MapRegion getRestartRegion(Creature activeChar, String point) {
 		try {
-			PlayerInstance player = ((PlayerInstance) activeChar);
+			Player player = ((Player) activeChar);
 			MapRegion region = _regions.get(point);
 
 			if (region.getBannedRace().containsKey(player.getRace())) {

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,14 +26,14 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExShowBeautyMenu implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _type;
 
 	// TODO: Enum
 	public final static int MODIFY_APPEARANCE = 0;
 	public final static int RESTORE_APPEARANCE = 1;
 
-	public ExShowBeautyMenu(PlayerInstance activeChar, int type) {
+	public ExShowBeautyMenu(Player activeChar, int type) {
 		_activeChar = activeChar;
 		_type = type;
 	}

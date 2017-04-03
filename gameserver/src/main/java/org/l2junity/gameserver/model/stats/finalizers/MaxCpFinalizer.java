@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -35,7 +35,7 @@ public class MaxCpFinalizer implements IStatsFunction {
 		throwIfPresent(base);
 
 		double baseValue = creature.getTemplate().getBaseValue(stat, 0);
-		final PlayerInstance player = creature.getActingPlayer();
+		final Player player = creature.getActingPlayer();
 		if (player != null) {
 			baseValue = player.getTemplate().getBaseCpMax(player.getLevel());
 		}

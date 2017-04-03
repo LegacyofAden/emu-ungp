@@ -20,7 +20,7 @@ package handlers.usercommandhandlers;
 
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Mount user command.
@@ -34,7 +34,7 @@ public class Mount implements IUserCommandHandler {
 			};
 
 	@Override
-	public synchronized boolean useUserCommand(int id, PlayerInstance activeChar) {
+	public synchronized boolean useUserCommand(int id, Player activeChar) {
 		if (id != COMMAND_IDS[0]) {
 			return false;
 		}

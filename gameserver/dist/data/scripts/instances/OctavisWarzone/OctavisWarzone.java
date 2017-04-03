@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -124,7 +124,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "enterEasyInstance": {
 				enterInstance(player, npc, TEMPLATE_ID);
@@ -146,7 +146,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (isInInstance(world)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -275,7 +275,7 @@ public final class OctavisWarzone extends AbstractInstance {
 					break;
 				}
 				case "MINION_CALL": {
-					final PlayerInstance mostHated = ((Attackable) npc).getMostHated().getActingPlayer();
+					final Player mostHated = ((Attackable) npc).getMostHated().getActingPlayer();
 					if ((mostHated != null) && (mostHated.distance3d(npc) < 5000)) {
 						World.getInstance().getVisibleObjects(npc, Attackable.class, 4000, obj -> ArrayUtil.contains(BEASTS_MINIONS, obj.getId()) || ArrayUtil.contains(GLADIATORS, obj.getId())).forEach(minion ->
 						{
@@ -307,7 +307,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (isInInstance(world)) {
 			final int hpPer = npc.getCurrentHpPercent();
@@ -357,7 +357,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (isInInstance(world)) {
 			if (ArrayUtil.contains(OCTAVIS_STAGE_1, npc.getId())) {
@@ -392,7 +392,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		if ((player != null) && isInInstance(instance)) {
 			showHtmlFile(player, (instance.getTemplateId() == TEMPLATE_ID) ? "PartyEnterCommon.html" : "PartyEnterExtreme.html");
 		}
@@ -421,7 +421,7 @@ public final class OctavisWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if (skill.getId() == STAGE_2_SKILL_3.getSkillId()) {
 			npc.setState(6);
 		}

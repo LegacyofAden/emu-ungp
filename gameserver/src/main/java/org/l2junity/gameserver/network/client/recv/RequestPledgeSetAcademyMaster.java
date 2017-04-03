@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -47,7 +47,7 @@ public final class RequestPledgeSetAcademyMaster implements IClientIncomingPacke
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 		L2Clan clan = activeChar.getClan();
 		if (clan == null) {
 			return;
@@ -73,8 +73,8 @@ public final class RequestPledgeSetAcademyMaster implements IClientIncomingPacke
 			sponsorMember = currentMember;
 		}
 
-		PlayerInstance apprentice = apprenticeMember.getPlayerInstance();
-		PlayerInstance sponsor = sponsorMember.getPlayerInstance();
+		Player apprentice = apprenticeMember.getPlayerInstance();
+		Player sponsor = sponsorMember.getPlayerInstance();
 
 		SystemMessage sm = null;
 		if (_set == 0) {

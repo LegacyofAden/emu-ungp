@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -92,7 +92,7 @@ public final class IstinaCavern extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
@@ -136,7 +136,7 @@ public final class IstinaCavern extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
@@ -268,7 +268,7 @@ public final class IstinaCavern extends AbstractInstance {
 						istina.teleToLocation(DEFEAT_ISTINA_LOC);
 						istina.setInvisible(false);
 						istina.setUndying(false);
-						istina.reduceCurrentHp(istina.getVariables().getInt("REWARD_DAMAGE", 1000000), istina.getVariables().getObject("REWARD_PLAYER", PlayerInstance.class), null);
+						istina.reduceCurrentHp(istina.getVariables().getInt("REWARD_DAMAGE", 1000000), istina.getVariables().getObject("REWARD_PLAYER", Player.class), null);
 					});
 					break;
 				}
@@ -305,7 +305,7 @@ public final class IstinaCavern extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if ((skill != null) && isInInstance(instance)) {
 			final int skillId = skill.getId();
@@ -318,7 +318,7 @@ public final class IstinaCavern extends AbstractInstance {
 					getTimers().addTimer("NPC_DELETE", 2000, event -> npc.deleteMe());
 
 					if (isExtremeMode(instance) && (getRandom(100) < 30)) {
-						addAttackPlayerDesire(addSpawn(EXTREME_MINION, npc, false, 0, false, instance.getId()), npc.getVariables().getObject("ERUPTION_TARGET", PlayerInstance.class), 23);
+						addAttackPlayerDesire(addSpawn(EXTREME_MINION, npc, false, 0, false, instance.getId()), npc.getVariables().getObject("ERUPTION_TARGET", Player.class), 23);
 					}
 				}
 			} else {
@@ -355,7 +355,7 @@ public final class IstinaCavern extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -486,7 +486,7 @@ public final class IstinaCavern extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
@@ -525,10 +525,10 @@ public final class IstinaCavern extends AbstractInstance {
 		return charged;
 	}
 
-	private PlayerInstance setPlayerRewardInfo(Npc npc) {
-		final Map<PlayerInstance, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
+	private Player setPlayerRewardInfo(Npc npc) {
+		final Map<Player, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
 		final StatsSet npcVars = npc.getVariables();
-		PlayerInstance maxDealer = null;
+		Player maxDealer = null;
 		int maxDamage = 0;
 		int totalDamage = 0;
 
@@ -537,7 +537,7 @@ public final class IstinaCavern extends AbstractInstance {
 				continue;
 			}
 
-			final PlayerInstance attacker = info.getAttacker().getActingPlayer();
+			final Player attacker = info.getAttacker().getActingPlayer();
 			if (attacker != null) {
 				final int damage = info.getDamage();
 				if (damage > 1) {

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv.friend;
 
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -40,7 +40,7 @@ public final class RequestFriendList implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -50,7 +50,7 @@ public final class RequestFriendList implements IClientIncomingPacket {
 		// ======<Friend List>======
 		activeChar.sendPacket(SystemMessageId.FRIENDS_LIST);
 
-		PlayerInstance friend = null;
+		Player friend = null;
 		for (int id : activeChar.getFriendList()) {
 			// int friendId = rset.getInt("friendId");
 			String friendName = CharNameTable.getInstance().getNameById(id);

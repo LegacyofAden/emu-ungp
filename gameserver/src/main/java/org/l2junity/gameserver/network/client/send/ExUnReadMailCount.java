@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,7 +29,7 @@ import org.l2junity.network.PacketWriter;
 public class ExUnReadMailCount implements IClientOutgoingPacket {
 	private final int _mailUnreadCount;
 
-	public ExUnReadMailCount(PlayerInstance player) {
+	public ExUnReadMailCount(Player player) {
 		_mailUnreadCount = (int) MailManager.getInstance().getUnreadCount(player);
 	}
 

@@ -18,16 +18,16 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 import java.util.Map.Entry;
 
 public class RecipeShopSellList implements IClientOutgoingPacket {
-	private final PlayerInstance _buyer, _manufacturer;
+	private final Player _buyer, _manufacturer;
 
-	public RecipeShopSellList(PlayerInstance buyer, PlayerInstance manufacturer) {
+	public RecipeShopSellList(Player buyer, Player manufacturer) {
 		_buyer = buyer;
 		_manufacturer = manufacturer;
 	}

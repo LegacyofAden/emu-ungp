@@ -20,13 +20,13 @@ package org.l2junity.gameserver.model.skills.affectscopetypes;
 
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
@@ -45,7 +45,7 @@ public class Pledge implements IAffectScopeHandler {
 
 		if (target.isPlayable()) {
 			final Playable playable = (Playable) target;
-			final PlayerInstance player = playable.getActingPlayer();
+			final Player player = playable.getActingPlayer();
 
 			// Create the target filter.
 			final MutableInt affected = new MutableInt(0);
@@ -60,7 +60,7 @@ public class Pledge implements IAffectScopeHandler {
 					return;
 				}
 
-				PlayerInstance p = c.getActingPlayer();
+				Player p = c.getActingPlayer();
 				if ((p == null) || p.isDead()) {
 					return;
 				}

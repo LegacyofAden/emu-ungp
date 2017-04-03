@@ -28,7 +28,7 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.*;
@@ -81,7 +81,7 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {
@@ -255,7 +255,7 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 
 		if (!player.isCursedWeaponEquipped()) {
@@ -267,7 +267,7 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler {
 	}
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature bypassOrigin) {
+	public boolean useBypass(String command, Player activeChar, Creature bypassOrigin) {
 		try {
 			final Npc olymanager = activeChar.getLastFolkNPC();
 

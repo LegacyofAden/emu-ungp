@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,7 +26,7 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExResponseBeautyRegistReset implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _type;
 	private final int _result;
 
@@ -36,7 +36,7 @@ public class ExResponseBeautyRegistReset implements IClientOutgoingPacket {
 	public final static int CHANGE = 0;
 	public final static int RESTORE = 1;
 
-	public ExResponseBeautyRegistReset(PlayerInstance activeChar, int type, int result) {
+	public ExResponseBeautyRegistReset(Player activeChar, int type, int result) {
 		_activeChar = activeChar;
 		_type = type;
 		_result = result;

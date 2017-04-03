@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -65,7 +65,7 @@ public final class IceQueensCastle extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "ATTACK_KNIGHT": {
 				World.getInstance().forEachVisibleObject(npc, Npc.class, mob ->
@@ -114,7 +114,7 @@ public final class IceQueensCastle extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		enterInstance(talker, npc, TEMPLATE_ID);
 		return super.onTalk(npc, talker);
 	}
@@ -146,10 +146,10 @@ public final class IceQueensCastle extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance world = npc.getInstanceWorld();
 		if ((world != null) && (skill == ETHERNAL_BLIZZARD.getSkill())) {
-			final PlayerInstance playerInside = world.getFirstPlayer();
+			final Player playerInside = world.getFirstPlayer();
 			if (playerInside != null) {
 				startQuestTimer("TIMER_SCENE_21", 1000, npc, playerInside);
 			}

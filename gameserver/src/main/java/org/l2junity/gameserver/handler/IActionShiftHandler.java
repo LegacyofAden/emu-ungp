@@ -20,14 +20,14 @@ package org.l2junity.gameserver.handler;
 
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public interface IActionShiftHandler {
 	Logger _log = LoggerFactory.getLogger(IActionShiftHandler.class);
 
-	boolean action(PlayerInstance activeChar, WorldObject target, boolean interact);
+	boolean action(Player activeChar, WorldObject target, boolean interact);
 
 	InstanceType getInstanceType();
 }

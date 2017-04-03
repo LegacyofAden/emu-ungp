@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -34,7 +34,7 @@ public class ExVoteSystemInfo implements IClientOutgoingPacket {
 	private final int _bonusVal;
 	private final int _bonusType;
 
-	public ExVoteSystemInfo(PlayerInstance player) {
+	public ExVoteSystemInfo(Player player) {
 		_recomLeft = player.getRecomLeft();
 		_recomHave = player.getRecomHave();
 		_bonusTime = 0;

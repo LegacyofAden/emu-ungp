@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -50,7 +50,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		StringTokenizer st = new StringTokenizer(command, " ");
 		command = st.nextToken(); // Get actual command
 
@@ -67,9 +67,9 @@ public class AdminFortSiege implements IAdminCommandHandler {
 			showFortSelectPage(activeChar);
 		} else {
 			WorldObject target = activeChar.getTarget();
-			PlayerInstance player = null;
-			if (target instanceof PlayerInstance) {
-				player = (PlayerInstance) target;
+			Player player = null;
+			if (target instanceof Player) {
+				player = (Player) target;
 			}
 
 			if (command.equalsIgnoreCase("admin_add_fortattacker")) {
@@ -114,7 +114,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void showFortSelectPage(PlayerInstance activeChar) {
+	private void showFortSelectPage(Player activeChar) {
 		int i = 0;
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/forts.htm");
@@ -138,7 +138,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private void showFortSiegePage(PlayerInstance activeChar, Fort fort) {
+	private void showFortSiegePage(Player activeChar, Fort fort) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/fort.htm");
 		adminReply.replace("%fortName%", fort.getName());

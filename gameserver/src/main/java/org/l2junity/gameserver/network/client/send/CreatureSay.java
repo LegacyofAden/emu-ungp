@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.MentorManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -47,7 +47,7 @@ public final class CreatureSay implements IClientOutgoingPacket {
 	 * @param messageType
 	 * @param text
 	 */
-	public CreatureSay(PlayerInstance sender, PlayerInstance receiver, String name, ChatType messageType, String text) {
+	public CreatureSay(Player sender, Player receiver, String name, ChatType messageType, String text) {
 		_objectId = sender.getObjectId();
 		_charName = name;
 		_charLevel = sender.getLevel();
@@ -85,7 +85,7 @@ public final class CreatureSay implements IClientOutgoingPacket {
 		_text = text;
 	}
 
-	public CreatureSay(PlayerInstance player, ChatType messageType, String text) {
+	public CreatureSay(Player player, ChatType messageType, String text) {
 		_objectId = player.getObjectId();
 		_textType = messageType;
 		_charName = player.getAppearance().getVisibleName();
@@ -161,7 +161,7 @@ public final class CreatureSay implements IClientOutgoingPacket {
 	}
 
 	@Override
-	public final void runImpl(PlayerInstance player) {
+	public final void runImpl(Player player) {
 		if (player != null) {
 			player.broadcastSnoop(_textType, _charName, _text);
 		}

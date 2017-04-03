@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -99,7 +99,7 @@ public final class TeredorWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -164,7 +164,7 @@ public final class TeredorWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {
@@ -326,7 +326,7 @@ public final class TeredorWarzone extends AbstractInstance {
 					switch (eventName) {
 						case "SCE_EGG_DIE": {
 							npc.setState(2);
-							final PlayerInstance player = instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0));
+							final Player player = instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0));
 							if (player != null) {
 								final Npc minion = addSpawn(getRandomBoolean() ? HATCHET_MILLIPADE : HATCHET_UNDERBUG, npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, false, instance.getId());
 								addAttackPlayerDesire(minion, player, 23);
@@ -339,7 +339,7 @@ public final class TeredorWarzone extends AbstractInstance {
 							break;
 						}
 						case "SCE_BREAK_AN_EGG2": {
-							final PlayerInstance player = reference == null ? instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0)) : reference.getActingPlayer();
+							final Player player = reference == null ? instance.getPlayerById(npc.getVariables().getInt("SEE_CREATURE_ID", 0)) : reference.getActingPlayer();
 							int npcId = 0;
 
 							switch (npc.getParameters().getInt("Spot", 0)) {
@@ -382,7 +382,7 @@ public final class TeredorWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {
@@ -521,7 +521,7 @@ public final class TeredorWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {
@@ -543,7 +543,7 @@ public final class TeredorWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {

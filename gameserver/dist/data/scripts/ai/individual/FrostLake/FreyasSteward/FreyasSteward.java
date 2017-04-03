@@ -21,7 +21,7 @@ package ai.individual.FrostLake.FreyasSteward;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Freya's Steward AI.
@@ -43,12 +43,12 @@ public final class FreyasSteward extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "32029.html";
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		if (player.getLevel() >= MIN_LEVEL) {
 			player.teleToLocation(TELEPORT_LOC);
 			return null;

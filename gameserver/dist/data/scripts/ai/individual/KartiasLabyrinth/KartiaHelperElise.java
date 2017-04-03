@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -87,13 +87,13 @@ public final class KartiaHelperElise extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if ((instance != null) && event.equals("CHECK_ACTION")) {
 			final StatsSet npcVars = npc.getVariables();
 			final StatsSet instParams = instance.getTemplateParameters();
 
-			player = npcVars.getObject("PLAYER_OBJECT", PlayerInstance.class);
+			player = npcVars.getObject("PLAYER_OBJECT", Player.class);
 			final FriendlyNpcInstance adolph = npcVars.getObject("ADOLPH_OBJECT", FriendlyNpcInstance.class);
 			final FriendlyNpcInstance barton = npcVars.getObject("BARTON_OBJECT", FriendlyNpcInstance.class);
 			final FriendlyNpcInstance eliyah = npcVars.getObject("ELIYAH_OBJECT", FriendlyNpcInstance.class);

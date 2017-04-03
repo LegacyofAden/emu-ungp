@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -61,7 +61,7 @@ public final class MithrilMine extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "BUFF": {
 				if ((player != null) && npc.isInRadius3d(player, 1000) && npc.isScriptValue(1) && !player.isDead()) {
@@ -104,7 +104,7 @@ public final class MithrilMine extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final QuestState qs = player.getQuestState(Q10284_AcquisitionOfDivineSword.class.getSimpleName());
 		if ((qs != null)) {
 			if (qs.isMemoState(2)) {
@@ -122,7 +122,7 @@ public final class MithrilMine extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			if (npc.getId() == KEGOR) {
@@ -147,7 +147,7 @@ public final class MithrilMine extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		switch (npc.getId()) {
 			case TARUN:
 			case KRUN: {

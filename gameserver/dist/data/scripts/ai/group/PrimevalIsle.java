@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -120,7 +120,7 @@ public final class PrimevalIsle extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if (skill.getId() == CREW_SKILL.getSkillId()) {
 			startQuestTimer("START_INVUL", 4000, npc, null);
 			final Npc target = (Npc) npc.getTarget();
@@ -165,7 +165,7 @@ public final class PrimevalIsle extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "USE_SKILL": {
 				if ((npc != null) && !npc.isDead()) {
@@ -262,7 +262,7 @@ public final class PrimevalIsle extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			npc.broadcastSay(ChatType.NPC_GENERAL, "?");
@@ -273,7 +273,7 @@ public final class PrimevalIsle extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.getId() == EGG) {
 			if ((getRandom(100) <= 80) && npc.isScriptValue(0)) {
 				npc.setScriptValue(1);
@@ -373,12 +373,12 @@ public final class PrimevalIsle extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if ((npc.getId() == DEINO) || ((npc.getId() == ORNIT) && !npc.isScriptValue(1))) {
 			return super.onKill(npc, killer, isSummon);
 		}
 		if ((npc.getId() == SAILREN) || (getRandom(100) < 3)) {
-			final PlayerInstance player = npc.getId() == SAILREN ? getRandomPartyMember(killer) : killer;
+			final Player player = npc.getId() == SAILREN ? getRandomPartyMember(killer) : killer;
 			if (player.isInventoryUnder80(false)) {
 				giveItems(player, DEINONYCHUS, 1);
 				final ItemInstance summonItem = player.getInventory().getItemByItemId(DEINONYCHUS);

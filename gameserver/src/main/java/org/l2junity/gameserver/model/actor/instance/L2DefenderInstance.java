@@ -66,7 +66,7 @@ public class L2DefenderInstance extends Attackable {
 			return false;
 		}
 
-		PlayerInstance player = attacker.getActingPlayer();
+		Player player = attacker.getActingPlayer();
 
 		// Check if siege is in progress
 		if (((_fort != null) && _fort.getZone().isActive()) || ((_castle != null) && _castle.getZone().isActive())) {
@@ -122,7 +122,7 @@ public class L2DefenderInstance extends Attackable {
 	 * Custom onAction behaviour. Note that super() is not called because guards need extra check to see if a player should interact or ATTACK them when clicked.
 	 */
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if (!canTarget(player)) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -158,7 +158,7 @@ public class L2DefenderInstance extends Attackable {
 
 		if (!(attacker instanceof L2DefenderInstance)) {
 			if ((damage == 0) && (aggro <= 1) && (attacker.isPlayable())) {
-				PlayerInstance player = attacker.getActingPlayer();
+				Player player = attacker.getActingPlayer();
 				// Check if siege is in progress
 				if (((_fort != null) && _fort.getZone().isActive()) || ((_castle != null) && _castle.getZone().isActive())) {
 					int activeSiegeId = (_fort != null) ? _fort.getResidenceId() : _castle.getResidenceId();

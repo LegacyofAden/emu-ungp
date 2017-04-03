@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingEndReason;
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingE
  * @author UnAfraid
  */
 public class OnPlayerFishing implements IBaseEvent {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final FishingEndReason _reason;
 
-	public OnPlayerFishing(PlayerInstance player, FishingEndReason reason) {
+	public OnPlayerFishing(Player player, FishingEndReason reason) {
 		_player = player;
 		_reason = reason;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _player;
 	}
 

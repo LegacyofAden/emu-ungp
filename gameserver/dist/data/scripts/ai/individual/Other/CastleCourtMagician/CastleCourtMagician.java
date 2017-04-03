@@ -25,7 +25,7 @@ import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.recv.RequestAcquireSkill;
 
@@ -139,7 +139,7 @@ public final class CastleCourtMagician extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if ((player.getClan() == null) && (player.getClanId() != npc.getCastle().getOwnerId())) {
 			return "courtmagician-01.html";
 		}
@@ -273,7 +273,7 @@ public final class CastleCourtMagician extends AbstractNpcAI {
 			}
 			case "clanTeleport": {
 				if (player.getClanId() == npc.getCastle().getOwnerId()) {
-					final PlayerInstance clanLeader = player.getClan().getLeader().getPlayerInstance();
+					final Player clanLeader = player.getClan().getLeader().getPlayerInstance();
 
 					if ((clanLeader != null) && clanLeader.isAffectedBySkill(CLAN_GATE)) {
 						if (InstantCallPc.checkSummonTargetStatus(player, clanLeader)) // TODO: Custom one, retail dont check it but for sure lets check same conditions like when summon player by skill.
@@ -303,11 +303,11 @@ public final class CastleCourtMagician extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return ((player.getClan() != null) && (player.getClanId() == npc.getCastle().getOwnerId())) ? "courtmagician.html" : "courtmagician-01.html";
 	}
 
-	private void showClassSpecificMultisell(PlayerInstance player, Npc npc, int index) {
+	private void showClassSpecificMultisell(Player player, Npc npc, int index) {
 		for (CategoryType ct : AWAKENED_CT) {
 			if (player.isInCategory(ct)) {
 				MultisellData.getInstance().separateAndSend(index, player, npc, false);

@@ -21,7 +21,7 @@ package quests.Q10709_TheStolenSeed;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -59,7 +59,7 @@ public final class Q10709_TheStolenSeed extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 
 		if (event.equals("action")) {
@@ -120,7 +120,7 @@ public final class Q10709_TheStolenSeed extends Quest {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("EMBRYO_DELAY")) {
 			final Npc akum = (Npc) npc.getTarget();
 			final QuestState st = getQuestState(player, true);
@@ -138,7 +138,7 @@ public final class Q10709_TheStolenSeed extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -176,7 +176,7 @@ public final class Q10709_TheStolenSeed extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
 
 		if ((st != null) && st.isStarted() && st.isCond(2)) {

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.instant;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.SummonRequestHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -49,12 +49,12 @@ public final class InstantCallPc extends AbstractEffect {
 
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
-		final PlayerInstance casterPlayer = caster.asPlayer();
+		final Player casterPlayer = caster.asPlayer();
 		if (casterPlayer == null) {
 			return;
 		}
 
-		final PlayerInstance targetPlayer = target.asPlayer();
+		final Player targetPlayer = target.asPlayer();
 		if (targetPlayer == null) {
 			return;
 		}
@@ -87,7 +87,7 @@ public final class InstantCallPc extends AbstractEffect {
 		}
 	}
 
-	public static boolean checkSummonTargetStatus(PlayerInstance target, Creature activeChar) {
+	public static boolean checkSummonTargetStatus(Player target, Creature activeChar) {
 		if (target == activeChar) {
 			return false;
 		}

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.enums.AttributeType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemAttributeRequest;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -38,7 +38,7 @@ public class ExChooseInventoryAttributeItem implements IClientOutgoingPacket {
 	private int _level;
 	private final Set<Integer> _items = new HashSet<>();
 
-	public ExChooseInventoryAttributeItem(PlayerInstance activeChar, ItemInstance stone) {
+	public ExChooseInventoryAttributeItem(Player activeChar, ItemInstance stone) {
 		final EnchantItemAttributeRequest request = activeChar.getRequest(EnchantItemAttributeRequest.class);
 		if (request == null) {
 			return;

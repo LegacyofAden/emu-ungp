@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.entity.FortSiege;
 import org.l2junity.gameserver.model.entity.Siegable;
@@ -125,7 +125,7 @@ public class SiegeZone extends ZoneType {
 			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true); // FIXME: Custom ?
 
 			if (character.isPlayer()) {
-				PlayerInstance plyer = character.getActingPlayer();
+				Player plyer = character.getActingPlayer();
 				if (plyer.isRegisteredOnThisSiegeField(getSettings().getSiegeableId())) {
 					plyer.setIsInSiege(true); // in siege
 					if (getSettings().getSiege().giveFame() && (getSettings().getSiege().getFameFrequency() > 0)) {
@@ -149,7 +149,7 @@ public class SiegeZone extends ZoneType {
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false); // FIXME: Custom ?
 		if (getSettings().isActiveSiege()) {
 			if (character.isPlayer()) {
-				PlayerInstance player = character.getActingPlayer();
+				Player player = character.getActingPlayer();
 				character.sendPacket(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 				if (player.getMountType() == MountType.WYVERN) {
 					player.exitedNoLanding();
@@ -161,7 +161,7 @@ public class SiegeZone extends ZoneType {
 			}
 		}
 		if (character.isPlayer()) {
-			PlayerInstance activeChar = character.getActingPlayer();
+			Player activeChar = character.getActingPlayer();
 			activeChar.stopFameTask();
 			activeChar.setIsInSiege(false);
 
@@ -206,7 +206,7 @@ public class SiegeZone extends ZoneType {
 				}
 			}
 		} else {
-			PlayerInstance player;
+			Player player;
 			for (Creature character : getCharactersInside()) {
 				if (character == null) {
 					continue;
@@ -234,7 +234,7 @@ public class SiegeZone extends ZoneType {
 	 * @param message
 	 */
 	public void announceToPlayers(String message) {
-		for (PlayerInstance player : getPlayersInside()) {
+		for (Player player : getPlayersInside()) {
 			if (player != null) {
 				player.sendMessage(message);
 			}
@@ -264,7 +264,7 @@ public class SiegeZone extends ZoneType {
 	 */
 	public void banishForeigners(int owningClanId) {
 		TeleportWhereType type = TeleportWhereType.TOWN;
-		for (PlayerInstance temp : getPlayersInside()) {
+		for (Player temp : getPlayersInside()) {
 			if (temp.getClanId() == owningClanId) {
 				continue;
 			}

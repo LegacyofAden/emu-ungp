@@ -19,39 +19,39 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class RecipeItemMakeInfo implements IClientOutgoingPacket {
 	private final int _id;
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Boolean _success;
 	private final long _offeringMaximumAdena;
 
-	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success, long offeringMaximumAdena) {
+	public RecipeItemMakeInfo(int id, Player player, boolean success, long offeringMaximumAdena) {
 		_id = id;
 		_activeChar = player;
 		_success = success;
 		_offeringMaximumAdena = offeringMaximumAdena;
 	}
 
-	public RecipeItemMakeInfo(int id, PlayerInstance player, boolean success) {
+	public RecipeItemMakeInfo(int id, Player player, boolean success) {
 		_id = id;
 		_activeChar = player;
 		_success = success;
 		_offeringMaximumAdena = 0;
 	}
 
-	public RecipeItemMakeInfo(int id, PlayerInstance player, long offeringMaximumAdena) {
+	public RecipeItemMakeInfo(int id, Player player, long offeringMaximumAdena) {
 		_id = id;
 		_activeChar = player;
 		_success = null;
 		_offeringMaximumAdena = offeringMaximumAdena;
 	}
 
-	public RecipeItemMakeInfo(int id, PlayerInstance player) {
+	public RecipeItemMakeInfo(int id, Player player) {
 		_id = id;
 		_activeChar = player;
 		_success = null;

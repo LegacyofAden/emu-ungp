@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.*;
 import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
@@ -134,7 +134,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 
 		// Get the owner if the target is a summon
 		if (target.isSummon()) {
-			PlayerInstance owner = ((Summon) target).getOwner();
+			Player owner = ((Summon) target).getOwner();
 			if (_actor.isInRadius3d(owner, 1000)) {
 				target = owner;
 			}
@@ -168,7 +168,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 				Attackable npc = (Attackable) _actor;
 
 				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
-				if (!World.getInstance().getVisibleObjects(npc, PlayerInstance.class).isEmpty()) {
+				if (!World.getInstance().getVisibleObjects(npc, Player.class).isEmpty()) {
 					intention = AI_INTENTION_ACTIVE;
 				} else {
 					intention = AI_INTENTION_IDLE;

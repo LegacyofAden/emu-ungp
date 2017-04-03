@@ -58,7 +58,7 @@ public final class L2TeleporterInstance extends Npc {
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		// Check if transformed
 		for (CommonSkill skill : FORBIDDEN_TRANSFORM) {
 			if (player.isAffectedBySkill(skill.getId())) {
@@ -132,7 +132,7 @@ public final class L2TeleporterInstance extends Npc {
 	}
 
 	@Override
-	public void showChatWindow(PlayerInstance player) {
+	public void showChatWindow(Player player) {
 		// Teleporter isn't on castle ground
 		if (CastleManager.getInstance().getCastle(this) == null) {
 			super.showChatWindow(player);
@@ -151,7 +151,7 @@ public final class L2TeleporterInstance extends Npc {
 		sendHtmlMessage(player, filename);
 	}
 
-	private void sendHtmlMessage(PlayerInstance player, String filename) {
+	private void sendHtmlMessage(Player player, String filename) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));

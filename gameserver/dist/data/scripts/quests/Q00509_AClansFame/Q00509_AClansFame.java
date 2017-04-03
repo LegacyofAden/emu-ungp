@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -70,7 +70,7 @@ public class Q00509_AClansFame extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -104,7 +104,7 @@ public class Q00509_AClansFame extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		if (player.getClan() == null) {
 			return null;
 		}
@@ -113,7 +113,7 @@ public class Q00509_AClansFame extends Quest {
 		if (player.isClanLeader()) {
 			st = player.getQuestState(getName());
 		} else {
-			PlayerInstance pleader = player.getClan().getLeader().getPlayerInstance();
+			Player pleader = player.getClan().getLeader().getPlayerInstance();
 			if ((pleader != null) && player.isInRadius3d(pleader, 1500)) {
 				st = pleader.getQuestState(getName());
 			}
@@ -132,7 +132,7 @@ public class Q00509_AClansFame extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

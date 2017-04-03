@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.instancezone.conditions;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -39,7 +39,7 @@ public abstract class Condition {
 	private final boolean _leaderOnly;
 	private final boolean _showMessageAndHtml;
 	private SystemMessageId _systemMsg = null;
-	private BiConsumer<SystemMessage, PlayerInstance> _systemMsgParams = null;
+	private BiConsumer<SystemMessage, Player> _systemMsgParams = null;
 
 	/**
 	 * Create new condition
@@ -82,8 +82,8 @@ public abstract class Condition {
 	 * @param htmlCallback HTML callback function used to display fail HTML to player
 	 * @return {@code true} when all conditions met, otherwise {@code false}
 	 */
-	public boolean validate(Npc npc, List<PlayerInstance> group, BiConsumer<PlayerInstance, String> htmlCallback) {
-		for (PlayerInstance member : group) {
+	public boolean validate(Npc npc, List<Player> group, BiConsumer<Player, String> htmlCallback) {
+		for (Player member : group) {
 			if (!test(member, npc, group)) {
 				sendMessage(group, member, htmlCallback);
 				return false;
@@ -103,7 +103,7 @@ public abstract class Condition {
 	 * @param member       player which doesn't meet condition
 	 * @param htmlCallback HTML callback function used to display fail HTML to player
 	 */
-	private void sendMessage(List<PlayerInstance> group, PlayerInstance member, BiConsumer<PlayerInstance, String> htmlCallback) {
+	private void sendMessage(List<Player> group, Player member, BiConsumer<Player, String> htmlCallback) {
 		// Send HTML message if condition has any
 		final String html = _parameters.getString("html", null);
 		if ((html != null) && (htmlCallback != null)) {
@@ -147,8 +147,8 @@ public abstract class Condition {
 	 *
 	 * @param group group of players which wants to enter into instance
 	 */
-	public void applyEffect(List<PlayerInstance> group) {
-		for (PlayerInstance member : group) {
+	public void applyEffect(List<Player> group) {
+		for (Player member : group) {
 			onSuccess(member);
 			if (_leaderOnly) {
 				break;
@@ -172,21 +172,21 @@ public abstract class Condition {
 	 * @param msg    identification code of system message
 	 * @param params function which set parameters to system message
 	 */
-	protected void setSystemMessage(SystemMessageId msg, BiConsumer<SystemMessage, PlayerInstance> params) {
+	protected void setSystemMessage(SystemMessageId msg, BiConsumer<SystemMessage, Player> params) {
 		setSystemMessage(msg);
 		_systemMsgParams = params;
 	}
 
 	/**
 	 * Test condition for player.<br>
-	 * <i>Calls {@link Condition#test(PlayerInstance, Npc)} by default.</i>
+	 * <i>Calls {@link Condition#test(Player, Npc)} by default.</i>
 	 *
 	 * @param player instance of player which should meet condition
 	 * @param npc    instance of NPC used to enter into instance
 	 * @param group  group of players which wants to enter
 	 * @return {@code true} on success, {@code false} on fail
 	 */
-	protected boolean test(PlayerInstance player, Npc npc, List<PlayerInstance> group) {
+	protected boolean test(Player player, Npc npc, List<Player> group) {
 		return test(player, npc);
 	}
 
@@ -197,7 +197,7 @@ public abstract class Condition {
 	 * @param npc    instance of NPC used to enter into instance
 	 * @return {@code true} on success, {@code false} on fail
 	 */
-	protected boolean test(PlayerInstance player, Npc npc) {
+	protected boolean test(Player player, Npc npc) {
 		return true;
 	}
 
@@ -207,7 +207,7 @@ public abstract class Condition {
 	 *
 	 * @param player player which should be affected
 	 */
-	protected void onSuccess(PlayerInstance player) {
+	protected void onSuccess(Player player) {
 
 	}
 }

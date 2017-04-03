@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.model.eventengine.AbstractEvent;
@@ -103,7 +103,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 
 	@ScheduleTarget
 	private void onVitalityReset() {
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			player.setVitalityPoints(PcStat.MAX_VITALITY_POINTS, false);
 
 			for (SubClass subclass : player.getSubClasses().values()) {

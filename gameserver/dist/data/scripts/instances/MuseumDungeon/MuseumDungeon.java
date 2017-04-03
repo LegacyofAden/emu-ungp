@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.Id;
@@ -78,7 +78,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 
 		final Attackable toyron = (Attackable) instance.getNpc(TOYRON);
@@ -118,7 +118,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enter_instance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
@@ -126,7 +126,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		if (skill == null) {
 			showOnScreenMsg(attacker, NpcStringId.USE_YOUR_SKILL_ATTACKS_AGAINST_THEM, ExShowScreenMessage.TOP_CENTER, 2500);
 		}
@@ -134,7 +134,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		final Attackable toyron = (Attackable) instance.getNpc(TOYRON);
 		if (isInInstance(instance)) {
@@ -169,7 +169,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		String htmltext = null;
 		if (isInInstance(instance)) {
@@ -218,7 +218,7 @@ public final class MuseumDungeon extends AbstractInstance {
 	public DamageReturn onCreatureDamageReceived(OnCreatureDamageReceived event) {
 		final Creature target = event.getTarget();
 		if (target.isNpc() && event.getAttacker().isPlayer()) {
-			final PlayerInstance player = event.getAttacker().getActingPlayer();
+			final Player player = event.getAttacker().getActingPlayer();
 			final Instance instance = player.getInstanceWorld();
 			if (isInInstance(instance)) {
 				final QuestState qs = player.getQuestState(Q10542_SearchingForNewPower.class.getSimpleName());
@@ -245,7 +245,7 @@ public final class MuseumDungeon extends AbstractInstance {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final Attackable toyron = (Attackable) instance.getNpc(TOYRON);
-			final PlayerInstance player = instance.getFirstPlayer();
+			final Player player = instance.getFirstPlayer();
 			final QuestState qs = player.getQuestState(Q10542_SearchingForNewPower.class.getSimpleName());
 			if ((qs != null) && qs.isCond(4)) {
 				if (instance.getAliveNpcs(THIEF).isEmpty()) {

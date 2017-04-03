@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.xml.impl.ClassListData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class AdminExpSp implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_add_exp_sp")) {
 			try {
 				String val = command.substring(16);
@@ -79,11 +79,11 @@ public class AdminExpSp implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void addExpSp(PlayerInstance activeChar) {
+	private void addExpSp(Player activeChar) {
 		WorldObject target = activeChar.getTarget();
-		PlayerInstance player = null;
-		if (target instanceof PlayerInstance) {
-			player = (PlayerInstance) target;
+		Player player = null;
+		if (target instanceof Player) {
+			player = (Player) target;
 		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
@@ -98,11 +98,11 @@ public class AdminExpSp implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private boolean adminAddExpSp(PlayerInstance activeChar, String ExpSp) {
+	private boolean adminAddExpSp(Player activeChar, String ExpSp) {
 		WorldObject target = activeChar.getTarget();
-		PlayerInstance player = null;
-		if (target instanceof PlayerInstance) {
-			player = (PlayerInstance) target;
+		Player player = null;
+		if (target instanceof Player) {
+			player = (Player) target;
 		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;
@@ -135,11 +135,11 @@ public class AdminExpSp implements IAdminCommandHandler {
 		return true;
 	}
 
-	private boolean adminRemoveExpSP(PlayerInstance activeChar, String ExpSp) {
+	private boolean adminRemoveExpSP(Player activeChar, String ExpSp) {
 		WorldObject target = activeChar.getTarget();
-		PlayerInstance player = null;
-		if (target instanceof PlayerInstance) {
-			player = (PlayerInstance) target;
+		Player player = null;
+		if (target instanceof Player) {
+			player = (Player) target;
 		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;

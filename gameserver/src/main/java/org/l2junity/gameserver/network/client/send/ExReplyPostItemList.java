@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,10 +30,10 @@ import java.util.Collection;
  */
 
 public class ExReplyPostItemList extends AbstractItemPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Collection<ItemInstance> _itemList;
 
-	public ExReplyPostItemList(PlayerInstance activeChar) {
+	public ExReplyPostItemList(Player activeChar) {
 		_activeChar = activeChar;
 		_itemList = _activeChar.getInventory().getAvailableItems(true, false, false);
 	}

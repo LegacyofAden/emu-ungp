@@ -22,7 +22,7 @@ import instances.AbstractInstance;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -62,7 +62,7 @@ public final class TalkingIslandPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		} else if (event.equals("exitInstance")) {
@@ -75,7 +75,7 @@ public final class TalkingIslandPast extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		final QuestState qs = player.getQuestState(Q10385_RedThreadOfFate.class.getSimpleName());
 		if ((qs != null) && qs.isCond(21) && (qs.isMemoState(2))) {
 			Npc knight = addSpawn(MYSTERIOUS_DARK_KNIGHT, TI_LOC_3, false, 0, false, instance.getId());
@@ -108,7 +108,7 @@ public final class TalkingIslandPast extends AbstractInstance {
 
 		if (creature.isPlayer()) {
 			final Instance instance = creature.getInstanceWorld();
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			final QuestState qs = player.getQuestState(Q10385_RedThreadOfFate.class.getSimpleName());
 
 			if ((instance != null) && (npc.getId() == INVISIBLE_TI_NPC) && (qs != null) && qs.isCond(21) && qs.isMemoState(1)) {

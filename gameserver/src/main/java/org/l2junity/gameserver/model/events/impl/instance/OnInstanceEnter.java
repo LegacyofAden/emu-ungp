@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.instance;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.instancezone.Instance;
  * @author malyelfik
  */
 public final class OnInstanceEnter implements IBaseEvent {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final Instance _instance;
 
-	public OnInstanceEnter(PlayerInstance player, Instance instance) {
+	public OnInstanceEnter(Player player, Instance instance) {
 		_player = player;
 		_instance = instance;
 	}
 
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return _player;
 	}
 

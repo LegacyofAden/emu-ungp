@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExMPCCPartymasterList;
@@ -41,14 +41,14 @@ public class RequestExMpccPartymasterList implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
 
 		final MatchingRoom room = activeChar.getMatchingRoom();
 		if ((room != null) && (room.getRoomType() == MatchingRoomType.COMMAND_CHANNEL)) {
-			final Set<String> leadersName = room.getMembers().stream().map(PlayerInstance::getParty).filter(Objects::nonNull).map(Party::getLeader).map(PlayerInstance::getName).collect(Collectors.toSet());
+			final Set<String> leadersName = room.getMembers().stream().map(Player::getParty).filter(Objects::nonNull).map(Party::getLeader).map(Player::getName).collect(Collectors.toSet());
 			activeChar.sendPacket(new ExMPCCPartymasterList(leadersName));
 		}
 	}

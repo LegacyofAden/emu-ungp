@@ -21,7 +21,7 @@ package ai.individual.Other.LaVieEnRose;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
@@ -49,7 +49,7 @@ public final class LaVieEnRose extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "33825.html":
@@ -105,7 +105,7 @@ public final class LaVieEnRose extends AbstractNpcAI {
 		return htmltext;
 	}
 
-	private boolean canUseBeautyShop(PlayerInstance player) {
+	private boolean canUseBeautyShop(Player player) {
 		if (player.isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(player)) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_USE_THE_BEAUTY_SHOP_WHILE_REGISTERED_IN_THE_OLYMPIAD);
 			return false;

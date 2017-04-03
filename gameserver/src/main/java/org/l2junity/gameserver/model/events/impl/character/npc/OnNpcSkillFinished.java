@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.npc;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -29,16 +29,16 @@ import org.l2junity.gameserver.model.skills.Skill;
  */
 public class OnNpcSkillFinished implements IBaseEvent {
 	private final Npc _caster;
-	private final PlayerInstance _target;
+	private final Player _target;
 	private final Skill _skill;
 
-	public OnNpcSkillFinished(Npc caster, PlayerInstance target, Skill skill) {
+	public OnNpcSkillFinished(Npc caster, Player target, Skill skill) {
 		_caster = caster;
 		_target = target;
 		_skill = skill;
 	}
 
-	public PlayerInstance getTarget() {
+	public Player getTarget() {
 		return _target;
 	}
 

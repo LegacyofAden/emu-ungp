@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -43,12 +43,12 @@ public final class RequestOustFromPartyRoom implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
 
-		PlayerInstance member = World.getInstance().getPlayer(_charObjId);
+		Player member = World.getInstance().getPlayer(_charObjId);
 		if (member == null) {
 			return;
 		}

@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.MonsterRace;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.DeleteObject;
 import org.l2junity.gameserver.network.client.send.MonRaceInfo;
 import org.l2junity.gameserver.network.client.send.PlaySound;
@@ -45,7 +45,7 @@ public class AdminMonsterRace implements IAdminCommandHandler {
 	protected static int state = -1;
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equalsIgnoreCase("admin_mons")) {
 			handleSendPacket(activeChar);
 		}
@@ -57,7 +57,7 @@ public class AdminMonsterRace implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleSendPacket(PlayerInstance activeChar) {
+	private void handleSendPacket(Player activeChar) {
 		/*
 		 * -1 0 to initialize the race 0 15322 to start race 13765 -1 in middle of race -1 0 to end the race 8003 to 8027
 		 */
@@ -113,9 +113,9 @@ public class AdminMonsterRace implements IAdminCommandHandler {
 	class RunRace implements Runnable {
 
 		private final int[][] codes;
-		private final PlayerInstance activeChar;
+		private final Player activeChar;
 
-		public RunRace(int[][] pCodes, PlayerInstance pActiveChar) {
+		public RunRace(int[][] pCodes, Player pActiveChar) {
 			codes = pCodes;
 			activeChar = pActiveChar;
 		}
@@ -137,9 +137,9 @@ public class AdminMonsterRace implements IAdminCommandHandler {
 	}
 
 	private static class RunEnd implements Runnable {
-		private final PlayerInstance activeChar;
+		private final Player activeChar;
 
-		public RunEnd(PlayerInstance pActiveChar) {
+		public RunEnd(Player pActiveChar) {
 			activeChar = pActiveChar;
 		}
 

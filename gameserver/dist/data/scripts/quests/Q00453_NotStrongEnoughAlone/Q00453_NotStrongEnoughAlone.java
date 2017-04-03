@@ -22,7 +22,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -85,7 +85,7 @@ public final class Q00453_NotStrongEnoughAlone extends Quest {
 		addCondMinLevel(MIN_LV, "32734-03.html");
 	}
 
-	private void increaseKill(PlayerInstance player, Npc npc) {
+	private void increaseKill(Player player, Npc npc) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return;
@@ -147,7 +147,7 @@ public final class Q00453_NotStrongEnoughAlone extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -176,9 +176,9 @@ public final class Q00453_NotStrongEnoughAlone extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		if (player.getParty() != null) {
-			for (PlayerInstance member : player.getParty().getMembers()) {
+			for (Player member : player.getParty().getMembers()) {
 				increaseKill(member, npc);
 			}
 		} else {
@@ -188,7 +188,7 @@ public final class Q00453_NotStrongEnoughAlone extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -286,7 +286,7 @@ public final class Q00453_NotStrongEnoughAlone extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
+	public Set<NpcLogListHolder> getNpcLogList(Player activeChar) {
 		final QuestState qs = getQuestState(activeChar, false);
 		final Set<NpcLogListHolder> npcLogList = new HashSet<>(3);
 

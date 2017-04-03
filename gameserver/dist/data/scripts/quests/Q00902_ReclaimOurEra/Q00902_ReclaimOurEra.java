@@ -20,7 +20,7 @@ package quests.Q00902_ReclaimOurEra;
 
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -69,7 +69,7 @@ public final class Q00902_ReclaimOurEra extends Quest {
 		registerQuestItems(SHATTERED_BONES, CANNIBALISTIC_STAKATO_LDR_CLAW, ANAIS_SCROLL);
 	}
 
-	private void giveItem(Npc npc, PlayerInstance player) {
+	private void giveItem(Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && (st.isStarted()) && (!st.isCond(5)) && Util.checkIfInRange(1500, npc, player, false)) {
 			giveItems(player, MONSTER_DROPS.get(npc.getId()), 1);
@@ -78,7 +78,7 @@ public final class Q00902_ReclaimOurEra extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		String htmltext = null;
 		if (st == null) {
@@ -131,9 +131,9 @@ public final class Q00902_ReclaimOurEra extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (killer.isInParty()) {
-			for (PlayerInstance member : killer.getParty().getMembers()) {
+			for (Player member : killer.getParty().getMembers()) {
 				giveItem(npc, member);
 			}
 		} else {
@@ -143,7 +143,7 @@ public final class Q00902_ReclaimOurEra extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		if (st == null) {

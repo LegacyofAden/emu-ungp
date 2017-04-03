@@ -22,7 +22,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -76,7 +76,7 @@ public final class Q00490_DutyOfTheSurvivor extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 
 		if (st == null) {
@@ -101,7 +101,7 @@ public final class Q00490_DutyOfTheSurvivor extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -144,8 +144,8 @@ public final class Q00490_DutyOfTheSurvivor extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
-		final PlayerInstance member = getRandomPartyMember(player, 1);
+	public String onKill(Npc npc, Player player, boolean isSummon) {
+		final Player member = getRandomPartyMember(player, 1);
 		if (member != null) {
 			final QuestState st = getQuestState(member, false);
 			if (st.isCond(1) && (getRandom(100) < DROP_CHANCE)) {
@@ -167,7 +167,7 @@ public final class Q00490_DutyOfTheSurvivor extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
+	public Set<NpcLogListHolder> getNpcLogList(Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs != null) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(2);

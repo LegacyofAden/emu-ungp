@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.Faction;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public final class AdminFactions implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 
@@ -52,7 +52,7 @@ public final class AdminFactions implements IAdminCommandHandler {
 				final Faction faction = Faction.valueOf(st.nextToken());
 				final String action = st.nextToken();
 
-				final PlayerInstance target = getTarget(activeChar);
+				final Player target = getTarget(activeChar);
 				if ((target == null) || !st.hasMoreTokens()) {
 					return false;
 				}
@@ -91,7 +91,7 @@ public final class AdminFactions implements IAdminCommandHandler {
 							final int count = increaseForAll(World.getInstance().getPlayers(), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all online players (" + count + ") by " + value + ".");
 						} else if (range > 0) {
-							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, PlayerInstance.class, range), faction, value);
+							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, Player.class, range), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all players (" + count + ") in range " + range + " by " + value + ".");
 						}
 						break;
@@ -105,9 +105,9 @@ public final class AdminFactions implements IAdminCommandHandler {
 		return true;
 	}
 
-	private int increaseForAll(Collection<PlayerInstance> playerList, Faction faction, int value) {
+	private int increaseForAll(Collection<Player> playerList, Faction faction, int value) {
 		int counter = 0;
-		for (PlayerInstance temp : playerList) {
+		for (Player temp : playerList) {
 			if ((temp != null) && (temp.isOnlineInt() == 1)) {
 				temp.addFactionPoints(faction, value);
 				temp.sendMessage("Admin increase your Faction " + faction + " Point(s) by " + value + "!");
@@ -117,13 +117,13 @@ public final class AdminFactions implements IAdminCommandHandler {
 		return counter;
 	}
 
-	private PlayerInstance getTarget(PlayerInstance activeChar) {
+	private Player getTarget(Player activeChar) {
 		return ((activeChar.getTarget() != null) && (activeChar.getTarget().getActingPlayer() != null)) ? activeChar.getTarget().getActingPlayer() : activeChar;
 	}
 
-	private void showMenuHtml(PlayerInstance activeChar) {
+	private void showMenuHtml(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		final PlayerInstance target = getTarget(activeChar);
+		final Player target = getTarget(activeChar);
 		html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/factions.htm"));
 		html.replace("%targetName%", target.getName());
 

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -27,18 +27,18 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  * @author lord_rex
  */
 public final class CanPlayerUseItem implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final ItemInstance _item;
 	private final boolean _ctrlPressed;
 
-	public CanPlayerUseItem(PlayerInstance activeChar, ItemInstance item, boolean ctrlPressed) {
+	public CanPlayerUseItem(Player activeChar, ItemInstance item, boolean ctrlPressed) {
 		_activeChar = activeChar;
 		_item = item;
 
 		_ctrlPressed = ctrlPressed;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

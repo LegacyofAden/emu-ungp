@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExMPCCShowPartyMemberInfo;
 import org.l2junity.network.PacketReader;
@@ -40,12 +40,12 @@ public final class RequestExMPCCShowPartyMembersInfo implements IClientIncomingP
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
 
-		final PlayerInstance player = World.getInstance().getPlayer(_partyLeaderId);
+		final Player player = World.getInstance().getPlayer(_partyLeaderId);
 		if ((player != null) && (player.getParty() != null)) {
 			client.sendPacket(new ExMPCCShowPartyMemberInfo(player.getParty()));
 		}

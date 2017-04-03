@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class AdminRes implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_res ")) {
 			handleRes(activeChar, command.split(" ")[1]);
 		} else if (command.equals("admin_res")) {
@@ -64,16 +64,16 @@ public class AdminRes implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleRes(PlayerInstance activeChar) {
+	private void handleRes(Player activeChar) {
 		handleRes(activeChar, null);
 	}
 
-	private void handleRes(PlayerInstance activeChar, String resParam) {
+	private void handleRes(Player activeChar, String resParam) {
 		WorldObject obj = activeChar.getTarget();
 
 		if (resParam != null) {
 			// Check if a player name was specified as a param.
-			PlayerInstance plyr = World.getInstance().getPlayer(resParam);
+			Player plyr = World.getInstance().getPlayer(resParam);
 
 			if (plyr != null) {
 				obj = plyr;
@@ -82,7 +82,7 @@ public class AdminRes implements IAdminCommandHandler {
 				try {
 					int radius = Integer.parseInt(resParam);
 
-					World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, radius, knownPlayer ->
+					World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, radius, knownPlayer ->
 					{
 						doResurrect(knownPlayer);
 					});
@@ -112,11 +112,11 @@ public class AdminRes implements IAdminCommandHandler {
 		}
 	}
 
-	private void handleNonPlayerRes(PlayerInstance activeChar) {
+	private void handleNonPlayerRes(Player activeChar) {
 		handleNonPlayerRes(activeChar, "");
 	}
 
-	private void handleNonPlayerRes(PlayerInstance activeChar, String radiusStr) {
+	private void handleNonPlayerRes(Player activeChar, String radiusStr) {
 		WorldObject obj = activeChar.getTarget();
 
 		try {
@@ -127,7 +127,7 @@ public class AdminRes implements IAdminCommandHandler {
 
 				World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, knownChar ->
 				{
-					if (!(knownChar instanceof PlayerInstance) && !(knownChar instanceof L2ControllableMobInstance)) {
+					if (!(knownChar instanceof Player) && !(knownChar instanceof L2ControllableMobInstance)) {
 						doResurrect(knownChar);
 					}
 				});
@@ -139,7 +139,7 @@ public class AdminRes implements IAdminCommandHandler {
 			return;
 		}
 
-		if ((obj instanceof PlayerInstance) || (obj instanceof L2ControllableMobInstance)) {
+		if ((obj instanceof Player) || (obj instanceof L2ControllableMobInstance)) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
@@ -153,8 +153,8 @@ public class AdminRes implements IAdminCommandHandler {
 		}
 
 		// If the target is a player, then restore the XP lost on death.
-		if (targetChar instanceof PlayerInstance) {
-			((PlayerInstance) targetChar).restoreExp(100.0);
+		if (targetChar instanceof Player) {
+			((Player) targetChar).restoreExp(100.0);
 		} else {
 			DecayTaskManager.getInstance().cancel(targetChar);
 		}

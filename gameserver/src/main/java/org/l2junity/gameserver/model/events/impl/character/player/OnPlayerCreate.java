@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -27,19 +27,19 @@ import org.l2junity.gameserver.network.client.L2GameClient;
  * @author UnAfraid
  */
 public class OnPlayerCreate implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _objectId;
 	private final String _name;
 	private final L2GameClient _client;
 
-	public OnPlayerCreate(PlayerInstance activeChar, int objectId, String name, L2GameClient client) {
+	public OnPlayerCreate(Player activeChar, int objectId, String name, L2GameClient client) {
 		_activeChar = activeChar;
 		_objectId = objectId;
 		_name = name;
 		_client = client;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

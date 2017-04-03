@@ -28,7 +28,7 @@ import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -60,8 +60,8 @@ public class Duel {
 	private static final int PLAYER_DUEL_DURATION = 120;
 
 	private final int _duelId;
-	private PlayerInstance _playerA;
-	private PlayerInstance _playerB;
+	private Player _playerA;
+	private Player _playerB;
 	private final boolean _partyDuel;
 	private final Calendar _duelEndTime;
 	private int _surrenderRequest = 0;
@@ -71,7 +71,7 @@ public class Duel {
 	private final Map<Integer, PlayerCondition> _playerConditions = new ConcurrentHashMap<>();
 	private Instance _duelInstance;
 
-	public Duel(PlayerInstance playerA, PlayerInstance playerB, int partyDuel, int duelId) {
+	public Duel(Player playerA, Player playerB, int partyDuel, int duelId) {
 		_duelId = duelId;
 		_playerA = playerA;
 		_playerB = playerB;
@@ -95,7 +95,7 @@ public class Duel {
 	}
 
 	public static class PlayerCondition {
-		private PlayerInstance _player;
+		private Player _player;
 		private double _hp;
 		private double _mp;
 		private double _cp;
@@ -103,7 +103,7 @@ public class Duel {
 		private double _x, _y, _z;
 		private Set<Skill> _debuffs;
 
-		public PlayerCondition(PlayerInstance player, boolean partyDuel) {
+		public PlayerCondition(Player player, boolean partyDuel) {
 			if (player == null) {
 				return;
 			}
@@ -155,7 +155,7 @@ public class Duel {
 			}
 		}
 
-		public PlayerInstance getPlayer() {
+		public Player getPlayer() {
 			return _player;
 		}
 	}
@@ -259,13 +259,13 @@ public class Duel {
 	private void stopFighting() {
 		ActionFailed af = ActionFailed.STATIC_PACKET;
 		if (_partyDuel) {
-			for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+			for (Player temp : _playerA.getParty().getMembers()) {
 				temp.abortCast();
 				temp.getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 				temp.setTarget(null);
 				temp.sendPacket(af);
 			}
-			for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+			for (Player temp : _playerB.getParty().getMembers()) {
 				temp.abortCast();
 				temp.getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 				temp.setTarget(null);
@@ -316,14 +316,14 @@ public class Duel {
 
 		if (_partyDuel) {
 			// Set duel state and team
-			for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+			for (Player temp : _playerA.getParty().getMembers()) {
 				temp.cancelActiveTrade();
 				temp.setIsInDuel(_duelId);
 				temp.setTeam(Team.BLUE);
 				temp.broadcastUserInfo();
 				broadcastToTeam2(new ExDuelUpdateUserInfo(temp));
 			}
-			for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+			for (Player temp : _playerB.getParty().getMembers()) {
 				temp.cancelActiveTrade();
 				temp.setIsInDuel(_duelId);
 				temp.setTeam(Team.RED);
@@ -375,10 +375,10 @@ public class Duel {
 	 */
 	public void savePlayerConditions() {
 		if (_partyDuel) {
-			for (PlayerInstance player : _playerA.getParty().getMembers()) {
+			for (Player player : _playerA.getParty().getMembers()) {
 				_playerConditions.put(player.getObjectId(), new PlayerCondition(player, _partyDuel));
 			}
-			for (PlayerInstance player : _playerB.getParty().getMembers()) {
+			for (Player player : _playerB.getParty().getMembers()) {
 				_playerConditions.put(player.getObjectId(), new PlayerCondition(player, _partyDuel));
 			}
 		} else {
@@ -395,12 +395,12 @@ public class Duel {
 	public void restorePlayerConditions(boolean abnormalDuelEnd) {
 		// update isInDuel() state for all players
 		if (_partyDuel) {
-			for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+			for (Player temp : _playerA.getParty().getMembers()) {
 				temp.setIsInDuel(0);
 				temp.setTeam(Team.NONE);
 				temp.broadcastUserInfo();
 			}
-			for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+			for (Player temp : _playerB.getParty().getMembers()) {
 				temp.setIsInDuel(0);
 				temp.setTeam(Team.NONE);
 				temp.broadcastUserInfo();
@@ -446,7 +446,7 @@ public class Duel {
 	 *
 	 * @return duel requester
 	 */
-	public PlayerInstance getPlayerA() {
+	public Player getPlayerA() {
 		return _playerA;
 	}
 
@@ -455,7 +455,7 @@ public class Duel {
 	 *
 	 * @return challenged player
 	 */
-	public PlayerInstance getPlayerB() {
+	public Player getPlayerB() {
 		return _playerB;
 	}
 
@@ -496,12 +496,12 @@ public class Duel {
 		_duelInstance = InstanceManager.getInstance().createInstance(InstanceManager.getInstance().getInstanceTemplate(instanceId), null);
 
 		final Location spawn1 = spawns.get(Rnd.get(spawns.size() / 2));
-		for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+		for (Player temp : _playerA.getParty().getMembers()) {
 			temp.teleToLocation(spawn1.getX(), spawn1.getY(), spawn1.getZ(), 0, 0, _duelInstance);
 		}
 
 		final Location spawn2 = spawns.get(Rnd.get(spawns.size() / 2, spawns.size()));
-		for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+		for (Player temp : _playerB.getParty().getMembers()) {
 			temp.teleToLocation(spawn2.getX(), spawn2.getY(), spawn2.getZ(), 0, 0, _duelInstance);
 		}
 	}
@@ -517,7 +517,7 @@ public class Duel {
 		}
 
 		if (_partyDuel && (_playerA.getParty() != null)) {
-			for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+			for (Player temp : _playerA.getParty().getMembers()) {
 				temp.sendPacket(packet);
 			}
 		} else {
@@ -536,7 +536,7 @@ public class Duel {
 		}
 
 		if (_partyDuel && (_playerB.getParty() != null)) {
-			for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+			for (Player temp : _playerB.getParty().getMembers()) {
 				temp.sendPacket(packet);
 			}
 		} else {
@@ -549,7 +549,7 @@ public class Duel {
 	 *
 	 * @return winner
 	 */
-	public PlayerInstance getWinner() {
+	public Player getWinner() {
 		if (!getFinished() || (_playerA == null) || (_playerB == null)) {
 			return null;
 		}
@@ -567,7 +567,7 @@ public class Duel {
 	 *
 	 * @return looser
 	 */
-	public PlayerInstance getLooser() {
+	public Player getLooser() {
 		if (!getFinished() || (_playerA == null) || (_playerB == null)) {
 			return null;
 		}
@@ -583,14 +583,14 @@ public class Duel {
 	 * Playback the bow animation for all loosers
 	 */
 	public void playKneelAnimation() {
-		PlayerInstance looser = getLooser();
+		Player looser = getLooser();
 
 		if (looser == null) {
 			return;
 		}
 
 		if (_partyDuel && (looser.getParty() != null)) {
-			for (PlayerInstance temp : looser.getParty().getMembers()) {
+			for (Player temp : looser.getParty().getMembers()) {
 				temp.broadcastPacket(new SocialAction(temp.getObjectId(), 7));
 			}
 		} else {
@@ -752,7 +752,7 @@ public class Duel {
 	 *
 	 * @param player the player that surrenders.
 	 */
-	public void doSurrender(PlayerInstance player) {
+	public void doSurrender(Player player) {
 		// already received a surrender request
 		if (_surrenderRequest != 0) {
 			return;
@@ -765,18 +765,18 @@ public class Duel {
 		if (_partyDuel) {
 			if (_playerA.getParty().getMembers().contains(player)) {
 				_surrenderRequest = 1;
-				for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+				for (Player temp : _playerA.getParty().getMembers()) {
 					temp.setDuelState(DUELSTATE_DEAD);
 				}
-				for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+				for (Player temp : _playerB.getParty().getMembers()) {
 					temp.setDuelState(DUELSTATE_WINNER);
 				}
 			} else if (_playerB.getParty().getMembers().contains(player)) {
 				_surrenderRequest = 2;
-				for (PlayerInstance temp : _playerB.getParty().getMembers()) {
+				for (Player temp : _playerB.getParty().getMembers()) {
 					temp.setDuelState(DUELSTATE_DEAD);
 				}
-				for (PlayerInstance temp : _playerA.getParty().getMembers()) {
+				for (Player temp : _playerA.getParty().getMembers()) {
 					temp.setDuelState(DUELSTATE_WINNER);
 				}
 
@@ -799,13 +799,13 @@ public class Duel {
 	 *
 	 * @param player the player defeated.
 	 */
-	public void onPlayerDefeat(PlayerInstance player) {
+	public void onPlayerDefeat(Player player) {
 		// Set player as defeated
 		player.setDuelState(DUELSTATE_DEAD);
 
 		if (_partyDuel) {
 			boolean teamdefeated = true;
-			for (PlayerInstance temp : player.getParty().getMembers()) {
+			for (Player temp : player.getParty().getMembers()) {
 				if (temp.getDuelState() == DUELSTATE_DUELLING) {
 					teamdefeated = false;
 					break;
@@ -813,12 +813,12 @@ public class Duel {
 			}
 
 			if (teamdefeated) {
-				PlayerInstance winner = _playerA;
+				Player winner = _playerA;
 				if (_playerA.getParty().getMembers().contains(player)) {
 					winner = _playerB;
 				}
 
-				for (PlayerInstance temp : winner.getParty().getMembers()) {
+				for (Player temp : winner.getParty().getMembers()) {
 					temp.setDuelState(DUELSTATE_WINNER);
 				}
 			}
@@ -840,7 +840,7 @@ public class Duel {
 	 *
 	 * @param player the player quitting.
 	 */
-	public void onRemoveFromParty(PlayerInstance player) {
+	public void onRemoveFromParty(Player player) {
 		// if it isn't a party duel ignore this
 		if (!_partyDuel) {
 			return;
@@ -867,7 +867,7 @@ public class Duel {
 		}
 	}
 
-	public void onBuff(PlayerInstance player, Skill debuff) {
+	public void onBuff(Player player, Skill debuff) {
 		final PlayerCondition cond = _playerConditions.get(player.getObjectId());
 		if (cond != null) {
 			cond.registerDebuff(debuff);

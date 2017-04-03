@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpChanged;
@@ -56,7 +56,7 @@ public class PumpGetItemByExp extends AbstractEffect {
 	public void onExperienceReceived(OnPlayableExpChanged event) {
 		// TODO: Should only be through hunting.
 		if (event.getActiveChar().isPlayer()) {
-			final PlayerInstance player = event.getActiveChar().getActingPlayer();
+			final Player player = event.getActiveChar().getActingPlayer();
 			long expDiff = event.getNewExp() - event.getOldExp();
 			if (expDiff > 0) {
 				long accumulatedExp = _expHolder.get(player.getObjectId()) + expDiff;

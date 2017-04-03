@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv.primeshop;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.primeshop.ExBRGamePoint;
@@ -35,7 +35,7 @@ public final class RequestBRGamePoint implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player != null) {
 			client.sendPacket(new ExBRGamePoint(player));
 		}

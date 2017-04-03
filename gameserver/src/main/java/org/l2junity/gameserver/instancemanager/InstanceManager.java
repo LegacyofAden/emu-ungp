@@ -33,7 +33,7 @@ import org.l2junity.gameserver.enums.InstanceRemoveBuffType;
 import org.l2junity.gameserver.enums.InstanceTeleportType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.DoorTemplate;
 import org.l2junity.gameserver.model.holders.InstanceReenterTimeHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -334,7 +334,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param player   player who create instance.
 	 * @return newly created instance if success, otherwise {@code null}
 	 */
-	public Instance createInstance(InstanceTemplate template, PlayerInstance player) {
+	public Instance createInstance(InstanceTemplate template, Player player) {
 		return (template != null) ? new Instance(getNewInstanceId(), template, player) : null;
 	}
 
@@ -345,7 +345,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param player player who create instance
 	 * @return newly created instance if template was found, otherwise {@code null}
 	 */
-	public Instance createInstance(int id, PlayerInstance player) {
+	public Instance createInstance(int id, Player player) {
 		if (!_instanceTemplates.containsKey(id)) {
 			LOGGER.warn("Missing template for instance with id {}!", id);
 			return null;
@@ -379,7 +379,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param isInside when {@code true} find world where player is currently located, otherwise find world where player can enter
 	 * @return instance if found, otherwise {@code null}
 	 */
-	public Instance getPlayerInstance(PlayerInstance player, boolean isInside) {
+	public Instance getPlayerInstance(Player player, boolean isInside) {
 		return _instanceWorlds.values().stream().filter(i -> (isInside) ? i.containsPlayer(player) : i.isAllowed(player)).findFirst().orElse(null);
 	}
 
@@ -466,7 +466,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param player instance of player who wants to get re-enter data
 	 * @return map in form templateId, penaltyEndTime
 	 */
-	public Map<Integer, Long> getAllInstanceTimes(PlayerInstance player) {
+	public Map<Integer, Long> getAllInstanceTimes(Player player) {
 		// When player don't have any instance penalty
 		final Map<Integer, Long> instanceTimes = _playerInstanceTimes.get(player.getObjectId());
 		if ((instanceTimes == null) || instanceTimes.isEmpty()) {
@@ -519,7 +519,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param id     template ID of instance
 	 * @return penalty end time if penalty is found, otherwise -1
 	 */
-	public long getInstanceTime(PlayerInstance player, int id) {
+	public long getInstanceTime(Player player, int id) {
 		// Check if exists reenter data for player
 		final Map<Integer, Long> playerData = _playerInstanceTimes.get(player.getObjectId());
 		if ((playerData == null) || !playerData.containsKey(id)) {
@@ -541,7 +541,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @param player player who wants to delete penalty
 	 * @param id     template id of instance world
 	 */
-	public void deleteInstanceTime(PlayerInstance player, int id) {
+	public void deleteInstanceTime(Player player, int id) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement ps = con.prepareStatement(DELETE_INSTANCE_TIME)) {
 			ps.setInt(1, player.getObjectId());

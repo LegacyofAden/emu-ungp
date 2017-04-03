@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -30,7 +30,7 @@ public class ExCubeGameExtendedChangePoints implements IClientOutgoingPacket {
 	int _bluePoints;
 	int _redPoints;
 	boolean _isRedTeam;
-	PlayerInstance _player;
+	Player _player;
 	int _playerPoints;
 
 	/**
@@ -43,7 +43,7 @@ public class ExCubeGameExtendedChangePoints implements IClientOutgoingPacket {
 	 * @param player       Player Instance
 	 * @param playerPoints Current Player Points
 	 */
-	public ExCubeGameExtendedChangePoints(int timeLeft, int bluePoints, int redPoints, boolean isRedTeam, PlayerInstance player, int playerPoints) {
+	public ExCubeGameExtendedChangePoints(int timeLeft, int bluePoints, int redPoints, boolean isRedTeam, Player player, int playerPoints) {
 		_timeLeft = timeLeft;
 		_bluePoints = bluePoints;
 		_redPoints = redPoints;

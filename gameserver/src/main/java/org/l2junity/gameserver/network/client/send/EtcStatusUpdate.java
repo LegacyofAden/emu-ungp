@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -27,10 +27,10 @@ import org.l2junity.network.PacketWriter;
  * @author Luca Baldi
  */
 public class EtcStatusUpdate implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private int _mask;
 
-	public EtcStatusUpdate(PlayerInstance activeChar) {
+	public EtcStatusUpdate(Player activeChar) {
 		_activeChar = activeChar;
 		_mask = _activeChar.getMessageRefusal() || _activeChar.isChatBanned() || _activeChar.isSilenceMode() ? 1 : 0;
 		_mask |= _activeChar.isInsideZone(ZoneId.DANGER_AREA) ? 2 : 0;

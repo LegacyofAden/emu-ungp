@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2TamedBeastInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import quests.Q00020_BringUpWithLove.Q00020_BringUpWithLove;
@@ -345,7 +345,7 @@ public final class FeedableBeasts extends AbstractNpcAI {
 		GROWTH_CAPABLE_MOBS.put(21505, temp);
 	}
 
-	private void spawnNext(Npc npc, int growthLevel, PlayerInstance player, int food) {
+	private void spawnNext(Npc npc, int growthLevel, Player player, int food) {
 		int npcId = npc.getId();
 		int nextNpcId = 0;
 
@@ -446,7 +446,7 @@ public final class FeedableBeasts extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equalsIgnoreCase("polymorph Mad Cow") && (npc != null) && (player != null)) {
 			if (MAD_COW_POLYMORPH.containsKey(npc.getId())) {
 				// remove the feed info from the previous mob
@@ -469,7 +469,7 @@ public final class FeedableBeasts extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		// this behavior is only run when the target of skill is the passed npc (chest)
 		// i.e. when the player is attempting to open the chest using a skill
 		if (!ArrayUtil.contains(targets, npc)) {
@@ -543,7 +543,7 @@ public final class FeedableBeasts extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		// remove the feedinfo of the mob that got killed, if any
 		if (_feedInfo.containsKey(npc.getObjectId())) {
 			_feedInfo.remove(npc.getObjectId());

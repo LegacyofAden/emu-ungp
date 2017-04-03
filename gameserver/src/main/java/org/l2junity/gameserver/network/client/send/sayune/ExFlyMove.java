@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.sayune;
 
 import org.l2junity.gameserver.enums.SayuneType;
 import org.l2junity.gameserver.model.SayuneEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -36,7 +36,7 @@ public class ExFlyMove implements IClientOutgoingPacket {
 	private final int _mapId;
 	private final List<SayuneEntry> _locations;
 
-	public ExFlyMove(PlayerInstance activeChar, SayuneType type, int mapId, List<SayuneEntry> locations) {
+	public ExFlyMove(Player activeChar, SayuneType type, int mapId, List<SayuneEntry> locations) {
 		_objectId = activeChar.getObjectId();
 		_type = type;
 		_mapId = mapId;

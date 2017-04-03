@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv.adenadistribution;
 
 import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.AdenaDistributionRequest;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
@@ -48,7 +48,7 @@ public class RequestDivideAdena implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -85,7 +85,7 @@ public class RequestDivideAdena implements IClientIncomingPacket {
 			return;
 		}
 
-		final List<PlayerInstance> targets = commandChannel != null ? commandChannel.getMembers() : party.getMembers();
+		final List<Player> targets = commandChannel != null ? commandChannel.getMembers() : party.getMembers();
 
 		if (player.getAdena() < targets.size()) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_PROCEED_AS_THERE_IS_INSUFFICIENT_ADENA);
@@ -109,7 +109,7 @@ public class RequestDivideAdena implements IClientIncomingPacket {
 
 		final long memberAdenaGet = (long) Math.floor(_adenaCount / targets.size());
 		if (player.reduceAdena("Adena Distribution", memberAdenaGet * targets.size(), player, false)) {
-			for (PlayerInstance target : targets) {
+			for (Player target : targets) {
 				if ((target == null)) {
 					// TODO : handle that case here + regive adena OR filter with Objects::nonNull on memberCount ?
 					// those sys msg exists and bother me ADENA_WAS_NOT_DISTRIBUTED_TO_S1 / YOU_DID_NOT_RECEIVE_ADENA_DISTRIBUTION

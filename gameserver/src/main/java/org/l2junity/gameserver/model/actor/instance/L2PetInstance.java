@@ -195,7 +195,7 @@ public class L2PetInstance extends Summon {
 		}
 	}
 
-	public synchronized static L2PetInstance spawnPet(L2NpcTemplate template, PlayerInstance owner, ItemInstance control) {
+	public synchronized static L2PetInstance spawnPet(L2NpcTemplate template, Player owner, ItemInstance control) {
 		if (World.getInstance().getPet(owner.getObjectId()) != null) {
 			return null; // owner has a pet listed in world
 		}
@@ -221,7 +221,7 @@ public class L2PetInstance extends Summon {
 	 * @param owner
 	 * @param control
 	 */
-	public L2PetInstance(L2NpcTemplate template, PlayerInstance owner, ItemInstance control) {
+	public L2PetInstance(L2NpcTemplate template, Player owner, ItemInstance control) {
 		this(template, owner, control, (byte) (template.getDisplayId() == 12564 ? owner.getLevel() : template.getLevel()));
 	}
 
@@ -233,7 +233,7 @@ public class L2PetInstance extends Summon {
 	 * @param control
 	 * @param level
 	 */
-	public L2PetInstance(L2NpcTemplate template, PlayerInstance owner, ItemInstance control, byte level) {
+	public L2PetInstance(L2NpcTemplate template, Player owner, ItemInstance control, byte level) {
 		super(template, owner);
 		setInstanceType(InstanceType.L2PetInstance);
 		_inventory.restore();
@@ -545,7 +545,7 @@ public class L2PetInstance extends Summon {
 	}
 
 	@Override
-	public void deleteMe(PlayerInstance owner) {
+	public void deleteMe(Player owner) {
 		getInventory().transferItemsToOwner();
 		super.deleteMe(owner);
 		destroyControlItem(owner, false); // this should also delete the pet from the db
@@ -554,7 +554,7 @@ public class L2PetInstance extends Summon {
 
 	@Override
 	public boolean doDie(Creature killer) {
-		PlayerInstance owner = getOwner();
+		Player owner = getOwner();
 		if ((owner != null) && !owner.isInDuel() && (!isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.SIEGE))) {
 			deathPenalty();
 		}
@@ -602,7 +602,7 @@ public class L2PetInstance extends Summon {
 	 * @param reference Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance transferItem(String process, int objectId, long count, Inventory target, PlayerInstance actor, WorldObject reference) {
+	public ItemInstance transferItem(String process, int objectId, long count, Inventory target, Player actor, WorldObject reference) {
 		ItemInstance oldItem = getInventory().getItemByObjectId(objectId);
 		ItemInstance playerOldItem = target.getItemByItemId(oldItem.getId());
 		ItemInstance newItem = getInventory().transferItem(process, objectId, count, target, actor, reference);
@@ -640,7 +640,7 @@ public class L2PetInstance extends Summon {
 	 * @param owner  The owner from whose inventory we should delete the item
 	 * @param evolve
 	 */
-	public void destroyControlItem(PlayerInstance owner, boolean evolve) {
+	public void destroyControlItem(Player owner, boolean evolve) {
 		// remove the pet instance from world
 		World.getInstance().removePet(owner.getObjectId());
 
@@ -715,7 +715,7 @@ public class L2PetInstance extends Summon {
 		return _mountable;
 	}
 
-	private static L2PetInstance restore(ItemInstance control, L2NpcTemplate template, PlayerInstance owner) {
+	private static L2PetInstance restore(ItemInstance control, L2NpcTemplate template, Player owner) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement statement = con.prepareStatement("SELECT item_obj_id, name, level, curHp, curMp, exp, sp, fed FROM pets WHERE item_obj_id=?")) {
 			L2PetInstance pet;
@@ -952,7 +952,7 @@ public class L2PetInstance extends Summon {
 	}
 
 	@Override
-	public synchronized void unSummon(PlayerInstance owner) {
+	public synchronized void unSummon(Player owner) {
 		stopFeed();
 		stopHpMpRegeneration();
 		super.unSummon(owner);
@@ -1049,7 +1049,7 @@ public class L2PetInstance extends Summon {
 		return lvl > 70 ? 7 + ((lvl - 70) / 5) : lvl / 10;
 	}
 
-	public void updateRefOwner(PlayerInstance owner) {
+	public void updateRefOwner(Player owner) {
 		final int oldOwnerId = getOwner().getObjectId();
 
 		setOwner(owner);

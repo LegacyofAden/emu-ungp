@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
@@ -38,9 +38,9 @@ public final class IllegalPlayerActionTask implements Runnable {
 
 	private final String _message;
 	private final IllegalActionPunishmentType _punishment;
-	private final PlayerInstance _actor;
+	private final Player _actor;
 
-	public IllegalPlayerActionTask(PlayerInstance actor, String message, IllegalActionPunishmentType punishment) {
+	public IllegalPlayerActionTask(Player actor, String message, IllegalActionPunishmentType punishment) {
 		_message = message;
 		_punishment = punishment;
 		_actor = actor;

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -35,7 +35,7 @@ public class ExSpawnEmitter implements IClientOutgoingPacket {
 		_npcObjectId = npcObjectId;
 	}
 
-	public ExSpawnEmitter(PlayerInstance player, Npc npc) {
+	public ExSpawnEmitter(Player player, Npc npc) {
 		this(player.getObjectId(), npc.getObjectId());
 	}
 

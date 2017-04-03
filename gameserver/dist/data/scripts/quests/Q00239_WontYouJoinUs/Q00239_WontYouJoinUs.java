@@ -20,7 +20,7 @@ package quests.Q00239_WontYouJoinUs;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -58,7 +58,7 @@ public class Q00239_WontYouJoinUs extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -84,9 +84,9 @@ public class Q00239_WontYouJoinUs extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (npc.getId() == WASTE_LANDFILL_MACHINE) {
-			final PlayerInstance partyMember = getRandomPartyMember(killer, 1);
+			final Player partyMember = getRandomPartyMember(killer, 1);
 			if (partyMember != null) {
 				final QuestState st = getQuestState(partyMember, false);
 				if (getQuestItemsCount(partyMember, DESTROYED_MACHINE_PIECE) < DESTROYED_MACHINE_PIECE_NEEDED) {
@@ -99,7 +99,7 @@ public class Q00239_WontYouJoinUs extends Quest {
 				}
 			}
 		} else {
-			final PlayerInstance partyMember = getRandomPartyMember(killer, 3);
+			final Player partyMember = getRandomPartyMember(killer, 3);
 			if ((partyMember != null) && (getRandom(100) < CHANCE_FOR_FRAGMENT)) {
 				final QuestState st = getQuestState(partyMember, false);
 				if (getQuestItemsCount(partyMember, ENCHANTED_GOLEM_FRAGMENT) < ENCHANTED_GOLEM_FRAGMENT_NEEDED) {
@@ -116,7 +116,7 @@ public class Q00239_WontYouJoinUs extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		String htmltext = getNoQuestMsg(talker);
 		final QuestState st = getQuestState(talker, true);
 		if (st == null) {

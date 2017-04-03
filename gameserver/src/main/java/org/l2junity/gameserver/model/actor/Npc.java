@@ -57,11 +57,8 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.L2FishermanInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
-import org.l2junity.gameserver.model.actor.instance.L2TeleporterInstance;
-import org.l2junity.gameserver.model.actor.instance.L2WarehouseInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.NpcStatus;
 import org.l2junity.gameserver.model.actor.tasks.npc.RandomAnimationTask;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
@@ -358,7 +355,7 @@ public class Npc extends Creature {
 	 */
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -442,7 +439,7 @@ public class Npc extends Creature {
 		return false;
 	}
 
-	public boolean canTarget(PlayerInstance player) {
+	public boolean canTarget(Player player) {
 		if (player.isControlBlocked()) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
@@ -457,7 +454,7 @@ public class Npc extends Creature {
 		return true;
 	}
 
-	public boolean canInteract(PlayerInstance player) {
+	public boolean canInteract(Player player) {
 		if (player.isCastingNow()) {
 			return false;
 		} else if (player.isDead() || player.isFakeDeath()) {
@@ -565,7 +562,7 @@ public class Npc extends Creature {
 	 * @param player
 	 * @param command The command string received from client
 	 */
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		// if (canInteract(player))
 		{
 			IBypassHandler handler = BypassHandler.getInstance().getHandler(command);
@@ -639,7 +636,7 @@ public class Npc extends Creature {
 		return "npcdefault.htm";
 	}
 
-	public void showChatWindow(PlayerInstance player) {
+	public void showChatWindow(Player player) {
 		showChatWindow(player, 0);
 	}
 
@@ -650,7 +647,7 @@ public class Npc extends Creature {
 	 * @param type
 	 * @return boolean
 	 */
-	private boolean showPkDenyChatWindow(PlayerInstance player, String type) {
+	private boolean showPkDenyChatWindow(Player player, String type) {
 		String html = HtmRepository.getInstance().getCustomHtm(type + "/" + getId() + "-pk.htm");
 		if (html != null) {
 			html = html.replaceAll("%objectId%", String.valueOf(getObjectId()));
@@ -673,7 +670,7 @@ public class Npc extends Creature {
 	 * @param player The L2PcInstance that talk with the L2NpcInstance
 	 * @param val    The number of the page of the L2NpcInstance to display
 	 */
-	public void showChatWindow(PlayerInstance player, int val) {
+	public void showChatWindow(Player player, int val) {
 		if (!isTalkable()) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -764,7 +761,7 @@ public class Npc extends Creature {
 	 * @param player   The L2PcInstance that talk with the L2NpcInstance
 	 * @param filename The filename that contains the text to send
 	 */
-	public void showChatWindow(PlayerInstance player, String filename) {
+	public void showChatWindow(Player player, String filename) {
 		// Send a Server->Client NpcHtmlMessage containing the text of the L2NpcInstance to the L2PcInstance
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), filename);
@@ -834,7 +831,7 @@ public class Npc extends Creature {
 
 		// Apply Mp Rewards
 		if ((getTemplate().getMpRewardValue() > 0) && (killer != null) && killer.isPlayable()) {
-			final PlayerInstance killerPlayer = killer.getActingPlayer();
+			final Player killerPlayer = killer.getActingPlayer();
 			new MpRewardTask(killerPlayer, this);
 			for (Summon summon : killerPlayer.getServitors().values()) {
 				new MpRewardTask(summon, this);
@@ -842,7 +839,7 @@ public class Npc extends Creature {
 			if (getTemplate().getMpRewardAffectType() == MpRewardAffectType.PARTY) {
 				final Party party = killerPlayer.getParty();
 				if (party != null) {
-					for (PlayerInstance member : party.getMembers()) {
+					for (Player member : party.getMembers()) {
 						if ((member != killerPlayer) && (member.isInRadius3d(this, PlayerConfig.ALT_PARTY_RANGE))) {
 							new MpRewardTask(member, this);
 							for (Summon summon : member.getServitors().values()) {
@@ -1092,7 +1089,7 @@ public class Npc extends Creature {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		if (isVisibleFor(activeChar)) {
 			if (getRunSpeed() == 0) {
 				activeChar.sendPacket(new ServerObjectInfo(this, activeChar));
@@ -1317,7 +1314,7 @@ public class Npc extends Creature {
 	 * @param itemCount the item count
 	 * @return the dropped item
 	 */
-	public ItemInstance dropItem(PlayerInstance player, int itemId, long itemCount) {
+	public ItemInstance dropItem(Player player, int itemId, long itemCount) {
 		ItemInstance item = null;
 		for (int i = 0; i < itemCount; i++) {
 			// Randomize drop position.
@@ -1358,13 +1355,13 @@ public class Npc extends Creature {
 	}
 
 	/**
-	 * Method overload for {@link Attackable#dropItem(PlayerInstance, int, long)}
+	 * Method overload for {@link Attackable#dropItem(Player, int, long)}
 	 *
 	 * @param player the last attacker or main damage dealer
 	 * @param item   the item holder
 	 * @return the dropped item
 	 */
-	public ItemInstance dropItem(PlayerInstance player, ItemHolder item) {
+	public ItemInstance dropItem(Player player, ItemHolder item) {
 		return dropItem(player, item.getId(), item.getCount());
 	}
 
@@ -1374,7 +1371,7 @@ public class Npc extends Creature {
 	}
 
 	@Override
-	public boolean isVisibleFor(PlayerInstance player) {
+	public boolean isVisibleFor(Player player) {
 		if (hasListener(EventType.ON_NPC_CAN_BE_SEEN)) {
 			final TerminateReturn term = EventDispatcher.getInstance().notifyEvent(new OnNpcCanBeSeen(this, player), this, TerminateReturn.class);
 			if (term != null) {

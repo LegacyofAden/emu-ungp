@@ -20,7 +20,7 @@ package quests.Q00943_FillingTheEnergyOfDestruction;
 
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -63,7 +63,7 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 
 		if (st == null) {
@@ -92,7 +92,7 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -121,13 +121,13 @@ public final class Q00943_FillingTheEnergyOfDestruction extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		executeForEachPlayer(player, npc, isSummon, true, true);
 		return super.onKill(npc, player, isSummon);
 	}
 
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
+	public void actionForEachPlayer(Player player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, true);
 		if ((st != null) && st.isCond(1) && (npc.distance2d(player) <= 1500)) {
 			st.setCond(2, true);

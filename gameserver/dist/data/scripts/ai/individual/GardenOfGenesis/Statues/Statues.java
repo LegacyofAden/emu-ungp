@@ -21,7 +21,7 @@ package ai.individual.GardenOfGenesis.Statues;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
 /**
@@ -53,7 +53,7 @@ public final class Statues extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		if (event.equals("fight")) {
 			if (npc.isScriptValue(0)) {
@@ -88,12 +88,12 @@ public final class Statues extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return npc.getId() + ".html";
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Npc buffNpc = addSpawn(BUFF_NPC, npc, false, 5000);
 		buffNpc.setIsInvul(true);
 		addSkillCastDesire(buffNpc, buffNpc, REWARD_BUFF, 23);

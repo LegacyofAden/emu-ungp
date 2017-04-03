@@ -22,7 +22,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -76,7 +76,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -165,7 +165,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 		return htmltext;
 	}
 
-	private String generateItemListHtml(PlayerInstance player, Npc npc) {
+	private String generateItemListHtml(Player player, Npc npc) {
 		String html = null;
 		final QuestState qs = getQuestState(player, false);
 		if (qs != null) {
@@ -218,7 +218,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 		return html;
 	}
 
-	private NpcHtmlMessage getNpcHtmlMessage(PlayerInstance player, Npc npc, String fileName) {
+	private NpcHtmlMessage getNpcHtmlMessage(Player player, Npc npc, String fileName) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		final String text = getHtm(player.getLang(), fileName);
 		if (text == null) {
@@ -230,7 +230,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 

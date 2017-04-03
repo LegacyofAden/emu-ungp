@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2DecoyInstance;
 import org.l2junity.gameserver.model.actor.instance.L2EffectPointInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -61,7 +61,7 @@ public final class InstantSummonUniqueNpc extends AbstractEffect {
 
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
-		final PlayerInstance casterPlayer = caster.asPlayer();
+		final Player casterPlayer = caster.asPlayer();
 		if (casterPlayer == null) {
 			return;
 		}

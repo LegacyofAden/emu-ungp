@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -39,7 +39,7 @@ public class ChatPartyMatchRoom implements IChatHandler {
 			};
 
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+	public void handleChat(ChatType type, Player activeChar, String target, String text) {
 		final MatchingRoom room = activeChar.getMatchingRoom();
 		if (room != null) {
 			if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type)) {

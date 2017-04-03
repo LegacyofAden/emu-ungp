@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,17 +26,17 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerReputationChanged implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _oldReputation;
 	private final int _newReputation;
 
-	public OnPlayerReputationChanged(PlayerInstance activeChar, int oldReputation, int newReputation) {
+	public OnPlayerReputationChanged(Player activeChar, int oldReputation, int newReputation) {
 		_activeChar = activeChar;
 		_oldReputation = oldReputation;
 		_newReputation = newReputation;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

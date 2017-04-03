@@ -28,7 +28,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.tasks.MessageDeletionTask;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.network.client.send.ExNoticePostArrived;
 import org.l2junity.gameserver.network.client.send.ExUnReadMailCount;
@@ -92,7 +92,7 @@ public final class MailManager {
 		return _messages.values();
 	}
 
-	public final boolean hasUnreadPost(PlayerInstance player) {
+	public final boolean hasUnreadPost(Player player) {
 		final int objectId = player.getObjectId();
 		for (Message msg : getMessages()) {
 			if ((msg != null) && (msg.getReceiverId() == objectId) && msg.isUnread()) {
@@ -132,7 +132,7 @@ public final class MailManager {
 		return inbox;
 	}
 
-	public final long getUnreadCount(PlayerInstance player) {
+	public final long getUnreadCount(Player player) {
 		return getInbox(player.getObjectId()).stream().filter(Message::isUnread).count();
 	}
 
@@ -169,7 +169,7 @@ public final class MailManager {
 			log.warn("Error saving message:", e);
 		}
 
-		final PlayerInstance receiver = World.getInstance().getPlayer(msg.getReceiverId());
+		final Player receiver = World.getInstance().getPlayer(msg.getReceiverId());
 		if (receiver != null) {
 			receiver.sendPacket(ExNoticePostArrived.valueOf(true));
 			receiver.sendPacket(new ExUnReadMailCount(receiver));

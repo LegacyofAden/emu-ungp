@@ -28,7 +28,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2CubicTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExUserInfoCubic;
@@ -38,13 +38,13 @@ import org.l2junity.gameserver.network.client.send.MagicSkillUse;
  * @author UnAfraid
  */
 public class CubicInstance {
-	private final PlayerInstance _owner;
-	private final PlayerInstance _caster;
+	private final Player _owner;
+	private final Player _caster;
 	private final L2CubicTemplate _template;
 	private ScheduledFuture<?> _skillUseTask;
 	private ScheduledFuture<?> _expireTask;
 
-	public CubicInstance(PlayerInstance owner, PlayerInstance caster, L2CubicTemplate template) {
+	public CubicInstance(Player owner, Player caster, L2CubicTemplate template) {
 		_owner = owner;
 		_caster = caster;
 		_template = template;

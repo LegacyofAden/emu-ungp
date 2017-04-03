@@ -1,7 +1,7 @@
 package org.l2junity.gameserver.network.client.send.string;
 
 import org.l2junity.gameserver.model.Language;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public enum CustomMessage {
         return message;
     }
 
-    public void send(PlayerInstance player, String ... args) {
+    public void send(Player player, String ... args) {
         player.sendPacket(SystemMessage.sendString(get(player.getLang(), args)));
     }
 }

@@ -20,7 +20,7 @@ package instances.HideoutOfTheDawn;
 
 import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Hideout of the Dawn instance zone.
@@ -41,7 +41,7 @@ public final class HideoutOfTheDawn extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		if (npc.getId() == WOOD) {
 			enterInstance(talker, npc, TEMPLATE_ID);
 			return "32593-01.htm";

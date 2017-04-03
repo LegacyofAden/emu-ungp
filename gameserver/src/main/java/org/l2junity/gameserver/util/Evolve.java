@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.PetData;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 public final class Evolve {
 	protected static final Logger _log = LoggerFactory.getLogger(Evolve.class);
 
-	public static final boolean doEvolve(PlayerInstance player, Npc npc, int itemIdtake, int itemIdgive, int petminlvl) {
+	public static final boolean doEvolve(Player player, Npc npc, int itemIdtake, int itemIdgive, int petminlvl) {
 		if ((itemIdtake == 0) || (itemIdgive == 0) || (petminlvl == 0)) {
 			return false;
 		}
@@ -145,7 +145,7 @@ public final class Evolve {
 		return true;
 	}
 
-	public static final boolean doRestore(PlayerInstance player, Npc npc, int itemIdtake, int itemIdgive, int petminlvl) {
+	public static final boolean doRestore(Player player, Npc npc, int itemIdtake, int itemIdgive, int petminlvl) {
 		if ((itemIdtake == 0) || (itemIdgive == 0) || (petminlvl == 0)) {
 			return false;
 		}
@@ -236,10 +236,10 @@ public final class Evolve {
 	}
 
 	static final class EvolveFeedWait implements Runnable {
-		private final PlayerInstance _activeChar;
+		private final Player _activeChar;
 		private final L2PetInstance _petSummon;
 
-		EvolveFeedWait(PlayerInstance activeChar, L2PetInstance petSummon) {
+		EvolveFeedWait(Player activeChar, L2PetInstance petSummon) {
 			_activeChar = activeChar;
 			_petSummon = petSummon;
 		}
@@ -259,10 +259,10 @@ public final class Evolve {
 	}
 
 	static final class EvolveFinalizer implements Runnable {
-		private final PlayerInstance _activeChar;
+		private final Player _activeChar;
 		private final L2PetInstance _petSummon;
 
-		EvolveFinalizer(PlayerInstance activeChar, L2PetInstance petSummon) {
+		EvolveFinalizer(Player activeChar, L2PetInstance petSummon) {
 			_activeChar = activeChar;
 			_petSummon = petSummon;
 		}

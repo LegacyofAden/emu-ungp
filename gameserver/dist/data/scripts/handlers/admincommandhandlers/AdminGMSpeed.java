@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.util.BuilderUtil;
 import org.l2junity.gameserver.util.Util;
@@ -46,7 +46,7 @@ public final class AdminGMSpeed implements IAdminCommandHandler {
 	private static final Set<DoubleStat> SPEED_STATS = EnumSet.of(DoubleStat.RUN_SPEED, DoubleStat.WALK_SPEED, DoubleStat.SWIM_RUN_SPEED, DoubleStat.SWIM_WALK_SPEED, DoubleStat.FLY_RUN_SPEED, DoubleStat.FLY_WALK_SPEED);
 
 	@Override
-	public boolean useAdminCommand(final String command, final PlayerInstance player) {
+	public boolean useAdminCommand(final String command, final Player player) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {

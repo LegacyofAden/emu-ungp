@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.xml.impl.PrimeShopData;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.PrimeShopRequest;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -64,7 +64,7 @@ public final class RequestBRPresentBuyProduct implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -127,7 +127,7 @@ public final class RequestBRPresentBuyProduct implements IClientIncomingPacket {
 	 * @param player
 	 * @return
 	 */
-	private static boolean validatePlayer(PrimeShopGroup item, int count, PlayerInstance player) {
+	private static boolean validatePlayer(PrimeShopGroup item, int count, Player player) {
 		final long currentTime = System.currentTimeMillis() / 1000;
 		if (item == null) {
 			player.sendPacket(new ExBRBuyProduct(ExBrProductReplyType.INVALID_PRODUCT));
@@ -176,7 +176,7 @@ public final class RequestBRPresentBuyProduct implements IClientIncomingPacket {
 		return true;
 	}
 
-	private static int validatePaymentId(PlayerInstance player, PrimeShopGroup item, long amount) {
+	private static int validatePaymentId(Player player, PrimeShopGroup item, long amount) {
 		switch (item.getPaymentType()) {
 			case 0: // Prime points
 			{

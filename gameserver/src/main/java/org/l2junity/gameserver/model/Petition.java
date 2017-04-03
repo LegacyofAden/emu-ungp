@@ -22,7 +22,7 @@ import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.PetitionState;
 import org.l2junity.gameserver.enums.PetitionType;
 import org.l2junity.gameserver.instancemanager.PetitionManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.PetitionVotePacket;
@@ -44,10 +44,10 @@ public final class Petition {
 	private PetitionState _state = PetitionState.PENDING;
 	private final String _content;
 	private final List<CreatureSay> _messageLog = new CopyOnWriteArrayList<>();
-	private final PlayerInstance _petitioner;
-	private PlayerInstance _responder;
+	private final Player _petitioner;
+	private Player _responder;
 
-	public Petition(PlayerInstance petitioner, String petitionText, int petitionType) {
+	public Petition(Player petitioner, String petitionText, int petitionType) {
 		_id = IdFactory.getInstance().getNextId();
 		_type = PetitionType.values()[--petitionType];
 		_content = petitionText;
@@ -101,11 +101,11 @@ public final class Petition {
 		return _id;
 	}
 
-	public PlayerInstance getPetitioner() {
+	public Player getPetitioner() {
 		return _petitioner;
 	}
 
-	public PlayerInstance getResponder() {
+	public Player getResponder() {
 		return _responder;
 	}
 
@@ -146,7 +146,7 @@ public final class Petition {
 		_state = state;
 	}
 
-	public void setResponder(PlayerInstance respondingAdmin) {
+	public void setResponder(Player respondingAdmin) {
 		if (getResponder() != null) {
 			return;
 		}

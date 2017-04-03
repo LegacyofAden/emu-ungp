@@ -24,7 +24,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Ye Segira Combat Soldier AI.
@@ -54,7 +54,7 @@ public class YeSegiraCombatSoldier extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("LOOK_AROUND") && (npc != null)) {
 			if (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK) {
 				World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, 500, chars ->

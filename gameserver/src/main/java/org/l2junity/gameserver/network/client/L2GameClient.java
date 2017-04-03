@@ -34,7 +34,7 @@ import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
@@ -69,7 +69,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 	private Channel _channel;
 	private String _accountName;
 	private SessionKey _sessionId;
-	private PlayerInstance _activeChar;
+	private Player _activeChar;
 	private final ReentrantLock _activeCharLock = new ReentrantLock();
 	private SecondaryPasswordAuth _secondaryAuth;
 
@@ -166,11 +166,11 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 		return _addr;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 
-	public void setActiveChar(PlayerInstance activeChar) {
+	public void setActiveChar(Player activeChar) {
 		_activeChar = activeChar;
 	}
 
@@ -429,13 +429,13 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 		}
 	}
 
-	public PlayerInstance load(int characterSlot) {
+	public Player load(int characterSlot) {
 		final int objectId = getObjectIdForSlot(characterSlot);
 		if (objectId < 0) {
 			return null;
 		}
 
-		PlayerInstance player = World.getInstance().getPlayer(objectId);
+		Player player = World.getInstance().getPlayer(objectId);
 		if (player != null) {
 			// exploit prevention, should not happens in normal way
 			LOGGER.error("Attempt of double login: {}({}) {}", player.getName(), objectId, getAccountName());
@@ -443,7 +443,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 			return null;
 		}
 
-		player = PlayerInstance.load(objectId);
+		player = Player.load(objectId);
 		if (player == null) {
 			LOGGER.error("Could not restore in slot: {}", characterSlot);
 		}
@@ -490,7 +490,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 		try {
 			final InetAddress address = _addr;
 			ConnectionState state = (ConnectionState) getConnectionState();
-			final PlayerInstance player = getActiveChar();
+			final Player player = getActiveChar();
 			switch (state) {
 				case CONNECTED:
 					return "[IP: " + (address == null ? "disconnected" : address.getHostAddress()) + "]";

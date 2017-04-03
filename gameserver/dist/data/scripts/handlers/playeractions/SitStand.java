@@ -27,7 +27,7 @@ import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ChairSit;
 
 /**
@@ -37,7 +37,7 @@ import org.l2junity.gameserver.network.client.send.ChairSit;
  */
 public final class SitStand implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+	public void useAction(Player activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		if (activeChar.isSitting() || !activeChar.isMoving() || activeChar.isFakeDeath()) {
 			useSit(activeChar, activeChar.getTarget());
 		} else {
@@ -57,7 +57,7 @@ public final class SitStand implements IPlayerActionHandler {
 	 * @param target     the target to sit, throne, bench or chair
 	 * @return {@code true} if the player can sit, {@code false} otherwise
 	 */
-	protected boolean useSit(PlayerInstance activeChar, WorldObject target) {
+	protected boolean useSit(Player activeChar, WorldObject target) {
 		if (activeChar.getMountType() != MountType.NONE) {
 			return false;
 		}

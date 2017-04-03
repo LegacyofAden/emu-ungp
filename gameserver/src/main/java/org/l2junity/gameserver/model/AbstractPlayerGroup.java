@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -36,7 +36,7 @@ public abstract class AbstractPlayerGroup {
 	/**
 	 * @return a list of all members of this group
 	 */
-	public abstract List<PlayerInstance> getMembers();
+	public abstract List<Player> getMembers();
 
 	/**
 	 * @return a list of object IDs of the members of this group
@@ -54,14 +54,14 @@ public abstract class AbstractPlayerGroup {
 	/**
 	 * @return the leader of this group
 	 */
-	public abstract PlayerInstance getLeader();
+	public abstract Player getLeader();
 
 	/**
 	 * Change the leader of this group to the specified player.
 	 *
 	 * @param leader the player to set as the new leader of this group
 	 */
-	public abstract void setLeader(PlayerInstance leader);
+	public abstract void setLeader(Player leader);
 
 	/**
 	 * @return the leader's object ID
@@ -76,7 +76,7 @@ public abstract class AbstractPlayerGroup {
 	 * @param player the player to check
 	 * @return {@code true} if the specified player is the leader of this group, {@code false} otherwise
 	 */
-	public boolean isLeader(PlayerInstance player) {
+	public boolean isLeader(Player player) {
 		return (getLeaderObjectId() == player.getObjectId());
 	}
 
@@ -125,7 +125,7 @@ public abstract class AbstractPlayerGroup {
 		broadcastPacket(SystemMessage.sendString(text));
 	}
 
-	public void broadcastCreatureSay(final CreatureSay msg, final PlayerInstance broadcaster) {
+	public void broadcastCreatureSay(final CreatureSay msg, final Player broadcaster) {
 		forEachMember(m ->
 		{
 			if ((m != null) && !BlockList.isBlocked(m, broadcaster)) {
@@ -141,14 +141,14 @@ public abstract class AbstractPlayerGroup {
 	 * @param player the player to check
 	 * @return {@code true} if this group contains the specified player, {@code false} otherwise
 	 */
-	public boolean containsPlayer(PlayerInstance player) {
+	public boolean containsPlayer(Player player) {
 		return getMembers().contains(player);
 	}
 
 	/**
 	 * @return a random member of this group
 	 */
-	public PlayerInstance getRandomPlayer() {
+	public Player getRandomPlayer() {
 		return getMembers().get(Rnd.get(getMemberCount()));
 	}
 
@@ -159,8 +159,8 @@ public abstract class AbstractPlayerGroup {
 	 *                  If executing the procedure on a member returns {@code true}, the loop continues to the next member, otherwise it breaks the loop
 	 * @return {@code true} if the procedure executed correctly, {@code false} if the loop was broken prematurely
 	 */
-	public boolean forEachMember(Function<PlayerInstance, Boolean> procedure) {
-		for (PlayerInstance player : getMembers()) {
+	public boolean forEachMember(Function<Player, Boolean> procedure) {
+		for (Player player : getMembers()) {
 			if (!procedure.apply(player)) {
 				return false;
 			}

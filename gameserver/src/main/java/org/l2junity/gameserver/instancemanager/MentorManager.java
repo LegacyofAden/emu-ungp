@@ -21,7 +21,7 @@ package org.l2junity.gameserver.instancemanager;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.Mentee;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +108,7 @@ public class MentorManager {
 		return _menteeData;
 	}
 
-	public void cancelAllMentoringBuffs(PlayerInstance player) {
+	public void cancelAllMentoringBuffs(Player player) {
 		if (player == null) {
 			return;
 		}
@@ -117,13 +117,13 @@ public class MentorManager {
 	}
 
 	public void setPenalty(int mentorId, long penalty) {
-		final PlayerInstance player = World.getInstance().getPlayer(mentorId);
+		final Player player = World.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		vars.set("Mentor-Penalty-" + mentorId, String.valueOf(System.currentTimeMillis() + penalty));
 	}
 
 	public long getMentorPenalty(int mentorId) {
-		final PlayerInstance player = World.getInstance().getPlayer(mentorId);
+		final Player player = World.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		return vars.getLong("Mentor-Penalty-" + mentorId, 0);
 	}

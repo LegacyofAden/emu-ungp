@@ -21,14 +21,12 @@ package org.l2junity.gameserver.instancemanager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.PropertiesParser;
 import org.l2junity.core.configs.SiegeCastleConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TowerSpawn;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -104,7 +102,7 @@ public final class SiegeManager {
 		}*/
 	}
 
-	public final void addSiegeSkills(PlayerInstance character) {
+	public final void addSiegeSkills(Player character) {
 		character.addSkill(CommonSkill.IMPRIT_OF_LIGHT.getSkill(), false);
 		character.addSkill(CommonSkill.IMPRIT_OF_DARKNESS.getSkill(), false);
 		character.addSkill(CommonSkill.BUILD_HEADQUARTERS.getSkill(), false);
@@ -147,7 +145,7 @@ public final class SiegeManager {
 		return register;
 	}
 
-	public final void removeSiegeSkills(PlayerInstance character) {
+	public final void removeSiegeSkills(Player character) {
 		character.removeSkill(CommonSkill.IMPRIT_OF_LIGHT.getSkill(), false);
 		character.removeSkill(CommonSkill.IMPRIT_OF_DARKNESS.getSkill(), false);
 		character.removeSkill(CommonSkill.BUILD_HEADQUARTERS.getSkill(), false);

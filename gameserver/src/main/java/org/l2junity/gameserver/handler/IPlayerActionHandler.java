@@ -19,11 +19,11 @@
 package org.l2junity.gameserver.handler;
 
 import org.l2junity.gameserver.model.ActionDataHolder;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author UnAfraid
  */
 public interface IPlayerActionHandler {
-	void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed);
+	void useAction(Player activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed);
 }

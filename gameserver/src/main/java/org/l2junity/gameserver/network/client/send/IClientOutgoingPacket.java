@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.IUpdateTypeComponent;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.network.IOutgoingPacket;
@@ -122,7 +122,7 @@ public interface IClientOutgoingPacket extends IOutgoingPacket {
 		player.sendPacket(this);
 	}
 
-	default void runImpl(PlayerInstance player) {
+	default void runImpl(Player player) {
 
 	}
 

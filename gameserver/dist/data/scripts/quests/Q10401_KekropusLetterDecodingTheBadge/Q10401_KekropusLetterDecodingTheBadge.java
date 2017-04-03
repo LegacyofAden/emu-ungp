@@ -21,7 +21,7 @@ package quests.Q10401_KekropusLetterDecodingTheBadge;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -60,7 +60,7 @@ public final class Q10401_KekropusLetterDecodingTheBadge extends LetterQuest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -99,7 +99,7 @@ public final class Q10401_KekropusLetterDecodingTheBadge extends LetterQuest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
 
@@ -120,7 +120,7 @@ public final class Q10401_KekropusLetterDecodingTheBadge extends LetterQuest {
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
 
 			if ((st != null) && st.isCond(2)) {

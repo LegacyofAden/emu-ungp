@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -121,7 +121,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -155,7 +155,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 
 		if (isInInstance(instance) && (npc.getId() == JOSEPHINA)) {
@@ -165,7 +165,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		} else {
@@ -193,7 +193,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 					}
 					case "acceptTeleport": {
 						if (player.isInParty()) {
-							for (PlayerInstance member : player.getParty().getMembers()) {
+							for (Player member : player.getParty().getMembers()) {
 								if (member.isInRadius3d(npc, 1500)) {
 									member.teleToLocation(ORBIS_LOCATION);
 								}
@@ -244,7 +244,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 					}
 					case "spezionTeleport": {
 						if (player.isInParty()) {
-							for (PlayerInstance member : player.getParty().getMembers()) {
+							for (Player member : player.getParty().getMembers()) {
 								if (member.getInstanceWorld() == instance) {
 									member.teleToLocation(SPEZION_LAIR);
 								}
@@ -328,7 +328,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance) && (npc.getId() == SPEZIONS_PAWN)) {
 			instance.openCloseDoor(DOOR_3, false);
@@ -339,7 +339,7 @@ public final class PrisonOfDarkness extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			if ((skill == TELEPORT.getSkill()) && (player != null) && (npc.distance3d(player) < 1000) && (npc.getCurrentHpPercent() > 10)) {

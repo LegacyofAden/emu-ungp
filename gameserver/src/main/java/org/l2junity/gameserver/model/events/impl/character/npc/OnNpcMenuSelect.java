@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.npc;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author St3eT
  */
 public class OnNpcMenuSelect implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Npc _npc;
 	private final int _ask;
 	private final int _reply;
@@ -38,14 +38,14 @@ public class OnNpcMenuSelect implements IBaseEvent {
 	 * @param ask
 	 * @param reply
 	 */
-	public OnNpcMenuSelect(PlayerInstance activeChar, Npc npc, int ask, int reply) {
+	public OnNpcMenuSelect(Player activeChar, Npc npc, int ask, int reply) {
 		_activeChar = activeChar;
 		_npc = npc;
 		_ask = ask;
 		_reply = reply;
 	}
 
-	public PlayerInstance getTalker() {
+	public Player getTalker() {
 		return _activeChar;
 	}
 

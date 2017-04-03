@@ -21,7 +21,7 @@ package org.l2junity.gameserver.instancemanager;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.eventengine.AbstractEvent;
 import org.l2junity.gameserver.model.eventengine.AbstractEventManager;
 import org.l2junity.gameserver.model.eventengine.ScheduleTarget;
@@ -110,7 +110,7 @@ public class PcCafeManager extends AbstractEventManager<AbstractEvent<?>> {
 	}
 
 	private void onPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if (!player.getAccountVariables().getBoolean(AccountVariables.PC_CAFE_POINTS_TODAY, false)) {
 			player.getAccountVariables().set(AccountVariables.PC_CAFE_POINTS_TODAY, true);
 			player.increasePcCafePoints(getVariables().getLong(ENABLE_DAILY_BONUS_POINTS_KEY, 1000L));
@@ -118,7 +118,7 @@ public class PcCafeManager extends AbstractEventManager<AbstractEvent<?>> {
 	}
 
 	private void onAttackableKill(OnAttackableKill event) {
-		final PlayerInstance player = event.getAttacker();
+		final Player player = event.getAttacker();
 		final int levelDiff = event.getTarget().getLevel() - player.getLevel();
 		final int maxLevelDiff = getVariables().getInt(FARMING_BONUS_LEVEL_DIFF_KEY, 11);
 		if ((levelDiff > -maxLevelDiff) && (levelDiff < maxLevelDiff)) {

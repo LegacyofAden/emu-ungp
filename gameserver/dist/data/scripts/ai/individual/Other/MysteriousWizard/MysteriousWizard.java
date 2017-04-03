@@ -20,7 +20,7 @@ package ai.individual.Other.MysteriousWizard;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
@@ -45,7 +45,7 @@ public final class MysteriousWizard extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		if (npc != null) {
 			if (event.equals("33980-01.html") && isFotDInstance(npc.getInstanceWorld())) {
@@ -64,7 +64,7 @@ public final class MysteriousWizard extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState qs = player.getQuestState(Q10751_WindsOfFateEncounters.class.getSimpleName());
 		final Instance world = npc.getInstanceWorld();

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.conditions;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.items.L2Item;
@@ -80,11 +80,11 @@ public final class ConditionSiegeZone extends Condition {
 	 * @return true, if successful
 	 */
 	public static boolean checkIfOk(Creature activeChar, Castle castle, int value) {
-		if ((activeChar == null) || !(activeChar instanceof PlayerInstance)) {
+		if ((activeChar == null) || !(activeChar instanceof Player)) {
 			return false;
 		}
 
-		PlayerInstance player = (PlayerInstance) activeChar;
+		Player player = (Player) activeChar;
 
 		if (((castle == null) || (castle.getResidenceId() <= 0))) {
 			if ((value & COND_NOT_ZONE) != 0) {
@@ -114,11 +114,11 @@ public final class ConditionSiegeZone extends Condition {
 	 * @return true, if successful
 	 */
 	public static boolean checkIfOk(Creature activeChar, Fort fort, int value) {
-		if ((activeChar == null) || !(activeChar instanceof PlayerInstance)) {
+		if ((activeChar == null) || !(activeChar instanceof Player)) {
 			return false;
 		}
 
-		PlayerInstance player = (PlayerInstance) activeChar;
+		Player player = (Player) activeChar;
 
 		if (((fort == null) || (fort.getResidenceId() <= 0))) {
 			if ((value & COND_NOT_ZONE) != 0) {

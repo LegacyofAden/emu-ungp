@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,19 +26,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author lord_rex
  */
 public final class CanPlayerInviteToParty implements IBaseEvent {
-	private final PlayerInstance _requestor;
-	private final PlayerInstance _target;
+	private final Player _requestor;
+	private final Player _target;
 
-	public CanPlayerInviteToParty(PlayerInstance requestor, PlayerInstance target) {
+	public CanPlayerInviteToParty(Player requestor, Player target) {
 		_requestor = requestor;
 		_target = target;
 	}
 
-	public PlayerInstance getRequestor() {
+	public Player getRequestor() {
 		return _requestor;
 	}
 
-	public PlayerInstance getTarget() {
+	public Player getTarget() {
 		return _target;
 	}
 

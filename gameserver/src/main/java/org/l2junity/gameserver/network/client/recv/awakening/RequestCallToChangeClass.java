@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv.awakening;
 
 import org.l2junity.gameserver.enums.CategoryType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerCallToChangeClass;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -38,7 +38,7 @@ public class RequestCallToChangeClass implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 import java.util.StringTokenizer;
@@ -36,7 +36,7 @@ public class AdminLevel implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		WorldObject targetChar = activeChar.getTarget();
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
@@ -56,11 +56,11 @@ public class AdminLevel implements IAdminCommandHandler {
 			}
 		} else if (actualCommand.equalsIgnoreCase("admin_set_level")) {
 			try {
-				if (!(targetChar instanceof PlayerInstance)) {
+				if (!(targetChar instanceof Player)) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET); // incorrect target!
 					return false;
 				}
-				PlayerInstance targetPlayer = (PlayerInstance) targetChar;
+				Player targetPlayer = (Player) targetChar;
 
 				byte lvl = Byte.parseByte(val);
 				if ((lvl >= 1) && (lvl <= ExperienceData.getInstance().getMaxLevel())) {

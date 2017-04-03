@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
 import org.l2junity.gameserver.model.skills.*;
@@ -771,7 +771,7 @@ public final class CharEffectList {
 	 * @param partyOnly {@code true} only party icons need to be updated.
 	 */
 	public void updateEffectIcons(boolean partyOnly) {
-		final PlayerInstance player = _owner.getActingPlayer();
+		final Player player = _owner.getActingPlayer();
 		if (player != null) {
 			final Party party = player.getParty();
 			final Optional<AbnormalStatusUpdate> asu = (_owner.isPlayer() && !partyOnly) ? Optional.of(new AbnormalStatusUpdate()) : Optional.empty();

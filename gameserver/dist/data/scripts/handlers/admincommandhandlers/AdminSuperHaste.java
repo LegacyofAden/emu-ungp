@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 
 import java.util.StringTokenizer;
@@ -43,7 +43,7 @@ public final class AdminSuperHaste implements IAdminCommandHandler {
 	private static final int SUPER_HASTE_ID = 7029;
 
 	@Override
-	public boolean useAdminCommand(final String command, final PlayerInstance player) {
+	public boolean useAdminCommand(final String command, final Player player) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {

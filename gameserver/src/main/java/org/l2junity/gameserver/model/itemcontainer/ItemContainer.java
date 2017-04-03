@@ -27,7 +27,7 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.slf4j.Logger;
@@ -186,7 +186,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance addItem(String process, ItemInstance item, PlayerInstance actor, Object reference) {
+	public ItemInstance addItem(String process, ItemInstance item, Player actor, Object reference) {
 		ItemInstance olditem = getItemByItemId(item.getId());
 
 		// If stackable item is found in inventory just add to current quantity
@@ -242,7 +242,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance addItem(String process, int itemId, long count, PlayerInstance actor, Object reference) {
+	public ItemInstance addItem(String process, int itemId, long count, Player actor, Object reference) {
 		ItemInstance item = getItemByItemId(itemId);
 
 		// If stackable item is found in inventory just add to current quantity
@@ -310,7 +310,7 @@ public abstract class ItemContainer {
 	 * @param reference Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance transferItem(String process, int objectId, long count, ItemContainer target, PlayerInstance actor, Object reference) {
+	public ItemInstance transferItem(String process, int objectId, long count, ItemContainer target, Player actor, Object reference) {
 		if (target == null) {
 			return null;
 		}
@@ -387,7 +387,7 @@ public abstract class ItemContainer {
 	 * @param reference   Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return the detached item instance if operation completes successfully, {@code null} if the item does not exist in this container anymore or item count is not available
 	 */
-	public ItemInstance detachItem(String process, ItemInstance item, long count, ItemLocation newLocation, PlayerInstance actor, Object reference) {
+	public ItemInstance detachItem(String process, ItemInstance item, long count, ItemLocation newLocation, Player actor, Object reference) {
 		if (item == null) {
 			return null;
 		}
@@ -433,7 +433,7 @@ public abstract class ItemContainer {
 	 * @param reference    Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return the detached item instance if operation completes successfully, {@code null} if the item does not exist in this container anymore or item count is not available
 	 */
-	public ItemInstance detachItem(String process, int itemObjectId, long count, ItemLocation newLocation, PlayerInstance actor, Object reference) {
+	public ItemInstance detachItem(String process, int itemObjectId, long count, ItemLocation newLocation, Player actor, Object reference) {
 		final ItemInstance itemInstance = getItemByObjectId(itemObjectId);
 		if (itemInstance == null) {
 			return null;
@@ -451,7 +451,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, ItemInstance item, PlayerInstance actor, Object reference) {
+	public ItemInstance destroyItem(String process, ItemInstance item, Player actor, Object reference) {
 		return this.destroyItem(process, item, item.getCount(), actor, reference);
 	}
 
@@ -465,7 +465,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, ItemInstance item, long count, PlayerInstance actor, Object reference) {
+	public ItemInstance destroyItem(String process, ItemInstance item, long count, Player actor, Object reference) {
 		if (count < 0) {
 			throw new IllegalArgumentException("Negative counts while destroying an item are not permitted! Process: " + process + " Item: " + item + " Count: " + count + " Actor: " + String.valueOf(actor) + " Reference: " + String.valueOf(reference));
 		}
@@ -513,7 +513,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, int objectId, long count, PlayerInstance actor, Object reference) {
+	public ItemInstance destroyItem(String process, int objectId, long count, Player actor, Object reference) {
 		ItemInstance item = getItemByObjectId(objectId);
 		if (item == null) {
 			return null;
@@ -531,7 +531,7 @@ public abstract class ItemContainer {
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return L2ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItemByItemId(String process, int itemId, long count, PlayerInstance actor, Object reference) {
+	public ItemInstance destroyItemByItemId(String process, int itemId, long count, Player actor, Object reference) {
 		ItemInstance item = getItemByItemId(itemId);
 		if (item == null) {
 			return null;
@@ -546,7 +546,7 @@ public abstract class ItemContainer {
 	 * @param actor     : L2PcInstance Player requesting the item destroy
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void destroyAllItems(String process, PlayerInstance actor, Object reference) {
+	public void destroyAllItems(String process, Player actor, Object reference) {
 		for (ItemInstance item : _items.values()) {
 			destroyItem(process, item, actor, reference);
 		}
@@ -654,7 +654,7 @@ public abstract class ItemContainer {
 					final ItemInstance item = new ItemInstance(rs);
 					World.getInstance().addObject(item);
 
-					final PlayerInstance owner = getOwner() != null ? getOwner().getActingPlayer() : null;
+					final Player owner = getOwner() != null ? getOwner().getActingPlayer() : null;
 
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

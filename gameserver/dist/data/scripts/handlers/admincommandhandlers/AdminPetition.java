@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.PetitionManager;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
@@ -42,7 +42,7 @@ public class AdminPetition implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		int petitionId = -1;
 
 		try {
@@ -83,11 +83,11 @@ public class AdminPetition implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_force_peti")) {
 			try {
 				WorldObject targetChar = activeChar.getTarget();
-				if ((targetChar == null) || !(targetChar instanceof PlayerInstance)) {
+				if ((targetChar == null) || !(targetChar instanceof Player)) {
 					activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 					return false;
 				}
-				PlayerInstance targetPlayer = (PlayerInstance) targetChar;
+				Player targetPlayer = (Player) targetChar;
 
 				String val = command.substring(15);
 

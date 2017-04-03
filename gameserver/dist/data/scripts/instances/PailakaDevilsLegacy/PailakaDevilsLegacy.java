@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -77,7 +77,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 		if (firstEnter) {
 			final QuestState qs = player.getQuestState(Q00129_PailakaDevilsLegacy.class.getSimpleName());
@@ -91,7 +91,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 	}
 
 	@Override
-	public final String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public final String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enter")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		} else {
@@ -133,7 +133,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 	}
 
 	@Override
-	public final String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public final String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (npc.getId()) {
@@ -200,7 +200,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 	}
 
 	@Override
-	public final String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public final String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			world.getNpcs(FOLLOWERS).forEach(Npc::deleteMe);
@@ -211,7 +211,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 
 	@Override
 	public String onEnterZone(Creature character, ZoneType zone) {
-		if ((character.isPlayer()) && !character.isDead() && !character.isTeleporting() && ((PlayerInstance) character).isOnline()) {
+		if ((character.isPlayer()) && !character.isDead() && !character.isTeleporting() && ((Player) character).isOnline()) {
 			final Instance instance = character.getInstanceWorld();
 			if (isInInstance(instance)) {
 				startQuestTimer("TELEPORT", 1000, instance.getNpc(LEMATAN), character.getActingPlayer());

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,13 +26,13 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author malyelfik
  */
 public final class OnPlayerSubChange implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public OnPlayerSubChange(PlayerInstance activeChar) {
+	public OnPlayerSubChange(Player activeChar) {
 		_activeChar = activeChar;
 	}
 
-	public final PlayerInstance getActiveChar() {
+	public final Player getActiveChar() {
 		return _activeChar;
 	}
 

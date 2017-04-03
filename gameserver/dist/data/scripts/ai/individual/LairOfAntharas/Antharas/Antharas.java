@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
@@ -116,9 +116,9 @@ public final class Antharas extends AbstractNpcAI {
 	private static int minionMultipler = 0;
 	private static int moveChance = 0;
 	private static int sandStorm = 0;
-	private static PlayerInstance attacker_1 = null;
-	private static PlayerInstance attacker_2 = null;
-	private static PlayerInstance attacker_3 = null;
+	private static Player attacker_1 = null;
+	private static Player attacker_2 = null;
+	private static Player attacker_3 = null;
 	private static int attacker_1_hate = 0;
 	private static int attacker_2_hate = 0;
 	private static int attacker_3_hate = 0;
@@ -182,7 +182,7 @@ public final class Antharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "enter": {
 				String htmltext = null;
@@ -195,7 +195,7 @@ public final class Antharas extends AbstractNpcAI {
 				} else if (player.isInParty()) {
 					final Party party = player.getParty();
 					final boolean isInCC = party.isInCommandChannel();
-					final List<PlayerInstance> members = (isInCC) ? party.getCommandChannel().getMembers() : party.getMembers();
+					final List<Player> members = (isInCC) ? party.getCommandChannel().getMembers() : party.getMembers();
 					final boolean isPartyLeader = (isInCC) ? party.getCommandChannel().isLeader(player) : party.isLeader(player);
 					if (!isPartyLeader) {
 						htmltext = "13001-05.html";
@@ -204,7 +204,7 @@ public final class Antharas extends AbstractNpcAI {
 					} else if (members.size() > (MAX_PEOPLE - zone.getPlayersInside().size())) {
 						htmltext = "13001-04.html";
 					} else {
-						for (PlayerInstance member : members) {
+						for (Player member : members) {
 							if (member.isInRadius3d(npc, 1000)) {
 								member.teleToLocation(179700 + getRandom(700), 113800 + getRandom(2100), -7709);
 							}
@@ -271,7 +271,7 @@ public final class Antharas extends AbstractNpcAI {
 				break;
 			}
 			case "START_MOVE": {
-				for (PlayerInstance players : World.getInstance().getVisibleObjects(npc, PlayerInstance.class, 4000)) {
+				for (Player players : World.getInstance().getVisibleObjects(npc, Player.class, 4000)) {
 					if (players.isHero()) {
 						zone.broadcastPacket(new ExShowScreenMessage(NpcStringId.S1_YOU_CANNOT_HOPE_TO_DEFEAT_ME_WITH_YOUR_MEAGER_STRENGTH, 2, 4000, players.getName()));
 						break;
@@ -481,14 +481,14 @@ public final class Antharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		npc.doCast(DISPEL_BOM.getSkill());
 		npc.doDie(player);
 		return super.onAggroRangeEnter(npc, player, isSummon);
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		_lastAttack = System.currentTimeMillis();
 
 		if (npc.getId() == BOMBER) {
@@ -526,7 +526,7 @@ public final class Antharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (zone.isCharacterInZone(killer)) {
 			if (npc.getId() == ANTHARAS) {
 				_antharas = null;
@@ -573,7 +573,7 @@ public final class Antharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if ((skill.getId() == ANTH_FEAR.getSkillId()) || (skill.getId() == ANTH_FEAR_SHORT.getSkillId())) {
 			startQuestTimer("TID_USED_FEAR", 7000, npc, null);
 		}
@@ -606,7 +606,7 @@ public final class Antharas extends AbstractNpcAI {
 		GrandBossManager.getInstance().getStatsSet(ANTHARAS).set("respawn_time", (System.currentTimeMillis() + respawnTime));
 	}
 
-	private final void refreshAiParams(PlayerInstance attacker, int damage) {
+	private final void refreshAiParams(Player attacker, int damage) {
 		if ((attacker_1 != null) && (attacker == attacker_1)) {
 			if (attacker_1_hate < (damage + 1000)) {
 				attacker_1_hate = damage + getRandom(3000);
@@ -641,7 +641,7 @@ public final class Antharas extends AbstractNpcAI {
 
 		int i1 = 0;
 		int i2 = 0;
-		PlayerInstance c2 = null;
+		Player c2 = null;
 		if ((attacker_1 == null) || !npc.isInRadius3d(attacker_1, 9000) || attacker_1.isDead()) {
 			attacker_1_hate = 0;
 		}

@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GraciaSeedsManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 import java.util.Calendar;
@@ -36,7 +36,7 @@ public class AdminGraciaSeeds implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
 
@@ -55,7 +55,7 @@ public class AdminGraciaSeeds implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void showMenu(PlayerInstance activeChar) {
+	private void showMenu(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/graciaseeds.htm");
 		html.replace("%sodstate%", String.valueOf(GraciaSeedsManager.getInstance().getSoDState()));

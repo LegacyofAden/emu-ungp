@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -32,7 +32,7 @@ public class ExMoveToLocationInAirShip implements IClientOutgoingPacket {
 	/**
 	 * @param player
 	 */
-	public ExMoveToLocationInAirShip(PlayerInstance player) {
+	public ExMoveToLocationInAirShip(Player player) {
 		_charObjId = player.getObjectId();
 		_airShipId = player.getAirShip().getObjectId();
 		_destination = player.getInVehiclePosition();

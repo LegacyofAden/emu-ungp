@@ -124,11 +124,11 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		return _instanceType.isTypes(instanceTypes);
 	}
 
-	public final void onAction(PlayerInstance player) {
+	public final void onAction(Player player) {
 		onAction(player, true);
 	}
 
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		IActionHandler handler = ActionHandler.getInstance().getHandler(getInstanceType());
 		if (handler != null) {
 			handler.action(player, this, interact);
@@ -137,7 +137,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
-	public void onActionShift(PlayerInstance player) {
+	public void onActionShift(Player player) {
 		IActionShiftHandler handler = ActionShiftHandler.getInstance().getHandler(getInstanceType());
 		if (handler != null) {
 			handler.action(player, this, true);
@@ -146,7 +146,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
-	public void onForcedAttack(PlayerInstance player) {
+	public void onForcedAttack(Player player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
@@ -265,7 +265,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		return (poly == null) ? addScript(new ObjectPoly(this)) : poly;
 	}
 
-	public abstract void sendInfo(PlayerInstance activeChar);
+	public abstract void sendInfo(Player activeChar);
 
 	public void sendPacket(IClientOutgoingPacket... packets) {
 	}
@@ -273,7 +273,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	public void sendPacket(SystemMessageId id) {
 	}
 
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return null;
 	}
 
@@ -383,9 +383,9 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * @return {@link PlayerInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link Player} instance if current object is such, {@code null} otherwise.
 	 */
-	public PlayerInstance asPlayer() {
+	public Player asPlayer() {
 		return null;
 	}
 
@@ -843,7 +843,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		_isInvisible = invis;
 		if (invis) {
 			final DeleteObject deletePacket = new DeleteObject(this);
-			World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+			World.getInstance().forEachVisibleObject(this, Player.class, player ->
 			{
 				if (!isVisibleFor(player)) {
 					player.sendPacket(deletePacket);
@@ -859,7 +859,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 * @param player
 	 * @return {@code true} if player can see an invisible object if it's invisible, {@code false} otherwise.
 	 */
-	public boolean isVisibleFor(PlayerInstance player) {
+	public boolean isVisibleFor(Player player) {
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new IsWorldObjectVisibleFor(this, player), this, BooleanReturn.class);
 		if (term != null) {
 			return term.getValue();
@@ -872,7 +872,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 * Broadcasts describing info to known players.
 	 */
 	public void broadcastInfo() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				sendInfo(player);

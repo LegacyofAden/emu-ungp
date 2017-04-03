@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.zone.type;
 
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.L2ZoneRespawn;
 
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class RespawnZone extends L2ZoneRespawn {
 		return _raceRespawnPoint;
 	}
 
-	public String getRespawnPoint(PlayerInstance activeChar) {
+	public String getRespawnPoint(Player activeChar) {
 		return _raceRespawnPoint.get(activeChar.getRace());
 	}
 }

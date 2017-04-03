@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -389,7 +389,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		switch (event) {
 			case "EARTHQUAKE": {
 				player.sendPacket(new Earthquake(player.getLocation(), 50, 4));
@@ -583,7 +583,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		getTimers().addTimer("OPENING_SCENE", 1000, e ->
 		{
 			instance.getPlayers().forEach(p ->
@@ -755,7 +755,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		switch (npc.getId()) {
 			case SIEGE_GOLEM: {
 				if (skill.getId() == SIEGE_GOLEM_SKILL_1.getSkillId()) {
@@ -834,7 +834,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	@RegisterEvent(EventType.ON_PLAYER_CALL_TO_CHANGE_CLASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerCallToChangeClass(OnPlayerCallToChangeClass event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if ((player.getLevel() > 84) && player.isInCategory(CategoryType.FOURTH_CLASS_GROUP) && !player.isSubClassActive() && (player.getClassId() != ClassId.JUDICATOR) && (player.getRace() != Race.ERTHEIA)) {
 			enterInstance(event.getActiveChar(), null, TEMPLATE_ID);
 		}
@@ -843,7 +843,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if ((player.getLevel() > 84) && player.isInCategory(CategoryType.FOURTH_CLASS_GROUP) && !player.isSubClassActive() && (player.getClassId() != ClassId.JUDICATOR) && (player.getRace() != Race.ERTHEIA)) {
 			for (ClassId newClass : player.getClassId().getNextClassIds()) {
 				player.sendPacket(new ExCallToChangeClass(newClass.getId(), false));
@@ -855,7 +855,7 @@ public final class MemoryOfDisaster extends AbstractInstance {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if ((player.getLevel() > 84) && player.isInCategory(CategoryType.FOURTH_CLASS_GROUP) && !player.isSubClassActive() && (player.getClassId() != ClassId.JUDICATOR) && (player.getRace() != Race.ERTHEIA)) {
 			for (ClassId newClass : player.getClassId().getNextClassIds()) {
 				player.sendPacket(new ExCallToChangeClass(newClass.getId(), false));

@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public final class PartySmallWindowDelete implements IClientOutgoingPacket {
-	private final PlayerInstance _member;
+	private final Player _member;
 
-	public PartySmallWindowDelete(PlayerInstance member) {
+	public PartySmallWindowDelete(Player member) {
 		_member = member;
 	}
 

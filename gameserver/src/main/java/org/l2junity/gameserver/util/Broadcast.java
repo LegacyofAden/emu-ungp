@@ -21,7 +21,7 @@ package org.l2junity.gameserver.util;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -47,7 +47,7 @@ public final class Broadcast {
 	 * @param mov
 	 */
 	public static void toPlayersTargettingMyself(Creature character, IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(character, Player.class, player ->
 		{
 			if (player.getTarget() == character) {
 				player.sendPacket(mov);
@@ -67,7 +67,7 @@ public final class Broadcast {
 	 * @param mov
 	 */
 	public static void toKnownPlayers(Creature character, IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(character, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(character, Player.class, player ->
 		{
 			try {
 				player.sendPacket(mov);
@@ -93,7 +93,7 @@ public final class Broadcast {
 			radius = 1500;
 		}
 
-		World.getInstance().forEachVisibleObjectInRadius(character, PlayerInstance.class, radius, mov::sendTo);
+		World.getInstance().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public final class Broadcast {
 	 * @param mov
 	 */
 	public static void toSelfAndKnownPlayers(Creature character, IClientOutgoingPacket mov) {
-		if (character instanceof PlayerInstance) {
+		if (character instanceof Player) {
 			character.sendPacket(mov);
 		}
 
@@ -119,11 +119,11 @@ public final class Broadcast {
 			radius = 600;
 		}
 
-		if (character instanceof PlayerInstance) {
+		if (character instanceof Player) {
 			character.sendPacket(mov);
 		}
 
-		World.getInstance().forEachVisibleObjectInRadius(character, PlayerInstance.class, radius, mov::sendTo);
+		World.getInstance().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public final class Broadcast {
 	 * @param packet
 	 */
 	public static void toAllOnlinePlayers(IClientOutgoingPacket packet) {
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(packet);
 			}

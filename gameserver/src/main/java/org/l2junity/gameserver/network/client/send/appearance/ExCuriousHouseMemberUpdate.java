@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.appearance;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -36,7 +36,7 @@ public class ExCuriousHouseMemberUpdate implements IClientOutgoingPacket {
 
 	public ExCuriousHouseMemberUpdate(CeremonyOfChaosMember member) {
 		_objId = member.getObjectId();
-		final PlayerInstance player = member.getPlayer();
+		final Player player = member.getPlayer();
 		if (player != null) {
 			_maxHp = player.getMaxHp();
 			_maxCp = player.getMaxCp();

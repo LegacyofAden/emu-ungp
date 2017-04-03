@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillFinishCast;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
@@ -68,7 +68,7 @@ public final class Minigame extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final MinigameRoom room = getRoomByManager(npc);
 		switch (event) {
 			case "restart": {
@@ -175,7 +175,7 @@ public final class Minigame extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance talker) {
+	public String onFirstTalk(Npc npc, Player talker) {
 		String htmltext = null;
 		final MinigameRoom room = getRoomByManager(npc);
 		final boolean miniGameStarted = room.getStarted();
@@ -218,7 +218,7 @@ public final class Minigame extends AbstractNpcAI {
 	}
 
 	public void onSkillUse(OnCreatureSkillFinishCast event) {
-		final MinigameRoom room = getRoomByParticipant((PlayerInstance) event.getCaster());
+		final MinigameRoom room = getRoomByParticipant((Player) event.getCaster());
 		final boolean miniGameStarted = room.getStarted();
 		if (miniGameStarted && (event.getSkill().getId() == SKILL_TORCH_LIGHT)) {
 			WorldObject obj = event.getTarget();
@@ -304,7 +304,7 @@ public final class Minigame extends AbstractNpcAI {
 	 * @param participant the L2PcInstance participating
 	 * @return MinigameRoom
 	 */
-	private MinigameRoom getRoomByParticipant(PlayerInstance participant) {
+	private MinigameRoom getRoomByParticipant(Player participant) {
 		for (MinigameRoom room : _rooms) {
 			if (room.getParticipant() == participant) {
 				return room;
@@ -320,7 +320,7 @@ public final class Minigame extends AbstractNpcAI {
 	private class MinigameRoom {
 		private final Npc[] _burners;
 		private final Npc _manager;
-		private PlayerInstance _participant;
+		private Player _participant;
 		private boolean _started;
 		private int _attemptNumber;
 		private int _currentPot;
@@ -384,7 +384,7 @@ public final class Minigame extends AbstractNpcAI {
 		 *
 		 * @return The L2PcInstance who is participating
 		 */
-		public PlayerInstance getParticipant() {
+		public Player getParticipant() {
 			return _participant;
 		}
 
@@ -393,7 +393,7 @@ public final class Minigame extends AbstractNpcAI {
 		 *
 		 * @param participant The L2PcInstance participating
 		 */
-		public void setParticipant(PlayerInstance participant) {
+		public void setParticipant(Player participant) {
 			_participant = participant;
 		}
 

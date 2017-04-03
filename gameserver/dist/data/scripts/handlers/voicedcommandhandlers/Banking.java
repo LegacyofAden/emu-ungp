@@ -21,7 +21,7 @@ package handlers.voicedcommandhandlers;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * This class trades Gold Bars for Adena and vice versa.
@@ -37,7 +37,7 @@ public class Banking implements IVoicedCommandHandler {
 			};
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+	public boolean useVoicedCommand(String command, Player activeChar, String params) {
 		if (command.equals("bank")) {
 			activeChar.sendMessage(".deposit (" + L2JModsConfig.BANKING_SYSTEM_ADENA + " Adena = " + L2JModsConfig.BANKING_SYSTEM_GOLDBARS + " Goldbar) / .withdraw (" + L2JModsConfig.BANKING_SYSTEM_GOLDBARS + " Goldbar = " + L2JModsConfig.BANKING_SYSTEM_ADENA + " Adena)");
 		} else if (command.equals("deposit")) {

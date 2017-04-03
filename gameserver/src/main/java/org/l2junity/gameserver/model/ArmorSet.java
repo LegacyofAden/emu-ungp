@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ArmorsetSkillHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
@@ -162,7 +162,7 @@ public final class ArmorSet {
 	 * @param player
 	 * @return true if all parts of set are enchanted to +6 or more
 	 */
-	public int getLowestSetEnchant(PlayerInstance player) {
+	public int getLowestSetEnchant(Player player) {
 		// Player don't have full set
 
 		if (getPiecesCount(player, ItemInstance::getId) < getMinimumPieces()) {
@@ -195,7 +195,7 @@ public final class ArmorSet {
 		return enchantLevel;
 	}
 
-	public boolean hasOptionalEquipped(PlayerInstance player, Function<ItemInstance, Integer> idProvider) {
+	public boolean hasOptionalEquipped(Player player, Function<ItemInstance, Integer> idProvider) {
 		return player.getInventory().getPaperdollItems().stream().anyMatch(item -> _optionalItems.contains(idProvider.apply(item)));
 	}
 
@@ -204,7 +204,7 @@ public final class ArmorSet {
 	 * @param idProvider
 	 * @return the amount of set visual items that player has equipped
 	 */
-	public long getPiecesCount(PlayerInstance player, Function<ItemInstance, Integer> idProvider) {
+	public long getPiecesCount(Player player, Function<ItemInstance, Integer> idProvider) {
 		return player.getInventory().getPaperdollItems(item -> _requiredItems.contains(idProvider.apply(item))).size();
 	}
 }

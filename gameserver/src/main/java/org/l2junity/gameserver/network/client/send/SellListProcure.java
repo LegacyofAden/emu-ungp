@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.CropProcure;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -32,7 +32,7 @@ public class SellListProcure implements IClientOutgoingPacket {
 	private final long _money;
 	private final Map<ItemInstance, Long> _sellList = new HashMap<>();
 
-	public SellListProcure(PlayerInstance player, int castleId) {
+	public SellListProcure(Player player, int castleId) {
 		_money = player.getAdena();
 		for (CropProcure c : CastleManorManager.getInstance().getCropProcure(castleId, false)) {
 			final ItemInstance item = player.getInventory().getItemByItemId(c.getId());

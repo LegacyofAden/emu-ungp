@@ -25,7 +25,7 @@ import org.l2junity.gameserver.enums.TeleportType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleportRequest;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
@@ -124,7 +124,7 @@ public final class TeleportHolder {
 	 * @param player receiver of HTML message
 	 * @param npc    teleporter
 	 */
-	public void showTeleportList(PlayerInstance player, Npc npc) {
+	public void showTeleportList(Player player, Npc npc) {
 		showTeleportList(player, npc, "npc_" + npc.getObjectId() + "_teleport");
 	}
 
@@ -135,7 +135,7 @@ public final class TeleportHolder {
 	 * @param npc    teleporter
 	 * @param bypass bypass used while building message
 	 */
-	public void showTeleportList(PlayerInstance player, Npc npc, String bypass) {
+	public void showTeleportList(Player player, Npc npc, String bypass) {
 		if (isNoblesse() && !player.isNoble()) {
 			LOGGER.warn("Player {} requested noblesse teleport without being noble!", player.getObjectId());
 			return;
@@ -186,7 +186,7 @@ public final class TeleportHolder {
 	 * @param npc    teleporter
 	 * @param locId  destination
 	 */
-	public void doTeleport(PlayerInstance player, Npc npc, int locId) {
+	public void doTeleport(Player player, Npc npc, int locId) {
 		if (isNoblesse() && !player.isNoble()) {
 			LOGGER.warn("Player {} requested noblesse teleport without being noble!", player.getObjectId());
 			return;
@@ -247,7 +247,7 @@ public final class TeleportHolder {
 	 * @param loc    location where player should be teleported
 	 * @return {@code true} when all requirements are met otherwise {@code false}
 	 */
-	private boolean shouldPayFee(PlayerInstance player, TeleportLocation loc) {
+	private boolean shouldPayFee(Player player, TeleportLocation loc) {
 		return (_type != TeleportType.NORMAL) || (!PlayerConfig.ALT_GAME_FREE_TELEPORT && ((player.getLevel() > 76) || player.isSubClassActive()) && ((loc.getFeeId() != 0) && (loc.getFeeCount() > 0)));
 	}
 
@@ -260,7 +260,7 @@ public final class TeleportHolder {
 	 * @param loc    location where player should be teleported
 	 * @return fee amount
 	 */
-	private long calculateFee(PlayerInstance player, TeleportLocation loc) {
+	private long calculateFee(Player player, TeleportLocation loc) {
 		if (_type == TeleportType.NORMAL) {
 			if (!player.isSubClassActive() && (player.getLevel() < 77)) {
 				return 0;

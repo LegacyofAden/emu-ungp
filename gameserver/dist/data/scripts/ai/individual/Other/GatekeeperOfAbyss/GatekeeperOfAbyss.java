@@ -19,7 +19,7 @@
 package ai.individual.Other.GatekeeperOfAbyss;
 
 import ai.AbstractNpcAI;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.Id;
@@ -39,7 +39,7 @@ public final class GatekeeperOfAbyss extends AbstractNpcAI {
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(32539)
 	public TerminateReturn onPlayerTeleportRequest(OnNpcTeleportRequest evt) {
-		final PlayerInstance player = evt.getPlayer();
+		final Player player = evt.getPlayer();
 		if (player.isFlyingMounted()) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_ENTER_A_SEED_WHILE_IN_A_FLYING_TRANSFORMATION_STATE);
 			return new TerminateReturn(true, true, true);

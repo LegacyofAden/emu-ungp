@@ -20,7 +20,7 @@ package ai.individual.FreyasGarden.Jinia;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10286_ReunionWithSirra.Q10286_ReunionWithSirra;
 
@@ -45,7 +45,7 @@ public final class Jinia extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		switch (event) {
 			case "32781-10.html":
@@ -71,7 +71,7 @@ public final class Jinia extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final QuestState st = player.getQuestState(Q10286_ReunionWithSirra.class.getSimpleName());
 		if ((st != null) && (player.getLevel() >= MIN_LEVEL)) {
 			if (st.isCond(5) || st.isCond(6)) {

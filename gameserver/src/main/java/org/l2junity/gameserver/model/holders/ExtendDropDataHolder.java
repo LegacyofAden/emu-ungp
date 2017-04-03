@@ -19,10 +19,10 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.commons.util.Rnd;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class ExtendDropDataHolder {
 		_systemMessages = set.getMap("systemMessages", Long.class, SystemMessageId.class);
 	}
 
-	public void reward(PlayerInstance player, Npc npc) {
+	public void reward(Player player, Npc npc) {
 		if (_conditions.isEmpty() || _conditions.stream().allMatch(cond -> cond.test(player, npc))) {
 			_items.forEach(i ->
 			{

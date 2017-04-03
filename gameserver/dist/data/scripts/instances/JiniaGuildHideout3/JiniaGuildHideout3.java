@@ -20,7 +20,7 @@ package instances.JiniaGuildHideout3;
 
 import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10286_ReunionWithSirra.Q10286_ReunionWithSirra;
@@ -43,7 +43,7 @@ public final class JiniaGuildHideout3 extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 		if (firstEnter) {
 			final QuestState qs = player.getQuestState(Q10286_ReunionWithSirra.class.getSimpleName());
@@ -54,7 +54,7 @@ public final class JiniaGuildHideout3 extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		enterInstance(talker, npc, TEMPLATE_ID);
 		return super.onTalk(npc, talker);
 	}

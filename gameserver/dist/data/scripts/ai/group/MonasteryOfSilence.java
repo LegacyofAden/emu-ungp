@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -82,7 +82,7 @@ public final class MonasteryOfSilence extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "TRAINING": {
 				World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, 400, character ->
@@ -122,7 +122,7 @@ public final class MonasteryOfSilence extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		final Attackable mob = (Attackable) npc;
 
 		switch (npc.getId()) {
@@ -171,12 +171,12 @@ public final class MonasteryOfSilence extends AbstractNpcAI {
 	}
 
 	@Override
-	public boolean onNpcHate(Attackable mob, PlayerInstance player, boolean isSummon) {
+	public boolean onNpcHate(Attackable mob, Player player, boolean isSummon) {
 		return player.getActiveWeaponInstance() != null;
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		if (player.getActiveWeaponInstance() != null) {
 			SkillHolder skill = null;
 			switch (npc.getId()) {
@@ -222,7 +222,7 @@ public final class MonasteryOfSilence extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (skill.hasEffectType(L2EffectType.AGGRESSION) && (targets.length != 0)) {
 			for (WorldObject obj : targets) {
 				if (obj.equals(npc)) {

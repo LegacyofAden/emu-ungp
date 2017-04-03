@@ -21,7 +21,7 @@ package ai.individual.Other.TeleportWithCharm;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Charm teleport AI.<br>
@@ -45,7 +45,7 @@ public final class TeleportWithCharm extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		switch (npc.getId()) {
 			case WHIRPY: {
 				if (hasQuestItems(player, DWARF_GATEKEEPER_TOKEN)) {

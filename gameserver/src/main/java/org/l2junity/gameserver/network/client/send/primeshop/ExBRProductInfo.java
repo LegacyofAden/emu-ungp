@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.primeshop;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -33,7 +33,7 @@ public class ExBRProductInfo implements IClientOutgoingPacket {
 	private final int _charPoints;
 	private final long _charAdena;
 
-	public ExBRProductInfo(PrimeShopGroup item, PlayerInstance player) {
+	public ExBRProductInfo(PrimeShopGroup item, Player player) {
 		_item = item;
 		_charPoints = player.getPrimePoints();
 		_charAdena = player.getAdena();

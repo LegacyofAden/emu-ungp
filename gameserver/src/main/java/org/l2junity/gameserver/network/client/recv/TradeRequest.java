@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerTrade;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
@@ -49,7 +49,7 @@ public final class TradeRequest implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -80,7 +80,7 @@ public final class TradeRequest implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance partner = target.getActingPlayer();
+		final Player partner = target.getActingPlayer();
 
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerTrade(player, partner), player, BooleanReturn.class);
 		if ((term != null) && !term.getValue()) {

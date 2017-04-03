@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.olympiad;
 
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.type.OlympiadStadiumZone;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -134,7 +134,7 @@ public class OlympiadGameManager implements Runnable {
 							continue;
 						}
 
-						PlayerInstance noble = World.getInstance().getPlayer(id);
+						Player noble = World.getInstance().getPlayer(id);
 						if (noble != null) {
 							noble.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_GAMES_MAY_BE_DELAYED_DUE_TO_AN_INSUFFICIENT_NUMBER_OF_PLAYERS_WAITING));
 						}
@@ -146,7 +146,7 @@ public class OlympiadGameManager implements Runnable {
 								continue;
 							}
 
-							PlayerInstance noble = World.getInstance().getPlayer(id);
+							Player noble = World.getInstance().getPlayer(id);
 							if (noble != null) {
 								noble.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_GAMES_MAY_BE_DELAYED_DUE_TO_AN_INSUFFICIENT_NUMBER_OF_PLAYERS_WAITING));
 							}
@@ -188,7 +188,7 @@ public class OlympiadGameManager implements Runnable {
 		return _tasks.size();
 	}
 
-	public final void notifyCompetitorDamage(PlayerInstance attacker, int damage) {
+	public final void notifyCompetitorDamage(Player attacker, int damage) {
 		if (attacker == null) {
 			return;
 		}

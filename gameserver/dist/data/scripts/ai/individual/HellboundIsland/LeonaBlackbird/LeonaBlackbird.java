@@ -21,7 +21,7 @@ package ai.individual.HellboundIsland.LeonaBlackbird;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Leona Blackbird AI.
@@ -39,7 +39,7 @@ public final class LeonaBlackbird extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "31595.html":

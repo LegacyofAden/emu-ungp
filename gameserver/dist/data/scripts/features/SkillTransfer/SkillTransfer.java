@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.transform.Transform;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogin;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerProfessionChange;
@@ -58,7 +58,7 @@ public final class SkillTransfer extends AbstractNpcAI {
 	}
 
 	private void onProfessionChange(OnPlayerProfessionChange event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final int index = getTransferClassIndex(player);
 		if (index < 0) {
 			return;
@@ -72,7 +72,7 @@ public final class SkillTransfer extends AbstractNpcAI {
 	}
 
 	private void onPlayerLogin(OnPlayerLogin evt) {
-		final PlayerInstance player = evt.getActiveChar();
+		final Player player = evt.getActiveChar();
 		if (!player.canOverrideCond(PcCondOverride.SKILL_CONDITIONS) || GeneralConfig.SKILL_CHECK_GM) {
 			final int index = getTransferClassIndex(player);
 			if (index < 0) {
@@ -101,7 +101,7 @@ public final class SkillTransfer extends AbstractNpcAI {
 		}
 	}
 
-	private static int getTransferClassIndex(PlayerInstance player) {
+	private static int getTransferClassIndex(Player player) {
 		switch (player.getClassId()) {
 			case CARDINAL: {
 				return 0;

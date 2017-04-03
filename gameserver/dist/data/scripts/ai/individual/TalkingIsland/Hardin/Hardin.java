@@ -21,7 +21,7 @@ package ai.individual.TalkingIsland.Hardin;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10472_WindsOfFateEncroachingShadows.Q10472_WindsOfFateEncroachingShadows;
 
@@ -40,7 +40,7 @@ public final class Hardin extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = "33870-01.html"; // Anybody except Ertheia race TODO: Find HTML
 		if (player.getRace().equals(Race.ERTHEIA)) {
 			final QuestState st = player.getQuestState(Q10472_WindsOfFateEncroachingShadows.class.getSimpleName());

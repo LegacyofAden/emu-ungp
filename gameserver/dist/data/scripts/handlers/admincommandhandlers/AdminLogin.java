@@ -23,7 +23,7 @@ import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 
@@ -48,7 +48,7 @@ public class AdminLogin implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_server_gm_only")) {
 			GameServerRMI.getInstance().setServerStatus(ServerStatus.GM_ONLY);
 			GeneralConfig.SERVER_GMONLY = true;
@@ -135,7 +135,7 @@ public class AdminLogin implements IAdminCommandHandler {
 	/**
 	 * @param activeChar
 	 */
-	private void showMainPage(PlayerInstance activeChar) {
+	private void showMainPage(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/login.htm");
 		html.replace("%status%", GameServerRMI.getInstance().getServerStatus().toString());

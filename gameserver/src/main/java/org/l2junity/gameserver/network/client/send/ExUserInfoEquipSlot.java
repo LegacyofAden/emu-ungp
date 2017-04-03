@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.enums.InventorySlot;
 import org.l2junity.gameserver.model.VariationInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -29,7 +29,7 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExUserInfoEquipSlot extends AbstractMaskPacket<InventorySlot> {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
 	private final byte[] _masks = new byte[]
 			{
@@ -40,11 +40,11 @@ public class ExUserInfoEquipSlot extends AbstractMaskPacket<InventorySlot> {
 					(byte) 0x00
 			};
 
-	public ExUserInfoEquipSlot(PlayerInstance cha) {
+	public ExUserInfoEquipSlot(Player cha) {
 		this(cha, true);
 	}
 
-	public ExUserInfoEquipSlot(PlayerInstance cha, boolean addAll) {
+	public ExUserInfoEquipSlot(Player cha, boolean addAll) {
 		_activeChar = cha;
 
 		if (addAll) {

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
@@ -27,13 +27,13 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author Nik
  */
 public final class CanPlayerLearnSkill implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _skillId;
 	private final int _skillLevel;
 	private final AcquireSkillType _skillType;
 	private final int _subType;
 
-	public CanPlayerLearnSkill(PlayerInstance activeChar, int skillId, int skillLevel, AcquireSkillType skillType, int subType) {
+	public CanPlayerLearnSkill(Player activeChar, int skillId, int skillLevel, AcquireSkillType skillType, int subType) {
 		_activeChar = activeChar;
 		_skillId = skillId;
 		_skillLevel = skillLevel;
@@ -41,7 +41,7 @@ public final class CanPlayerLearnSkill implements IBaseEvent {
 		_subType = subType;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.AccessLevel;
 import org.l2junity.gameserver.model.AdminCommandAccessRight;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -54,7 +54,7 @@ public final class AdminData implements IGameXmlReader {
 
 	private final Map<Integer, AccessLevel> _accessLevels = new HashMap<>();
 	private final Map<String, AdminCommandAccessRight> _adminCommandAccessRights = new HashMap<>();
-	private final Map<PlayerInstance, Boolean> _gmList = new ConcurrentHashMap<>();
+	private final Map<Player, Boolean> _gmList = new ConcurrentHashMap<>();
 	private int _highestLevel = 0;
 
 	private AdminData() {
@@ -187,9 +187,9 @@ public final class AdminData implements IGameXmlReader {
 	 * @param includeHidden the include hidden
 	 * @return the all GMs
 	 */
-	public List<PlayerInstance> getAllGms(boolean includeHidden) {
-		final List<PlayerInstance> tmpGmList = new ArrayList<>();
-		for (Entry<PlayerInstance, Boolean> entry : _gmList.entrySet()) {
+	public List<Player> getAllGms(boolean includeHidden) {
+		final List<Player> tmpGmList = new ArrayList<>();
+		for (Entry<Player, Boolean> entry : _gmList.entrySet()) {
 			if (includeHidden || !entry.getValue()) {
 				tmpGmList.add(entry.getKey());
 			}
@@ -205,7 +205,7 @@ public final class AdminData implements IGameXmlReader {
 	 */
 	public List<String> getAllGmNames(boolean includeHidden) {
 		final List<String> tmpGmList = new ArrayList<>();
-		for (Entry<PlayerInstance, Boolean> entry : _gmList.entrySet()) {
+		for (Entry<Player, Boolean> entry : _gmList.entrySet()) {
 			if (!entry.getValue()) {
 				tmpGmList.add(entry.getKey().getName());
 			} else if (includeHidden) {
@@ -221,7 +221,7 @@ public final class AdminData implements IGameXmlReader {
 	 * @param player the player
 	 * @param hidden the hidden
 	 */
-	public void addGm(PlayerInstance player, boolean hidden) {
+	public void addGm(Player player, boolean hidden) {
 		_gmList.put(player, hidden);
 	}
 
@@ -230,7 +230,7 @@ public final class AdminData implements IGameXmlReader {
 	 *
 	 * @param player the player
 	 */
-	public void deleteGm(PlayerInstance player) {
+	public void deleteGm(Player player) {
 		_gmList.remove(player);
 	}
 
@@ -239,7 +239,7 @@ public final class AdminData implements IGameXmlReader {
 	 *
 	 * @param player the player
 	 */
-	public void showGm(PlayerInstance player) {
+	public void showGm(Player player) {
 		if (_gmList.containsKey(player)) {
 			_gmList.put(player, false);
 		}
@@ -250,7 +250,7 @@ public final class AdminData implements IGameXmlReader {
 	 *
 	 * @param player the player
 	 */
-	public void hideGm(PlayerInstance player) {
+	public void hideGm(Player player) {
 		if (_gmList.containsKey(player)) {
 			_gmList.put(player, true);
 		}
@@ -263,7 +263,7 @@ public final class AdminData implements IGameXmlReader {
 	 * @return true, if is GM online
 	 */
 	public boolean isGmOnline(boolean includeHidden) {
-		for (Entry<PlayerInstance, Boolean> entry : _gmList.entrySet()) {
+		for (Entry<Player, Boolean> entry : _gmList.entrySet()) {
 			if (includeHidden || !entry.getValue()) {
 				return true;
 			}
@@ -276,7 +276,7 @@ public final class AdminData implements IGameXmlReader {
 	 *
 	 * @param player the player
 	 */
-	public void sendListToPlayer(PlayerInstance player) {
+	public void sendListToPlayer(Player player) {
 		if (isGmOnline(player.isGM())) {
 			player.sendPacket(SystemMessageId.GM_LIST);
 
@@ -296,7 +296,7 @@ public final class AdminData implements IGameXmlReader {
 	 * @param packet the packet
 	 */
 	public void broadcastToGMs(IClientOutgoingPacket packet) {
-		for (PlayerInstance gm : getAllGms(true)) {
+		for (Player gm : getAllGms(true)) {
 			gm.sendPacket(packet);
 		}
 	}
@@ -308,7 +308,7 @@ public final class AdminData implements IGameXmlReader {
 	 * @return the message that was broadcasted
 	 */
 	public String broadcastMessageToGMs(String message) {
-		for (PlayerInstance gm : getAllGms(true)) {
+		for (Player gm : getAllGms(true)) {
 			gm.sendMessage(message);
 		}
 		return message;

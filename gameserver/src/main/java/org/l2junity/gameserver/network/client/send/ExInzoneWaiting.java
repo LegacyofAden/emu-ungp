@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -35,7 +35,7 @@ public class ExInzoneWaiting implements IClientOutgoingPacket {
 	private final int _currentTemplateId;
 	private final Map<Integer, Long> _instanceTimes;
 
-	public ExInzoneWaiting(PlayerInstance activeChar) {
+	public ExInzoneWaiting(Player activeChar) {
 		final Instance instance = InstanceManager.getInstance().getPlayerInstance(activeChar, false);
 		_currentTemplateId = ((instance != null) && (instance.getTemplateId() >= 0)) ? instance.getTemplateId() : -1;
 		_instanceTimes = InstanceManager.getInstance().getAllInstanceTimes(activeChar);

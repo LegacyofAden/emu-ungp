@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -75,14 +75,14 @@ public final class WarriorFishingBlock extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "SPAWN": {
 				final WorldObject obj = npc.getTarget();
 				if ((obj == null) || !obj.isPlayer()) {
 					npc.decayMe();
 				} else {
-					final PlayerInstance target = obj.getActingPlayer();
+					final Player target = obj.getActingPlayer();
 					npc.broadcastSay(ChatType.NPC_GENERAL, NPC_STRINGS_ON_SPAWN[getRandom(NPC_STRINGS_ON_SPAWN.length)], target.getName());
 					((Attackable) npc).addDamageHate(target, 0, 2000);
 					npc.getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, target);
@@ -101,7 +101,7 @@ public final class WarriorFishingBlock extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (getRandom(100) < CHANCE_TO_SHOUT_ON_ATTACK) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NPC_STRINGS_ON_ATTACK[getRandom(NPC_STRINGS_ON_ATTACK.length)]);
 		}
@@ -109,7 +109,7 @@ public final class WarriorFishingBlock extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		npc.broadcastSay(ChatType.NPC_GENERAL, NPC_STRINGS_ON_KILL[getRandom(NPC_STRINGS_ON_KILL.length)]);
 		cancelQuestTimer("DESPAWN", npc, killer);
 		return super.onKill(npc, killer, isSummon);

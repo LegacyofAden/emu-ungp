@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.instant;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -47,7 +47,7 @@ public final class InstantRestoration extends AbstractEffect {
 
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
-		final PlayerInstance casterPlayer = caster.asPlayer();
+		final Player casterPlayer = caster.asPlayer();
 		if (casterPlayer == null) {
 			return;
 		}

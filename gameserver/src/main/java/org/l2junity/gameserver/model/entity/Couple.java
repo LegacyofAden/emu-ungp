@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.entity;
 
 import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +66,7 @@ public class Couple {
 		}
 	}
 
-	public Couple(PlayerInstance player1, PlayerInstance player2) {
+	public Couple(Player player1, Player player2) {
 		int _tempPlayer1Id = player1.getObjectId();
 		int _tempPlayer2Id = player2.getObjectId();
 

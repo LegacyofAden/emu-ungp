@@ -20,7 +20,7 @@ package ai.individual.Other.SymbolMaker;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.HennaEquipList;
 import org.l2junity.gameserver.network.client.send.HennaRemoveList;
 
@@ -53,7 +53,7 @@ public final class SymbolMaker extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "symbol_maker.htm":
@@ -76,7 +76,7 @@ public final class SymbolMaker extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "symbol_maker.htm";
 	}
 

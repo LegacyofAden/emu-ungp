@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.variables;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,7 +173,7 @@ public class PlayerVariables extends AbstractVariables {
 		return true;
 	}
 
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return World.getInstance().getPlayer(_objectId);
 	}
 

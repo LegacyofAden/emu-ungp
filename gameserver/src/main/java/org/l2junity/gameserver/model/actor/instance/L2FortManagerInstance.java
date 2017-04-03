@@ -60,14 +60,14 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 		return true;
 	}
 
-	private void sendHtmlMessage(PlayerInstance player, NpcHtmlMessage html) {
+	private void sendHtmlMessage(Player player, NpcHtmlMessage html) {
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcId%", String.valueOf(getId()));
 		player.sendPacket(html);
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		// BypassValidation Exploit plug.
 		if (player.getLastFolkNPC().getObjectId() != getObjectId()) {
 			return;
@@ -715,7 +715,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 	}
 
 	@Override
-	public void showChatWindow(PlayerInstance player) {
+	public void showChatWindow(Player player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		String filename = "fortress/foreman-no.htm";
 
@@ -735,7 +735,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 		player.sendPacket(html);
 	}
 
-	protected int validateCondition(PlayerInstance player) {
+	protected int validateCondition(Player player) {
 		if ((getFort() != null) && (getFort().getResidenceId() > 0)) {
 			if (player.getClan() != null) {
 				if (getFort().getZone().isActive()) {
@@ -748,13 +748,13 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 		return COND_ALL_FALSE;
 	}
 
-	private void showVaultWindowDeposit(PlayerInstance player) {
+	private void showVaultWindowDeposit(Player player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		player.setActiveWarehouse(player.getClan().getWarehouse());
 		player.sendPacket(new WareHouseDepositList(player, WareHouseDepositList.CLAN));
 	}
 
-	private void showVaultWindowWithdraw(PlayerInstance player) {
+	private void showVaultWindowWithdraw(Player player) {
 		if (player.isClanLeader() || player.hasClanPrivilege(ClanPrivilege.CL_VIEW_WAREHOUSE)) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			player.setActiveWarehouse(player.getClan().getWarehouse());

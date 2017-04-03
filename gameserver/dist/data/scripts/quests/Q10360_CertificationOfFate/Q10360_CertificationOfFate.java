@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -86,7 +86,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -217,7 +217,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState st = getQuestState(player, true);
 
@@ -239,7 +239,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -337,7 +337,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
 
 		if ((st != null) && st.isStarted()) {
@@ -369,7 +369,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 		return super.onKill(npc, killer, isSummon);
 	}
 
-	private boolean isRightMaster(Npc npc, PlayerInstance player) {
+	private boolean isRightMaster(Npc npc, Player player) {
 		switch (npc.getId()) {
 			case RAYMOND:
 			case ESRANDELL: {
@@ -402,7 +402,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			String fileName = "";
 			switch (player.getRace()) {
 				case DARK_ELF:
@@ -425,7 +425,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
 
@@ -438,7 +438,7 @@ public final class Q10360_CertificationOfFate extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 
 		if ((player.getLevel() >= MIN_LEVEL) && (player.getRace() != Race.ERTHEIA) && (player.isInCategory(CategoryType.SECOND_CLASS_GROUP))) {
 			final QuestState st = getQuestState(player, true);

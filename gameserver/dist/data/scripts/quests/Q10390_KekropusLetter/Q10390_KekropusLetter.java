@@ -21,7 +21,7 @@ package quests.Q10390_KekropusLetter;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -69,7 +69,7 @@ public final class Q10390_KekropusLetter extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -150,7 +150,7 @@ public final class Q10390_KekropusLetter extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -250,7 +250,7 @@ public final class Q10390_KekropusLetter extends Quest {
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
 
 			if ((st != null) && st.isCond(4)) {
@@ -260,7 +260,7 @@ public final class Q10390_KekropusLetter extends Quest {
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
 
-	private boolean isRightMaster(Npc npc, PlayerInstance player) {
+	private boolean isRightMaster(Npc npc, Player player) {
 		switch (npc.getId()) {
 			case RAYMOND:
 			case ESRANDELL: {

@@ -28,7 +28,7 @@ import org.l2junity.gameserver.data.sql.impl.OfflineTradersTable;
 import org.l2junity.gameserver.datatables.BotReportTable;
 import org.l2junity.gameserver.instancemanager.*;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.network.EventLoopGroupManager;
@@ -172,7 +172,7 @@ public final class ShutdownHooks {
 	 * This disconnects all clients from the server.
 	 */
 	private static void disconnectAllCharacters() {
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			Disconnection.of(player).defaultSequence(true);
 		}
 	}

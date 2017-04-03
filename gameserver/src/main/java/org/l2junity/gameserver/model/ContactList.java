@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -43,14 +43,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ContactList {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContactList.class);
 
-	private final PlayerInstance activeChar;
+	private final Player activeChar;
 	private final Set<String> _contacts = ConcurrentHashMap.newKeySet();
 
 	private static final String QUERY_ADD = "INSERT INTO character_contacts (charId, contactId) VALUES (?, ?)";
 	private static final String QUERY_REMOVE = "DELETE FROM character_contacts WHERE charId = ? and contactId = ?";
 	private static final String QUERY_LOAD = "SELECT contactId FROM character_contacts WHERE charId = ?";
 
-	public ContactList(PlayerInstance player) {
+	public ContactList(Player player) {
 		activeChar = player;
 		restore();
 	}

@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.instancemanager.DuelManager;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 import org.l2junity.gameserver.model.entity.Duel;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -41,7 +41,7 @@ import org.l2junity.gameserver.util.Util;
 public class PcStatus extends PlayableStatus {
 	private double _currentCp = 0; // Current CP of the L2PcInstance
 
-	public PcStatus(PlayerInstance activeChar) {
+	public PcStatus(Player activeChar) {
 		super(activeChar);
 	}
 
@@ -105,7 +105,7 @@ public class PcStatus extends PlayableStatus {
 		int mpDam = 0;
 
 		if ((attacker != null) && (attacker != getActiveChar())) {
-			final PlayerInstance attackerPlayer = attacker.getActingPlayer();
+			final Player attackerPlayer = attacker.getActingPlayer();
 
 			if (attackerPlayer != null) {
 				if (attackerPlayer.isGM() && !attackerPlayer.getAccessLevel().canGiveDamage()) {
@@ -158,7 +158,7 @@ public class PcStatus extends PlayableStatus {
 				}
 			}
 
-			final PlayerInstance caster = getActiveChar().getTransferingDamageTo();
+			final Player caster = getActiveChar().getTransferingDamageTo();
 			if ((caster != null) && (getActiveChar().getParty() != null) && Util.checkIfInRange(1000, getActiveChar(), caster, true) && !caster.isDead() && (getActiveChar() != caster) && getActiveChar().getParty().getMembers().contains(caster)) {
 				int transferDmg = 0;
 
@@ -166,7 +166,7 @@ public class PcStatus extends PlayableStatus {
 				transferDmg = Math.min((int) caster.getCurrentHp() - 1, transferDmg);
 				if (transferDmg > 0) {
 					int membersInRange = 0;
-					for (PlayerInstance member : caster.getParty().getMembers()) {
+					for (Player member : caster.getParty().getMembers()) {
 						if (Util.checkIfInRange(1000, member, caster, false) && (member != caster)) {
 							membersInRange++;
 						}
@@ -332,7 +332,7 @@ public class PcStatus extends PlayableStatus {
 	}
 
 	@Override
-	public PlayerInstance getActiveChar() {
-		return (PlayerInstance) super.getActiveChar();
+	public Player getActiveChar() {
+		return (Player) super.getActiveChar();
 	}
 }

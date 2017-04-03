@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.L2ArtefactInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.CastleSpawnHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
@@ -379,15 +379,15 @@ public final class Castle extends AbstractResidence {
 		return getZone().getDistanceToZone(obj);
 	}
 
-	public void closeDoor(PlayerInstance activeChar, int doorId) {
+	public void closeDoor(Player activeChar, int doorId) {
 		openCloseDoor(activeChar, doorId, false);
 	}
 
-	public void openDoor(PlayerInstance activeChar, int doorId) {
+	public void openDoor(Player activeChar, int doorId) {
 		openCloseDoor(activeChar, doorId, true);
 	}
 
-	public void openCloseDoor(PlayerInstance activeChar, int doorId, boolean open) {
+	public void openCloseDoor(Player activeChar, int doorId, boolean open) {
 		if ((activeChar.getClanId() != getOwnerId()) && !activeChar.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS)) {
 			return;
 		}
@@ -402,7 +402,7 @@ public final class Castle extends AbstractResidence {
 		}
 	}
 
-	public void openCloseDoor(PlayerInstance activeChar, String doorName, boolean open) {
+	public void openCloseDoor(Player activeChar, String doorName, boolean open) {
 		if ((activeChar.getClanId() != getOwnerId()) && !activeChar.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS)) {
 			return;
 		}
@@ -440,7 +440,7 @@ public final class Castle extends AbstractResidence {
 					}
 				}
 				try {
-					PlayerInstance oldleader = oldOwner.getLeader().getPlayerInstance();
+					Player oldleader = oldOwner.getLeader().getPlayerInstance();
 					if (oldleader != null) {
 						if (oldleader.getMountType() == MountType.WYVERN) {
 							oldleader.dismount();
@@ -450,7 +450,7 @@ public final class Castle extends AbstractResidence {
 					_log.warn("Exception in setOwner: " + e.getMessage(), e);
 				}
 				oldOwner.setCastleId(0); // Unset has castle flag for old owner
-				for (PlayerInstance member : oldOwner.getOnlineMembers(0)) {
+				for (Player member : oldOwner.getOnlineMembers(0)) {
 					removeResidentialSkills(member);
 					member.sendSkillList();
 					member.broadcastUserInfo();
@@ -470,7 +470,7 @@ public final class Castle extends AbstractResidence {
 		}
 
 		if (clan != null) {
-			for (PlayerInstance member : clan.getOnlineMembers(0)) {
+			for (Player member : clan.getOnlineMembers(0)) {
 				giveResidentialSkills(member);
 				member.sendSkillList();
 			}
@@ -483,7 +483,7 @@ public final class Castle extends AbstractResidence {
 			if (PlayerConfig.REMOVE_CASTLE_CIRCLETS) {
 				CastleManager.getInstance().removeCirclet(_formerOwner, getResidenceId());
 			}
-			for (PlayerInstance member : clan.getOnlineMembers(0)) {
+			for (Player member : clan.getOnlineMembers(0)) {
 				removeResidentialSkills(member);
 				member.sendSkillList();
 			}
@@ -600,7 +600,7 @@ public final class Castle extends AbstractResidence {
 		}
 	}
 
-	public boolean updateFunctions(PlayerInstance player, int type, int lvl, int lease, long rate, boolean addNew) {
+	public boolean updateFunctions(Player player, int type, int lvl, int lease, long rate, boolean addNew) {
 		if (player == null) {
 			return false;
 		}
@@ -906,14 +906,14 @@ public final class Castle extends AbstractResidence {
 	}
 
 	@Override
-	public void giveResidentialSkills(PlayerInstance player) {
+	public void giveResidentialSkills(Player player) {
 		super.giveResidentialSkills(player);
 		final Skill skill = getSide() == CastleSide.DARK ? CommonSkill.ABILITY_OF_DARKNESS.getSkill() : CommonSkill.ABILITY_OF_LIGHT.getSkill();
 		player.addSkill(skill);
 	}
 
 	@Override
-	public void removeResidentialSkills(PlayerInstance player) {
+	public void removeResidentialSkills(Player player) {
 		super.removeResidentialSkills(player);
 		player.removeSkill(CommonSkill.ABILITY_OF_DARKNESS.getId());
 		player.removeSkill(CommonSkill.ABILITY_OF_LIGHT.getId());

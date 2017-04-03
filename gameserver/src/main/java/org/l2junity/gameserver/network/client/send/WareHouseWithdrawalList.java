@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -32,7 +32,7 @@ public final class WareHouseWithdrawalList extends AbstractItemPacket {
 	public static final int CLAN = 2;
 	public static final int CASTLE = 3; // not sure
 	public static final int FREIGHT = 1;
-	private PlayerInstance _activeChar;
+	private Player _activeChar;
 	private long _playerAdena;
 	private final int _invSize;
 	private Collection<ItemInstance> _items;
@@ -47,7 +47,7 @@ public final class WareHouseWithdrawalList extends AbstractItemPacket {
 	 */
 	private int _whType;
 
-	public WareHouseWithdrawalList(PlayerInstance player, int type) {
+	public WareHouseWithdrawalList(Player player, int type) {
 		_activeChar = player;
 		_whType = type;
 

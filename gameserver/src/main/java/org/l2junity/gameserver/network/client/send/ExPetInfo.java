@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.enums.NpcInfoType;
 import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class ExPetInfo extends AbstractMaskPacket<NpcInfoType> {
 	private final Summon _summon;
-	private final PlayerInstance _attacker;
+	private final Player _attacker;
 	private final int _val;
 	private final byte[] _masks = new byte[]
 			{
@@ -57,7 +57,7 @@ public class ExPetInfo extends AbstractMaskPacket<NpcInfoType> {
 	private final String _title;
 	private final Set<AbnormalVisualEffect> _abnormalVisualEffects;
 
-	public ExPetInfo(Summon summon, PlayerInstance attacker, int val) {
+	public ExPetInfo(Summon summon, Player attacker, int val) {
 		_summon = summon;
 		_attacker = attacker;
 		_title = (summon.getOwner() != null) && summon.getOwner().isOnline() ? summon.getOwner().getName() : "";

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.gameserver.model.ArmorSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 import java.util.function.Function;
@@ -52,7 +52,7 @@ public class ArmorsetSkillHolder extends SkillHolder {
 		return _isOptional;
 	}
 
-	public boolean validateConditions(PlayerInstance player, ArmorSet armorSet, Function<ItemInstance, Integer> idProvider) {
+	public boolean validateConditions(Player player, ArmorSet armorSet, Function<ItemInstance, Integer> idProvider) {
 		// Player doesn't have enough items equipped to use this skill
 		if (_minimumPieces > armorSet.getPiecesCount(player, idProvider)) {
 			return false;

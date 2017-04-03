@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.eventengine;
 
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.eventengine.drop.IEventDrop;
 import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.events.EventType;
@@ -49,7 +49,7 @@ public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends A
 	private volatile Map<String, IEventDrop> _rewards = Collections.emptyMap();
 
 	private final Set<T> _events = ConcurrentHashMap.newKeySet();
-	private final Queue<PlayerInstance> _registeredPlayers = new ConcurrentLinkedDeque<>();
+	private final Queue<Player> _registeredPlayers = new ConcurrentLinkedDeque<>();
 	private final AtomicReference<IEventState> _state = new AtomicReference<>();
 
 	public abstract void onInitialized();
@@ -150,23 +150,23 @@ public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends A
 	
 	/* ********************** */
 
-	public final boolean registerPlayer(PlayerInstance player) {
+	public final boolean registerPlayer(Player player) {
 		return canRegister(player, true) && _registeredPlayers.offer(player);
 	}
 
-	public final boolean unregisterPlayer(PlayerInstance player) {
+	public final boolean unregisterPlayer(Player player) {
 		return _registeredPlayers.remove(player);
 	}
 
-	public final boolean isRegistered(PlayerInstance player) {
+	public final boolean isRegistered(Player player) {
 		return _registeredPlayers.contains(player);
 	}
 
-	public boolean canRegister(PlayerInstance player, boolean sendMessage) {
+	public boolean canRegister(Player player, boolean sendMessage) {
 		return !_registeredPlayers.contains(player);
 	}
 
-	public final Queue<PlayerInstance> getRegisteredPlayers() {
+	public final Queue<Player> getRegisteredPlayers() {
 		return _registeredPlayers;
 	}
 	
@@ -175,7 +175,7 @@ public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends A
 	@RegisterEvent(EventType.ON_PLAYER_LOGOUT)
 	@RegisterType(ListenerRegisterType.GLOBAL)
 	private void onPlayerLogout(OnPlayerLogout event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		if (_registeredPlayers.remove(player)) {
 			onUnregisteredPlayer(player);
 		}
@@ -188,7 +188,7 @@ public abstract class AbstractEventManager<T extends AbstractEvent<?>> extends A
 	 *
 	 * @param player
 	 */
-	protected void onUnregisteredPlayer(PlayerInstance player) {
+	protected void onUnregisteredPlayer(Player player) {
 
 	}
 

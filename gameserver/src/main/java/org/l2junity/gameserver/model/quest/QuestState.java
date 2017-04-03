@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.CharacterQuests;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.instancemanager.QuestManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerQuestComplete;
@@ -57,7 +57,7 @@ public final class QuestState {
 	/**
 	 * The "owner" of this QuestState object
 	 */
-	private final PlayerInstance _player;
+	private final Player _player;
 	/**
 	 * The current state of the quest
 	 */
@@ -74,7 +74,7 @@ public final class QuestState {
 	 * @param player the owner of this {@link QuestState} object
 	 * @param state  the initial state of the quest
 	 */
-	public QuestState(Quest quest, PlayerInstance player, byte state) {
+	public QuestState(Quest quest, Player player, byte state) {
 		_questName = quest.getName();
 		_player = player;
 		_state = state;
@@ -88,7 +88,7 @@ public final class QuestState {
 	 * @param quest  the {@link Quest} associated with this quest state
 	 * @param player owner of this object
 	 */
-	public QuestState(Quest quest, PlayerInstance player) {
+	public QuestState(Quest quest, Player player) {
 		this(quest, player, State.CREATED);
 	}
 
@@ -122,9 +122,9 @@ public final class QuestState {
 	/**
 	 * Get player associated with this quest state.
 	 *
-	 * @return the {@link PlayerInstance} object of the owner of this QuestState
+	 * @return the {@link Player} object of the owner of this QuestState
 	 */
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return _player;
 	}
 

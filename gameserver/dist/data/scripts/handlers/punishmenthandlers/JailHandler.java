@@ -19,12 +19,11 @@
 package handlers.punishmenthandlers;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IPunishmentHandler;
 import org.l2junity.gameserver.handler.PunishmentHandler;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.tasks.player.TeleportTask;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
@@ -53,7 +52,7 @@ public class JailHandler implements IPunishmentHandler {
 	}
 
 	public void onPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance activeChar = event.getActiveChar();
+		final Player activeChar = event.getActiveChar();
 		if (activeChar.isJailed() && !activeChar.isInsideZone(ZoneId.JAIL)) {
 			applyToPlayer(null, activeChar);
 		} else if (!activeChar.isJailed() && activeChar.isInsideZone(ZoneId.JAIL) && !activeChar.isGM()) {
@@ -66,7 +65,7 @@ public class JailHandler implements IPunishmentHandler {
 		switch (task.getAffect()) {
 			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
-				final PlayerInstance player = World.getInstance().getPlayer(objectId);
+				final Player player = World.getInstance().getPlayer(objectId);
 				if (player != null) {
 					applyToPlayer(task, player);
 				}
@@ -76,7 +75,7 @@ public class JailHandler implements IPunishmentHandler {
 				final String account = String.valueOf(task.getKey());
 				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
 				if (client != null) {
-					final PlayerInstance player = client.getActiveChar();
+					final Player player = client.getActiveChar();
 					if (player != null) {
 						applyToPlayer(task, player);
 					}
@@ -85,7 +84,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (player.getIPAddress().equals(ip)) {
 						applyToPlayer(task, player);
 					}
@@ -94,7 +93,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						applyToPlayer(task, player);
 					}
@@ -109,7 +108,7 @@ public class JailHandler implements IPunishmentHandler {
 		switch (task.getAffect()) {
 			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
-				final PlayerInstance player = World.getInstance().getPlayer(objectId);
+				final Player player = World.getInstance().getPlayer(objectId);
 				if (player != null) {
 					removeFromPlayer(player);
 				}
@@ -119,7 +118,7 @@ public class JailHandler implements IPunishmentHandler {
 				final String account = String.valueOf(task.getKey());
 				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
 				if (client != null) {
-					final PlayerInstance player = client.getActiveChar();
+					final Player player = client.getActiveChar();
 					if (player != null) {
 						removeFromPlayer(player);
 					}
@@ -128,7 +127,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (ip.equalsIgnoreCase(player.getIPAddress())) {
 						removeFromPlayer(player);
 					}
@@ -137,7 +136,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						removeFromPlayer(player);
 					}
@@ -153,7 +152,7 @@ public class JailHandler implements IPunishmentHandler {
 	 * @param task
 	 * @param player
 	 */
-	private static void applyToPlayer(PunishmentTask task, PlayerInstance player) {
+	private static void applyToPlayer(PunishmentTask task, Player player) {
 		player.setInstance(null);
 
 		if (OlympiadManager.getInstance().isRegisteredInComp(player)) {
@@ -188,7 +187,7 @@ public class JailHandler implements IPunishmentHandler {
 	 *
 	 * @param player
 	 */
-	private static void removeFromPlayer(PlayerInstance player) {
+	private static void removeFromPlayer(Player player) {
 		ThreadPool.getInstance().scheduleGeneral(new TeleportTask(player, JailZone.getLocationOut()), 2000, TimeUnit.MILLISECONDS);
 
 		// Open a Html message to inform the player

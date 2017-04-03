@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -52,7 +52,7 @@ public final class ClanTrader extends AbstractNpcAI {
 		addFirstTalkId(CLAN_TRADER);
 	}
 
-	private String giveReputation(Npc npc, PlayerInstance player, int count, int itemId, int itemCount) {
+	private String giveReputation(Npc npc, Player player, int count, int itemId, int itemCount) {
 		if (getQuestItemsCount(player, itemId) >= itemCount) {
 			takeItems(player, itemId, itemCount);
 			player.getClan().addReputationScore(count, true);
@@ -66,7 +66,7 @@ public final class ClanTrader extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "32024.html":
@@ -97,7 +97,7 @@ public final class ClanTrader extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		if (player.getClanId() > 0) {
 			htmltext = npc.getId() + ((player.isClanLeader() || player.hasClanPrivilege(ClanPrivilege.CL_TROOPS_FAME)) ? ".html" : "-06.html");

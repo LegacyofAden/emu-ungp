@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.instancezone.conditions;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -36,7 +36,7 @@ public final class ConditionParty extends Condition {
 	}
 
 	@Override
-	public boolean test(PlayerInstance player, Npc npc) {
+	public boolean test(Player player, Npc npc) {
 		return player.isInParty();
 	}
 }

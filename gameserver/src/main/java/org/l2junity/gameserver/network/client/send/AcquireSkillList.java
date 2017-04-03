@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * @author Sdw
  */
 public class AcquireSkillList implements IClientOutgoingPacket {
-	final PlayerInstance _activeChar;
+	final Player _activeChar;
 	final List<SkillLearn> _learnable;
 
-	public AcquireSkillList(PlayerInstance activeChar) {
+	public AcquireSkillList(Player activeChar) {
 		_activeChar = activeChar;
 		_learnable = SkillTreesData.getInstance().getAvailableSkills(activeChar, activeChar.getClassId(), false, false);
 		_learnable.addAll(SkillTreesData.getInstance().getNextAvailableSkills(activeChar, activeChar.getClassId(), false, false));

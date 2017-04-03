@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
 
 /**
@@ -27,9 +27,9 @@ import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
  * @author UnAfraid
  */
 public class RecoBonusTaskEnd implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public RecoBonusTaskEnd(PlayerInstance player) {
+	public RecoBonusTaskEnd(Player player) {
 		_player = player;
 	}
 

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.util.Util;
@@ -92,7 +92,7 @@ public final class KetraOrcSupport extends AbstractNpcAI {
 		addStartNpc(KURFA, JAFF);
 	}
 
-	private int getAllianceLevel(PlayerInstance player) {
+	private int getAllianceLevel(Player player) {
 		for (int i = 0; i < KETRA_MARKS.length; i++) {
 			if (hasQuestItems(player, KETRA_MARKS[i])) {
 				return (i + 1);
@@ -102,7 +102,7 @@ public final class KetraOrcSupport extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		if (Util.isDigit(event) && BUFF.containsKey(Integer.parseInt(event))) {
 			final BuffsData buff = BUFF.get(Integer.parseInt(event));
@@ -125,7 +125,7 @@ public final class KetraOrcSupport extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final int AllianceLevel = getAllianceLevel(player);
 		switch (npc.getId()) {

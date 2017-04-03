@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -30,10 +30,10 @@ import java.util.List;
  * @author Tempy
  */
 public class GmViewQuestInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final List<Quest> _questList;
 
-	public GmViewQuestInfo(PlayerInstance cha) {
+	public GmViewQuestInfo(Player cha) {
 		_activeChar = cha;
 		_questList = cha.getAllActiveQuests();
 	}

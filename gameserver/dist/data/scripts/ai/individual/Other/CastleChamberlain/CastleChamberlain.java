@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Castle.CastleFunction;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -133,13 +133,13 @@ public final class CastleChamberlain extends AbstractNpcAI {
 		addFirstTalkId(NPC);
 	}
 
-	private NpcHtmlMessage getHtmlPacket(PlayerInstance player, Npc npc, String htmlFile) {
+	private NpcHtmlMessage getHtmlPacket(Player player, Npc npc, String htmlFile) {
 		final NpcHtmlMessage packet = new NpcHtmlMessage(npc.getObjectId());
 		packet.setHtml(getHtm(player.getLang(), htmlFile));
 		return packet;
 	}
 
-	private final String funcConfirmHtml(final PlayerInstance player, final Npc npc, final Castle castle, final int func, final int level) {
+	private final String funcConfirmHtml(final Player player, final Npc npc, final Castle castle, final int func, final int level) {
 		if (isOwner(player, npc) && player.hasClanPrivilege(ClanPrivilege.CS_SET_FUNCTIONS)) {
 			final NpcHtmlMessage html;
 			final String fstring = (func == Castle.FUNC_TELEPORT) ? "9" : "10";
@@ -306,12 +306,12 @@ public final class CastleChamberlain extends AbstractNpcAI {
 		return false;
 	}
 
-	private final boolean isOwner(final PlayerInstance player, final Npc npc) {
+	private final boolean isOwner(final Player player, final Npc npc) {
 		return player.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS) || ((player.getClan() != null) && (player.getClanId() == npc.getCastle().getOwnerId()));
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Castle castle = npc.getCastle();
 		final StringTokenizer st = new StringTokenizer(event, " ");
 		String htmltext = null;
@@ -869,7 +869,7 @@ public final class CastleChamberlain extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return (isOwner(player, npc)) ? "chamberlain-01.html" : "chamberlain-04.html";
 	}
 
@@ -879,7 +879,7 @@ public final class CastleChamberlain extends AbstractNpcAI {
 	@Id({35100, 35142, 35184, 35226, 35274, 35316, 35363, 35509, 35555, 36653, 36654, 36655, 36656, 36657, 36658, 36659, 36660, 36661})
 	// @formatter:on
 	public final void onNpcManorBypass(OnNpcManorBypass evt) {
-		final PlayerInstance player = evt.getActiveChar();
+		final Player player = evt.getActiveChar();
 		final Npc npc = evt.getTarget();
 		if (isOwner(player, npc)) {
 			final CastleManorManager manor = CastleManorManager.getInstance();

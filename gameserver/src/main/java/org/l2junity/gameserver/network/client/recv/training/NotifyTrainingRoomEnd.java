@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv.training;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.TrainingHolder;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -38,7 +38,7 @@ public class NotifyTrainingRoomEnd implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

@@ -22,7 +22,7 @@ import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.VariationInstance;
 import org.l2junity.gameserver.model.actor.instance.L2DecoyInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -35,7 +35,7 @@ import org.l2junity.network.PacketWriter;
 import java.util.Set;
 
 public class CharInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private int _objId;
 	private int _x, _y, _z, _heading;
 	private final int _mAtkSpd, _pAtkSpd;
@@ -68,7 +68,7 @@ public class CharInfo implements IClientOutgoingPacket {
 					Inventory.PAPERDOLL_HAIR2
 			};
 
-	public CharInfo(PlayerInstance cha, boolean gmSeeInvis) {
+	public CharInfo(Player cha, boolean gmSeeInvis) {
 		_activeChar = cha;
 		_objId = cha.getObjectId();
 		if ((_activeChar.getVehicle() != null) && (_activeChar.getInVehiclePosition() != null)) {

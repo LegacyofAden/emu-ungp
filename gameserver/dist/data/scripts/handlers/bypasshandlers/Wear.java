@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.ShopPreviewList;
@@ -37,7 +37,7 @@ public class Wear implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		if (!target.isNpc()) {
 			return false;
 		}
@@ -62,7 +62,7 @@ public class Wear implements IBypassHandler {
 		return false;
 	}
 
-	private static final void showWearWindow(PlayerInstance player, int val) {
+	private static final void showWearWindow(Player player, int val) {
 		final ProductList buyList = BuyListData.getInstance().getBuyList(val);
 		if (buyList == null) {
 			_log.warn("BuyList not found! BuyListId:" + val);

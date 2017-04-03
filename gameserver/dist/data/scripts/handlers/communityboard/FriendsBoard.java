@@ -21,7 +21,7 @@ package handlers.communityboard;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IParseBoardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Friends board.
@@ -41,7 +41,7 @@ public class FriendsBoard implements IParseBoardHandler {
 	}
 
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+	public boolean parseCommunityBoardCommand(String command, Player activeChar) {
 		if (command.equals("_friendlist")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Friends List", command);
 

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.PetDataTable;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.PetData;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.PetItemHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -38,7 +38,7 @@ public class SummonItems extends ItemSkillsTemplate {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 		if (!activeChar.getFloodProtectors().getItemPetSummon().tryPerformAction("summon items") || (activeChar.getBlockCheckerArena() != -1) || activeChar.inObserverMode() || activeChar.isAllSkillsDisabled() || activeChar.isCastingNow()) {
 			return false;
 		}

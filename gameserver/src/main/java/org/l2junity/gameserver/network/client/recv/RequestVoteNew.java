@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -38,14 +38,14 @@ public final class RequestVoteNew implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
 
 		WorldObject object = activeChar.getTarget();
 
-		if (!(object instanceof PlayerInstance)) {
+		if (!(object instanceof Player)) {
 			if (object == null) {
 				client.sendPacket(SystemMessageId.SELECT_TARGET);
 			} else {
@@ -54,7 +54,7 @@ public final class RequestVoteNew implements IClientIncomingPacket {
 			return;
 		}
 
-		PlayerInstance target = (PlayerInstance) object;
+		Player target = (Player) object;
 
 		if (target.getObjectId() != _targetId) {
 			return;

@@ -21,7 +21,7 @@ package ai.group;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
@@ -45,19 +45,19 @@ public final class AltarOfEvil extends AbstractNpcAI {
 	}
 
 	@Override
-	public boolean onNpcHate(Attackable mob, PlayerInstance player, boolean isSummon) {
+	public boolean onNpcHate(Attackable mob, Player player, boolean isSummon) {
 		teleportPlayer(mob, player);
 		return super.onNpcHate(mob, player, isSummon);
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		teleportPlayer(npc, attacker);
 		return super.onAttack(npc, attacker, damage, isSummon);
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if (skill.getId() == SKILL.getSkillId()) {
 			showOnScreenMsg(player, NpcStringId.DIMENSIONAL_RIFTER_SUMMONED_YOU, ExShowScreenMessage.TOP_CENTER, 5000);
 			player.teleToLocation(npc);
@@ -65,7 +65,7 @@ public final class AltarOfEvil extends AbstractNpcAI {
 		return super.onSpellFinished(npc, player, skill);
 	}
 
-	private void teleportPlayer(Npc npc, PlayerInstance player) {
+	private void teleportPlayer(Npc npc, Player player) {
 		if (npc.isScriptValue(0) && !npc.isInRadius3d(player, 200)) {
 			addSkillCastDesire(npc, player, SKILL, 23);
 			npc.setScriptValue(1);

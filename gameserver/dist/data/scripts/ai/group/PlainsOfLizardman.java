@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
 /**
@@ -93,7 +93,7 @@ public final class PlainsOfLizardman extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("fantasy_mushroom") && (npc != null) && (player != null)) {
 			npc.doCast(FANTASY_MUSHROOM_SKILL.getSkill());
 			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 200, monster ->
@@ -108,7 +108,7 @@ public final class PlainsOfLizardman extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		switch (npc.getId()) {
 			case TANTA_SUMMONER:
 				if (!npc.isAffectedBySkill(DEMOTIVATION_HEX.getSkillId())) {
@@ -143,7 +143,7 @@ public final class PlainsOfLizardman extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		// Tanta Guard
 		if (getRandom(1000) == 0) {
 			addAttackPlayerDesire(addSpawn(TANTA_GUARD, npc), killer);

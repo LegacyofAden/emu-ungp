@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -36,7 +36,7 @@ public class SpiritshotsBonusFinalizer implements IStatsFunction {
 		throwIfPresent(base);
 
 		double baseValue = 1;
-		final PlayerInstance player = creature.getActingPlayer();
+		final Player player = creature.getActingPlayer();
 		if (player != null) {
 			final ItemInstance weapon = player.getActiveWeaponInstance();
 			if ((weapon != null) && weapon.isEnchanted()) {

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TeleportWhereType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.SpawnTerritory;
@@ -45,7 +45,7 @@ public class AdminZone implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (activeChar == null) {
 			return false;
 		}
@@ -96,7 +96,7 @@ public class AdminZone implements IAdminCommandHandler {
 		return true;
 	}
 
-	private static void showHtml(PlayerInstance activeChar) {
+	private static void showHtml(Player activeChar) {
 		final String htmContent = HtmRepository.getInstance().getCustomHtm("admin/zone.htm");
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setHtml(htmContent);
@@ -142,7 +142,7 @@ public class AdminZone implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private static void getGeoRegionXY(PlayerInstance activeChar) {
+	private static void getGeoRegionXY(Player activeChar) {
 		int worldX = (int) activeChar.getX();
 		int worldY = (int) activeChar.getY();
 		int geoX = ((((worldX - (-327680)) >> 4) >> 11) + 10);

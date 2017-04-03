@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.TeleportBookmark;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -27,9 +27,9 @@ import org.l2junity.network.PacketWriter;
  * @author ShanSoft
  */
 public class ExGetBookMarkInfoPacket implements IClientOutgoingPacket {
-	private final PlayerInstance player;
+	private final Player player;
 
-	public ExGetBookMarkInfoPacket(PlayerInstance cha) {
+	public ExGetBookMarkInfoPacket(Player cha) {
 		player = cha;
 	}
 

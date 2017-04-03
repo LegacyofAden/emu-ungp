@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.npc;
 
 import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -30,13 +30,13 @@ import org.l2junity.gameserver.model.skills.Skill;
  * @author UnAfraid
  */
 public class OnAttackableAttack implements IBaseEvent {
-	private final PlayerInstance _attacker;
+	private final Player _attacker;
 	private final Attackable _target;
 	private final int _damage;
 	private final Skill _skill;
 	private final boolean _isSummon;
 
-	public OnAttackableAttack(PlayerInstance attacker, Attackable target, int damage, Skill skill, boolean isSummon) {
+	public OnAttackableAttack(Player attacker, Attackable target, int damage, Skill skill, boolean isSummon) {
 		_attacker = attacker;
 		_target = target;
 		_damage = damage;
@@ -44,7 +44,7 @@ public class OnAttackableAttack implements IBaseEvent {
 		_isSummon = isSummon;
 	}
 
-	public final PlayerInstance getAttacker() {
+	public final Player getAttacker() {
 		return _attacker;
 	}
 

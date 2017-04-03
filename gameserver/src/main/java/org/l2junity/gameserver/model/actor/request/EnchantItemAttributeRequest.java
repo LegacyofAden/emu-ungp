@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.request;
 
 import org.l2junity.gameserver.enums.AttributeType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 /**
@@ -72,7 +72,7 @@ public final class EnchantItemAttributeRequest extends AbstractRequest {
 	final int _minValue;
 	final int _maxValue;
 
-	public EnchantItemAttributeRequest(PlayerInstance activeChar, int enchantingStoneObjectId, AttributeType weaponAttribute, AttributeType armorAttribute, int maxLevel, int minValue, int maxValue) {
+	public EnchantItemAttributeRequest(Player activeChar, int enchantingStoneObjectId, AttributeType weaponAttribute, AttributeType armorAttribute, int maxLevel, int minValue, int maxValue) {
 		super(activeChar);
 		_enchantingStoneObjectId = enchantingStoneObjectId;
 		_weaponAttribute = weaponAttribute;

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.zone.type;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -74,7 +74,7 @@ public class ResidenceHallTeleportZone extends ResidenceTeleportZone {
 				throw new NullPointerException();
 			}
 
-			for (PlayerInstance pc : getPlayersInside()) {
+			for (Player pc : getPlayersInside()) {
 				if (pc != null) {
 					pc.teleToLocation(loc, false);
 				}

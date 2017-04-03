@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 import java.util.Calendar;
@@ -57,7 +57,7 @@ public final class Lindvior extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "tomaris_shout1": {
 				npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.HUH_THE_SKY_LOOKS_FUNNY_WHAT_S_THAT);
@@ -73,7 +73,7 @@ public final class Lindvior extends AbstractNpcAI {
 			}
 			case "lindvior_scene": {
 				if (npc != null) {
-					playMovie(World.getInstance().getVisibleObjects(npc, PlayerInstance.class, 4000), Movie.SC_LINDVIOR);
+					playMovie(World.getInstance().getVisibleObjects(npc, Player.class, 4000), Movie.SC_LINDVIOR);
 				}
 				break;
 			}

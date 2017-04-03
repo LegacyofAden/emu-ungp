@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
 
@@ -344,7 +344,7 @@ public final class ControllableMobAI extends AttackableAI {
 		}
 
 		// Spawn protection (only against mobs)
-		if (target.isPlayer() && ((PlayerInstance) target).isSpawnProtected()) {
+		if (target.isPlayer() && ((Player) target).isSpawnProtected()) {
 			return false;
 		}
 

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -27,19 +27,19 @@ import org.l2junity.gameserver.model.skills.Skill;
  * @author lord_rex
  */
 public final class CanPlayerUseSkill implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Skill _skill;
 	private final boolean _ctrlPressed;
 	private final boolean _shiftPressed;
 
-	public CanPlayerUseSkill(PlayerInstance activeChar, Skill skill, boolean ctrlPressed, boolean shiftPressed) {
+	public CanPlayerUseSkill(Player activeChar, Skill skill, boolean ctrlPressed, boolean shiftPressed) {
 		_activeChar = activeChar;
 		_skill = skill;
 		_ctrlPressed = ctrlPressed;
 		_shiftPressed = shiftPressed;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

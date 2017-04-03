@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -66,7 +66,7 @@ public final class Q00457_LostAndFound extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -159,7 +159,7 @@ public final class Q00457_LostAndFound extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (npc.getTarget() != null) {
 			return npc.getTarget().equals(player) ? "32759-08.html" : "32759-01a.html";
 		}
@@ -167,7 +167,7 @@ public final class Q00457_LostAndFound extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final QuestState st = getQuestState(player, true);
 
 		if ((getRandom(100) < CHANCE_SPAWN) && st.isNowAvailable() && (player.getLevel() >= MIN_LV)) {
@@ -177,7 +177,7 @@ public final class Q00457_LostAndFound extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
 		switch (st.getState()) {
@@ -204,7 +204,7 @@ public final class Q00457_LostAndFound extends Quest {
 		return super.onSpawn(npc);
 	}
 
-	public void broadcastNpcSay(Npc npc, PlayerInstance player, NpcStringId stringId, boolean whisper) {
+	public void broadcastNpcSay(Npc npc, Player player, NpcStringId stringId, boolean whisper) {
 		((whisper) ? player : npc).sendPacket(new NpcSay(npc.getObjectId(), ((whisper) ? ChatType.NPC_WHISPER : ChatType.NPC_GENERAL), npc.getId(), stringId));
 	}
 }

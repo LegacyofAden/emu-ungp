@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.itemcontainer;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 import java.sql.Connection;
@@ -46,7 +46,7 @@ public class Mail extends ItemContainer {
 	}
 
 	@Override
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return null;
 	}
 

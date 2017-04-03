@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.fishing;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -28,7 +28,7 @@ import org.l2junity.network.PacketWriter;
  * @author -Wooden-
  */
 public class ExFishingStart implements IClientOutgoingPacket {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final int _fishType;
 	private final int _baitType;
 	private final ILocational _baitLocation;
@@ -39,7 +39,7 @@ public class ExFishingStart implements IClientOutgoingPacket {
 	 * @param baitType     - 0 = newbie, 1 = normal, 2 = night
 	 * @param baitLocation
 	 */
-	public ExFishingStart(PlayerInstance player, int fishType, int baitType, ILocational baitLocation) {
+	public ExFishingStart(Player player, int fishType, int baitType, ILocational baitLocation) {
 		_player = player;
 		_fishType = fishType;
 		_baitType = baitType;

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.instance;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.instancezone.Instance;
  */
 public final class OnInstanceCreated implements IBaseEvent {
 	private final Instance _instance;
-	private final PlayerInstance _creator;
+	private final Player _creator;
 
-	public OnInstanceCreated(Instance instance, PlayerInstance creator) {
+	public OnInstanceCreated(Instance instance, Player creator) {
 		_instance = instance;
 		_creator = creator;
 	}
@@ -39,7 +39,7 @@ public final class OnInstanceCreated implements IBaseEvent {
 		return _instance;
 	}
 
-	public PlayerInstance getCreator() {
+	public Player getCreator() {
 		return _creator;
 	}
 

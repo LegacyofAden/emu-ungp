@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +42,7 @@ public final class DarkWaterDragon extends AbstractNpcAI {
 	private static final int DETRACTOR2 = 22271;
 	private static Set<Integer> SECOND_SPAWN = ConcurrentHashMap.newKeySet(); // Used to track if second Shades were already spawned
 	private static Set<Integer> MY_TRACKING_SET = ConcurrentHashMap.newKeySet(); // Used to track instances of npcs
-	private static Map<Integer, PlayerInstance> ID_MAP = new ConcurrentHashMap<>(); // Used to track instances of npcs
+	private static Map<Integer, Player> ID_MAP = new ConcurrentHashMap<>(); // Used to track instances of npcs
 
 	private DarkWaterDragon() {
 		int[] mobs =
@@ -62,7 +62,7 @@ public final class DarkWaterDragon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (npc != null) {
 			if (event.equalsIgnoreCase("first_spawn")) // timer to start timer "1"
 			{
@@ -125,7 +125,7 @@ public final class DarkWaterDragon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		int npcId = npc.getId();
 		int npcObjId = npc.getObjectId();
 		if (npcId == DRAGON) {
@@ -152,7 +152,7 @@ public final class DarkWaterDragon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		int npcId = npc.getId();
 		int npcObjId = npc.getObjectId();
 		if (npcId == DRAGON) {

@@ -18,22 +18,22 @@
  */
 package org.l2junity.gameserver.model.holders;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
  * @author UnAfraid
  */
 public class SummonRequestHolder {
-	private final PlayerInstance _target;
+	private final Player _target;
 	private final Skill _skill;
 
-	public SummonRequestHolder(PlayerInstance destination, Skill skill) {
+	public SummonRequestHolder(Player destination, Skill skill) {
 		_target = destination;
 		_skill = skill;
 	}
 
-	public PlayerInstance getTarget() {
+	public Player getTarget() {
 		return _target;
 	}
 

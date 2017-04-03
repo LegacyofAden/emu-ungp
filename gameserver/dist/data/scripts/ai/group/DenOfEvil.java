@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.type.EffectZone;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -134,7 +134,7 @@ public final class DenOfEvil extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		ThreadPool.getInstance().scheduleGeneral(new RespawnNewEye(npc.getLocation()), 15000, TimeUnit.MILLISECONDS);
 		EffectZone zone = ZoneManager.getInstance().getZone(npc, EffectZone.class);
 		if (zone == null) {

@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -156,7 +156,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "enter_85_solo": {
 				enterInstance(player, npc, TEMPLATE_ID_SOLO_85);
@@ -212,7 +212,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = (npc != null) ? npc.getInstanceWorld() : player.getInstanceWorld();
 		if (instance != null) {
 			switch (event) {
@@ -270,7 +270,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		instance.spawnGroup("PRISONERS").forEach(npc ->
 		{
 			final SkillHolder poison = npc.getParameters().getSkillHolder("poison_skill");
@@ -325,7 +325,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (instance != null) {
 			if (ArrayUtil.contains(MINI_BOSSES, npc.getId())) {
@@ -357,7 +357,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	public String onEnterZone(Creature character, ZoneType zone) {
 		final Instance instance = character.getInstanceWorld();
 		if ((instance != null) && character.isPlayer()) {
-			final PlayerInstance player = character.getActingPlayer();
+			final Player player = character.getActingPlayer();
 			switch (zone.getId()) {
 				case KARTIA_85_DETECT_1:
 				case KARTIA_90_DETECT_1:
@@ -721,7 +721,7 @@ public final class KartiasLabyrinth extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "adolph.html";
 	}
 

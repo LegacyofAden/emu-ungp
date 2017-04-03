@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.network.client.send.OnEventTrigger;
 
@@ -60,7 +60,7 @@ public final class EntrancePortalToCrystalCaverns extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			Quest instanceScript = null;
 
@@ -84,7 +84,7 @@ public final class EntrancePortalToCrystalCaverns extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "EntrancePortal_" + getCurrentInstanceTemplateId() + ".html";
 	}
 
@@ -95,11 +95,11 @@ public final class EntrancePortalToCrystalCaverns extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("LOOP_TIMER")) {
 			final int currentTemplateId = getCurrentInstanceTemplateId();
 
-			World.getInstance().forEachVisibleObjectInRadius(npc, PlayerInstance.class, 5000, pl ->
+			World.getInstance().forEachVisibleObjectInRadius(npc, Player.class, 5000, pl ->
 			{
 				updateTriggersForPlayer(player, currentTemplateId);
 			});
@@ -116,7 +116,7 @@ public final class EntrancePortalToCrystalCaverns extends AbstractNpcAI {
 		return super.onSeeCreature(npc, creature, isSummon);
 	}
 
-	public void updateTriggersForPlayer(PlayerInstance player, int currentTemplateId) {
+	public void updateTriggersForPlayer(Player player, int currentTemplateId) {
 		if (player != null) {
 			player.sendPacket(new OnEventTrigger(EMERALD_SQUARE_TRIGGER, false));
 			player.sendPacket(new OnEventTrigger(STEAM_CORRIDOR_TRIGGER, false));

@@ -1,6 +1,5 @@
 package org.l2junity.gameserver.service;
 
-import com.mysql.fabric.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.AccountInfo;
 import org.l2junity.commons.model.GameServerInfo;
@@ -15,7 +14,7 @@ import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.NetworkConfig;
 import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.rmi.ConnectException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -135,7 +133,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		accountsInGameServer.remove(account);
 	}
 
-	public void changePassword(PlayerInstance player, String oldPass, String newPass) {
+	public void changePassword(Player player, String oldPass, String newPass) {
 		try {
 			connection.changePassword(player.getAccountName(), oldPass, newPass);
 		}

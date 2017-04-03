@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2TamedBeastInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.NpcInfo;
@@ -227,7 +227,7 @@ public final class BeastFarm extends AbstractNpcAI {
 		TAMED_BEAST_DATA.add(new TamedBeast("%name% of Vigor", new SkillHolder(6431, 1), new SkillHolder(6666, 1)));
 	}
 
-	public void spawnNext(Npc npc, PlayerInstance player, int nextNpcId, int food) {
+	public void spawnNext(Npc npc, Player player, int nextNpcId, int food) {
 		// remove the feedinfo of the mob that got despawned, if any
 		if (_feedInfo.containsKey(npc.getObjectId())) {
 			if (_feedInfo.get(npc.getObjectId()) == player.getObjectId()) {
@@ -289,7 +289,7 @@ public final class BeastFarm extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		// this behavior is only run when the target of skill is the passed npc (chest)
 		// i.e. when the player is attempting to open the chest using a skill
 		if (!ArrayUtil.contains(targets, npc)) {
@@ -354,7 +354,7 @@ public final class BeastFarm extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		// remove the feedinfo of the mob that got killed, if any
 		if (_feedInfo.containsKey(npc.getObjectId())) {
 			_feedInfo.remove(npc.getObjectId());

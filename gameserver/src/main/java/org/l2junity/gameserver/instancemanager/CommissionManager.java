@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.CommissionManagerInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.commission.CommissionItem;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -111,7 +111,7 @@ public final class CommissionManager {
 	 * @param player the player
 	 * @param filter the filter
 	 */
-	public void showAuctions(PlayerInstance player, Predicate<L2Item> filter) {
+	public void showAuctions(Player player, Predicate<L2Item> filter) {
 		//@formatter:off
 		final List<CommissionItem> commissionItems = _commissionItems.values().stream()
 				.filter(c -> filter.test(c.getItemInfo().getItem()))
@@ -139,7 +139,7 @@ public final class CommissionManager {
 	 *
 	 * @param player the player
 	 */
-	public void showPlayerAuctions(PlayerInstance player) {
+	public void showPlayerAuctions(Player player) {
 		//@formatter:off
 		final List<CommissionItem> commissionItems = _commissionItems.values().stream()
 				.filter(c -> c.getItemInstance().getOwnerId() == player.getObjectId())
@@ -163,7 +163,7 @@ public final class CommissionManager {
 	 * @param pricePerUnit   the price per unit
 	 * @param durationInDays the duration in days
 	 */
-	public void registerItem(PlayerInstance player, int itemObjectId, long itemCount, long pricePerUnit, byte durationInDays) {
+	public void registerItem(Player player, int itemObjectId, long itemCount, long pricePerUnit, byte durationInDays) {
 		if (itemCount < 1) {
 			player.sendPacket(SystemMessageId.THE_ITEM_HAS_FAILED_TO_BE_REGISTERED);
 			player.sendPacket(ExResponseCommissionRegister.FAILED);
@@ -245,7 +245,7 @@ public final class CommissionManager {
 	 * @param player       the player
 	 * @param commissionId the commission id
 	 */
-	public void deleteItem(PlayerInstance player, long commissionId) {
+	public void deleteItem(Player player, long commissionId) {
 		final CommissionItem commissionItem = getCommissionItem(commissionId);
 		if (commissionItem == null) {
 			player.sendPacket(SystemMessageId.CANCELLATION_OF_SALE_HAS_FAILED_BECAUSE_REQUIREMENTS_ARE_NOT_MET);
@@ -287,7 +287,7 @@ public final class CommissionManager {
 	 * @param player       the player
 	 * @param commissionId the commission id
 	 */
-	public void buyItem(PlayerInstance player, long commissionId) {
+	public void buyItem(Player player, long commissionId) {
 		final CommissionItem commissionItem = getCommissionItem(commissionId);
 		if (commissionItem == null) {
 			player.sendPacket(SystemMessageId.ITEM_PURCHASE_HAS_FAILED);
@@ -393,7 +393,7 @@ public final class CommissionManager {
 	 * @param player the player
 	 * @return {@code true} if the player is allowed to interact, {@code false} otherwise
 	 */
-	public static boolean isPlayerAllowedToInteract(PlayerInstance player) {
+	public static boolean isPlayerAllowedToInteract(Player player) {
 		final Npc npc = player.getLastFolkNPC();
 		if ((npc != null) && (npc instanceof CommissionManagerInstance)) {
 			return npc.isInRadius3d(player, INTERACTION_DISTANCE);

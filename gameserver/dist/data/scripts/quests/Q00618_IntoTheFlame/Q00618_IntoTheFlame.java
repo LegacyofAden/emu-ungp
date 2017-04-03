@@ -20,7 +20,7 @@ package quests.Q00618_IntoTheFlame;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 
@@ -66,7 +66,7 @@ public class Q00618_IntoTheFlame extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -107,8 +107,8 @@ public class Q00618_IntoTheFlame extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isPet) {
-		final PlayerInstance member = getRandomPartyMember(player, 2);
+	public String onKill(Npc npc, Player player, boolean isPet) {
+		final Player member = getRandomPartyMember(player, 2);
 		if (member != null) {
 			final QuestState qs = getQuestState(member, false);
 			if ((getQuestItemsCount(member, VACUALITE_ORE) < REQUIRED_COUNT) && (getRandom(1000) < MONSTERS.get(npc.getId()))) {
@@ -124,7 +124,7 @@ public class Q00618_IntoTheFlame extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

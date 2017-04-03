@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class RecipeShopMsg implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public RecipeShopMsg(PlayerInstance player) {
+	public RecipeShopMsg(Player player) {
 		_activeChar = player;
 	}
 

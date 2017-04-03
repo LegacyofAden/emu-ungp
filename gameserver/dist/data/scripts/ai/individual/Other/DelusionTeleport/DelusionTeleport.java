@@ -21,7 +21,7 @@ package ai.individual.Other.DelusionTeleport;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public final class DelusionTeleport extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		if (npc.getId() == NPCS[0]) // Pathfinder Worker
 		{
 			final int locId = npc.getParameters().getInt("Level", -1);

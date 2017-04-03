@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.residences;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.interfaces.INamable;
@@ -94,7 +94,7 @@ public abstract class AbstractResidence extends ListenersContainer implements IN
 		return _residentialSkills;
 	}
 
-	public void giveResidentialSkills(PlayerInstance player) {
+	public void giveResidentialSkills(Player player) {
 		if ((_residentialSkills != null) && !_residentialSkills.isEmpty()) {
 			for (SkillHolder sh : _residentialSkills) {
 				player.addSkill(sh.getSkill(), false);
@@ -102,7 +102,7 @@ public abstract class AbstractResidence extends ListenersContainer implements IN
 		}
 	}
 
-	public void removeResidentialSkills(PlayerInstance player) {
+	public void removeResidentialSkills(Player player) {
 		if ((_residentialSkills != null) && !_residentialSkills.isEmpty()) {
 			for (SkillHolder sh : _residentialSkills) {
 				player.removeSkill(sh.getSkill(), false);

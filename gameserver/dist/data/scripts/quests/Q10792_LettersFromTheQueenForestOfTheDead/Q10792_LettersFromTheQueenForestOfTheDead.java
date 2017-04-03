@@ -21,7 +21,7 @@ package quests.Q10792_LettersFromTheQueenForestOfTheDead;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -56,7 +56,7 @@ public final class Q10792_LettersFromTheQueenForestOfTheDead extends LetterQuest
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -95,7 +95,7 @@ public final class Q10792_LettersFromTheQueenForestOfTheDead extends LetterQuest
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
 		if (qs == null) {
@@ -113,7 +113,7 @@ public final class Q10792_LettersFromTheQueenForestOfTheDead extends LetterQuest
 	}
 
 	@Override
-	public boolean canShowTutorialMark(PlayerInstance player) {
+	public boolean canShowTutorialMark(Player player) {
 		return player.isInCategory(CategoryType.MAGE_GROUP);
 	}
 }

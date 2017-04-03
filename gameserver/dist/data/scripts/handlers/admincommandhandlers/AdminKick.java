@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.Disconnection;
 
 import java.util.StringTokenizer;
@@ -34,13 +34,13 @@ public class AdminKick implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_kick")) {
 			StringTokenizer st = new StringTokenizer(command);
 			if (st.countTokens() > 1) {
 				st.nextToken();
 				String player = st.nextToken();
-				PlayerInstance plyr = World.getInstance().getPlayer(player);
+				Player plyr = World.getInstance().getPlayer(player);
 				if (plyr != null) {
 					Disconnection.of(plyr).defaultSequence(false);
 					activeChar.sendMessage("You kicked " + plyr.getName() + " from the game.");
@@ -49,7 +49,7 @@ public class AdminKick implements IAdminCommandHandler {
 		}
 		if (command.startsWith("admin_kick_non_gm")) {
 			int counter = 0;
-			for (PlayerInstance player : World.getInstance().getPlayers()) {
+			for (Player player : World.getInstance().getPlayers()) {
 				if (!player.isGM()) {
 					counter++;
 					Disconnection.of(player).defaultSequence(false);

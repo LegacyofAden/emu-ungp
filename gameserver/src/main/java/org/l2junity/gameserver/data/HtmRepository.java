@@ -9,7 +9,7 @@ import org.l2junity.commons.util.ZipUtils;
 import org.l2junity.core.configs.ScriptsConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.Language;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,7 +98,7 @@ public class HtmRepository {
 		loadHtmls();
 	}
 
-	public String getHtm(PlayerInstance player, String htmPath) {
+	public String getHtm(Player player, String htmPath) {
 		return getHtm(player.getLang(), htmPath);
 	}
 
@@ -115,7 +115,7 @@ public class HtmRepository {
 		return getHtm(language, "custom/" + htmPath);
 	}
 
-	public String getCustomHtm(PlayerInstance player, String htmPath) {
+	public String getCustomHtm(Player player, String htmPath) {
 		return getHtm(player.getLang(), "custom/" + htmPath);
 	}
 

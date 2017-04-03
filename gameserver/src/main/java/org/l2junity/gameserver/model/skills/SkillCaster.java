@@ -34,7 +34,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -275,7 +275,7 @@ public class SkillCaster implements Runnable {
 		}
 
 		if (caster.isPlayer()) {
-			final PlayerInstance player = caster.getActingPlayer();
+			final Player player = caster.getActingPlayer();
 			final L2Clan clan = player.getClan();
 
 			// Consume fame points
@@ -476,7 +476,7 @@ public class SkillCaster implements Runnable {
 			// Launch the magic skill and calculate its effects
 			skill.activateSkill(caster, item, targets.toArray(new WorldObject[0]));
 
-			PlayerInstance player = caster.getActingPlayer();
+			Player player = caster.getActingPlayer();
 			if (player != null) {
 				for (WorldObject obj : targets) {
 					if (!(obj instanceof Creature)) {
@@ -570,7 +570,7 @@ public class SkillCaster implements Runnable {
 
 		// If there is a queued skill, launch it and wipe the queue.
 		if (caster.isPlayer()) {
-			final PlayerInstance currPlayer = caster.getActingPlayer();
+			final Player currPlayer = caster.getActingPlayer();
 			final SkillUseHolder queuedSkill = currPlayer.getQueuedSkill();
 
 			if (queuedSkill != null) {
@@ -808,7 +808,7 @@ public class SkillCaster implements Runnable {
 		}
 
 		if (caster.isPlayer()) {
-			final PlayerInstance player = caster.getActingPlayer();
+			final Player player = caster.getActingPlayer();
 			if (player.inObserverMode()) {
 				return false;
 			}

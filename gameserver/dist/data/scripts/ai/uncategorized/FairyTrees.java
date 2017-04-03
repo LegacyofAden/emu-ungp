@@ -21,7 +21,7 @@ package ai.uncategorized;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
 /**
@@ -53,7 +53,7 @@ public class FairyTrees extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (npc.distance3d(killer) <= MIN_DISTANCE) {
 			for (int i = 0; i < 20; i++) {
 				final Npc guardian = addSpawn(SOUL_GUARDIAN, npc, false, 30000);

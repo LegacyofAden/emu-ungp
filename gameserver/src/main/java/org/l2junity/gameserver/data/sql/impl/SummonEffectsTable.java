@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class SummonEffectsTable {
 		return _servitorEffects;
 	}
 
-	public Map<Integer, List<SummonEffect>> getServitorEffects(PlayerInstance owner) {
+	public Map<Integer, List<SummonEffect>> getServitorEffects(Player owner) {
 		final Map<Integer, Map<Integer, List<SummonEffect>>> servitorMap = _servitorEffects.get(owner.getObjectId());
 		if (servitorMap == null) {
 			return null;

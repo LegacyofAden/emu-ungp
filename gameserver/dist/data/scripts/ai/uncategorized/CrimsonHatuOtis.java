@@ -21,7 +21,7 @@ package ai.uncategorized;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -43,7 +43,7 @@ public final class CrimsonHatuOtis extends AbstractNpcAI {
 	}
 
 	@Override
-	public final String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public final String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "SKILL": {
 				if (npc.isDead()) {
@@ -67,7 +67,7 @@ public final class CrimsonHatuOtis extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			startQuestTimer("SKILL", 5000, npc, null);
@@ -80,7 +80,7 @@ public final class CrimsonHatuOtis extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		cancelQuestTimer("SKILL", npc, null);
 		cancelQuestTimer("BUFF", npc, null);
 		return super.onKill(npc, player, isSummon);

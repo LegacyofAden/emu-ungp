@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,19 +26,19 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author lord_rex
  */
 public final class CanPlayerUseAction implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _actionId;
 	private final boolean _ctrlPressed;
 	private final boolean _shiftPressed;
 
-	public CanPlayerUseAction(PlayerInstance activeChar, int actionId, boolean ctrlPressed, boolean shiftPressed) {
+	public CanPlayerUseAction(Player activeChar, int actionId, boolean ctrlPressed, boolean shiftPressed) {
 		_activeChar = activeChar;
 		_actionId = actionId;
 		_ctrlPressed = ctrlPressed;
 		_shiftPressed = shiftPressed;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

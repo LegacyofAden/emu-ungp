@@ -18,11 +18,10 @@
  */
 package handlers.punishmenthandlers;
 
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.handler.IPunishmentHandler;
 import org.l2junity.gameserver.handler.PunishmentHandler;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.network.client.Disconnection;
@@ -40,7 +39,7 @@ public class BanHandler implements IPunishmentHandler {
 		switch (task.getAffect()) {
 			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
-				final PlayerInstance player = World.getInstance().getPlayer(objectId);
+				final Player player = World.getInstance().getPlayer(objectId);
 				if (player != null) {
 					applyToPlayer(player);
 				}
@@ -50,7 +49,7 @@ public class BanHandler implements IPunishmentHandler {
 				final String account = String.valueOf(task.getKey());
 				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
 				if (client != null) {
-					final PlayerInstance player = client.getActiveChar();
+					final Player player = client.getActiveChar();
 					if (player != null) {
 						applyToPlayer(player);
 					} else {
@@ -61,7 +60,7 @@ public class BanHandler implements IPunishmentHandler {
 			}
 			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (ip.equalsIgnoreCase(player.getIPAddress())) {
 						applyToPlayer(player);
 					}
@@ -70,7 +69,7 @@ public class BanHandler implements IPunishmentHandler {
 			}
 			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						applyToPlayer(player);
 					}
@@ -90,7 +89,7 @@ public class BanHandler implements IPunishmentHandler {
 	 *
 	 * @param player
 	 */
-	private static void applyToPlayer(PlayerInstance player) {
+	private static void applyToPlayer(Player player) {
 		Disconnection.of(player).defaultSequence(false);
 	}
 

@@ -24,7 +24,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -68,7 +68,7 @@ public final class RequestRecipeShopMakeItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -82,7 +82,7 @@ public final class RequestRecipeShopMakeItem implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance manufacturer = World.getInstance().getPlayer(_objectId);
+		final Player manufacturer = World.getInstance().getPlayer(_objectId);
 		if (manufacturer == null) {
 			return;
 		}

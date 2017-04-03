@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,7 +29,7 @@ import org.l2junity.network.PacketWriter;
 public class TradeUpdate extends AbstractItemPacket {
 	private final TradeItem _item;
 
-	public TradeUpdate(PlayerInstance player, TradeItem item) {
+	public TradeUpdate(Player player, TradeItem item) {
 		_item = new TradeItem(item, player.getInventory().getItemByObjectId(item.getObjectId()).getCount() - item.getCount(), item.getPrice());
 	}
 

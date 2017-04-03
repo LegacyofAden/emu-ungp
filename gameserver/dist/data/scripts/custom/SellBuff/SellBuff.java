@@ -28,7 +28,7 @@ import org.l2junity.gameserver.instancemanager.SellBuffsManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.model.items.L2Item;
@@ -70,7 +70,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 	}
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		String cmd = "";
 		String params = "";
 		final StringTokenizer st = new StringTokenizer(command, " ");
@@ -90,7 +90,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 	}
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+	public boolean useVoicedCommand(String command, Player activeChar, String params) {
 		switch (command) {
 			case "sellbuff":
 			case "sellbuffs": {
@@ -101,7 +101,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 		return true;
 	}
 
-	public boolean useBypass(String command, PlayerInstance activeChar, String params) {
+	public boolean useBypass(String command, Player activeChar, String params) {
 		if (!SellBuffConfig.SELLBUFF_ENABLED) {
 			return false;
 		}
@@ -275,7 +275,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						index = Integer.parseInt(st.nextToken());
 					}
 
-					final PlayerInstance seller = World.getInstance().getPlayer(objId);
+					final Player seller = World.getInstance().getPlayer(objId);
 					if (seller != null) {
 						if (!seller.isSellingBuffs() || !activeChar.isInRadius3d(seller, Npc.INTERACTION_DISTANCE)) {
 							return false;
@@ -309,7 +309,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						return false;
 					}
 
-					final PlayerInstance seller = World.getInstance().getPlayer(objId);
+					final Player seller = World.getInstance().getPlayer(objId);
 					if (seller == null) {
 						return false;
 					}

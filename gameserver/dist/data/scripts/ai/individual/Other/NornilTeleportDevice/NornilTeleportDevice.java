@@ -21,7 +21,7 @@ package ai.individual.Other.NornilTeleportDevice;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Nornil Teleport Device AI.
@@ -48,7 +48,7 @@ public final class NornilTeleportDevice extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.startsWith("teleport_")) {
 			final int locId = Integer.parseInt(event.replace("teleport_", ""));
 			player.teleToLocation(LOCATIONS[locId - 1]);
@@ -57,7 +57,7 @@ public final class NornilTeleportDevice extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "NornilTeleportDevice-" + npc.getParameters().getInt("device_place", 0) + ".html";
 	}
 

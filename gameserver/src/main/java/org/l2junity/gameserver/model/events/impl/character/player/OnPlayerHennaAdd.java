@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.Henna;
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.items.Henna;
  * @author UnAfraid
  */
 public class OnPlayerHennaAdd implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Henna _henna;
 
-	public OnPlayerHennaAdd(PlayerInstance activeChar, Henna henna) {
+	public OnPlayerHennaAdd(Player activeChar, Henna henna) {
 		_activeChar = activeChar;
 		_henna = henna;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

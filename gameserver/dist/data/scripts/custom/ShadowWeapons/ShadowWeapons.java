@@ -20,7 +20,7 @@ package custom.ShadowWeapons;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Shadow Weapons AI.<br>
@@ -50,7 +50,7 @@ public final class ShadowWeapons extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext;
 		boolean has_d = hasQuestItems(player, 8869); // Shadow Item Exchange Coupon (D-Grade)
 		boolean has_c = hasQuestItems(player, 8870); // Shadow Item Exchange Coupon (C-Grade)

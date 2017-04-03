@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,7 +29,7 @@ import org.l2junity.network.PacketWriter;
 public class ExConnectedTimeAndGettableReward implements IClientOutgoingPacket {
 	private final int _oneDayRewardAvailableCount;
 
-	public ExConnectedTimeAndGettableReward(PlayerInstance player) {
+	public ExConnectedTimeAndGettableReward(Player player) {
 		_oneDayRewardAvailableCount = OneDayRewardData.getInstance().getOneDayRewardData(player).size();
 	}
 

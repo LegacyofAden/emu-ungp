@@ -20,7 +20,7 @@ package org.l2junity.gameserver.instancemanager;
 
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 
@@ -36,13 +36,13 @@ import java.util.stream.Collectors;
  * @author Sdw
  */
 public class MatchingRoomManager {
-	private volatile Set<PlayerInstance> _waitingList;
+	private volatile Set<Player> _waitingList;
 
 	private static final Map<MatchingRoomType, Map<Integer, MatchingRoom>> _rooms = new ConcurrentHashMap<>(2);
 
 	private final AtomicInteger _id = new AtomicInteger(0);
 
-	public void addToWaitingList(PlayerInstance player) {
+	public void addToWaitingList(Player player) {
 		if (_waitingList == null) {
 			synchronized (this) {
 				if (_waitingList == null) {
@@ -53,15 +53,15 @@ public class MatchingRoomManager {
 		_waitingList.add(player);
 	}
 
-	public void removeFromWaitingList(PlayerInstance player) {
+	public void removeFromWaitingList(Player player) {
 		getPlayerInWaitingList().remove(player);
 	}
 
-	public Set<PlayerInstance> getPlayerInWaitingList() {
+	public Set<Player> getPlayerInWaitingList() {
 		return _waitingList == null ? Collections.emptySet() : _waitingList;
 	}
 
-	public List<PlayerInstance> getPlayerInWaitingList(int minLevel, int maxLevel, List<ClassId> classIds, String query) {
+	public List<Player> getPlayerInWaitingList(int minLevel, int maxLevel, List<ClassId> classIds, String query) {
 		return _waitingList == null ? Collections.emptyList() : _waitingList.stream().filter(p -> (p.getLevel() >= minLevel) && (p.getLevel() <= maxLevel)).filter(p -> (classIds == null) || classIds.contains(p.getClassId())).filter(p -> query.isEmpty() || p.getName().toLowerCase().contains(query)).collect(Collectors.toList());
 	}
 

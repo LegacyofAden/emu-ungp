@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -70,7 +70,7 @@ public final class SilentValley extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if ((npc != null) && !npc.isDead()) {
 			switch (event) {
 				case "CLEAR":
@@ -89,7 +89,7 @@ public final class SilentValley extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		switch (npc.getId()) {
 			case CHEST: {
 				if (!isSummon && npc.isScriptValue(0)) {
@@ -122,7 +122,7 @@ public final class SilentValley extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (getRandom(1000) < SPAWN_CHANCE) {
 			final double newZ = npc.getZ() + 100;
 			addSpawn(GUARD2, npc.getX() + 100, npc.getY(), newZ, 0, false, 0);
@@ -136,7 +136,7 @@ public final class SilentValley extends AbstractNpcAI {
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
 		if (creature.isPlayable()) {
-			final PlayerInstance player = (isSummon) ? ((Summon) creature).getOwner() : creature.getActingPlayer();
+			final Player player = (isSummon) ? ((Summon) creature).getOwner() : creature.getActingPlayer();
 			if ((npc.getId() == GUARD1) || (npc.getId() == GUARD2)) {
 				npc.setTarget(player);
 				npc.doCast(BLAZE.getSkill());

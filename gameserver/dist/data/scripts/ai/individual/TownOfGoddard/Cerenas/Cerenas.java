@@ -20,7 +20,7 @@ package ai.individual.TownOfGoddard.Cerenas;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import quests.Q10369_NoblesseSoulTesting.Q10369_NoblesseSoulTesting;
 
 /**
@@ -40,7 +40,7 @@ public final class Cerenas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		if (event.equals("tiara")) {

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Gordon AI
@@ -39,8 +39,8 @@ public final class Gordon extends AbstractNpcAI {
 
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
-		if (creature.isPlayer() && ((PlayerInstance) creature).isCursedWeaponEquipped()) {
-			addAttackPlayerDesire(npc, (PlayerInstance) creature);
+		if (creature.isPlayer() && ((Player) creature).isCursedWeaponEquipped()) {
+			addAttackPlayerDesire(npc, (Player) creature);
 		}
 		return super.onSeeCreature(npc, creature, isSummon);
 	}

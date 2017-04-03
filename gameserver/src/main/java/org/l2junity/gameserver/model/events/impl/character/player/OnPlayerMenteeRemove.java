@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerMenteeRemove implements IBaseEvent {
-	private final PlayerInstance _mentor;
+	private final Player _mentor;
 	private final Mentee _mentee;
 
-	public OnPlayerMenteeRemove(PlayerInstance mentor, Mentee mentee) {
+	public OnPlayerMenteeRemove(Player mentor, Mentee mentee) {
 		_mentor = mentor;
 		_mentee = mentee;
 	}
 
-	public PlayerInstance getMentor() {
+	public Player getMentor() {
 		return _mentor;
 	}
 

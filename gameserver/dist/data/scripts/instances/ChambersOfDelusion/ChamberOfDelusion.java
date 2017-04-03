@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -104,7 +104,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		// Choose start room
 		changeRoom(instance);
 
@@ -116,7 +116,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 				task.cancel(false);
 			} else {
 				for (int objId : instance.getAllowed()) {
-					final PlayerInstance pl = World.getInstance().getPlayer(objId);
+					final Player pl = World.getInstance().getPlayer(objId);
 					if ((pl != null) && pl.isOnline() && !pl.isInParty()) {
 						instance.finishInstance(0);
 						break;
@@ -141,7 +141,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		// Teleport player to instance
 		super.onEnter(player, instance, firstEnter);
 
@@ -158,14 +158,14 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	protected void teleportPlayerIn(PlayerInstance player, Instance instance) {
+	protected void teleportPlayerIn(Player player, Instance instance) {
 		final int room = instance.getParameters().getInt("currentRoom");
 		final Location loc = instance.getEnterLocations().get(room);
 		player.teleToLocation(loc, instance);
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		final Instance world = npc.getInstanceWorld();
@@ -207,7 +207,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final int npcId = npc.getId();
 		if (ENTRANCE_GATEKEEPER.containsKey(npcId)) {
 			enterInstance(player, npc, ENTRANCE_GATEKEEPER.get(npcId));
@@ -216,7 +216,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if (!npc.isDead() && ArrayUtil.contains(BOX, npc.getId()) && ((skill.getId() == FAIL_SKILL.getSkillId()) || (skill.getId() == SUCCESS_SKILL.getSkillId()))) {
 			npc.doDie(player);
 		}
@@ -239,7 +239,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(final Npc npc, final PlayerInstance attacker, final int damage, final boolean isPet, final Skill skill) {
+	public String onAttack(final Npc npc, final Player attacker, final int damage, final boolean isPet, final Skill skill) {
 		if (!npc.isBusy() && (npc.getCurrentHp() < (npc.getMaxHp() / 10))) {
 			npc.setBusy(true);
 			if (getRandom(100) < 25) // 25% chance to reward
@@ -266,7 +266,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isPet) {
+	public String onKill(Npc npc, Player player, boolean isPet) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			if (isBigChamber(world)) {
@@ -345,7 +345,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 			{
 				try {
 					// Send earthquake packet
-					for (PlayerInstance player : world.getPlayers()) {
+					for (Player player : world.getPlayers()) {
 						player.sendPacket(new Earthquake(player, 20, 10));
 					}
 					// Wait for a while

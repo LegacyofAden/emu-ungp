@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.BuyList;
@@ -49,7 +49,7 @@ public class AdminShop implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_buy")) {
 			try {
 				handleBuyRequest(activeChar, command.substring(10));
@@ -81,7 +81,7 @@ public class AdminShop implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleBuyRequest(PlayerInstance activeChar, String command) {
+	private void handleBuyRequest(Player activeChar, String command) {
 		int val = -1;
 		try {
 			val = Integer.parseInt(command);

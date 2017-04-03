@@ -20,7 +20,7 @@ package handlers.admincommandhandlers;
 
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class AdminUnblockIp implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 
 		if (command.startsWith("admin_unblockip ")) {
 			try {
@@ -62,7 +62,7 @@ public class AdminUnblockIp implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private boolean unblockIp(String ipAddress, PlayerInstance activeChar) {
+	private boolean unblockIp(String ipAddress, Player activeChar) {
 		// LoginServerThread.getInstance().unBlockip(ipAddress);
 		_log.warn("IP removed by GM " + activeChar.getName());
 		return true;

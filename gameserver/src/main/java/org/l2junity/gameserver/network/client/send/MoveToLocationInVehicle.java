@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -37,7 +37,7 @@ public class MoveToLocationInVehicle implements IClientOutgoingPacket {
 	 * @param destination
 	 * @param origin
 	 */
-	public MoveToLocationInVehicle(PlayerInstance player, Location destination, Location origin) {
+	public MoveToLocationInVehicle(Player player, Location destination, Location origin) {
 		_charObjId = player.getObjectId();
 		_boatId = player.getBoat().getObjectId();
 		_destination = destination;

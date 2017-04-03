@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Task dedicated to update player's current pvp status.
@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
  * @author UnAfraid
  */
 public class PvPFlagTask implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public PvPFlagTask(PlayerInstance player) {
+	public PvPFlagTask(Player player) {
 		_player = player;
 	}
 

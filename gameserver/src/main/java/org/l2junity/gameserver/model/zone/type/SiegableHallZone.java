@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.zone.type;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public final class SiegableHallZone extends ClanHallZone {
 	}
 
 	public void banishNonSiegeParticipants() {
-		for (PlayerInstance player : getPlayersInside()) {
+		for (Player player : getPlayersInside()) {
 			if ((player != null) && player.isInHideoutSiege()) {
 				player.teleToLocation(getBanishSpawnLoc(), true);
 			}

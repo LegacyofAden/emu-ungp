@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.debugger;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
 import java.util.Set;
@@ -33,7 +33,7 @@ public class Debugger {
 	private final String _name;
 	private final Set<Integer> _types = ConcurrentHashMap.newKeySet();
 
-	public Debugger(PlayerInstance player) {
+	public Debugger(Player player) {
 		_objectId = player.getObjectId();
 		_name = player.getName();
 	}
@@ -46,7 +46,7 @@ public class Debugger {
 		return _name;
 	}
 
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return World.getInstance().getPlayer(_objectId);
 	}
 
@@ -70,7 +70,7 @@ public class Debugger {
 	}
 
 	public void sendPacket(IClientOutgoingPacket... packets) {
-		final PlayerInstance player = getPlayer();
+		final Player player = getPlayer();
 		if (player != null) {
 			for (IClientOutgoingPacket packet : packets) {
 				player.sendPacket(packet);
@@ -79,7 +79,7 @@ public class Debugger {
 	}
 
 	public void sendMessage(String message) {
-		final PlayerInstance player = getPlayer();
+		final Player player = getPlayer();
 		if (player != null) {
 			player.sendMessage(message);
 		}

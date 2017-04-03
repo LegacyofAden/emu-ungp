@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.TryMixCubeResultType;
 import org.l2junity.gameserver.enums.TryMixCubeType;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.AlchemyResult;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -66,7 +66,7 @@ public class RequestAlchemyTryMixCube implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if ((player == null) || (player.getRace() != Race.ERTHEIA)) {
 			return;
 		}

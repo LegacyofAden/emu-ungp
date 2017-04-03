@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.util;
 
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.geodriver.Cell;
 
@@ -29,7 +29,7 @@ import java.awt.*;
  * @author HorridoJoho
  */
 public final class GeoUtils {
-	public static void debug2DLine(PlayerInstance player, double x, double y, double tx, double ty, double z) {
+	public static void debug2DLine(Player player, double x, double y, double tx, double ty, double z) {
 		int gx = GeoData.getInstance().getGeoX(x);
 		int gy = GeoData.getInstance().getGeoY(y);
 
@@ -50,7 +50,7 @@ public final class GeoUtils {
 		player.sendPacket(prim);
 	}
 
-	public static void debug3DLine(PlayerInstance player, int x, int y, int z, int tx, int ty, int tz) {
+	public static void debug3DLine(Player player, int x, int y, int z, int tx, int ty, int tz) {
 		int gx = GeoData.getInstance().getGeoX(x);
 		int gy = GeoData.getInstance().getGeoY(y);
 
@@ -94,7 +94,7 @@ public final class GeoUtils {
 		return Color.RED;
 	}
 
-	public static void debugGrid(PlayerInstance player, int radius) {
+	public static void debugGrid(Player player, int radius) {
 		int blocksPerPacket = 40;
 		if (radius < 0) {
 			throw new IllegalArgumentException("geoRadius < 0");

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpChanged;
@@ -68,7 +68,7 @@ public final class PumpSoulEating extends AbstractEffect {
 	public void onExperienceReceived(Playable playable, long exp) {
 		// TODO: Verify logic.
 		if (playable.isPlayer() && (exp >= _expNeeded)) {
-			final PlayerInstance player = playable.getActingPlayer();
+			final Player player = playable.getActingPlayer();
 			final int maxSouls = (int) player.getStat().getValue(DoubleStat.MAX_SOULS, 0);
 			if (player.getChargedSouls() >= maxSouls) {
 				playable.sendPacket(SystemMessageId.SOUL_CANNOT_BE_ABSORBED_ANYMORE);

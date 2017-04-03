@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
@@ -51,7 +51,7 @@ public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	}
 
 	@Override
-	public boolean isAvailable(PlayerInstance player) {
+	public boolean isAvailable(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		if (entry != null) {
 			switch (entry.getStatus()) {
@@ -73,12 +73,12 @@ public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
 
 	private void onAttackableKill(OnAttackableKill event) {
 		final Attackable monster = event.getTarget();
-		final PlayerInstance player = event.getAttacker();
+		final Player player = event.getAttacker();
 		if (monster.isRaid() && (monster.getInstanceId() > 0) && (player != null)) {
 			final Party party = player.getParty();
 			if (party != null) {
 				final CommandChannel channel = party.getCommandChannel();
-				final List<PlayerInstance> members = channel != null ? channel.getMembers() : party.getMembers();
+				final List<Player> members = channel != null ? channel.getMembers() : party.getMembers();
 				members.stream().filter(member -> member.distance3d(monster) <= PlayerConfig.ALT_PARTY_RANGE).forEach(this::processPlayerProgress);
 			} else {
 				processPlayerProgress(player);
@@ -86,7 +86,7 @@ public class BossOneDayRewardHandler extends AbstractOneDayRewardHandler {
 		}
 	}
 
-	private void processPlayerProgress(PlayerInstance player) {
+	private void processPlayerProgress(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), true);
 		if (entry.getStatus() == OneDayRewardStatus.NOT_AVAILABLE) {
 			if (entry.increaseProgress() >= _amount) {

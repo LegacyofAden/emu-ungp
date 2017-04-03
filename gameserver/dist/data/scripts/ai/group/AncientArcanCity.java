@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.spawns.SpawnGroup;
@@ -68,11 +68,11 @@ public final class AncientArcanCity extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("CHANGE_STATE")) {
 			isCeremonyRunning = !isCeremonyRunning;
 
-			for (PlayerInstance temp : BROADCAST_ZONE.getPlayersInside()) {
+			for (Player temp : BROADCAST_ZONE.getPlayersInside()) {
 				temp.sendPacket(new OnEventTrigger(262001, !isCeremonyRunning));
 				temp.sendPacket(new OnEventTrigger(262003, isCeremonyRunning));
 
@@ -97,7 +97,7 @@ public final class AncientArcanCity extends AbstractNpcAI {
 	@Override
 	public String onEnterZone(Creature creature, ZoneType zone) {
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 
 			if (zone.getId() == TELEPORT_ZONE.getId()) {
 				final QuestState qs = creature.getActingPlayer().getQuestState(Q10301_ShadowOfTerrorBlackishRedFog.class.getSimpleName());

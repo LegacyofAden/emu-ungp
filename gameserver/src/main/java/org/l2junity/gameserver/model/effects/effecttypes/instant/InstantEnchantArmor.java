@@ -28,7 +28,7 @@ import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
@@ -79,7 +79,7 @@ public class InstantEnchantArmor extends AbstractEffect {
 
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
-		final PlayerInstance casterPlayer = caster.asPlayer();
+		final Player casterPlayer = caster.asPlayer();
 		if (casterPlayer == null) {
 			return;
 		}
@@ -376,7 +376,7 @@ public class InstantEnchantArmor extends AbstractEffect {
 		}
 	}
 
-	public EnchantResultType calculateSuccess(PlayerInstance player, ItemInstance enchantItem, ItemInstance supportItem) {
+	public EnchantResultType calculateSuccess(Player player, ItemInstance enchantItem, ItemInstance supportItem) {
 		final EnchantItemGroup group = EnchantItemGroupsData.getInstance().getItemGroup(enchantItem.getItem(), enchantItem.getItem().getEnchantGroup());
 		if (group == null) {
 			LOGGER.warn("Couldn't find enchant item group for item: {} requested by: {}", enchantItem.getId(), player);

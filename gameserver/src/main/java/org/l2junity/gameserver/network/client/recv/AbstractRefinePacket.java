@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemAttributeRequest;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
 import org.l2junity.gameserver.model.items.Armor;
@@ -44,7 +44,7 @@ public abstract class AbstractRefinePacket implements IClientIncomingPacket {
 	 * @param fee
 	 * @return
 	 */
-	protected static boolean isValid(PlayerInstance player, ItemInstance item, ItemInstance mineralItem, ItemInstance feeItem, VariationFee fee) {
+	protected static boolean isValid(Player player, ItemInstance item, ItemInstance mineralItem, ItemInstance feeItem, VariationFee fee) {
 		if (fee == null) {
 			return false;
 		}
@@ -82,7 +82,7 @@ public abstract class AbstractRefinePacket implements IClientIncomingPacket {
 	 * @param mineralItem
 	 * @return
 	 */
-	protected static boolean isValid(PlayerInstance player, ItemInstance item, ItemInstance mineralItem) {
+	protected static boolean isValid(Player player, ItemInstance item, ItemInstance mineralItem) {
 		if (!isValid(player, item)) {
 			return false;
 		}
@@ -106,7 +106,7 @@ public abstract class AbstractRefinePacket implements IClientIncomingPacket {
 	 * @param item
 	 * @return
 	 */
-	protected static boolean isValid(PlayerInstance player, ItemInstance item) {
+	protected static boolean isValid(Player player, ItemInstance item) {
 		if (!isValid(player)) {
 			return false;
 		}
@@ -164,7 +164,7 @@ public abstract class AbstractRefinePacket implements IClientIncomingPacket {
 	 * @param player
 	 * @return
 	 */
-	protected static boolean isValid(PlayerInstance player) {
+	protected static boolean isValid(Player player) {
 		if (player.getPrivateStoreType() != PrivateStoreType.NONE) {
 			player.sendPacket(SystemMessageId.YOU_CANNOT_AUGMENT_ITEMS_WHILE_A_PRIVATE_STORE_OR_PRIVATE_WORKSHOP_IS_IN_OPERATION);
 			return false;

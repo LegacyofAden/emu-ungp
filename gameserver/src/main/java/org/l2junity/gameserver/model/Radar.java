@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.RadarControl;
 
 import java.util.Set;
@@ -28,10 +28,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author dalrond
  */
 public final class Radar {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final Set<RadarMarker> _markers = ConcurrentHashMap.newKeySet();
 
-	public Radar(PlayerInstance player) {
+	public Radar(Player player) {
 		_player = player;
 	}
 

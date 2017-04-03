@@ -20,14 +20,14 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 public class CombatFlag {
-	private PlayerInstance _player = null;
+	private Player _player = null;
 	private int _playerId = 0;
 	private ItemInstance _item = null;
 	private ItemInstance _itemInstance;
@@ -54,7 +54,7 @@ public class CombatFlag {
 		}
 	}
 
-	public boolean activate(PlayerInstance player, ItemInstance item) {
+	public boolean activate(Player player, ItemInstance item) {
 		if (player.isMounted()) {
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIRED_CONDITION_TO_EQUIP_THAT_ITEM);
 			return false;

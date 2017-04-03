@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.mentoring;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -27,9 +27,9 @@ import org.l2junity.network.PacketWriter;
  * @author Gnacik, UnAfraid
  */
 public class ExMentorAdd implements IClientOutgoingPacket {
-	final PlayerInstance _mentor;
+	final Player _mentor;
 
-	public ExMentorAdd(PlayerInstance mentor) {
+	public ExMentorAdd(Player mentor) {
 		_mentor = mentor;
 	}
 

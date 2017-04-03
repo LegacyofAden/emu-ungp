@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.WareHouseDepositList;
 import org.l2junity.gameserver.network.client.send.WareHouseWithdrawalList;
@@ -36,7 +36,7 @@ public class PrivateWarehouse implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		if (!target.isNpc()) {
 			return false;
 		}
@@ -66,7 +66,7 @@ public class PrivateWarehouse implements IBypassHandler {
 		return false;
 	}
 
-	private static final void showWithdrawWindow(PlayerInstance player) {
+	private static final void showWithdrawWindow(Player player) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 		player.setActiveWarehouse(player.getWarehouse());
 

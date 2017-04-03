@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.VehicleStat;
 import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -55,7 +55,7 @@ public abstract class Vehicle extends Creature {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Vehicle.class);
 
 	protected int _dockId = 0;
-	protected final Set<PlayerInstance> _passengers = ConcurrentHashMap.newKeySet();
+	protected final Set<Player> _passengers = ConcurrentHashMap.newKeySet();
 	protected Location _oustLoc = null;
 	private Runnable _engine = null;
 
@@ -193,10 +193,10 @@ public abstract class Vehicle extends Creature {
 	}
 
 	public void oustPlayers() {
-		PlayerInstance player;
+		Player player;
 
 		// Use iterator because oustPlayer will try to remove player from _passengers
-		final Iterator<PlayerInstance> iter = _passengers.iterator();
+		final Iterator<Player> iter = _passengers.iterator();
 		while (iter.hasNext()) {
 			player = iter.next();
 			iter.remove();
@@ -206,13 +206,13 @@ public abstract class Vehicle extends Creature {
 		}
 	}
 
-	public void oustPlayer(PlayerInstance player) {
+	public void oustPlayer(Player player) {
 		player.setVehicle(null);
 		player.setInVehiclePosition(null);
 		removePassenger(player);
 	}
 
-	public boolean addPassenger(PlayerInstance player) {
+	public boolean addPassenger(Player player) {
 		if ((player == null) || _passengers.contains(player)) {
 			return false;
 		}
@@ -226,7 +226,7 @@ public abstract class Vehicle extends Creature {
 		return true;
 	}
 
-	public void removePassenger(PlayerInstance player) {
+	public void removePassenger(Player player) {
 		try {
 			_passengers.remove(player);
 		} catch (Exception e) {
@@ -237,12 +237,12 @@ public abstract class Vehicle extends Creature {
 		return _passengers.isEmpty();
 	}
 
-	public Set<PlayerInstance> getPassengers() {
+	public Set<Player> getPassengers() {
 		return _passengers;
 	}
 
 	public void broadcastToPassengers(IClientOutgoingPacket sm) {
-		for (PlayerInstance player : _passengers) {
+		for (Player player : _passengers) {
 			if (player != null) {
 				player.sendPacket(sm);
 			}
@@ -259,7 +259,7 @@ public abstract class Vehicle extends Creature {
 	 * @param oustZ
 	 */
 	public void payForRide(int itemId, int count, int oustX, int oustY, int oustZ) {
-		World.getInstance().forEachVisibleObjectInRadius(this, PlayerInstance.class, 1000, player ->
+		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, 1000, player ->
 		{
 			if (player.isInBoat() && (player.getBoat() == this)) {
 				if (itemId > 0) {
@@ -282,7 +282,7 @@ public abstract class Vehicle extends Creature {
 	public boolean updatePosition() {
 		final boolean result = super.updatePosition();
 
-		for (PlayerInstance player : _passengers) {
+		for (Player player : _passengers) {
 			if ((player != null) && (player.getVehicle() == this)) {
 				player.setXYZ(getX(), getY(), getZ());
 				player.revalidateZone(false);
@@ -302,7 +302,7 @@ public abstract class Vehicle extends Creature {
 
 		getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 
-		for (PlayerInstance player : _passengers) {
+		for (Player player : _passengers) {
 			if (player != null) {
 				player.teleToLocation(loc, false);
 			}

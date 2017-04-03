@@ -19,15 +19,15 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.enums.PartySmallWindowUpdateType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public final class PartySmallWindowUpdate extends AbstractMaskPacket<PartySmallWindowUpdateType> {
-	private final PlayerInstance _member;
+	private final Player _member;
 	private int _flags = 0;
 
-	public PartySmallWindowUpdate(PlayerInstance member, boolean addAllFlags) {
+	public PartySmallWindowUpdate(Player member, boolean addAllFlags) {
 		_member = member;
 		if (addAllFlags) {
 			for (PartySmallWindowUpdateType type : PartySmallWindowUpdateType.values()) {

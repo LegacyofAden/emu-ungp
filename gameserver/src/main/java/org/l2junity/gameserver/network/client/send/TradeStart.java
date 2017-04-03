@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -29,12 +29,12 @@ import org.l2junity.network.PacketWriter;
 import java.util.Collection;
 
 public final class TradeStart extends AbstractItemPacket {
-	private final PlayerInstance _activeChar;
-	private final PlayerInstance _partner;
+	private final Player _activeChar;
+	private final Player _partner;
 	private final Collection<ItemInstance> _itemList;
 	private int _mask = 0;
 
-	public TradeStart(PlayerInstance player) {
+	public TradeStart(Player player) {
 		_activeChar = player;
 		_partner = player.getActiveTradeList().getPartner();
 		_itemList = _activeChar.getInventory().getAvailableItems(true, (_activeChar.canOverrideCond(PcCondOverride.ITEM_CONDITIONS) && AdminConfig.GM_TRADE_RESTRICTED_ITEMS), false);

@@ -23,11 +23,11 @@ import org.l2junity.gameserver.handler.ActionShiftHandler;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class L2SummonActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		if (activeChar.isGM()) {
 			if (activeChar.getTarget() != target) {
 				// Set the target of the L2PcInstance activeChar

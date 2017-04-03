@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -32,7 +32,7 @@ public class StopMoveInVehicle implements IClientOutgoingPacket {
 	private final Location _pos;
 	private final int _heading;
 
-	public StopMoveInVehicle(PlayerInstance player, int boatId) {
+	public StopMoveInVehicle(Player player, int boatId) {
 		_charObjId = player.getObjectId();
 		_boatId = boatId;
 		_pos = player.getInVehiclePosition();

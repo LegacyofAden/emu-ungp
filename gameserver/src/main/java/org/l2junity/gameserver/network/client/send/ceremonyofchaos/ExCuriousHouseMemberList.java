@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.ceremonyofchaos;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -48,7 +48,7 @@ public class ExCuriousHouseMemberList implements IClientOutgoingPacket {
 		packet.writeD(_maxPlayers);
 		packet.writeD(_players.size());
 		for (CeremonyOfChaosMember cocPlayer : _players) {
-			final PlayerInstance player = cocPlayer.getPlayer();
+			final Player player = cocPlayer.getPlayer();
 			packet.writeD(cocPlayer.getObjectId());
 			packet.writeD(cocPlayer.getPosition());
 			if (player != null) {

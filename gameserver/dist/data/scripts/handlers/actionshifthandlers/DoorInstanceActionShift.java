@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.ActionShiftHandler;
 import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -40,7 +40,7 @@ import org.l2junity.gameserver.util.HtmlUtil;
  */
 public class DoorInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		if (activeChar.isGM()) {
 			activeChar.setTarget(target);
 			final DoorInstance door = (DoorInstance) target;

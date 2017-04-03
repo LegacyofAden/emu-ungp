@@ -23,7 +23,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
@@ -89,7 +89,7 @@ public final class StakatoNest extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final L2MonsterInstance mob = (L2MonsterInstance) npc;
 
 		if ((mob.getId() == STAKATO_LEADER) && (getRandom(1000) < 100) && (mob.getCurrentHp() < (mob.getMaxHp() * 0.3))) {
@@ -113,7 +113,7 @@ public final class StakatoNest extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final L2MonsterInstance monster;
 		switch (npc.getId()) {
 			case STAKATO_NURSE:
@@ -150,8 +150,8 @@ public final class StakatoNest extends AbstractNpcAI {
 				break;
 			case STAKATO_CHIEF:
 				if (killer.isInParty()) {
-					List<PlayerInstance> party = killer.getParty().getMembers();
-					for (PlayerInstance member : party) {
+					List<Player> party = killer.getParty().getMembers();
+					for (Player member : party) {
 						giveCocoon(member, npc);
 					}
 				} else {
@@ -163,7 +163,7 @@ public final class StakatoNest extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (ArrayUtil.contains(COCOONS, npc.getId()) && ArrayUtil.contains(targets, npc) && (skill.getId() == GROWTH_ACCELERATOR)) {
 			npc.doDie(caster);
 			final Npc spawned = addSpawn(STAKATO_CHIEF, npc.getX(), npc.getY(), npc.getZ(), Util.calculateHeadingFrom(npc, caster), false, 0, true);
@@ -173,7 +173,7 @@ public final class StakatoNest extends AbstractNpcAI {
 	}
 
 	@Override
-	public final String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public final String onAdvEvent(String event, Npc npc, Player player) {
 		if ((npc == null) || (player == null) || npc.isDead()) {
 			return null;
 		}
@@ -207,7 +207,7 @@ public final class StakatoNest extends AbstractNpcAI {
 		return null;
 	}
 
-	private static void giveCocoon(PlayerInstance player, Npc npc) {
+	private static void giveCocoon(Player player, Npc npc) {
 		player.addItem("StakatoCocoon", ((getRandom(100) > 80) ? LARGE_COCOON : SMALL_COCOON), 1, npc, true);
 	}
 

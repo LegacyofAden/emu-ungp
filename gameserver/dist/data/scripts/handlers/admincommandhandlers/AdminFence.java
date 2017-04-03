@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.FenceInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
@@ -48,7 +48,7 @@ public class AdminFence implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String cmd = st.nextToken();
 		switch (cmd) {
@@ -146,7 +146,7 @@ public class AdminFence implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private static void sendHtml(PlayerInstance activeChar, int page) {
+	private static void sendHtml(Player activeChar, int page) {
 		final PageResult result = PageBuilder.newBuilder(FenceData.getInstance().getFences().values(), 10, "bypass -h admin_listfence").currentPage(page).style(ButtonsStyle.INSTANCE).bodyHandler((pages, fence, sb) ->
 		{
 			sb.append("<tr><td>");

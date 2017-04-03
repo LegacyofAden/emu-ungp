@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,7 +30,7 @@ public class RecipeBookItemList implements IClientOutgoingPacket {
 	private final boolean _isDwarvenCraft;
 	private final int _maxMp;
 
-	public RecipeBookItemList(PlayerInstance player, boolean isDwarvenCraft) {
+	public RecipeBookItemList(Player player, boolean isDwarvenCraft) {
 		_isDwarvenCraft = isDwarvenCraft;
 		_maxMp = player.getMaxMp();
 		_recipes = (isDwarvenCraft ? player.getDwarvenRecipeBook() : player.getCommonRecipeBook());

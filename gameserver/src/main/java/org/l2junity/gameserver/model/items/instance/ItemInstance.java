@@ -36,7 +36,7 @@ import org.l2junity.gameserver.instancemanager.SiegeGuardManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -335,7 +335,7 @@ public final class ItemInstance extends WorldObject {
 	 * @param creator   : L2PcInstance Player requesting the item creation
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void setOwnerId(String process, int owner_id, PlayerInstance creator, Object reference) {
+	public void setOwnerId(String process, int owner_id, Player creator, Object reference) {
 		setOwnerId(owner_id);
 
 		if (GeneralConfig.LOG_ITEMS) {
@@ -460,7 +460,7 @@ public final class ItemInstance extends WorldObject {
 	 * @param creator   : L2PcInstance Player requesting the item creation
 	 * @param reference : Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void changeCount(String process, long count, PlayerInstance creator, Object reference) {
+	public void changeCount(String process, long count, Player creator, Object reference) {
 		if (count == 0) {
 			return;
 		}
@@ -506,7 +506,7 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	// No logging (function designed for shots only)
-	public void changeCountWithoutTrace(int count, PlayerInstance creator, Object reference) {
+	public void changeCountWithoutTrace(int count, Player creator, Object reference) {
 		changeCount(null, count, creator, reference);
 	}
 
@@ -812,7 +812,7 @@ public final class ItemInstance extends WorldObject {
 	 * @param allowNonTradeable
 	 * @return if item is available for manipulation
 	 */
-	public boolean isAvailable(PlayerInstance player, boolean allowAdena, boolean allowNonTradeable) {
+	public boolean isAvailable(Player player, boolean allowAdena, boolean allowNonTradeable) {
 		final Summon pet = player.getPet();
 
 		return ((!isEquipped()) // Not equipped
@@ -1170,7 +1170,7 @@ public final class ItemInstance extends WorldObject {
 			_consumingMana = false;
 		}
 
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			SystemMessage sm;
 			switch (_mana) {
@@ -1551,7 +1551,7 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	public void endOfLife() {
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			if (isEquipped()) {
 				final ItemInstance[] unequiped = player.getInventory().unEquipItemInSlotAndRecord(getLocationSlot());
@@ -1616,7 +1616,7 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		if (_dropperObjectId != 0) {
 			activeChar.sendPacket(new DropItem(this, _dropperObjectId));
 		} else {
@@ -1665,7 +1665,7 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	public int getOlyEnchantLevel() {
-		PlayerInstance player = getActingPlayer();
+		Player player = getActingPlayer();
 		int enchant = getEnchantLevel();
 
 		if (player == null) {
@@ -1688,7 +1688,7 @@ public final class ItemInstance extends WorldObject {
 			return;
 		}
 
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			getItem().forEachSkill(ItemSkillType.NORMAL, holder ->
 			{
@@ -1705,7 +1705,7 @@ public final class ItemInstance extends WorldObject {
 			return;
 		}
 
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			getItem().forEachSkill(ItemSkillType.NORMAL, holder ->
 			{
@@ -1728,7 +1728,7 @@ public final class ItemInstance extends WorldObject {
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return World.getInstance().getPlayer(getOwnerId());
 	}
 
@@ -1740,7 +1740,7 @@ public final class ItemInstance extends WorldObject {
 	 * @param activeChar
 	 * @param command
 	 */
-	public void onBypassFeedback(PlayerInstance activeChar, String command) {
+	public void onBypassFeedback(Player activeChar, String command) {
 		String event = null;
 
 		// If no command, open default html and replace objectId.
@@ -1864,7 +1864,7 @@ public final class ItemInstance extends WorldObject {
 
 			final Skill skill = option.getSkill();
 			if (skill != null) {
-				final PlayerInstance player = getActingPlayer();
+				final Player player = getActingPlayer();
 				if (player != null) {
 					player.removeSkill(skill.getId());
 				}
@@ -1877,7 +1877,7 @@ public final class ItemInstance extends WorldObject {
 	private void applySpecialAbility(EnsoulOption option) {
 		final Skill skill = option.getSkill();
 		if (skill != null) {
-			final PlayerInstance player = getActingPlayer();
+			final Player player = getActingPlayer();
 			if (player != null) {
 				if (player.getSkillLevel(skill.getId()) != skill.getLevel()) {
 					player.addSkill(skill, false);
@@ -1889,7 +1889,7 @@ public final class ItemInstance extends WorldObject {
 	private void clearSpecialAbility(EnsoulOption option) {
 		final Skill skill = option.getSkill();
 		if (skill != null) {
-			final PlayerInstance player = getActingPlayer();
+			final Player player = getActingPlayer();
 			if (player != null) {
 				player.removeSkill(skill, false, true);
 			}
@@ -1957,7 +1957,7 @@ public final class ItemInstance extends WorldObject {
 	 * Clears all the enchant bonuses if item is enchanted and containing bonuses for enchant value.
 	 */
 	public void clearEnchantStats() {
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			_enchantOptions.forEach(op -> op.remove(player));
 		}
@@ -1969,7 +1969,7 @@ public final class ItemInstance extends WorldObject {
 	 * Clears and applies all the enchant bonuses if item is enchanted and containing bonuses for enchant value.
 	 */
 	public void applyEnchantStats() {
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (!isEquipped() || (player == null) || (getEnchantOptions() == DEFAULT_ENCHANT_OPTIONS)) {
 			return;
 		}
@@ -2015,7 +2015,7 @@ public final class ItemInstance extends WorldObject {
 			if (appearanceStoneId > 0) {
 				final AppearanceStone stone = AppearanceItemData.getInstance().getStone(appearanceStoneId);
 				if (stone != null) {
-					final PlayerInstance player = getActingPlayer();
+					final Player player = getActingPlayer();
 					if (player != null) {
 						if (!stone.getRaces().isEmpty() && !stone.getRaces().contains(player.getRace())) {
 							return 0;
@@ -2059,7 +2059,7 @@ public final class ItemInstance extends WorldObject {
 		vars.remove(ItemVariables.VISUAL_APPEARANCE_LIFE_TIME);
 		vars.storeMe();
 
-		final PlayerInstance player = getActingPlayer();
+		final Player player = getActingPlayer();
 		if (player != null) {
 			final InventoryUpdate iu = new InventoryUpdate();
 			iu.addModifiedItem(this);

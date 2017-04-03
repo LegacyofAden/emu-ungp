@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv.crystalization;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.ItemCrystallizationData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.CrystallizationRequest;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -52,7 +52,7 @@ public class RequestCrystallizeEstimate implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

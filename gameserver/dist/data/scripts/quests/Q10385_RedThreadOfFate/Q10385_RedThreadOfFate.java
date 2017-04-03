@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -122,7 +122,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -347,7 +347,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_SOCIAL_ACTION)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerSocialAction(OnPlayerSocialAction event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 		final WorldObject target = player.getTarget();
 
@@ -361,7 +361,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState qs = getQuestState(player, true);
 
@@ -534,7 +534,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
 
 		if ((qs != null) && qs.isCond(16)) {
@@ -546,7 +546,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	@Override
 	public String onSeeCreature(Npc npc, Creature creature, boolean isSummon) {
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			final QuestState qs = getQuestState(player, false);
 
 			if ((npc.getId() == INVISIBLE_ANGHEL_WATERFALL_NPC) && (qs != null) && qs.isCond(7)) {
@@ -557,7 +557,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance player, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player player, Skill skill, WorldObject[] targets, boolean isSummon) {
 		final QuestState qs = getQuestState(player, false);
 
 		if ((qs != null) && qs.isStarted() && ArrayUtil.contains(targets, npc)) {
@@ -605,7 +605,7 @@ public final class Q10385_RedThreadOfFate extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
 

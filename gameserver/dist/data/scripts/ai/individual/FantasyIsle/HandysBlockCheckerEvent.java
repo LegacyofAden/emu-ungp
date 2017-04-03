@@ -23,7 +23,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ExCubeGameChangeTimeToStart;
 import org.l2junity.gameserver.network.client.send.ExCubeGameRequestReady;
 import org.l2junity.gameserver.network.client.send.ExCubeGameTeamList;
@@ -51,7 +51,7 @@ public class HandysBlockCheckerEvent extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if ((npc == null) || (player == null)) {
 			return null;
 		}

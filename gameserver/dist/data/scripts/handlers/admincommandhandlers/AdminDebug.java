@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.debugger.Debugger;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -38,7 +38,7 @@ public class AdminDebug implements IAdminCommandHandler {
 			};
 
 	@Override
-	public final boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public final boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {

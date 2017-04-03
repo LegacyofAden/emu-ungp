@@ -21,7 +21,7 @@ package ai.individual.Other.NpcBuffers;
 import ai.AbstractNpcAI;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +40,7 @@ public final class NpcBuffers extends AbstractNpcAI {
 
 	// TODO: Cleanup once npc rework is finished and default html is configurable.
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return null;
 	}
 

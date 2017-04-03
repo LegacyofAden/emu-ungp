@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.network.client.send.NpcSay;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -78,7 +78,7 @@ public final class CastleTeleporter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final StringTokenizer st = new StringTokenizer(event, " ");
 		final String action = st.nextToken();
 
@@ -135,7 +135,7 @@ public final class CastleTeleporter extends AbstractNpcAI {
 				msg.addStringParameter(npc.getCastle().getName());
 				npc.getCastle().oustAllPlayers();
 				npc.setScriptValue(0);
-				for (PlayerInstance pl : World.getInstance().getPlayers()) // TODO: Is it possible to get all the players for that region, instead of all players?
+				for (Player pl : World.getInstance().getPlayers()) // TODO: Is it possible to get all the players for that region, instead of all players?
 				{
 					if (region == MapRegionManager.getInstance().getMapRegionLocId(pl)) {
 						pl.sendPacket(msg);
@@ -148,7 +148,7 @@ public final class CastleTeleporter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		if (ArrayUtil.contains(MASS_TELEPORTERS, npc.getId())) {
 			final Siege siege = npc.getCastle().getSiege();
@@ -206,7 +206,7 @@ public final class CastleTeleporter extends AbstractNpcAI {
 		return String.valueOf(npc.getId());
 	}
 
-	private boolean isOwner(final PlayerInstance player, final Npc npc) {
+	private boolean isOwner(final Player player, final Npc npc) {
 		return player.canOverrideCond(PcCondOverride.CASTLE_CONDITIONS) || ((player.getClan() != null) && (player.getClanId() == npc.getCastle().getOwnerId()) && player.isClanLeader());
 	}
 

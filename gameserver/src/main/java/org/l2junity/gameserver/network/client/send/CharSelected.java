@@ -19,19 +19,19 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class CharSelected implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _sessionId;
 
 	/**
 	 * @param cha
 	 * @param sessionId
 	 */
-	public CharSelected(PlayerInstance cha, int sessionId) {
+	public CharSelected(Player cha, int sessionId) {
 		_activeChar = cha;
 		_sessionId = sessionId;
 	}

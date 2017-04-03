@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PledgeReceiveMemberInfo;
 import org.l2junity.network.PacketReader;
@@ -46,7 +46,7 @@ public final class RequestPledgeMemberInfo implements IClientIncomingPacket {
 	public void run(L2GameClient client) {
 		// LOGGER.info("C5: RequestPledgeMemberInfo d:"+_unk1);
 		// LOGGER.info("C5: RequestPledgeMemberInfo S:"+_player);
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

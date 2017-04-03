@@ -21,7 +21,7 @@ package ai.individual.TalkingIsland;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Drill Sergeant AI.
@@ -42,7 +42,7 @@ public final class DrillSergeant extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("SOCIAL_SHOW")) {
 			final int socialActionId = SOCIAL_ACTIONS[getRandom(SOCIAL_ACTIONS.length)];
 			npc.broadcastSocialAction(socialActionId);

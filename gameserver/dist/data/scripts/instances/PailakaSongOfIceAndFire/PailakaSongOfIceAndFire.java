@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -63,7 +63,7 @@ public final class PailakaSongOfIceAndFire extends AbstractInstance {
 	}
 
 	@Override
-	public final String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public final String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "enter": {
 				enterInstance(player, npc, TEMPLATE_ID);
@@ -97,7 +97,7 @@ public final class PailakaSongOfIceAndFire extends AbstractInstance {
 	}
 
 	@Override
-	public final String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public final String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		if ((damage > 0) && npc.isScriptValue(0)) {
 			switch (getRandom(6)) {
 				case 0: {
@@ -130,14 +130,14 @@ public final class PailakaSongOfIceAndFire extends AbstractInstance {
 	}
 
 	@Override
-	public final String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public final String onKill(Npc npc, Player player, boolean isSummon) {
 		npc.dropItem(player, getRandomBoolean() ? SHIELD_POTION : HEAL_POTION, getRandom(1, 7));
 		return super.onKill(npc, player, isSummon);
 	}
 
 	@Override
 	public String onExitZone(Creature character, ZoneType zone) {
-		if ((character.isPlayer()) && !character.isDead() && !character.isTeleporting() && ((PlayerInstance) character).isOnline()) {
+		if ((character.isPlayer()) && !character.isDead() && !character.isTeleporting() && ((Player) character).isOnline()) {
 			final Instance world = character.getInstanceWorld();
 			if ((world != null) && (world.getTemplateId() == TEMPLATE_ID)) {
 				startQuestTimer("TELEPORT", 1000, null, character.getActingPlayer());

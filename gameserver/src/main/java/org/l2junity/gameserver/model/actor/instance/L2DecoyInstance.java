@@ -32,9 +32,9 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 public class L2DecoyInstance extends Npc {
-	private final PlayerInstance _owner;
+	private final Player _owner;
 
-	public L2DecoyInstance(L2NpcTemplate template, PlayerInstance owner, int totalLifeTime) {
+	public L2DecoyInstance(L2NpcTemplate template, Player owner, int totalLifeTime) {
 		super(template);
 		setInstanceType(InstanceType.L2DecoyInstance);
 		_owner = owner;
@@ -60,7 +60,7 @@ public class L2DecoyInstance extends Npc {
 
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(new CharInfo(this, isInvisible() && player.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS)));
@@ -103,17 +103,17 @@ public class L2DecoyInstance extends Npc {
 		return getTemplate().getId();
 	}
 
-	public void deleteMe(PlayerInstance owner) {
+	public void deleteMe(Player owner) {
 		decayMe();
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return _owner;
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		activeChar.sendPacket(new CharInfo(this, isInvisible() && activeChar.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS)));
 	}
 

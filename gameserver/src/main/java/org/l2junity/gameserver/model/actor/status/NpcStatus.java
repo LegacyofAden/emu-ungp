@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor.status;
 
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Duel;
 
 public class NpcStatus extends CharStatus {
@@ -35,7 +35,7 @@ public class NpcStatus extends CharStatus {
 		}
 
 		if (attacker != null) {
-			final PlayerInstance attackerPlayer = attacker.getActingPlayer();
+			final Player attackerPlayer = attacker.getActingPlayer();
 			if ((attackerPlayer != null) && attackerPlayer.isInDuel()) {
 				attackerPlayer.setDuelState(Duel.DUELSTATE_INTERRUPTED);
 			}

@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
@@ -161,7 +161,7 @@ public final class Orfen extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equalsIgnoreCase("orfen_unlock")) {
 			int i = getRandom(10);
 			Location loc;
@@ -204,7 +204,7 @@ public final class Orfen extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (npc.getId() == ORFEN) {
 			Creature originalCaster = isSummon ? caster.getServitors().values().stream().findFirst().orElse(caster.getPet()) : caster;
 			if ((skill.getEffectPoint() > 0) && (getRandom(5) == 0) && npc.isInRadius2d(originalCaster, 1000)) {
@@ -218,7 +218,7 @@ public final class Orfen extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFactionCall(Npc npc, Npc caller, PlayerInstance attacker, boolean isSummon) {
+	public String onFactionCall(Npc npc, Npc caller, Player attacker, boolean isSummon) {
 		if ((caller == null) || (npc == null) || npc.isCastingNow(SkillCaster::isAnyNormalType)) {
 			return super.onFactionCall(npc, caller, attacker, isSummon);
 		}
@@ -242,7 +242,7 @@ public final class Orfen extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		int npcId = npc.getId();
 		if (npcId == ORFEN) {
 			if (!_IsTeleported && ((npc.getCurrentHp() - damage) < (npc.getMaxHp() / 2))) {
@@ -264,7 +264,7 @@ public final class Orfen extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (npc.getId() == ORFEN) {
 			npc.broadcastPacket(new PlaySound(1, "BS02_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 			GrandBossManager.getInstance().setBossStatus(ORFEN, DEAD);

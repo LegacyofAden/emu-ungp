@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
@@ -45,7 +45,7 @@ public class DeadParty implements IAffectScopeHandler {
 		final int affectLimit = skill.getAffectLimit();
 
 		if (target.isPlayable()) {
-			final PlayerInstance player = target.getActingPlayer();
+			final Player player = target.getActingPlayer();
 			final Party party = player.getParty();
 
 			// Create the target filter.
@@ -61,7 +61,7 @@ public class DeadParty implements IAffectScopeHandler {
 					return;
 				}
 
-				final PlayerInstance p = c.asPlayer();
+				final Player p = c.asPlayer();
 				if ((p == null) || !p.isDead()) {
 					return;
 				}
