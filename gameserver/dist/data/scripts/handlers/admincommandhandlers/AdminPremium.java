@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author Sdw
@@ -33,9 +33,9 @@ public class AdminPremium implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final WorldObject target = activeChar.getTarget();
-		final PlayerInstance player = ((target != null) && target.isPlayer()) ? target.getActingPlayer() : activeChar;
+		final Player player = ((target != null) && target.isPlayer()) ? target.getActingPlayer() : activeChar;
 		final boolean isPremium = player.isPremium();
 		player.setPremium(!isPremium);
 		player.broadcastUserInfo();

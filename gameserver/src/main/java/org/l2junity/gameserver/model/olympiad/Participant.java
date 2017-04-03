@@ -20,14 +20,14 @@ package org.l2junity.gameserver.model.olympiad;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author DS, Zoey76
  */
 public final class Participant {
 	private final int objectId;
-	private PlayerInstance player;
+	private Player player;
 	private final String name;
 	private final int side;
 	private final int baseClass;
@@ -37,7 +37,7 @@ public final class Participant {
 	public String clanName;
 	public int clanId;
 
-	public Participant(PlayerInstance plr, int olympiadSide) {
+	public Participant(Player plr, int olympiadSide) {
 		objectId = plr.getObjectId();
 		player = plr;
 		name = plr.getName();
@@ -103,7 +103,7 @@ public final class Participant {
 	/**
 	 * @return the player
 	 */
-	public PlayerInstance getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
@@ -124,7 +124,7 @@ public final class Participant {
 	/**
 	 * @param noble the player to set
 	 */
-	public void setPlayer(PlayerInstance noble) {
+	public void setPlayer(Player noble) {
 		player = noble;
 	}
 

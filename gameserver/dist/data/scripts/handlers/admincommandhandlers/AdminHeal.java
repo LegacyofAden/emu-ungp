@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class AdminHeal implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 
 		if (command.equals("admin_heal")) {
 			handleHeal(activeChar);
@@ -66,15 +66,15 @@ public class AdminHeal implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleHeal(PlayerInstance activeChar) {
+	private void handleHeal(Player activeChar) {
 		handleHeal(activeChar, null);
 	}
 
-	private void handleHeal(PlayerInstance activeChar, String player) {
+	private void handleHeal(Player activeChar, String player) {
 
 		WorldObject obj = activeChar.getTarget();
 		if (player != null) {
-			PlayerInstance plyr = World.getInstance().getPlayer(player);
+			Player plyr = World.getInstance().getPlayer(player);
 
 			if (plyr != null) {
 				obj = plyr;
@@ -84,7 +84,7 @@ public class AdminHeal implements IAdminCommandHandler {
 					World.getInstance().forEachVisibleObject(activeChar, Creature.class, character ->
 					{
 						character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-						if (character instanceof PlayerInstance) {
+						if (character instanceof Player) {
 							character.setCurrentCp(character.getMaxCp());
 						}
 					});
@@ -101,7 +101,7 @@ public class AdminHeal implements IAdminCommandHandler {
 		if (obj instanceof Creature) {
 			Creature target = (Creature) obj;
 			target.setCurrentHpMp(target.getMaxHp(), target.getMaxMp());
-			if (target instanceof PlayerInstance) {
+			if (target instanceof Player) {
 				target.setCurrentCp(target.getMaxCp());
 			}
 			if (GeneralConfig.DEBUG) {

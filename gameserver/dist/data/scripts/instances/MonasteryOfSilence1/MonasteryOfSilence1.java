@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -79,7 +79,7 @@ public final class MonasteryOfSilence1 extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 
 		final Npc elcadia = addSpawn(ELCADIA_INSTANCE, player, false, 0, false, player.getId());
@@ -87,7 +87,7 @@ public final class MonasteryOfSilence1 extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			final Npc elcadia = world.getNpc(ELCADIA_INSTANCE);
@@ -156,7 +156,7 @@ public final class MonasteryOfSilence1 extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		if (npc.getId() == ODD_GLOBE) {
 			enterInstance(talker, npc, TEMPLATE_ID);
 		}

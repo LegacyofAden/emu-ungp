@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.gameserver.data.xml.impl.OptionData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.options.Options;
 
 import java.util.Objects;
@@ -64,12 +64,12 @@ public final class VariationInstance {
 		return _option2.getId();
 	}
 
-	public void applyBonus(PlayerInstance player) {
+	public void applyBonus(Player player) {
 		_option1.apply(player);
 		_option2.apply(player);
 	}
 
-	public void removeBonus(PlayerInstance player) {
+	public void removeBonus(Player player) {
 		_option1.remove(player);
 		_option2.remove(player);
 	}

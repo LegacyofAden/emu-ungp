@@ -20,7 +20,7 @@ package quests.Q10289_FadeToBlack;
 
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10288_SecretMission.Q10288_SecretMission;
@@ -48,7 +48,7 @@ public class Q10289_FadeToBlack extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		QuestState qs = getQuestState(player, false);
 		String htmltext = null;
 		if (qs == null) {
@@ -190,7 +190,7 @@ public class Q10289_FadeToBlack extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc anays, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc anays, Player killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, -1, 3, anays);
 		if (qs != null) {
 			if (qs.getPlayer().isInParty()) {
@@ -199,7 +199,7 @@ public class Q10289_FadeToBlack extends Quest {
 				final int rnd = getRandom(party.getMemberCount());
 				int idx = 0;
 
-				for (PlayerInstance member : party.getMembers()) {
+				for (Player member : party.getMembers()) {
 					// only one lucky player will get the good item, the rest will get the bad one
 					rewardPlayer(getQuestState(member, false), (idx == rnd));
 					idx++;
@@ -218,7 +218,7 @@ public class Q10289_FadeToBlack extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		if (qs == null) {

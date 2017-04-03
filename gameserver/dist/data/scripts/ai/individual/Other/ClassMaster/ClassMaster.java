@@ -31,7 +31,7 @@ import org.l2junity.gameserver.enums.NobleStatus;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -214,12 +214,12 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return _isEnabled ? "test_server_helper001.html" : null;
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (!_isEnabled) {
 			return null;
 		}
@@ -430,7 +430,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		return htmltext;
 	}
 
-	private String getFirstOccupationChangeHtml(PlayerInstance player) {
+	private String getFirstOccupationChangeHtml(Player player) {
 		switch (player.getClassId()) {
 			case FIGHTER:
 				return "test_server_helper026a.html";
@@ -459,7 +459,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private String getSecondOccupationChangeHtml(PlayerInstance player) {
+	private String getSecondOccupationChangeHtml(Player player) {
 		switch (player.getClassId()) {
 			case FIGHTER:
 				return "test_server_helper012.html";
@@ -527,7 +527,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private boolean changeToNextClass(PlayerInstance player) {
+	private boolean changeToNextClass(Player player) {
 		final ClassId newClass = player.getClassId().getNextClassIds().stream().findFirst().orElse(null);
 		if (newClass == null) {
 			LOGGER.warn("No new classId found for player {}", player);
@@ -553,7 +553,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private void showPopupWindow(PlayerInstance player) {
+	private void showPopupWindow(Player player) {
 		if (!_showPopupWindow) {
 			return;
 		}
@@ -572,7 +572,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_PRESS_TUTORIAL_MARK)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 
 		if (!_showPopupWindow || (event.getQuestId() != 1001)) {
 			return;
@@ -625,7 +625,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		showPopupWindow(event.getActiveChar());
 	}
 
-	private String getClassChangeOptions(PlayerInstance player, int selectedClassId) {
+	private String getClassChangeOptions(Player player, int selectedClassId) {
 		final StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < _classChangeData.size(); i++) {
@@ -710,7 +710,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 			return _appliedCategories != null ? _appliedCategories : Collections.emptyList();
 		}
 
-		public boolean isInCategory(PlayerInstance player) {
+		public boolean isInCategory(Player player) {
 			if (_appliedCategories != null) {
 				for (CategoryType category : _appliedCategories) {
 					if (player.isInCategory(category)) {
@@ -755,7 +755,7 @@ public final class ClassMaster extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private boolean checkIfClassChangeHasOptions(PlayerInstance player) {
+	private boolean checkIfClassChangeHasOptions(Player player) {
 		boolean showOptions = _classChangeData.stream().filter(ccd -> !ccd.getItemsRequired().isEmpty()).anyMatch(ccd -> ccd.isInCategory(player)); // Check if there are requirements
 		if (!showOptions) {
 			showOptions = _classChangeData.stream().filter(ccd -> !ccd.getItemsRewarded().isEmpty()).filter(ccd -> ccd.isInCategory(player)).count() > 1; // Check if there is more than 1 reward to chose.

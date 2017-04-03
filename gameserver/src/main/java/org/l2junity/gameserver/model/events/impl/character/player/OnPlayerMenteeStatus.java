@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,15 +26,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerMenteeStatus implements IBaseEvent {
-	private final PlayerInstance _mentee;
+	private final Player _mentee;
 	private final boolean _isOnline;
 
-	public OnPlayerMenteeStatus(PlayerInstance mentee, boolean isOnline) {
+	public OnPlayerMenteeStatus(Player mentee, boolean isOnline) {
 		_mentee = mentee;
 		_isOnline = isOnline;
 	}
 
-	public PlayerInstance getMentee() {
+	public Player getMentee() {
 		return _mentee;
 	}
 

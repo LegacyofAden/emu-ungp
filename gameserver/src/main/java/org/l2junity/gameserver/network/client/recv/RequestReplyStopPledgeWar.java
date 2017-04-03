@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
@@ -41,11 +41,11 @@ public final class RequestReplyStopPledgeWar implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
-		PlayerInstance requestor = activeChar.getActiveRequester();
+		Player requestor = activeChar.getActiveRequester();
 		if (requestor == null) {
 			return;
 		}

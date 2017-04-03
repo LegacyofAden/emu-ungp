@@ -20,7 +20,7 @@ package quests.Q10785_LettersFromTheQueenFieldsOfMassacre;
 
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -55,7 +55,7 @@ public final class Q10785_LettersFromTheQueenFieldsOfMassacre extends LetterQues
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -94,7 +94,7 @@ public final class Q10785_LettersFromTheQueenFieldsOfMassacre extends LetterQues
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = getNoQuestMsg(player);
 		if (qs == null) {

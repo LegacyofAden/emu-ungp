@@ -30,12 +30,12 @@ public final class L2TerrainObjectInstance extends Npc {
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
 	@Override
-	public void onActionShift(PlayerInstance player) {
+	public void onActionShift(Player player) {
 		if (player.isGM()) {
 			super.onActionShift(player);
 		} else {

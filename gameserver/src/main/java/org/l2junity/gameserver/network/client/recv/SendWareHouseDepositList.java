@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcWarehouse;
@@ -71,7 +71,7 @@ public final class SendWareHouseDepositList implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

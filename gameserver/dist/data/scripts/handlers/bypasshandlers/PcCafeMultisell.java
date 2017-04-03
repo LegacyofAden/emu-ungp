@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class PcCafeMultisell implements IBypassHandler {
 	private static final String[] COMMANDS =
@@ -31,7 +31,7 @@ public class PcCafeMultisell implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		try {
 			final int listId = Integer.parseInt(command.substring(13).trim());
 			MultisellData.getInstance().separateAndSend(listId, activeChar, null, false);

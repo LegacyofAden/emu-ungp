@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.util.Util;
 
 /**
@@ -85,7 +85,7 @@ public final class TeleportToUndergroundColiseum extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.endsWith(".htm")) {
 			return event;
 		} else if (event.equals("return")) {
@@ -98,7 +98,7 @@ public final class TeleportToUndergroundColiseum extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		if (ArrayUtil.contains(MANAGERS, npc.getId())) {
 			player.teleToLocation(RETURN_LOCS[getRandom(RETURN_LOCS.length)], false);
 		}
@@ -106,7 +106,7 @@ public final class TeleportToUndergroundColiseum extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "32491.htm";
 	}
 

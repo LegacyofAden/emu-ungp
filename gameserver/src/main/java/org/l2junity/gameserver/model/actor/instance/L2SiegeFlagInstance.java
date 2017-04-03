@@ -38,7 +38,7 @@ public class L2SiegeFlagInstance extends Npc {
 	private Siegable _siege;
 	private long _nextTalkTime;
 
-	public L2SiegeFlagInstance(PlayerInstance player, L2NpcTemplate template, boolean advanced) {
+	public L2SiegeFlagInstance(Player player, L2NpcTemplate template, boolean advanced) {
 		super(template);
 		setInstanceType(InstanceType.L2SiegeFlagInstance);
 
@@ -86,12 +86,12 @@ public class L2SiegeFlagInstance extends Npc {
 	}
 
 	@Override
-	public void onForcedAttack(PlayerInstance player) {
+	public void onForcedAttack(Player player) {
 		onAction(player);
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if ((player == null) || !canTarget(player)) {
 			return;
 		}

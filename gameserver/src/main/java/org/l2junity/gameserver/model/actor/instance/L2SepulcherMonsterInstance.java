@@ -285,14 +285,14 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance {
 				break;
 		}
 
-		PlayerInstance player = killer.getActingPlayer();
+		Player player = killer.getActingPlayer();
 
 		if (player == null) {
 			return;
 		}
 
 		if (player.getParty() != null) {
-			for (PlayerInstance mem : player.getParty().getMembers()) {
+			for (Player mem : player.getParty().getMembers()) {
 				QuestState qs = mem.getQuestState(questId);
 				if ((qs != null) && (qs.isStarted() || qs.isCompleted()) && (mem.getInventory().getItemByItemId(oldBrooch) == null)) {
 					mem.addItem("Quest", cupId, 1, mem, true);

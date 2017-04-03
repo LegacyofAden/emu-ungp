@@ -20,7 +20,7 @@ package quests.Q00553_OlympiadUndefeated;
 
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.CompetitionType;
 import org.l2junity.gameserver.model.olympiad.Participant;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -51,7 +51,7 @@ public class Q00553_OlympiadUndefeated extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -79,7 +79,7 @@ public class Q00553_OlympiadUndefeated extends Quest {
 	@Override
 	public void onOlympiadMatchFinish(Participant winner, Participant looser, CompetitionType type) {
 		if (winner != null) {
-			final PlayerInstance player = winner.getPlayer();
+			final Player player = winner.getPlayer();
 			if (player == null) {
 				return;
 			}
@@ -110,7 +110,7 @@ public class Q00553_OlympiadUndefeated extends Quest {
 		}
 
 		if (looser != null) {
-			final PlayerInstance player = looser.getPlayer();
+			final Player player = looser.getPlayer();
 			if (player == null) {
 				return;
 			}
@@ -126,7 +126,7 @@ public class Q00553_OlympiadUndefeated extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10542_SearchingForNewPower.Q10542_SearchingForNewPower;
@@ -48,7 +48,7 @@ public final class Toyron extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance world = InstanceManager.getInstance().getPlayerInstance(player, true);
 		if (event.equals("museum_teleport")) {
 			if ((world != null) && (world.getTemplateId() == TEMPLATE_ID)) {
@@ -67,7 +67,7 @@ public final class Toyron extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = "33004.html";
 		final Instance world = npc.getInstanceWorld();
 		if ((world != null) && (world.getTemplateId() == TEMPLATE_ID)) {

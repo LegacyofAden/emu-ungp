@@ -24,7 +24,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.w3c.dom.Document;
@@ -103,7 +103,7 @@ public class OneDayRewardData implements IGameXmlReader {
 				.collect(Collectors.toList());
 	}
 
-	public Collection<OneDayRewardDataHolder> getOneDayRewardData(PlayerInstance player) {
+	public Collection<OneDayRewardDataHolder> getOneDayRewardData(Player player) {
 		return _oneDayReward.values()
 				.stream()
 				.flatMap(List::stream)

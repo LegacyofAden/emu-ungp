@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.core.configs.RatesConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -31,7 +31,7 @@ public class ExVitalityEffectInfo implements IClientOutgoingPacket {
 	private final int _vitalityItemsRemaining;
 	private final int _points;
 
-	public ExVitalityEffectInfo(PlayerInstance cha) {
+	public ExVitalityEffectInfo(Player cha) {
 		_points = cha.getVitalityPoints();
 		_vitalityBonus = (int) cha.getStat().getVitalityExpBonus() * 100;
 		_vitalityItemsRemaining = cha.getVitalityItemsUsed() - RatesConfig.VITALITY_MAX_ITEMS_ALLOWED;

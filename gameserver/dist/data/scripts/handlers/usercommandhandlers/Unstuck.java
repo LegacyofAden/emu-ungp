@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.skills.SkillCastingType;
@@ -41,7 +41,7 @@ public class Unstuck implements IUserCommandHandler {
 			};
 
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+	public boolean useUserCommand(int id, Player activeChar) {
 		if (activeChar.isJailed()) {
 			activeChar.sendMessage("You cannot use this function while you are jailed.");
 			return false;

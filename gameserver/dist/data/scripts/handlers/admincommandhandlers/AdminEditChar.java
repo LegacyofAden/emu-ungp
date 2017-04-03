@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
@@ -96,14 +96,14 @@ public class AdminEditChar implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_current_player")) {
 			showCharacterInfo(activeChar, activeChar);
 		} else if (command.startsWith("admin_character_info")) {
 			String[] data = command.split(" ");
 			if ((data.length > 1)) {
 				showCharacterInfo(activeChar, World.getInstance().getPlayer(data[1]));
-			} else if (activeChar.getTarget() instanceof PlayerInstance) {
+			} else if (activeChar.getTarget() instanceof Player) {
 				showCharacterInfo(activeChar, activeChar.getTarget().getActingPlayer());
 			} else {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
@@ -147,7 +147,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 			String[] data = command.split(" ");
 			if ((data.length > 1)) {
 				editCharacter(activeChar, data[1]);
-			} else if (activeChar.getTarget() instanceof PlayerInstance) {
+			} else if (activeChar.getTarget() instanceof Player) {
 				editCharacter(activeChar, null);
 			} else {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
@@ -178,7 +178,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 				final int pk = Integer.parseInt(val);
 				final WorldObject target = activeChar.getTarget();
 				if (target.isPlayer()) {
-					final PlayerInstance player = target.getActingPlayer();
+					final Player player = target.getActingPlayer();
 					player.setPkKills(pk);
 					player.broadcastUserInfo();
 					player.sendPacket(new UserInfo(player));
@@ -198,8 +198,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				String val = command.substring(13);
 				int pvp = Integer.parseInt(val);
 				WorldObject target = activeChar.getTarget();
-				if (target instanceof PlayerInstance) {
-					PlayerInstance player = (PlayerInstance) target;
+				if (target instanceof Player) {
+					Player player = (Player) target;
 					player.setPvpKills(pvp);
 					player.broadcastUserInfo();
 					player.sendPacket(new UserInfo(player));
@@ -219,8 +219,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				String val = command.substring(14);
 				int fame = Integer.parseInt(val);
 				WorldObject target = activeChar.getTarget();
-				if (target instanceof PlayerInstance) {
-					PlayerInstance player = (PlayerInstance) target;
+				if (target instanceof Player) {
+					Player player = (Player) target;
 					player.setFame(fame);
 					player.broadcastUserInfo();
 					player.sendPacket(new UserInfo(player));
@@ -240,8 +240,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				String val = command.substring(10);
 				int recVal = Integer.parseInt(val);
 				WorldObject target = activeChar.getTarget();
-				if (target instanceof PlayerInstance) {
-					PlayerInstance player = (PlayerInstance) target;
+				if (target instanceof Player) {
+					Player player = (Player) target;
 					player.setRecomHave(recVal);
 					player.broadcastUserInfo();
 					player.sendPacket(new UserInfo(player));
@@ -262,7 +262,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 				if ((target == null) || !target.isPlayer()) {
 					return false;
 				}
-				final PlayerInstance player = target.getActingPlayer();
+				final Player player = target.getActingPlayer();
 				if ((ClassId.getClassId(classidval) != null) && (player.getClassId().getId() != classidval)) {
 					player.setClassId(classidval);
 
@@ -293,9 +293,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 			try {
 				String val = command.substring(15);
 				WorldObject target = activeChar.getTarget();
-				PlayerInstance player = null;
-				if (target instanceof PlayerInstance) {
-					player = (PlayerInstance) target;
+				Player player = null;
+				if (target instanceof Player) {
+					player = (Player) target;
 				} else {
 					return false;
 				}
@@ -309,9 +309,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 			try {
 				String val = command.substring(17);
 				WorldObject target = activeChar.getTarget();
-				PlayerInstance player = null;
-				if (target instanceof PlayerInstance) {
-					player = (PlayerInstance) target;
+				Player player = null;
+				if (target instanceof Player) {
+					player = (Player) target;
 				} else {
 					return false;
 				}
@@ -332,7 +332,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 				if (player.isInParty()) {
 					// Delete party window for other party members
 					player.getParty().broadcastToPartyMembers(player, PartySmallWindowDeleteAll.STATIC_PACKET);
-					for (PlayerInstance member : player.getParty().getMembers()) {
+					for (Player member : player.getParty().getMembers()) {
 						// And re-add
 						if (member != player) {
 							member.sendPacket(new PartySmallWindowAll(member, player.getParty()));
@@ -347,9 +347,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 			}
 		} else if (command.startsWith("admin_setsex")) {
 			WorldObject target = activeChar.getTarget();
-			PlayerInstance player = null;
-			if (target instanceof PlayerInstance) {
-				player = (PlayerInstance) target;
+			Player player = null;
+			if (target instanceof Player) {
+				player = (Player) target;
 			} else {
 				return false;
 			}
@@ -360,9 +360,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 			try {
 				String val = command.substring(15);
 				WorldObject target = activeChar.getTarget();
-				PlayerInstance player = null;
-				if (target instanceof PlayerInstance) {
-					player = (PlayerInstance) target;
+				Player player = null;
+				if (target instanceof Player) {
+					player = (Player) target;
 				} else {
 					return false;
 				}
@@ -376,9 +376,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 			try {
 				String val = command.substring(16);
 				WorldObject target = activeChar.getTarget();
-				PlayerInstance player = null;
-				if (target instanceof PlayerInstance) {
-					player = (PlayerInstance) target;
+				Player player = null;
+				if (target instanceof Player) {
+					player = (Player) target;
 				} else {
 					return false;
 				}
@@ -410,7 +410,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 				boolean changeCreateExpiryTime = st.nextToken().equalsIgnoreCase("create");
 
 				String playerName = st.nextToken();
-				PlayerInstance player = null;
+				Player player = null;
 				player = World.getInstance().getPlayer(playerName);
 
 				if (player == null) {
@@ -458,13 +458,13 @@ public class AdminEditChar implements IAdminCommandHandler {
 			findDualboxStrict(activeChar, multibox);
 		} else if (command.startsWith("admin_tracert")) {
 			String[] data = command.split(" ");
-			PlayerInstance pl = null;
+			Player pl = null;
 			if ((data.length > 1)) {
 				pl = World.getInstance().getPlayer(data[1]);
 			} else {
 				WorldObject target = activeChar.getTarget();
-				if (target instanceof PlayerInstance) {
-					pl = (PlayerInstance) target;
+				if (target instanceof Player) {
+					pl = (Player) target;
 				}
 			}
 
@@ -558,9 +558,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 				target = activeChar.getTarget();
 			}
 
-			if (target instanceof PlayerInstance) {
-				if (((PlayerInstance) target).isInParty()) {
-					gatherPartyInfo((PlayerInstance) target, activeChar);
+			if (target instanceof Player) {
+				if (((Player) target).isInParty()) {
+					gatherPartyInfo((Player) target, activeChar);
 				} else {
 					activeChar.sendMessage("Not in party.");
 				}
@@ -569,11 +569,11 @@ public class AdminEditChar implements IAdminCommandHandler {
 			}
 
 		} else if (command.equals("admin_setnoble")) {
-			PlayerInstance player = null;
+			Player player = null;
 			if (activeChar.getTarget() == null) {
 				player = activeChar;
-			} else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof PlayerInstance)) {
-				player = (PlayerInstance) activeChar.getTarget();
+			} else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof Player)) {
+				player = (Player) activeChar.getTarget();
 			}
 
 			if (player != null) {
@@ -728,9 +728,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void listCharacters(PlayerInstance activeChar, int page) {
-		final List<PlayerInstance> players = new ArrayList<>(World.getInstance().getPlayers());
-		players.sort(Comparator.comparingLong(PlayerInstance::getUptime));
+	private void listCharacters(Player activeChar, int page) {
+		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
+		players.sort(Comparator.comparingLong(Player::getUptime));
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/charlist.htm");
@@ -753,11 +753,11 @@ public class AdminEditChar implements IAdminCommandHandler {
 		activeChar.sendPacket(html);
 	}
 
-	private void showCharacterInfo(PlayerInstance activeChar, PlayerInstance player) {
+	private void showCharacterInfo(Player activeChar, Player player) {
 		if (player == null) {
 			WorldObject target = activeChar.getTarget();
-			if (target instanceof PlayerInstance) {
-				player = (PlayerInstance) target;
+			if (target instanceof Player) {
+				player = (Player) target;
 			} else {
 				return;
 			}
@@ -774,7 +774,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 	 * @param player
 	 * @param filename
 	 */
-	private void gatherCharacterInfo(PlayerInstance activeChar, PlayerInstance player, String filename) {
+	private void gatherCharacterInfo(Player activeChar, Player player, String filename) {
 		String ip = "N/A";
 
 		if (player == null) {
@@ -837,11 +837,11 @@ public class AdminEditChar implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private void setTargetReputation(PlayerInstance activeChar, int newReputation) {
+	private void setTargetReputation(Player activeChar, int newReputation) {
 		final WorldObject target = activeChar.getTarget();
-		PlayerInstance player = null;
+		Player player = null;
 		if (target.isPlayer()) {
-			player = (PlayerInstance) target;
+			player = (Player) target;
 		} else {
 			return;
 		}
@@ -861,7 +861,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 	}
 
-	private void editCharacter(PlayerInstance activeChar, String targetName) {
+	private void editCharacter(Player activeChar, String targetName) {
 		WorldObject target = null;
 		if (targetName != null) {
 			target = World.getInstance().getPlayer(targetName);
@@ -869,8 +869,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 			target = activeChar.getTarget();
 		}
 
-		if (target instanceof PlayerInstance) {
-			PlayerInstance player = (PlayerInstance) target;
+		if (target instanceof Player) {
+			Player player = (Player) target;
 			gatherCharacterInfo(activeChar, player, "charedit.htm");
 		}
 	}
@@ -879,7 +879,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param CharacterToFind
 	 */
-	private void findCharacter(PlayerInstance activeChar, String CharacterToFind) {
+	private void findCharacter(Player activeChar, String CharacterToFind) {
 		int CharactersFound = 0;
 		String name;
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
@@ -887,9 +887,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 
 		final StringBuilder replyMSG = new StringBuilder(1000);
 
-		final List<PlayerInstance> players = new ArrayList<>(World.getInstance().getPlayers());
-		players.sort(Comparator.comparingLong(PlayerInstance::getUptime));
-		for (PlayerInstance player : players) { // Add player info into new Table row
+		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
+		players.sort(Comparator.comparingLong(Player::getUptime));
+		for (Player player : players) { // Add player info into new Table row
 			name = player.getName();
 			if (name.toLowerCase().contains(CharacterToFind.toLowerCase())) {
 				CharactersFound = CharactersFound + 1;
@@ -932,7 +932,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 	 * @param IpAdress
 	 * @throws IllegalArgumentException
 	 */
-	private void findCharactersPerIp(PlayerInstance activeChar, String IpAdress) throws IllegalArgumentException {
+	private void findCharactersPerIp(Player activeChar, String IpAdress) throws IllegalArgumentException {
 		boolean findDisconnected = false;
 
 		if (IpAdress.equals("disconnected")) {
@@ -950,9 +950,9 @@ public class AdminEditChar implements IAdminCommandHandler {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/ipfind.htm");
 
-		final List<PlayerInstance> players = new ArrayList<>(World.getInstance().getPlayers());
-		players.sort(Comparator.comparingLong(PlayerInstance::getUptime));
-		for (PlayerInstance player : players) {
+		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
+		players.sort(Comparator.comparingLong(Player::getUptime));
+		for (Player player : players) {
 			client = player.getClient();
 			if (client == null) {
 				continue;
@@ -1014,8 +1014,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 	 * @param characterName
 	 * @throws IllegalArgumentException
 	 */
-	private void findCharactersPerAccount(PlayerInstance activeChar, String characterName) throws IllegalArgumentException {
-		PlayerInstance player = World.getInstance().getPlayer(characterName);
+	private void findCharactersPerAccount(Player activeChar, String characterName) throws IllegalArgumentException {
+		Player player = World.getInstance().getPlayer(characterName);
 		if (player == null) {
 			throw new IllegalArgumentException("Player doesn't exist");
 		}
@@ -1036,15 +1036,15 @@ public class AdminEditChar implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param multibox
 	 */
-	private void findDualbox(PlayerInstance activeChar, int multibox) {
-		Map<String, List<PlayerInstance>> ipMap = new HashMap<>();
+	private void findDualbox(Player activeChar, int multibox) {
+		Map<String, List<Player>> ipMap = new HashMap<>();
 		String ip = "0.0.0.0";
 		L2GameClient client;
 		final Map<String, Integer> dualboxIPs = new HashMap<>();
 
-		final List<PlayerInstance> players = new ArrayList<>(World.getInstance().getPlayers());
-		players.sort(Comparator.comparingLong(PlayerInstance::getUptime));
-		for (PlayerInstance player : players) {
+		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
+		players.sort(Comparator.comparingLong(Player::getUptime));
+		for (Player player : players) {
 			client = player.getClient();
 			if ((client == null) || client.isDetached()) {
 				continue;
@@ -1052,7 +1052,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 
 			ip = client.getConnectionAddress().getHostAddress();
 			if (ipMap.get(ip) == null) {
-				ipMap.put(ip, new ArrayList<PlayerInstance>());
+				ipMap.put(ip, new ArrayList<Player>());
 			}
 			ipMap.get(ip).add(player);
 
@@ -1082,14 +1082,14 @@ public class AdminEditChar implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private void findDualboxStrict(PlayerInstance activeChar, int multibox) {
-		Map<IpPack, List<PlayerInstance>> ipMap = new HashMap<>();
+	private void findDualboxStrict(Player activeChar, int multibox) {
+		Map<IpPack, List<Player>> ipMap = new HashMap<>();
 		L2GameClient client;
 		final Map<IpPack, Integer> dualboxIPs = new HashMap<>();
 
-		final List<PlayerInstance> players = new ArrayList<>(World.getInstance().getPlayers());
-		players.sort(Comparator.comparingLong(PlayerInstance::getUptime));
-		for (PlayerInstance player : players) {
+		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
+		players.sort(Comparator.comparingLong(Player::getUptime));
+		for (Player player : players) {
 			client = player.getClient();
 			if ((client == null) || client.isDetached()) {
 				continue;
@@ -1097,7 +1097,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 
 			IpPack pack = new IpPack(client.getConnectionAddress().getHostAddress(), client.getTrace());
 			if (ipMap.get(pack) == null) {
-				ipMap.put(pack, new ArrayList<PlayerInstance>());
+				ipMap.put(pack, new ArrayList<Player>());
 			}
 			ipMap.get(pack).add(player);
 
@@ -1184,7 +1184,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 	}
 
-	private void gatherSummonInfo(Summon target, PlayerInstance activeChar) {
+	private void gatherSummonInfo(Summon target, Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/petinfo.htm");
 		String name = target.getName();
@@ -1215,12 +1215,12 @@ public class AdminEditChar implements IAdminCommandHandler {
 		activeChar.sendPacket(html);
 	}
 
-	private void gatherPartyInfo(PlayerInstance target, PlayerInstance activeChar) {
+	private void gatherPartyInfo(Player target, Player activeChar) {
 		boolean color = true;
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/partyinfo.htm");
 		StringBuilder text = new StringBuilder(400);
-		for (PlayerInstance member : target.getParty().getMembers()) {
+		for (Player member : target.getParty().getMembers()) {
 			if (color) {
 				text.append("<tr><td><table width=270 border=0 bgcolor=131210 cellpadding=2><tr><td width=30 align=right>");
 			} else {

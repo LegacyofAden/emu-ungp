@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.itemauction;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author Forsaiken
@@ -53,7 +53,7 @@ public final class ItemAuctionBid {
 		return _lastBid <= 0;
 	}
 
-	final PlayerInstance getPlayer() {
+	final Player getPlayer() {
 		return World.getInstance().getPlayer(_playerObjId);
 	}
 }

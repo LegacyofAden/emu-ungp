@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -38,7 +38,7 @@ public class CastleVCmd implements IVoicedCommandHandler {
 			};
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+	public boolean useVoicedCommand(String command, Player activeChar, String params) {
 		switch (command) {
 			case "opendoors":
 				if (!params.equals("castle")) {

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.npc;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  */
 public class OnNpcFirstTalk implements IBaseEvent {
 	private final Npc _npc;
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public OnNpcFirstTalk(Npc npc, PlayerInstance activeChar) {
+	public OnNpcFirstTalk(Npc npc, Player activeChar) {
 		_npc = npc;
 		_activeChar = activeChar;
 	}
@@ -39,7 +39,7 @@ public class OnNpcFirstTalk implements IBaseEvent {
 		return _npc;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

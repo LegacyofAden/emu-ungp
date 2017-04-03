@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -43,7 +43,7 @@ public final class RequestSentPost implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if ((activeChar == null) || !GeneralConfig.ALLOW_MAIL) {
 			return;
 		}

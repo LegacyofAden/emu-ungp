@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.model.VariationInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -28,19 +28,19 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  * @author UnAfraid
  */
 public class OnPlayerAugment implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final ItemInstance _item;
 	private final VariationInstance _augmentation;
 	private final boolean _isAugment; // true = is being augmented // false = augment is being removed
 
-	public OnPlayerAugment(PlayerInstance activeChar, ItemInstance item, VariationInstance augment, boolean isAugment) {
+	public OnPlayerAugment(Player activeChar, ItemInstance item, VariationInstance augment, boolean isAugment) {
 		_activeChar = activeChar;
 		_item = item;
 		_augmentation = augment;
 		_isAugment = isAugment;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

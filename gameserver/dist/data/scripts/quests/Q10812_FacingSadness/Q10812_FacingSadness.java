@@ -23,7 +23,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -93,7 +93,7 @@ public final class Q10812_FacingSadness extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -136,7 +136,7 @@ public final class Q10812_FacingSadness extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -162,13 +162,13 @@ public final class Q10812_FacingSadness extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		executeForEachPlayer(player, npc, isSummon, true, false);
 		return super.onKill(npc, player, isSummon);
 	}
 
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
+	public void actionForEachPlayer(Player player, Npc npc, boolean isSummon) {
 		final QuestState qs = getQuestState(player, false);
 		if ((qs != null) && player.isInRadius3d(npc, PlayerConfig.ALT_PARTY_RANGE)) {
 			giveItems(player, PROOF_OF_DISPOSAL, ArrayUtil.contains(MONSTERS_1, npc.getId()) ? 1 : 2);

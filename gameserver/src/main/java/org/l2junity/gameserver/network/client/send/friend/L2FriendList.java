@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.friend;
 
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -53,10 +53,10 @@ public class L2FriendList implements IClientOutgoingPacket {
 		}
 	}
 
-	public L2FriendList(PlayerInstance player) {
+	public L2FriendList(Player player) {
 		for (int objId : player.getFriendList()) {
 			String name = CharNameTable.getInstance().getNameById(objId);
-			PlayerInstance player1 = World.getInstance().getPlayer(objId);
+			Player player1 = World.getInstance().getPlayer(objId);
 			boolean online = false;
 			int level = 0;
 			int classId = 0;

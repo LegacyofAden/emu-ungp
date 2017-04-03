@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeFinish;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeStart;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -97,7 +97,7 @@ public final class Venom extends AbstractNpcAI {
 			};
 	// @formatter:on
 
-	private static List<PlayerInstance> _targets = new ArrayList<>();
+	private static List<Player> _targets = new ArrayList<>();
 
 	private Venom() {
 		addStartNpc(DUNGEON_KEEPER, TELEPORT_CUBE);
@@ -120,7 +120,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		switch (npc.getId()) {
 			case TELEPORT_CUBE: {
 				talker.teleToLocation(TeleportWhereType.TOWN);
@@ -139,7 +139,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "tower_check":
 				if (CastleManager.getInstance().getCastleById(CASTLE).getSiege().getControlTowerCount() <= 1) {
@@ -164,7 +164,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		if (isSummon) {
 			return super.onAggroRangeEnter(npc, player, isSummon);
 		}
@@ -200,7 +200,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		switch (skill.getId()) {
 			case 4222:
 				npc.teleToLocation(_loc);
@@ -213,7 +213,7 @@ public final class Venom extends AbstractNpcAI {
 				teleportTarget(player);
 				((Attackable) npc).stopHating(player);
 				if ((_targets != null) && (_targets.size() > 0)) {
-					for (PlayerInstance target : _targets) {
+					for (Player target : _targets) {
 						final double x = player.getX() - target.getX();
 						final double y = player.getY() - target.getY();
 						final double z = player.getZ() - target.getZ();
@@ -262,7 +262,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (_aggroMode && (getRandom(100) < 25)) {
 			npc.setTarget(attacker);
 			npc.doCast(VENOM_TELEPORT.getSkill());
@@ -280,7 +280,7 @@ public final class Venom extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		updateStatus(DEAD);
 		npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.IT_S_NOT_OVER_YET_IT_WON_T_BE_OVER_LIKE_THIS_NEVER);
 		if (!CastleManager.getInstance().getCastleById(CASTLE).getSiege().isInProgress()) {
@@ -314,7 +314,7 @@ public final class Venom extends AbstractNpcAI {
 		_loc.setLocation(_venom.getLocation());
 	}
 
-	private void teleportTarget(PlayerInstance player) {
+	private void teleportTarget(Player player) {
 		if ((player != null) && !player.isDead()) {
 			final int rnd = getRandom(11);
 			player.teleToLocation(TARGET_TELEPORTS[rnd], TARGET_TELEPORTS_OFFSET[rnd]);

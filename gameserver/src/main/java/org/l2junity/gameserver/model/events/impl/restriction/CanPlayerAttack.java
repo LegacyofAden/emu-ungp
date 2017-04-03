@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.restriction;
 
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author lord_rex
  */
 public final class CanPlayerAttack implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final WorldObject _target;
 
-	public CanPlayerAttack(PlayerInstance activeChar, WorldObject target) {
+	public CanPlayerAttack(Player activeChar, WorldObject target) {
 		_activeChar = activeChar;
 		_target = target;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

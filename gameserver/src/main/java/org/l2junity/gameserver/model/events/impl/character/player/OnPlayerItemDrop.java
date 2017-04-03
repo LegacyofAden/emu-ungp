@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -28,17 +28,17 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  * @author UnAfraid
  */
 public class OnPlayerItemDrop implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final ItemInstance _item;
 	private final Location _loc;
 
-	public OnPlayerItemDrop(PlayerInstance activeChar, ItemInstance item, Location loc) {
+	public OnPlayerItemDrop(Player activeChar, ItemInstance item, Location loc) {
 		_activeChar = activeChar;
 		_item = item;
 		_loc = loc;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

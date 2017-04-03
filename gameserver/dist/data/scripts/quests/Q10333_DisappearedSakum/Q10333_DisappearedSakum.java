@@ -21,7 +21,7 @@ package quests.Q10333_DisappearedSakum;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -66,7 +66,7 @@ public final class Q10333_DisappearedSakum extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -112,7 +112,7 @@ public final class Q10333_DisappearedSakum extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -170,7 +170,7 @@ public final class Q10333_DisappearedSakum extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState st = getQuestState(killer, false);
 
 		if ((st != null) && st.isStarted() && st.isCond(2)) {
@@ -212,7 +212,7 @@ public final class Q10333_DisappearedSakum extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
+	public Set<NpcLogListHolder> getNpcLogList(Player activeChar) {
 		final QuestState st = getQuestState(activeChar, false);
 		if ((st != null) && st.isStarted() && st.isCond(2)) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(2);

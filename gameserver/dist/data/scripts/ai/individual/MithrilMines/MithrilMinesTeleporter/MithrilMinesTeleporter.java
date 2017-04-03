@@ -21,7 +21,7 @@ package ai.individual.MithrilMines.MithrilMinesTeleporter;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Mithril Mines teleport AI.
@@ -49,7 +49,7 @@ public final class MithrilMinesTeleporter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		int index = Integer.parseInt(event) - 1;
 		if (LOCS.length > index) {
 			Location loc = LOCS[index];
@@ -59,7 +59,7 @@ public final class MithrilMinesTeleporter extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (npc.isInRadius2d(173147, -173762, Npc.INTERACTION_DISTANCE)) {
 			return "32652-01.htm";
 		}

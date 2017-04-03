@@ -20,7 +20,7 @@ package ai.individual.WharfGludioAirships.FortuneTelling;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 
 /**
@@ -40,7 +40,7 @@ public final class FortuneTelling extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = null;
 		if (player.getAdena() < COST) {
 			htmltext = "lowadena.htm";

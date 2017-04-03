@@ -20,7 +20,7 @@ package ai.group;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public final class IsleOfPrayer extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final ItemChanceHolder holder = MONSTERS.get(npc.getId());
 		if (getRandom(10000) <= holder.getChance()) {
 			npc.dropItem(killer, holder);

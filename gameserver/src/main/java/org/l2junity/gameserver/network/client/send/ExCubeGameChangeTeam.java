@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,7 +26,7 @@ import org.l2junity.network.PacketWriter;
  * @author mrTJO
  */
 public class ExCubeGameChangeTeam implements IClientOutgoingPacket {
-	PlayerInstance _player;
+	Player _player;
 	boolean _fromRedTeam;
 
 	/**
@@ -35,7 +35,7 @@ public class ExCubeGameChangeTeam implements IClientOutgoingPacket {
 	 * @param player      Player Instance
 	 * @param fromRedTeam Is Player from Red Team?
 	 */
-	public ExCubeGameChangeTeam(PlayerInstance player, boolean fromRedTeam) {
+	public ExCubeGameChangeTeam(Player player, boolean fromRedTeam) {
 		_player = player;
 		_fromRedTeam = fromRedTeam;
 	}

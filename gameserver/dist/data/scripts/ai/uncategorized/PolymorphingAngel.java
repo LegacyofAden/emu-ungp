@@ -21,7 +21,7 @@ package ai.uncategorized;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ public final class PolymorphingAngel extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Attackable newNpc = (Attackable) addSpawn(ANGELSPAWNS.get(npc.getId()), npc);
 		newNpc.setRunning();
 		return super.onKill(npc, killer, isSummon);

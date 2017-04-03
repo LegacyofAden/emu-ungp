@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 /**
@@ -30,7 +30,7 @@ public class CrystallizationRequest extends AbstractRequest {
 	private final int _objectId;
 	private final long _count;
 
-	public CrystallizationRequest(PlayerInstance activeChar, int objectId, long count) {
+	public CrystallizationRequest(Player activeChar, int objectId, long count) {
 		super(activeChar);
 		_objectId = objectId;
 		_count = count;

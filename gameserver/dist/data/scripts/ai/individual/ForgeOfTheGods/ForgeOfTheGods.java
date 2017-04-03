@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Forge of the Gods AI
@@ -88,7 +88,7 @@ public final class ForgeOfTheGods extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "suicide":
 				if (npc != null) {
@@ -103,7 +103,7 @@ public final class ForgeOfTheGods extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		int rand = getRandom(100);
 		Npc mob = null;
 		_npcCount++;

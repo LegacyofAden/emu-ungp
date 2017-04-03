@@ -22,7 +22,7 @@ import instances.AbstractInstance;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
@@ -135,7 +135,7 @@ public final class CavernOfThePirateCaptain extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		final List<Npc> candles = new ArrayList<>();
 		final int zakenRoom = getRandom(1, 15);
 
@@ -156,19 +156,19 @@ public final class CavernOfThePirateCaptain extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceEnter(PlayerInstance player, Instance instance) {
+	public void onInstanceEnter(Player player, Instance instance) {
 		final int startTime = (int) (instance.getElapsedTime() / 1000);
 		final int endTime = (int) (instance.getRemainingTime() / 1000);
 		player.sendPacket(new ExSendUIEvent(player, false, true, startTime, endTime, NpcStringId.ELAPSED_TIME));
 	}
 
 	@Override
-	public void onInstanceLeave(PlayerInstance player, Instance instance) {
+	public void onInstanceLeave(Player player, Instance instance) {
 		player.sendPacket(new ExSendUIEvent(player, true, true, 0, 0, NpcStringId.ELAPSED_TIME));
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enter60")) {
 			enterInstance(player, npc, TEMPLATE_ID_60);
 		} else if (event.equals("enter83")) {
@@ -237,12 +237,12 @@ public final class CavernOfThePirateCaptain extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			if (npc.getId() == ZAKEN_83) {
 				final long time = world.getElapsedTime();
-				for (PlayerInstance playersInside : world.getPlayersInsideRadius(npc, 1500)) {
+				for (Player playersInside : world.getPlayersInsideRadius(npc, 1500)) {
 					for (int[] reward : VORPAL_JEWELS) {
 						if (time <= reward[0]) {
 							if (getRandom(100) < reward[2]) {
@@ -259,7 +259,7 @@ public final class CavernOfThePirateCaptain extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if ((world != null) && npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
@@ -292,7 +292,7 @@ public final class CavernOfThePirateCaptain extends AbstractInstance {
 		return 0;
 	}
 
-	private Npc spawnNpc(int npcId, int roomId, PlayerInstance player, Instance world) {
+	private Npc spawnNpc(int npcId, int roomId, Player player, Instance world) {
 		if ((player != null) && (npcId != ZAKEN_60) && (npcId != ZAKEN_83)) {
 			final Npc mob = addSpawn(npcId, ROOM_DATA[roomId - 1][0] + getRandom(350), ROOM_DATA[roomId - 1][1] + getRandom(350), ROOM_DATA[roomId - 1][2], 0, false, 0, false, world.getId());
 			addAttackPlayerDesire(mob, player);

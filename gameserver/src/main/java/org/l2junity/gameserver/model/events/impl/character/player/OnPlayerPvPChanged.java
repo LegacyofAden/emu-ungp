@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,17 +26,17 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerPvPChanged implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _oldPoints;
 	private final int _newPoints;
 
-	public OnPlayerPvPChanged(PlayerInstance activeChar, int oldPoints, int newPoints) {
+	public OnPlayerPvPChanged(Player activeChar, int oldPoints, int newPoints) {
 		_activeChar = activeChar;
 		_oldPoints = oldPoints;
 		_newPoints = newPoints;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

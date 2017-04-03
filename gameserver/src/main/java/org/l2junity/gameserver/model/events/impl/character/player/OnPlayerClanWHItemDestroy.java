@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
@@ -29,12 +29,12 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  */
 public class OnPlayerClanWHItemDestroy implements IBaseEvent {
 	private final String _process;
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final ItemInstance _item;
 	private final long _count;
 	private final ItemContainer _container;
 
-	public OnPlayerClanWHItemDestroy(String process, PlayerInstance activeChar, ItemInstance item, long count, ItemContainer container) {
+	public OnPlayerClanWHItemDestroy(String process, Player activeChar, ItemInstance item, long count, ItemContainer container) {
 		_process = process;
 		_activeChar = activeChar;
 		_item = item;
@@ -46,7 +46,7 @@ public class OnPlayerClanWHItemDestroy implements IBaseEvent {
 		return _process;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

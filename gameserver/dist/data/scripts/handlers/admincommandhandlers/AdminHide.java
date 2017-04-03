@@ -20,7 +20,7 @@ package handlers.admincommandhandlers;
 
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.util.BuilderUtil;
 
 import java.util.StringTokenizer;
@@ -35,7 +35,7 @@ public final class AdminHide implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(final String command, final PlayerInstance player) {
+	public boolean useAdminCommand(final String command, final Player player) {
 		final StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
 

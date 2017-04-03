@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -42,7 +42,7 @@ public class OpSweeperSkillCondition implements ISkillCondition {
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		AtomicBoolean canSweep = new AtomicBoolean(false);
 		if (caster.getActingPlayer() != null) {
-			final PlayerInstance sweeper = caster.getActingPlayer();
+			final Player sweeper = caster.getActingPlayer();
 			if (skill != null) {
 				skill.forEachTargetAffected(sweeper, target, o ->
 				{

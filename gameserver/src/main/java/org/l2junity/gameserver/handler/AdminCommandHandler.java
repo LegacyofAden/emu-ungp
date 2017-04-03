@@ -25,7 +25,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.PlayerAction;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ConfirmDlg;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.GMAudit;
@@ -65,7 +65,7 @@ public final class AdminCommandHandler implements IHandler<IAdminCommandHandler,
 	}
 
 	/**
-	 * WARNING: Please use {@link #useAdminCommand(PlayerInstance, String, boolean)} instead.
+	 * WARNING: Please use {@link #useAdminCommand(Player, String, boolean)} instead.
 	 */
 	@Override
 	public IAdminCommandHandler getHandler(String adminCommand) {
@@ -77,18 +77,18 @@ public final class AdminCommandHandler implements IHandler<IAdminCommandHandler,
 	}
 
 	/**
-	 * Three {@link #useAdminCommand(PlayerInstance, String, boolean)} methods for the Elven-Sdw-kings under the sky,<br>
+	 * Three {@link #useAdminCommand(Player, String, boolean)} methods for the Elven-Sdw-kings under the sky,<br>
 	 * Seven for the UnAfraid Dwarf-lords in their halls of stone,<br>
 	 * Nine for Mortal Nik doomed to die,<br>
 	 * One for the Dark Lord(Rex) on his dark throne.<br>
-	 * One {@link #useAdminCommand(PlayerInstance, String, boolean)} method to rule them all. One {@link #useAdminCommand(PlayerInstance, String, boolean)} method to find them,<br>
-	 * One {@link #useAdminCommand(PlayerInstance, String, boolean)} method to bring them all and in the darkness bind them.<br>
+	 * One {@link #useAdminCommand(Player, String, boolean)} method to rule them all. One {@link #useAdminCommand(Player, String, boolean)} method to find them,<br>
+	 * One {@link #useAdminCommand(Player, String, boolean)} method to bring them all and in the darkness bind them.<br>
 	 *
 	 * @param player
 	 * @param fullCommand
 	 * @param useConfirm
 	 */
-	public void useAdminCommand(PlayerInstance player, String fullCommand, boolean useConfirm) {
+	public void useAdminCommand(Player player, String fullCommand, boolean useConfirm) {
 		final String command = fullCommand.split(" ")[0];
 		final String commandNoPrefix = command.substring(6);
 

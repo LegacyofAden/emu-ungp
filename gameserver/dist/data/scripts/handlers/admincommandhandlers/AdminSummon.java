@@ -20,7 +20,7 @@ package handlers.admincommandhandlers;
 
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author poltomb
@@ -38,7 +38,7 @@ public final class AdminSummon implements IAdminCommandHandler {
 	}
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		int id;
 		int count = 1;
 		String[] data = command.split(" ");

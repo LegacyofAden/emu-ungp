@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
 import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -67,7 +67,7 @@ public class ListPartyWaiting implements IClientOutgoingPacket {
 			packet.writeD(room.getMaxMembers());
 			packet.writeS(room.getLeader().getName());
 			packet.writeD(room.getMembersCount());
-			for (PlayerInstance member : room.getMembers()) {
+			for (Player member : room.getMembers()) {
 				packet.writeD(member.getClassId().getId());
 				packet.writeS(member.getName());
 			}

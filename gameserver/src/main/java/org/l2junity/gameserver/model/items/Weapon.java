@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSkillUsed;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
@@ -251,7 +251,7 @@ public final class Weapon extends L2Item {
 			// TODO: Verify if this applies ONLY to ON_MAGIC_SKILL!
 			if (type == ItemSkillType.ON_MAGIC_SKILL) {
 				// notify quests of a skill use
-				if (caster instanceof PlayerInstance) {
+				if (caster instanceof Player) {
 					World.getInstance().forEachVisibleObjectInRadius(caster, Npc.class, 1000, npc ->
 					{
 						EventDispatcher.getInstance().notifyEventAsync(new OnNpcSkillSee(npc, caster.getActingPlayer(), skill, false, target), npc);

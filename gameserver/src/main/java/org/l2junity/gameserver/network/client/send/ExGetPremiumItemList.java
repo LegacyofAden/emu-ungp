@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.PremiumItem;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -30,11 +30,11 @@ import java.util.Map.Entry;
  * @author Gnacik
  */
 public class ExGetPremiumItemList implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
 	private final Map<Integer, PremiumItem> _map;
 
-	public ExGetPremiumItemList(PlayerInstance activeChar) {
+	public ExGetPremiumItemList(Player activeChar) {
 		_activeChar = activeChar;
 		_map = _activeChar.getPremiumItemList();
 	}

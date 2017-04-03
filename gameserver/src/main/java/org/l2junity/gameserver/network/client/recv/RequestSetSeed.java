@@ -23,7 +23,7 @@ import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.model.SeedProduction;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.network.PacketReader;
@@ -78,7 +78,7 @@ public class RequestSetSeed implements IClientIncomingPacket {
 		}
 
 		// Check player privileges
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if ((player == null) || (player.getClan() == null) || (player.getClan().getCastleId() != _manorId) || !player.hasClanPrivilege(ClanPrivilege.CS_MANOR_ADMIN) || !player.getLastFolkNPC().canInteract(player)) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

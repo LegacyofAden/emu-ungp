@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.server;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -35,7 +35,7 @@ public class OnPacketSent implements IBaseEvent {
 		_data = data;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _client.getActiveChar();
 	}
 

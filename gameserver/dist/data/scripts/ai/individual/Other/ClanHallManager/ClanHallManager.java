@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.residences.ResidenceFunction;
@@ -107,7 +107,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final StringTokenizer st = new StringTokenizer(event, " ");
 		final String action = st.nextToken();
 		final ClanHall clanHall = npc.getClanHall();
@@ -340,7 +340,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final ClanHall clanHall = npc.getClanHall();
 
@@ -369,7 +369,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 	}
 
 	private void updateVisualEffects(ClanHall clanHall, Npc npc) {
-		World.getInstance().forEachVisibleObject(npc, PlayerInstance.class, player -> player.sendPacket(new AgitDecoInfo(clanHall)));
+		World.getInstance().forEachVisibleObject(npc, Player.class, player -> player.sendPacket(new AgitDecoInfo(clanHall)));
 	}
 
 	private String getFunctionInfo(ResidenceFunction func, String htmltext, String name) {
@@ -387,7 +387,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 		return htmltext;
 	}
 
-	private boolean isOwningClan(PlayerInstance player, Npc npc) {
+	private boolean isOwningClan(Player player, Npc npc) {
 		return ((npc.getClanHall().getOwnerId() == player.getClanId()) && (player.getClanId() != 0));
 	}
 

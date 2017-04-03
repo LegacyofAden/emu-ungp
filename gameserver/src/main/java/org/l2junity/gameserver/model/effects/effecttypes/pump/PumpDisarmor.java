@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -68,7 +68,7 @@ public final class PumpDisarmor extends AbstractEffect {
 			return;
 		}
 
-		PlayerInstance player = target.getActingPlayer();
+		Player player = target.getActingPlayer();
 		ItemInstance[] unequiped = player.getInventory().unEquipItemInBodySlotAndRecord(_slot);
 		if (unequiped.length > 0) {
 			InventoryUpdate iu = new InventoryUpdate();
@@ -101,7 +101,7 @@ public final class PumpDisarmor extends AbstractEffect {
 
 		Integer disarmedObjId = _unequippedItems.remove(target.getObjectId());
 		if ((disarmedObjId != null) && (disarmedObjId > 0)) {
-			PlayerInstance player = target.getActingPlayer();
+			Player player = target.getActingPlayer();
 			target.getInventory().unblockItemSlot(_slot);
 
 			ItemInstance disarmed = player.getInventory().getItemByObjectId(disarmedObjId);

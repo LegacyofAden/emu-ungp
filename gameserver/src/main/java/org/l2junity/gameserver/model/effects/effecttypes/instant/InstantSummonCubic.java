@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.xml.impl.CubicData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2CubicTemplate;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -52,12 +52,12 @@ public final class InstantSummonCubic extends AbstractEffect {
 
 	@Override
 	public void instant(Creature caster, WorldObject target, Skill skill, ItemInstance item) {
-		final PlayerInstance casterPlayer = caster.asPlayer();
+		final Player casterPlayer = caster.asPlayer();
 		if (casterPlayer == null) {
 			return;
 		}
 
-		final PlayerInstance targetPlayer = target.asPlayer();
+		final Player targetPlayer = target.asPlayer();
 		if (targetPlayer == null) {
 			return;
 		}

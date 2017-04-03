@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -30,7 +30,7 @@ import java.util.Set;
 public class ExShowContactList implements IClientOutgoingPacket {
 	private final Set<String> _contacts;
 
-	public ExShowContactList(PlayerInstance player) {
+	public ExShowContactList(Player player) {
 		_contacts = player.getContactList().getAllContacts();
 	}
 

@@ -46,7 +46,7 @@ public class FriendlyNpcInstance extends Attackable {
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if (!canTarget(player)) {
 			return;
 		}

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.ItemSkillType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -47,7 +47,7 @@ public class RequestExTryToPutEnchantSupportItem implements IClientIncomingPacke
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -65,8 +65,8 @@ public class RequestExTryToPutEnchantSupportItem implements IClientIncomingPacke
 		if ((item == null) || (scroll == null) || (support == null) || (request.getEnchantingItem().getObjectId() != _enchantObjectId)) {
 			// message may be custom
 			activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
-			request.setEnchantingItem(PlayerInstance.ID_NONE);
-			request.setSupportItem(PlayerInstance.ID_NONE);
+			request.setEnchantingItem(Player.ID_NONE);
+			request.setSupportItem(Player.ID_NONE);
 			return;
 		}
 
@@ -74,7 +74,7 @@ public class RequestExTryToPutEnchantSupportItem implements IClientIncomingPacke
 
 		if (!skills.stream().allMatch(skill -> skill.getSkill().checkConditions(SkillConditionScope.GENERAL, activeChar, item))) {
 			activeChar.sendPacket(SystemMessageId.INAPPROPRIATE_ENCHANT_CONDITIONS);
-			request.setSupportItem(PlayerInstance.ID_NONE);
+			request.setSupportItem(Player.ID_NONE);
 			activeChar.sendPacket(new ExPutEnchantSupportItemResult(0));
 			return;
 		}

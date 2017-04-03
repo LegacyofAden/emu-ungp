@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
@@ -50,7 +50,7 @@ public final class Wisp extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("DELETE_NPC")) {
 			params = new StatsSet();
 			params.set("LOCATION_OBJECT", npc.getLocation());

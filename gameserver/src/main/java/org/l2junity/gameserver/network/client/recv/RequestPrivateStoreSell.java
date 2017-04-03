@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.ItemRequest;
 import org.l2junity.gameserver.model.TradeList;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -74,7 +74,7 @@ public final class RequestPrivateStoreSell implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -95,7 +95,7 @@ public final class RequestPrivateStoreSell implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance storePlayer = World.getInstance().getPlayer(_storePlayerId);
+		final Player storePlayer = World.getInstance().getPlayer(_storePlayerId);
 		if ((storePlayer == null) || !player.isInRadius3d(storePlayer, INTERACTION_DISTANCE)) {
 			return;
 		}

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.SetupGauge;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -44,7 +44,7 @@ public class AdminPolymorph implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_transform_menu")) {
 			AdminHtml.showAdminHtml(activeChar, "transform.htm");
 			return true;
@@ -62,7 +62,7 @@ public class AdminPolymorph implements IAdminCommandHandler {
 				return false;
 			}
 
-			final PlayerInstance player = obj.getActingPlayer();
+			final Player player = obj.getActingPlayer();
 			if (activeChar.isSitting()) {
 				activeChar.sendPacket(SystemMessageId.YOU_CANNOT_TRANSFORM_WHILE_SITTING);
 				return false;
@@ -131,7 +131,7 @@ public class AdminPolymorph implements IAdminCommandHandler {
 	 * @param id         the polymorph ID
 	 * @param type       the polymorph type
 	 */
-	private static void doPolymorph(PlayerInstance activeChar, WorldObject obj, String id, String type) {
+	private static void doPolymorph(Player activeChar, WorldObject obj, String id, String type) {
 		if (obj != null) {
 			obj.getPoly().setPolyInfo(type, id);
 			// animation
@@ -156,7 +156,7 @@ public class AdminPolymorph implements IAdminCommandHandler {
 	 * @param activeChar the active Game Master
 	 * @param target     the target
 	 */
-	private static void doUnPolymorph(PlayerInstance activeChar, WorldObject target) {
+	private static void doUnPolymorph(Player activeChar, WorldObject target) {
 		if (target != null) {
 			target.getPoly().setPolyInfo(null, "1");
 			target.broadcastInfo();

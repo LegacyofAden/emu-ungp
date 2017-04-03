@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -944,7 +944,7 @@ public class CharacterAI extends AbstractAI {
 	protected boolean checkTargetLostOrDead(Creature target) {
 		if ((target == null) || target.isAlikeDead()) {
 			// check if player is fakedeath
-			if ((target instanceof PlayerInstance) && ((PlayerInstance) target).isFakeDeath()) {
+			if ((target instanceof Player) && ((Player) target).isFakeDeath()) {
 				target.stopFakeDeath(true);
 				return false;
 			}
@@ -974,8 +974,8 @@ public class CharacterAI extends AbstractAI {
 	 */
 	protected boolean checkTargetLost(WorldObject target) {
 		// check if player is fakedeath
-		if (target instanceof PlayerInstance) {
-			PlayerInstance target2 = (PlayerInstance) target; // convert object to chara
+		if (target instanceof Player) {
+			Player target2 = (Player) target; // convert object to chara
 
 			if (target2.isFakeDeath()) {
 				target2.stopFakeDeath(true);

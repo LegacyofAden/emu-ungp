@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
@@ -54,7 +54,7 @@ public final class AdminClanHall implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 
@@ -64,7 +64,7 @@ public final class AdminClanHall implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void doAction(PlayerInstance player, int clanHallId, String action, String actionVal) {
+	private void doAction(Player player, int clanHallId, String action, String actionVal) {
 		final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallId);
 		if (clanHall != null) {
 			switch (action) {
@@ -128,7 +128,7 @@ public final class AdminClanHall implements IAdminCommandHandler {
 		useAdminCommand("admin_clanhall id=" + clanHallId, player);
 	}
 
-	private void sendClanHallList(PlayerInstance player, int page, BypassParser parser) {
+	private void sendClanHallList(Player player, int page, BypassParser parser) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(player.getLang(), "admin/clanhall_list.htm");
 		final List<ClanHall> clanHallList = ClanHallData.getInstance().getClanHalls().stream().sorted(Comparator.comparingLong(ClanHall::getResidenceId)).collect(Collectors.toList());
@@ -175,7 +175,7 @@ public final class AdminClanHall implements IAdminCommandHandler {
 		player.sendPacket(html);
 	}
 
-	private void sendClanHallDetails(PlayerInstance player, int clanHallId) {
+	private void sendClanHallDetails(Player player, int clanHallId) {
 		final ClanHall clanHall = ClanHallData.getInstance().getClanHallById(clanHallId);
 		if (clanHall != null) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
@@ -220,7 +220,7 @@ public final class AdminClanHall implements IAdminCommandHandler {
 		}
 	}
 
-	private void processBypass(PlayerInstance player, BypassParser parser) {
+	private void processBypass(Player player, BypassParser parser) {
 		final int page = parser.getInt("page", 0);
 		final int clanHallId = parser.getInt("id", 0);
 		final String action = parser.getString("action", null);

@@ -21,7 +21,7 @@ package handlers.itemhandlers;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -40,7 +40,7 @@ public class CharmOfCourage implements IItemHandler {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 
 		int level = activeChar.getLevel();
 		final int itemLevel = item.getItem().getCrystalType().getLevel();

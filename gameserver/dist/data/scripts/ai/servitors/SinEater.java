@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.Id;
@@ -48,7 +48,7 @@ public final class SinEater extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("TALK") && (player != null) && (player.getPet() != null)) {
 			if (getRandom(100) < 30) {
 				final int random = getRandom(100);

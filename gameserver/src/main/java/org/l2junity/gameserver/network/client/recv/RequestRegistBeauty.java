@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.xml.impl.BeautyShopData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.beautyshop.BeautyData;
 import org.l2junity.gameserver.model.beautyshop.BeautyItem;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -45,7 +45,7 @@ public class RequestRegistBeauty implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

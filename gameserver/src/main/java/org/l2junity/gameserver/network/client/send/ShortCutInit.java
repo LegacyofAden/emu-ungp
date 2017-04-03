@@ -19,14 +19,14 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Shortcut;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public final class ShortCutInit implements IClientOutgoingPacket {
 	private Shortcut[] _shortCuts;
 
-	public ShortCutInit(PlayerInstance activeChar) {
+	public ShortCutInit(Player activeChar) {
 		if (activeChar == null) {
 			return;
 		}

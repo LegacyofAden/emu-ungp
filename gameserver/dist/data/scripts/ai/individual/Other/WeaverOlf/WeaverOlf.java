@@ -21,7 +21,7 @@ package ai.individual.Other.WeaverOlf;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -156,7 +156,7 @@ public final class WeaverOlf extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.contains("_grade_")) {
 			int grade = Integer.parseInt(event.substring(0, 1));
 			int price;
@@ -205,7 +205,7 @@ public final class WeaverOlf extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		return npc.getId() + "-1.htm";
 	}
 

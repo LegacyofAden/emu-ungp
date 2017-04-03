@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.type.RespawnZone;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -38,7 +38,7 @@ public class Loc implements IUserCommandHandler {
 			};
 
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+	public boolean useUserCommand(int id, Player activeChar) {
 		int region;
 		RespawnZone zone = ZoneManager.getInstance().getZone(activeChar, RespawnZone.class);
 		if (zone != null) {

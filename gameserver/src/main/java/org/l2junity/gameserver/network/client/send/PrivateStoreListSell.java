@@ -19,15 +19,15 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class PrivateStoreListSell extends AbstractItemPacket {
-	private final PlayerInstance _player;
-	private final PlayerInstance _seller;
+	private final Player _player;
+	private final Player _seller;
 
-	public PrivateStoreListSell(PlayerInstance player, PlayerInstance seller) {
+	public PrivateStoreListSell(Player player, Player seller) {
 		_player = player;
 		_seller = seller;
 	}

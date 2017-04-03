@@ -21,7 +21,7 @@ package quests.Q10294_SevenSignsToTheMonasteryOfSilence;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -93,7 +93,7 @@ public final class Q10294_SevenSignsToTheMonasteryOfSilence extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -262,12 +262,12 @@ public final class Q10294_SevenSignsToTheMonasteryOfSilence extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "32787.html";
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		switch (npc.getId()) {

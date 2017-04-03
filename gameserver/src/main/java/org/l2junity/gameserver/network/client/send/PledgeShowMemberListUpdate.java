@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -38,7 +38,7 @@ public final class PledgeShowMemberListUpdate implements IClientOutgoingPacket {
 	private final int _race;
 	private final int _sex;
 
-	public PledgeShowMemberListUpdate(PlayerInstance player) {
+	public PledgeShowMemberListUpdate(Player player) {
 		this(player.getClan().getClanMember(player.getObjectId()));
 	}
 

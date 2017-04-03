@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -70,7 +70,7 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -175,7 +175,7 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		if (ArrayUtil.contains(MOBS, npc.getId())) {
 			final QuestState st = getRandomPartyMemberState(player, 3, 3, npc);
 			if ((st != null) && giveItemRandomly(st.getPlayer(), npc, ELCADIAS_MARK.getId(), 1, ELCADIAS_MARK.getCount(), 1.0, true)) {
@@ -195,7 +195,7 @@ public final class Q10292_SevenSignsGirlOfDoubt extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		switch (npc.getId()) {

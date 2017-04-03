@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,15 +26,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author Sdw
  */
 public class OnPlayerQuestAbort implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _questId;
 
-	public OnPlayerQuestAbort(PlayerInstance activeChar, int questId) {
+	public OnPlayerQuestAbort(Player activeChar, int questId) {
 		_activeChar = activeChar;
 		_questId = questId;
 	}
 
-	public final PlayerInstance getActiveChar() {
+	public final Player getActiveChar() {
 		return _activeChar;
 	}
 

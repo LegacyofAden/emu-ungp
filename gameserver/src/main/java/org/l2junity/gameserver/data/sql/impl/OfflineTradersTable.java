@@ -23,11 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.TradeItem;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -72,7 +71,7 @@ public class OfflineTradersTable {
 			stm2.execute();
 			con.setAutoCommit(false); // avoid halfway done
 
-			for (PlayerInstance pc : World.getInstance().getPlayers()) {
+			for (Player pc : World.getInstance().getPlayers()) {
 				try {
 					if ((pc.getPrivateStoreType() != PrivateStoreType.NONE) && ((pc.getClient() == null) || pc.getClient().isDetached())) {
 						stm3.setInt(1, pc.getObjectId()); // Char Id
@@ -185,12 +184,12 @@ public class OfflineTradersTable {
 					continue;
 				}
 
-				PlayerInstance player = null;
+				Player player = null;
 
 				try {
 					L2GameClient client = new L2GameClient();
 					client.setDetached(true);
-					player = PlayerInstance.load(rs.getInt("charId"));
+					player = Player.load(rs.getInt("charId"));
 					client.setActiveChar(player);
 					player.setOnlineStatus(true, false);
 					client.setAccountName(player.getAccountNamePlayer());

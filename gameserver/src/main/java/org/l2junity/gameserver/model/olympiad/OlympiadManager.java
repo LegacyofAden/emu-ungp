@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.olympiad;
 
 import org.l2junity.core.configs.OlympiadConfig;
 import org.l2junity.gameserver.instancemanager.MultiboxManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -74,11 +74,11 @@ public class OlympiadManager {
 		MultiboxManager.getInstance().clearManager(Olympiad.class);
 	}
 
-	public final boolean isRegistered(PlayerInstance noble) {
+	public final boolean isRegistered(Player noble) {
 		return isRegistered(noble, noble, false);
 	}
 
-	private boolean isRegistered(PlayerInstance noble, PlayerInstance player, boolean showMessage) {
+	private boolean isRegistered(Player noble, Player player, boolean showMessage) {
 		final Integer objId = noble.getObjectId();
 		if (_nonClassBasedRegisters.contains(objId)) {
 			if (showMessage) {
@@ -102,11 +102,11 @@ public class OlympiadManager {
 		return false;
 	}
 
-	public final boolean isRegisteredInComp(PlayerInstance noble) {
+	public final boolean isRegisteredInComp(Player noble) {
 		return isRegistered(noble, noble, false) || isInCompetition(noble, noble, false);
 	}
 
-	private boolean isInCompetition(PlayerInstance noble, PlayerInstance player, boolean showMessage) {
+	private boolean isInCompetition(Player noble, Player player, boolean showMessage) {
 		if (!Olympiad._inCompPeriod) {
 			return false;
 		}
@@ -143,7 +143,7 @@ public class OlympiadManager {
 		return false;
 	}
 
-	public final boolean registerNoble(PlayerInstance player, CompetitionType type) {
+	public final boolean registerNoble(Player player, CompetitionType type) {
 		if (!Olympiad._inCompPeriod) {
 			player.sendPacket(SystemMessageId.THE_OLYMPIAD_GAMES_ARE_NOT_CURRENTLY_IN_PROGRESS);
 			return false;
@@ -211,7 +211,7 @@ public class OlympiadManager {
 		return true;
 	}
 
-	public final boolean unRegisterNoble(PlayerInstance noble) {
+	public final boolean unRegisterNoble(Player noble) {
 		if (!Olympiad._inCompPeriod) {
 			noble.sendPacket(SystemMessageId.THE_OLYMPIAD_GAMES_ARE_NOT_CURRENTLY_IN_PROGRESS);
 			return false;
@@ -252,7 +252,7 @@ public class OlympiadManager {
 		return false;
 	}
 
-	public final void removeDisconnectedCompetitor(PlayerInstance player) {
+	public final void removeDisconnectedCompetitor(Player player) {
 		final OlympiadGameTask task = OlympiadGameManager.getInstance().getOlympiadTask(player.getOlympiadGameId());
 		if ((task != null) && task.isGameStarted()) {
 			task.getGame().handleDisconnect(player);

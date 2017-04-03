@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
@@ -64,7 +64,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param player player who wants get instance world
 	 * @return instance world if found, otherwise null
 	 */
-	public Instance getPlayerInstance(PlayerInstance player) {
+	public Instance getPlayerInstance(Player player) {
 		return InstanceManager.getInstance().getPlayerInstance(player, false);
 	}
 
@@ -103,7 +103,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param npc        NPC which allows to enter into instance
 	 * @param templateId template ID of instance where player wants to enter
 	 */
-	protected final void enterInstance(PlayerInstance player, Npc npc, int templateId) {
+	protected final void enterInstance(Player player, Npc npc, int templateId) {
 		Instance instance = getPlayerInstance(player);
 		if (instance != null) // Player has already any instance active
 		{
@@ -122,7 +122,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 			}
 
 			// Get instance enter scope
-			final List<PlayerInstance> enterGroup = template.getEnterGroup(player);
+			final List<Player> enterGroup = template.getEnterGroup(player);
 			// When nobody can enter
 			if (enterGroup == null) {
 				_log.warn("Instance {} ({}) has invalid group size limits!", template.getName(), templateId);
@@ -141,7 +141,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 			}
 
 			// Check if any player from enter group has active instance
-			for (PlayerInstance member : enterGroup) {
+			for (Player member : enterGroup) {
 				if (getPlayerInstance(member) != null) {
 					enterGroup.forEach(p -> p.sendPacket(SystemMessageId.YOU_HAVE_ENTERED_ANOTHER_INSTANT_ZONE_THEREFORE_YOU_CANNOT_ENTER_CORRESPONDING_DUNGEON));
 					return;
@@ -152,7 +152,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 			instance = manager.createInstance(template, player);
 
 			// Move each player from enter group to instance
-			for (PlayerInstance member : enterGroup) {
+			for (Player member : enterGroup) {
 				instance.addAllowed(member);
 				onEnter(member, instance, true);
 			}
@@ -174,7 +174,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param instance   instance world where player enter
 	 * @param firstEnter when {@code true} player enter first time, otherwise player entered multiple times
 	 */
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		teleportPlayerIn(player, instance);
 	}
 
@@ -185,7 +185,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param player   player which should be teleported
 	 * @param instance instance where player should be teleported
 	 */
-	protected void teleportPlayerIn(PlayerInstance player, Instance instance) {
+	protected void teleportPlayerIn(Player player, Instance instance) {
 		final Location loc = instance.getEnterLocation();
 		if (loc != null) {
 			player.teleToLocation(loc, instance);
@@ -200,7 +200,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param player   player which should be ejected
 	 * @param instance instance from player should be removed
 	 */
-	protected void teleportPlayerOut(PlayerInstance player, Instance instance) {
+	protected void teleportPlayerOut(Player player, Instance instance) {
 		instance.ejectPlayer(player);
 	}
 
@@ -210,7 +210,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 *
 	 * @param player player used for determine current instance world
 	 */
-	protected void finishInstance(PlayerInstance player) {
+	protected void finishInstance(Player player) {
 		finishInstance(player, GeneralConfig.INSTANCE_FINISH_TIME);
 	}
 
@@ -221,7 +221,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param player player used for determine current instance world
 	 * @param delay  finish delay in minutes
 	 */
-	protected void finishInstance(PlayerInstance player, int delay) {
+	protected void finishInstance(Player player, int delay) {
 		final Instance inst = player.getInstanceWorld();
 		if (inst != null) {
 			inst.finishInstance(delay);
@@ -237,7 +237,7 @@ public abstract class AbstractInstance extends AbstractNpcAI {
 	 * @param template template of instance world which should be created
 	 * @return {@code true} when conditions are valid, otherwise {@code false}
 	 */
-	protected boolean validateConditions(List<PlayerInstance> group, Npc npc, InstanceTemplate template) {
+	protected boolean validateConditions(List<Player> group, Npc npc, InstanceTemplate template) {
 		return true;
 	}
 }

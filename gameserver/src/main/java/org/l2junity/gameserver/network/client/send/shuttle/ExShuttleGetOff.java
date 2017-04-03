@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send.shuttle;
 
 import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -34,7 +34,7 @@ public class ExShuttleGetOff implements IClientOutgoingPacket {
 	private final int _y;
 	private final int _z;
 
-	public ExShuttleGetOff(PlayerInstance player, L2ShuttleInstance shuttle, int x, int y, int z) {
+	public ExShuttleGetOff(Player player, L2ShuttleInstance shuttle, int x, int y, int z) {
 		_playerObjectId = player.getObjectId();
 		_shuttleObjectId = shuttle.getObjectId();
 		_x = x;

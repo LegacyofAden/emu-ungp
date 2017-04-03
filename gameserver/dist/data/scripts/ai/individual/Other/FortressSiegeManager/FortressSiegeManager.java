@@ -23,7 +23,7 @@ import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -68,7 +68,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "FortressSiegeManager-11.html":
@@ -158,7 +158,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Fort fortress = npc.getFort();
 		final int fortOwner = fortress.getOwnerClan() == null ? 0 : fortress.getOwnerClan().getId();
 		if (fortOwner == 0) {

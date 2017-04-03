@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.announce.Announcement;
 import org.l2junity.gameserver.model.announce.AnnouncementType;
 import org.l2junity.gameserver.model.announce.AutoAnnouncement;
@@ -85,7 +85,7 @@ public final class AnnouncementsTable {
 	 *
 	 * @param player
 	 */
-	public void showAnnouncements(PlayerInstance player) {
+	public void showAnnouncements(Player player) {
 		sendAnnouncements(player, AnnouncementType.NORMAL);
 		sendAnnouncements(player, AnnouncementType.CRITICAL);
 		sendAnnouncements(player, AnnouncementType.EVENT);
@@ -97,7 +97,7 @@ public final class AnnouncementsTable {
 	 * @param player
 	 * @param type
 	 */
-	public void sendAnnouncements(PlayerInstance player, AnnouncementType type) {
+	public void sendAnnouncements(Player player, AnnouncementType type) {
 		for (IAnnouncement announce : _announcements.values()) {
 			if (announce.isValid() && (announce.getType() == type)) {
 				player.sendPacket(new CreatureSay(0, type == AnnouncementType.CRITICAL ? ChatType.CRITICAL_ANNOUNCE : ChatType.ANNOUNCEMENT, player.getName(), announce.getContent()));

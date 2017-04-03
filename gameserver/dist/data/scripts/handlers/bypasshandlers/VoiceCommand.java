@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author DS
@@ -35,7 +35,7 @@ public class VoiceCommand implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		// only voice commands allowed
 		if ((command.length() > 7) && (command.charAt(6) == '.')) {
 			final String vc, vparams;

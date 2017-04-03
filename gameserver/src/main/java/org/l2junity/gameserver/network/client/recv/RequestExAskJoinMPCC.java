@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExAskJoinMPCC;
@@ -45,12 +45,12 @@ public final class RequestExAskJoinMPCC implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
 
-		final PlayerInstance player = World.getInstance().getPlayer(_name);
+		final Player player = World.getInstance().getPlayer(_name);
 		if (player == null) {
 			return;
 		}
@@ -111,7 +111,7 @@ public final class RequestExAskJoinMPCC implements IClientIncomingPacket {
 		}
 	}
 
-	private void askJoinMPCC(PlayerInstance requestor, PlayerInstance target) {
+	private void askJoinMPCC(Player requestor, Player target) {
 		boolean hasRight = false;
 		if (requestor.isClanLeader() && (requestor.getClan().getLevel() >= 5)) {
 			// Clan leader of lvl5 Clan or higher.
@@ -131,7 +131,7 @@ public final class RequestExAskJoinMPCC implements IClientIncomingPacket {
 		}
 
 		// Get the target's party leader, and do whole actions on him.
-		final PlayerInstance targetLeader = target.getParty().getLeader();
+		final Player targetLeader = target.getParty().getLeader();
 		SystemMessage sm;
 		if (!targetLeader.isProcessingRequest()) {
 			requestor.onTransactionRequest(targetLeader);

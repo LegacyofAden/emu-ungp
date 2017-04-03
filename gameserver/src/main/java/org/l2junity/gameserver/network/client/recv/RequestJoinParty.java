@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.PartyDistributionType;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.PartyRequest;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -54,8 +54,8 @@ public final class RequestJoinParty implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance requestor = client.getActiveChar();
-		final PlayerInstance target = World.getInstance().getPlayer(_name);
+		final Player requestor = client.getActiveChar();
+		final Player target = World.getInstance().getPlayer(_name);
 
 		if (requestor == null) {
 			return;
@@ -151,7 +151,7 @@ public final class RequestJoinParty implements IClientIncomingPacket {
 	 * @param target
 	 * @param requestor
 	 */
-	private void addTargetToParty(PlayerInstance target, PlayerInstance requestor) {
+	private void addTargetToParty(Player target, Player requestor) {
 		final Party party = requestor.getParty();
 
 		// summary of ppl already in party and ppl that get invitation
@@ -179,7 +179,7 @@ public final class RequestJoinParty implements IClientIncomingPacket {
 	 * @param target
 	 * @param requestor
 	 */
-	private void createNewParty(PlayerInstance target, PlayerInstance requestor) {
+	private void createNewParty(Player target, Player requestor) {
 		final PartyDistributionType partyDistributionType = PartyDistributionType.findById(_partyDistributionTypeId);
 		if (partyDistributionType == null) {
 			return;

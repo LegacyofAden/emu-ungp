@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -149,7 +149,7 @@ public final class DisciplesNecropolisPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			switch (event) {
@@ -228,7 +228,7 @@ public final class DisciplesNecropolisPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		switch (npc.getId()) {
 			case LILIM_BUTCHER:
 			case LILIM_GUARD_KNIGHT: {
@@ -266,7 +266,7 @@ public final class DisciplesNecropolisPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			if (npc.isScriptValue(0)) {
@@ -286,12 +286,12 @@ public final class DisciplesNecropolisPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return npc.getId() + ".htm";
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			synchronized (world) {
@@ -328,7 +328,7 @@ public final class DisciplesNecropolisPast extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		final QuestState qs = talker.getQuestState(Q00196_SevenSignsSealOfTheEmperor.class.getSimpleName());
 		String htmltext = getNoQuestMsg(talker);
 		if (qs == null) {

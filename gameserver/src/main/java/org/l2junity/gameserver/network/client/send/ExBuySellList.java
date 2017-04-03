@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -36,7 +36,7 @@ public class ExBuySellList extends AbstractItemPacket {
 	private final int _inventorySlots;
 	private double _castleTaxRate = 1;
 
-	public ExBuySellList(PlayerInstance player, boolean done) {
+	public ExBuySellList(Player player, boolean done) {
 		final Summon pet = player.getPet();
 		_sellList = player.getInventory().getItems(item -> !item.isEquipped() && item.isSellable() && ((pet == null) || (item.getObjectId() != pet.getControlObjectId())));
 		_inventorySlots = player.getInventory().getItems((item) -> !item.isQuestItem()).size();
@@ -46,7 +46,7 @@ public class ExBuySellList extends AbstractItemPacket {
 		_done = done;
 	}
 
-	public ExBuySellList(PlayerInstance player, boolean done, double castleTaxRate) {
+	public ExBuySellList(Player player, boolean done, double castleTaxRate) {
 		this(player, done);
 		_castleTaxRate = 1 - castleTaxRate;
 	}

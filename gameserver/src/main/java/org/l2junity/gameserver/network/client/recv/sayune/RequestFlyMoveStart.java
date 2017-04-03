@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv.sayune;
 import org.l2junity.gameserver.data.xml.impl.SayuneData;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.SayuneEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.SayuneRequest;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.SayuneZone;
@@ -41,7 +41,7 @@ public class RequestFlyMoveStart implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if ((activeChar == null) || !activeChar.isInsideZone(ZoneId.SAYUNE) || activeChar.hasRequest(SayuneRequest.class) || !activeChar.isAwakenedClass()) {
 			return;
 		}

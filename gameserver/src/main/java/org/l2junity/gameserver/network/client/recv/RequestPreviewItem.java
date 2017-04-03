@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.Product;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -59,9 +59,9 @@ public final class RequestPreviewItem implements IClientIncomingPacket {
 	private int[] _items;
 
 	private class RemoveWearItemsTask implements Runnable {
-		private final PlayerInstance activeChar;
+		private final Player activeChar;
 
-		protected RemoveWearItemsTask(PlayerInstance player) {
+		protected RemoveWearItemsTask(Player player) {
 			activeChar = player;
 		}
 
@@ -106,7 +106,7 @@ public final class RequestPreviewItem implements IClientIncomingPacket {
 		}
 
 		// Get the current player and return if null
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

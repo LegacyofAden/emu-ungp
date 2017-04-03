@@ -20,7 +20,7 @@ package quests.Q10305_UnstoppableFutileEfforts;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -53,7 +53,7 @@ public final class Q10305_UnstoppableFutileEfforts extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
@@ -103,7 +103,7 @@ public final class Q10305_UnstoppableFutileEfforts extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -129,7 +129,7 @@ public final class Q10305_UnstoppableFutileEfforts extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
+	public Set<NpcLogListHolder> getNpcLogList(Player activeChar) {
 		final QuestState qs = getQuestState(activeChar, false);
 
 		if ((qs != null) && qs.isCond(1)) {

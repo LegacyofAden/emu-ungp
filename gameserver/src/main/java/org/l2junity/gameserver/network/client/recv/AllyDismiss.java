@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
@@ -41,7 +41,7 @@ public final class AllyDismiss implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

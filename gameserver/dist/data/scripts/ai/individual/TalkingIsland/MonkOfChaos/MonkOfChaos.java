@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.SubclassType;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
@@ -63,7 +63,7 @@ public final class MonkOfChaos extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {

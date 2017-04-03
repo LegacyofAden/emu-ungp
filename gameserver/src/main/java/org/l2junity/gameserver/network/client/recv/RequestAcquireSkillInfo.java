@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerRequestAcquireSkillInfo;
@@ -61,7 +61,7 @@ public final class RequestAcquireSkillInfo implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

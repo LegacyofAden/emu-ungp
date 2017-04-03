@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSocialAction;
 import org.l2junity.gameserver.network.client.send.ExAskCoupleAction;
@@ -40,7 +40,7 @@ import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
  */
 public final class SocialAction implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+	public void useAction(Player activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		switch (data.getOptionId()) {
 			case 2: // Greeting
 			case 3: // Victory
@@ -72,7 +72,7 @@ public final class SocialAction implements IPlayerActionHandler {
 		}
 	}
 
-	private boolean useSocial(PlayerInstance activeChar, final int id) {
+	private boolean useSocial(Player activeChar, final int id) {
 		if (activeChar.isFishing()) {
 			activeChar.sendPacket(SystemMessageId.YOU_CANNOT_DO_THAT_WHILE_FISHING3);
 			return false;
@@ -88,7 +88,7 @@ public final class SocialAction implements IPlayerActionHandler {
 		return true;
 	}
 
-	private void useCoupleSocial(PlayerInstance player, final int id) {
+	private void useCoupleSocial(Player player, final int id) {
 		if (player == null) {
 			return;
 		}
@@ -174,7 +174,7 @@ public final class SocialAction implements IPlayerActionHandler {
 		}
 
 		// Checks for partner.
-		final PlayerInstance partner = target.getActingPlayer();
+		final Player partner = target.getActingPlayer();
 		if (partner.isInStoreMode()) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_IS_IN_PRIVATE_STORE_MODE_OR_IN_A_BATTLE_AND_CANNOT_BE_REQUESTED_FOR_A_COUPLE_ACTION);
 			sm.addPcName(partner);

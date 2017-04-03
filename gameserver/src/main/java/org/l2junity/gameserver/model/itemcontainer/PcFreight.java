@@ -20,13 +20,13 @@ package org.l2junity.gameserver.model.itemcontainer;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author UnAfraid
  */
 public class PcFreight extends ItemContainer {
-	private final PlayerInstance _owner;
+	private final Player _owner;
 	private final int _ownerId;
 
 	public PcFreight(int object_id) {
@@ -35,7 +35,7 @@ public class PcFreight extends ItemContainer {
 		restore();
 	}
 
-	public PcFreight(PlayerInstance owner) {
+	public PcFreight(Player owner) {
 		_owner = owner;
 		_ownerId = owner.getObjectId();
 	}
@@ -46,7 +46,7 @@ public class PcFreight extends ItemContainer {
 	}
 
 	@Override
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return _owner;
 	}
 

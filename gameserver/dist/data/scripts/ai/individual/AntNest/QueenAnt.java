@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -144,7 +144,7 @@ public final class QueenAnt extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equalsIgnoreCase("heal")) {
 			boolean notCasting;
 			final boolean larvaNeedHeal = (_larva != null) && (_larva.getCurrentHp() < _larva.getMaxHp());
@@ -218,7 +218,7 @@ public final class QueenAnt extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFactionCall(Npc npc, Npc caller, PlayerInstance attacker, boolean isSummon) {
+	public String onFactionCall(Npc npc, Npc caller, Player attacker, boolean isSummon) {
 		if ((caller == null) || (npc == null)) {
 			return super.onFactionCall(npc, caller, attacker, isSummon);
 		}
@@ -233,7 +233,7 @@ public final class QueenAnt extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		if ((npc == null) || (player.isGM() && player.isInvisible())) {
 			return null;
 		}
@@ -277,7 +277,7 @@ public final class QueenAnt extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		int npcId = npc.getId();
 		if (npcId == QUEEN) {
 			npc.broadcastPacket(new PlaySound(1, "BS02_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));

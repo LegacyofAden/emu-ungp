@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.player;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Task dedicated watch for player teleportation.
@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
  * @author UnAfraid
  */
 public class TeleportWatchdogTask implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public TeleportWatchdogTask(PlayerInstance player) {
+	public TeleportWatchdogTask(Player player) {
 		_player = player;
 	}
 

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
@@ -43,7 +43,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {
@@ -53,7 +53,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 					return false;
 				}
 
-				final PlayerInstance player = World.getInstance().getPlayer(st.nextToken());
+				final Player player = World.getInstance().getPlayer(st.nextToken());
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.YOUR_TARGET_CANNOT_BE_FOUND);
 					return false;
@@ -86,7 +86,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 			}
 			case "admin_addolypoints": {
 				final WorldObject target = activeChar.getTarget();
-				final PlayerInstance player = target != null ? target.getActingPlayer() : null;
+				final Player player = target != null ? target.getActingPlayer() : null;
 				if (player != null) {
 					final int val = parseInt(st, Integer.MIN_VALUE);
 					if (val == Integer.MIN_VALUE) {
@@ -118,7 +118,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 			}
 			case "admin_removeolypoints": {
 				final WorldObject target = activeChar.getTarget();
-				final PlayerInstance player = target != null ? target.getActingPlayer() : null;
+				final Player player = target != null ? target.getActingPlayer() : null;
 				if (player != null) {
 					final int val = parseInt(st, Integer.MIN_VALUE);
 					if (val == Integer.MIN_VALUE) {
@@ -151,7 +151,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 			}
 			case "admin_setolypoints": {
 				final WorldObject target = activeChar.getTarget();
-				final PlayerInstance player = target != null ? target.getActingPlayer() : null;
+				final Player player = target != null ? target.getActingPlayer() : null;
 				if (player != null) {
 					final int val = parseInt(st, Integer.MIN_VALUE);
 					if (val == Integer.MIN_VALUE) {
@@ -193,7 +193,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 		return Integer.decode(token);
 	}
 
-	private StatsSet getPlayerSet(PlayerInstance player) {
+	private StatsSet getPlayerSet(Player player) {
 		StatsSet statDat = Olympiad.getNobleStats(player.getObjectId());
 		if (statDat == null) {
 			statDat = new StatsSet();
@@ -214,7 +214,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 		return statDat;
 	}
 
-	private boolean checkplayer(PlayerInstance player, PlayerInstance activeChar) {
+	private boolean checkplayer(Player player, Player activeChar) {
 		if (player.isSubClassActive()) {
 			activeChar.sendMessage("Player " + player + " subclass active.");
 			return false;

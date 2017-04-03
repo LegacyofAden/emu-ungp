@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.TeleportWhereType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -49,9 +49,9 @@ public final class RequestRestartPoint implements IClientIncomingPacket {
 	}
 
 	class DeathTask implements Runnable {
-		final PlayerInstance activeChar;
+		final Player activeChar;
 
-		DeathTask(PlayerInstance _activeChar) {
+		DeathTask(Player _activeChar) {
 			activeChar = _activeChar;
 		}
 
@@ -63,7 +63,7 @@ public final class RequestRestartPoint implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 
 		if (activeChar == null) {
 			return;
@@ -96,7 +96,7 @@ public final class RequestRestartPoint implements IClientIncomingPacket {
 		portPlayer(activeChar);
 	}
 
-	protected final void portPlayer(final PlayerInstance activeChar) {
+	protected final void portPlayer(final Player activeChar) {
 		Location loc = null;
 		Instance instance = null;
 

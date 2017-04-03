@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -41,7 +41,7 @@ public final class ChatHeroVoice implements IChatHandler {
 			};
 
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+	public void handleChat(ChatType type, Player activeChar, String target, String text) {
 		if (!activeChar.isHero() && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS)) {
 			activeChar.sendPacket(SystemMessageId.ONLY_HEROES_CAN_ENTER_THE_HERO_CHANNEL);
 			return;
@@ -58,7 +58,7 @@ public final class ChatHeroVoice implements IChatHandler {
 		}
 
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			if ((player != null) && !BlockList.isBlocked(player, activeChar)) {
 				player.sendPacket(cs);
 			}

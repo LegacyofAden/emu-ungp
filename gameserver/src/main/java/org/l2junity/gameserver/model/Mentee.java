@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class Mentee {
 	}
 
 	public void load() {
-		PlayerInstance player = getPlayerInstance();
+		Player player = getPlayerInstance();
 		if (player == null) // Only if player is offline
 		{
 			try (Connection con = DatabaseFactory.getInstance().getConnection();
@@ -94,7 +94,7 @@ public class Mentee {
 		return _currentLevel;
 	}
 
-	public PlayerInstance getPlayerInstance() {
+	public Player getPlayerInstance() {
 		return World.getInstance().getPlayer(_objectId);
 	}
 

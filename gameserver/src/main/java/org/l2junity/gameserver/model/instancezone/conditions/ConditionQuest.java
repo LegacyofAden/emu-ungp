@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.instancezone.conditions;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -40,7 +40,7 @@ public final class ConditionQuest extends Condition {
 	}
 
 	@Override
-	protected boolean test(PlayerInstance player, Npc npc) {
+	protected boolean test(Player player, Npc npc) {
 		final int id = getParameters().getInt("id");
 		final Quest q = QuestManager.getInstance().getQuest(id);
 		if (q == null) {

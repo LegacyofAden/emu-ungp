@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -75,7 +75,7 @@ public final class TersisHerald extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("giveBuff")) {
 			if (player.isAffectedBySkill(DRAGON_BUFF.getSkillId())) {
 				return npc.getId() + "-01.html";
@@ -88,7 +88,7 @@ public final class TersisHerald extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("DESPAWN_NPCS")) {
 			cancelQuestTimer("TEXT_SPAM", null, null);
 			SPAWNED_NPCS.stream().forEach(Npc::deleteMe);
@@ -99,7 +99,7 @@ public final class TersisHerald extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final NpcStringId npcStringId;
 		switch (npc.getId()) {
 			case ANTHARAS:

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send.onedayreward;
 
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -33,10 +33,10 @@ import java.util.Collections;
  * @author Sdw
  */
 public class ExOneDayReceiveRewardList implements IClientOutgoingPacket {
-	final PlayerInstance _player;
+	final Player _player;
 	private final Collection<OneDayRewardDataHolder> _rewards;
 
-	public ExOneDayReceiveRewardList(PlayerInstance player, boolean sendRewards) {
+	public ExOneDayReceiveRewardList(Player player, boolean sendRewards) {
 		_player = player;
 		_rewards = sendRewards ? OneDayRewardData.getInstance().getOneDayRewardData(player) : Collections.emptyList();
 	}

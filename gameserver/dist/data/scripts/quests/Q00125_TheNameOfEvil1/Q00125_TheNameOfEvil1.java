@@ -21,7 +21,7 @@ package quests.Q00125_TheNameOfEvil1;
 import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -79,7 +79,7 @@ public class Q00125_TheNameOfEvil1 extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -253,8 +253,8 @@ public class Q00125_TheNameOfEvil1 extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
-		final PlayerInstance partyMember = getRandomPartyMember(player, 3);
+	public String onKill(Npc npc, Player player, boolean isSummon) {
+		final Player partyMember = getRandomPartyMember(player, 3);
 		if (partyMember == null) {
 			return null;
 		}
@@ -286,7 +286,7 @@ public class Q00125_TheNameOfEvil1 extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
 		if (st == null) {

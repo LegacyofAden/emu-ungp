@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ISkillsHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -32,7 +32,7 @@ import java.util.Map;
 public class PlayerSkillHolder implements ISkillsHolder {
 	private final Map<Integer, Skill> _skills = new HashMap<>();
 
-	public PlayerSkillHolder(PlayerInstance player) {
+	public PlayerSkillHolder(Player player) {
 		for (Skill skill : player.getSkills().values()) {
 			// Adding only skills that can be learned by the player.
 			if (SkillTreesData.getInstance().isSkillAllowed(player, skill)) {

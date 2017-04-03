@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -28,7 +28,7 @@ public class ExGetOnAirShip implements IClientOutgoingPacket {
 	private final int _playerId, _airShipId;
 	private final Location _pos;
 
-	public ExGetOnAirShip(PlayerInstance player, Creature ship) {
+	public ExGetOnAirShip(Player player, Creature ship) {
 		_playerId = player.getObjectId();
 		_airShipId = ship.getObjectId();
 		_pos = player.getInVehiclePosition();

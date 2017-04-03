@@ -20,16 +20,16 @@ package org.l2junity.gameserver.model.itemcontainer;
 
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 /**
  * @author DS
  */
 public class PcRefund extends ItemContainer {
-	private final PlayerInstance _owner;
+	private final Player _owner;
 
-	public PcRefund(PlayerInstance owner) {
+	public PcRefund(Player owner) {
 		_owner = owner;
 	}
 
@@ -39,7 +39,7 @@ public class PcRefund extends ItemContainer {
 	}
 
 	@Override
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return _owner;
 	}
 

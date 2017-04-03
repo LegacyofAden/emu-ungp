@@ -78,7 +78,7 @@ public final class FenceInstance extends WorldObject implements IDeletable {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		activeChar.sendPacket(new ExColosseumFenceInfo(this));
 
 		if (_heightFences != null) {
@@ -96,7 +96,7 @@ public final class FenceInstance extends WorldObject implements IDeletable {
 				deleteObjects[i] = new DeleteObject(_heightFences[i]);
 			}
 
-			World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player -> player.sendPacket(deleteObjects));
+			World.getInstance().forEachVisibleObject(this, Player.class, player -> player.sendPacket(deleteObjects));
 		}
 
 		return super.decayMe();

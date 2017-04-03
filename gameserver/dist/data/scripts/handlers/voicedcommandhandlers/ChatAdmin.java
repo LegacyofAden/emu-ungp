@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
@@ -40,7 +40,7 @@ public class ChatAdmin implements IVoicedCommandHandler {
 			};
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
+	public boolean useVoicedCommand(String command, Player activeChar, String params) {
 		if (!AdminData.getInstance().hasAccess(command, activeChar.getAccessLevel())) {
 			return false;
 		}
@@ -64,7 +64,7 @@ public class ChatAdmin implements IVoicedCommandHandler {
 
 				int objId = CharNameTable.getInstance().getIdByName(name);
 				if (objId > 0) {
-					PlayerInstance player = World.getInstance().getPlayer(objId);
+					Player player = World.getInstance().getPlayer(objId);
 					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;
@@ -111,7 +111,7 @@ public class ChatAdmin implements IVoicedCommandHandler {
 
 				int objId = CharNameTable.getInstance().getIdByName(name);
 				if (objId > 0) {
-					PlayerInstance player = World.getInstance().getPlayer(objId);
+					Player player = World.getInstance().getPlayer(objId);
 					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;

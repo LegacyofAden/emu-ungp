@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,7 +26,7 @@ public class PrivateStoreMsgBuy implements IClientOutgoingPacket {
 	private final int _objId;
 	private String _storeMsg;
 
-	public PrivateStoreMsgBuy(PlayerInstance player) {
+	public PrivateStoreMsgBuy(Player player) {
 		_objId = player.getObjectId();
 		if (player.getBuyList() != null) {
 			_storeMsg = player.getBuyList().getTitle();

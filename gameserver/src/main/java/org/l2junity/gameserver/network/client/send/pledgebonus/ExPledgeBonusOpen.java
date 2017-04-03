@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send.pledgebonus;
 import org.l2junity.gameserver.data.xml.impl.ClanRewardData;
 import org.l2junity.gameserver.enums.ClanRewardType;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.pledge.ClanRewardBonus;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
 public class ExPledgeBonusOpen implements IClientOutgoingPacket {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExPledgeBonusOpen.class);
 
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public ExPledgeBonusOpen(PlayerInstance player) {
+	public ExPledgeBonusOpen(Player player) {
 		_player = player;
 	}
 

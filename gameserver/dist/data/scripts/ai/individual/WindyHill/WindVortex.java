@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -42,7 +42,7 @@ public final class WindVortex extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.isScriptValue(0) && !npc.isDead()) {
 			npc.setScriptValue(1);
 			if (attacker.getRace().equals(Race.ERTHEIA)) {

@@ -62,7 +62,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.AttackableStatus;
 import org.l2junity.gameserver.model.actor.tasks.attackable.CommandChannelTimer;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
@@ -315,16 +315,16 @@ public class Attackable extends Npc {
 			}
 
 			// NOTE: Concurrent-safe map is used because while iterating to verify all conditions sometimes an entry must be removed.
-			final Map<PlayerInstance, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
+			final Map<Player, DamageDoneInfo> rewards = new ConcurrentHashMap<>();
 
-			PlayerInstance maxDealer = null;
+			Player maxDealer = null;
 			int maxDamage = 0;
 			long totalDamage = 0;
 			// While Iterating over This Map Removing Object is Not Allowed
 			// Go through the _aggroList of the L2Attackable
 			for (AggroInfo info : getAggroList().values()) {
 				// Get the L2Character corresponding to this attacker
-				final PlayerInstance attacker = info.getAttacker().getActingPlayer();
+				final Player attacker = info.getAttacker().getActingPlayer();
 				if (attacker != null) {
 					// Get damages done by this attacker
 					final int damage = info.getDamage();
@@ -352,7 +352,7 @@ public class Attackable extends Npc {
 
 			// Calculate raidboss points
 			if (isRaid() && !isRaidMinion()) {
-				final PlayerInstance player = (maxDealer != null) && maxDealer.isOnline() ? maxDealer : lastAttacker.getActingPlayer();
+				final Player player = (maxDealer != null) && maxDealer.isOnline() ? maxDealer : lastAttacker.getActingPlayer();
 				broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.CONGRATULATIONS_YOUR_RAID_WAS_SUCCESSFUL));
 				final int raidbossPoints = (int) (getTemplate().getRaidPoints() * RatesConfig.RATE_RAIDBOSS_POINTS);
 				final Party party = player.getParty();
@@ -360,7 +360,7 @@ public class Attackable extends Npc {
 				if (party != null) {
 					final CommandChannel command = party.getCommandChannel();
 					//@formatter:off
-					final List<PlayerInstance> members = command != null ?
+					final List<Player> members = command != null ?
 							command.getMembers().stream().filter(p -> p.isInRadius3d(this, PlayerConfig.ALT_PARTY_RANGE)).collect(Collectors.toList()) :
 							player.getParty().getMembers().stream().filter(p -> p.isInRadius3d(this, PlayerConfig.ALT_PARTY_RANGE)).collect(Collectors.toList());
 					//@formatter:on
@@ -402,7 +402,7 @@ public class Attackable extends Npc {
 					}
 
 					// Attacker to be rewarded
-					final PlayerInstance attacker = reward.getAttacker();
+					final Player attacker = reward.getAttacker();
 
 					// Total amount of damage done
 					final int damage = reward.getDamage();
@@ -473,10 +473,10 @@ public class Attackable extends Npc {
 						int partyLvl = 0;
 
 						// Get all L2Character that can be rewarded in the party
-						final List<PlayerInstance> rewardedMembers = new ArrayList<>();
+						final List<Player> rewardedMembers = new ArrayList<>();
 						// Go through all L2PcInstance in the party
-						final List<PlayerInstance> groupMembers = attackerParty.isInCommandChannel() ? attackerParty.getCommandChannel().getMembers() : attackerParty.getMembers();
-						for (PlayerInstance partyPlayer : groupMembers) {
+						final List<Player> groupMembers = attackerParty.isInCommandChannel() ? attackerParty.getCommandChannel().getMembers() : attackerParty.getMembers();
+						for (Player partyPlayer : groupMembers) {
 							if ((partyPlayer == null) || partyPlayer.isDead()) {
 								continue;
 							}
@@ -592,7 +592,7 @@ public class Attackable extends Npc {
 
 				addDamageHate(attacker, damage, (int) hateValue);
 
-				final PlayerInstance player = attacker.getActingPlayer();
+				final Player player = attacker.getActingPlayer();
 				if (player != null) {
 					EventDispatcher.getInstance().notifyEventAsync(new OnAttackableAttack(player, this, damage, skill, attacker.isSummon()), this);
 				}
@@ -614,7 +614,7 @@ public class Attackable extends Npc {
 			return;
 		}
 
-		PlayerInstance targetPlayer = attacker.getActingPlayer();
+		Player targetPlayer = attacker.getActingPlayer();
 		final Creature summoner = attacker.getSummoner();
 		if (attacker.isNpc() && (summoner != null) && summoner.isPlayer() && !attacker.isTargetable()) {
 			targetPlayer = summoner.getActingPlayer();
@@ -795,8 +795,8 @@ public class Attackable extends Npc {
 			return 0;
 		}
 
-		if (ai.getAttacker() instanceof PlayerInstance) {
-			PlayerInstance act = (PlayerInstance) ai.getAttacker();
+		if (ai.getAttacker() instanceof Player) {
+			Player act = (Player) ai.getAttacker();
 			if (act.isInvisible() || ai.getAttacker().isInvul() || act.isSpawnProtected()) {
 				// Remove Object Should Use This Method and Can be Blocked While Interacting
 				getAggroList().remove(target);
@@ -843,7 +843,7 @@ public class Attackable extends Npc {
 			return;
 		}
 
-		final PlayerInstance player = mainDamageDealer.getActingPlayer();
+		final Player player = mainDamageDealer.getActingPlayer();
 
 		// Don't drop anything if the last attacker or owner isn't L2PcInstance
 		if (player == null) {
@@ -912,7 +912,7 @@ public class Attackable extends Npc {
 			return;
 		}
 
-		final PlayerInstance player = mainDamageDealer.getActingPlayer();
+		final Player player = mainDamageDealer.getActingPlayer();
 
 		// Don't drop anything if the last attacker or owner isn't L2PcInstance
 		if (player == null) {
@@ -998,7 +998,7 @@ public class Attackable extends Npc {
 	 * @param sendMessage   if {@code true} will send a message of corpse too old
 	 * @return {@code true} if the corpse is too old
 	 */
-	public boolean isOldCorpse(PlayerInstance attacker, int remainingTime, boolean sendMessage) {
+	public boolean isOldCorpse(Player attacker, int remainingTime, boolean sendMessage) {
 		if (isDead() && (DecayTaskManager.getInstance().getRemainingTime(this) < remainingTime)) {
 			if (sendMessage && (attacker != null)) {
 				attacker.sendPacket(SystemMessageId.THE_CORPSE_IS_TOO_OLD_THE_SKILL_CANNOT_BE_USED);
@@ -1013,7 +1013,7 @@ public class Attackable extends Npc {
 	 * @param sendMessage sendMessage if {@code true} will send a message of sweep not allowed.
 	 * @return {@code true} if is the spoiler or is in the spoiler party.
 	 */
-	public boolean checkSpoilOwner(PlayerInstance sweeper, boolean sendMessage) {
+	public boolean checkSpoilOwner(Player sweeper, boolean sendMessage) {
 		if ((sweeper.getObjectId() != getSpoilerObjectId()) && !sweeper.isInLooterParty(getSpoilerObjectId())) {
 			if (sendMessage) {
 				sweeper.sendPacket(SystemMessageId.THERE_ARE_NO_PRIORITY_RIGHTS_ON_A_SWEEPER);
@@ -1243,7 +1243,7 @@ public class Attackable extends Npc {
 	 *
 	 * @param seeder
 	 */
-	public final void setSeeded(PlayerInstance seeder) {
+	public final void setSeeded(Player seeder) {
 		if ((_seed != null) && (_seederObjId == seeder.getObjectId())) {
 			_seeded = true;
 
@@ -1292,7 +1292,7 @@ public class Attackable extends Npc {
 	 * @param seed   - instance {@link L2Seed} of used seed
 	 * @param seeder - player who sows the seed
 	 */
-	public final void setSeeded(L2Seed seed, PlayerInstance seeder) {
+	public final void setSeeded(L2Seed seed, Player seeder) {
 		if (!_seeded) {
 			_seed = seed;
 			_seederObjId = seeder.getObjectId();

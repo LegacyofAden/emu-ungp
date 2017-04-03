@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -80,7 +80,7 @@ public final class TeleportToRaceTrack extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		if (npc.getId() == RACE_MANAGER) {
 			final int returnId = player.getVariables().getInt(PlayerVariables.MONSTER_RETURN, -1);
 

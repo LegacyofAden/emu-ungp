@@ -20,7 +20,7 @@ package ai.individual.FreyasGarden.Sirra;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 
 /**
@@ -40,7 +40,7 @@ public final class Sirra extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			if ((world.getTemplateId() == FREYA_INSTID)) {

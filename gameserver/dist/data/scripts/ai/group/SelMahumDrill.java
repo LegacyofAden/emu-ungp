@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -132,7 +132,7 @@ public final class SelMahumDrill extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "do_social_action": {
 				if ((npc != null) && !npc.isDead()) {
@@ -177,7 +177,7 @@ public final class SelMahumDrill extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (getRandom(10) < 1) {
 			npc.broadcastEvent("ATTACKED", 1000, null);
 		}
@@ -224,7 +224,7 @@ public final class SelMahumDrill extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		npc.broadcastEvent("CHIEF_DIED", TRAINING_RANGE, null);
 		return null;
 	}

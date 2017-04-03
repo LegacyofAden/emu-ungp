@@ -21,14 +21,13 @@ package org.l2junity.gameserver.instancemanager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.BasePathProvider;
 import org.l2junity.core.configs.SiegeFortConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.CombatFlag;
 import org.l2junity.gameserver.model.FortSiegeSpawn;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.entity.FortSiege;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -36,16 +35,11 @@ import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -113,7 +107,7 @@ public final class FortSiegeManager {
 		*/
 	}
 
-	public final void addSiegeSkills(PlayerInstance character) {
+	public final void addSiegeSkills(Player character) {
 		character.addSkill(CommonSkill.SEAL_OF_RULER.getSkill(), false);
 		character.addSkill(CommonSkill.BUILD_HEADQUARTERS.getSkill(), false);
 	}
@@ -144,7 +138,7 @@ public final class FortSiegeManager {
 		return register;
 	}
 
-	public final void removeSiegeSkills(PlayerInstance character) {
+	public final void removeSiegeSkills(Player character) {
 		character.removeSkill(CommonSkill.SEAL_OF_RULER.getSkill());
 		character.removeSkill(CommonSkill.BUILD_HEADQUARTERS.getSkill());
 	}
@@ -213,7 +207,7 @@ public final class FortSiegeManager {
 		return (itemId == 9819);
 	}
 
-	public boolean activateCombatFlag(PlayerInstance player, ItemInstance item) {
+	public boolean activateCombatFlag(Player player, ItemInstance item) {
 		if (!checkIfCanPickup(player)) {
 			return false;
 		}
@@ -229,7 +223,7 @@ public final class FortSiegeManager {
 		return true;
 	}
 
-	public boolean checkIfCanPickup(PlayerInstance player) {
+	public boolean checkIfCanPickup(Player player) {
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_FORTRESS_BATTLE_OF_S1_HAS_FINISHED);
 		sm.addItemName(9819);
 		// Cannot own 2 combat flag
@@ -255,7 +249,7 @@ public final class FortSiegeManager {
 		return true;
 	}
 
-	public void dropCombatFlag(PlayerInstance player, int fortId) {
+	public void dropCombatFlag(Player player, int fortId) {
 		final Fort fort = FortManager.getInstance().getFortById(fortId);
 		final List<CombatFlag> fcf = _flagList.get(fort.getResidenceId());
 		for (CombatFlag cf : fcf) {

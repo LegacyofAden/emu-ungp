@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -43,7 +43,7 @@ public class SoulShots implements IItemHandler {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 		final ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
 		final Weapon weaponItem = activeChar.getActiveWeaponItem();
 		final List<ItemSkillHolder> skills = item.getItem().getSkills(ItemSkillType.NORMAL);

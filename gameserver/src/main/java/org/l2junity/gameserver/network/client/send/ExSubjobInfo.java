@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.enums.SubclassInfoType;
 import org.l2junity.gameserver.enums.SubclassType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -37,7 +37,7 @@ public class ExSubjobInfo implements IClientOutgoingPacket {
 	private final int _type;
 	private final List<SubInfo> _subs;
 
-	public ExSubjobInfo(PlayerInstance player, SubclassInfoType type) {
+	public ExSubjobInfo(Player player, SubclassInfoType type) {
 		_currClassId = player.getClassId().getId();
 		_currRace = player.getRace().ordinal();
 		_type = type.ordinal();
@@ -63,7 +63,7 @@ public class ExSubjobInfo implements IClientOutgoingPacket {
 			_type = sub.isDualClass() ? SubclassType.DUALCLASS.ordinal() : SubclassType.SUBCLASS.ordinal();
 		}
 
-		public SubInfo(PlayerInstance player) {
+		public SubInfo(Player player) {
 			_index = 0;
 			_classId = player.getBaseClass();
 			_level = player.getStat().getBaseLevel();

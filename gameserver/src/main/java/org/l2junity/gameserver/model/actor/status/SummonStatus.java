@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor.status;
 
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Duel;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.util.Util;
@@ -36,19 +36,19 @@ public class SummonStatus extends PlayableStatus {
 			return;
 		}
 
-		final PlayerInstance attackerPlayer = attacker.getActingPlayer();
+		final Player attackerPlayer = attacker.getActingPlayer();
 		if ((attackerPlayer != null) && ((getActiveChar().getOwner() == null) || (getActiveChar().getOwner().getDuelId() != attackerPlayer.getDuelId()))) {
 			attackerPlayer.setDuelState(Duel.DUELSTATE_INTERRUPTED);
 		}
 
-		final PlayerInstance caster = getActiveChar().getTransferingDamageTo();
+		final Player caster = getActiveChar().getTransferingDamageTo();
 		if (getActiveChar().getOwner().getParty() != null) {
 			if ((caster != null) && Util.checkIfInRange(1000, getActiveChar(), caster, true) && !caster.isDead() && getActiveChar().getParty().getMembers().contains(caster)) {
 				int transferDmg = ((int) value * (int) getActiveChar().getStat().getValue(DoubleStat.TRANSFER_DAMAGE_TO_PLAYER, 0)) / 100;
 				transferDmg = Math.min((int) caster.getCurrentHp() - 1, transferDmg);
 				if (transferDmg > 0) {
 					int membersInRange = 0;
-					for (PlayerInstance member : caster.getParty().getMembers()) {
+					for (Player member : caster.getParty().getMembers()) {
 						if (Util.checkIfInRange(1000, member, caster, false) && (member != caster)) {
 							membersInRange++;
 						}

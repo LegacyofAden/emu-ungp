@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.enchant.attribute.AttributeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -47,7 +47,7 @@ public class AdminElement implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		int armorType = -1;
 
 		if (command.startsWith("admin_setlh")) {
@@ -92,15 +92,15 @@ public class AdminElement implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void setElement(PlayerInstance activeChar, AttributeType type, int value, int armorType) {
+	private void setElement(Player activeChar, AttributeType type, int value, int armorType) {
 		// get the target
 		WorldObject target = activeChar.getTarget();
 		if (target == null) {
 			target = activeChar;
 		}
-		PlayerInstance player = null;
-		if (target instanceof PlayerInstance) {
-			player = (PlayerInstance) target;
+		Player player = null;
+		if (target instanceof Player) {
+			player = (Player) target;
 		} else {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;

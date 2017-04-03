@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.entity;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public interface Siegable {
 
 	Collection<SiegeClan> getAttackerClans();
 
-	List<PlayerInstance> getAttackersInZone();
+	List<Player> getAttackersInZone();
 
 	boolean checkIsAttacker(L2Clan clan);
 

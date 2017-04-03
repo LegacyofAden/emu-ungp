@@ -25,7 +25,7 @@ import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.holders.SiegeGuardHolder;
@@ -109,12 +109,12 @@ public final class SiegeGuardManager {
 	}
 
 	/**
-	 * Checks if {@code PlayerInstance} is too much close to another ticket.
+	 * Checks if {@code Player} is too much close to another ticket.
 	 *
-	 * @param player the PlayerInstance
-	 * @return {@code true} if {@code PlayerInstance} is too much close to another ticket, {@code false} otherwise
+	 * @param player the Player
+	 * @return {@code true} if {@code Player} is too much close to another ticket, {@code false} otherwise
 	 */
-	public boolean isTooCloseToAnotherTicket(PlayerInstance player) {
+	public boolean isTooCloseToAnotherTicket(Player player) {
 		return _droppedTickets.stream().filter(g -> g.isInRadius3d(player, 25)).findFirst().orElse(null) != null;
 	}
 
@@ -135,9 +135,9 @@ public final class SiegeGuardManager {
 	 * Adds ticket in current world.
 	 *
 	 * @param itemId the ID of the item
-	 * @param player the PlayerInstance
+	 * @param player the Player
 	 */
-	public void addTicket(int itemId, PlayerInstance player) {
+	public void addTicket(int itemId, Player player) {
 		final Castle castle = CastleManager.getInstance().getCastle(player);
 		if (castle == null) {
 			return;

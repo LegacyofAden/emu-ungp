@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.network.PacketReader;
@@ -41,7 +41,7 @@ public final class Appearing implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

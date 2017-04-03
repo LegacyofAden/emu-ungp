@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv.ability;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -63,7 +63,7 @@ public class RequestAcquireAbilityList implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

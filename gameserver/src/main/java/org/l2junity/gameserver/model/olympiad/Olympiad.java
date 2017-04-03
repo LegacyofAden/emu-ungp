@@ -28,10 +28,9 @@ import org.l2junity.gameserver.data.xml.impl.CategoryData;
 import org.l2junity.gameserver.data.xml.impl.MultiboxData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.instancemanager.MultiboxManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -40,8 +39,6 @@ import org.l2junity.gameserver.util.Broadcast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -243,7 +240,7 @@ public class Olympiad {
 		}
 	}
 
-	public int getOlympiadRank(PlayerInstance player) {
+	public int getOlympiadRank(Player player) {
 		return _noblesRank.getOrDefault(player.getObjectId(), 0);
 	}
 
@@ -578,7 +575,7 @@ public class Olympiad {
 		return _period;
 	}
 
-	public boolean playerInStadia(PlayerInstance player) {
+	public boolean playerInStadia(Player player) {
 		return (ZoneManager.getInstance().getOlympiadStadium(player) != null);
 	}
 
@@ -767,7 +764,7 @@ public class Olympiad {
 		return names;
 	}
 
-	public int getOlympiadTradePoint(PlayerInstance player, boolean clear) {
+	public int getOlympiadTradePoint(Player player, boolean clear) {
 		if ((player == null) || (_period != 1) || _noblesRank.isEmpty()) {
 			return 0;
 		}
@@ -816,7 +813,7 @@ public class Olympiad {
 		return points;
 	}
 
-	public int getNoblePoints(PlayerInstance player) {
+	public int getNoblePoints(Player player) {
 		if (!_nobles.containsKey(player.getObjectId())) {
 			final StatsSet statDat = new StatsSet();
 			statDat.set(Olympiad.CLASS_ID, player.getBaseClass());

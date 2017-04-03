@@ -23,7 +23,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.Fishing;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.fishing.ExAutoFishAvailable;
@@ -45,11 +45,11 @@ public class FishingZone extends ZoneType {
 	protected void onEnter(Creature character) {
 		if (character.isPlayer()) {
 			if ((GeneralConfig.ALLOWFISHING || character.canOverrideCond(PcCondOverride.ZONE_CONDITIONS)) && !character.isInsideZone(ZoneId.FISHING)) {
-				WeakReference<PlayerInstance> weakPlayer = new WeakReference<>(character.getActingPlayer());
+				WeakReference<Player> weakPlayer = new WeakReference<>(character.getActingPlayer());
 				ThreadPool.getInstance().executeGeneral(new Runnable() {
 					@Override
 					public void run() {
-						PlayerInstance player = weakPlayer.get();
+						Player player = weakPlayer.get();
 						if (player != null) {
 							Fishing fishing = player.getFishing();
 							if (player.isInsideZone(ZoneId.FISHING)) {

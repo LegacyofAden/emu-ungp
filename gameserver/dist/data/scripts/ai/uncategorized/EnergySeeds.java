@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -113,7 +113,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (!ArrayUtil.contains(targets, npc) || (skill.getId() != 5780)) {
 			return super.onSkillSee(npc, caster, skill, targets, isSummon);
 		}
@@ -165,7 +165,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equalsIgnoreCase("StartSoDAi")) {
 			for (int doorId : SEED_OF_DESTRUCTION_DOORS) {
 				DoorInstance doorInstance = DoorData.getInstance().getDoor(doorId);
@@ -181,7 +181,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 					doorInstance.closeMe();
 				}
 			}
-			for (PlayerInstance ch : ZoneManager.getInstance().getZoneById(SOD_ZONE).getPlayersInside()) {
+			for (Player ch : ZoneManager.getInstance().getZoneById(SOD_ZONE).getPlayersInside()) {
 				if (ch != null) {
 					ch.teleToLocation(SOD_EXIT_POINT);
 				}
@@ -198,7 +198,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (npc.getId() == TEMPORARY_TELEPORTER) {
 			player.teleToLocation(SOD_EXIT_POINT);
 		}
@@ -207,7 +207,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		if (_spawnedNpcs.containsKey(npc) && _spawns.containsKey(_spawnedNpcs.get(npc))) {
 			_spawns.get(_spawnedNpcs.get(npc)).scheduleRespawn(RESPAWN + getRandom(RANDOM_RESPAWN_OFFSET));
 			_spawnedNpcs.remove(npc);
@@ -253,7 +253,7 @@ public final class EnergySeeds extends AbstractNpcAI {
 		}
 	}
 
-	public void seedCollectEvent(PlayerInstance player, Npc seedEnergy, GraciaSeeds seedType) {
+	public void seedCollectEvent(Player player, Npc seedEnergy, GraciaSeeds seedType) {
 		if (player == null) {
 			return;
 		}

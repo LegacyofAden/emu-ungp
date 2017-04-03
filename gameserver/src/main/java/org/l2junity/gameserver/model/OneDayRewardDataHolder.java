@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.onedayreward.OneDayRewardType;
@@ -102,7 +102,7 @@ public class OneDayRewardDataHolder {
 		return _isDisplayedWhenNotAvailable;
 	}
 
-	public boolean isDisplayable(PlayerInstance player) {
+	public boolean isDisplayable(Player player) {
 		// Check if its main class only
 		if (isMainClassOnly() && (player.isSubClassActive() || player.isDualClassActive())) {
 			return false;
@@ -127,21 +127,21 @@ public class OneDayRewardDataHolder {
 		return (!isOneTime() || getRecentlyCompleted(player) || (status != OneDayRewardStatus.COMPLETED.getClientId()));
 	}
 
-	public void requestReward(PlayerInstance player) {
+	public void requestReward(Player player) {
 		if ((_handler != null) && isDisplayable(player)) {
 			_handler.requestReward(player);
 		}
 	}
 
-	public int getStatus(PlayerInstance player) {
+	public int getStatus(Player player) {
 		return _handler != null ? _handler.getStatus(player) : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
 
-	public int getProgress(PlayerInstance player) {
+	public int getProgress(Player player) {
 		return _handler != null ? _handler.getProgress(player) : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
 
-	public boolean getRecentlyCompleted(PlayerInstance player) {
+	public boolean getRecentlyCompleted(Player player) {
 		return (_handler != null) && _handler.getRecentlyCompleted(player);
 	}
 

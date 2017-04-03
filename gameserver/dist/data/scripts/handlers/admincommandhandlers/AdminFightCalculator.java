@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.Formulas;
@@ -48,7 +48,7 @@ public class AdminFightCalculator implements IAdminCommandHandler {
 
 	// TODO: remove from gm list etc etc
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		try {
 			if (command.startsWith("admin_fight_calculator_show")) {
 				handleShow(command.substring("admin_fight_calculator_show".length()), activeChar);
@@ -67,7 +67,7 @@ public class AdminFightCalculator implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleStart(String params, PlayerInstance activeChar) {
+	private void handleStart(String params, Player activeChar) {
 		StringTokenizer st = new StringTokenizer(params);
 		int lvl1 = 0;
 		int lvl2 = 0;
@@ -138,7 +138,7 @@ public class AdminFightCalculator implements IAdminCommandHandler {
 		activeChar.sendPacket(adminReply);
 	}
 
-	private void handleShow(String params, PlayerInstance activeChar) {
+	private void handleShow(String params, Player activeChar) {
 		params = params.trim();
 
 		Creature npc1 = null;

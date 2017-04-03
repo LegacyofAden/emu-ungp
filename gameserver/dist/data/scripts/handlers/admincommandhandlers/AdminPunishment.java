@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
@@ -65,7 +65,7 @@ public class AdminPunishment implements IAdminCommandHandler {
 	private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		if (!st.hasMoreTokens()) {
 			return false;
@@ -134,7 +134,7 @@ public class AdminPunishment implements IAdminCommandHandler {
 							break;
 						}
 						case "player": {
-							PlayerInstance target = null;
+							Player target = null;
 							if (st.hasMoreTokens()) {
 								final String playerName = st.nextToken();
 								if (playerName.isEmpty() && ((activeChar.getTarget() == null) || !activeChar.getTarget().isPlayer())) {

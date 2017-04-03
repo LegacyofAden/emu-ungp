@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.CursedWeapon;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -49,7 +49,7 @@ public class AdminCursedWeapons implements IAdminCommandHandler {
 	private int itemId;
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		int id = 0;
 
 		StringTokenizer st = new StringTokenizer(command);
@@ -61,7 +61,7 @@ public class AdminCursedWeapons implements IAdminCommandHandler {
 				for (CursedWeapon cw : CursedWeaponsManager.getInstance().getCursedWeapons()) {
 					activeChar.sendMessage("> " + cw.getName() + " (" + cw.getItemId() + ")");
 					if (cw.isActivated()) {
-						PlayerInstance pl = cw.getPlayer();
+						Player pl = cw.getPlayer();
 						activeChar.sendMessage("  Player holding: " + (pl == null ? "null" : pl.getName()));
 						activeChar.sendMessage("    Player Reputation: " + cw.getPlayerReputation());
 						activeChar.sendMessage("    Time Remaining: " + (cw.getTimeLeft() / 60000) + " min.");
@@ -88,7 +88,7 @@ public class AdminCursedWeapons implements IAdminCommandHandler {
 					replyMSG.append("</td></tr>");
 
 					if (cw.isActivated()) {
-						PlayerInstance pl = cw.getPlayer();
+						Player pl = cw.getPlayer();
 						replyMSG.append("<tr><td>Weilder:</td><td>");
 						replyMSG.append(pl == null ? "null" : pl.getName());
 						replyMSG.append("</td></tr>");
@@ -164,8 +164,8 @@ public class AdminCursedWeapons implements IAdminCommandHandler {
 					activeChar.sendMessage("This cursed weapon is already active.");
 				} else {
 					WorldObject target = activeChar.getTarget();
-					if (target instanceof PlayerInstance) {
-						((PlayerInstance) target).addItem("AdminCursedWeaponAdd", id, 1, target, true);
+					if (target instanceof Player) {
+						((Player) target).addItem("AdminCursedWeaponAdd", id, 1, target, true);
 					} else {
 						activeChar.addItem("AdminCursedWeaponAdd", id, 1, activeChar, true);
 					}

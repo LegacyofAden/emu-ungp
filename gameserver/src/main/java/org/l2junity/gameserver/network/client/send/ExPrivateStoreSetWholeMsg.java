@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,12 +29,12 @@ public class ExPrivateStoreSetWholeMsg implements IClientOutgoingPacket {
 	private final int _objectId;
 	private final String _msg;
 
-	public ExPrivateStoreSetWholeMsg(PlayerInstance player, String msg) {
+	public ExPrivateStoreSetWholeMsg(Player player, String msg) {
 		_objectId = player.getObjectId();
 		_msg = msg;
 	}
 
-	public ExPrivateStoreSetWholeMsg(PlayerInstance player) {
+	public ExPrivateStoreSetWholeMsg(Player player) {
 		this(player, player.getSellList().getTitle());
 	}
 

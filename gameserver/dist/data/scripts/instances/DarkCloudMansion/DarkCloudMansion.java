@@ -23,7 +23,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -122,7 +122,7 @@ public final class DarkCloudMansion extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (event) {
@@ -144,7 +144,7 @@ public final class DarkCloudMansion extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		if (npc.getId() == YIYEN) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		} else {
@@ -157,7 +157,7 @@ public final class DarkCloudMansion extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (npc.getId()) {
@@ -214,7 +214,7 @@ public final class DarkCloudMansion extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (npc.getId()) {
@@ -244,7 +244,7 @@ public final class DarkCloudMansion extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (world.getStatus()) {

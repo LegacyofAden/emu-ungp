@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,7 +29,7 @@ public class ExAskJoinPartyRoom implements IClientOutgoingPacket {
 	private final String _charName;
 	private final String _roomName;
 
-	public ExAskJoinPartyRoom(PlayerInstance player) {
+	public ExAskJoinPartyRoom(Player player) {
 		_charName = player.getName();
 		_roomName = player.getMatchingRoom().getTitle();
 	}

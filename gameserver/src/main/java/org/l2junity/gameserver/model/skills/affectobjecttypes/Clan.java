@@ -22,7 +22,7 @@ import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author Nik
@@ -34,7 +34,7 @@ public class Clan implements IAffectObjectHandler {
 			return true;
 		}
 
-		PlayerInstance player = activeChar.getActingPlayer();
+		Player player = activeChar.getActingPlayer();
 		if (player != null) {
 			L2Clan clan = player.getClan();
 			if (clan != null) {

@@ -22,7 +22,7 @@ import ai.individual.FaeronVillage.RemembranceTower.RemembranceTower;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -65,7 +65,7 @@ public final class Q10740_NeverForget extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -97,7 +97,7 @@ public final class Q10740_NeverForget extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -162,7 +162,7 @@ public final class Q10740_NeverForget extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
 		if ((qs != null) && qs.isCond(1) && giveItemRandomly(killer, npc, UNNAMED_RELICS, 1, 20, 1.0, true)) {
 			qs.setCond(2);

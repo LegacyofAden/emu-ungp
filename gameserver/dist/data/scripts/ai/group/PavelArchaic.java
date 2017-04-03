@@ -20,7 +20,7 @@ package ai.group;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Pavel Archaic AI.
@@ -39,7 +39,7 @@ public final class PavelArchaic extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (getRandom(100) < 70) {
 			final Npc golem1 = addSpawn(PINCER_GOLEM2, npc.getX(), npc.getY(), npc.getZ() + 10, npc.getHeading(), false, 0, false);
 			addAttackPlayerDesire(golem1, killer);

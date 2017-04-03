@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -35,7 +35,7 @@ public class PrivateStoreListBuy extends AbstractItemPacket {
 	private final long _playerAdena;
 	private final Collection<TradeItem> _items;
 
-	public PrivateStoreListBuy(PlayerInstance player, PlayerInstance storePlayer) {
+	public PrivateStoreListBuy(Player player, Player storePlayer) {
 		_objId = storePlayer.getObjectId();
 		_playerAdena = player.getAdena();
 		storePlayer.getSellList().updateItems(); // Update SellList for case inventory content has changed

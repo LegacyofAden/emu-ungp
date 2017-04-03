@@ -21,7 +21,7 @@ package quests.Q00662_AGameOfCards;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -98,7 +98,7 @@ public final class Q00662_AGameOfCards extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		String htmltext = null;
 		if (st == null) {
@@ -466,7 +466,7 @@ public final class Q00662_AGameOfCards extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		if (st == null) {
@@ -541,20 +541,20 @@ public final class Q00662_AGameOfCards extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
-		final List<PlayerInstance> players = new ArrayList<>();
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
+		final List<Player> players = new ArrayList<>();
 		players.add(killer);
 		players.add(killer);
 
 		if (killer.isInParty()) {
-			for (PlayerInstance member : killer.getParty().getMembers()) {
+			for (Player member : killer.getParty().getMembers()) {
 				if (getQuestState(member, false) != null) {
 					players.add(member);
 				}
 			}
 		}
 
-		final PlayerInstance player = players.get(Rnd.get(players.size()));
+		final Player player = players.get(Rnd.get(players.size()));
 		if ((player != null) && Util.checkIfInRange(1500, npc, player, false)) {
 			if (MONSTERS.get(npc.getId()) < getRandom(1000)) {
 				final QuestState st = getQuestState(player, false);

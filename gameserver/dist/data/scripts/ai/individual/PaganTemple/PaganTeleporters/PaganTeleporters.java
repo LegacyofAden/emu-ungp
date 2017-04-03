@@ -21,7 +21,7 @@ package ai.individual.PaganTemple.PaganTeleporters;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public final class PaganTeleporters extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "Close_Door1": {
 				closeDoor(19160001, 0);
@@ -77,7 +77,7 @@ public final class PaganTeleporters extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (TRIOLS_LOCS.containsKey(npc.getId())) {
 			player.teleToLocation(TRIOLS_LOCS.get(npc.getId()));
 		}
@@ -85,7 +85,7 @@ public final class PaganTeleporters extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		switch (npc.getId()) {
 			case 32034: {
 				if (!hasAtLeastOneQuestItem(player, VISITORS_MARK, FADED_VISITORS_MARK, PAGANS_MARK)) {

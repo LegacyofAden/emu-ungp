@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.onedayreward.handlers;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
@@ -45,7 +45,7 @@ public class OlympiadOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	}
 
 	@Override
-	public boolean isAvailable(PlayerInstance player) {
+	public boolean isAvailable(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		if (entry != null) {
 			switch (entry.getStatus()) {

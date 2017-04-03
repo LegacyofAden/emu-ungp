@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerChat;
@@ -97,7 +97,7 @@ public final class Say2 implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -218,7 +218,7 @@ public final class Say2 implements IClientIncomingPacket {
 		_text = _text;
 	}
 
-	private boolean parseAndPublishItem(L2GameClient client, PlayerInstance owner) {
+	private boolean parseAndPublishItem(L2GameClient client, Player owner) {
 		int pos1 = -1;
 		while ((pos1 = _text.indexOf(8, pos1)) > -1) {
 			int pos = _text.indexOf("ID=", pos1);

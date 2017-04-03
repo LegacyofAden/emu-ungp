@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.OlympiadStadiumZone;
@@ -89,9 +89,9 @@ public class OlympiadStadium {
 		_buffers.stream().map(L2Spawn::getLastSpawn).filter(Objects::nonNull).forEach(Npc::deleteMe);
 	}
 
-	public final void broadcastStatusUpdate(PlayerInstance player) {
+	public final void broadcastStatusUpdate(Player player) {
 		final ExOlympiadUserInfo packet = new ExOlympiadUserInfo(player);
-		for (PlayerInstance target : _instance.getPlayers()) {
+		for (Player target : _instance.getPlayers()) {
 			if (target.inObserverMode() || (target.getOlympiadSide() != player.getOlympiadSide())) {
 				target.sendPacket(packet);
 			}
@@ -103,7 +103,7 @@ public class OlympiadStadium {
 	}
 
 	public final void broadcastPacketToObservers(IClientOutgoingPacket packet) {
-		for (PlayerInstance target : _instance.getPlayers()) {
+		for (Player target : _instance.getPlayers()) {
 			if (target.inObserverMode()) {
 				target.sendPacket(packet);
 			}
@@ -123,7 +123,7 @@ public class OlympiadStadium {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 		}
 
-		for (PlayerInstance player : _instance.getPlayers()) {
+		for (Player player : _instance.getPlayers()) {
 			if (player.inObserverMode()) {
 				return;
 			}
@@ -144,7 +144,7 @@ public class OlympiadStadium {
 			return;
 		}
 
-		for (PlayerInstance player : _instance.getPlayers()) {
+		for (Player player : _instance.getPlayers()) {
 			if (!player.inObserverMode()) {
 				return;
 			}

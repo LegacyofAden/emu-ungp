@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -33,7 +33,7 @@ public class ExOlympiadSpelledInfo implements IClientOutgoingPacket {
 	private final int _playerId;
 	private final List<BuffInfo> _effects = new ArrayList<>();
 
-	public ExOlympiadSpelledInfo(PlayerInstance player) {
+	public ExOlympiadSpelledInfo(Player player) {
 		_playerId = player.getObjectId();
 	}
 

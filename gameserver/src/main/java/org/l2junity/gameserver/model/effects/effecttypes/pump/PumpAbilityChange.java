@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -57,7 +57,7 @@ public final class PumpAbilityChange extends AbstractEffect {
 
 	@Override
 	public void pump(Creature target, Skill skill) {
-		final PlayerInstance owner = target.getActingPlayer();
+		final Player owner = target.getActingPlayer();
 		if (owner != null) {
 			for (Entry<DoubleStat, Float> stats : _sharedStats.entrySet()) {
 				target.getStat().mergeAdd(stats.getKey(), owner.getStat().getValue(stats.getKey()) * stats.getValue());

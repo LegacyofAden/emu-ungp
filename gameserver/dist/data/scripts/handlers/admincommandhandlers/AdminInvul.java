@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class AdminInvul implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 
 		if (command.equals("admin_invul")) {
 			handleInvul(activeChar);
@@ -53,8 +53,8 @@ public class AdminInvul implements IAdminCommandHandler {
 			AdminHtml.showAdminHtml(activeChar, "gm_menu.htm");
 		} else if (command.equals("admin_setinvul")) {
 			final WorldObject target = activeChar.getTarget();
-			if (target instanceof PlayerInstance) {
-				handleInvul((PlayerInstance) target);
+			if (target instanceof Player) {
+				handleInvul((Player) target);
 			}
 		} else if (command.equals("admin_setundying")) {
 			final WorldObject target = activeChar.getTarget();
@@ -70,7 +70,7 @@ public class AdminInvul implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void handleInvul(PlayerInstance activeChar) {
+	private void handleInvul(Player activeChar) {
 		String text;
 		if (activeChar.isInvul()) {
 			activeChar.setIsInvul(false);

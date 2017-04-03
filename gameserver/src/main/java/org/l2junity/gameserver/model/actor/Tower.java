@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor;
 
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
@@ -48,7 +48,7 @@ public abstract class Tower extends Npc {
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if (!canTarget(player)) {
 			return;
 		}
@@ -67,7 +67,7 @@ public abstract class Tower extends Npc {
 	}
 
 	@Override
-	public void onForcedAttack(PlayerInstance player) {
+	public void onForcedAttack(Player player) {
 		onAction(player);
 	}
 }

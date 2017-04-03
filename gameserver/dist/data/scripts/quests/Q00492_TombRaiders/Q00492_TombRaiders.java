@@ -21,7 +21,7 @@ package quests.Q00492_TombRaiders;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -56,7 +56,7 @@ public class Q00492_TombRaiders extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -75,7 +75,7 @@ public class Q00492_TombRaiders extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {
@@ -143,8 +143,8 @@ public class Q00492_TombRaiders extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
-		final PlayerInstance member = getRandomPartyMember(killer, 1);
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
+		final Player member = getRandomPartyMember(killer, 1);
 		final QuestState st = getQuestState(member, false);
 
 		if (giveItemRandomly(member, npc, RELIC_OF_THE_EMPIRE, 1, 50, 0.5, true)) {

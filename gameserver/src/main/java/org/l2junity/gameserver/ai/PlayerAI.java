@@ -21,7 +21,7 @@ package org.l2junity.gameserver.ai;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerAttack;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
@@ -35,7 +35,7 @@ public class PlayerAI extends PlayableAI {
 
 	IntentionCommand _nextIntention = null;
 
-	public PlayerAI(PlayerInstance player) {
+	public PlayerAI(Player player) {
 		super(player);
 	}
 
@@ -310,7 +310,7 @@ public class PlayerAI extends PlayableAI {
 
 	@Override
 	protected void onIntentionAttack(Creature target) {
-		final PlayerInstance activeChar = getActor();
+		final Player activeChar = getActor();
 		final BooleanReturn term = EventDispatcher.getInstance().notifyEvent(new CanPlayerAttack(activeChar, target), activeChar, BooleanReturn.class);
 		if ((term != null) && !term.getValue()) {
 			return;
@@ -320,7 +320,7 @@ public class PlayerAI extends PlayableAI {
 	}
 
 	@Override
-	public PlayerInstance getActor() {
-		return (PlayerInstance) super.getActor();
+	public Player getActor() {
+		return (Player) super.getActor();
 	}
 }

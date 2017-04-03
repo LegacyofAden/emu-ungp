@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -68,7 +68,7 @@ public final class KartiaHelperBarton extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if ((instance != null) && event.equals("CHECK_ACTION")) {
 			final FriendlyNpcInstance adolph = npc.getVariables().getObject("ADOLPH_OBJECT", FriendlyNpcInstance.class);

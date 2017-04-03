@@ -19,7 +19,7 @@
 package quests.Q00344_1000YearsTheEndOfLamentation;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -86,7 +86,7 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
 		if (qs == null) {
@@ -179,7 +179,7 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		final QuestState qs = getQuestState(talker, true);
 		String htmltext = getNoQuestMsg(talker);
 		switch (npc.getId()) {
@@ -287,7 +287,7 @@ public final class Q00344_1000YearsTheEndOfLamentation extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(killer, 1, 3, npc);
 		if (qs != null) {
 			giveItemRandomly(qs.getPlayer(), npc, ARTICLES, 1, 0, MONSTER_CHANCES.get(npc.getId()), true);

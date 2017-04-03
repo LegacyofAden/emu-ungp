@@ -19,12 +19,12 @@
 package org.l2junity.gameserver.model.itemcontainer;
 
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class PcWarehouse extends Warehouse {
-	private final PlayerInstance _owner;
+	private final Player _owner;
 
-	public PcWarehouse(PlayerInstance owner) {
+	public PcWarehouse(Player owner) {
 		_owner = owner;
 	}
 
@@ -34,7 +34,7 @@ public class PcWarehouse extends Warehouse {
 	}
 
 	@Override
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return _owner;
 	}
 

@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -105,7 +105,7 @@ public final class HarnakUndergroundRuins extends AbstractInstance {
 	}
 
 	@Override
-	protected void onEnter(PlayerInstance player, Instance instance, boolean firstEnter) {
+	protected void onEnter(Player player, Instance instance, boolean firstEnter) {
 		super.onEnter(player, instance, firstEnter);
 		if (firstEnter) {
 			startQuestTimer("fail_instance", 1260000, null, player);
@@ -117,7 +117,7 @@ public final class HarnakUndergroundRuins extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "enter_instance":
 				enterInstance(player, npc, TEMPLATE_ID);
@@ -395,7 +395,7 @@ public final class HarnakUndergroundRuins extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance world = killer.getInstanceWorld();
 		if (world != null) {
 			switch (world.getStatus()) {
@@ -477,7 +477,7 @@ public final class HarnakUndergroundRuins extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			if (world.isStatus(1)) {
@@ -533,7 +533,7 @@ public final class HarnakUndergroundRuins extends AbstractInstance {
 			return null;
 		}
 
-		final PlayerInstance player = character.getActingPlayer();
+		final Player player = character.getActingPlayer();
 		final Instance world = player.getInstanceWorld();
 		if (world != null) {
 			switch (zone.getId()) {

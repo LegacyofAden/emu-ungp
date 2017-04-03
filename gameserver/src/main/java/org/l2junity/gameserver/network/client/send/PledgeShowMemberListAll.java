@@ -23,7 +23,7 @@ import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.L2Clan.SubPledge;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -45,7 +45,7 @@ public class PledgeShowMemberListAll implements IClientOutgoingPacket {
 		_members = _clan.getMembers();
 	}
 
-	public static void sendAllTo(PlayerInstance player) {
+	public static void sendAllTo(Player player) {
 		final L2Clan clan = player.getClan();
 		if (clan != null) {
 			player.sendPacket(new PledgeShowMemberListAll(clan, null));
@@ -91,7 +91,7 @@ public class PledgeShowMemberListAll implements IClientOutgoingPacket {
 			packet.writeS(m.getName());
 			packet.writeD(m.getLevel());
 			packet.writeD(m.getClassId());
-			final PlayerInstance player = m.getPlayerInstance();
+			final Player player = m.getPlayerInstance();
 			if (player != null) {
 				packet.writeD(player.getAppearance().getSex() ? 1 : 0); // no visible effect
 				packet.writeD(player.getRace().ordinal());// packet.writeD(1);

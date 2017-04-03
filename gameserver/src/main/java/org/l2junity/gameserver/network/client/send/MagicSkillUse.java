@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.SkillCastingType;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -60,7 +60,7 @@ public final class MagicSkillUse implements IClientOutgoingPacket {
 		_castingType = castingType;
 		ILocational skillWorldPos = null;
 		if (cha.isPlayer()) {
-			final PlayerInstance player = cha.getActingPlayer();
+			final Player player = cha.getActingPlayer();
 			if (player.getCurrentSkillWorldPosition() != null) {
 				skillWorldPos = player.getCurrentSkillWorldPosition();
 			}

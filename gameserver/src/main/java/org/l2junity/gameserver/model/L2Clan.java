@@ -35,7 +35,7 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanJoin;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanLeaderChange;
@@ -244,9 +244,9 @@ public class L2Clan implements IIdentifiable, INamable {
 	}
 
 	public void setNewLeader(ClanMember member) {
-		final PlayerInstance newLeader = member.getPlayerInstance();
+		final Player newLeader = member.getPlayerInstance();
 		final ClanMember exMember = getLeader();
-		final PlayerInstance exLeader = exMember.getPlayerInstance();
+		final Player exLeader = exMember.getPlayerInstance();
 
 		// Notify to scripts
 		EventDispatcher.getInstance().notifyEventAsync(new OnPlayerClanLeaderChange(exMember, member, this));
@@ -351,7 +351,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 *
 	 * @param player the clan member
 	 */
-	public void addClanMember(PlayerInstance player) {
+	public void addClanMember(Player player) {
 		final ClanMember member = new ClanMember(this, player);
 		// store in memory
 		addClanMember(member);
@@ -371,7 +371,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 *
 	 * @param player the player to be updated.
 	 */
-	public void updateClanMember(PlayerInstance player) {
+	public void updateClanMember(Player player) {
 		final ClanMember member = new ClanMember(player.getClan(), player);
 		if (player.isClanLeader()) {
 			setLeader(member);
@@ -448,7 +448,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			CastleManager.getInstance().removeCirclet(exMember, getCastleId());
 		}
 		if (exMember.isOnline()) {
-			PlayerInstance player = exMember.getPlayerInstance();
+			Player player = exMember.getPlayerInstance();
 			if (!player.isNoble()) {
 				player.setTitle("");
 			}
@@ -575,7 +575,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 * @param exclude the object Id to exclude from list.
 	 * @return all online members excluding the one with object id {code exclude}.
 	 */
-	public List<PlayerInstance> getOnlineMembers(int exclude) {
+	public List<Player> getOnlineMembers(int exclude) {
 		//@formatter:off
 		return _members.values().stream()
 				.filter(member -> member.getObjectId() != exclude)
@@ -1231,7 +1231,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void addSkillEffects(PlayerInstance player) {
+	public void addSkillEffects(Player player) {
 		if (player == null) {
 			return;
 		}
@@ -1261,7 +1261,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void removeSkillEffects(PlayerInstance player) {
+	public void removeSkillEffects(Player player) {
 		if (player == null) {
 			return;
 		}
@@ -1285,7 +1285,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void skillsStatus(PlayerInstance player, boolean disable) {
+	public void skillsStatus(Player player, boolean disable) {
 		if (player == null) {
 			return;
 		}
@@ -1334,7 +1334,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void broadcastCSToOnlineMembers(CreatureSay packet, PlayerInstance broadcaster) {
+	public void broadcastCSToOnlineMembers(CreatureSay packet, Player broadcaster) {
 		for (ClanMember member : _members.values()) {
 			if ((member != null) && member.isOnline() && !BlockList.isBlocked(member.getPlayerInstance(), broadcaster)) {
 				member.getPlayerInstance().sendPacket(packet);
@@ -1342,7 +1342,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void broadcastToOtherOnlineMembers(IClientOutgoingPacket packet, PlayerInstance player) {
+	public void broadcastToOtherOnlineMembers(IClientOutgoingPacket packet, Player player) {
 		for (ClanMember member : _members.values()) {
 			if ((member != null) && member.isOnline() && (member.getPlayerInstance() != player)) {
 				member.getPlayerInstance().sendPacket(packet);
@@ -1387,7 +1387,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	}
 
 	public void broadcastClanStatus() {
-		for (PlayerInstance member : getOnlineMembers(0)) {
+		for (Player member : getOnlineMembers(0)) {
 			member.sendPacket(PledgeShowMemberListDeleteAll.STATIC_PACKET);
 			PledgeShowMemberListAll.sendAllTo(member);
 		}
@@ -1538,7 +1538,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		return _subPledges.values().toArray(new SubPledge[_subPledges.values().size()]);
 	}
 
-	public SubPledge createSubPledge(PlayerInstance player, int pledgeType, int leaderId, String subPledgeName) {
+	public SubPledge createSubPledge(Player player, int pledgeType, int leaderId, String subPledgeName) {
 		SubPledge subPledge = null;
 		pledgeType = getAvailablePledgeTypes(pledgeType);
 		if (pledgeType == 0) {
@@ -1822,7 +1822,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 * @param pledgeType the pledge type to join.
 	 * @return {core true} if activeChar and target meet various conditions to join a clan.
 	 */
-	public boolean checkClanJoinCondition(PlayerInstance activeChar, PlayerInstance target, int pledgeType) {
+	public boolean checkClanJoinCondition(Player activeChar, Player target, int pledgeType) {
 		if (activeChar == null) {
 			return false;
 		}
@@ -1879,7 +1879,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 * @param target     the invited player.
 	 * @return {core true} if activeChar and target meet various conditions to join a clan.
 	 */
-	public boolean checkAllyJoinCondition(PlayerInstance activeChar, PlayerInstance target) {
+	public boolean checkAllyJoinCondition(Player activeChar, Player target) {
 		if (activeChar == null) {
 			return false;
 		}
@@ -1979,7 +1979,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		_dissolvingExpiryTime = time;
 	}
 
-	public void createAlly(PlayerInstance player, String allyName) {
+	public void createAlly(Player player, String allyName) {
 		if (null == player) {
 			return;
 		}
@@ -2034,7 +2034,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		player.sendMessage("Alliance " + allyName + " has been created.");
 	}
 
-	public void dissolveAlly(PlayerInstance player) {
+	public void dissolveAlly(Player player) {
 		if (getAllyId() == 0) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_CURRENTLY_ALLIED_WITH_ANY_CLANS);
 			return;
@@ -2067,7 +2067,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		updateClanInDB();
 	}
 
-	public boolean levelUpClan(PlayerInstance player) {
+	public boolean levelUpClan(Player player) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return false;
@@ -2269,7 +2269,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		setLevel(level);
 
 		if (getLeader().isOnline()) {
-			PlayerInstance leader = getLeader().getPlayerInstance();
+			Player leader = getLeader().getPlayerInstance();
 			if (level > 4) {
 				SiegeManager.getInstance().addSiegeSkills(leader);
 				leader.sendPacket(SystemMessageId.NOW_THAT_YOUR_CLAN_LEVEL_IS_ABOVE_LEVEL_5_IT_CAN_ACCUMULATE_CLAN_REPUTATION);
@@ -2304,7 +2304,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			_log.warn("Could not update crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
 		}
 
-		for (PlayerInstance member : getOnlineMembers(0)) {
+		for (Player member : getOnlineMembers(0)) {
 			member.broadcastUserInfo();
 		}
 	}
@@ -2337,13 +2337,13 @@ public class L2Clan implements IIdentifiable, INamable {
 
 		if (onlyThisClan) {
 			setAllyCrestId(crestId);
-			for (PlayerInstance member : getOnlineMembers(0)) {
+			for (Player member : getOnlineMembers(0)) {
 				member.broadcastUserInfo();
 			}
 		} else {
 			for (L2Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
 				clan.setAllyCrestId(crestId);
-				for (PlayerInstance member : clan.getOnlineMembers(0)) {
+				for (Player member : clan.getOnlineMembers(0)) {
 					member.broadcastUserInfo();
 				}
 			}
@@ -2371,7 +2371,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			_log.warn("Could not update large crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
 		}
 
-		for (PlayerInstance member : getOnlineMembers(0)) {
+		for (Player member : getOnlineMembers(0)) {
 			member.broadcastUserInfo();
 		}
 	}
@@ -2461,7 +2461,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		return _newLeaderId;
 	}
 
-	public PlayerInstance getNewLeader() {
+	public Player getNewLeader() {
 		return World.getInstance().getPlayer(_newLeaderId);
 	}
 
@@ -2509,7 +2509,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		return _atWarWith.get(clanId);
 	}
 
-	public synchronized void addMemberOnlineTime(PlayerInstance player) {
+	public synchronized void addMemberOnlineTime(Player player) {
 		final ClanMember clanMember = getClanMember(player.getObjectId());
 		if (clanMember != null) {
 			clanMember.setOnlineTime(clanMember.getOnlineTime() + (60 * 1000));
@@ -2540,7 +2540,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 * @param target
 	 * @param value
 	 */
-	public synchronized void addHuntingPoints(PlayerInstance activeChar, Npc target, double value) {
+	public synchronized void addHuntingPoints(Player activeChar, Npc target, double value) {
 		// TODO: Figure out the retail formula
 		final int points = (int) value / 29600;
 		if (points > 0) {
@@ -2574,7 +2574,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		return getVariables().getInt("PREVIOUS_HUNTING_POINTS", 0);
 	}
 
-	public boolean canClaimBonusReward(PlayerInstance player, ClanRewardType type) {
+	public boolean canClaimBonusReward(Player player, ClanRewardType type) {
 		final ClanMember clanMember = getClanMember(player.getObjectId());
 		return (clanMember != null) && (type.getAvailableBonus(this) != null) && !clanMember.isRewardClaimed(type);
 	}

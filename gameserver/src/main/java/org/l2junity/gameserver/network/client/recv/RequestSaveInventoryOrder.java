@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -56,7 +56,7 @@ public final class RequestSaveInventoryOrder implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player != null) {
 			Inventory inventory = player.getInventory();
 			for (InventoryOrder order : _order) {

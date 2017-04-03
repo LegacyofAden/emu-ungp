@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.Party.MessageType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.PartyRequest;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -41,7 +41,7 @@ public final class RequestAnswerJoinParty implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -52,7 +52,7 @@ public final class RequestAnswerJoinParty implements IClientIncomingPacket {
 		}
 		request.setProcessing(true);
 
-		final PlayerInstance requestor = request.getActiveChar();
+		final Player requestor = request.getActiveChar();
 		if (requestor == null) {
 			return;
 		}

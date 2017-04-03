@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -50,7 +50,7 @@ public class RequestDispel implements IClientIncomingPacket {
 		if ((_skillId <= 0) || (_skillLevel <= 0)) {
 			return;
 		}
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

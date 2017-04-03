@@ -20,6 +20,7 @@ package org.l2junity.gameserver.model.skills.affectscopetypes;
 
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Party;
@@ -27,7 +28,6 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
@@ -48,7 +48,7 @@ public class DeadPartyPledge implements IAffectScopeHandler {
 
 		if (target.isPlayable()) {
 			final Playable playable = (Playable) target;
-			final PlayerInstance player = playable.getActingPlayer();
+			final Player player = playable.getActingPlayer();
 			final Party party = player.getParty();
 
 			// Create the target filter.
@@ -64,7 +64,7 @@ public class DeadPartyPledge implements IAffectScopeHandler {
 					return;
 				}
 
-				final PlayerInstance p = c.asPlayer();
+				final Player p = c.asPlayer();
 				if ((p == null) || !p.isDead()) {
 					return;
 				}

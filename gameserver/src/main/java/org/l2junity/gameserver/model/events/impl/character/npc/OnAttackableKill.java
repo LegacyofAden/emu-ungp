@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.npc;
 
 import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -29,17 +29,17 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnAttackableKill implements IBaseEvent {
-	private final PlayerInstance _attacker;
+	private final Player _attacker;
 	private final Attackable _target;
 	private final boolean _isSummon;
 
-	public OnAttackableKill(PlayerInstance attacker, Attackable target, boolean isSummon) {
+	public OnAttackableKill(Player attacker, Attackable target, boolean isSummon) {
 		_attacker = attacker;
 		_target = target;
 		_isSummon = isSummon;
 	}
 
-	public final PlayerInstance getAttacker() {
+	public final Player getAttacker() {
 		return _attacker;
 	}
 

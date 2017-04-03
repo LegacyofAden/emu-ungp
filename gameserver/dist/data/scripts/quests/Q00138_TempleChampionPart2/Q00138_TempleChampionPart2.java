@@ -20,7 +20,7 @@ package quests.Q00138_TempleChampionPart2;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -64,7 +64,7 @@ public class Q00138_TempleChampionPart2 extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return getNoQuestMsg(player);
@@ -142,7 +142,7 @@ public class Q00138_TempleChampionPart2 extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isCond(4) && (getQuestItemsCount(player, RELICS_OF_THE_DARK_ELF_TRAINEE) < 10)) {
 			giveItems(player, RELICS_OF_THE_DARK_ELF_TRAINEE, 1);
@@ -156,7 +156,7 @@ public class Q00138_TempleChampionPart2 extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

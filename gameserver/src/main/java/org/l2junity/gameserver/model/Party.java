@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -68,7 +68,7 @@ public class Party extends AbstractPlayerGroup {
 	private static final Duration PARTY_POSITION_BROADCAST_INTERVAL = Duration.ofSeconds(12);
 	private static final Duration PARTY_DISTRIBUTION_TYPE_REQUEST_TIMEOUT = Duration.ofSeconds(15);
 
-	private final List<PlayerInstance> _members = new CopyOnWriteArrayList<>();
+	private final List<Player> _members = new CopyOnWriteArrayList<>();
 	private boolean _pendingInvitation = false;
 	private long _pendingInviteTimeout;
 	private int _partyLvl = 0;
@@ -107,7 +107,7 @@ public class Party extends AbstractPlayerGroup {
 	 * @param leader                the leader of this party
 	 * @param partyDistributionType the item distribution rule of this party
 	 */
-	public Party(PlayerInstance leader, PartyDistributionType partyDistributionType) {
+	public Party(Player leader, PartyDistributionType partyDistributionType) {
 		_members.add(leader);
 		_partyLvl = leader.getLevel();
 		_distributionType = partyDistributionType;
@@ -131,14 +131,14 @@ public class Party extends AbstractPlayerGroup {
 	 */
 	public void setPendingInvitation(boolean val) {
 		_pendingInvitation = val;
-		_pendingInviteTimeout = GameTimeManager.getInstance().getGameTicks() + (PlayerInstance.REQUEST_TIMEOUT * GameTimeManager.TICKS_PER_SECOND);
+		_pendingInviteTimeout = GameTimeManager.getInstance().getGameTicks() + (Player.REQUEST_TIMEOUT * GameTimeManager.TICKS_PER_SECOND);
 	}
 
 	/**
 	 * Check if a player invitation request is expired.
 	 *
 	 * @return {@code true} if time is expired, {@code false} otherwise
-	 * @see org.l2junity.gameserver.model.actor.instance.PlayerInstance#isRequestExpired()
+	 * @see Player#isRequestExpired()
 	 */
 	public boolean isInvitationRequestExpired() {
 		return (_pendingInviteTimeout <= GameTimeManager.getInstance().getGameTicks());
@@ -151,9 +151,9 @@ public class Party extends AbstractPlayerGroup {
 	 * @param target the object of which the member must be within a certain range (must not be null)
 	 * @return a random member from this party or {@code null} if none of the members have inventory space for the specified item
 	 */
-	private PlayerInstance getCheckedRandomMember(int itemId, Creature target) {
-		final List<PlayerInstance> availableMembers = new ArrayList<>();
-		for (PlayerInstance member : getMembers()) {
+	private Player getCheckedRandomMember(int itemId, Creature target) {
+		final List<Player> availableMembers = new ArrayList<>();
+		for (Player member : getMembers()) {
 			if (member.getInventory().validateCapacityByItemId(itemId) && Util.checkIfInRange(PlayerConfig.ALT_PARTY_RANGE2, target, member, true)) {
 				availableMembers.add(member);
 			}
@@ -168,12 +168,12 @@ public class Party extends AbstractPlayerGroup {
 	 * @param target
 	 * @return
 	 */
-	private PlayerInstance getCheckedNextLooter(int ItemId, Creature target) {
+	private Player getCheckedNextLooter(int ItemId, Creature target) {
 		for (int i = 0; i < getMemberCount(); i++) {
 			if (++_itemLastLoot >= getMemberCount()) {
 				_itemLastLoot = 0;
 			}
-			PlayerInstance member;
+			Player member;
 			try {
 				member = getMembers().get(_itemLastLoot);
 				if (member.getInventory().validateCapacityByItemId(ItemId) && Util.checkIfInRange(PlayerConfig.ALT_PARTY_RANGE2, target, member, true)) {
@@ -196,8 +196,8 @@ public class Party extends AbstractPlayerGroup {
 	 * @param target
 	 * @return
 	 */
-	private PlayerInstance getActualLooter(PlayerInstance player, int ItemId, boolean spoil, Creature target) {
-		PlayerInstance looter = null;
+	private Player getActualLooter(Player player, int ItemId, boolean spoil, Creature target) {
+		Player looter = null;
 
 		switch (_distributionType) {
 			case RANDOM:
@@ -225,7 +225,7 @@ public class Party extends AbstractPlayerGroup {
 	 * Broadcasts UI update and User Info for new party leader.
 	 */
 	public void broadcastToPartyMembersNewLeader() {
-		for (PlayerInstance member : getMembers()) {
+		for (Player member : getMembers()) {
 			if (member != null) {
 				member.sendPacket(PartySmallWindowDeleteAll.STATIC_PACKET);
 				member.sendPacket(new PartySmallWindowAll(member, this));
@@ -241,8 +241,8 @@ public class Party extends AbstractPlayerGroup {
 	 * @param player
 	 * @param msg
 	 */
-	public void broadcastToPartyMembers(PlayerInstance player, IClientOutgoingPacket msg) {
-		for (PlayerInstance member : getMembers()) {
+	public void broadcastToPartyMembers(Player player, IClientOutgoingPacket msg) {
+		for (Player member : getMembers()) {
 			if ((member != null) && (member.getObjectId() != player.getObjectId())) {
 				member.sendPacket(msg);
 			}
@@ -254,7 +254,7 @@ public class Party extends AbstractPlayerGroup {
 	 *
 	 * @param player
 	 */
-	public void addPartyMember(PlayerInstance player) {
+	public void addPartyMember(Player player) {
 		if (getMembers().contains(player)) {
 			return;
 		}
@@ -271,7 +271,7 @@ public class Party extends AbstractPlayerGroup {
 		player.sendPacket(new PartySmallWindowAll(player, this));
 
 		// sends pets/summons of party members
-		for (PlayerInstance pMember : getMembers()) {
+		for (Player pMember : getMembers()) {
 			if (pMember != null) {
 				final Summon pet = pMember.getPet();
 				if (pet != null) {
@@ -311,7 +311,7 @@ public class Party extends AbstractPlayerGroup {
 
 		// update partySpelled
 		Summon summon;
-		for (PlayerInstance member : getMembers()) {
+		for (Player member : getMembers()) {
 			if (member != null) {
 				member.updateEffectIcons(true); // update party icons only
 				summon = member.getPet();
@@ -354,7 +354,7 @@ public class Party extends AbstractPlayerGroup {
 		return _tacticalSigns;
 	}
 
-	public void applyTacticalSigns(PlayerInstance player, boolean remove) {
+	public void applyTacticalSigns(Player player, boolean remove) {
 		if (_tacticalSigns == null) {
 			return;
 		}
@@ -362,7 +362,7 @@ public class Party extends AbstractPlayerGroup {
 		_tacticalSigns.entrySet().forEach(entry -> player.sendPacket(new ExTacticalSign(entry.getValue(), remove ? 0 : entry.getKey())));
 	}
 
-	public void addTacticalSign(PlayerInstance activeChar, int tacticalSignId, Creature target) {
+	public void addTacticalSign(Player activeChar, int tacticalSignId, Creature target) {
 		final Creature tacticalTarget = getTacticalSigns().get(tacticalSignId);
 
 		if (tacticalTarget == null) {
@@ -405,7 +405,7 @@ public class Party extends AbstractPlayerGroup {
 		}
 	}
 
-	public void setTargetBasedOnTacticalSignId(PlayerInstance player, int tacticalSignId) {
+	public void setTargetBasedOnTacticalSignId(Player player, int tacticalSignId) {
 		if (_tacticalSigns == null) {
 			return;
 		}
@@ -432,7 +432,7 @@ public class Party extends AbstractPlayerGroup {
 	 * @param player the player to be removed from the party.
 	 * @param type   the message type {@link MessageType}.
 	 */
-	public void removePartyMember(PlayerInstance player, MessageType type) {
+	public void removePartyMember(Player player, MessageType type) {
 		if (getMembers().contains(player)) {
 			final boolean isLeader = isLeader(player);
 			if (!_disbanding) {
@@ -531,7 +531,7 @@ public class Party extends AbstractPlayerGroup {
 		_disbanding = true;
 		if (_members != null) {
 			broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_PARTY_HAS_DISPERSED));
-			for (PlayerInstance member : _members) {
+			for (Player member : _members) {
 				if (member != null) {
 					removePartyMember(member, MessageType.NONE);
 				}
@@ -550,14 +550,14 @@ public class Party extends AbstractPlayerGroup {
 	}
 
 	@Override
-	public void setLeader(PlayerInstance player) {
+	public void setLeader(Player player) {
 		if ((player != null) && !player.isInDuel()) {
 			if (getMembers().contains(player)) {
 				if (isLeader(player)) {
 					player.sendPacket(SystemMessageId.SLOW_DOWN_YOU_ARE_ALREADY_THE_PARTY_LEADER);
 				} else {
 					// Swap party members
-					PlayerInstance temp = getLeader();
+					Player temp = getLeader();
 					int p1 = getMembers().indexOf(player);
 					getMembers().set(0, player);
 					getMembers().set(p1, temp);
@@ -585,8 +585,8 @@ public class Party extends AbstractPlayerGroup {
 	 * @param name
 	 * @return
 	 */
-	private PlayerInstance getPlayerByName(String name) {
-		for (PlayerInstance member : getMembers()) {
+	private Player getPlayerByName(String name) {
+		for (Player member : getMembers()) {
 			if (member.getName().equalsIgnoreCase(name)) {
 				return member;
 			}
@@ -600,14 +600,14 @@ public class Party extends AbstractPlayerGroup {
 	 * @param player
 	 * @param item
 	 */
-	public void distributeItem(PlayerInstance player, ItemInstance item) {
+	public void distributeItem(Player player, ItemInstance item) {
 		if (item.getId() == Inventory.ADENA_ID) {
 			distributeAdena(player, item.getCount(), player);
 			ItemTable.getInstance().destroyItem("Party", item, player, null);
 			return;
 		}
 
-		PlayerInstance target = getActualLooter(player, item.getId(), false, player);
+		Player target = getActualLooter(player, item.getId(), false, player);
 		target.addItem("Party", item, player, true);
 
 		// Send messages to other party members about reward
@@ -634,13 +634,13 @@ public class Party extends AbstractPlayerGroup {
 	 * @param spoil     {@code true} if it's spoil loot
 	 * @param target    the NPC target
 	 */
-	public void distributeItem(PlayerInstance player, int itemId, long itemCount, boolean spoil, Attackable target) {
+	public void distributeItem(Player player, int itemId, long itemCount, boolean spoil, Attackable target) {
 		if (itemId == Inventory.ADENA_ID) {
 			distributeAdena(player, itemCount, target);
 			return;
 		}
 
-		PlayerInstance looter = getActualLooter(player, itemId, spoil, target);
+		Player looter = getActualLooter(player, itemId, spoil, target);
 
 		looter.addItem(spoil ? "Sweeper Party" : "Party", itemId, itemCount, target, true);
 
@@ -660,14 +660,14 @@ public class Party extends AbstractPlayerGroup {
 	}
 
 	/**
-	 * Method overload for {@link Party#distributeItem(PlayerInstance, int, long, boolean, Attackable)}
+	 * Method overload for {@link Party#distributeItem(Player, int, long, boolean, Attackable)}
 	 *
 	 * @param player the reference player
 	 * @param item   the item holder
 	 * @param spoil  {@code true} if it's spoil loot
 	 * @param target the NPC target
 	 */
-	public void distributeItem(PlayerInstance player, ItemHolder item, boolean spoil, Attackable target) {
+	public void distributeItem(Player player, ItemHolder item, boolean spoil, Attackable target) {
 		distributeItem(player, item.getId(), item.getCount(), spoil, target);
 	}
 
@@ -678,11 +678,11 @@ public class Party extends AbstractPlayerGroup {
 	 * @param adena
 	 * @param target
 	 */
-	public void distributeAdena(PlayerInstance player, long adena, Creature target) {
+	public void distributeAdena(Player player, long adena, Creature target) {
 		// Check the number of party members that must be rewarded
 		// (The party member must be in range to receive its reward)
-		List<PlayerInstance> toReward = new LinkedList<>();
-		for (PlayerInstance member : getMembers()) {
+		List<Player> toReward = new LinkedList<>();
+		for (Player member : getMembers()) {
 			if (Util.checkIfInRange(PlayerConfig.ALT_PARTY_RANGE2, target, member, true)) {
 				toReward.add(member);
 			}
@@ -692,7 +692,7 @@ public class Party extends AbstractPlayerGroup {
 			// Now we can actually distribute the adena reward
 			// (Total adena splitted by the number of party members that are in range and must be rewarded)
 			long count = adena / toReward.size();
-			for (PlayerInstance member : toReward) {
+			for (Player member : toReward) {
 				member.addAdena("Party", count, player, true);
 			}
 		}
@@ -713,18 +713,18 @@ public class Party extends AbstractPlayerGroup {
 	 * @param partyDmg
 	 * @param target
 	 */
-	public void distributeXpAndSp(double xpReward, double spReward, List<PlayerInstance> rewardedMembers, int topLvl, int partyDmg, Attackable target) {
-		final List<PlayerInstance> validMembers = getValidMembers(rewardedMembers, topLvl);
+	public void distributeXpAndSp(double xpReward, double spReward, List<Player> rewardedMembers, int topLvl, int partyDmg, Attackable target) {
+		final List<Player> validMembers = getValidMembers(rewardedMembers, topLvl);
 
 		xpReward *= getExpBonus(validMembers.size(), target.getInstanceWorld());
 		spReward *= getSpBonus(validMembers.size(), target.getInstanceWorld());
 
 		int sqLevelSum = 0;
-		for (PlayerInstance member : validMembers) {
+		for (Player member : validMembers) {
 			sqLevelSum += (member.getLevel() * member.getLevel());
 		}
 
-		for (PlayerInstance member : rewardedMembers) {
+		for (Player member : rewardedMembers) {
 			if (member.isDead()) {
 				continue;
 			}
@@ -769,7 +769,7 @@ public class Party extends AbstractPlayerGroup {
 		}
 	}
 
-	private double calculateExpSpPartyCutoff(PlayerInstance player, int topLvl, double addExp, double addSp, boolean vit) {
+	private double calculateExpSpPartyCutoff(Player player, int topLvl, double addExp, double addSp, boolean vit) {
 		double xp = addExp;
 		double sp = addSp;
 		if (PlayerConfig.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("highfive")) {
@@ -795,7 +795,7 @@ public class Party extends AbstractPlayerGroup {
 	 */
 	public void recalculatePartyLevel() {
 		int newLevel = 0;
-		for (PlayerInstance member : getMembers()) {
+		for (Player member : getMembers()) {
 			if (member == null) {
 				getMembers().remove(member);
 				continue;
@@ -808,12 +808,12 @@ public class Party extends AbstractPlayerGroup {
 		_partyLvl = newLevel;
 	}
 
-	private List<PlayerInstance> getValidMembers(List<PlayerInstance> members, int topLvl) {
-		final List<PlayerInstance> validMembers = new ArrayList<>();
+	private List<Player> getValidMembers(List<Player> members, int topLvl) {
+		final List<Player> validMembers = new ArrayList<>();
 
 		// Fixed LevelDiff cutoff point
 		if (PlayerConfig.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("level")) {
-			for (PlayerInstance member : members) {
+			for (Player member : members) {
 				if ((topLvl - member.getLevel()) <= PlayerConfig.PARTY_XP_CUTOFF_LEVEL) {
 					validMembers.add(member);
 				}
@@ -822,11 +822,11 @@ public class Party extends AbstractPlayerGroup {
 		// Fixed MinPercentage cutoff point
 		else if (PlayerConfig.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("percentage")) {
 			int sqLevelSum = 0;
-			for (PlayerInstance member : members) {
+			for (Player member : members) {
 				sqLevelSum += (member.getLevel() * member.getLevel());
 			}
 
-			for (PlayerInstance member : members) {
+			for (Player member : members) {
 				int sqLevel = member.getLevel() * member.getLevel();
 				if ((sqLevel * 100) >= (sqLevelSum * PlayerConfig.PARTY_XP_CUTOFF_PERCENT)) {
 					validMembers.add(member);
@@ -836,7 +836,7 @@ public class Party extends AbstractPlayerGroup {
 		// Automatic cutoff method
 		else if (PlayerConfig.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("auto")) {
 			int sqLevelSum = 0;
-			for (PlayerInstance member : members) {
+			for (Player member : members) {
 				sqLevelSum += (member.getLevel() * member.getLevel());
 			}
 
@@ -848,7 +848,7 @@ public class Party extends AbstractPlayerGroup {
 				i = BONUS_EXP_SP.length - 1;
 			}
 
-			for (PlayerInstance member : members) {
+			for (Player member : members) {
 				int sqLevel = member.getLevel() * member.getLevel();
 				if (sqLevel >= (sqLevelSum / (members.size() * members.size()))) {
 					validMembers.add(member);
@@ -911,7 +911,7 @@ public class Party extends AbstractPlayerGroup {
 	 * @return the leader of this party
 	 */
 	@Override
-	public PlayerInstance getLeader() {
+	public Player getLeader() {
 		return _members.get(0);
 	}
 
@@ -930,7 +930,7 @@ public class Party extends AbstractPlayerGroup {
 		getLeader().sendPacket(sm);
 	}
 
-	public synchronized void answerLootChangeRequest(PlayerInstance member, boolean answer) {
+	public synchronized void answerLootChangeRequest(Player member, boolean answer) {
 		if (_changeRequestDistributionType == null) {
 			return;
 		}
@@ -976,7 +976,7 @@ public class Party extends AbstractPlayerGroup {
 	 * @return a list of all members of this party
 	 */
 	@Override
-	public List<PlayerInstance> getMembers() {
+	public List<Player> getMembers() {
 		return _members;
 	}
 }

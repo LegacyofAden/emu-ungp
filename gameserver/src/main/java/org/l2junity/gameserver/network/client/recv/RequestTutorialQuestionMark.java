@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressTutorialMark;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -37,7 +37,7 @@ public class RequestTutorialQuestionMark implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

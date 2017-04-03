@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2WarehouseInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.WareHouseDepositList;
@@ -39,7 +39,7 @@ public class ClanWarehouse implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		if (!target.isNpc()) {
 			return false;
 		}

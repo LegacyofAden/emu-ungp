@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -84,7 +84,7 @@ public class Q00458_PerfectForm extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String noQuest = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -178,7 +178,7 @@ public class Q00458_PerfectForm extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isCond(1)) {
 			int npcId = npc.getId();
@@ -233,7 +233,7 @@ public class Q00458_PerfectForm extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {

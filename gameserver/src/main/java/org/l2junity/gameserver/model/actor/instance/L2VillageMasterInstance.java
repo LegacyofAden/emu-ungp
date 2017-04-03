@@ -78,7 +78,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		String[] commandStr = command.split(" ");
 		String actualCommand = commandStr[0]; // Get actual command
 
@@ -223,7 +223,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		}
 	}
 
-	private static void dissolveClan(PlayerInstance player, int clanId) {
+	private static void dissolveClan(Player player, int clanId) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
@@ -273,7 +273,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		ClanTable.getInstance().scheduleRemoveClan(clan.getId());
 	}
 
-	private static void recoverClan(PlayerInstance player, int clanId) {
+	private static void recoverClan(Player player, int clanId) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
@@ -284,7 +284,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		clan.updateClanInDB();
 	}
 
-	private static void createSubPledge(PlayerInstance player, String clanName, String leaderName, int pledgeType, int minClanLvl) {
+	private static void createSubPledge(Player player, String clanName, String leaderName, int pledgeType, int minClanLvl) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
@@ -358,7 +358,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 
 		if (pledgeType != L2Clan.SUBUNIT_ACADEMY) {
 			final ClanMember leaderSubPledge = clan.getClanMember(leaderName);
-			final PlayerInstance leaderPlayer = leaderSubPledge.getPlayerInstance();
+			final Player leaderPlayer = leaderSubPledge.getPlayerInstance();
 			if (leaderPlayer != null) {
 				leaderPlayer.setPledgeClass(ClanMember.calculatePledgeClass(leaderPlayer));
 				leaderPlayer.sendPacket(new UserInfo(leaderPlayer));
@@ -366,7 +366,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		}
 	}
 
-	private static void renameSubPledge(PlayerInstance player, int pledgeType, String pledgeName) {
+	private static void renameSubPledge(Player player, int pledgeType, String pledgeName) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
@@ -394,7 +394,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		player.sendMessage("Pledge name changed.");
 	}
 
-	private static void assignSubPledgeLeader(PlayerInstance player, String clanName, String leaderName) {
+	private static void assignSubPledgeLeader(Player player, String clanName, String leaderName) {
 		if (!player.isClanLeader()) {
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
@@ -429,7 +429,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 		clan.updateSubPledgeInDB(subPledge.getId());
 
 		final ClanMember leaderSubPledge = clan.getClanMember(leaderName);
-		final PlayerInstance leaderPlayer = leaderSubPledge.getPlayerInstance();
+		final Player leaderPlayer = leaderSubPledge.getPlayerInstance();
 		if (leaderPlayer != null) {
 			leaderPlayer.setPledgeClass(ClanMember.calculatePledgeClass(leaderPlayer));
 			leaderPlayer.sendPacket(new UserInfo(leaderPlayer));
@@ -447,7 +447,7 @@ public class L2VillageMasterInstance extends L2NpcInstance {
 	 *
 	 * @param player
 	 */
-	public static void showPledgeSkillList(PlayerInstance player) {
+	public static void showPledgeSkillList(Player player) {
 		if (!player.isClanLeader()) {
 			final NpcHtmlMessage html = new NpcHtmlMessage();
 			html.setFile(player.getLang(), "villagemaster/NotClanLeader.htm");

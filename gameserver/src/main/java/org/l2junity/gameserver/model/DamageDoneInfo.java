@@ -18,20 +18,20 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author xban1x
  */
 public final class DamageDoneInfo {
-	private final PlayerInstance _attacker;
+	private final Player _attacker;
 	private int _damage = 0;
 
-	public DamageDoneInfo(PlayerInstance attacker) {
+	public DamageDoneInfo(Player attacker) {
 		_attacker = attacker;
 	}
 
-	public PlayerInstance getAttacker() {
+	public Player getAttacker() {
 		return _attacker;
 	}
 

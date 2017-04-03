@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -53,7 +53,7 @@ public final class PrisonGuards extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("CLEAR_STATUS")) {
 			npc.setScriptValue(0);
 		} else if (event.equals("CHECK_HOME")) {
@@ -66,7 +66,7 @@ public final class PrisonGuards extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		if (npc.getId() == GUARD_HEAD) {
 			if (player.isAffectedBySkill(TIMER)) {
 				if ((getRandom(100) < 10) && (npc.distance3d(player) < 100)) {
@@ -92,7 +92,7 @@ public final class PrisonGuards extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSkillSee(Npc npc, PlayerInstance caster, Skill skill, WorldObject[] targets, boolean isSummon) {
+	public String onSkillSee(Npc npc, Player caster, Skill skill, WorldObject[] targets, boolean isSummon) {
 		if (!caster.isAffectedBySkill(TIMER)) {
 			npc.setTarget(caster);
 			npc.doCast(SILENCE.getSkill());
@@ -101,7 +101,7 @@ public final class PrisonGuards extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if ((skill == SILENCE.getSkill()) || (skill == STONE.getSkill())) {
 			((Attackable) npc).clearAggroList();
 			npc.setTarget(npc);
@@ -110,7 +110,7 @@ public final class PrisonGuards extends AbstractNpcAI {
 	}
 
 	@Override
-	public boolean onNpcHate(Attackable mob, PlayerInstance player, boolean isSummon) {
+	public boolean onNpcHate(Attackable mob, Player player, boolean isSummon) {
 		return player.isAffectedBySkill(TIMER);
 	}
 

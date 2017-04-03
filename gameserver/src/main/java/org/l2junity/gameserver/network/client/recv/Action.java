@@ -22,7 +22,7 @@ import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -48,7 +48,7 @@ public final class Action implements IClientIncomingPacket {
 	@Override
 	public void run(L2GameClient client) {
 		// Get the current L2PcInstance of the player
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

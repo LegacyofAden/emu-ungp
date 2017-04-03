@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send.friend;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -31,11 +31,11 @@ import java.util.Calendar;
  */
 public class ExFriendDetailInfo implements IClientOutgoingPacket {
 	private final int _objectId;
-	private final PlayerInstance _friend;
+	private final Player _friend;
 	private final String _name;
 	private final int _lastAccess;
 
-	public ExFriendDetailInfo(PlayerInstance player, String name) {
+	public ExFriendDetailInfo(Player player, String name) {
 		_objectId = player.getObjectId();
 		_name = name;
 		_friend = World.getInstance().getPlayer(_name);

@@ -20,7 +20,7 @@ package instances.ElcadiasTent;
 
 import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10292_SevenSignsGirlOfDoubt.Q10292_SevenSignsGirlOfDoubt;
 import quests.Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom.Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom;
@@ -46,7 +46,7 @@ public final class ElcadiasTent extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		if (npc.getId() == GRUFF_LOOKING_MAN) {
 			final QuestState GirlOfDoubt = talker.getQuestState(Q10292_SevenSignsGirlOfDoubt.class.getSimpleName());
 			final QuestState ForbiddenBook = talker.getQuestState(Q10293_SevenSignsForbiddenBookOfTheElmoreAdenKingdom.class.getSimpleName());

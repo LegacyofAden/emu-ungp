@@ -20,7 +20,7 @@ package handlers.admincommandhandlers;
 
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.util.Util;
 
@@ -39,7 +39,7 @@ public class AdminMessages implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_msg ")) {
 			try {
 				activeChar.sendPacket(SystemMessage.getSystemMessage(Integer.parseInt(command.substring(10).trim())));

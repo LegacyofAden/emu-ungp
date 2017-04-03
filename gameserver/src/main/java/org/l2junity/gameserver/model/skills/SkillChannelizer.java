@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.MagicSkillLaunched;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
@@ -173,7 +173,7 @@ public class SkillChannelizer implements Runnable {
 
 						// Update PvP status
 						if (character.isPlayable() && getChannelizer().isPlayer()) {
-							((PlayerInstance) getChannelizer()).updatePvPStatus(character);
+							((Player) getChannelizer()).updatePvPStatus(character);
 						}
 
 						// Be warned, this method has the possibility to call doDie->abortCast->stopChanneling method. Variable cache above try{} is used in this case to avoid NPEs.

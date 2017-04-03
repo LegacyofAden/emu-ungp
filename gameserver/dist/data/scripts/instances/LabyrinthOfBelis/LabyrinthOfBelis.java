@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -90,7 +90,7 @@ public final class LabyrinthOfBelis extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enter_instance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		} else {
@@ -212,7 +212,7 @@ public final class LabyrinthOfBelis extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		String htmltext = null;
 
@@ -255,7 +255,7 @@ public final class LabyrinthOfBelis extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 
 		if (isInInstance(world)) {
@@ -304,7 +304,7 @@ public final class LabyrinthOfBelis extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 
 		if (isInInstance(world)) {
@@ -435,7 +435,7 @@ public final class LabyrinthOfBelis extends AbstractInstance {
 	public void onCreatureKill(OnCreatureDeath event) {
 		final Npc npc = (Npc) event.getTarget();
 		final Instance world = npc.getInstanceWorld();
-		final PlayerInstance player = world.getFirstPlayer();
+		final Player player = world.getFirstPlayer();
 
 		if (isInInstance(world)) {
 			switch (npc.getId()) {

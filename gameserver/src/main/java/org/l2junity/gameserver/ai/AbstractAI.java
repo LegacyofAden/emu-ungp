@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -371,7 +371,7 @@ public abstract class AbstractAI implements Ctrl {
 	 * Cancel action client side by sending Server->Client packet ActionFailed to the L2PcInstance actor. <FONT COLOR=#FF0000><B> <U>Caution</U> : Low level function, used by AI subclasses</B></FONT>
 	 */
 	protected void clientActionFailed() {
-		if (_actor instanceof PlayerInstance) {
+		if (_actor instanceof Player) {
 			_actor.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 	}
@@ -552,7 +552,7 @@ public abstract class AbstractAI implements Ctrl {
 			}
 			return;
 		}
-		if (_actor instanceof PlayerInstance) {
+		if (_actor instanceof Player) {
 			if (!AttackStanceTaskManager.getInstance().hasAttackStanceTask(_actor) && isAutoAttacking()) {
 				AttackStanceTaskManager.getInstance().addAttackStanceTask(_actor);
 			}
@@ -585,7 +585,7 @@ public abstract class AbstractAI implements Ctrl {
 	 *
 	 * @param player The L2PcIstance to notify with state of this L2Character
 	 */
-	public void describeStateToPlayer(PlayerInstance player) {
+	public void describeStateToPlayer(Player player) {
 		if (getActor().isVisibleFor(player)) {
 			if (_clientMoving) {
 				if ((_clientMovingToPawnOffset != 0) && isFollowing()) {

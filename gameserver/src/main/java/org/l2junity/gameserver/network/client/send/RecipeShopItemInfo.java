@@ -18,18 +18,18 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class RecipeShopItemInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _manufacturer;
+	private final Player _manufacturer;
 	private final int _recipeId;
 	private final Boolean _success;
 	private final long _manufacturePrice;
 	private final long _offeringMaximumAdena;
 
-	public RecipeShopItemInfo(PlayerInstance manufacturer, int recipeId, boolean success, long manufacturePrice, long offeringMaximumAdena) {
+	public RecipeShopItemInfo(Player manufacturer, int recipeId, boolean success, long manufacturePrice, long offeringMaximumAdena) {
 		_manufacturer = manufacturer;
 		_recipeId = recipeId;
 		_success = success;
@@ -37,7 +37,7 @@ public class RecipeShopItemInfo implements IClientOutgoingPacket {
 		_offeringMaximumAdena = offeringMaximumAdena;
 	}
 
-	public RecipeShopItemInfo(PlayerInstance manufacturer, int recipeId, long manufacturePrice, long offeringMaximumAdena) {
+	public RecipeShopItemInfo(Player manufacturer, int recipeId, long manufacturePrice, long offeringMaximumAdena) {
 		_manufacturer = manufacturer;
 		_recipeId = recipeId;
 		_success = null;

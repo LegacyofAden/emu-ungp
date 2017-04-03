@@ -25,7 +25,7 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -62,7 +62,7 @@ public final class PlainsOfDion extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		if (npc.isScriptValue(0)) {
 			final int i = getRandom(5);
 			if (i < 2) {

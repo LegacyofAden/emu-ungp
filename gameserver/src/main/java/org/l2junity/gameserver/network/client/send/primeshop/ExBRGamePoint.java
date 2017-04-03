@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.primeshop;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -30,7 +30,7 @@ public class ExBRGamePoint implements IClientOutgoingPacket {
 	private final int _charId;
 	private final int _charPoints;
 
-	public ExBRGamePoint(final PlayerInstance player) {
+	public ExBRGamePoint(final Player player) {
 		_charId = player.getObjectId();
 		_charPoints = player.getPrimePoints();
 	}

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.restriction;
 
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  */
 public final class IsWorldObjectVisibleFor implements IBaseEvent {
 	private final WorldObject _worldObject;
-	private final PlayerInstance _observer;
+	private final Player _observer;
 
-	public IsWorldObjectVisibleFor(WorldObject worldObject, PlayerInstance observer) {
+	public IsWorldObjectVisibleFor(WorldObject worldObject, Player observer) {
 		_worldObject = worldObject;
 		_observer = observer;
 	}
@@ -39,7 +39,7 @@ public final class IsWorldObjectVisibleFor implements IBaseEvent {
 		return _worldObject;
 	}
 
-	public PlayerInstance getObserver() {
+	public Player getObserver() {
 		return _observer;
 	}
 

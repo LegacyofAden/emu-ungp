@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowQuestMark;
@@ -61,9 +61,9 @@ public class AdminShowQuests implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		String[] cmdParams = command.split(" ");
-		PlayerInstance target = null;
+		Player target = null;
 		WorldObject targetObject = null;
 		String[] val = new String[4];
 		val[0] = null;
@@ -132,7 +132,7 @@ public class AdminShowQuests implements IAdminCommandHandler {
 		return true;
 	}
 
-	private static void showFirstQuestMenu(PlayerInstance target, PlayerInstance actor) {
+	private static void showFirstQuestMenu(Player target, Player actor) {
 		StringBuilder replyMSG = new StringBuilder("<html><body><table width=270><tr><td width=45><button value=\"Main\" action=\"bypass -h admin_admin\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=180><center>Player: " + target.getName() + "</center></td><td width=45><button value=\"Back\" action=\"bypass -h admin_admin6\" width=45 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table>");
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		int ID = target.getObjectId();
@@ -149,7 +149,7 @@ public class AdminShowQuests implements IAdminCommandHandler {
 		actor.sendPacket(adminReply);
 	}
 
-	private static void showQuestMenu(PlayerInstance target, PlayerInstance actor, String[] val) {
+	private static void showQuestMenu(Player target, Player actor, String[] val) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection()) {
 			ResultSet rs;
 			PreparedStatement req;
@@ -268,7 +268,7 @@ public class AdminShowQuests implements IAdminCommandHandler {
 		}
 	}
 
-	private static void setQuestVar(PlayerInstance target, PlayerInstance actor, String[] val) {
+	private static void setQuestVar(Player target, Player actor, String[] val) {
 		QuestState qs = target.getQuestState(val[0]);
 		String[] outval = new String[3];
 

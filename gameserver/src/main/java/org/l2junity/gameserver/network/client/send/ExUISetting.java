@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.ActionKey;
 import org.l2junity.gameserver.model.UIKeysSettings;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -33,7 +33,7 @@ public class ExUISetting implements IClientOutgoingPacket {
 	private final UIKeysSettings _uiSettings;
 	private int buffsize, categories;
 
-	public ExUISetting(PlayerInstance player) {
+	public ExUISetting(Player player) {
 		_uiSettings = player.getUISettings();
 		calcSize();
 	}

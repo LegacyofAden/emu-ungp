@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.request;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
@@ -29,17 +29,17 @@ import java.util.concurrent.TimeUnit;
  * @author UnAfraid
  */
 public abstract class AbstractRequest {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private volatile long _timestamp = 0;
 	private volatile boolean _isProcessing;
 	private ScheduledFuture<?> _timeOutTask;
 
-	public AbstractRequest(PlayerInstance activeChar) {
+	public AbstractRequest(Player activeChar) {
 		Objects.requireNonNull(activeChar);
 		_activeChar = activeChar;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

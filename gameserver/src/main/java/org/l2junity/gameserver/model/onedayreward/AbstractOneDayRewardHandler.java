@@ -22,7 +22,7 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,21 +52,21 @@ public abstract class AbstractOneDayRewardHandler extends ListenersContainer {
 		return _holder;
 	}
 
-	public abstract boolean isAvailable(PlayerInstance player);
+	public abstract boolean isAvailable(Player player);
 
 	public abstract void init();
 
-	public int getStatus(PlayerInstance player) {
+	public int getStatus(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return entry != null ? entry.getStatus().getClientId() : OneDayRewardStatus.NOT_AVAILABLE.getClientId();
 	}
 
-	public int getProgress(PlayerInstance player) {
+	public int getProgress(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return entry != null ? entry.getProgress() : 0;
 	}
 
-	public boolean getRecentlyCompleted(PlayerInstance player) {
+	public boolean getRecentlyCompleted(Player player) {
 		final OneDayRewardPlayerEntry entry = getPlayerEntry(player.getObjectId(), false);
 		return (entry != null) && entry.getRecentlyCompleted();
 	}
@@ -84,7 +84,7 @@ public abstract class AbstractOneDayRewardHandler extends ListenersContainer {
 		}
 	}
 
-	public boolean requestReward(PlayerInstance player) {
+	public boolean requestReward(Player player) {
 		if (isAvailable(player)) {
 			giveRewards(player);
 
@@ -99,7 +99,7 @@ public abstract class AbstractOneDayRewardHandler extends ListenersContainer {
 		return false;
 	}
 
-	protected void giveRewards(PlayerInstance player) {
+	protected void giveRewards(Player player) {
 		_holder.getRewards().forEach(i -> player.addItem("One Day Reward", i, player, true));
 	}
 

@@ -21,7 +21,7 @@ package ai.individual.TalkingIsland;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -40,7 +40,7 @@ public final class Oris extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("SOCIAL_ACTION_1")) {
 			npc.broadcastSocialAction(6);
 			startQuestTimer("SOCIAL_ACTION_2", 2500, npc, null);

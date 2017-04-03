@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ClanInvitationRequest;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.*;
@@ -44,7 +44,7 @@ public final class RequestAnswerJoinPledge implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -55,7 +55,7 @@ public final class RequestAnswerJoinPledge implements IClientIncomingPacket {
 		}
 		request.setProcessing(true);
 
-		final PlayerInstance requestor = request.getActiveChar();
+		final Player requestor = request.getActiveChar();
 		if (requestor == null) {
 			return;
 		}

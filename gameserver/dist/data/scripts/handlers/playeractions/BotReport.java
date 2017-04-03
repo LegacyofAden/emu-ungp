@@ -23,7 +23,7 @@ import org.l2junity.gameserver.datatables.BotReportTable;
 import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Bot Report button player action handler.
@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
  */
 public final class BotReport implements IPlayerActionHandler {
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+	public void useAction(Player activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		if (GeneralConfig.BOTREPORT_ENABLE) {
 			BotReportTable.getInstance().reportBot(activeChar);
 		} else {

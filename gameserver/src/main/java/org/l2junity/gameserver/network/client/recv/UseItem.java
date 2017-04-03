@@ -31,7 +31,7 @@ import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseItem;
@@ -66,7 +66,7 @@ public final class UseItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -284,7 +284,7 @@ public final class UseItem implements IClientIncomingPacket {
 		}
 	}
 
-	private void reuseData(PlayerInstance activeChar, ItemInstance item, long remainingTime) {
+	private void reuseData(Player activeChar, ItemInstance item, long remainingTime) {
 		final int hours = (int) (remainingTime / 3600000L);
 		final int minutes = (int) (remainingTime % 3600000L) / 60000;
 		final int seconds = (int) ((remainingTime / 1000) % 60);
@@ -306,7 +306,7 @@ public final class UseItem implements IClientIncomingPacket {
 		activeChar.sendPacket(sm);
 	}
 
-	private void sendSharedGroupUpdate(PlayerInstance activeChar, int group, long remaining, int reuse) {
+	private void sendSharedGroupUpdate(Player activeChar, int group, long remaining, int reuse) {
 		if (group > 0) {
 			activeChar.sendPacket(new ExUseSharedGroupItem(_itemId, group, remaining, reuse));
 		}

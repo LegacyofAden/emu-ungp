@@ -27,7 +27,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.Priority;
@@ -74,7 +74,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	}
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {
@@ -203,7 +203,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param minZ
 	 */
-	private void setMinZ(PlayerInstance activeChar, int minZ) {
+	private void setMinZ(Player activeChar, int minZ) {
 		_zones.computeIfAbsent(activeChar.getObjectId(), key -> new ZoneNodeHolder(activeChar)).setMinZ(minZ);
 	}
 
@@ -211,11 +211,11 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param maxZ
 	 */
-	private void setMaxZ(PlayerInstance activeChar, int maxZ) {
+	private void setMaxZ(Player activeChar, int maxZ) {
 		_zones.computeIfAbsent(activeChar.getObjectId(), key -> new ZoneNodeHolder(activeChar)).setMaxZ(maxZ);
 	}
 
-	private void buildZonesEditorWindow(PlayerInstance activeChar) {
+	private void buildZonesEditorWindow(Player activeChar) {
 		final StringBuilder sb = new StringBuilder();
 		final List<ZoneType> zones = ZoneManager.getInstance().getZones(activeChar);
 		for (ZoneType zone : zones) {
@@ -236,7 +236,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param zoneName
 	 */
-	private void loadZone(PlayerInstance activeChar, String zoneName) {
+	private void loadZone(Player activeChar, String zoneName) {
 		activeChar.sendMessage("Searching for zone: " + zoneName);
 		final List<ZoneType> zones = ZoneManager.getInstance().getZones(activeChar);
 		ZoneType zoneType = null;
@@ -268,7 +268,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param name
 	 */
-	private void setName(PlayerInstance activeChar, String name) {
+	private void setName(Player activeChar, String name) {
 		if (name.contains("<") || name.contains(">") || name.contains("&") || name.contains("\\") || name.contains("\"") || name.contains("$")) {
 			activeChar.sendMessage("You cannot use symbols like: < > & \" $ \\");
 			return;
@@ -279,7 +279,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	/**
 	 * @param activeChar
 	 */
-	private void enablePicking(PlayerInstance activeChar) {
+	private void enablePicking(Player activeChar) {
 		if (!activeChar.hasAction(PlayerAction.ADMIN_POINT_PICKING)) {
 			activeChar.addAction(PlayerAction.ADMIN_POINT_PICKING);
 			activeChar.sendMessage("Point picking mode activated!");
@@ -291,7 +291,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	/**
 	 * @param activeChar
 	 */
-	private void disablePicking(PlayerInstance activeChar) {
+	private void disablePicking(Player activeChar) {
 		if (activeChar.removeAction(PlayerAction.ADMIN_POINT_PICKING)) {
 			activeChar.sendMessage("Point picking mode deactivated!");
 		} else {
@@ -302,7 +302,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	/**
 	 * @param activeChar
 	 */
-	private void showPoints(PlayerInstance activeChar) {
+	private void showPoints(Player activeChar) {
 		final ZoneNodeHolder holder = _zones.get(activeChar.getObjectId());
 		if (holder != null) {
 			if (holder.getNodes().size() < 3) {
@@ -339,7 +339,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param index
 	 */
-	private void changePoint(PlayerInstance activeChar, int index) {
+	private void changePoint(Player activeChar, int index) {
 		final ZoneNodeHolder holder = _zones.get(activeChar.getObjectId());
 		if (holder != null) {
 			final Location loc = holder.getNodes().get(index);
@@ -354,7 +354,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	 * @param activeChar
 	 * @param index
 	 */
-	private void deletePoint(PlayerInstance activeChar, int index) {
+	private void deletePoint(Player activeChar, int index) {
 		final ZoneNodeHolder holder = _zones.get(activeChar.getObjectId());
 		if (holder != null) {
 			final Location loc = holder.getNodes().get(index);
@@ -372,7 +372,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	/**
 	 * @param activeChar
 	 */
-	private void dumpPoints(final PlayerInstance activeChar) {
+	private void dumpPoints(final Player activeChar) {
 		final ZoneNodeHolder holder = _zones.get(activeChar.getObjectId());
 		if ((holder != null) && !holder.getNodes().isEmpty()) {
 			if (holder.getName().isEmpty()) {
@@ -415,7 +415,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	@Priority(Integer.MAX_VALUE)
 	public TerminateReturn onPlayerPointPicking(OnPlayerMoveRequest event) {
-		final PlayerInstance activeChar = event.getActiveChar();
+		final Player activeChar = event.getActiveChar();
 		if (activeChar.hasAction(PlayerAction.ADMIN_POINT_PICKING)) {
 			final Location newLocation = event.getLocation();
 			final ZoneNodeHolder holder = _zones.computeIfAbsent(activeChar.getObjectId(), key -> new ZoneNodeHolder(activeChar));
@@ -443,7 +443,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 	@RegisterEvent(EventType.ON_PLAYER_DLG_ANSWER)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerDlgAnswer(OnPlayerDlgAnswer event) {
-		final PlayerInstance activeChar = event.getActiveChar();
+		final Player activeChar = event.getActiveChar();
 		if (activeChar.removeAction(PlayerAction.ADMIN_SHOW_TERRITORY) && (event.getAnswer() == 1)) {
 			final ZoneNodeHolder holder = _zones.get(activeChar.getObjectId());
 			if (holder != null) {
@@ -469,7 +469,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 		return COMMANDS;
 	}
 
-	private void buildHtmlWindow(final PlayerInstance activeChar, final int page) {
+	private void buildHtmlWindow(final Player activeChar, final int page) {
 		final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
 		msg.setFile(activeChar.getHtmlPrefix(), "admin/zone_editor_create.htm");
 		final ZoneNodeHolder holder = _zones.computeIfAbsent(activeChar.getObjectId(), key -> new ZoneNodeHolder(activeChar));
@@ -505,7 +505,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 		private double _maxZ;
 		private final List<Location> _nodes = new ArrayList<>();
 
-		public ZoneNodeHolder(PlayerInstance player) {
+		public ZoneNodeHolder(Player player) {
 			_minZ = player.getZ() - 200;
 			_maxZ = player.getZ() + 200;
 		}

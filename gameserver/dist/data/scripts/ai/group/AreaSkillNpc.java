@@ -23,7 +23,7 @@ import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 
 /**
@@ -115,7 +115,7 @@ public final class AreaSkillNpc extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		switch (event) {
 			case "START_SKILL_CAST": {
 				final SkillHolder skill = npc.getParameters().getSkillHolder(ArrayUtil.contains(DECOY, npc.getId()) ? "decoy_skill" : "union_skill");

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -69,7 +69,7 @@ public final class KartiaBoss extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("NPC_SAY") && npc.isTargetable()) {
 			npc.broadcastSay(ChatType.NPC_SHOUT, NpcStringId.YOU_PUNY_INSECTS_DON_T_KNOW_YOUR_PLACE_YOU_CANNOT_STOP_ME);
 		}

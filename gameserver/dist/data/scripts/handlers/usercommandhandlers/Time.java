@@ -22,7 +22,7 @@ import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -42,7 +42,7 @@ public class Time implements IUserCommandHandler {
 	private static final SimpleDateFormat fmt = new SimpleDateFormat("H:mm.");
 
 	@Override
-	public boolean useUserCommand(int id, PlayerInstance activeChar) {
+	public boolean useUserCommand(int id, Player activeChar) {
 		if (COMMAND_IDS[0] != id) {
 			return false;
 		}

@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2FishermanInstance;
 import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
 import org.l2junity.gameserver.model.actor.instance.L2VillageMasterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -89,7 +89,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -437,7 +437,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 		}
 	}
 
-	public static void showSubUnitSkillList(PlayerInstance activeChar) {
+	public static void showSubUnitSkillList(Player activeChar) {
 		final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableSubPledgeSkills(activeChar.getClan());
 
 		if (skills.isEmpty()) {
@@ -447,7 +447,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 		}
 	}
 
-	public static void showSubSkillList(PlayerInstance activeChar) {
+	public static void showSubSkillList(Player activeChar) {
 		final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableSubClassSkills(activeChar);
 		if (!skills.isEmpty()) {
 			activeChar.sendPacket(new ExAcquirableSkillListByClass(skills, AcquireSkillType.SUBCLASS));
@@ -456,7 +456,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 		}
 	}
 
-	public static void showDualSkillList(PlayerInstance activeChar) {
+	public static void showDualSkillList(Player activeChar) {
 		final List<SkillLearn> skills = SkillTreesData.getInstance().getAvailableDualClassSkills(activeChar);
 		if (!skills.isEmpty()) {
 			activeChar.sendPacket(new ExAcquirableSkillListByClass(skills, AcquireSkillType.DUALCLASS));
@@ -475,7 +475,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 	 * @param skillLearn the skill to be learn.
 	 * @return {@code true} if all requirements are meet, {@code false} otherwise.
 	 */
-	private boolean checkPlayerSkill(PlayerInstance player, Npc trainer, SkillLearn skillLearn) {
+	private boolean checkPlayerSkill(Player player, Npc trainer, SkillLearn skillLearn) {
 		if (skillLearn != null) {
 			if ((skillLearn.getSkillId() == _id) && (skillLearn.getSkillLevel() == _level)) {
 				// Hack check.
@@ -572,7 +572,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 	 * @param trainer the Npc teaching a skill.
 	 * @param skill   the skill to be learn.
 	 */
-	private void giveSkill(PlayerInstance player, Npc trainer, Skill skill) {
+	private void giveSkill(Player player, Npc trainer, Skill skill) {
 		giveSkill(player, trainer, skill, true);
 	}
 
@@ -584,7 +584,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 	 * @param skill   the skill to be learn.
 	 * @param store
 	 */
-	private void giveSkill(PlayerInstance player, Npc trainer, Skill skill, boolean store) {
+	private void giveSkill(Player player, Npc trainer, Skill skill, boolean store) {
 		// Send message.
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_EARNED_S12);
 		sm.addSkillName(skill);
@@ -619,7 +619,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 	 * @param trainer the Npc which the {@code player} is interacting
 	 * @param player  the active character
 	 */
-	private void showSkillList(Npc trainer, PlayerInstance player) {
+	private void showSkillList(Npc trainer, Player player) {
 		if (_skillType == AcquireSkillType.SUBCLASS) {
 			showSubSkillList(player);
 		} else if (_skillType == AcquireSkillType.DUALCLASS) {

@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -82,7 +82,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -216,7 +216,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -361,7 +361,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			final QuestState qs = getQuestState(player, false);
 			if (qs == null) {
 				if (player.isInCategory(CategoryType.MAGE_GROUP)) {
@@ -379,7 +379,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerBypass(OnPlayerBypass event) {
 		final String command = event.getCommand();
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 
 		if (qs == null) {
@@ -413,7 +413,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
@@ -431,7 +431,7 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 
 		if ((qs == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.THIRD_CLASS_GROUP))) {

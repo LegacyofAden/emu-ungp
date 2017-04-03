@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,11 +29,11 @@ import org.l2junity.network.PacketWriter;
  * @author kerberos JIV
  */
 public class ExValidateLocationInAirShip implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _shipId, _heading;
 	private final Location _loc;
 
-	public ExValidateLocationInAirShip(PlayerInstance player) {
+	public ExValidateLocationInAirShip(Player player) {
 		_activeChar = player;
 		_shipId = _activeChar.getAirShip().getObjectId();
 		_loc = player.getInVehiclePosition();

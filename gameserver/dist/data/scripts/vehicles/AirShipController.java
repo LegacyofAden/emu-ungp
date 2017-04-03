@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.L2ControllableAirShipInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.ScriptZone;
@@ -104,7 +104,7 @@ public abstract class AirShipController extends AbstractNpcAI {
 	private static final SystemMessage SM_NEED_MORE = SystemMessage.getSystemMessage(SystemMessageId.AN_AIRSHIP_CANNOT_BE_SUMMONED_BECAUSE_YOU_DON_T_HAVE_ENOUGH_S1).addItemName(STARSTONE);
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if ("summon".equalsIgnoreCase(event)) {
 			if (_dockedShip != null) {
 				if (_dockedShip.isOwner(player)) {
@@ -259,7 +259,7 @@ public abstract class AirShipController extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return npc.getId() + ".htm";
 	}
 

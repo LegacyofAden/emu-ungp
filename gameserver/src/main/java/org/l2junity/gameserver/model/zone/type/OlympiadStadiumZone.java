@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
 import org.l2junity.gameserver.model.zone.AbstractZoneSettings;
 import org.l2junity.gameserver.model.zone.L2ZoneRespawn;
@@ -107,7 +107,7 @@ public class OlympiadStadiumZone extends L2ZoneRespawn {
 		}
 
 		if (character.isPlayable()) {
-			final PlayerInstance player = character.getActingPlayer();
+			final Player player = character.getActingPlayer();
 			if (player != null) {
 				// only participants, observers and GMs allowed
 				if (!player.canOverrideCond(PcCondOverride.ZONE_CONDITIONS) && !player.isInOlympiadMode() && !player.inObserverMode()) {

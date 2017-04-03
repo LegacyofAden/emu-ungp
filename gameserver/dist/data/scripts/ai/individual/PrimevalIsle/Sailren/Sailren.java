@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2RaidBossInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
 import org.l2junity.gameserver.network.client.send.SpecialCamera;
@@ -78,7 +78,7 @@ public final class Sailren extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "32109-01.html":
 			case "32109-01a.html":
@@ -102,7 +102,7 @@ public final class Sailren extends AbstractNpcAI {
 					takeItems(player, GAZKH, 1);
 					STATUS = Status.IN_FIGHT;
 					_lastAttack = System.currentTimeMillis();
-					for (PlayerInstance member : player.getParty().getMembers()) {
+					for (Player member : player.getParty().getMembers()) {
 						if (member.isInRadius3d(npc, 1000)) {
 							member.teleToLocation(27549, -6638, -2008);
 						}
@@ -210,7 +210,7 @@ public final class Sailren extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (zone.isCharacterInZone(attacker)) {
 			_lastAttack = System.currentTimeMillis();
 		}
@@ -218,7 +218,7 @@ public final class Sailren extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (zone.isCharacterInZone(killer)) {
 			switch (npc.getId()) {
 				case SAILREN: {

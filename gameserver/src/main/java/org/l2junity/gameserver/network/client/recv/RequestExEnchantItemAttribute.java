@@ -23,7 +23,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemAttributeRequest;
 import org.l2junity.gameserver.model.items.enchant.attribute.AttributeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -53,7 +53,7 @@ public class RequestExEnchantItemAttribute implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -242,7 +242,7 @@ public class RequestExEnchantItemAttribute implements IClientIncomingPacket {
 		player.sendInventoryUpdate(iu);
 	}
 
-	private int addElement(final PlayerInstance player, final ItemInstance stone, final ItemInstance item, AttributeType elementToAdd, int limit, int powerToAdd, int maxLevel) {
+	private int addElement(final Player player, final ItemInstance stone, final ItemInstance item, AttributeType elementToAdd, int limit, int powerToAdd, int maxLevel) {
 		final AttributeHolder oldElement = item.getAttribute(elementToAdd);
 		final int elementValue = oldElement == null ? 0 : oldElement.getValue();
 

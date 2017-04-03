@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -43,7 +43,7 @@ public final class PumpCreateItem extends AbstractEffect {
 
 	@Override
 	public void pumpStart(Creature caster, Creature target, Skill skill) {
-		final PlayerInstance player = target.getActingPlayer();
+		final Player player = target.getActingPlayer();
 		if (player != null) {
 			player.setCreateItemLevel(_recipeLevel);
 		}
@@ -51,7 +51,7 @@ public final class PumpCreateItem extends AbstractEffect {
 
 	@Override
 	public void pumpEnd(Creature caster, Creature target, Skill skill) {
-		final PlayerInstance player = target.getActingPlayer();
+		final Player player = target.getActingPlayer();
 		if (player != null) {
 			player.setCreateItemLevel(0);
 		}

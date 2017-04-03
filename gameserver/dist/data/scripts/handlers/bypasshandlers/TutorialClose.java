@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.HtmlActionScope;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.TutorialCloseHtml;
 
 /**
@@ -35,7 +35,7 @@ public class TutorialClose implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		activeChar.sendPacket(TutorialCloseHtml.STATIC_PACKET);
 		activeChar.clearHtmlActions(HtmlActionScope.TUTORIAL_HTML);
 		return false;

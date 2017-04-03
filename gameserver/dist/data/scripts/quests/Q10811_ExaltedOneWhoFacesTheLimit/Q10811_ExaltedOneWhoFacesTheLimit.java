@@ -21,7 +21,7 @@ package quests.Q10811_ExaltedOneWhoFacesTheLimit;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -58,7 +58,7 @@ public final class Q10811_ExaltedOneWhoFacesTheLimit extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 
 		if (qs == null) {
@@ -102,7 +102,7 @@ public final class Q10811_ExaltedOneWhoFacesTheLimit extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 

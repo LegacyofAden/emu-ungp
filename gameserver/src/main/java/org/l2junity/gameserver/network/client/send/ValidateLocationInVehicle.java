@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -29,7 +29,7 @@ public class ValidateLocationInVehicle implements IClientOutgoingPacket {
 	private final int _heading;
 	private final Location _pos;
 
-	public ValidateLocationInVehicle(PlayerInstance player) {
+	public ValidateLocationInVehicle(Player player) {
 		_charObjId = player.getObjectId();
 		_boatObjId = player.getBoat().getObjectId();
 		_heading = player.getHeading();

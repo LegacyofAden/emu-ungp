@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.primeshop;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -31,11 +31,11 @@ import java.util.Collection;
  * @author UnAfraid
  */
 public class ExBRProductList implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _type;
 	private final Collection<PrimeShopGroup> _primeList;
 
-	public ExBRProductList(PlayerInstance activeChar, int type, Collection<PrimeShopGroup> items) {
+	public ExBRProductList(Player activeChar, int type, Collection<PrimeShopGroup> items) {
 		_activeChar = activeChar;
 		_type = type;
 		_primeList = items;

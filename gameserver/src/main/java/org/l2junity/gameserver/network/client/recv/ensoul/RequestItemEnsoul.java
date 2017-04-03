@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv.ensoul;
 
 import org.l2junity.gameserver.data.xml.impl.EnsoulData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
 import org.l2junity.gameserver.model.ensoul.EnsoulStone;
 import org.l2junity.gameserver.model.holders.ItemHolder;
@@ -66,7 +66,7 @@ public class RequestItemEnsoul implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -64,7 +64,7 @@ public final class RequestRefundItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

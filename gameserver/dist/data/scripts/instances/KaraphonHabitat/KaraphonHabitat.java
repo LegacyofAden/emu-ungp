@@ -20,7 +20,7 @@ package instances.KaraphonHabitat;
 
 import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import quests.Q10745_TheSecretIngredients.Q10745_TheSecretIngredients;
 
@@ -47,7 +47,7 @@ public final class KaraphonHabitat extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (player.hasQuestState(Q10745_TheSecretIngredients.class.getSimpleName())) {
 			switch (event) {
 				case "enter_instance":
@@ -62,7 +62,7 @@ public final class KaraphonHabitat extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance world = killer.getInstanceWorld();
 		if (world != null) {
 			world.setReenterTime();

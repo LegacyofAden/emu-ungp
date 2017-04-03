@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.skills.conditiontypes;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
@@ -41,7 +41,7 @@ public class CanTransformSkillCondition implements ISkillCondition {
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		if (target.isPlayer()) {
-			final PlayerInstance player = target.getActingPlayer();
+			final Player player = target.getActingPlayer();
 			if ((player == null) || player.isAlikeDead() || player.isCursedWeaponEquipped()) {
 				return false;
 			}

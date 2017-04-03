@@ -20,7 +20,7 @@ package ai.individual.Other.CastleWarehouse;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Castle Warehouse Keeper AI.
@@ -52,7 +52,7 @@ public final class CastleWarehouse extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 		boolean isMyLord = player.isClanLeader() ? (player.getClan().getCastleId() == (npc.getCastle() != null ? npc.getCastle().getResidenceId() : -1)) : false;
 		switch (event) {
@@ -93,7 +93,7 @@ public final class CastleWarehouse extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "warehouse-01.html";
 	}
 

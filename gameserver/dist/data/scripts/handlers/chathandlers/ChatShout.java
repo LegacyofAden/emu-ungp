@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -43,7 +43,7 @@ public final class ChatShout implements IChatHandler {
 			};
 
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String target, String text) {
+	public void handleChat(ChatType type, Player activeChar, String target, String text) {
 		if (activeChar.isChatBanned() && GeneralConfig.BAN_CHAT_CHANNELS.contains(type)) {
 			activeChar.sendPacket(SystemMessageId.CHATTING_IS_CURRENTLY_PROHIBITED_IF_YOU_TRY_TO_CHAT_BEFORE_THE_PROHIBITION_IS_REMOVED_THE_PROHIBITION_TIME_WILL_INCREASE_EVEN_FURTHER_CHATTING_BAN_TIME_REMAINING_S1_SECONDS);
 			return;
@@ -57,7 +57,7 @@ public final class ChatShout implements IChatHandler {
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
 		if (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || (GeneralConfig.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS))) {
 			final int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
-			for (PlayerInstance player : World.getInstance().getPlayers()) {
+			for (Player player : World.getInstance().getPlayers()) {
 				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceWorld() == activeChar.getInstanceWorld())) {
 					player.sendPacket(cs);
 				}
@@ -68,7 +68,7 @@ public final class ChatShout implements IChatHandler {
 				return;
 			}
 
-			for (PlayerInstance player : World.getInstance().getPlayers()) {
+			for (Player player : World.getInstance().getPlayers()) {
 				if (!BlockList.isBlocked(player, activeChar)) {
 					player.sendPacket(cs);
 				}

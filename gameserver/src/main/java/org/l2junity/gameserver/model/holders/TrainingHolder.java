@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.core.configs.TrainingCampConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -71,7 +71,7 @@ public class TrainingHolder implements Serializable {
 		return _endTime == -1;
 	}
 
-	public boolean isValid(PlayerInstance player) {
+	public boolean isValid(Player player) {
 		return TrainingCampConfig.ENABLE && (player.getObjectId() == _objectId) && (player.getClassIndex() == _classIndex);
 	}
 

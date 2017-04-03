@@ -27,7 +27,7 @@ import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.SubclassInfoType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.model.events.EventType;
@@ -142,7 +142,7 @@ public final class Raina extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		switch (event) {
 			case "33491-01.html":
@@ -341,7 +341,7 @@ public final class Raina extends AbstractNpcAI {
 	@RegisterType(ListenerRegisterType.NPC)
 	@Id(RAINA)
 	public final void OnNpcMenuSelect(OnNpcMenuSelect event) {
-		final PlayerInstance player = event.getTalker();
+		final Player player = event.getTalker();
 		final Npc npc = event.getNpc();
 		final int ask = event.getAsk();
 
@@ -513,7 +513,7 @@ public final class Raina extends AbstractNpcAI {
 	 * @param player
 	 * @return
 	 */
-	private Set<ClassId> getAvailableSubClasses(PlayerInstance player) {
+	private Set<ClassId> getAvailableSubClasses(Player player) {
 		final int currentBaseId = player.getBaseClass();
 		final ClassId baseCID = ClassId.getClassId(currentBaseId);
 		int baseClassId = (CategoryData.getInstance().isInCategory(CategoryType.FOURTH_CLASS_GROUP, baseCID.getId()) || CategoryData.getInstance().isInCategory(CategoryType.FIFTH_CLASS_GROUP, baseCID.getId()) || CategoryData.getInstance().isInCategory(CategoryType.SIXTH_CLASS_GROUP, baseCID.getId())) ? baseCID.getParent().getId() : currentBaseId;
@@ -546,7 +546,7 @@ public final class Raina extends AbstractNpcAI {
 	 * @param classId
 	 * @return
 	 */
-	private boolean isValidNewSubClass(PlayerInstance player, int classId) {
+	private boolean isValidNewSubClass(Player player, int classId) {
 		final ClassId cid = ClassId.getClassId(classId);
 		ClassId subClassId;
 		for (SubClass subList : player.getSubClasses().values()) {
@@ -579,7 +579,7 @@ public final class Raina extends AbstractNpcAI {
 		return found;
 	}
 
-	private boolean hasAllSubclassLeveled(PlayerInstance player) {
+	private boolean hasAllSubclassLeveled(Player player) {
 		boolean leveled = true;
 
 		for (SubClass sub : player.getSubClasses().values()) {
@@ -590,7 +590,7 @@ public final class Raina extends AbstractNpcAI {
 		return leveled;
 	}
 
-	public final List<ClassId> getAvailableDualclasses(PlayerInstance player) {
+	public final List<ClassId> getAvailableDualclasses(Player player) {
 		final List<ClassId> dualClasses = new ArrayList<>();
 
 		for (ClassId ClassId : ClassId.values()) {
@@ -601,7 +601,7 @@ public final class Raina extends AbstractNpcAI {
 		return dualClasses;
 	}
 
-	private List<ClassId> getDualClasses(PlayerInstance player, CategoryType cType) {
+	private List<ClassId> getDualClasses(Player player, CategoryType cType) {
 		final List<ClassId> tempList = new ArrayList<>();
 		final int baseClassId = player.getBaseClass();
 		final int dualClassId = player.getClassId().getId();
@@ -614,7 +614,7 @@ public final class Raina extends AbstractNpcAI {
 		return tempList;
 	}
 
-	public final Set<ClassId> getSubclasses(PlayerInstance player, int classId) {
+	public final Set<ClassId> getSubclasses(Player player, int classId) {
 		Set<ClassId> subclasses = null;
 		final ClassId pClass = ClassId.getClassId(classId);
 
@@ -661,7 +661,7 @@ public final class Raina extends AbstractNpcAI {
 		return subclasses;
 	}
 
-	private NpcHtmlMessage getNpcHtmlMessage(PlayerInstance player, Npc npc, String fileName) {
+	private NpcHtmlMessage getNpcHtmlMessage(Player player, Npc npc, String fileName) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		final String text = getHtm(player.getLang(), fileName);
 		if (text == null) {
@@ -672,11 +672,11 @@ public final class Raina extends AbstractNpcAI {
 		return html;
 	}
 
-	private int getCloakId(PlayerInstance player) {
+	private int getCloakId(Player player) {
 		return classCloak.entrySet().stream().filter(e -> player.isInCategory(e.getKey())).mapToInt(Entry::getValue).findFirst().orElse(0);
 	}
 
-	private int getPowerItemId(PlayerInstance player) {
+	private int getPowerItemId(Player player) {
 		return powerItem.entrySet().stream().filter(e -> player.isInCategory(e.getKey())).mapToInt(Entry::getValue).findFirst().orElse(0);
 	}
 

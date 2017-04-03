@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.SiegeGuardManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -59,7 +59,7 @@ public final class MercTicket extends AbstractNpcAI implements IItemHandler {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 		final Castle castle = CastleManager.getInstance().getCastle(activeChar);
 		if ((castle == null) || (activeChar.getClan() == null) || (castle.getOwnerId() != activeChar.getClanId()) || !activeChar.hasClanPrivilege(ClanPrivilege.CS_MERCENARIES)) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_AUTHORITY_TO_POSITION_MERCENARIES);
@@ -94,7 +94,7 @@ public final class MercTicket extends AbstractNpcAI implements IItemHandler {
 	@RegisterEvent(EventType.ON_PLAYER_DLG_ANSWER)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerDlgAnswer(OnPlayerDlgAnswer event) {
-		final PlayerInstance activeChar = event.getActiveChar();
+		final Player activeChar = event.getActiveChar();
 		if (activeChar.removeAction(PlayerAction.MERCENARY_CONFIRM) && _items.containsKey(activeChar.getObjectId())) {
 			if (SiegeGuardManager.getInstance().isTooCloseToAnotherTicket(activeChar)) {
 				activeChar.sendPacket(SystemMessageId.POSITIONING_CANNOT_BE_DONE_HERE_BECAUSE_THE_DISTANCE_BETWEEN_MERCENARIES_IS_TOO_SHORT);

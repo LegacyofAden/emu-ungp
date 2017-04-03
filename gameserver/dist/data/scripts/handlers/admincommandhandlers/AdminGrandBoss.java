@@ -27,7 +27,7 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -59,7 +59,7 @@ public class AdminGrandBoss implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 		switch (actualCommand.toLowerCase()) {
@@ -164,7 +164,7 @@ public class AdminGrandBoss implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void manageHtml(PlayerInstance activeChar, int grandBossId) {
+	private void manageHtml(Player activeChar, int grandBossId) {
 		if (Arrays.asList(ANTHARAS, VALAKAS, BAIUM, QUEENANT, ORFEN, CORE).contains(grandBossId)) {
 			final int bossStatus = GrandBossManager.getInstance().getBossStatus(grandBossId);
 			NoRestartZone bossZone = null;

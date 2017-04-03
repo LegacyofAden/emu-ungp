@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.handler;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public interface IVoicedCommandHandler {
 	/**
@@ -29,7 +29,7 @@ public interface IVoicedCommandHandler {
 	 * @param params
 	 * @return command success
 	 */
-	boolean useVoicedCommand(String command, PlayerInstance activeChar, String params);
+	boolean useVoicedCommand(String command, Player activeChar, String params);
 
 	/**
 	 * this method is called at initialization to register all the item ids automatically

@@ -20,7 +20,7 @@ package ai.individual.Other.BlackMarketeerOfMammon;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.util.Util;
 
@@ -42,7 +42,7 @@ public final class BlackMarketeerOfMammon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("31092-01.html")) {
 			return event;
 		} else if (event.startsWith("exchange")) {

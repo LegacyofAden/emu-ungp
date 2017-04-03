@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.drops.DropListScope;
 import org.l2junity.gameserver.model.drops.GeneralDropItem;
 import org.l2junity.gameserver.model.drops.GroupedGeneralDropItem;
@@ -58,7 +58,7 @@ public class NpcViewMod implements IBypassHandler {
 	private static final int DROP_LIST_ITEMS_PER_PAGE = 10;
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature bypassOrigin) {
+	public boolean useBypass(String command, Player activeChar, Creature bypassOrigin) {
 		final StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
 
@@ -163,7 +163,7 @@ public class NpcViewMod implements IBypassHandler {
 		return COMMANDS;
 	}
 
-	public static void sendNpcView(PlayerInstance activeChar, Npc npc) {
+	public static void sendNpcView(Player activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
 		html.setFile(activeChar.getLang(), "mods/NpcView/Info.htm");
 		html.replace("%name%", npc.getName());
@@ -228,7 +228,7 @@ public class NpcViewMod implements IBypassHandler {
 		activeChar.sendPacket(html);
 	}
 
-	public static void sendNpcSkillView(PlayerInstance activeChar, Npc npc) {
+	public static void sendNpcSkillView(Player activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
 		html.setFile(activeChar.getLang(), "mods/NpcView/Skills.htm");
 
@@ -259,7 +259,7 @@ public class NpcViewMod implements IBypassHandler {
 		activeChar.sendPacket(html);
 	}
 
-	public static void sendAggroListView(PlayerInstance activeChar, Npc npc) {
+	public static void sendAggroListView(Player activeChar, Npc npc) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
 		html.setFile(activeChar.getLang(), "mods/NpcView/AggroList.htm");
 
@@ -307,7 +307,7 @@ public class NpcViewMod implements IBypassHandler {
 		return sb.toString();
 	}
 
-	public static void sendNpcDropList(PlayerInstance activeChar, Npc npc, DropListScope dropListScope, int page) {
+	public static void sendNpcDropList(Player activeChar, Npc npc, DropListScope dropListScope, int page) {
 		final List<IDropItem> dropList = npc.getTemplate().getDropList(dropListScope);
 		if ((dropList == null) || dropList.isEmpty()) {
 			return;

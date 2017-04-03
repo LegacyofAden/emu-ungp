@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.PrivateStoreManageListBuy;
@@ -41,7 +41,7 @@ public final class PrivateStore implements IPlayerActionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrivateStore.class);
 
 	@Override
-	public void useAction(PlayerInstance activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
+	public void useAction(Player activeChar, ActionDataHolder data, boolean ctrlPressed, boolean shiftPressed) {
 		final PrivateStoreType type = PrivateStoreType.findById(data.getOptionId());
 		if (type == null) {
 			LOGGER.warn("Incorrect private store type: {}", data.getOptionId());

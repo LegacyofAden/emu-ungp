@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  */
 public class OnPlayerMenteeLeft implements IBaseEvent {
 	private final Mentee _mentor;
-	private final PlayerInstance _mentee;
+	private final Player _mentee;
 
-	public OnPlayerMenteeLeft(Mentee mentor, PlayerInstance mentee) {
+	public OnPlayerMenteeLeft(Mentee mentor, Player mentee) {
 		_mentor = mentor;
 		_mentee = mentee;
 	}
@@ -39,7 +39,7 @@ public class OnPlayerMenteeLeft implements IBaseEvent {
 		return _mentor;
 	}
 
-	public PlayerInstance getMentee() {
+	public Player getMentee() {
 		return _mentee;
 	}
 

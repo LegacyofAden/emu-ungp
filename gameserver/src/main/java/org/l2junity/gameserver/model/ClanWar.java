@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.UserInfoType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.clan.OnClanWarStart;
 import org.l2junity.gameserver.network.client.send.SurrenderPledgeWar;
@@ -113,7 +113,7 @@ public final class ClanWar {
 		}
 	}
 
-	public void onKill(PlayerInstance killer, PlayerInstance victim) {
+	public void onKill(Player killer, Player victim) {
 		final L2Clan victimClan = victim.getClan();
 		final L2Clan killerClan = killer.getClan();
 
@@ -172,7 +172,7 @@ public final class ClanWar {
 		}
 	}
 
-	public void cancel(PlayerInstance player, L2Clan cancelor) {
+	public void cancel(Player player, L2Clan cancelor) {
 		final L2Clan winnerClan = cancelor.getId() == _attackerClanId ? ClanTable.getInstance().getClan(_attackedClanId) : ClanTable.getInstance().getClan(_attackerClanId);
 
 		if (cancelor.getReputationScore() > 5000) {

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.impl.FishingData;
 import org.l2junity.gameserver.enums.ShotType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFishing;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -59,12 +59,12 @@ public class Fishing {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(Fishing.class);
 	private volatile ILocational _baitLocation = new Location(0, 0, 0);
 
-	private final PlayerInstance _player;
+	private final Player _player;
 	private ScheduledFuture<?> _reelInTask;
 	private ScheduledFuture<?> _startFishingTask;
 	private boolean _isFishing = false;
 
-	public Fishing(PlayerInstance player) {
+	public Fishing(Player player) {
 		_player = player;
 	}
 
@@ -374,7 +374,7 @@ public class Fishing {
 	 * @param waterZone   the water zone
 	 * @return the bait z or {@link Double#NaN} when you cannot fish here
 	 */
-	private static double computeBaitZ(final PlayerInstance player, final double baitX, final double baitY, final FishingZone fishingZone, final WaterZone waterZone) {
+	private static double computeBaitZ(final Player player, final double baitX, final double baitY, final FishingZone fishingZone, final WaterZone waterZone) {
 		if ((fishingZone == null)) {
 			return Double.NaN;
 		}

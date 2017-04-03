@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.instancemanager.games.Lottery;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
@@ -42,7 +42,7 @@ public class Loto implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		if (!target.isNpc()) {
 			return false;
 		}
@@ -84,7 +84,7 @@ public class Loto implements IBypassHandler {
 	// 23 - current lottery jackpot
 	// 24 - Previous winning numbers/Prize claim
 	// >24 - check lottery ticket by item object id
-	public static final void showLotoWindow(PlayerInstance player, Npc npc, int val) {
+	public static final void showLotoWindow(Player player, Npc npc, int val) {
 		int npcId = npc.getTemplate().getId();
 		String filename;
 		SystemMessage sm;

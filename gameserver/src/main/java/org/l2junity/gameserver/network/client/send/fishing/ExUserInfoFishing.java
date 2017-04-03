@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.fishing;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -28,17 +28,17 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExUserInfoFishing implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final boolean _isFishing;
 	private final ILocational _baitLocation;
 
-	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing, ILocational baitLocation) {
+	public ExUserInfoFishing(Player activeChar, boolean isFishing, ILocational baitLocation) {
 		_activeChar = activeChar;
 		_isFishing = isFishing;
 		_baitLocation = baitLocation;
 	}
 
-	public ExUserInfoFishing(PlayerInstance activeChar, boolean isFishing) {
+	public ExUserInfoFishing(Player activeChar, boolean isFishing) {
 		_activeChar = activeChar;
 		_isFishing = isFishing;
 		_baitLocation = null;

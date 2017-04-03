@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.holders;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.StatusUpdateType;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -184,7 +184,7 @@ public class RecipeHolder implements IIdentifiable {
 		return null;
 	}
 
-	public boolean checkNecessaryStats(PlayerInstance player, PlayerInstance manufacturer, boolean sendMessage) {
+	public boolean checkNecessaryStats(Player player, Player manufacturer, boolean sendMessage) {
 		for (Entry<StatusUpdateType, Double> entry : _statUse.entrySet()) {
 			final StatusUpdateType stat = entry.getKey();
 			final double requiredAmount = entry.getValue();
@@ -219,7 +219,7 @@ public class RecipeHolder implements IIdentifiable {
 	 * @param sendMessage send system messages for item requirements if there is missing ingredient.
 	 * @return {@code true} if all necessary ingredients are met, {@code false} if there are missing ingredients.
 	 */
-	public boolean checkNecessaryIngredients(PlayerInstance player, boolean sendMessage) {
+	public boolean checkNecessaryIngredients(Player player, boolean sendMessage) {
 		for (ItemHolder ingredient : getMaterials()) {
 			final long count = player.getInventory().getInventoryItemCount(ingredient.getId(), -1);
 			if (count < ingredient.getCount()) {
@@ -245,7 +245,7 @@ public class RecipeHolder implements IIdentifiable {
 	 * @param sendMessage      send system messages of the process.
 	 * @return {@code ItemHolder} of the randomly created product (even if its failing craft), {@code null} if the item creation was not performed due to failed checks.
 	 */
-	public ItemHolder doCraft(PlayerInstance player, PlayerInstance manufacturer, boolean success, boolean craftingCritical, boolean sendMessage) {
+	public ItemHolder doCraft(Player player, Player manufacturer, boolean success, boolean craftingCritical, boolean sendMessage) {
 		if (!checkNecessaryStats(player, manufacturer, sendMessage)) {
 			return null;
 		}

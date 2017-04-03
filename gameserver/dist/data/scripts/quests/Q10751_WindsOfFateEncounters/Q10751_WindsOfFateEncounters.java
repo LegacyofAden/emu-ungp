@@ -25,7 +25,7 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -90,7 +90,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -218,7 +218,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		if (npc.getId() == TELESHA) {
 			htmltext = "33981-01.html";
@@ -227,7 +227,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -322,7 +322,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
 		if ((qs != null) && qs.isCond(6)) {
 			int killCount = qs.getInt(KILL_COUNT_VAR);
@@ -343,7 +343,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
+	public Set<NpcLogListHolder> getNpcLogList(Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if ((qs != null) && qs.isCond(6)) {
 			final int killCount = qs.getInt(KILL_COUNT_VAR);
@@ -360,7 +360,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			final QuestState qs = getQuestState(player, false);
 			if (qs == null) {
 				player.sendPacket(new PlaySound(3, "Npcdialog1.serenia_quest_12", 0, 0, 0, 0, 0));
@@ -373,7 +373,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerBypass(OnPlayerBypass event) {
 		final String command = event.getCommand();
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 
 		if (st == null) {
@@ -407,7 +407,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
@@ -421,7 +421,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLogin(OnPlayerLogin event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState st = getQuestState(player, false);
 
 		if ((st == null) && player.getRace().equals(Race.ERTHEIA) && (player.getLevel() >= MIN_LEVEL) && (player.isInCategory(CategoryType.FIRST_CLASS_GROUP))) {

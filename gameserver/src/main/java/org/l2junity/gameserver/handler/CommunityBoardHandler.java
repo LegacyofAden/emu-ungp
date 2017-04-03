@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.handler;
 
 import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
@@ -96,7 +96,7 @@ public final class CommunityBoardHandler implements IHandler<IParseBoardHandler,
 	 * @param command the command
 	 * @param player  the player
 	 */
-	public void handleParseCommand(String command, PlayerInstance player) {
+	public void handleParseCommand(String command, Player player) {
 		if (player == null) {
 			return;
 		}
@@ -126,7 +126,7 @@ public final class CommunityBoardHandler implements IHandler<IParseBoardHandler,
 	 * @param arg4   the fourth argument
 	 * @param arg5   the fifth argument
 	 */
-	public void handleWriteCommand(PlayerInstance player, String url, String arg1, String arg2, String arg3, String arg4, String arg5) {
+	public void handleWriteCommand(Player player, String url, String arg1, String arg2, String arg3, String arg4, String arg5) {
 		if (player == null) {
 			return;
 		}
@@ -180,7 +180,7 @@ public final class CommunityBoardHandler implements IHandler<IParseBoardHandler,
 	 * @param title  the title
 	 * @param bypass the bypass
 	 */
-	public void addBypass(PlayerInstance player, String title, String bypass) {
+	public void addBypass(Player player, String title, String bypass) {
 		_bypasses.put(player.getObjectId(), title + "&" + bypass);
 	}
 
@@ -190,7 +190,7 @@ public final class CommunityBoardHandler implements IHandler<IParseBoardHandler,
 	 * @param player the player
 	 * @return the last bypass used
 	 */
-	public String removeBypass(PlayerInstance player) {
+	public String removeBypass(Player player) {
 		return _bypasses.remove(player.getObjectId());
 	}
 
@@ -201,7 +201,7 @@ public final class CommunityBoardHandler implements IHandler<IParseBoardHandler,
 	 * @param html   the HTML to send
 	 * @param player the player
 	 */
-	public static void separateAndSend(String html, PlayerInstance player) {
+	public static void separateAndSend(String html, Player player) {
 		Util.sendCBHtml(player, html);
 	}
 

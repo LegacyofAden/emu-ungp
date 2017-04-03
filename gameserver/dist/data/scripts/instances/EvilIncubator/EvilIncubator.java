@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -198,7 +198,7 @@ public final class EvilIncubator extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player);
 		if ((st == null) || !st.isStarted()) {
 			return super.onAdvEvent(event, npc, player);
@@ -272,7 +272,7 @@ public final class EvilIncubator extends AbstractInstance {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player);
 
@@ -337,7 +337,7 @@ public final class EvilIncubator extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState st = getQuestState(player);
 
@@ -399,7 +399,7 @@ public final class EvilIncubator extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 
 	}
 
@@ -486,7 +486,7 @@ public final class EvilIncubator extends AbstractInstance {
 		}
 	}
 
-	private QuestState getQuestState(PlayerInstance player) {
+	private QuestState getQuestState(Player player) {
 		if (player == null) {
 			return null;
 		}

@@ -22,7 +22,7 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.ClanRewardType;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class ClanMember {
 	private int _classId;
 	private boolean _sex;
 	private int _raceOrdinal;
-	private PlayerInstance _player;
+	private Player _player;
 	private int _pledgeType;
 	private int _apprentice;
 	private int _sponsor;
@@ -84,7 +84,7 @@ public class ClanMember {
 	 * @param clan   the clan where the player belongs
 	 * @param player the player from which the clan member will be created
 	 */
-	public ClanMember(L2Clan clan, PlayerInstance player) {
+	public ClanMember(L2Clan clan, Player player) {
 		if (clan == null) {
 			throw new IllegalArgumentException("Cannot create a Clan Member if player has a null clan.");
 		}
@@ -108,7 +108,7 @@ public class ClanMember {
 	 *
 	 * @param player the new player instance
 	 */
-	public void setPlayerInstance(PlayerInstance player) {
+	public void setPlayerInstance(Player player) {
 		if ((player == null) && (_player != null)) {
 			// this is here to keep the data when the player logs off
 			_name = _player.getName();
@@ -141,7 +141,7 @@ public class ClanMember {
 	 *
 	 * @return the player instance
 	 */
-	public PlayerInstance getPlayerInstance() {
+	public Player getPlayerInstance() {
 		return _player;
 	}
 
@@ -390,7 +390,7 @@ public class ClanMember {
 	 * @param player the player
 	 * @return the int
 	 */
-	public static int calculatePledgeClass(PlayerInstance player) {
+	public static int calculatePledgeClass(Player player) {
 		int pledgeClass = 0;
 		if (player == null) {
 			return pledgeClass;
@@ -701,7 +701,7 @@ public class ClanMember {
 	}
 
 	private PlayerVariables getVariables() {
-		final PlayerInstance player = getPlayerInstance();
+		final Player player = getPlayerInstance();
 		return player != null ? player.getVariables() : new PlayerVariables(_objectId);
 	}
 }

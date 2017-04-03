@@ -20,7 +20,7 @@ package instances.EvasHiddenSpace;
 
 import instances.AbstractInstance;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import quests.Q10369_NoblesseSoulTesting.Q10369_NoblesseSoulTesting;
@@ -45,7 +45,7 @@ public final class EvasHiddenSpace extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		final QuestState qs = player.getQuestState(Q10369_NoblesseSoulTesting.class.getSimpleName());

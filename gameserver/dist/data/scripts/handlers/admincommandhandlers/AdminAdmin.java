@@ -28,7 +28,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
@@ -82,7 +82,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_admin")) {
 			showMainPage(activeChar, command);
 		} else if (command.equals("admin_config_server")) {
@@ -121,7 +121,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 				return false;
 			}
 
-			final PlayerInstance target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
+			final Player target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
 			target.setHero(!target.isHero());
 			target.broadcastUserInfo();
 		} else if (command.startsWith("admin_settruehero")) {
@@ -130,7 +130,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 				return false;
 			}
 
-			final PlayerInstance target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
+			final Player target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
 			target.setTrueHero(!target.isTrueHero());
 			target.broadcastUserInfo();
 		} else if (command.startsWith("admin_givehero")) {
@@ -139,7 +139,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 				return false;
 			}
 
-			final PlayerInstance target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
+			final Player target = activeChar.getTarget().isPlayer() ? activeChar.getTarget().getActingPlayer() : activeChar;
 			if (Hero.getInstance().isHero(target.getObjectId())) {
 				activeChar.sendMessage("This player has already claimed the hero status.");
 				return false;
@@ -221,7 +221,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 						activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
 						break;
 					}
-					final PlayerInstance targetPlayer = target.getActingPlayer();
+					final Player targetPlayer = target.getActingPlayer();
 					if (targetPlayer.getLevel() < GeneralConfig.WORLD_CHAT_MIN_LEVEL) {
 						activeChar.sendMessage("Your target's level is below the minimum: " + GeneralConfig.WORLD_CHAT_MIN_LEVEL);
 						break;
@@ -236,7 +236,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 						break;
 					}
 
-					final PlayerInstance targetPlayer = target.getActingPlayer();
+					final Player targetPlayer = target.getActingPlayer();
 					if (targetPlayer.getLevel() < GeneralConfig.WORLD_CHAT_MIN_LEVEL) {
 						activeChar.sendMessage("Your target's level is below the minimum: " + GeneralConfig.WORLD_CHAT_MIN_LEVEL);
 						break;
@@ -291,7 +291,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void showMainPage(PlayerInstance activeChar, String command) {
+	private void showMainPage(Player activeChar, String command) {
 		int mode = 0;
 		String filename = null;
 		try {
@@ -327,7 +327,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 		AdminHtml.showAdminHtml(activeChar, filename + "_menu.htm");
 	}
 
-	public void showConfigPage(PlayerInstance activeChar) {
+	public void showConfigPage(Player activeChar) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage();
 		StringBuilder replyMSG = new StringBuilder("<html><title>L2J :: Config</title><body>");
 		replyMSG.append("<center><table width=270><tr><td width=60><button value=\"Main\" action=\"bypass -h admin_admin\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td><td width=150>Config Server Panel</td><td width=60><button value=\"Back\" action=\"bypass -h admin_admin4\" width=60 height=25 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"></td></tr></table></center><br>");

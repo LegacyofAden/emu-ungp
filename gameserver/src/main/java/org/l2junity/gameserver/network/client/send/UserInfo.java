@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ItemGrade;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -34,7 +34,7 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw, UnAfraid
  */
 public class UserInfo extends AbstractMaskPacket<UserInfoType> {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
 	private final int _relation;
 	private final int _runSpd;
@@ -59,11 +59,11 @@ public class UserInfo extends AbstractMaskPacket<UserInfoType> {
 
 	private int _initSize = 5;
 
-	public UserInfo(PlayerInstance cha) {
+	public UserInfo(Player cha) {
 		this(cha, true);
 	}
 
-	public UserInfo(PlayerInstance cha, boolean addAll) {
+	public UserInfo(Player cha, boolean addAll) {
 		_activeChar = cha;
 
 		_relation = calculateRelation(cha);
@@ -325,7 +325,7 @@ public class UserInfo extends AbstractMaskPacket<UserInfoType> {
 		return true;
 	}
 
-	private int calculateRelation(PlayerInstance activeChar) {
+	private int calculateRelation(Player activeChar) {
 		int relation = 0;
 		final Party party = activeChar.getParty();
 		final L2Clan clan = activeChar.getClan();

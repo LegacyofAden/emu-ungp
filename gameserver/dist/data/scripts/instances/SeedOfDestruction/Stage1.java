@@ -35,7 +35,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -286,7 +286,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		spawnState(instance);
 		for (DoorInstance door : instance.getDoors()) {
 			if (ArrayUtil.contains(ATTACKABLE_DOORS, door.getId())) {
@@ -412,7 +412,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 				spawnState(world);
 				final Npc videoNpc = world.getNpc(TIAT_VIDEO_NPC);
 				if (videoNpc != null) {
-					playMovie(World.getInstance().getVisibleObjects(videoNpc, PlayerInstance.class, 8000), Movie.SC_BOSS_TIAT_OPENING);
+					playMovie(World.getInstance().getVisibleObjects(videoNpc, Player.class, 8000), Movie.SC_BOSS_TIAT_OPENING);
 					videoNpc.deleteMe();
 				}
 			}
@@ -421,7 +421,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			if (npc.getId() == OBELISK) {
@@ -442,13 +442,13 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (event) {
 				case "Spawn": {
-					final List<PlayerInstance> players = new ArrayList<>(world.getPlayers());
-					final PlayerInstance target = players.get(getRandom(players.size()));
+					final List<Player> players = new ArrayList<>(world.getPlayers());
+					final Player target = players.get(getRandom(players.size()));
 					final int deviceCount = world.getParameters().getInt("deviceCount", 0);
 					if ((deviceCount < MAX_DEVICESPAWNEDMOBCOUNT) && !target.isDead()) {
 						world.setParameter("deviceCount", deviceCount + 1);
@@ -483,7 +483,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final Instance world = npc.getInstanceWorld();
 		if (world != null) {
 			switch (world.getStatus()) {
@@ -521,7 +521,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 					if (world.getStatus() >= 7) {
 						if (npc.getId() == TIAT) {
 							world.incStatus();
-							playMovie(World.getInstance().getVisibleObjects(npc, PlayerInstance.class, 8000), Movie.SC_BOSS_TIAT_ENDING_SUCCES);
+							playMovie(World.getInstance().getVisibleObjects(npc, Player.class, 8000), Movie.SC_BOSS_TIAT_ENDING_SUCCES);
 							world.removeNpcs();
 							world.finishInstance();
 							GraciaSeedsManager.getInstance().increaseSoDTiatKilled();
@@ -541,7 +541,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final int npcId = npc.getId();
 		if (npcId == ALENOS) {
 			final int state = GraciaSeedsManager.getInstance().getSoDState();

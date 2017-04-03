@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.item;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -28,10 +28,10 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  */
 public class OnItemBypassEvent implements IBaseEvent {
 	private final ItemInstance _item;
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final String _event;
 
-	public OnItemBypassEvent(ItemInstance item, PlayerInstance activeChar, String event) {
+	public OnItemBypassEvent(ItemInstance item, Player activeChar, String event) {
 		_item = item;
 		_activeChar = activeChar;
 		_event = event;
@@ -41,7 +41,7 @@ public class OnItemBypassEvent implements IBaseEvent {
 		return _item;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

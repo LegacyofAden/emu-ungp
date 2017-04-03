@@ -21,7 +21,7 @@ package ai.individual.TalkingIsland;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -38,7 +38,7 @@ public final class Mahram extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("SPAM_TEXT") && (npc != null)) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.ALCHEMY_IS_A_SCIENCE_AND_AN_ART, 1000);
 		}

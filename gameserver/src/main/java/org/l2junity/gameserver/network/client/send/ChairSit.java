@@ -18,19 +18,19 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class ChairSit implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _staticObjectId;
 
 	/**
 	 * @param player
 	 * @param staticObjectId
 	 */
-	public ChairSit(PlayerInstance player, int staticObjectId) {
+	public ChairSit(Player player, int staticObjectId) {
 		_activeChar = player;
 		_staticObjectId = staticObjectId;
 	}

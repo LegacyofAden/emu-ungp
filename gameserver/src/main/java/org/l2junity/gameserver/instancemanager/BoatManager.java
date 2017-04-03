@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
@@ -163,7 +163,7 @@ public class BoatManager {
 	}
 
 	private void broadcastPacketsToPlayers(VehiclePathPoint point1, VehiclePathPoint point2, IClientOutgoingPacket... packets) {
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			double dx = player.getX() - point1.getX();
 			double dy = player.getY() - point1.getY();
 			if (Math.sqrt((dx * dx) + (dy * dy)) < GeneralConfig.BOAT_BROADCAST_RADIUS) {

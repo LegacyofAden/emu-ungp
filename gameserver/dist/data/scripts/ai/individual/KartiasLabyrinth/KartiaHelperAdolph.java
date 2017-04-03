@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
@@ -77,7 +77,7 @@ public final class KartiaHelperAdolph extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if ((instance != null) && event.equals("CHECK_ACTION")) {
 			final StatsSet instParams = instance.getTemplateParameters();
@@ -100,7 +100,7 @@ public final class KartiaHelperAdolph extends AbstractNpcAI {
 				if (npc.isInCombat() && (hateSkill != null) && SkillCaster.checkUseConditions(npc, hateSkill.getSkill())) {
 					addSkillCastDesire(npc, npc.getTarget(), hateSkill, 23);
 				} else {
-					final PlayerInstance instancePlayer = npc.getVariables().getObject("PLAYER_OBJECT", PlayerInstance.class);
+					final Player instancePlayer = npc.getVariables().getObject("PLAYER_OBJECT", Player.class);
 					if (instancePlayer != null) {
 						final double radian = Math.toRadians(Util.convertHeadingToDegree(instancePlayer.getHeading()));
 						final int X = (int) (instancePlayer.getX() + (Math.cos(radian) * 150));
@@ -118,7 +118,7 @@ public final class KartiaHelperAdolph extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (instance != null) {
 			final StatsSet instParams = instance.getTemplateParameters();

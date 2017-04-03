@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -78,7 +78,7 @@ public final class RequestBypassToServer implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -251,7 +251,7 @@ public final class RequestBypassToServer implements IClientIncomingPacket {
 	/**
 	 * @param activeChar
 	 */
-	private static void comeHere(PlayerInstance activeChar) {
+	private static void comeHere(Player activeChar) {
 		WorldObject obj = activeChar.getTarget();
 		if (obj == null) {
 			return;

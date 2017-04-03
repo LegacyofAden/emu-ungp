@@ -21,7 +21,7 @@ package handlers.bypasshandlers;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 public class Link implements IBypassHandler {
@@ -31,7 +31,7 @@ public class Link implements IBypassHandler {
 			};
 
 	@Override
-	public boolean useBypass(String command, PlayerInstance activeChar, Creature target) {
+	public boolean useBypass(String command, Player activeChar, Creature target) {
 		String htmlPath = command.substring(4).trim();
 		if (htmlPath.isEmpty()) {
 			_log.warn("Player " + activeChar.getName() + " sent empty link html!");

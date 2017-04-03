@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.network.PacketReader;
@@ -51,7 +51,7 @@ public final class AttackRequest implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.handler;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public interface IBypassHandler {
 	 * @param bypassOrigin
 	 * @return success
 	 */
-	boolean useBypass(String command, PlayerInstance activeChar, Creature bypassOrigin);
+	boolean useBypass(String command, Player activeChar, Creature bypassOrigin);
 
 	/**
 	 * This method is called at initialization to register all bypasses automatically.

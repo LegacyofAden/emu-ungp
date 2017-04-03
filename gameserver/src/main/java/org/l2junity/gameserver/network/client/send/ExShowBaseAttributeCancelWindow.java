@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -29,7 +29,7 @@ public class ExShowBaseAttributeCancelWindow implements IClientOutgoingPacket {
 	private final Collection<ItemInstance> _items;
 	private long _price;
 
-	public ExShowBaseAttributeCancelWindow(PlayerInstance player) {
+	public ExShowBaseAttributeCancelWindow(Player player) {
 		_items = player.getInventory().getItems(ItemInstance::hasAttributes);
 	}
 

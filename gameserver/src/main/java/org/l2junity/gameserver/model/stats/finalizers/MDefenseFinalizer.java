@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.BaseStats;
@@ -61,7 +61,7 @@ public class MDefenseFinalizer implements IStatsFunction {
 		}
 
 		if (creature.isPlayer()) {
-			final PlayerInstance player = creature.getActingPlayer();
+			final Player player = creature.getActingPlayer();
 			for (int slot : SLOTS) {
 				if (!player.getInventory().isPaperdollSlotEmpty(slot)) {
 					final int defaultStatValue = player.getTemplate().getBaseDefBySlot(slot);

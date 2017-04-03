@@ -20,7 +20,7 @@ package org.l2junity.gameserver.util;
 
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.Disconnection;
@@ -44,7 +44,7 @@ public final class OfflineTradeUtil {
 	 * @param player the player to be check.
 	 * @return {@code true} if the player is allowed to remain as off-line shop.
 	 */
-	private static boolean offlineMode(final PlayerInstance player) {
+	private static boolean offlineMode(final Player player) {
 		if ((player == null) || player.isInOlympiadMode() || player.isBlockedFromExit() || player.isJailed() || (player.getVehicle() != null)) {
 			return false;
 		}
@@ -86,7 +86,7 @@ public final class OfflineTradeUtil {
 	 * @param player
 	 * @return {@code true} when player entered offline mode, otherwise {@code false}
 	 */
-	public static boolean enteredOfflineMode(final PlayerInstance player) {
+	public static boolean enteredOfflineMode(final Player player) {
 		if (!OfflineTradeUtil.offlineMode(player)) {
 			return false;
 		}

@@ -24,7 +24,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -55,7 +55,7 @@ public final class RequestDropItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 		if ((activeChar == null) || activeChar.isDead()) {
 			return;
 		}

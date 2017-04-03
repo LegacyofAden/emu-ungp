@@ -27,7 +27,7 @@ import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
@@ -61,7 +61,7 @@ public class NpcAction implements IActionHandler {
 	 * @param activeChar The L2PcInstance that start an action on the L2Npc
 	 */
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		if (!((Npc) target).canTarget(activeChar)) {
 			return false;
 		}

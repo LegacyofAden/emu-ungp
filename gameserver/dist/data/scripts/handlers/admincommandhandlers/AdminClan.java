@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
@@ -49,12 +49,12 @@ public class AdminClan implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		switch (cmd) {
 			case "admin_clan_info": {
-				final PlayerInstance player = getPlayer(activeChar, st);
+				final Player player = getPlayer(activeChar, st);
 				if (player == null) {
 					break;
 				}
@@ -82,7 +82,7 @@ public class AdminClan implements IAdminCommandHandler {
 				break;
 			}
 			case "admin_clan_changeleader": {
-				final PlayerInstance player = getPlayer(activeChar, st);
+				final Player player = getPlayer(activeChar, st);
 				if (player == null) {
 					break;
 				}
@@ -152,9 +152,9 @@ public class AdminClan implements IAdminCommandHandler {
 	 * @param st
 	 * @return
 	 */
-	private PlayerInstance getPlayer(PlayerInstance activeChar, StringTokenizer st) {
+	private Player getPlayer(Player activeChar, StringTokenizer st) {
 		String val;
-		PlayerInstance player = null;
+		Player player = null;
 		if (st.hasMoreTokens()) {
 			val = st.nextToken();
 			// From the HTML we receive player's object Id.
@@ -173,7 +173,7 @@ public class AdminClan implements IAdminCommandHandler {
 			}
 		} else {
 			WorldObject targetObj = activeChar.getTarget();
-			if (targetObj instanceof PlayerInstance) {
+			if (targetObj instanceof Player) {
 				player = targetObj.getActingPlayer();
 			} else {
 				activeChar.sendPacket(SystemMessageId.INVALID_TARGET);

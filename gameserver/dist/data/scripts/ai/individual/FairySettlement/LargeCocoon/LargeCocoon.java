@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
 import org.l2junity.gameserver.model.quest.Quest;
 import quests.Q10305_UnstoppableFutileEfforts.Q10305_UnstoppableFutileEfforts;
@@ -60,7 +60,7 @@ public final class LargeCocoon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "attack": {
 				onCreatureAttacked(new OnCreatureAttacked(player, npc, null));

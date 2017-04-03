@@ -44,7 +44,7 @@ public class DoppelgangerInstance extends Npc {
 
 	private boolean _copySummonerEffects = true;
 
-	public DoppelgangerInstance(L2NpcTemplate template, PlayerInstance owner) {
+	public DoppelgangerInstance(L2NpcTemplate template, Player owner) {
 		super(template);
 
 		setSummoner(owner);
@@ -123,7 +123,7 @@ public class DoppelgangerInstance extends Npc {
 
 		// Prevents the double spam of system messages, if the target is the owning player.
 		if (target.getObjectId() != getSummoner().getObjectId()) {
-			if (getActingPlayer().isInOlympiadMode() && (target.isPlayer()) && ((PlayerInstance) target).isInOlympiadMode() && (((PlayerInstance) target).getOlympiadGameId() == getActingPlayer().getOlympiadGameId())) {
+			if (getActingPlayer().isInOlympiadMode() && (target.isPlayer()) && ((Player) target).isInOlympiadMode() && (((Player) target).getOlympiadGameId() == getActingPlayer().getOlympiadGameId())) {
 				OlympiadGameManager.getInstance().notifyCompetitorDamage(getSummoner().getActingPlayer(), damage);
 			}
 
@@ -157,7 +157,7 @@ public class DoppelgangerInstance extends Npc {
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return getSummoner() != null ? getSummoner().getActingPlayer() : super.getActingPlayer();
 	}
 

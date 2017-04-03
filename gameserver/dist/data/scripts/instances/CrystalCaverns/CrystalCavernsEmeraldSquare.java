@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -81,7 +81,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
@@ -89,7 +89,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
@@ -140,7 +140,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -177,7 +177,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcParams = npc.getParameters();
@@ -290,7 +290,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance) && (npc.getId() == WATER_CANNON_SKILL) && (skill.getId() == WATER_CANNON_SKILL_ATTACK.getSkillId())) {
 			npc.deleteMe();
@@ -337,14 +337,14 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceEnter(PlayerInstance player, Instance instance) {
+	public void onInstanceEnter(Player player, Instance instance) {
 		final int startTime = (int) (instance.getElapsedTime() / 1000);
 		final int endTime = (int) (instance.getRemainingTime() / 1000);
 		player.sendPacket(new ExSendUIEvent(player, false, true, startTime, endTime, NpcStringId.ELAPSED_TIME));
 	}
 
 	@Override
-	public void onInstanceLeave(PlayerInstance player, Instance instance) {
+	public void onInstanceLeave(Player player, Instance instance) {
 		player.sendPacket(new ExSendUIEvent(player, true, true, 0, 0, NpcStringId.ELAPSED_TIME));
 	}
 

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.zone.type;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -57,7 +57,7 @@ public class MotherTreeZone extends ZoneType {
 	@Override
 	protected void onEnter(Creature character) {
 		if (character.isPlayer()) {
-			PlayerInstance player = character.getActingPlayer();
+			Player player = character.getActingPlayer();
 			character.setInsideZone(ZoneId.MOTHER_TREE, true);
 			if (_enterMsg != 0) {
 				player.sendPacket(SystemMessage.getSystemMessage(_enterMsg));
@@ -68,7 +68,7 @@ public class MotherTreeZone extends ZoneType {
 	@Override
 	protected void onExit(Creature character) {
 		if (character.isPlayer()) {
-			PlayerInstance player = character.getActingPlayer();
+			Player player = character.getActingPlayer();
 			player.setInsideZone(ZoneId.MOTHER_TREE, false);
 			if (_leaveMsg != 0) {
 				player.sendPacket(SystemMessage.getSystemMessage(_leaveMsg));

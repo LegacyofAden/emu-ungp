@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -90,7 +90,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("enterInstance")) {
 			enterInstance(player, npc, TEMPLATE_ID);
 		}
@@ -98,7 +98,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (event) {
@@ -131,7 +131,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceCreated(Instance instance, PlayerInstance player) {
+	public void onInstanceCreated(Instance instance, Player player) {
 		getTimers().addTimer("BATTLE_PORT", 3000, e ->
 		{
 			instance.getPlayers().forEach(p -> p.teleToLocation(BATTLE_PORT));
@@ -149,7 +149,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public void onInstanceEnter(PlayerInstance player, Instance instance) {
+	public void onInstanceEnter(Player player, Instance instance) {
 		if (!instance.getAliveNpcs(BALOK).isEmpty()) {
 			getTimers().addTimer("TELEPORT_PLAYER", 2000, null, player);
 		}
@@ -181,7 +181,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			final StatsSet npcVars = npc.getVariables();
@@ -251,7 +251,7 @@ public final class BalokWarzone extends AbstractInstance {
 						} else if (random < 140) {
 							instance.getAliveNpcs(HELL_GATE_MINION).forEach(minion ->
 							{
-								final PlayerInstance target = instance.getPlayersInsideRadius(minion, 500).stream().findAny().orElse(null);
+								final Player target = instance.getPlayersInsideRadius(minion, 500).stream().findAny().orElse(null);
 
 								if ((target != null) && getRandomBoolean()) {
 									final double distance = npc.distance3d(target);
@@ -277,7 +277,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			if (npc.getId() == BALOK) {
@@ -342,7 +342,7 @@ public final class BalokWarzone extends AbstractInstance {
 		return super.onSpellFinished(npc, player, skill);
 	}
 
-	private void prisonPlayer(Instance instance, PlayerInstance player, int jailId) {
+	private void prisonPlayer(Instance instance, Player player, int jailId) {
 		showOnScreenMsg(instance, NpcStringId.S1_LOCKED_AWAY_IN_THE_PRISON, ExShowScreenMessage.TOP_CENTER, 4000, player.getName());
 		player.teleToLocation(PRISON_LOCS[jailId]);
 
@@ -361,7 +361,7 @@ public final class BalokWarzone extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {

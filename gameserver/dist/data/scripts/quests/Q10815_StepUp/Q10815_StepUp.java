@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -68,7 +68,7 @@ public final class Q10815_StepUp extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -110,7 +110,7 @@ public final class Q10815_StepUp extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 
@@ -138,7 +138,7 @@ public final class Q10815_StepUp extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_CHAT)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerChat(OnPlayerChat event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final QuestState qs = getQuestState(player, false);
 
 		final Instant now = Instant.now();
@@ -172,7 +172,7 @@ public final class Q10815_StepUp extends Quest {
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance activeChar) {
+	public Set<NpcLogListHolder> getNpcLogList(Player activeChar) {
 		final QuestState qs = getQuestState(activeChar, false);
 		if (qs != null) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(1);

@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.DoorTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.instance.*;
@@ -72,7 +72,7 @@ public final class Instance implements IIdentifiable, INamable {
 	private long _endTime;
 	// Advanced instance parameters
 	private final Set<Integer> _allowed = ConcurrentHashMap.newKeySet(); // ObjectId of players which can enter to instance
-	private final Set<PlayerInstance> _players = ConcurrentHashMap.newKeySet(); // Players inside instance
+	private final Set<Player> _players = ConcurrentHashMap.newKeySet(); // Players inside instance
 	private final Set<Npc> _npcs = ConcurrentHashMap.newKeySet(); // Spawned NPCs inside instance
 	private final Map<Integer, DoorInstance> _doors = new HashMap<>(); // Spawned doors inside instance
 	private final StatsSet _parameters = new StatsSet();
@@ -89,7 +89,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param template template of instance world
 	 * @param player   player who create instance world.
 	 */
-	public Instance(int id, InstanceTemplate template, PlayerInstance player) {
+	public Instance(int id, InstanceTemplate template, Player player) {
 		// Set basic instance info
 		_id = id;
 		_template = template;
@@ -208,7 +208,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player player instance
 	 */
-	public void addAllowed(PlayerInstance player) {
+	public void addAllowed(Player player) {
 		_allowed.add(player.getObjectId());
 	}
 
@@ -218,7 +218,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param player player itself
 	 * @return {@code true} when can enter, otherwise {@code false}
 	 */
-	public boolean isAllowed(PlayerInstance player) {
+	public boolean isAllowed(Player player) {
 		return _allowed.contains(player.getObjectId());
 	}
 
@@ -245,7 +245,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player player instance
 	 */
-	public void addPlayer(PlayerInstance player) {
+	public void addPlayer(Player player) {
 		_players.add(player);
 		if (_emptyDestroyTask != null) {
 			_emptyDestroyTask.cancel(false);
@@ -258,7 +258,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player player instance
 	 */
-	public void removePlayer(PlayerInstance player) {
+	public void removePlayer(Player player) {
 		_players.remove(player);
 		if (_players.isEmpty()) {
 			final long emptyTime = _template.getEmptyDestroyTime();
@@ -276,7 +276,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param player player to be checked
 	 * @return {@code true} if player is inside, otherwise {@code false}
 	 */
-	public boolean containsPlayer(PlayerInstance player) {
+	public boolean containsPlayer(Player player) {
 		return _players.contains(player);
 	}
 
@@ -285,7 +285,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @return players within instance
 	 */
-	public Set<PlayerInstance> getPlayers() {
+	public Set<Player> getPlayers() {
 		return _players;
 	}
 
@@ -304,7 +304,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @return first found player, otherwise {@code null}
 	 */
-	public PlayerInstance getFirstPlayer() {
+	public Player getFirstPlayer() {
 		return _players.stream().findFirst().orElse(null);
 	}
 
@@ -314,7 +314,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param id objectId of player
 	 * @return first player by ID, otherwise {@code null}
 	 */
-	public PlayerInstance getPlayerById(int id) {
+	public Player getPlayerById(int id) {
 		return _players.stream().filter(p -> p.getObjectId() == id).findFirst().orElse(null);
 	}
 
@@ -325,7 +325,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param radius radius around target
 	 * @return players within radius
 	 */
-	public Set<PlayerInstance> getPlayersInsideRadius(ILocational object, int radius) {
+	public Set<Player> getPlayersInsideRadius(ILocational object, int radius) {
 		return _players.stream().filter(p -> p.isInRadius3d(object, radius)).collect(Collectors.toSet());
 	}
 
@@ -673,7 +673,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player player that should be moved out
 	 */
-	public void ejectPlayer(PlayerInstance player) {
+	public void ejectPlayer(Player player) {
 		if (player.getInstanceWorld().equals(this)) {
 			final Location loc = _template.getExitLocation(player);
 			if (loc != null) {
@@ -690,7 +690,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param packets packets to be send
 	 */
 	public void broadcastPacket(IClientOutgoingPacket... packets) {
-		for (PlayerInstance player : _players) {
+		for (Player player : _players) {
 			for (IClientOutgoingPacket packet : packets) {
 				player.sendPacket(packet);
 			}
@@ -773,7 +773,7 @@ public final class Instance implements IIdentifiable, INamable {
 			_allowed.forEach(objId ->
 			{
 				InstanceManager.getInstance().setReenterPenalty(objId, getTemplateId(), time);
-				final PlayerInstance player = World.getInstance().getPlayer(objId);
+				final Player player = World.getInstance().getPlayer(objId);
 				if ((player != null) && player.isOnline()) {
 					player.sendPacket(msg);
 				}
@@ -808,7 +808,7 @@ public final class Instance implements IIdentifiable, INamable {
 		setDuration(delay);
 		_allowed.forEach(objId ->
 		{
-			final PlayerInstance player = World.getInstance().getPlayer(objId);
+			final Player player = World.getInstance().getPlayer(objId);
 			if ((player != null) && player.isOnline()) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnInstanceFinish(player, this), player);
 			}
@@ -824,7 +824,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player
 	 */
-	public void onDeath(PlayerInstance player) {
+	public void onDeath(Player player) {
 		// Send message
 		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.IF_YOU_ARE_NOT_RESURRECTED_WITHIN_S1_MINUTE_S_YOU_WILL_BE_EXPELLED_FROM_THE_INSTANT_ZONE);
 		sm.addInt(_template.getEjectTime());
@@ -844,7 +844,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player resurrected player
 	 */
-	public void doRevive(PlayerInstance player) {
+	public void doRevive(Player player) {
 		final ScheduledFuture<?> task = _ejectDeadTasks.remove(player.getObjectId());
 		if (task != null) {
 			task.cancel(true);
@@ -859,7 +859,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 */
 	public void onInstanceChange(WorldObject object, boolean enter) {
 		if (object.isPlayer()) {
-			final PlayerInstance player = object.getActingPlayer();
+			final Player player = object.getActingPlayer();
 			if (enter) {
 				addPlayer(player);
 
@@ -902,7 +902,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param player player who logout
 	 */
-	public void onPlayerLogout(PlayerInstance player) {
+	public void onPlayerLogout(Player player) {
 		removePlayer(player);
 		if (GeneralConfig.RESTORE_PLAYER_INSTANCE) {
 			player.getVariables().set(PlayerVariables.INSTANCE_RESTORE, getId());
@@ -999,7 +999,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param player instance of player who wants to leave instance world
 	 * @return {@link Location} object if instance has exit location defined, otherwise {@code null}
 	 */
-	public Location getExitLocation(PlayerInstance player) {
+	public Location getExitLocation(Player player) {
 		return _template.getExitLocation(player);
 	}
 

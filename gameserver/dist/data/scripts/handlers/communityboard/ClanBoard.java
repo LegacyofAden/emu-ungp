@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IWriteBoardHandler;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 
@@ -48,7 +48,7 @@ public class ClanBoard implements IWriteBoardHandler {
 	}
 
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+	public boolean parseCommunityBoardCommand(String command, Player activeChar) {
 		if (command.equals("_bbsclan")) {
 			CommunityBoardHandler.getInstance().addBypass(activeChar, "Clan", command);
 
@@ -107,7 +107,7 @@ public class ClanBoard implements IWriteBoardHandler {
 		return true;
 	}
 
-	private void clanNotice(PlayerInstance activeChar, int clanId) {
+	private void clanNotice(Player activeChar, int clanId) {
 		final L2Clan cl = ClanTable.getInstance().getClan(clanId);
 		if (cl != null) {
 			if (cl.getLevel() < 2) {
@@ -142,7 +142,7 @@ public class ClanBoard implements IWriteBoardHandler {
 		}
 	}
 
-	private void clanList(PlayerInstance activeChar, int index) {
+	private void clanList(Player activeChar, int index) {
 		if (index < 1) {
 			index = 1;
 		}
@@ -216,11 +216,11 @@ public class ClanBoard implements IWriteBoardHandler {
 		CommunityBoardHandler.separateAndSend(html.toString(), activeChar);
 	}
 
-	private void clanHome(PlayerInstance activeChar) {
+	private void clanHome(Player activeChar) {
 		clanHome(activeChar, activeChar.getClan().getId());
 	}
 
-	private void clanHome(PlayerInstance activeChar, int clanId) {
+	private void clanHome(Player activeChar, int clanId) {
 		L2Clan cl = ClanTable.getInstance().getClan(clanId);
 		if (cl != null) {
 			if (cl.getLevel() < 2) {
@@ -242,7 +242,7 @@ public class ClanBoard implements IWriteBoardHandler {
 	}
 
 	@Override
-	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
+	public boolean writeCommunityBoardCommand(Player activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
 		// the only Write bypass that comes to this handler is "Write Notice Set _ Content Content Content";
 		// arg1 = Set, arg2 = _
 		final L2Clan clan = activeChar.getClan();

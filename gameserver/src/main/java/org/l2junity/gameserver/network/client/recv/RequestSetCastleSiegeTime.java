@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.SiegeInfo;
@@ -49,7 +49,7 @@ public class RequestSetCastleSiegeTime implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		final Castle castle = CastleManager.getInstance().getCastleById(_castleId);
 		if ((activeChar == null) || (castle == null)) {
 			_log.warn(getClass().getSimpleName() + ": activeChar: " + activeChar + " castle: " + castle + " castleId: " + _castleId);

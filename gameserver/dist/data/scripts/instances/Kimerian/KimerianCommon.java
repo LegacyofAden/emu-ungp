@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -84,12 +84,12 @@ public final class KimerianCommon extends AbstractInstance {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (event) {
 				case "HELPER_TIME_ACTION": {
-					player = npc.getVariables().getObject("PC_INSTANCE", PlayerInstance.class);
+					player = npc.getVariables().getObject("PC_INSTANCE", Player.class);
 					if (player != null) {
 						final double distance = npc.distance2d(player);
 						if (distance > 1000) {
@@ -123,7 +123,7 @@ public final class KimerianCommon extends AbstractInstance {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
@@ -172,7 +172,7 @@ public final class KimerianCommon extends AbstractInstance {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance player, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player player, int damage, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			if (npc.getId() == KIMERIAN) {
@@ -204,7 +204,7 @@ public final class KimerianCommon extends AbstractInstance {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final Instance instance = npc.getInstanceWorld();
 		if (isInInstance(instance)) {
 			switch (npc.getId()) {
@@ -274,7 +274,7 @@ public final class KimerianCommon extends AbstractInstance {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		switch (npc.getId()) {
 			case NOETI_KASHERON_ENTRANCE: {
@@ -304,7 +304,7 @@ public final class KimerianCommon extends AbstractInstance {
 			switch (npc.getId()) {
 				case FAIRY_REBEL:
 				case NEOMI_KASHERON: {
-					if (creature.isPlayer() && (npcVars.getObject("PC_INSTANCE", PlayerInstance.class) == null)) {
+					if (creature.isPlayer() && (npcVars.getObject("PC_INSTANCE", Player.class) == null)) {
 						npcVars.set("PC_INSTANCE", creature.getActingPlayer());
 						getTimers().addRepeatingTimer("HELPER_TIME_ACTION", 2000, npc, null);
 					}
@@ -357,7 +357,7 @@ public final class KimerianCommon extends AbstractInstance {
 		}
 	}
 
-	private void spawnHollow(Npc npc, PlayerInstance player, boolean isHollow) {
+	private void spawnHollow(Npc npc, Player player, boolean isHollow) {
 		final Instance instance = npc.getInstanceWorld();
 
 		if (isInInstance(instance)) {

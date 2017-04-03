@@ -22,7 +22,7 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IParseBoardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.util.Util;
 
 import java.sql.Connection;
@@ -54,7 +54,7 @@ public class FavoriteBoard implements IParseBoardHandler {
 	}
 
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+	public boolean parseCommunityBoardCommand(String command, Player activeChar) {
 		// None of this commands can be added to favorites.
 		if (command.startsWith("_bbsgetfav")) {
 			// Load Favorite links

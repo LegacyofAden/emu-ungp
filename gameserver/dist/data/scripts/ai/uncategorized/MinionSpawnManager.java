@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -432,7 +432,7 @@ public final class MinionSpawnManager extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.isMonster()) {
 			final L2MonsterInstance monster = (L2MonsterInstance) npc;
 			if (!monster.isTeleporting()) {

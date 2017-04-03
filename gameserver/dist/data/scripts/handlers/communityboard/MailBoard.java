@@ -21,7 +21,7 @@ package handlers.communityboard;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IWriteBoardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Mail board.
@@ -40,7 +40,7 @@ public class MailBoard implements IWriteBoardHandler {
 	}
 
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+	public boolean parseCommunityBoardCommand(String command, Player activeChar) {
 		CommunityBoardHandler.getInstance().addBypass(activeChar, "Mail Command", command);
 
 		final String html = HtmRepository.getInstance().getCustomHtm("CommunityBoard/mail.html");
@@ -49,7 +49,7 @@ public class MailBoard implements IWriteBoardHandler {
 	}
 
 	@Override
-	public boolean writeCommunityBoardCommand(PlayerInstance activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
+	public boolean writeCommunityBoardCommand(Player activeChar, String arg1, String arg2, String arg3, String arg4, String arg5) {
 		// TODO: Implement.
 		return false;
 	}

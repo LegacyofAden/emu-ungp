@@ -27,7 +27,7 @@ import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLevelChanged;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerVitalityConsume;
@@ -57,13 +57,13 @@ public class PcStat extends PlayableStat {
 	public static final int MAX_VITALITY_POINTS = 140000;
 	public static final int MIN_VITALITY_POINTS = 0;
 
-	public PcStat(PlayerInstance activeChar) {
+	public PcStat(Player activeChar) {
 		super(activeChar);
 	}
 
 	@Override
 	public boolean addExp(long value) {
-		PlayerInstance activeChar = getActiveChar();
+		Player activeChar = getActiveChar();
 
 		// Allowed to gain exp?
 		if (!activeChar.getAccessLevel().canGainExp()) {
@@ -82,7 +82,7 @@ public class PcStat extends PlayableStat {
 	}
 
 	public void addExpAndSp(double addToExp, double addToSp, boolean useBonuses) {
-		PlayerInstance activeChar = getActiveChar();
+		Player activeChar = getActiveChar();
 
 		// Allowed to gain exp/sp?
 		if (!activeChar.getAccessLevel().canGainExp()) {
@@ -260,8 +260,8 @@ public class PcStat extends PlayableStat {
 	}
 
 	@Override
-	public final PlayerInstance getActiveChar() {
-		return (PlayerInstance) super.getActiveChar();
+	public final Player getActiveChar() {
+		return (Player) super.getActiveChar();
 	}
 
 	@Override
@@ -416,7 +416,7 @@ public class PcStat extends PlayableStat {
 			getActiveChar().sendPacket(SystemMessageId.YOUR_VITALITY_IS_AT_MAXIMUM);
 		}
 
-		final PlayerInstance player = getActiveChar();
+		final Player player = getActiveChar();
 		player.sendPacket(new ExVitalityPointInfo(getVitalityPoints()));
 		player.broadcastUserInfo(UserInfoType.VITA_FAME);
 		final Party party = player.getParty();
@@ -533,7 +533,7 @@ public class PcStat extends PlayableStat {
 	protected void onRecalculateStats(boolean broadcast) {
 		super.onRecalculateStats(broadcast);
 
-		final PlayerInstance player = getActiveChar();
+		final Player player = getActiveChar();
 		if (player.hasAbnormalType(AbnormalType.ABILITY_CHANGE) && player.hasServitors()) {
 			player.getServitors().values().forEach(servitor -> servitor.getStat().recalculateStats(broadcast));
 		}

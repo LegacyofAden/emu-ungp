@@ -20,7 +20,7 @@ package org.l2junity.gameserver.communitybbs.Manager;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.communitybbs.BB.Forum;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +81,7 @@ public class ForumsBBSManager extends BaseBBSManager {
 	}
 
 	@Override
-	public void parsecmd(String command, PlayerInstance activeChar) {
+	public void parsecmd(String command, Player activeChar) {
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class ForumsBBSManager extends BaseBBSManager {
 	}
 
 	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, PlayerInstance activeChar) {
+	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, Player activeChar) {
 
 	}
 

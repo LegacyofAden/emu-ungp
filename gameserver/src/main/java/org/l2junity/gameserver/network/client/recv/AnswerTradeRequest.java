@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -43,7 +43,7 @@ public final class AnswerTradeRequest implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}
@@ -54,7 +54,7 @@ public final class AnswerTradeRequest implements IClientIncomingPacket {
 			return;
 		}
 
-		PlayerInstance partner = player.getActiveRequester();
+		Player partner = player.getActiveRequester();
 		if (partner == null) {
 			// Trade partner not found, cancel trade
 			player.sendPacket(new TradeDone(0));

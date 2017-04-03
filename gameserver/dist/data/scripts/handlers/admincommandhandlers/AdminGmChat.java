@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -43,7 +43,7 @@ public class AdminGmChat implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_gmchat")) {
 			handleGmChat(command, activeChar);
 		} else if (command.startsWith("admin_snoop")) {
@@ -59,7 +59,7 @@ public class AdminGmChat implements IAdminCommandHandler {
 	 * @param command
 	 * @param activeChar
 	 */
-	private void snoop(String command, PlayerInstance activeChar) {
+	private void snoop(String command, Player activeChar) {
 		WorldObject target = null;
 		if (command.length() > 12) {
 			target = World.getInstance().getPlayer(command.substring(12));
@@ -72,11 +72,11 @@ public class AdminGmChat implements IAdminCommandHandler {
 			activeChar.sendPacket(SystemMessageId.SELECT_TARGET);
 			return;
 		}
-		if (!(target instanceof PlayerInstance)) {
+		if (!(target instanceof Player)) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
-		PlayerInstance player = (PlayerInstance) target;
+		Player player = (Player) target;
 		player.addSnooper(activeChar);
 		activeChar.addSnooped(player);
 	}
@@ -90,7 +90,7 @@ public class AdminGmChat implements IAdminCommandHandler {
 	 * @param command
 	 * @param activeChar
 	 */
-	private void handleGmChat(String command, PlayerInstance activeChar) {
+	private void handleGmChat(String command, Player activeChar) {
 		try {
 			int offset = 0;
 			String text;

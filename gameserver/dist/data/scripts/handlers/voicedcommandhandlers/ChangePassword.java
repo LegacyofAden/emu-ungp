@@ -18,11 +18,10 @@
  */
 package handlers.voicedcommandhandlers;
 
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.service.GameServerRMI;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class ChangePassword implements IVoicedCommandHandler {
 			};
 
 	@Override
-	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String target) {
+	public boolean useVoicedCommand(String command, Player activeChar, String target) {
 		if (target != null) {
 			final StringTokenizer st = new StringTokenizer(target);
 			try {

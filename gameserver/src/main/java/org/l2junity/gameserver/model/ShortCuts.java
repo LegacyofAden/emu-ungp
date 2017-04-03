@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.ShortcutType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.IRestorable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
@@ -39,10 +39,10 @@ import java.util.TreeMap;
 public class ShortCuts implements IRestorable {
 	private static Logger _log = LoggerFactory.getLogger(ShortCuts.class);
 	private static final int MAX_SHORTCUTS_PER_BAR = 12;
-	private final PlayerInstance _owner;
+	private final Player _owner;
 	private final Map<Integer, Shortcut> _shortCuts = new TreeMap<>();
 
-	public ShortCuts(PlayerInstance owner) {
+	public ShortCuts(Player owner) {
 		_owner = owner;
 	}
 

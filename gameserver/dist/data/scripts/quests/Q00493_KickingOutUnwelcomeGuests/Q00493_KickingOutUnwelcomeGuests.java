@@ -20,7 +20,7 @@ package quests.Q00493_KickingOutUnwelcomeGuests;
 
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -54,7 +54,7 @@ public final class Q00493_KickingOutUnwelcomeGuests extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -87,7 +87,7 @@ public final class Q00493_KickingOutUnwelcomeGuests extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -124,7 +124,7 @@ public final class Q00493_KickingOutUnwelcomeGuests extends Quest {
 	}
 
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
+	public void actionForEachPlayer(Player player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isCond(1)) {
 			final int killedCount = st.getInt(Integer.toString(npc.getId()));
@@ -147,13 +147,13 @@ public final class Q00493_KickingOutUnwelcomeGuests extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		executeForEachPlayer(player, npc, isSummon, true, false);
 		return super.onKill(npc, player, isSummon);
 	}
 
 	@Override
-	public Set<NpcLogListHolder> getNpcLogList(PlayerInstance player) {
+	public Set<NpcLogListHolder> getNpcLogList(Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st != null) {
 			final Set<NpcLogListHolder> npcLogList = new HashSet<>(5);

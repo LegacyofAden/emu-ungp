@@ -26,12 +26,12 @@ import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 public class L2StaticObjectInstanceAction implements IActionHandler {
 	@Override
-	public boolean action(final PlayerInstance activeChar, final WorldObject target, final boolean interact) {
+	public boolean action(final Player activeChar, final WorldObject target, final boolean interact) {
 		final L2StaticObjectInstance staticObject = (L2StaticObjectInstance) target;
 		if (staticObject.getType() < 0) {
 			_log.info("L2StaticObjectInstance: StaticObject with invalid type! StaticObjectId: " + staticObject.getId());

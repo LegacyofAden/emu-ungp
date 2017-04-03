@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.tick;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -38,7 +38,7 @@ public class TickGetEnergy extends AbstractEffect {
 	@Override
 	public void tick(Creature caster, Creature target, Skill skill) {
 		if (target.isPlayer()) {
-			final PlayerInstance player = target.getActingPlayer();
+			final Player player = target.getActingPlayer();
 			final int maxCharge = (int) target.getStat().getValue(DoubleStat.MAX_MOMENTUM, 0);
 			final int newCharge = Math.min(player.getCharges() + 1, maxCharge);
 

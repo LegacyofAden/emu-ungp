@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.tasks.player;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.SayuneRequest;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.sayune.ExNotifyFlyMoveStart;
@@ -31,10 +31,10 @@ import java.util.concurrent.TimeUnit;
  * @author UnAfraid
  */
 public class FlyMoveStartTask implements Runnable {
-	private final PlayerInstance _player;
+	private final Player _player;
 	private final ZoneType _zone;
 
-	public FlyMoveStartTask(ZoneType zone, PlayerInstance player) {
+	public FlyMoveStartTask(ZoneType zone, Player player) {
 		Objects.requireNonNull(zone);
 		Objects.requireNonNull(player);
 		_player = player;

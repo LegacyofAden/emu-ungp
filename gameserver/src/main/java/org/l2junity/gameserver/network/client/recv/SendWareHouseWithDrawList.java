@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.ClanWarehouse;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
@@ -70,7 +70,7 @@ public final class SendWareHouseWithDrawList implements IClientIncomingPacket {
 			return;
 		}
 
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

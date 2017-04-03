@@ -34,7 +34,7 @@ import org.l2junity.gameserver.model.AggroInfo;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.SummonStatus;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -57,7 +57,7 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 public abstract class Summon extends Playable {
-	private PlayerInstance _owner;
+	private Player _owner;
 	private int _attackRange = 36; // Melee range
 	private boolean _follow = true;
 	private boolean _previousFollowStatus = true;
@@ -74,7 +74,7 @@ public abstract class Summon extends Playable {
 			};
 	// @formatter:on
 
-	public Summon(L2NpcTemplate template, PlayerInstance owner) {
+	public Summon(L2NpcTemplate template, Player owner) {
 		super(template);
 		setInstanceType(InstanceType.L2Summon);
 		setInstance(owner.getInstanceWorld()); // set instance to same as owner
@@ -96,7 +96,7 @@ public abstract class Summon extends Playable {
 		setFollowStatus(true);
 		updateAndBroadcastStatus(0);
 		sendPacket(new RelationChanged(this, getOwner().getRelation(getOwner()), false));
-		World.getInstance().forEachVisibleObject(getOwner(), PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(getOwner(), Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(new RelationChanged(this, getOwner().getRelation(player), isAutoAttackable(player)));
@@ -153,7 +153,7 @@ public abstract class Summon extends Playable {
 
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));
@@ -207,7 +207,7 @@ public abstract class Summon extends Playable {
 		return getOwner() != null ? getOwner().getTeam() : Team.NONE;
 	}
 
-	public final PlayerInstance getOwner() {
+	public final Player getOwner() {
 		return _owner;
 	}
 
@@ -252,7 +252,7 @@ public abstract class Summon extends Playable {
 			return false;
 		}
 
-		final PlayerInstance owner = getOwner();
+		final Player owner = getOwner();
 		if (owner != null) {
 			World.getInstance().forEachVisibleObject(this, Attackable.class, TgMob ->
 			{
@@ -296,7 +296,7 @@ public abstract class Summon extends Playable {
 		updateAndBroadcastStatus(1);
 	}
 
-	public void deleteMe(PlayerInstance owner) {
+	public void deleteMe(Player owner) {
 		super.deleteMe();
 
 		if (owner != null) {
@@ -320,7 +320,7 @@ public abstract class Summon extends Playable {
 		decayMe();
 	}
 
-	public void unSummon(PlayerInstance owner) {
+	public void unSummon(Player owner) {
 		if (isSpawned() && !isDead()) {
 			abortAttack();
 			abortCast();
@@ -561,7 +561,7 @@ public abstract class Summon extends Playable {
 		}
 	}
 
-	public void setOwner(PlayerInstance newOwner) {
+	public void setOwner(Player newOwner) {
 		_owner = newOwner;
 	}
 
@@ -581,7 +581,7 @@ public abstract class Summon extends Playable {
 				}
 			}
 
-			if (getOwner().isInOlympiadMode() && (target instanceof PlayerInstance) && ((PlayerInstance) target).isInOlympiadMode() && (((PlayerInstance) target).getOlympiadGameId() == getOwner().getOlympiadGameId())) {
+			if (getOwner().isInOlympiadMode() && (target instanceof Player) && ((Player) target).isInOlympiadMode() && (((Player) target).getOlympiadGameId() == getOwner().getOlympiadGameId())) {
 				OlympiadGameManager.getInstance().notifyCompetitorDamage(getOwner(), damage);
 			}
 
@@ -616,7 +616,7 @@ public abstract class Summon extends Playable {
 
 	@Override
 	public void doCast(Skill skill) {
-		final PlayerInstance actingPlayer = getActingPlayer();
+		final Player actingPlayer = getActingPlayer();
 		if ((skill.getTarget(this, false, false, false) == null) && !actingPlayer.getAccessLevel().allowPeaceAttack()) {
 			// Send a System Message to the L2PcInstance
 			actingPlayer.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
@@ -635,7 +635,7 @@ public abstract class Summon extends Playable {
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return getOwner();
 	}
 
@@ -656,7 +656,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastNpcInfo(int val) {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if ((player == getOwner())) {
 				return;
@@ -671,7 +671,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastReputation() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));
@@ -691,7 +691,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastPvpFlag() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));
@@ -722,7 +722,7 @@ public abstract class Summon extends Playable {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		// Check if the L2PcInstance is the owner of the Pet
 		if (activeChar == getOwner()) {
 			activeChar.sendPacket(new MyPetSummonInfo(this, isDead() ? 0 : 1));
@@ -986,7 +986,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void sendInventoryUpdate(InventoryUpdate iu) {
-		final PlayerInstance owner = getOwner();
+		final Player owner = getOwner();
 		if (owner != null) {
 			owner.sendInventoryUpdate(iu);
 		}

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.data.sql.impl;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class CharNameTable {
 		}
 	}
 
-	public final void addName(PlayerInstance player) {
+	public final void addName(Player player) {
 		if (player != null) {
 			addName(player.getObjectId(), player.getName());
 			_accessLevels.put(player.getObjectId(), player.getAccessLevel().getLevel());

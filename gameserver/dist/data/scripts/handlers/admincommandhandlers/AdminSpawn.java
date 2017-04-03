@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -76,7 +76,7 @@ public class AdminSpawn implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_show_spawns")) {
 			AdminHtml.showAdminHtml(activeChar, "spawns.htm");
 		} else if (command.equalsIgnoreCase("admin_spawn_debug_menu")) {
@@ -240,7 +240,7 @@ public class AdminSpawn implements IAdminCommandHandler {
 	 * @param teleportIndex
 	 * @param showposition
 	 */
-	private void findNPCInstances(PlayerInstance activeChar, int npcId, int teleportIndex, boolean showposition) {
+	private void findNPCInstances(Player activeChar, int npcId, int teleportIndex, boolean showposition) {
 		int index = 0;
 		for (L2Spawn spawn : SpawnTable.getInstance().getSpawns(npcId)) {
 			index++;
@@ -287,7 +287,7 @@ public class AdminSpawn implements IAdminCommandHandler {
 		}
 	}
 
-	private void spawnMonster(PlayerInstance activeChar, String monsterId, int respawnTime, int mobCount, boolean permanent) {
+	private void spawnMonster(Player activeChar, String monsterId, int respawnTime, int mobCount, boolean permanent) {
 		WorldObject target = activeChar.getTarget();
 		if (target == null) {
 			target = activeChar;
@@ -325,7 +325,7 @@ public class AdminSpawn implements IAdminCommandHandler {
 		}
 	}
 
-	private void showMonsters(PlayerInstance activeChar, int level, int from) {
+	private void showMonsters(Player activeChar, int level, int from) {
 		final List<L2NpcTemplate> mobs = NpcData.getInstance().getAllMonstersOfLevel(level);
 		final int mobsCount = mobs.size();
 		final StringBuilder tb = new StringBuilder(500 + (mobsCount * 80));
@@ -346,7 +346,7 @@ public class AdminSpawn implements IAdminCommandHandler {
 		activeChar.sendPacket(new NpcHtmlMessage(0, 1, tb.toString()));
 	}
 
-	private void showNpcs(PlayerInstance activeChar, String starting, int from) {
+	private void showNpcs(Player activeChar, String starting, int from) {
 		final List<L2NpcTemplate> mobs = NpcData.getInstance().getAllNpcStartingWith(starting);
 		final int mobsCount = mobs.size();
 		final StringBuilder tb = new StringBuilder(500 + (mobsCount * 80));

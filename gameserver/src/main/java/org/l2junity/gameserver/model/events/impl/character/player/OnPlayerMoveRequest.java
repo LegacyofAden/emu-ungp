@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerMoveRequest implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Location _location;
 
-	public OnPlayerMoveRequest(PlayerInstance activeChar, Location loc) {
+	public OnPlayerMoveRequest(Player activeChar, Location loc) {
 		_activeChar = activeChar;
 		_location = loc;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

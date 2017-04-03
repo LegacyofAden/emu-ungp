@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -50,7 +50,7 @@ public abstract class AbstractNpcAI extends Quest {
 	 * Simple on first talk event handler.
 	 */
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return npc.getId() + ".html";
 	}
 

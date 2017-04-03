@@ -22,7 +22,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
@@ -41,7 +41,7 @@ public final class PumpBetray extends AbstractBooleanStatEffect {
 	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		final Summon summon = target.asSummon();
 		if (summon != null) {
-			final PlayerInstance owner = summon.getOwner();
+			final Player owner = summon.getOwner();
 			if (owner != null) {
 				target.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, target.asSummon().getOwner());
 			}

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.Product;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -33,7 +33,7 @@ public final class BuyList extends AbstractItemPacket {
 	private final int _inventorySlots;
 	private final double _castleTaxRate;
 
-	public BuyList(ProductList list, PlayerInstance player, double castleTaxRate) {
+	public BuyList(ProductList list, Player player, double castleTaxRate) {
 		_listId = list.getListId();
 		_list = list.getProducts();
 		_money = player.getAdena();

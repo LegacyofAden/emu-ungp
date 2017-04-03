@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 public class L2EffectPointInstance extends Npc {
-	private final PlayerInstance _owner;
+	private final Player _owner;
 
 	public L2EffectPointInstance(L2NpcTemplate template, Creature owner) {
 		super(template);
@@ -40,7 +40,7 @@ public class L2EffectPointInstance extends Npc {
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return _owner;
 	}
 
@@ -50,13 +50,13 @@ public class L2EffectPointInstance extends Npc {
 	 * @param player
 	 */
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
 	@Override
-	public void onActionShift(PlayerInstance player) {
+	public void onActionShift(Player player) {
 		if (player == null) {
 			return;
 		}

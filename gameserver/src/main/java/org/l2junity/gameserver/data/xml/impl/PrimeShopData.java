@@ -24,7 +24,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
@@ -108,7 +108,7 @@ public class PrimeShopData implements IGameXmlReader {
 		return _primeItems.size();
 	}
 
-	public void showProductInfo(PlayerInstance player, int brId) {
+	public void showProductInfo(Player player, int brId) {
 		final PrimeShopGroup item = _primeItems.get(brId);
 
 		if ((player == null) || (item == null)) {

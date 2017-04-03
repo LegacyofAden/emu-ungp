@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -32,7 +32,7 @@ public class PrivateStoreManageListBuy extends AbstractItemPacket {
 	private final Collection<ItemInstance> _itemList;
 	private final TradeItem[] _buyList;
 
-	public PrivateStoreManageListBuy(PlayerInstance player) {
+	public PrivateStoreManageListBuy(Player player) {
 		_objId = player.getObjectId();
 		_playerAdena = player.getAdena();
 		_itemList = player.getInventory().getUniqueItems(false, true);

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.data.xml.impl.MultisellData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public final class ProofOfCourage extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		if (talker.isInCategory(CategoryType.FIRST_CLASS_GROUP)) {
 			return npc.getId() + "-noclass.html";
 		} else if (!CLASSLIST.get(npc.getId()).contains(talker.getClassId())) {

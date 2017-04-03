@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -50,7 +50,7 @@ public final class RequestRejectPostAttachment implements IClientIncomingPacket 
 			return;
 		}
 
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}
@@ -83,7 +83,7 @@ public final class RequestRejectPostAttachment implements IClientIncomingPacket 
 		client.sendPacket(SystemMessageId.MAIL_SUCCESSFULLY_RETURNED);
 		client.sendPacket(new ExChangePostState(true, _msgId, Message.REJECTED));
 
-		final PlayerInstance sender = World.getInstance().getPlayer(msg.getSenderId());
+		final Player sender = World.getInstance().getPlayer(msg.getSenderId());
 		if (sender != null) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_RETURNED_THE_MAIL);
 			sm.addCharName(activeChar);

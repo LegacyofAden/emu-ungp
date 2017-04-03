@@ -24,7 +24,7 @@ import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.SpecialCamera;
 
@@ -48,7 +48,7 @@ public final class DrChaos extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "1": {
 				Npc machine = null;
@@ -100,7 +100,7 @@ public final class DrChaos extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (npc.getId() == DR_CHAOS) {
 			npc.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(96323, -110914, -3328, 0));
 			this.startQuestTimer("1", 3000, npc, player);

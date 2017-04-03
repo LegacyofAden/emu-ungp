@@ -21,18 +21,18 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.model.VariationInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class GMViewCharacterInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final int _runSpd, _walkSpd;
 	private final int _swimRunSpd, _swimWalkSpd;
 	private final int _flyRunSpd, _flyWalkSpd;
 	private final double _moveMultiplier;
 
-	public GMViewCharacterInfo(PlayerInstance cha) {
+	public GMViewCharacterInfo(Player cha) {
 		_activeChar = cha;
 		_moveMultiplier = cha.getMovementSpeedMultiplier();
 		_runSpd = (int) Math.round(cha.getRunSpeed() / _moveMultiplier);

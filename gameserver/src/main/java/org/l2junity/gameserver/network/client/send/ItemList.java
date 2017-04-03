@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ItemList extends AbstractItemPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final List<ItemInstance> _items;
 	private final boolean _showWindow;
 
-	public ItemList(PlayerInstance activeChar, boolean showWindow) {
+	public ItemList(Player activeChar, boolean showWindow) {
 		_activeChar = activeChar;
 		_showWindow = showWindow;
 		_items = activeChar.getInventory().getItems(item -> !item.isQuestItem()).stream().collect(Collectors.toList());

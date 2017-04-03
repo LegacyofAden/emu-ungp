@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.ActionHandler;
 import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class L2ArtefactInstanceAction implements IActionHandler {
 	/**
@@ -42,7 +42,7 @@ public class L2ArtefactInstanceAction implements IActionHandler {
 	 * <BR>
 	 */
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		if (!((Npc) target).canTarget(activeChar)) {
 			return false;
 		}

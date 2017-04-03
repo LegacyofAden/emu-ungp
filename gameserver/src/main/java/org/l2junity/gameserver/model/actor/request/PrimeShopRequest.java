@@ -18,13 +18,13 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author UnAfraid
  */
 public class PrimeShopRequest extends AbstractRequest {
-	public PrimeShopRequest(PlayerInstance activeChar) {
+	public PrimeShopRequest(Player activeChar) {
 		super(activeChar);
 	}
 

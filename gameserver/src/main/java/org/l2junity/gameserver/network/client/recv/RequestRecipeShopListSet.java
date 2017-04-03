@@ -23,7 +23,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
@@ -71,7 +71,7 @@ public final class RequestRecipeShopListSet implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

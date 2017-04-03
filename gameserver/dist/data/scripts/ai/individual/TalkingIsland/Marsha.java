@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
@@ -41,7 +41,7 @@ public final class Marsha extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("NPC_MOVE")) {
 			if (getRandomBoolean()) {
 				addMoveToDesire(npc, GeoData.getInstance().moveCheck(npc.getLocation(), Util.getRandomPosition(npc.getSpawn(), 0, 500), npc.getInstanceWorld()), 23);

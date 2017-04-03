@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import quests.Q00184_ArtOfPersuasion.Q00184_ArtOfPersuasion;
@@ -48,9 +48,9 @@ public final class Alarm extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
-		final PlayerInstance player0 = npc.getVariables().getObject("player0", PlayerInstance.class);
+		final Player player0 = npc.getVariables().getObject("player0", Player.class);
 		final Npc npc0 = npc.getVariables().getObject("npc0", Npc.class);
 		switch (event) {
 			case "SELF_DESTRUCT_IN_60": {
@@ -167,10 +167,10 @@ public final class Alarm extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance talker) {
+	public String onFirstTalk(Npc npc, Player talker) {
 		String htmltext = getNoQuestMsg(talker);
 		if (verifyMemoState(talker, ART_OF_PERSUASION_ID, 3) || verifyMemoState(talker, NIKOLAS_COOPERATION_ID, 3)) {
-			final PlayerInstance player = npc.getVariables().getObject("player0", PlayerInstance.class);
+			final Player player = npc.getVariables().getObject("player0", Player.class);
 			if (player == talker) {
 				htmltext = "32367-01.html";
 			} else {
@@ -184,7 +184,7 @@ public final class Alarm extends AbstractNpcAI {
 	public String onSpawn(Npc npc) {
 		startQuestTimer("SELF_DESTRUCT_IN_60", 60000, npc, null);
 		npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.INTRUDER_ALERT_THE_ALARM_WILL_SELF_DESTRUCT_IN_2_MINUTES);
-		final PlayerInstance player = npc.getVariables().getObject("player0", PlayerInstance.class);
+		final Player player = npc.getVariables().getObject("player0", Player.class);
 		if (player != null) {
 			playSound(player, QuestSound.ITEMSOUND_SIREN);
 		}
@@ -199,7 +199,7 @@ public final class Alarm extends AbstractNpcAI {
 	 * @param memoState the memo state, if memo state is less than zero, only quest state is checked
 	 * @return {@code true} if the player has the memo state, {@code false} otherwise
 	 */
-	private static final boolean verifyMemoState(PlayerInstance player, int questId, int memoState) {
+	private static final boolean verifyMemoState(Player player, int questId, int memoState) {
 		QuestState qs = null;
 		switch (questId) {
 			case ART_OF_PERSUASION_ID: {
@@ -221,7 +221,7 @@ public final class Alarm extends AbstractNpcAI {
 	 * @param questId   the quest ID
 	 * @param memoState the memo state
 	 */
-	private static final void setMemoState(PlayerInstance player, int questId, int memoState) {
+	private static final void setMemoState(Player player, int questId, int memoState) {
 		QuestState qs = null;
 		switch (questId) {
 			case ART_OF_PERSUASION_ID: {
@@ -246,7 +246,7 @@ public final class Alarm extends AbstractNpcAI {
 	 * @param slot    the slot
 	 * @return the memo state ex
 	 */
-	private static final int getMemoStateEx(PlayerInstance player, int questId, int slot) {
+	private static final int getMemoStateEx(Player player, int questId, int slot) {
 		QuestState qs = null;
 		switch (questId) {
 			case ART_OF_PERSUASION_ID: {
@@ -269,7 +269,7 @@ public final class Alarm extends AbstractNpcAI {
 	 * @param slot        the slot
 	 * @param memoStateEx the memo state ex
 	 */
-	private static final void setMemoStateEx(PlayerInstance player, int questId, int slot, int memoStateEx) {
+	private static final void setMemoStateEx(Player player, int questId, int slot, int memoStateEx) {
 		QuestState qs = null;
 		switch (questId) {
 			case ART_OF_PERSUASION_ID: {

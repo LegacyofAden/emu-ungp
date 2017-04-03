@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv.compound;
 
 import org.l2junity.gameserver.data.xml.impl.CombinationItemsData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.CompoundRequest;
 import org.l2junity.gameserver.model.items.combination.CombinationItem;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -45,7 +45,7 @@ public class RequestNewEnchantPushTwo implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		} else if (activeChar.isInStoreMode()) {

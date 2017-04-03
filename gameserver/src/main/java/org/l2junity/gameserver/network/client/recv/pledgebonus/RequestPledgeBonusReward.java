@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv.pledgebonus;
 import org.l2junity.gameserver.enums.ClanRewardType;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.pledge.ClanRewardBonus;
@@ -44,7 +44,7 @@ public class RequestPledgeBonusReward implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if ((player == null) || (player.getClan() == null)) {
 			return;
 		}

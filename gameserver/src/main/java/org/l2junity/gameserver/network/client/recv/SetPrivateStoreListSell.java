@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.TradeList;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -67,7 +67,7 @@ public class SetPrivateStoreListSell implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

@@ -20,7 +20,7 @@ package quests.Q10732_AForeignLand;
 
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.ExShowUsm;
@@ -47,7 +47,7 @@ public final class Q10732_AForeignLand extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -78,7 +78,7 @@ public final class Q10732_AForeignLand extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState st = getQuestState(player, true);
 		if (st.isCompleted()) {
 			return getAlreadyCompletedMsg(player);

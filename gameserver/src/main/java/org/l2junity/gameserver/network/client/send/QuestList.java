@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,7 +30,7 @@ public class QuestList implements IClientOutgoingPacket {
 	private final List<QuestState> _activeQuests;
 	private final byte[] _oneTimeQuestMask;
 
-	public QuestList(PlayerInstance player) {
+	public QuestList(Player player) {
 		_activeQuests = new LinkedList<>();
 		_oneTimeQuestMask = new byte[128];
 

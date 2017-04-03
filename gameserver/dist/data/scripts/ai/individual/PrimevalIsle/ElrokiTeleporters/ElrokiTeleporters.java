@@ -21,7 +21,7 @@ package ai.individual.PrimevalIsle.ElrokiTeleporters;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Elroki teleport AI.
@@ -43,7 +43,7 @@ public final class ElrokiTeleporters extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		if (!talker.isInCombat()) {
 			talker.teleToLocation((npc.getId() == ORAHOCHIN) ? TELEPORT_ORAHOCIN : TELEPORT_GARIACHIN);
 		} else {

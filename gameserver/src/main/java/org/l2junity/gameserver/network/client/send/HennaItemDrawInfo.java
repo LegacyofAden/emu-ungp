@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.Henna;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -28,10 +28,10 @@ import org.l2junity.network.PacketWriter;
  * @author Zoey76
  */
 public class HennaItemDrawInfo implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final Henna _henna;
 
-	public HennaItemDrawInfo(Henna henna, PlayerInstance player) {
+	public HennaItemDrawInfo(Henna henna, Player player) {
 		_henna = henna;
 		_activeChar = player;
 	}

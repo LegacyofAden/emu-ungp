@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.SkillEnchantType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExEnchantSkillInfoDetail;
 import org.l2junity.network.PacketReader;
@@ -48,7 +48,7 @@ public final class RequestExEnchantSkillInfoDetail implements IClientIncomingPac
 			return;
 		}
 
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

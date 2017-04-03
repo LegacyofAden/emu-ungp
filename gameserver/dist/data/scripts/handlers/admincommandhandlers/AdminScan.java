@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.formatters.BypassParserFormatter;
@@ -54,7 +54,7 @@ public class AdminScan implements IAdminCommandHandler {
 	private static final int DEFAULT_RADIUS = 1000;
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		final String actualCommand = st.nextToken();
 		switch (actualCommand.toLowerCase()) {
@@ -108,7 +108,7 @@ public class AdminScan implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void processBypass(PlayerInstance activeChar, BypassParser parser) {
+	private void processBypass(Player activeChar, BypassParser parser) {
 		final int id = parser.getInt("id", 0);
 		final String name = parser.getString("name", null);
 		int radius = parser.getInt("radius", parser.getInt("range", DEFAULT_RADIUS));
@@ -144,7 +144,7 @@ public class AdminScan implements IAdminCommandHandler {
 		return builder;
 	}
 
-	private void sendNpcList(PlayerInstance activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser) {
+	private void sendNpcList(Player activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser) {
 		final BypassBuilder bypassParser = createBypassBuilder(parser, "bypass -h admin_scan");
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "admin/scan.htm");

@@ -20,7 +20,7 @@ package quests.Q00111_ElrokianHuntersProof;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -87,7 +87,7 @@ public final class Q00111_ElrokianHuntersProof extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		String htmltext = null;
 		if (qs == null) {
@@ -202,7 +202,7 @@ public final class Q00111_ElrokianHuntersProof extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final QuestState qs = getRandomPartyMemberState(player, -1, 3, npc);
 		if (qs != null) {
 			final ItemChanceHolder item = MOBS_DROP_CHANCES.get(npc.getId());
@@ -225,7 +225,7 @@ public final class Q00111_ElrokianHuntersProof extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		if (qs == null) {

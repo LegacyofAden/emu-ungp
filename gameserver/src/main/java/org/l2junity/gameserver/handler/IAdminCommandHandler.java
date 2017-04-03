@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.handler;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 public interface IAdminCommandHandler {
 	/**
@@ -28,7 +28,7 @@ public interface IAdminCommandHandler {
 	 * @param command
 	 * @return command success
 	 */
-	boolean useAdminCommand(String command, PlayerInstance activeChar);
+	boolean useAdminCommand(String command, Player activeChar);
 
 	/**
 	 * this method is called at initialization to register all the item ids automatically

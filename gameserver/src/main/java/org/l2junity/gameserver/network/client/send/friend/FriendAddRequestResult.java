@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.friend;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -35,7 +35,7 @@ public class FriendAddRequestResult implements IClientOutgoingPacket {
 	private final int _charLevel;
 	private final int _charClassId;
 
-	public FriendAddRequestResult(PlayerInstance activeChar, int result) {
+	public FriendAddRequestResult(Player activeChar, int result) {
 		_result = result;
 		_charId = activeChar.getObjectId();
 		_charName = activeChar.getName();

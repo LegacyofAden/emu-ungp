@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 /**
@@ -43,7 +43,7 @@ public final class Rinne extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		switch (event) {
 			case "TID_LEFTWALK": {
 				npc.setRHandId(WEAPON);

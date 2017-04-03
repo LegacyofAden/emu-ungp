@@ -33,7 +33,7 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -371,7 +371,7 @@ public class Hero {
 		_heroMessage.clear();
 	}
 
-	public void showHeroDiary(PlayerInstance activeChar, int heroclass, int charid, int page) {
+	public void showHeroDiary(Player activeChar, int heroclass, int charid, int page) {
 		final int perpage = 10;
 		final List<StatsSet> mainList = _herodiary.get(charid);
 		if (mainList != null) {
@@ -440,7 +440,7 @@ public class Hero {
 		}
 	}
 
-	public void showHeroFights(PlayerInstance activeChar, int heroclass, int charid, int page) {
+	public void showHeroFights(Player activeChar, int heroclass, int charid, int page) {
 		final int perpage = 20;
 		int _win = 0;
 		int _loss = 0;
@@ -522,7 +522,7 @@ public class Hero {
 		updateHeroes(true);
 
 		for (Integer objectId : _heroes.keySet()) {
-			final PlayerInstance player = World.getInstance().getPlayer(objectId);
+			final Player player = World.getInstance().getPlayer(objectId);
 			if (player == null) {
 				continue;
 			}
@@ -722,7 +722,7 @@ public class Hero {
 	 * @param player  the player instance
 	 * @param message String to set
 	 */
-	public void setHeroMessage(PlayerInstance player, String message) {
+	public void setHeroMessage(Player player, String message) {
 		_heroMessage.put(player.getObjectId(), message);
 	}
 
@@ -790,7 +790,7 @@ public class Hero {
 	 *
 	 * @param player the player to become hero
 	 */
-	public void claimHero(PlayerInstance player) {
+	public void claimHero(Player player) {
 		StatsSet hero = _heroes.get(player.getObjectId());
 		if (hero == null) {
 			hero = new StatsSet();

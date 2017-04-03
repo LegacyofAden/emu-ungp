@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.stats.finalizers;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -37,7 +37,7 @@ public class RegenCPFinalizer implements IStatsFunction {
 			return 0;
 		}
 
-		final PlayerInstance player = creature.getActingPlayer();
+		final Player player = creature.getActingPlayer();
 		double baseValue = player.getTemplate().getBaseCpRegen(creature.getLevel()) * creature.getLevelMod() * BaseStats.CON.calcBonus(creature);
 		if (player.isSitting()) {
 			baseValue *= 1.5; // Sitting

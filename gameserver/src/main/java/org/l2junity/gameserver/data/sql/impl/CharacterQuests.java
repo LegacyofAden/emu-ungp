@@ -22,7 +22,7 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.sql.ICharacterQuests;
 import org.l2junity.gameserver.instancemanager.QuestManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -51,7 +51,7 @@ public class CharacterQuests implements ICharacterQuests {
 	private static final String DELETE_QUEST_REPEAT = "DELETE FROM character_quests WHERE charId=? AND name=?";
 
 	@Override
-	public void loadPlayerQuests(PlayerInstance player) {
+	public void loadPlayerQuests(Player player) {
 		try (Connection conn = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement stateSel = conn.prepareStatement(SELECT_STATES);
 			 PreparedStatement delInvalid = conn.prepareStatement(DELETE_QUEST_REPEAT);

@@ -20,7 +20,7 @@ package quests.Q00144_PailakaInjuredDragon;
 
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -78,7 +78,7 @@ public class Q00144_PailakaInjuredDragon extends Quest {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (npc.getId() == KETRA_ORC_INTELLIGENCE_OFFICIER) {
 			return "32509-01.html";
 		} else if (npc.getId() == KETRA_ORC_SUPPORTER_2) {
@@ -91,7 +91,7 @@ public class Q00144_PailakaInjuredDragon extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState qs = getQuestState(player, false);
 		if (qs == null) {
 			return null;
@@ -193,7 +193,7 @@ public class Q00144_PailakaInjuredDragon extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = null;
 
@@ -230,7 +230,7 @@ public class Q00144_PailakaInjuredDragon extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		final QuestState qs = getQuestState(killer, false);
 		if (qs != null) {
 			if (qs.isCond(3) && (npc.distance3d(killer) <= 1500)) {

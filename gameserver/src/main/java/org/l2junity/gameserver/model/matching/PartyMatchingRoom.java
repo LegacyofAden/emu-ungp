@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -32,24 +32,24 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
  * @author Sdw
  */
 public final class PartyMatchingRoom extends MatchingRoom {
-	public PartyMatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, PlayerInstance leader) {
+	public PartyMatchingRoom(String title, int loot, int minlvl, int maxlvl, int maxmem, Player leader) {
 		super(title, loot, minlvl, maxlvl, maxmem, leader);
 	}
 
 	@Override
-	protected void onRoomCreation(PlayerInstance player) {
+	protected void onRoomCreation(Player player) {
 		player.broadcastUserInfo(UserInfoType.POSITION, UserInfoType.CLAN);
 		player.sendPacket(new ListPartyWaiting(PartyMatchingRoomLevelType.ALL, -1, 1, player.getLevel()));
 		player.sendPacket(SystemMessageId.YOU_HAVE_CREATED_A_PARTY_ROOM);
 	}
 
 	@Override
-	protected void notifyInvalidCondition(PlayerInstance player) {
+	protected void notifyInvalidCondition(Player player) {
 		player.sendPacket(SystemMessageId.YOU_DO_NOT_MEET_THE_REQUIREMENTS_TO_ENTER_THAT_PARTY_ROOM);
 	}
 
 	@Override
-	protected void notifyNewMember(PlayerInstance player) {
+	protected void notifyNewMember(Player player) {
 		// Update others player
 		getMembers().stream().filter(p -> p != player).forEach(p ->
 		{
@@ -67,7 +67,7 @@ public final class PartyMatchingRoom extends MatchingRoom {
 	}
 
 	@Override
-	protected void notifyRemovedMember(PlayerInstance player, boolean kicked, boolean leaderChanged) {
+	protected void notifyRemovedMember(Player player, boolean kicked, boolean leaderChanged) {
 		final SystemMessage sm = SystemMessage.getSystemMessage(kicked ? SystemMessageId.C1_HAS_BEEN_KICKED_FROM_THE_PARTY_ROOM : SystemMessageId.C1_HAS_LEFT_THE_PARTY_ROOM);
 		sm.addPcName(player);
 
@@ -106,7 +106,7 @@ public final class PartyMatchingRoom extends MatchingRoom {
 	}
 
 	@Override
-	public MatchingMemberType getMemberType(PlayerInstance player) {
+	public MatchingMemberType getMemberType(Player player) {
 		if (isLeader(player)) {
 			return MatchingMemberType.PARTY_LEADER;
 		}

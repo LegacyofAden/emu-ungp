@@ -59,7 +59,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 	private static final int BUFF_INTERVAL = 5000; // 5 seconds
 	private int _remainingTime = MAX_DURATION;
 	private double _homeX, _homeY, _homeZ;
-	protected PlayerInstance _owner;
+	protected Player _owner;
 	private Future<?> _buffTask = null;
 	private Future<?> _durationCheckTask = null;
 	protected boolean _isFreyaBeast;
@@ -71,7 +71,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 		setHome(this);
 	}
 
-	public L2TamedBeastInstance(int npcTemplateId, PlayerInstance owner, int foodSkillId, double x, double y, double z) {
+	public L2TamedBeastInstance(int npcTemplateId, Player owner, int foodSkillId, double x, double y, double z) {
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = false;
 		setInstanceType(InstanceType.L2TamedBeastInstance);
@@ -83,7 +83,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 		spawnMe(x, y, z);
 	}
 
-	public L2TamedBeastInstance(int npcTemplateId, PlayerInstance owner, int food, double x, double y, double z, boolean isFreyaBeast) {
+	public L2TamedBeastInstance(int npcTemplateId, Player owner, int food, double x, double y, double z, boolean isFreyaBeast) {
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = isFreyaBeast;
 		setInstanceType(InstanceType.L2TamedBeastInstance);
@@ -216,11 +216,11 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 		}
 	}
 
-	public PlayerInstance getOwner() {
+	public Player getOwner() {
 		return _owner;
 	}
 
-	public void setOwner(PlayerInstance owner) {
+	public void setOwner(Player owner) {
 		if (owner != null) {
 			_owner = owner;
 			setTitle(owner.getName());
@@ -363,7 +363,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 		@Override
 		public void run() {
 			int foodTypeSkillId = _tamedBeast.getFoodType();
-			PlayerInstance owner = _tamedBeast.getOwner();
+			Player owner = _tamedBeast.getOwner();
 
 			ItemInstance item = null;
 			if (_tamedBeast._isFreyaBeast) {
@@ -423,7 +423,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 
 		@Override
 		public void run() {
-			PlayerInstance owner = _tamedBeast.getOwner();
+			Player owner = _tamedBeast.getOwner();
 
 			// check if the owner is no longer around...if so, despawn
 			if ((owner == null) || !owner.isOnline()) {
@@ -470,7 +470,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if ((player == null) || !canTarget(player)) {
 			return;
 		}

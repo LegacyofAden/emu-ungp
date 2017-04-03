@@ -20,7 +20,7 @@ package quests.Q00126_TheNameOfEvil2;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -59,7 +59,7 @@ public class Q00126_TheNameOfEvil2 extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 
 		QuestState st = getQuestState(player, false);
@@ -363,7 +363,7 @@ public class Q00126_TheNameOfEvil2 extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player, boolean isSimulated) {
+	public String onTalk(Npc npc, Player player, boolean isSimulated) {
 		String htmltext = getNoQuestMsg(player);
 		QuestState st = getQuestState(player, true);
 		if (st == null) {

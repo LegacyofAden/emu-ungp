@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class RecipeShopManageList implements IClientOutgoingPacket {
-	private final PlayerInstance _seller;
+	private final Player _seller;
 	private final boolean _isDwarven;
 	private final Collection<RecipeHolder> _recipes;
 	private List<Entry<Integer, Long>> _manufacture;
 
-	public RecipeShopManageList(PlayerInstance seller, boolean isDwarven) {
+	public RecipeShopManageList(Player seller, boolean isDwarven) {
 		_seller = seller;
 		_isDwarven = isDwarven;
 		_recipes = (isDwarven && (_seller.getCreateItemLevel() > 0)) ? _seller.getDwarvenRecipeBook() : _seller.getCommonRecipeBook();

@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
@@ -58,7 +58,7 @@ public class AdminEnchant implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_enchant")) {
 			showMainPage(activeChar);
 		} else {
@@ -125,10 +125,10 @@ public class AdminEnchant implements IAdminCommandHandler {
 		return true;
 	}
 
-	private void setEnchant(PlayerInstance activeChar, int ench, int armorType) {
+	private void setEnchant(Player activeChar, int ench, int armorType) {
 		// get the target
 
-		final PlayerInstance player = activeChar.getTarget() != null ? activeChar.getTarget().getActingPlayer() : activeChar;
+		final Player player = activeChar.getTarget() != null ? activeChar.getTarget().getActingPlayer() : activeChar;
 
 		if (player == null) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
@@ -164,7 +164,7 @@ public class AdminEnchant implements IAdminCommandHandler {
 		}
 	}
 
-	private void showMainPage(PlayerInstance activeChar) {
+	private void showMainPage(Player activeChar) {
 		AdminHtml.showAdminHtml(activeChar, "enchant.htm");
 	}
 

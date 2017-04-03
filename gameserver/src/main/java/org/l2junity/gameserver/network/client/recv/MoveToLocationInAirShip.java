@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -56,7 +56,7 @@ public class MoveToLocationInAirShip implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		}

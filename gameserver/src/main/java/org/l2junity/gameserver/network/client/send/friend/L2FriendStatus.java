@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.friend;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -41,7 +41,7 @@ public class L2FriendStatus implements IClientOutgoingPacket {
 	private final int _level;
 	private final String _name;
 
-	public L2FriendStatus(PlayerInstance player, int type) {
+	public L2FriendStatus(Player player, int type) {
 		_objectId = player.getObjectId();
 		_classId = player.getActiveClass();
 		_level = player.getLevel();

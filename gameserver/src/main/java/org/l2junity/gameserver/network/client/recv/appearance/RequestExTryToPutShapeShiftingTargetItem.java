@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv.appearance;
 
 import org.l2junity.gameserver.data.xml.impl.AppearanceItemData;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ShapeShiftingItemRequest;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.items.appearance.AppearanceStone;
@@ -45,7 +45,7 @@ public class RequestExTryToPutShapeShiftingTargetItem implements IClientIncoming
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

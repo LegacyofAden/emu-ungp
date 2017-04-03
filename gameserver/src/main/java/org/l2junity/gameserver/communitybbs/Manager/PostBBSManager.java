@@ -23,7 +23,7 @@ import org.l2junity.gameserver.communitybbs.BB.Post;
 import org.l2junity.gameserver.communitybbs.BB.Post.CPost;
 import org.l2junity.gameserver.communitybbs.BB.Topic;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -55,7 +55,7 @@ public class PostBBSManager extends BaseBBSManager {
 	}
 
 	@Override
-	public void parsecmd(String command, PlayerInstance activeChar) {
+	public void parsecmd(String command, Player activeChar) {
 		if (command.startsWith("_bbsposts;read;")) {
 			StringTokenizer st = new StringTokenizer(command, ";");
 			st.nextToken();
@@ -87,7 +87,7 @@ public class PostBBSManager extends BaseBBSManager {
 		}
 	}
 
-	private void showEditPost(Topic topic, Forum forum, PlayerInstance activeChar, int idp) {
+	private void showEditPost(Topic topic, Forum forum, Player activeChar, int idp) {
 		Post p = getGPosttByTopic(topic);
 		if ((forum == null) || (topic == null) || (p == null)) {
 			CommunityBoardHandler.separateAndSend("<html><body><br><br><center>Error, this forum, topic or post does not exit !</center><br><br></body></html>", activeChar);
@@ -96,7 +96,7 @@ public class PostBBSManager extends BaseBBSManager {
 		}
 	}
 
-	private void showPost(Topic topic, Forum forum, PlayerInstance activeChar, int ind) {
+	private void showPost(Topic topic, Forum forum, Player activeChar, int ind) {
 		if ((forum == null) || (topic == null)) {
 			CommunityBoardHandler.separateAndSend("<html><body><br><br><center>Error, this forum is not implemented yet</center><br><br></body></html>", activeChar);
 		} else if (forum.getType() == Forum.MEMO) {
@@ -106,13 +106,13 @@ public class PostBBSManager extends BaseBBSManager {
 		}
 	}
 
-	private void showHtmlEditPost(Topic topic, PlayerInstance activeChar, Forum forum, Post p) {
+	private void showHtmlEditPost(Topic topic, Player activeChar, Forum forum, Post p) {
 		final String html = "<html><body><br><br><table border=0 width=610><tr><td width=10></td><td width=600 align=left><a action=\"bypass _bbshome\">HOME</a>&nbsp;>&nbsp;<a action=\"bypass _bbsmemo\">" + forum.getName() + " Form</a></td></tr></table><img src=\"L2UI.squareblank\" width=\"1\" height=\"10\"><center><table border=0 cellspacing=0 cellpadding=0><tr><td width=610><img src=\"sek.cbui355\" width=\"610\" height=\"1\"><br1><img src=\"sek.cbui355\" width=\"610\" height=\"1\"></td></tr></table><table fixwidth=610 border=0 cellspacing=0 cellpadding=0><tr><td><img src=\"l2ui.mini_logo\" width=5 height=20></td></tr><tr><td><img src=\"l2ui.mini_logo\" width=5 height=1></td><td align=center FIXWIDTH=60 height=29>&$413;</td><td FIXWIDTH=540>" + topic.getName() + "</td><td><img src=\"l2ui.mini_logo\" width=5 height=1></td></tr></table><table fixwidth=610 border=0 cellspacing=0 cellpadding=0><tr><td><img src=\"l2ui.mini_logo\" width=5 height=10></td></tr><tr><td><img src=\"l2ui.mini_logo\" width=5 height=1></td><td align=center FIXWIDTH=60 height=29 valign=top>&$427;</td><td align=center FIXWIDTH=540><MultiEdit var =\"Content\" width=535 height=313></td><td><img src=\"l2ui.mini_logo\" width=5 height=1></td></tr><tr><td><img src=\"l2ui.mini_logo\" width=5 height=10></td></tr></table><table fixwidth=610 border=0 cellspacing=0 cellpadding=0><tr><td><img src=\"l2ui.mini_logo\" width=5 height=10></td></tr><tr><td><img src=\"l2ui.mini_logo\" width=5 height=1></td><td align=center FIXWIDTH=60 height=29>&nbsp;</td><td align=center FIXWIDTH=70><button value=\"&$140;\" action=\"Write Post " + forum.getID() + ";" + topic.getID() + ";0 _ Content Content Content\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\" ></td><td align=center FIXWIDTH=70><button value = \"&$141;\" action=\"bypass _bbsmemo\" back=\"l2ui_ch3.smallbutton2_down\" width=65 height=20 fore=\"l2ui_ch3.smallbutton2\"> </td><td align=center FIXWIDTH=400>&nbsp;</td><td><img src=\"l2ui.mini_logo\" width=5 height=1></td></tr></table></center></body></html>";
 		send1001(html, activeChar);
 		send1002(activeChar, p.getCPost(0).postTxt, topic.getName(), DateFormat.getInstance().format(new Date(topic.getDate())));
 	}
 
-	private void showMemoPost(Topic topic, PlayerInstance activeChar, Forum forum) {
+	private void showMemoPost(Topic topic, Player activeChar, Forum forum) {
 		//
 		Post p = getGPosttByTopic(topic);
 		Locale locale = Locale.getDefault();
@@ -126,7 +126,7 @@ public class PostBBSManager extends BaseBBSManager {
 	}
 
 	@Override
-	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, PlayerInstance activeChar) {
+	public void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, Player activeChar) {
 		StringTokenizer st = new StringTokenizer(ar1, ";");
 		int idf = Integer.parseInt(st.nextToken());
 		int idt = Integer.parseInt(st.nextToken());

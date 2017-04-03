@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.Mentee;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -132,7 +132,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = event;
 
 		if (event.equalsIgnoreCase("exchange")) {
@@ -148,7 +148,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 				final int objectId = Integer.valueOf(params[1]);
 				MentorManager.getInstance().getMentees(objectId).stream().filter(Objects::nonNull).filter(Mentee::isOnline).forEach(mentee ->
 				{
-					final PlayerInstance menteePlayer = mentee.getPlayerInstance();
+					final Player menteePlayer = mentee.getPlayerInstance();
 					if (menteePlayer != null) {
 						for (SkillHolder holder : MENTEE_BUFFS) {
 							menteePlayer.stopSkillEffects(holder.getSkill());
@@ -162,7 +162,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		return "33587-01.htm";
 	}
 
@@ -200,7 +200,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_MENTEE_STATUS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerMenteeStatus(OnPlayerMenteeStatus event) {
-		final PlayerInstance player = event.getMentee();
+		final Player player = event.getMentee();
 
 		if (event.isMenteeOnline()) {
 			final Mentee mentor = MentorManager.getInstance().getMentor(player.getObjectId());
@@ -255,7 +255,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_MENTOR_STATUS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerMentorStatus(OnPlayerMentorStatus event) {
-		final PlayerInstance player = event.getMentor();
+		final Player player = event.getMentor();
 
 		if (event.isMentorOnline()) {
 			// stop buffs removal task
@@ -306,7 +306,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_PROFESSION_CHANGE)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onProfessionChange(OnPlayerProfessionChange event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 
 		if (player.isMentor()) {
 			// Give mentor's buffs only if he didn't had them.
@@ -329,7 +329,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onLevelIncreased(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 
 		// Not a mentee
 		if (!player.isMentee()) {
@@ -351,8 +351,8 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterEvent(EventType.ON_PLAYER_MENTEE_LEFT)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onMenteeLeft(OnPlayerMenteeLeft event) {
-		final PlayerInstance player = event.getMentee();
-		final PlayerInstance mentor = event.getMentor().getPlayerInstance();
+		final Player player = event.getMentee();
+		final Player mentor = event.getMentor().getPlayerInstance();
 		// Remove the mentee skills
 		player.removeSkill(MENTEE_MENTOR_SUMMON.getSkill(), true);
 
@@ -372,8 +372,8 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onMenteeRemove(OnPlayerMenteeRemove event) {
 		final Mentee mentee = event.getMentee();
-		final PlayerInstance mentor = event.getMentor();
-		final PlayerInstance player = mentee.getPlayerInstance();
+		final Player mentor = event.getMentor();
+		final Player player = mentee.getPlayerInstance();
 
 		if (player != null) {
 			// Remove the mentee skills
@@ -392,7 +392,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 		event.getMentor().sendPacket(new ExMentorList(mentor));
 	}
 
-	private void handleMenteeSkills(PlayerInstance player) {
+	private void handleMenteeSkills(Player player) {
 		// Give mentee's buffs only if he didn't had them.
 		if (player.getKnownSkill(MENTEE_MENTOR_SUMMON.getSkillId()) == null) {
 			// Add the mentee skills
@@ -400,7 +400,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private void handleMentorSkills(PlayerInstance player) {
+	private void handleMentorSkills(Player player) {
 		// Give mentor's buffs only if he didn't had them.
 		if (player.getKnownSkill(MENTOR_ART_OF_SEDUCATION.getSkillId()) == null) {
 			// Add the mentor skills
@@ -408,7 +408,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private void handleGraduateMentee(PlayerInstance player) {
+	private void handleGraduateMentee(Player player) {
 		MentorManager.getInstance().cancelAllMentoringBuffs(player);
 		final Mentee mentor = MentorManager.getInstance().getMentor(player.getObjectId());
 		if (mentor != null) {
@@ -441,7 +441,7 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 	 *
 	 * @param player
 	 */
-	private void checkLevelForReward(PlayerInstance player) {
+	private void checkLevelForReward(Player player) {
 		if (!MENTEE_COINS.containsKey(player.getLevel())) {
 			return;
 		}
@@ -457,11 +457,11 @@ public final class MentorGuide extends AbstractNpcAI implements IGameXmlReader {
 		}
 	}
 
-	private void sendMail(PlayerInstance player, String title, String body, int itemId, long amount) {
+	private void sendMail(Player player, String title, String body, int itemId, long amount) {
 		sendMail(player.getObjectId(), player, title, body, itemId, amount);
 	}
 
-	private void sendMail(int objectId, PlayerInstance player, String title, String body, int itemId, long amount) {
+	private void sendMail(int objectId, Player player, String title, String body, int itemId, long amount) {
 		final Message msg = new Message(MENTOR_GUIDE, objectId, title, body, MailType.MENTOR_NPC);
 		msg.createAttachments().addItem(getName(), itemId, amount, null, player);
 

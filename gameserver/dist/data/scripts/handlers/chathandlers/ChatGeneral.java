@@ -27,7 +27,7 @@ import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -50,7 +50,7 @@ public final class ChatGeneral implements IChatHandler {
 			};
 
 	@Override
-	public void handleChat(ChatType type, PlayerInstance activeChar, String params, String text) {
+	public void handleChat(ChatType type, Player activeChar, String params, String text) {
 		boolean vcd_used = false;
 		if (text.startsWith(".")) {
 			final StringTokenizer st = new StringTokenizer(text);
@@ -98,7 +98,7 @@ public final class ChatGeneral implements IChatHandler {
 					return;
 				}
 
-				for (PlayerInstance player : World.getInstance().getPlayers()) {
+				for (Player player : World.getInstance().getPlayers()) {
 					if (!BlockList.isBlocked(player, activeChar)) {
 						player.sendPacket(cs);
 					}
@@ -106,7 +106,7 @@ public final class ChatGeneral implements IChatHandler {
 				return;
 			}
 
-			World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, 1250, player ->
+			World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, 1250, player ->
 			{
 				if (!BlockList.isBlocked(player, activeChar)) {
 					player.sendPacket(cs);

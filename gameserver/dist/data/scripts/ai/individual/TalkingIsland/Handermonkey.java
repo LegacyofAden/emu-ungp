@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Handermonkey AI.
@@ -38,7 +38,7 @@ public final class Handermonkey extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("NPC_MOVE") && (npc != null)) {
 			if (getRandom(100) < 70) {
 				final double x = npc.getSpawn().getX() + (getRandom(-100, 100));

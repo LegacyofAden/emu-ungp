@@ -19,7 +19,7 @@
 package quests.Q00237_WindsOfChange;
 
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -56,7 +56,7 @@ public class Q00237_WindsOfChange extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -142,7 +142,7 @@ public class Q00237_WindsOfChange extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance talker) {
+	public String onTalk(Npc npc, Player talker) {
 		String htmltext = getNoQuestMsg(talker);
 		final QuestState st = getQuestState(talker, true);
 		if (st == null) {

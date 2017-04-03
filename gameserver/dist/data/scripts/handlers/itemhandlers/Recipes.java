@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -40,7 +40,7 @@ public class Recipes implements IItemHandler {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 		if ((activeChar.getPrivateStoreType() == PrivateStoreType.MANUFACTURE) || activeChar.isCrafting()) {
 			activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_ALTER_YOUR_RECIPE_BOOK_WHILE_ENGAGED_IN_MANUFACTURING);
 			return false;

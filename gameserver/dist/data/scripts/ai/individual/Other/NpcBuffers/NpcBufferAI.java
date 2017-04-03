@@ -21,7 +21,7 @@ package ai.individual.Other.NpcBuffers;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class NpcBufferAI implements Runnable {
 		_skillData = skill;
 	}
 
-	private Skill getSkill(PlayerInstance player) {
+	private Skill getSkill(Player player) {
 		if (_skillData.getScaleToLevel() < 1) {
 			return _skillData.getSkill();
 		}
@@ -74,7 +74,7 @@ public class NpcBufferAI implements Runnable {
 			return;
 		}
 
-		final PlayerInstance player = _npc.getSummoner().getActingPlayer();
+		final Player player = _npc.getSummoner().getActingPlayer();
 
 		final Skill skill = getSkill(player);
 		if (skill == null) {

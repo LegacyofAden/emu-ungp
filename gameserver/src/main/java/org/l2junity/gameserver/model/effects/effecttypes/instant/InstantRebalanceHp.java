@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -48,7 +48,7 @@ public final class InstantRebalanceHp extends AbstractEffect {
 		double currentHPs = 0;
 		final Party party = caster.getParty();
 		if (party != null) {
-			for (PlayerInstance member : party.getMembers()) {
+			for (Player member : party.getMembers()) {
 				if (!member.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, member, true)) {
 					fullHP += member.getMaxHp();
 					currentHPs += member.getCurrentHp();
@@ -67,7 +67,7 @@ public final class InstantRebalanceHp extends AbstractEffect {
 			}
 
 			double percentHP = currentHPs / fullHP;
-			for (PlayerInstance member : party.getMembers()) {
+			for (Player member : party.getMembers()) {
 				if (!member.isDead() && Util.checkIfInRange(skill.getAffectRange(), caster, member, true)) {
 					double newHP = member.getMaxHp() * percentHP;
 					if (newHP > member.getCurrentHp()) // The target gets healed

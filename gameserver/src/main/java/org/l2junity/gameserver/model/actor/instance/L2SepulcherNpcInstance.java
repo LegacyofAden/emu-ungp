@@ -100,7 +100,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	}
 
 	@Override
-	public void onAction(PlayerInstance player, boolean interact) {
+	public void onAction(Player player, boolean interact) {
 		if (!canTarget(player)) {
 			return;
 		}
@@ -150,7 +150,7 @@ public class L2SepulcherNpcInstance extends Npc {
 		}
 	}
 
-	private void doAction(PlayerInstance player) {
+	private void doAction(Player player) {
 		if (isDead()) {
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -234,7 +234,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	}
 
 	@Override
-	public void showChatWindow(PlayerInstance player, int val) {
+	public void showChatWindow(Player player, int val) {
 		String filename = getHtmlPath(getId(), val);
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), filename);
@@ -244,7 +244,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	}
 
 	@Override
-	public void onBypassFeedback(PlayerInstance player, String command) {
+	public void onBypassFeedback(Player player, String command) {
 		if (isBusy()) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile(player.getLang(), "npcbusy.htm");
@@ -274,7 +274,7 @@ public class L2SepulcherNpcInstance extends Npc {
 					default: {
 						openNextDoor(getId());
 						if (player.getParty() != null) {
-							for (PlayerInstance mem : player.getParty().getMembers()) {
+							for (Player mem : player.getParty().getMembers()) {
 								if ((mem != null) && (mem.getInventory().getItemByItemId(HALLS_KEY) != null)) {
 									mem.destroyItemByItemId("Quest", HALLS_KEY, mem.getInventory().getItemByItemId(HALLS_KEY).getCount(), mem, true);
 								}
@@ -356,14 +356,14 @@ public class L2SepulcherNpcInstance extends Npc {
 		}
 
 		final CreatureSay creatureSay = new CreatureSay(0, ChatType.NPC_SHOUT, getName(), msg);
-		for (PlayerInstance player : World.getInstance().getPlayers()) {
+		for (Player player : World.getInstance().getPlayers()) {
 			if (Util.checkIfInRange(15000, player, this, true)) {
 				player.sendPacket(creatureSay);
 			}
 		}
 	}
 
-	public void showHtmlFile(PlayerInstance player, String file) {
+	public void showHtmlFile(Player player, String file) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(player.getLang(), "SepulcherNpc/" + file);
 		html.replace("%npcname%", getName());

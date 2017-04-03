@@ -22,7 +22,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeLeft;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeRemove;
@@ -52,7 +52,7 @@ public class RequestMentorCancel implements IClientIncomingPacket {
 			return;
 		}
 
-		PlayerInstance player = client.getActiveChar();
+		Player player = client.getActiveChar();
 		int objectId = CharNameTable.getInstance().getIdByName(_name);
 		if (player != null) {
 			if (player.isMentor()) {

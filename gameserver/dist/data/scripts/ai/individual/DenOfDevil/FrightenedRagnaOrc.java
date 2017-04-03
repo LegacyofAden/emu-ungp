@@ -23,7 +23,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -50,7 +50,7 @@ public final class FrightenedRagnaOrc extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.isScriptValue(0)) {
 			npc.setScriptValue(1);
 			startQuestTimer("say", (getRandom(5) + 3) * 1000, npc, null, true);
@@ -63,7 +63,7 @@ public final class FrightenedRagnaOrc extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onKill(Npc npc, Player player, boolean isSummon) {
 		final NpcStringId msg = getRandomBoolean() ? NpcStringId.UGH_A_CURSE_UPON_YOU : NpcStringId.I_REALLY_DIDN_T_WANT_TO_FIGHT;
 		npc.broadcastSay(ChatType.NPC_GENERAL, msg);
 		cancelQuestTimer("say", npc, null);
@@ -72,7 +72,7 @@ public final class FrightenedRagnaOrc extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "say": {
 				if (npc.isDead() || !npc.isScriptValue(1)) {

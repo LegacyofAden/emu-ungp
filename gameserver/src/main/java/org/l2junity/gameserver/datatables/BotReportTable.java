@@ -22,13 +22,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.commons.util.BasePathProvider;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -189,14 +188,14 @@ public final class BotReportTable {
 	 * @param reporter (L2PcInstance who issued the report)
 	 * @return True, if the report was registered, False otherwise
 	 */
-	public boolean reportBot(PlayerInstance reporter) {
+	public boolean reportBot(Player reporter) {
 		WorldObject target = reporter.getTarget();
 
 		if (target == null) {
 			return false;
 		}
 
-		PlayerInstance bot = target.getActingPlayer();
+		Player bot = target.getActingPlayer();
 
 		if ((bot == null) || (target.getObjectId() == reporter.getObjectId())) {
 			return false;
@@ -303,7 +302,7 @@ public final class BotReportTable {
 	 * @param bot (L2PcInstance to be punished)
 	 * @param rcd (RepotedCharData linked to this bot)
 	 */
-	private void handleReport(PlayerInstance bot, final ReportedCharData rcd) {
+	private void handleReport(Player bot, final ReportedCharData rcd) {
 		// Report count punishment
 		punishBot(bot, _punishments.get(rcd.getReportCount()));
 
@@ -321,7 +320,7 @@ public final class BotReportTable {
 	 * @param bot (L2PcInstance to punish)
 	 * @param ph  (PunishHolder containing the debuff and a possible system message to send)
 	 */
-	private void punishBot(PlayerInstance bot, PunishHolder ph) {
+	private void punishBot(Player bot, PunishHolder ph) {
 		if (ph != null) {
 			ph._punish.applyEffects(bot, bot);
 			if (ph._systemMessageId > -1) {
@@ -384,7 +383,7 @@ public final class BotReportTable {
 	 * @param player (The L2PcInstance owner of the connection)
 	 * @return int (hashed ip)
 	 */
-	private static int hashIp(PlayerInstance player) {
+	private static int hashIp(Player player) {
 		String con = player.getClient().getConnectionAddress().getHostAddress();
 		String[] rawByte = con.split("\\.");
 		int[] rawIp = new int[4];

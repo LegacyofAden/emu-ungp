@@ -26,7 +26,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
@@ -63,7 +63,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 	private static final String FONT_RED2 = "</font>";
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.startsWith("admin_buff")) {
 			if ((activeChar.getTarget() == null) || !activeChar.getTarget().isCreature()) {
 				activeChar.sendPacket(SystemMessageId.THAT_IS_AN_INCORRECT_TARGET);
@@ -101,7 +101,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 			command = st.nextToken();
 			if (st.hasMoreTokens()) {
 				final String playername = st.nextToken();
-				PlayerInstance player = World.getInstance().getPlayer(playername);
+				Player player = World.getInstance().getPlayer(playername);
 				if (player != null) {
 					int page = 0;
 					if (st.hasMoreTokens()) {
@@ -165,7 +165,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 			try {
 				int radius = Integer.parseInt(val);
 
-				World.getInstance().forEachVisibleObjectInRadius(activeChar, PlayerInstance.class, radius, Creature::stopAllEffects);
+				World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, radius, Creature::stopAllEffects);
 
 				activeChar.sendMessage("All effects canceled within radius " + radius);
 				return true;
@@ -177,7 +177,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 			StringTokenizer st = new StringTokenizer(command, " ");
 			command = st.nextToken();
 
-			PlayerInstance player = null;
+			Player player = null;
 			if (st.hasMoreTokens()) {
 				String playername = st.nextToken();
 
@@ -223,7 +223,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 	 * @param gmchar       the player to switch the Game Master skills.
 	 * @param toAuraSkills if {@code true} it will remove "GM Aura" skills and add "GM regular" skills, vice versa if {@code false}.
 	 */
-	public static void switchSkills(PlayerInstance gmchar, boolean toAuraSkills) {
+	public static void switchSkills(Player gmchar, boolean toAuraSkills) {
 		final Collection<Skill> skills = toAuraSkills ? SkillTreesData.getInstance().getGMSkillTree() : SkillTreesData.getInstance().getGMAuraSkillTree();
 		for (Skill skill : skills) {
 			gmchar.removeSkill(skill, false); // Don't Save GM skills to database
@@ -236,7 +236,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	public static void showBuffs(PlayerInstance activeChar, Creature target, int page, boolean passive) {
+	public static void showBuffs(Player activeChar, Creature target, int page, boolean passive) {
 		final String pageLink = "bypass -h admin_getbuffs" + (passive ? "_ps " : " ") + target.getName();
 
 		int size = 0;
@@ -300,7 +300,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		}
 	}
 
-	private static void removeBuff(PlayerInstance activeChar, int objId, int skillId) {
+	private static void removeBuff(Player activeChar, int objId, int skillId) {
 		Creature target = null;
 		try {
 			target = (Creature) World.getInstance().findObject(objId);
@@ -320,7 +320,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		}
 	}
 
-	private static void removeAllBuffs(PlayerInstance activeChar, int objId) {
+	private static void removeAllBuffs(Player activeChar, int objId) {
 		Creature target = null;
 		try {
 			target = (Creature) World.getInstance().findObject(objId);
@@ -337,7 +337,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		}
 	}
 
-	private static void viewBlockedEffects(PlayerInstance activeChar, int objId) {
+	private static void viewBlockedEffects(Player activeChar, int objId) {
 		Creature target = null;
 		try {
 			target = (Creature) World.getInstance().findObject(objId);

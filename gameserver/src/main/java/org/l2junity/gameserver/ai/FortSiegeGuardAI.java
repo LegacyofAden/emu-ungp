@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.*;
 import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
 import org.l2junity.gameserver.model.actor.instance.L2FortCommanderInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
@@ -123,9 +123,9 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 	private boolean autoAttackCondition(Creature target) {
 		// Check if the target isn't another guard, folk or a door
 		if ((target == null) || (target instanceof L2DefenderInstance) || target.isNpc() || target.isDoor() || target.isAlikeDead() || (target instanceof L2FortCommanderInstance) || target.isPlayable()) {
-			PlayerInstance player = null;
-			if (target instanceof PlayerInstance) {
-				player = ((PlayerInstance) target);
+			Player player = null;
+			if (target instanceof Player) {
+				player = ((Player) target);
 			} else if (target instanceof Summon) {
 				player = ((Summon) target).getOwner();
 			}
@@ -141,7 +141,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 
 		// Get the owner if the target is a summon
 		if (target instanceof Summon) {
-			PlayerInstance owner = ((Summon) target).getOwner();
+			Player owner = ((Summon) target).getOwner();
 			if (_actor.isInRadius3d(owner, 1000)) {
 				target = owner;
 			}
@@ -175,7 +175,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 				Attackable npc = (Attackable) _actor;
 
 				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
-				if (!World.getInstance().getVisibleObjects(npc, PlayerInstance.class).isEmpty()) {
+				if (!World.getInstance().getVisibleObjects(npc, Player.class).isEmpty()) {
 					intention = AI_INTENTION_ACTIVE;
 				} else {
 					intention = AI_INTENTION_IDLE;
@@ -483,7 +483,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 		}
 
 		// never attack defenders
-		if ((attackTarget instanceof PlayerInstance) && sGuard.getFort().getSiege().checkIsDefender(attackTarget.getClan())) {
+		if ((attackTarget instanceof Player) && sGuard.getFort().getSiege().checkIsDefender(attackTarget.getClan())) {
 			// Cancel the target
 			sGuard.stopHating(attackTarget);
 			setTarget(null);

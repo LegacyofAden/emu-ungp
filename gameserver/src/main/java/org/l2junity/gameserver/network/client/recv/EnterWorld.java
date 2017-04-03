@@ -22,7 +22,6 @@ import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.AnnouncementsTable;
 import org.l2junity.gameserver.data.sql.impl.CharacterQuests;
@@ -38,7 +37,7 @@ import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.*;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -84,7 +83,7 @@ public class EnterWorld implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			_log.warn("EnterWorld failed! activeChar returned 'null'.");
 			Disconnection.of(client).defaultSequence(false);
@@ -450,7 +449,7 @@ public class EnterWorld implements IClientIncomingPacket {
 	/**
 	 * @param activeChar
 	 */
-	private void notifyClanMembers(PlayerInstance activeChar) {
+	private void notifyClanMembers(Player activeChar) {
 		final L2Clan clan = activeChar.getClan();
 		if (clan != null) {
 			clan.getClanMember(activeChar.getObjectId()).setPlayerInstance(activeChar);
@@ -465,16 +464,16 @@ public class EnterWorld implements IClientIncomingPacket {
 	/**
 	 * @param activeChar
 	 */
-	private void notifySponsorOrApprentice(PlayerInstance activeChar) {
+	private void notifySponsorOrApprentice(Player activeChar) {
 		if (activeChar.getSponsor() != 0) {
-			final PlayerInstance sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
+			final Player sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
 			if (sponsor != null) {
 				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN);
 				msg.addString(activeChar.getName());
 				sponsor.sendPacket(msg);
 			}
 		} else if (activeChar.getApprentice() != 0) {
-			final PlayerInstance apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
+			final Player apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
 			if (apprentice != null) {
 				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_C1_HAS_LOGGED_IN);
 				msg.addString(activeChar.getName());

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.ExtractableProduct;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.EtcItem;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -46,7 +46,7 @@ public class ExtractableItems implements IItemHandler {
 			return false;
 		}
 
-		final PlayerInstance activeChar = playable.getActingPlayer();
+		final Player activeChar = playable.getActingPlayer();
 		final EtcItem etcitem = (EtcItem) item.getItem();
 		final List<ExtractableProduct> exitem = etcitem.getExtractableItems();
 		if (exitem == null) {

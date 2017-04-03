@@ -24,7 +24,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.ItemInfo;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -212,7 +212,7 @@ public final class ItemAuction {
 		}
 	}
 
-	public final void registerBid(final PlayerInstance player, final long newBid) {
+	public final void registerBid(final Player player, final long newBid) {
 		if (player == null) {
 			throw new NullPointerException();
 		}
@@ -277,11 +277,11 @@ public final class ItemAuction {
 		}
 	}
 
-	private void onPlayerBid(final PlayerInstance player, final ItemAuctionBid bid) {
+	private void onPlayerBid(final Player player, final ItemAuctionBid bid) {
 		if (_highestBid == null) {
 			_highestBid = bid;
 		} else if (_highestBid.getLastBid() < bid.getLastBid()) {
-			final PlayerInstance old = _highestBid.getPlayer();
+			final Player old = _highestBid.getPlayer();
 			if (old != null) {
 				old.sendPacket(SystemMessageId.YOU_HAVE_BEEN_OUTBID);
 			}
@@ -343,7 +343,7 @@ public final class ItemAuction {
 		for (int i = _auctionBids.size(); i-- > 0; ) {
 			final ItemAuctionBid bid = _auctionBids.get(i);
 			if (bid != null) {
-				final PlayerInstance player = bid.getPlayer();
+				final Player player = bid.getPlayer();
 				if (player != null) {
 					player.sendPacket(packet);
 				}
@@ -351,7 +351,7 @@ public final class ItemAuction {
 		}
 	}
 
-	public final boolean cancelBid(final PlayerInstance player) {
+	public final boolean cancelBid(final Player player) {
 		if (player == null) {
 			throw new NullPointerException();
 		}
@@ -420,7 +420,7 @@ public final class ItemAuction {
 		}
 	}
 
-	private boolean reduceItemCount(final PlayerInstance player, final long count) {
+	private boolean reduceItemCount(final Player player, final long count) {
 		if (!player.reduceAdena("ItemAuction", count, player, true)) {
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_ENOUGH_ADENA_FOR_THIS_BID);
 			return false;
@@ -428,7 +428,7 @@ public final class ItemAuction {
 		return true;
 	}
 
-	private void increaseItemCount(final PlayerInstance player, final long count) {
+	private void increaseItemCount(final Player player, final long count) {
 		player.addAdena("ItemAuction", count, player, true);
 	}
 
@@ -438,7 +438,7 @@ public final class ItemAuction {
 	 * @param player The player that made the bid
 	 * @return The last bid the player made or -1
 	 */
-	public final long getLastBid(final PlayerInstance player) {
+	public final long getLastBid(final Player player) {
 		final ItemAuctionBid bid = getBidFor(player.getObjectId());
 		return bid != null ? bid.getLastBid() : -1L;
 	}

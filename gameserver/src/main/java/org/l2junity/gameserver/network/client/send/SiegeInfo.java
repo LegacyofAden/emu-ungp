@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -47,9 +47,9 @@ import java.util.Calendar;
  */
 public class SiegeInfo implements IClientOutgoingPacket {
 	private final Castle _castle;
-	private final PlayerInstance _player;
+	private final Player _player;
 
-	public SiegeInfo(Castle castle, PlayerInstance player) {
+	public SiegeInfo(Castle castle, Player player) {
 		_castle = castle;
 		_player = player;
 	}

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.variables;
 
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * NPC Variables implementation.
@@ -53,8 +53,8 @@ public class NpcVariables extends AbstractVariables {
 	 * @param name the name of the variable
 	 * @return the stored player or {@code null}
 	 */
-	public PlayerInstance getPlayer(String name) {
-		return getObject(name, PlayerInstance.class);
+	public Player getPlayer(String name) {
+		return getObject(name, Player.class);
 	}
 
 	/**

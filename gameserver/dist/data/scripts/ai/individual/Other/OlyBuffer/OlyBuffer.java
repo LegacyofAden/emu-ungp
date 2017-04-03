@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
@@ -54,7 +54,7 @@ public final class OlyBuffer extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		String htmltext = null;
 		if (npc.getScriptValue() < 5) {
 			htmltext = "OlyBuffer-index.html";
@@ -63,7 +63,7 @@ public final class OlyBuffer extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		if (event.startsWith("giveBuff;") && (npc.getScriptValue() < 5)) {
 			final int buffId = Integer.parseInt(event.replace("giveBuff;", ""));

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -60,7 +60,7 @@ public final class Q10332_ToughRoad extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 
 		if (st == null) {
@@ -100,7 +100,7 @@ public final class Q10332_ToughRoad extends Quest {
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 
@@ -132,7 +132,7 @@ public final class Q10332_ToughRoad extends Quest {
 	@Override
 	public String onEnterZone(Creature character, ZoneType zone) {
 		if (character.isPlayer()) {
-			final PlayerInstance player = character.getActingPlayer();
+			final Player player = character.getActingPlayer();
 			final QuestState st = getQuestState(player, false);
 
 			if (((st == null) || st.isCreated()) && (player.getLevel() >= MIN_LEVEL) && (player.getLevel() <= MAX_LEVEL) && player.hasQuestCompleted(Q10331_StartOfFate.class.getSimpleName()) && !player.getVariables().getBoolean(MOVIE_VAR, false)) {

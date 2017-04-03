@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ValidateLocation;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -53,7 +53,7 @@ public final class LairOfAntharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("CHECK_HOME") && (npc != null) && !npc.isDead()) {
 			if ((npc.distance2d(npc.getSpawn()) > 10) && !npc.isInCombat()) {
 				((Attackable) npc).returnHome();
@@ -66,7 +66,7 @@ public final class LairOfAntharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		if (npc.isScriptValue(0) && (getRandom(100) < KNORIKS_CHANCE)) {
 			if (getRandom(100) < KNORIKS_CHANCE2) {
 				npc.setScriptValue(1);
@@ -77,7 +77,7 @@ public final class LairOfAntharas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		switch (npc.getId()) {
 			case DRAGON_KNIGHT: {
 				if (getRandom(100) > KNIGHT_CHANCE) {

@@ -29,7 +29,7 @@ import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2BlockInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -1001,7 +1001,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 			return true;
 		}
 
-		if (activeChar.isPlayer() && !canBeUseWhileRiding((PlayerInstance) activeChar)) {
+		if (activeChar.isPlayer() && !canBeUseWhileRiding((Player) activeChar)) {
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED_DUE_TO_UNSUITABLE_TERMS);
 			sm.addSkillName(_id);
 			activeChar.sendPacket(sm);
@@ -1034,7 +1034,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 
 		// Consume the required fame
 		if ((getPvPPointConsume() > 0) && activeChar.isPlayer()) {
-			final PlayerInstance player = activeChar.getActingPlayer();
+			final Player player = activeChar.getActingPlayer();
 			if (player.getFame() < getPvPPointConsume()) {
 				player.sendPacket(SystemMessageId.YOU_DON_T_HAVE_ENOUGH_FAME_TO_DO_THAT);
 				return false;
@@ -1059,7 +1059,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 	 * @param player the player
 	 * @return {@code true} if the player can use this skill, {@code false} otherwise
 	 */
-	public boolean canBeUseWhileRiding(final PlayerInstance player) {
+	public boolean canBeUseWhileRiding(final Player player) {
 		return (_rideState == null) || _rideState.contains(player.getMountType());
 	}
 
@@ -1376,7 +1376,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 			case 5852:
 			case 5853: {
 				final L2BlockInstance block = targets[0] instanceof L2BlockInstance ? (L2BlockInstance) targets[0] : null;
-				final PlayerInstance player = caster.isPlayer() ? (PlayerInstance) caster : null;
+				final Player player = caster.isPlayer() ? (Player) caster : null;
 				if ((block == null) || (player == null)) {
 					return;
 				}

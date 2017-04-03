@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.zone.type;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -36,7 +36,7 @@ public class ArenaZone extends ZoneType {
 
 	@Override
 	protected void onEnter(Creature character) {
-		if (character instanceof PlayerInstance) {
+		if (character instanceof Player) {
 			if (!character.isInsideZone(ZoneId.PVP)) {
 				character.sendPacket(SystemMessageId.YOU_HAVE_ENTERED_A_COMBAT_ZONE);
 			}
@@ -47,7 +47,7 @@ public class ArenaZone extends ZoneType {
 
 	@Override
 	protected void onExit(Creature character) {
-		if (character instanceof PlayerInstance) {
+		if (character instanceof Player) {
 			if (!character.isInsideZone(ZoneId.PVP)) {
 				character.sendPacket(SystemMessageId.YOU_HAVE_LEFT_A_COMBAT_ZONE);
 			}

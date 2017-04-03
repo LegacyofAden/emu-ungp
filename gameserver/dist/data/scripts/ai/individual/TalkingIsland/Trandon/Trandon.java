@@ -23,7 +23,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -60,7 +60,7 @@ public final class Trandon extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final String[] substrings = event.split(" ");
 		if (substrings.length < 1) {
 			return null;
@@ -248,7 +248,7 @@ public final class Trandon extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_SUB_CHANGE)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public final void onSubChange(OnPlayerSubChange evt) {
-		final PlayerInstance player = evt.getActiveChar();
+		final Player player = evt.getActiveChar();
 		if (player.isDualClassActive() || !player.isSubClassActive()) {
 			giveSkills(player, "DualSkillList");
 		}
@@ -258,7 +258,7 @@ public final class Trandon extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_LOGIN)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public final void onLogin(OnPlayerLogin evt) {
-		final PlayerInstance player = evt.getActiveChar();
+		final Player player = evt.getActiveChar();
 		if (player.isDualClassActive() || !player.isSubClassActive()) {
 			giveSkills(player, "DualSkillList");
 		}
@@ -273,7 +273,7 @@ public final class Trandon extends AbstractNpcAI {
 	 * @param player
 	 * @return
 	 */
-	private final boolean hasAllSubCertifications(PlayerInstance player) {
+	private final boolean hasAllSubCertifications(Player player) {
 		if (!player.isSubClassActive()) {
 			return false;
 		}
@@ -293,7 +293,7 @@ public final class Trandon extends AbstractNpcAI {
 	 * @param player
 	 * @return
 	 */
-	private final boolean hasSubCertificate(PlayerInstance player) {
+	private final boolean hasSubCertificate(Player player) {
 		final PlayerVariables vars = player.getVariables();
 		final Set<Integer> subs = player.getSubClasses().keySet();
 		for (int index : subs) {
@@ -312,7 +312,7 @@ public final class Trandon extends AbstractNpcAI {
 	 * @param player
 	 * @return
 	 */
-	private final boolean hasDualCertificate(PlayerInstance player) {
+	private final boolean hasDualCertificate(Player player) {
 		final PlayerVariables vars = player.getVariables();
 		for (int lv : DUAL_SKILL_LEVELS) {
 			if (vars.hasVariable(getDualSkillVariableName(lv))) {
@@ -322,7 +322,7 @@ public final class Trandon extends AbstractNpcAI {
 		return false;
 	}
 
-	private final String getSubSkillVariableName(PlayerInstance player, int level) {
+	private final String getSubSkillVariableName(Player player, int level) {
 		return "SubSkill-" + player.getClassIndex() + "-" + level;
 	}
 
@@ -330,7 +330,7 @@ public final class Trandon extends AbstractNpcAI {
 		return "DualSkill-" + level;
 	}
 
-	private final void takeSkills(PlayerInstance player, String type) {
+	private final void takeSkills(Player player, String type) {
 		final PlayerVariables vars = player.getVariables();
 		final String list = vars.getString(type, "");
 		if (!list.isEmpty()) {
@@ -345,7 +345,7 @@ public final class Trandon extends AbstractNpcAI {
 		}
 	}
 
-	private final void giveSkills(PlayerInstance player, String type) {
+	private final void giveSkills(Player player, String type) {
 		final String list = player.getVariables().getString(type, "");
 		if (!list.isEmpty()) {
 			final String[] skills = list.split(";");

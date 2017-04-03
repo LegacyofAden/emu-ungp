@@ -18,22 +18,22 @@
  */
 package org.l2junity.gameserver.communitybbs.Manager;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ShowBoard;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseBBSManager {
-	public abstract void parsecmd(String command, PlayerInstance activeChar);
+	public abstract void parsecmd(String command, Player activeChar);
 
-	public abstract void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, PlayerInstance activeChar);
+	public abstract void parsewrite(String ar1, String ar2, String ar3, String ar4, String ar5, Player activeChar);
 
 	/**
 	 * @param html
 	 * @param acha
 	 */
-	protected void send1001(String html, PlayerInstance acha) {
+	protected void send1001(String html, Player acha) {
 		if (html.length() < 8192) {
 			acha.sendPacket(new ShowBoard(html, "1001"));
 		}
@@ -42,7 +42,7 @@ public abstract class BaseBBSManager {
 	/**
 	 * @param acha
 	 */
-	protected void send1002(PlayerInstance acha) {
+	protected void send1002(Player acha) {
 		send1002(acha, " ", " ", "0");
 	}
 
@@ -52,7 +52,7 @@ public abstract class BaseBBSManager {
 	 * @param string2
 	 * @param string3
 	 */
-	protected void send1002(PlayerInstance activeChar, String string, String string2, String string3) {
+	protected void send1002(Player activeChar, String string, String string2, String string3) {
 		final List<String> _arg = new ArrayList<>(20);
 		_arg.add("0");
 		_arg.add("0");

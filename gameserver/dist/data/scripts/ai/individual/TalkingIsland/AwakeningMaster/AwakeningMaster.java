@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.events.EventType;
@@ -98,7 +98,7 @@ public final class AwakeningMaster extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {
 			return null;
@@ -171,7 +171,7 @@ public final class AwakeningMaster extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onFirstTalk(Npc npc, PlayerInstance player) {
+	public String onFirstTalk(Npc npc, Player player) {
 		if (player.getRace().equals(Race.ERTHEIA)) {
 			// Ertheia dual class quest
 			final QuestState qs = player.getQuestState(Q10472_WindsOfFateEncroachingShadows.class.getSimpleName());
@@ -209,7 +209,7 @@ public final class AwakeningMaster extends AbstractNpcAI {
 	@RegisterEvent(EventType.ON_PLAYER_CHANGE_TO_AWAKENED_CLASS)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerChangeToAwakenedClass(OnPlayerChangeToAwakenedClass event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 
 		if (player.isSubClassActive() && !player.isDualClassActive()) {
 			return;

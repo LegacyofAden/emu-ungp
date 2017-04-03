@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PetItemList;
@@ -43,7 +43,7 @@ public final class RequestPetUseItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if ((activeChar == null) || !activeChar.hasPet()) {
 			return;
 		}
@@ -87,7 +87,7 @@ public final class RequestPetUseItem implements IClientIncomingPacket {
 		useItem(pet, item, activeChar);
 	}
 
-	private void useItem(L2PetInstance pet, ItemInstance item, PlayerInstance activeChar) {
+	private void useItem(L2PetInstance pet, ItemInstance item, Player activeChar) {
 		if (item.isEquipable()) {
 			if (!item.getItem().isConditionAttached()) {
 				activeChar.sendPacket(SystemMessageId.THIS_PET_CANNOT_USE_THIS_ITEM);

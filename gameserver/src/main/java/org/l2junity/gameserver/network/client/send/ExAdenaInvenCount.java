@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -26,9 +26,9 @@ import org.l2junity.network.PacketWriter;
  * @author Sdw
  */
 public class ExAdenaInvenCount implements IClientOutgoingPacket {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public ExAdenaInvenCount(PlayerInstance cha) {
+	public ExAdenaInvenCount(Player cha) {
 		_activeChar = cha;
 	}
 

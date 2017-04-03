@@ -20,7 +20,7 @@ package quests.Q10505_JewelOfValakas;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -53,7 +53,7 @@ public class Q10505_JewelOfValakas extends Quest {
 	}
 
 	@Override
-	public void actionForEachPlayer(PlayerInstance player, Npc npc, boolean isSummon) {
+	public void actionForEachPlayer(Player player, Npc npc, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isCond(1) && Util.checkIfInRange(1500, npc, player, false)) {
 			takeItems(player, EMPTY_CRYSTAL, -1);
@@ -64,7 +64,7 @@ public class Q10505_JewelOfValakas extends Quest {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
 			return null;
@@ -90,13 +90,13 @@ public class Q10505_JewelOfValakas extends Quest {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		executeForEachPlayer(killer, npc, isSummon, true, true);
 		return super.onKill(npc, killer, isSummon);
 	}
 
 	@Override
-	public String onTalk(Npc npc, PlayerInstance player) {
+	public String onTalk(Npc npc, Player player) {
 		final QuestState st = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
 		switch (st.getState()) {

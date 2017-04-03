@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public final class KartiaSupportTroop extends AbstractNpcAI {
 	}
 
 	@Override
-	public void onTimerEvent(String event, StatsSet params, Npc npc, PlayerInstance player) {
+	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("NPC_SAY")) {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DEFEAT_ALL_THE_MONSTERS);
 		} else if (event.equals("CHECK_TARGET")) {

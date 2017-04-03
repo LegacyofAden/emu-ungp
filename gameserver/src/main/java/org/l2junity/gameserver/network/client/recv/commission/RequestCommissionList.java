@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv.commission;
 
 import org.l2junity.gameserver.instancemanager.CommissionManager;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.commission.CommissionItemType;
 import org.l2junity.gameserver.model.commission.CommissionTreeType;
 import org.l2junity.gameserver.model.items.L2Item;
@@ -53,7 +53,7 @@ public class RequestCommissionList implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance player = client.getActiveChar();
+		final Player player = client.getActiveChar();
 		if (player == null) {
 			return;
 		}

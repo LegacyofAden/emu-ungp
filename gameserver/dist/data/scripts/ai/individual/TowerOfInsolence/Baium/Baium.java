@@ -35,7 +35,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
@@ -101,7 +101,7 @@ public final class Baium extends AbstractNpcAI {
 	// Misc
 	private L2GrandBossInstance _baium = null;
 	private static long _lastAttack = 0;
-	private static PlayerInstance _standbyPlayer = null;
+	private static Player _standbyPlayer = null;
 
 	private Baium() {
 		addFirstTalkId(ANG_VORTEX);
@@ -155,7 +155,7 @@ public final class Baium extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "31862-04.html": {
 				return event;
@@ -234,7 +234,7 @@ public final class Baium extends AbstractNpcAI {
 					npc.doCast(BAIUM_PRESENT.getSkill());
 				}
 
-				for (PlayerInstance players : zone.getPlayersInside()) {
+				for (Player players : zone.getPlayersInside()) {
 					if (players.isHero()) {
 						zone.broadcastPacket(new ExShowScreenMessage(NpcStringId.NOT_EVEN_THE_GODS_THEMSELVES_COULD_TOUCH_ME_BUT_YOU_S1_YOU_DARE_CHALLENGE_ME_IGNORANT_MORTAL, 2, 4000, players.getName()));
 						break;
@@ -256,7 +256,7 @@ public final class Baium extends AbstractNpcAI {
 				} else if ((_standbyPlayer != null) && !_standbyPlayer.isDead()) {
 					addAttackPlayerDesire(npc, _standbyPlayer);
 				} else {
-					for (Creature creature : World.getInstance().getVisibleObjects(npc, PlayerInstance.class, 2000)) {
+					for (Creature creature : World.getInstance().getVisibleObjects(npc, Player.class, 2000)) {
 						if (zone.isInsideZone(creature) && !creature.isDead()) {
 							addAttackPlayerDesire(npc, (Playable) creature);
 							break;
@@ -335,7 +335,7 @@ public final class Baium extends AbstractNpcAI {
 						if (charInside.isNpc()) {
 							charInside.deleteMe();
 						} else if (charInside.isPlayer()) {
-							notifyEvent("teleportOut", null, (PlayerInstance) charInside);
+							notifyEvent("teleportOut", null, (Player) charInside);
 						}
 					}
 				}
@@ -390,7 +390,7 @@ public final class Baium extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon, Skill skill) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon, Skill skill) {
 		_lastAttack = System.currentTimeMillis();
 
 		if (npc.getId() == BAIUM) {
@@ -436,7 +436,7 @@ public final class Baium extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (zone.isCharacterInZone(killer)) {
 			setStatus(DEAD);
 			addSpawn(TELE_CUBE, TELEPORT_CUBIC_LOC, false, 900000);
@@ -457,7 +457,7 @@ public final class Baium extends AbstractNpcAI {
 		}
 
 		if (creature.isPlayer() && !creature.isDead() && (_standbyPlayer == null)) {
-			_standbyPlayer = (PlayerInstance) creature;
+			_standbyPlayer = (Player) creature;
 		}
 
 		if (creature.isInCategory(CategoryType.CLERIC_GROUP)) {
@@ -478,7 +478,7 @@ public final class Baium extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		startQuestTimer("MANAGE_SKILLS", 1000, npc, null);
 
 		if (!zone.isCharacterInZone(npc) && (_baium != null)) {

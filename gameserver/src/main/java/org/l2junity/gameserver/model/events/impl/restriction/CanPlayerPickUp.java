@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -27,15 +27,15 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
  * @author lord_rex
  */
 public final class CanPlayerPickUp implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 	private final ItemInstance _target;
 
-	public CanPlayerPickUp(PlayerInstance activeChar, ItemInstance target) {
+	public CanPlayerPickUp(Player activeChar, ItemInstance target) {
 		_activeChar = activeChar;
 		_target = target;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 

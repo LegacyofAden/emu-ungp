@@ -20,7 +20,7 @@ package quests.Q00128_PailakaSongOfIceAndFire;
 
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
@@ -83,7 +83,7 @@ public final class Q00128_PailakaSongOfIceAndFire extends Quest {
 	}
 
 	@Override
-	public final String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public final String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 		final QuestState st = getQuestState(player, false);
 		if (st == null) {
@@ -177,7 +177,7 @@ public final class Q00128_PailakaSongOfIceAndFire extends Quest {
 	}
 
 	@Override
-	public final String onTalk(Npc npc, PlayerInstance player) {
+	public final String onTalk(Npc npc, Player player) {
 		String htmltext = getNoQuestMsg(player);
 		final QuestState st = getQuestState(player, true);
 		if (st == null) {
@@ -253,7 +253,7 @@ public final class Q00128_PailakaSongOfIceAndFire extends Quest {
 	}
 
 	@Override
-	public final String onKill(Npc npc, PlayerInstance player, boolean isSummon) {
+	public final String onKill(Npc npc, Player player, boolean isSummon) {
 		final QuestState st = getQuestState(player, false);
 		if ((st != null) && st.isStarted()) {
 			switch (npc.getId()) {
@@ -316,7 +316,7 @@ public final class Q00128_PailakaSongOfIceAndFire extends Quest {
 	@RegisterEvent(EventType.ON_PLAYER_LEVEL_CHANGED)
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void OnPlayerLevelChanged(OnPlayerLevelChanged event) {
-		final PlayerInstance player = event.getActiveChar();
+		final Player player = event.getActiveChar();
 		final int oldLevel = event.getOldLevel();
 		final int newLevel = event.getNewLevel();
 
@@ -329,7 +329,7 @@ public final class Q00128_PailakaSongOfIceAndFire extends Quest {
 	@RegisterType(ListenerRegisterType.GLOBAL_PLAYERS)
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		if (event.getQuestId() == getId()) {
-			final PlayerInstance player = event.getActiveChar();
+			final Player player = event.getActiveChar();
 			player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popup.html")));
 		}
 	}

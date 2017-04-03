@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv.compound;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.CombinationItemsData;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.CompoundRequest;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.items.combination.CombinationItem;
@@ -48,7 +48,7 @@ public class RequestNewEnchantTry implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final PlayerInstance activeChar = client.getActiveChar();
+		final Player activeChar = client.getActiveChar();
 		if (activeChar == null) {
 			return;
 		} else if (activeChar.isInStoreMode()) {

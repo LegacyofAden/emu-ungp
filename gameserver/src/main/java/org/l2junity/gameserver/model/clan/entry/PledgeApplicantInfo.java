@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.clan.entry;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * @author Sdw
@@ -79,7 +79,7 @@ public class PledgeApplicantInfo {
 		return _karma;
 	}
 
-	public PlayerInstance getPlayerInstance() {
+	public Player getPlayerInstance() {
 		return World.getInstance().getPlayer(_playerId);
 	}
 

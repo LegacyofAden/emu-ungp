@@ -188,7 +188,7 @@ public final class CursedWeaponsManager implements IGameXmlReader {
 		}
 	}
 
-	public synchronized void checkDrop(Attackable attackable, PlayerInstance player) {
+	public synchronized void checkDrop(Attackable attackable, Player player) {
 		if ((attackable instanceof L2DefenderInstance) || (attackable instanceof L2GuardInstance) || (attackable instanceof L2GrandBossInstance) || (attackable instanceof L2FeedableBeastInstance) || (attackable instanceof L2FortCommanderInstance)) {
 			return;
 		}
@@ -204,7 +204,7 @@ public final class CursedWeaponsManager implements IGameXmlReader {
 		}
 	}
 
-	public void activate(PlayerInstance player, ItemInstance item) {
+	public void activate(Player player, ItemInstance item) {
 		CursedWeapon cw = _cursedWeapons.get(item.getId());
 		if (player.isCursedWeaponEquipped()) // cannot own 2 cursed swords
 		{
@@ -247,7 +247,7 @@ public final class CursedWeaponsManager implements IGameXmlReader {
 		Broadcast.toAllOnlinePlayers(sm);
 	}
 
-	public void checkPlayer(PlayerInstance player) {
+	public void checkPlayer(Player player) {
 		if (player == null) {
 			return;
 		}

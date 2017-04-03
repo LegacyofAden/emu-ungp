@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.options;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -133,7 +133,7 @@ public class Options {
 		_activationSkills.add(holder);
 	}
 
-	public void apply(PlayerInstance player) {
+	public void apply(Player player) {
 		player.sendDebugMessage("Activating option id: " + _id, DebugType.OPTIONS);
 		if (hasEffects()) {
 			final BuffInfo info = new BuffInfo(player, player, null, true, null, this);
@@ -173,7 +173,7 @@ public class Options {
 		player.sendSkillList();
 	}
 
-	public void remove(PlayerInstance player) {
+	public void remove(Player player) {
 		player.sendDebugMessage("Deactivating option id: " + _id, DebugType.OPTIONS);
 		if (hasEffects()) {
 			for (BuffInfo info : player.getEffectList().getOptions()) {
@@ -206,7 +206,7 @@ public class Options {
 		player.sendSkillList();
 	}
 
-	private void addSkill(PlayerInstance player, Skill skill) {
+	private void addSkill(Player player, Skill skill) {
 		boolean updateTimeStamp = false;
 
 		player.addSkill(skill, false);

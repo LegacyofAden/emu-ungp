@@ -25,7 +25,6 @@ import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.*;
 import org.l2junity.gameserver.ItemsAutoDestroy;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.ai.PlayerAI;
@@ -122,8 +121,8 @@ import java.util.stream.Collectors;
  * This class represents all player characters in the world.<br>
  * There is always a client-thread connected to this (except if a player-store is activated upon logout).
  */
-public final class PlayerInstance extends Playable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(PlayerInstance.class);
+public final class Player extends Playable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
 	// Character Skill SQL String Definitions:
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level,skill_sub_level FROM character_skills WHERE charId=? AND class_index=?";
@@ -247,7 +246,7 @@ public final class PlayerInstance extends Playable {
 	private ScheduledFuture<?> _fameTask;
 
 	/**
-	 * The Raidboss points of this PlayerInstance
+	 * The Raidboss points of this Player
 	 */
 	private int _raidbossPoints;
 
@@ -414,8 +413,8 @@ public final class PlayerInstance extends Playable {
 	 */
 	private final MacroList _macros = new MacroList(this);
 
-	private final Set<PlayerInstance> _snoopListener = ConcurrentHashMap.newKeySet();
-	private final Set<PlayerInstance> _snoopedPlayer = ConcurrentHashMap.newKeySet();
+	private final Set<Player> _snoopListener = ConcurrentHashMap.newKeySet();
+	private final Set<Player> _snoopedPlayer = ConcurrentHashMap.newKeySet();
 
 	// hennas
 	private final Henna[] _henna = new Henna[3];
@@ -504,7 +503,7 @@ public final class PlayerInstance extends Playable {
 
 	// this is needed to find the inviting player for Party response
 	// there can only be one active party request at once
-	private PlayerInstance _activeRequester;
+	private Player _activeRequester;
 	private long _requestExpireTime = 0;
 	private final L2Request _request = new L2Request(this);
 
@@ -738,9 +737,9 @@ public final class PlayerInstance extends Playable {
 	 * @param app         the player's appearance
 	 * @return The L2PcInstance added to the database or null
 	 */
-	public static PlayerInstance create(L2PcTemplate template, String accountName, String name, PcAppearance app) {
+	public static Player create(L2PcTemplate template, String accountName, String name, PcAppearance app) {
 		// Create a new L2PcInstance with an account name
-		PlayerInstance player = new PlayerInstance(template, accountName, app);
+		Player player = new Player(template, accountName, app);
 		// Set the name of the L2PcInstance
 		player.setName(name);
 		// Set access level
@@ -776,7 +775,7 @@ public final class PlayerInstance extends Playable {
 		return _chars;
 	}
 
-	public int getRelation(PlayerInstance target) {
+	public int getRelation(Player target) {
 		final L2Clan clan = getClan();
 		final Party party = getParty();
 		final L2Clan targetClan = target.getClan();
@@ -887,7 +886,7 @@ public final class PlayerInstance extends Playable {
 	 * @param objectId Identifier of the object to initialized
 	 * @return The L2PcInstance loaded from the database
 	 */
-	public static PlayerInstance load(int objectId) {
+	public static Player load(int objectId) {
 		return restore(objectId);
 	}
 
@@ -914,7 +913,7 @@ public final class PlayerInstance extends Playable {
 	 * @param accountName The name of the account including this L2PcInstance
 	 * @param app
 	 */
-	private PlayerInstance(int objectId, L2PcTemplate template, String accountName, PcAppearance app) {
+	private Player(int objectId, L2PcTemplate template, String accountName, PcAppearance app) {
 		super(objectId, template);
 		setInstanceType(InstanceType.L2PcInstance);
 		super.initCharStatusUpdateValues();
@@ -942,7 +941,7 @@ public final class PlayerInstance extends Playable {
 	 * @param accountName the account name
 	 * @param app         the player appearance
 	 */
-	private PlayerInstance(L2PcTemplate template, String accountName, PcAppearance app) {
+	private Player(L2PcTemplate template, String accountName, PcAppearance app) {
 		this(IdFactory.getInstance().getNextId(), template, accountName, app);
 	}
 
@@ -1555,7 +1554,7 @@ public final class PlayerInstance extends Playable {
 		}
 	}
 
-	public void giveRecom(PlayerInstance target) {
+	public void giveRecom(Player target) {
 		target.incRecomHave();
 		decRecomLeft();
 	}
@@ -1574,7 +1573,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	/**
-	 * Set the reputation of the PlayerInstance and send a Server->Client packet StatusUpdate (broadcast).
+	 * Set the reputation of the Player and send a Server->Client packet StatusUpdate (broadcast).
 	 *
 	 * @param reputation
 	 */
@@ -1815,14 +1814,14 @@ public final class PlayerInstance extends Playable {
 	}
 
 	/**
-	 * @return the Raidboss points of this PlayerInstance
+	 * @return the Raidboss points of this Player
 	 */
 	public int getRaidbossPoints() {
 		return _raidbossPoints;
 	}
 
 	/**
-	 * Set the Raidboss points of this PlayerInstance
+	 * Set the Raidboss points of this Player
 	 *
 	 * @param points
 	 */
@@ -1831,7 +1830,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	/**
-	 * Increase the Raidboss points of this PlayerInstance
+	 * Increase the Raidboss points of this Player
 	 *
 	 * @param increasePoints
 	 */
@@ -2367,14 +2366,14 @@ public final class PlayerInstance extends Playable {
 	}
 
 	/**
-	 * @return the Fortune Reading Tickets of the PlayerInstance.
+	 * @return the Fortune Reading Tickets of the Player.
 	 */
 	public long getFortuneReadingTickets() {
 		return _inventory.getFortuneReadingTickets();
 	}
 
 	/**
-	 * @return the Luxury Fortune Reading Tickets of the PlayerInstance.
+	 * @return the Luxury Fortune Reading Tickets of the Player.
 	 */
 	public long getLuxuryFortuneReadingTickets() {
 		return _inventory.getLuxuryFortuneReadingTickets();
@@ -2934,7 +2933,7 @@ public final class PlayerInstance extends Playable {
 
 		// Send target update packet
 		if (target instanceof PcInventory) {
-			PlayerInstance targetPlayer = ((PcInventory) target).getOwner();
+			Player targetPlayer = ((PcInventory) target).getOwner();
 
 			if (!GeneralConfig.FORCE_INVENTORY_UPDATE) {
 				InventoryUpdate playerIU = new InventoryUpdate();
@@ -3249,7 +3248,7 @@ public final class PlayerInstance extends Playable {
 		return ip;
 	}
 
-	public boolean hasSameIP(PlayerInstance target) {
+	public boolean hasSameIP(Player target) {
 		if ((getIPAddress(null) == null) || (target.getIPAddress(null) == null)) {
 			return false;
 		}
@@ -3268,7 +3267,7 @@ public final class PlayerInstance extends Playable {
 		return hwid;
 	}
 
-	public boolean hasSameHWID(PlayerInstance target) {
+	public boolean hasSameHWID(Player target) {
 		if ((getHWID(null) == null) || (target.getHWID(null) == null)) {
 			return false;
 		}
@@ -3431,7 +3430,7 @@ public final class PlayerInstance extends Playable {
 
 	public final void broadcastCharInfo() {
 		final CharInfo charInfo = new CharInfo(this, false);
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				if (isInvisible() && player.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS)) {
@@ -3463,7 +3462,7 @@ public final class PlayerInstance extends Playable {
 
 		sendPacket(mov);
 
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -3481,7 +3480,7 @@ public final class PlayerInstance extends Playable {
 
 		sendPacket(mov);
 
-		World.getInstance().forEachVisibleObjectInRadius(this, PlayerInstance.class, radiusInKnownlist, player ->
+		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -3490,7 +3489,7 @@ public final class PlayerInstance extends Playable {
 		});
 	}
 
-	public void sendRelationChanged(PlayerInstance target) {
+	public void sendRelationChanged(Player target) {
 		// Update relation.
 		final int relation = getRelation(target);
 		Integer oldrelation = getKnownRelations().get(target.getObjectId());
@@ -3515,7 +3514,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	public void broadcastRelationChanged() {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -3602,8 +3601,8 @@ public final class PlayerInstance extends Playable {
 	 * @param target The L2Character targeted
 	 */
 	public void doInteract(Creature target) {
-		if (target instanceof PlayerInstance) {
-			final PlayerInstance targetPlayer = (PlayerInstance) target;
+		if (target instanceof Player) {
+			final Player targetPlayer = (Player) target;
 			sendPacket(ActionFailed.STATIC_PACKET);
 
 			if ((targetPlayer.getPrivateStoreType() == PrivateStoreType.SELL) || (targetPlayer.getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL)) {
@@ -3651,7 +3650,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	/**
-	 * Method overload for {@link PlayerInstance#doAutoLoot(Attackable, int, long)}
+	 * Method overload for {@link Player#doAutoLoot(Attackable, int, long)}
 	 *
 	 * @param target the NPC dropping the item
 	 * @param item   the item holder
@@ -4085,7 +4084,7 @@ public final class PlayerInstance extends Playable {
 	@Override
 	public boolean doDie(Creature killer) {
 		if (killer != null) {
-			final PlayerInstance pk = killer.getActingPlayer();
+			final Player pk = killer.getActingPlayer();
 			if (pk != null) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnPlayerPvPKill(pk, this), this);
 			}
@@ -4174,7 +4173,7 @@ public final class PlayerInstance extends Playable {
 			return;
 		}
 
-		final PlayerInstance pk = killer.getActingPlayer();
+		final Player pk = killer.getActingPlayer();
 		if ((getReputation() >= 0) && (pk != null) && (pk.getClan() != null) && (getClan() != null) && (pk.getClan().isAtWarWith(getClanId())
 				// || getClan().isAtWarWith(((L2PcInstance)killer).getClanId())
 		)) {
@@ -4252,8 +4251,8 @@ public final class PlayerInstance extends Playable {
 	}
 
 	public void onPlayerKill(Playable killedPlayable) {
-		final PlayerInstance player = getActingPlayer();
-		final PlayerInstance killedPlayer = killedPlayable.getActingPlayer();
+		final Player player = getActingPlayer();
+		final Player killedPlayer = killedPlayable.getActingPlayer();
 
 		// Avoid nulls && check if player != killedPlayer
 		if ((player == null) || (killedPlayer == null) || (player == killedPlayer)) {
@@ -4331,7 +4330,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	public void updatePvPStatus(Creature target) {
-		final PlayerInstance player_target = target.getActingPlayer();
+		final Player player_target = target.getActingPlayer();
 		if (player_target == null) {
 			return;
 		}
@@ -4542,15 +4541,15 @@ public final class PlayerInstance extends Playable {
 	 *
 	 * @param requester
 	 */
-	public void setActiveRequester(PlayerInstance requester) {
+	public void setActiveRequester(Player requester) {
 		_activeRequester = requester;
 	}
 
 	/**
 	 * @return the L2PcInstance requester of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
 	 */
-	public PlayerInstance getActiveRequester() {
-		PlayerInstance requester = _activeRequester;
+	public Player getActiveRequester() {
+		Player requester = _activeRequester;
 		if (requester != null) {
 			if (requester.isRequestExpired() && (_activeTradeList == null)) {
 				_activeRequester = null;
@@ -4578,7 +4577,7 @@ public final class PlayerInstance extends Playable {
 	 *
 	 * @param partner
 	 */
-	public void onTransactionRequest(PlayerInstance partner) {
+	public void onTransactionRequest(Player partner) {
 		_requestExpireTime = GameTimeManager.getInstance().getGameTicks() + (REQUEST_TIMEOUT * GameTimeManager.TICKS_PER_SECOND);
 		partner.setActiveRequester(this);
 	}
@@ -4631,7 +4630,7 @@ public final class PlayerInstance extends Playable {
 		return _activeTradeList;
 	}
 
-	public void onTradeStart(PlayerInstance partner) {
+	public void onTradeStart(Player partner) {
 		_activeTradeList = new TradeList(this);
 		_activeTradeList.setPartner(partner);
 
@@ -4641,14 +4640,14 @@ public final class PlayerInstance extends Playable {
 		sendPacket(new TradeStart(this));
 	}
 
-	public void onTradeConfirm(PlayerInstance partner) {
+	public void onTradeConfirm(Player partner) {
 		SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_CONFIRMED_THE_TRADE);
 		msg.addPcName(partner);
 		sendPacket(msg);
 		sendPacket(TradeOtherDone.STATIC_PACKET);
 	}
 
-	public void onTradeCancel(PlayerInstance partner) {
+	public void onTradeCancel(Player partner) {
 		if (_activeTradeList == null) {
 			return;
 		}
@@ -4670,7 +4669,7 @@ public final class PlayerInstance extends Playable {
 		}
 	}
 
-	public void startTrade(PlayerInstance partner) {
+	public void startTrade(Player partner) {
 		onTradeStart(partner);
 		partner.onTradeStart(this);
 	}
@@ -4680,7 +4679,7 @@ public final class PlayerInstance extends Playable {
 			return;
 		}
 
-		PlayerInstance partner = _activeTradeList.getPartner();
+		Player partner = _activeTradeList.getPartner();
 		if (partner != null) {
 			partner.onTradeCancel(this);
 		}
@@ -5347,8 +5346,8 @@ public final class PlayerInstance extends Playable {
 	 * @param objectId Identifier of the object to initialized
 	 * @return The L2PcInstance loaded from the database
 	 */
-	private static PlayerInstance restore(int objectId) {
-		PlayerInstance player = null;
+	private static Player restore(int objectId) {
+		Player player = null;
 		double currentCp = 0;
 		double currentHp = 0;
 		double currentMp = 0;
@@ -5363,7 +5362,7 @@ public final class PlayerInstance extends Playable {
 					final L2PcTemplate template = PlayerTemplateData.getInstance().getTemplate(activeClassId);
 					final PcAppearance app = new PcAppearance(rset.getByte("face"), rset.getByte("hairColor"), rset.getByte("hairStyle"), female);
 
-					player = new PlayerInstance(objectId, template, rset.getString("account_name"), app);
+					player = new Player(objectId, template, rset.getString("account_name"), app);
 					player.setName(rset.getString("char_name"));
 					player.setLastAccess(rset.getLong("lastAccess"));
 
@@ -5636,7 +5635,7 @@ public final class PlayerInstance extends Playable {
 	 * @param player
 	 * @return
 	 */
-	private static boolean restoreSubClassData(PlayerInstance player) {
+	private static boolean restoreSubClassData(Player player) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement statement = con.prepareStatement(RESTORE_CHAR_SUBCLASSES)) {
 			statement.setInt(1, player.getObjectId());
@@ -6659,7 +6658,7 @@ public final class PlayerInstance extends Playable {
 
 		// Check if the attacker is in olympia and olympia start
 		if (attacker.isPlayer() && attacker.getActingPlayer().isInOlympiadMode()) {
-			if (isInOlympiadMode() && isOlympiadStart() && (((PlayerInstance) attacker).getOlympiadGameId() == getOlympiadGameId())) {
+			if (isInOlympiadMode() && isOlympiadStart() && (((Player) attacker).getOlympiadGameId() == getOlympiadGameId())) {
 				return true;
 			}
 			return false;
@@ -6677,7 +6676,7 @@ public final class PlayerInstance extends Playable {
 			}
 
 			// Get L2PcInstance
-			final PlayerInstance attackerPlayer = attacker.getActingPlayer();
+			final Player attackerPlayer = attacker.getActingPlayer();
 			final L2Clan clan = getClan();
 			final L2Clan attackerClan = attackerPlayer.getClan();
 			if (clan != null) {
@@ -6931,7 +6930,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	public boolean isInLooterParty(int LooterId) {
-		PlayerInstance looter = World.getInstance().getPlayer(LooterId);
+		Player looter = World.getInstance().getPlayer(LooterId);
 
 		// if L2PcInstance is in a CommandChannel
 		if (isInParty() && getParty().isInCommandChannel() && (looter != null)) {
@@ -7501,7 +7500,7 @@ public final class PlayerInstance extends Playable {
 	 * @param player
 	 * @return returns {@code true} if player is current player cannot accepting messages from the target player, {@code false} otherwise
 	 */
-	public boolean isBlocking(PlayerInstance player) {
+	public boolean isBlocking(Player player) {
 		return _blockList.isBlockAll() || _blockList.isInBlockList(player);
 	}
 
@@ -7509,7 +7508,7 @@ public final class PlayerInstance extends Playable {
 	 * @param player
 	 * @return returns {@code true} if player is current player can accepting messages from the target player, {@code false} otherwise
 	 */
-	public boolean isNotBlocking(PlayerInstance player) {
+	public boolean isNotBlocking(Player player) {
 		return !_blockList.isBlockAll() && !_blockList.isInBlockList(player);
 	}
 
@@ -7517,7 +7516,7 @@ public final class PlayerInstance extends Playable {
 	 * @param player
 	 * @return returns {@code true} if player is target player cannot accepting messages from the current player, {@code false} otherwise
 	 */
-	public boolean isBlocked(PlayerInstance player) {
+	public boolean isBlocked(Player player) {
 		return player.getBlockList().isBlockAll() || player.getBlockList().isInBlockList(this);
 	}
 
@@ -7525,7 +7524,7 @@ public final class PlayerInstance extends Playable {
 	 * @param player
 	 * @return returns {@code true} if player is target player can accepting messages from the current player, {@code false} otherwise
 	 */
-	public boolean isNotBlocked(PlayerInstance player) {
+	public boolean isNotBlocked(Player player) {
 		return !player.getBlockList().isBlockAll() && !player.getBlockList().isInBlockList(this);
 	}
 
@@ -8287,7 +8286,7 @@ public final class PlayerInstance extends Playable {
 		doRevive();
 	}
 
-	public void reviveRequest(PlayerInstance reviver, Skill skill, boolean Pet, int power) {
+	public void reviveRequest(Player reviver, Skill skill, boolean Pet, int power) {
 		if (isResurrectionBlocked()) {
 			return;
 		}
@@ -8521,7 +8520,7 @@ public final class PlayerInstance extends Playable {
 		if (!_snoopListener.isEmpty()) {
 			final Snoop sn = new Snoop(getObjectId(), getName(), type, name, _text);
 
-			for (PlayerInstance pci : _snoopListener) {
+			for (Player pci : _snoopListener) {
 				if (pci != null) {
 					pci.sendPacket(sn);
 				}
@@ -8529,23 +8528,23 @@ public final class PlayerInstance extends Playable {
 		}
 	}
 
-	public void addSnooper(PlayerInstance pci) {
+	public void addSnooper(Player pci) {
 		if (!_snoopListener.contains(pci)) {
 			_snoopListener.add(pci);
 		}
 	}
 
-	public void removeSnooper(PlayerInstance pci) {
+	public void removeSnooper(Player pci) {
 		_snoopListener.remove(pci);
 	}
 
-	public void addSnooped(PlayerInstance pci) {
+	public void addSnooped(Player pci) {
 		if (!_snoopedPlayer.contains(pci)) {
 			_snoopedPlayer.add(pci);
 		}
 	}
 
-	public void removeSnooped(PlayerInstance pci) {
+	public void removeSnooped(Player pci) {
 		_snoopedPlayer.remove(pci);
 	}
 
@@ -8982,11 +8981,11 @@ public final class PlayerInstance extends Playable {
 			// ClanTable.getInstance().getClan(getClanId()).broadcastToOnlineMembers(new PledgeShowMemberListAdd(this));
 		}
 
-		for (PlayerInstance player : _snoopedPlayer) {
+		for (Player player : _snoopedPlayer) {
 			player.removeSnooper(this);
 		}
 
-		for (PlayerInstance player : _snoopListener) {
+		for (Player player : _snoopListener) {
 			player.removeSnooped(this);
 		}
 
@@ -9337,7 +9336,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	@Override
-	public PlayerInstance getActingPlayer() {
+	public Player getActingPlayer() {
 		return this;
 	}
 
@@ -9886,7 +9885,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	@Override
-	public void sendInfo(PlayerInstance activeChar) {
+	public void sendInfo(Player activeChar) {
 		if (isInBoat()) {
 			setXYZ(getBoat().getLocation());
 
@@ -10372,7 +10371,7 @@ public final class PlayerInstance extends Playable {
 				return true;
 			}
 
-			final PlayerInstance target = cha.isSummon() ? ((Summon) cha).getOwner() : (PlayerInstance) cha;
+			final Player target = cha.isSummon() ? ((Summon) cha).getOwner() : (Player) cha;
 
 			if (isInDuel() && target.isInDuel() && (target.getDuelId() == getDuelId())) {
 				return true;
@@ -10548,7 +10547,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	@Override
-	public PlayerInstance asPlayer() {
+	public Player asPlayer() {
 		return this;
 	}
 
@@ -11131,7 +11130,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	@Override
-	public boolean isVisibleFor(PlayerInstance player) {
+	public boolean isVisibleFor(Player player) {
 		return (super.isVisibleFor(player) || ((player.getParty() != null) && (player.getParty() == getParty())));
 	}
 

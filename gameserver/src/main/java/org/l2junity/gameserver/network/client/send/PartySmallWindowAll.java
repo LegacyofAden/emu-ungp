@@ -20,15 +20,15 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public final class PartySmallWindowAll implements IClientOutgoingPacket {
 	private final Party _party;
-	private final PlayerInstance _exclude;
+	private final Player _exclude;
 
-	public PartySmallWindowAll(PlayerInstance exclude, Party party) {
+	public PartySmallWindowAll(Player exclude, Party party) {
 		_exclude = exclude;
 		_party = party;
 	}
@@ -41,7 +41,7 @@ public final class PartySmallWindowAll implements IClientOutgoingPacket {
 		packet.writeC(_party.getDistributionType().getId());
 		packet.writeC(_party.getMemberCount() - 1);
 
-		for (PlayerInstance member : _party.getMembers()) {
+		for (Player member : _party.getMembers()) {
 			if ((member != null) && (member != _exclude)) {
 				packet.writeD(member.getObjectId());
 				packet.writeS(member.getName());

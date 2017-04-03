@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.custom;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -61,7 +61,7 @@ public final class ResurrectionSpecial extends AbstractBooleanStatEffect {
 			return;
 		}
 
-		final PlayerInstance caster = effector.getActingPlayer();
+		final Player caster = effector.getActingPlayer();
 		final Instance instance = caster.getInstanceWorld();
 		if (!_instanceId.isEmpty() && ((instance == null) || !_instanceId.contains(instance.getTemplateId()))) {
 			return;

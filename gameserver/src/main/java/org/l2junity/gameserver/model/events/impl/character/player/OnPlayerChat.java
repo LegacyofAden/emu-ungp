@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.events.impl.character.player;
 
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -27,23 +27,23 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author UnAfraid
  */
 public class OnPlayerChat implements IBaseEvent {
-	private final PlayerInstance _activeChar;
-	private final PlayerInstance _target;
+	private final Player _activeChar;
+	private final Player _target;
 	private final String _text;
 	private final ChatType _type;
 
-	public OnPlayerChat(PlayerInstance activeChar, PlayerInstance target, String text, ChatType type) {
+	public OnPlayerChat(Player activeChar, Player target, String text, ChatType type) {
 		_activeChar = activeChar;
 		_target = target;
 		_text = text;
 		_type = type;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 
-	public PlayerInstance getTarget() {
+	public Player getTarget() {
 		return _target;
 	}
 

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.AdminForgePacket;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
@@ -155,12 +155,12 @@ public final class AdminPForge implements IAdminCommandHandler {
 		return false;
 	}
 
-	private void showValuesUsage(PlayerInstance activeChar) {
+	private void showValuesUsage(Player activeChar) {
 		activeChar.sendMessage("Usage: //forge_values opcode1[ opcode2[ opcode3]] ;[ format]");
 		showMainPage(activeChar);
 	}
 
-	private void showSendUsage(PlayerInstance activeChar, String[] opCodes, String format) {
+	private void showSendUsage(Player activeChar, String[] opCodes, String format) {
 		activeChar.sendMessage("Usage: //forge_send sc|sb|cs opcode1[;opcode2[;opcode3]][ format value1 ... valueN] ");
 		if (opCodes == null) {
 			showMainPage(activeChar);
@@ -169,11 +169,11 @@ public final class AdminPForge implements IAdminCommandHandler {
 		}
 	}
 
-	private void showMainPage(PlayerInstance activeChar) {
+	private void showMainPage(Player activeChar) {
 		AdminHtml.showAdminHtml(activeChar, "pforge/main.htm");
 	}
 
-	private void showValuesPage(PlayerInstance activeChar, String[] opCodes, String format) {
+	private void showValuesPage(Player activeChar, String[] opCodes, String format) {
 		String sendBypass = null;
 		String valuesHtml = HtmRepository.getInstance().getCustomHtm("admin/pforge/values.htm");
 		if (opCodes.length == 3) {
@@ -221,7 +221,7 @@ public final class AdminPForge implements IAdminCommandHandler {
 	}
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_forge")) {
 			showMainPage(activeChar);
 		} else if (command.startsWith("admin_forge_values ")) {

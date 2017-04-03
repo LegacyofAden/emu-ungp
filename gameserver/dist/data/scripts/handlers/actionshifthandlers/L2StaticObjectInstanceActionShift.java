@@ -23,13 +23,13 @@ import org.l2junity.gameserver.handler.ActionShiftHandler;
 import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.StaticObject;
 
 public class L2StaticObjectInstanceActionShift implements IActionShiftHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		if (activeChar.isGM()) {
 			activeChar.setTarget(target);
 			activeChar.sendPacket(new StaticObject((L2StaticObjectInstance) target));

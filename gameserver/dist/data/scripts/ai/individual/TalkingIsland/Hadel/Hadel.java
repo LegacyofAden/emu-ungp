@@ -21,7 +21,7 @@ package ai.individual.TalkingIsland.Hadel;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Hadel AI.
@@ -42,7 +42,7 @@ public final class Hadel extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		String htmltext = null;
 
 		switch (event) {

@@ -22,7 +22,7 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.ItemCrystallizationData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.CrystallizationRequest;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -50,7 +50,7 @@ public final class RequestCrystallizeItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		PlayerInstance activeChar = client.getActiveChar();
+		Player activeChar = client.getActiveChar();
 
 		if (activeChar == null) {
 			_log.debug("RequestCrystalizeItem: activeChar was null");

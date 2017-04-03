@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.GMViewPledgeInfo;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -48,11 +48,11 @@ public class AdminPledge implements IAdminCommandHandler {
 			};
 
 	@Override
-	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
+	public boolean useAdminCommand(String command, Player activeChar) {
 		final StringTokenizer st = new StringTokenizer(command);
 		final String cmd = st.nextToken();
 		final WorldObject target = activeChar.getTarget();
-		final PlayerInstance targetPlayer = target instanceof PlayerInstance ? (PlayerInstance) target : null;
+		final Player targetPlayer = target instanceof Player ? (Player) target : null;
 		L2Clan clan = targetPlayer != null ? targetPlayer.getClan() : null;
 		if (targetPlayer == null) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
@@ -134,7 +134,7 @@ public class AdminPledge implements IAdminCommandHandler {
 						int level = Integer.parseInt(param);
 						if ((level >= 0) && (level < 12)) {
 							clan.changeLevel(level);
-							for (PlayerInstance member : clan.getOnlineMembers(0)) {
+							for (Player member : clan.getOnlineMembers(0)) {
 								member.broadcastUserInfo(UserInfoType.RELATION, UserInfoType.CLAN);
 							}
 							activeChar.sendMessage("You set level " + level + " for clan " + clan.getName());
@@ -175,7 +175,7 @@ public class AdminPledge implements IAdminCommandHandler {
 		return ADMIN_COMMANDS;
 	}
 
-	private void showMainPage(PlayerInstance activeChar) {
+	private void showMainPage(Player activeChar) {
 		AdminHtml.showAdminHtml(activeChar, "game_menu.htm");
 	}
 

@@ -27,7 +27,7 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.SpecialItemType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.*;
 import org.l2junity.gameserver.model.items.L2Item;
 import org.l2junity.gameserver.network.client.send.MultiSellList;
@@ -176,7 +176,7 @@ public final class MultisellData implements IGameXmlReader {
 	 * @param ingredientMultiplier
 	 * @param productMultiplier
 	 */
-	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly, double ingredientMultiplier, double productMultiplier) {
+	public final void separateAndSend(int listId, Player player, Npc npc, boolean inventoryOnly, double ingredientMultiplier, double productMultiplier) {
 		final MultisellListHolder template = _multisells.get(listId);
 		if (template == null) {
 			log.warn("Can't find list id: {} requested by player: {}, npcId: {}", listId, player.getName(), (npc != null ? npc.getId() : 0));
@@ -208,7 +208,7 @@ public final class MultisellData implements IGameXmlReader {
 		player.setMultiSell(list);
 	}
 
-	public final void separateAndSend(int listId, PlayerInstance player, Npc npc, boolean inventoryOnly) {
+	public final void separateAndSend(int listId, Player player, Npc npc, boolean inventoryOnly) {
 		separateAndSend(listId, player, npc, inventoryOnly, Double.NaN, Double.NaN);
 	}
 

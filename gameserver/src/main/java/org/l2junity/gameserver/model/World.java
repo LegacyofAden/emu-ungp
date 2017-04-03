@@ -102,7 +102,7 @@ public final class World {
 	public static final int REGION_MIN_DIMENSION = Math.min(TILE_SIZE / (TILE_SIZE >> SHIFT_BY_Z), TILE_SIZE / (TILE_SIZE >> SHIFT_BY));
 
 	private final Map<Integer, WorldObject> _allObjects = new ConcurrentHashMap<>();
-	private final Map<Integer, PlayerInstance> _allPlayers = new ConcurrentHashMap<>();
+	private final Map<Integer, Player> _allPlayers = new ConcurrentHashMap<>();
 	/**
 	 * Map with the pets instances and their owner ID.
 	 */
@@ -144,13 +144,13 @@ public final class World {
 		}
 
 		if (object.isPlayer()) {
-			final PlayerInstance newPlayer = (PlayerInstance) object;
+			final Player newPlayer = (Player) object;
 			if (newPlayer.isTeleporting()) // TODO: drop when we stop removing player from the world while teleporting.
 			{
 				return;
 			}
 
-			final PlayerInstance existingPlayer = _allPlayers.putIfAbsent(object.getObjectId(), newPlayer);
+			final Player existingPlayer = _allPlayers.putIfAbsent(object.getObjectId(), newPlayer);
 			if (existingPlayer != null) {
 				Disconnection.of(existingPlayer).defaultSequence(false);
 				Disconnection.of(newPlayer).defaultSequence(false);
@@ -173,7 +173,7 @@ public final class World {
 	public void removeObject(WorldObject object) {
 		_allObjects.remove(object.getObjectId());
 		if (object.isPlayer()) {
-			final PlayerInstance player = (PlayerInstance) object;
+			final Player player = (Player) object;
 			if (player.isTeleporting()) // TODO: drop when we stop removing player from the world while teleportingq.
 			{
 				return;
@@ -208,7 +208,7 @@ public final class World {
 		return _allObjects.size();
 	}
 
-	public Collection<PlayerInstance> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return _allPlayers.values();
 	}
 
@@ -218,7 +218,7 @@ public final class World {
 	 * @param name Name of the player to get Instance
 	 * @return the player instance corresponding to the given name.
 	 */
-	public PlayerInstance getPlayer(String name) {
+	public Player getPlayer(String name) {
 		return getPlayer(CharNameTable.getInstance().getIdByName(name));
 	}
 
@@ -226,7 +226,7 @@ public final class World {
 	 * @param objectId of the player to get Instance
 	 * @return the player instance corresponding to the given object ID.
 	 */
-	public PlayerInstance getPlayer(int objectId) {
+	public Player getPlayer(int objectId) {
 		return _allPlayers.get(objectId);
 	}
 
@@ -259,18 +259,18 @@ public final class World {
 	}
 
 	/**
-	 * Add a L2Object in the world. <B><U> Concept</U> :</B> L2Object (including PlayerInstance) are identified in <B>_visibleObjects</B> of his current WorldRegion and in <B>_knownObjects</B> of other surrounding L2Characters <BR>
-	 * PlayerInstance are identified in <B>_allPlayers</B> of L2World, in <B>_allPlayers</B> of his current WorldRegion and in <B>_knownPlayer</B> of other surrounding L2Characters <B><U> Actions</U> :</B>
+	 * Add a L2Object in the world. <B><U> Concept</U> :</B> L2Object (including Player) are identified in <B>_visibleObjects</B> of his current WorldRegion and in <B>_knownObjects</B> of other surrounding L2Characters <BR>
+	 * Player are identified in <B>_allPlayers</B> of L2World, in <B>_allPlayers</B> of his current WorldRegion and in <B>_knownPlayer</B> of other surrounding L2Characters <B><U> Actions</U> :</B>
 	 * <li>Add the L2Object object in _allPlayers* of L2World</li>
 	 * <li>Add the L2Object object in _gmList** of GmListTable</li>
 	 * <li>Add object in _knownObjects and _knownPlayer* of all surrounding WorldRegion L2Characters</li><BR>
-	 * <li>If object is a L2Character, add all surrounding L2Object in its _knownObjects and all surrounding PlayerInstance in its _knownPlayer</li><BR>
-	 * <I>* only if object is a PlayerInstance</I><BR>
-	 * <I>** only if object is a GM PlayerInstance</I> <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T ADD the object in _visibleObjects and _allPlayers* of WorldRegion (need synchronisation)</B></FONT><BR>
+	 * <li>If object is a L2Character, add all surrounding L2Object in its _knownObjects and all surrounding Player in its _knownPlayer</li><BR>
+	 * <I>* only if object is a Player</I><BR>
+	 * <I>** only if object is a GM Player</I> <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T ADD the object in _visibleObjects and _allPlayers* of WorldRegion (need synchronisation)</B></FONT><BR>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T ADD the object to _allObjects and _allPlayers* of L2World (need synchronisation)</B></FONT> <B><U> Example of use </U> :</B>
 	 * <li>Drop an Item</li>
 	 * <li>Spawn a L2Character</li>
-	 * <li>Apply Death Penalty of a PlayerInstance</li>
+	 * <li>Apply Death Penalty of a Player</li>
 	 *
 	 * @param object    L2object to add in the world
 	 * @param newRegion WorldRegion in wich the object will be add (not used)
@@ -282,8 +282,8 @@ public final class World {
 
 		forEachVisibleObject(object, WorldObject.class, 1, wo ->
 		{
-			if (object.isPlayer() && wo.isVisibleFor((PlayerInstance) object)) {
-				final PlayerInstance player = object.getActingPlayer();
+			if (object.isPlayer() && wo.isVisibleFor((Player) object)) {
+				final Player player = object.getActingPlayer();
 				wo.sendInfo(player);
 				if (wo.isCreature()) {
 					final CharacterAI ai = ((Creature) wo).getAI();
@@ -307,8 +307,8 @@ public final class World {
 				}
 			}
 
-			if (wo.isPlayer() && object.isVisibleFor((PlayerInstance) wo)) {
-				final PlayerInstance player = wo.getActingPlayer();
+			if (wo.isPlayer() && object.isVisibleFor((Player) wo)) {
+				final Player player = wo.getActingPlayer();
 				object.sendInfo(player);
 				if (object.isCreature()) {
 					final CharacterAI ai = ((Creature) object).getAI();
@@ -343,14 +343,14 @@ public final class World {
 	}
 
 	/**
-	 * Remove a L2Object from the world. <B><U> Concept</U> :</B> L2Object (including PlayerInstance) are identified in <B>_visibleObjects</B> of his current WorldRegion and in <B>_knownObjects</B> of other surrounding L2Characters <BR>
-	 * PlayerInstance are identified in <B>_allPlayers</B> of L2World, in <B>_allPlayers</B> of his current WorldRegion and in <B>_knownPlayer</B> of other surrounding L2Characters <B><U> Actions</U> :</B>
+	 * Remove a L2Object from the world. <B><U> Concept</U> :</B> L2Object (including Player) are identified in <B>_visibleObjects</B> of his current WorldRegion and in <B>_knownObjects</B> of other surrounding L2Characters <BR>
+	 * Player are identified in <B>_allPlayers</B> of L2World, in <B>_allPlayers</B> of his current WorldRegion and in <B>_knownPlayer</B> of other surrounding L2Characters <B><U> Actions</U> :</B>
 	 * <li>Remove the L2Object object from _allPlayers* of L2World</li>
 	 * <li>Remove the L2Object object from _visibleObjects and _allPlayers* of WorldRegion</li>
 	 * <li>Remove the L2Object object from _gmList** of GmListTable</li>
 	 * <li>Remove object from _knownObjects and _knownPlayer* of all surrounding WorldRegion L2Characters</li><BR>
-	 * <li>If object is a L2Character, remove all L2Object from its _knownObjects and all PlayerInstance from its _knownPlayer</li> <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _allObjects of L2World</B></FONT> <I>* only if object is a PlayerInstance</I><BR>
-	 * <I>** only if object is a GM PlayerInstance</I> <B><U> Example of use </U> :</B>
+	 * <li>If object is a L2Character, remove all L2Object from its _knownObjects and all Player from its _knownPlayer</li> <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _allObjects of L2World</B></FONT> <I>* only if object is a Player</I><BR>
+	 * <I>** only if object is a GM Player</I> <B><U> Example of use </U> :</B>
 	 * <li>Pickup an Item</li>
 	 * <li>Decay a L2Character</li>
 	 *
@@ -464,13 +464,13 @@ public final class World {
 						continue;
 					}
 
-					if (object.isPlayer() && wo.isVisibleFor((PlayerInstance) object)) {
-						final PlayerInstance player = object.getActingPlayer();
+					if (object.isPlayer() && wo.isVisibleFor((Player) object)) {
+						final Player player = object.getActingPlayer();
 						wo.sendInfo(player);
 						if (wo.isCreature()) {
 							final CharacterAI ai = ((Creature) wo).getAI();
 							if (ai != null) {
-								ai.describeStateToPlayer((PlayerInstance) object);
+								ai.describeStateToPlayer((Player) object);
 								if (wo.isMonster() || (wo instanceof L2FriendlyMobInstance)) {
 									if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
@@ -489,13 +489,13 @@ public final class World {
 						}
 					}
 
-					if (wo.isPlayer() && object.isVisibleFor((PlayerInstance) wo)) {
-						final PlayerInstance player = wo.getActingPlayer();
+					if (wo.isPlayer() && object.isVisibleFor((Player) wo)) {
+						final Player player = wo.getActingPlayer();
 						object.sendInfo(player);
 						if (object.isCreature()) {
 							final CharacterAI ai = ((Creature) object).getAI();
 							if (ai != null) {
-								ai.describeStateToPlayer((PlayerInstance) wo);
+								ai.describeStateToPlayer((Player) wo);
 								if (object.isMonster() || (object instanceof L2FriendlyMobInstance)) {
 									if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);

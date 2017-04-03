@@ -21,7 +21,7 @@ package handlers.communityboard;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IParseBoardHandler;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 
 /**
  * Homepage board.
@@ -40,7 +40,7 @@ public class HomepageBoard implements IParseBoardHandler {
 	}
 
 	@Override
-	public boolean parseCommunityBoardCommand(String command, PlayerInstance activeChar) {
+	public boolean parseCommunityBoardCommand(String command, Player activeChar) {
 		CommunityBoardHandler.separateAndSend(HtmRepository.getInstance().getCustomHtm("CommunityBoard/homepage.html"), activeChar);
 		return true;
 	}

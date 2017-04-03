@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -176,7 +176,7 @@ public final class Valakas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAdvEvent(String event, Npc npc, PlayerInstance player) {
+	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (npc != null) {
 			if (event.equalsIgnoreCase("beginning")) {
 				// Stores current time
@@ -186,7 +186,7 @@ public final class Valakas extends AbstractNpcAI {
 				npc.teleToLocation(VALAKAS_LAIR);
 
 				// Sound + socialAction.
-				for (PlayerInstance plyr : ZONE.getPlayersInside()) {
+				for (Player plyr : ZONE.getPlayersInside()) {
 					plyr.sendPacket(new PlaySound(1, "B03_A", 0, 0, 0, 0, 0));
 					plyr.sendPacket(new SocialAction(npc.getObjectId(), 3));
 				}
@@ -320,7 +320,7 @@ public final class Valakas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (!ZONE.isInsideZone(attacker)) {
 			attacker.doDie(attacker);
 			return null;
@@ -349,7 +349,7 @@ public final class Valakas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onKill(Npc npc, PlayerInstance killer, boolean isSummon) {
+	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		// Cancel skill_task and regen_task.
 		cancelQuestTimer("regen_task", npc, null);
 		cancelQuestTimer("skill_task", npc, null);
@@ -382,7 +382,7 @@ public final class Valakas extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAggroRangeEnter(Npc npc, PlayerInstance player, boolean isSummon) {
+	public String onAggroRangeEnter(Npc npc, Player player, boolean isSummon) {
 		return null;
 	}
 
@@ -437,7 +437,7 @@ public final class Valakas extends AbstractNpcAI {
 		}
 
 		// Valakas will use mass spells if he feels surrounded.
-		if (World.getInstance().getVisibleObjects(npc, PlayerInstance.class, 1200).size() >= 20) {
+		if (World.getInstance().getVisibleObjects(npc, Player.class, 1200).size() >= 20) {
 			return VALAKAS_AOE_SKILLS[getRandom(VALAKAS_AOE_SKILLS.length)];
 		}
 

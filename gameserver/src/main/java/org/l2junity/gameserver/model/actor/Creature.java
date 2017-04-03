@@ -84,7 +84,7 @@ import org.l2junity.gameserver.model.TimeStamp;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.WorldRegion;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
 import org.l2junity.gameserver.model.actor.status.CharStatus;
 import org.l2junity.gameserver.model.actor.tasks.character.HitTask;
@@ -665,7 +665,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param mov
 	 */
 	public void broadcastPacket(IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+		World.getInstance().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(mov);
@@ -683,7 +683,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param radiusInKnownlist
 	 */
 	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
-		World.getInstance().forEachVisibleObjectInRadius(this, PlayerInstance.class, radiusInKnownlist, player ->
+		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(mov);
@@ -1099,7 +1099,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			}
 
 			// Flag the attacker if it's a L2PcInstance outside a PvP area
-			final PlayerInstance player = getActingPlayer();
+			final Player player = getActingPlayer();
 			if (player != null) {
 				AttackStanceTaskManager.getInstance().addAttackStanceTask(player);
 				player.updatePvPStatus(target);
@@ -2017,7 +2017,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		} else if (isSummon()) {
 			broadcastStatusUpdate();
 		} else if (isNpc()) {
-			World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+			World.getInstance().forEachVisibleObject(this, Player.class, player ->
 			{
 				if (!isVisibleFor(player)) {
 					return;
@@ -2506,7 +2506,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			}
 
 			if (isPlayer()) {
-				final PlayerInstance player = getActingPlayer();
+				final Player player = getActingPlayer();
 				player.refreshOverloaded(true);
 				player.refreshExpertisePenalty();
 				sendPacket(info);
@@ -2523,7 +2523,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 				}
 			} else if (isNpc()) {
 				if (broadcastFull) {
-					World.getInstance().forEachVisibleObject(this, PlayerInstance.class, player ->
+					World.getInstance().forEachVisibleObject(this, Player.class, player ->
 					{
 						if (!isVisibleFor(player)) {
 							return;
@@ -3459,7 +3459,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param player The L2PcInstance to attack
 	 */
 	@Override
-	public void onForcedAttack(PlayerInstance player) {
+	public void onForcedAttack(Player player) {
 		if (isInsidePeaceZone(player)) {
 			// If L2Character or target is in a peace zone, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed
 			player.sendPacket(SystemMessageId.YOU_MAY_NOT_ATTACK_IN_A_PEACEFUL_ZONE);
@@ -3467,7 +3467,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			return;
 		}
 		if (player.isInOlympiadMode() && (player.getTarget() != null) && player.getTarget().isPlayable()) {
-			PlayerInstance target = null;
+			Player target = null;
 			WorldObject object = player.getTarget();
 			if ((object != null) && object.isPlayable()) {
 				target = object.getActingPlayer();
@@ -4308,7 +4308,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return {@code true} if current player can revive and shows 'To Village' button upon death, {@code false} otherwise.
 	 */
@@ -4317,7 +4317,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @param val
 	 */
@@ -4334,7 +4334,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return {@code true} if player is on event, {@code false} otherwise.
 	 */
@@ -4343,7 +4343,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return the clan id of current character.
 	 */
@@ -4352,7 +4352,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return the clan of current character.
 	 */
@@ -4361,7 +4361,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return {@code true} if player is in academy, {@code false} otherwise.
 	 */
@@ -4370,7 +4370,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return the pledge type of current character.
 	 */
@@ -4379,7 +4379,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	}
 
 	/**
-	 * Dummy method overriden in {@link PlayerInstance}
+	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return the alliance id of current character.
 	 */

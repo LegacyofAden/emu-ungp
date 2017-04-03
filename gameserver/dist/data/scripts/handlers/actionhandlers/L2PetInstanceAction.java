@@ -26,7 +26,7 @@ import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonTalk;
 import org.l2junity.gameserver.network.client.send.PetStatusShow;
@@ -34,7 +34,7 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 public class L2PetInstanceAction implements IActionHandler {
 	@Override
-	public boolean action(PlayerInstance activeChar, WorldObject target, boolean interact) {
+	public boolean action(Player activeChar, WorldObject target, boolean interact) {
 		// Aggression target lock effect
 		if (activeChar.isLockedTarget() && (activeChar.getLockedTarget() != target)) {
 			activeChar.sendPacket(SystemMessageId.FAILED_TO_CHANGE_ENMITY);

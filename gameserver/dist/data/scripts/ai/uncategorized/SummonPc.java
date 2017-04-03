@@ -21,7 +21,7 @@ package ai.uncategorized;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -44,7 +44,7 @@ public final class SummonPc extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onAttack(Npc npc, PlayerInstance attacker, int damage, boolean isSummon) {
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		final int chance = getRandom(100);
 		final boolean attacked = npc.getVariables().getBoolean("attacked", false);
 		if ((npc.distance3d(attacker) > 300) && !attacked) {
@@ -76,7 +76,7 @@ public final class SummonPc extends AbstractNpcAI {
 	}
 
 	@Override
-	public String onSpellFinished(Npc npc, PlayerInstance player, Skill skill) {
+	public String onSpellFinished(Npc npc, Player player, Skill skill) {
 		if ((skill.getId() == SUMMON_PC.getSkillId()) && !npc.isDead() && npc.getVariables().getBoolean("attacked", false)) {
 			player.teleToLocation(npc);
 			npc.getVariables().set("attacked", false);

@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.events.impl.restriction;
 
-import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 
@@ -26,13 +26,13 @@ import org.l2junity.gameserver.model.events.impl.IBaseEvent;
  * @author lord_rex
  */
 public final class CanPlayerLeaveParty implements IBaseEvent {
-	private final PlayerInstance _activeChar;
+	private final Player _activeChar;
 
-	public CanPlayerLeaveParty(PlayerInstance activeChar) {
+	public CanPlayerLeaveParty(Player activeChar) {
 		_activeChar = activeChar;
 	}
 
-	public PlayerInstance getActiveChar() {
+	public Player getActiveChar() {
 		return _activeChar;
 	}
 
