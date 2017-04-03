@@ -1,5 +1,6 @@
 package org.l2junity.loginserver.manager;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.AgeLimit;
@@ -8,10 +9,15 @@ import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.commons.model.enums.ServerType;
 import org.l2junity.commons.rmi.IGameServerRMI;
 import org.l2junity.commons.rmi.ILoginServerRMI;
+import org.l2junity.commons.rmi.SocketFactory;
+import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.commons.util.XmlReaderException;
+import org.l2junity.core.configs.LoginServerConfig;
 import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.loginserver.db.AccountsDAO;
+import org.l2junity.loginserver.db.dto.Account;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -20,6 +26,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +51,15 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 		}
 		finally {
 			log.info("Loaded {} active game servers.", gameservers.values().stream().filter(GameServerInfo::isShowing).count());
-			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new GameServersStatusWatcher(), 0, 1, TimeUnit.SECONDS);
+			try {
+				Registry registry = LocateRegistry.createRegistry(LoginServerConfig.GAME_SERVER_LOGIN_PORT, new SocketFactory(), new SocketFactory());
+				registry.bind("loginServer", this);
+				log.info("Login server listening for gameserver's connections at port {}", LoginServerConfig.GAME_SERVER_LOGIN_PORT);
+			} catch (Exception e) {
+				log.error("Error while initialization RMI server!", e);
+			} finally {
+				ThreadPool.getInstance().scheduleGeneralAtFixedRate(new GameServersStatusWatcher(), 0, 1, TimeUnit.SECONDS);
+			}
 		}
 	}
 
@@ -82,6 +98,59 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 		}
 	}
 
+	@Override
+	public void changePassword(String accountName, String oldPass, String newPass) throws RemoteException {
+		try(AccountsDAO dao = DatabaseFactory.getInstance().getDAO(AccountsDAO.class)) {
+			Account account = dao.findByName(accountName);
+			account.setPassword(newPass);
+			dao.updatePassword(account);
+		}
+	}
+
+	@Override
+	public void changeAccessLevel(String accountName, int level) throws RemoteException {
+		try(AccountsDAO dao = DatabaseFactory.getInstance().getDAO(AccountsDAO.class)) {
+			Account account = dao.findByName(accountName);
+			account.setAccessLevel(level);
+			dao.updateAccessLevel(account);
+		}
+	}
+
+	@Override
+	public void sendMail(String account, String mailId, String... args) throws RemoteException {
+		// TODO
+	}
+
+	@Override
+	public void sendTempBan(String account, String ip, long time) throws RemoteException {
+		// TODO
+	}
+
+	public boolean isAccountOnServer(String account) {
+		for(GameServerInfo gameServerInfo : getGameServers()) {
+			try {
+				if (gameServerInfo.getConnection().isAccountOnServer(account)) {
+					return true;
+				}
+			}
+			catch (Exception e) {
+				log.error("Error while calling isAccountOnServer on serverId={}", gameServerInfo.getId());
+			}
+		}
+		return false;
+	}
+
+	public void kickPlayerByAccount(String account) {
+		for(GameServerInfo gameServerInfo : getGameServers()) {
+			try {
+				gameServerInfo.getConnection().kickPlayerByAccount(account);
+			}
+			catch (Exception e) {
+				log.error("Error while calling kickPlayerByAccount on serverId={}", gameServerInfo.getId());
+			}
+		}
+	}
+
 	public Collection<GameServerInfo> getGameServers() {
 		return gameservers.values().stream().filter(GameServerInfo::isShowing).collect(Collectors.toList());
 	}
@@ -91,12 +160,14 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 		public void run() {
 			for (Map.Entry<Short, GameServerInfo> entry : gameservers.entrySet()) {
 				GameServerInfo gameServerInfo = entry.getValue();
-				try {
-					gameServerInfo.getConnection().testConnection();
-				} catch (RemoteException e) {
-					gameServerInfo.setConnection(null);
-					gameServerInfo.setStatus(ServerStatus.DOWN);
-					log.info("Gameserver with id=[{}] disconnected.", entry.getKey());
+				if (gameServerInfo.getConnection() != null) {
+					try {
+						gameServerInfo.getConnection().testConnection();
+					} catch (RemoteException e) {
+						gameServerInfo.setConnection(null);
+						gameServerInfo.setStatus(ServerStatus.DOWN);
+						log.info("Gameserver with id=[{}] disconnected.", entry.getKey());
+					}
 				}
 			}
 		}

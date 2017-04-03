@@ -45,7 +45,6 @@ public class RequestServerLogin implements IIncomingPacket<ClientHandler> {
 			client.close(LoginFail2.ACCESS_FAILED_PLEASE_TRY_AGAIN_LATER);
 			return;
 		}
-
 		LoginManager.getInstance().tryServerLogin(client, _serverId);
 	}
 }

@@ -21,7 +21,6 @@ package handlers.admincommandhandlers;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
@@ -114,7 +113,7 @@ public class AdminLogin implements IAdminCommandHandler {
 					age = Integer.parseInt(mode);
 					if (GeneralConfig.SERVER_LIST_AGE != age) {
 						GeneralConfig.SERVER_LIST_AGE = age;
-						GameServerRMI.getInstance().setServerAge(AgeLimit.values()[age]);
+						GameServerRMI.getInstance().setServerAgeLimit(AgeLimit.valueOf(age));
 						activeChar.sendMessage("Server Age changed to " + age);
 						showMainPage(activeChar);
 					} else {
@@ -139,11 +138,10 @@ public class AdminLogin implements IAdminCommandHandler {
 	private void showMainPage(PlayerInstance activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/login.htm");
-		html.replace("%server_name%", LoginServerThread.getInstance().getServerName());
-		html.replace("%status%", LoginServerThread.getInstance().getStatusString());
+		html.replace("%status%", GameServerRMI.getInstance().getServerStatus().toString());
 		html.replace("%clock%", getServerTypeName(GeneralConfig.SERVER_LIST_TYPE));
 		html.replace("%brackets%", String.valueOf(GeneralConfig.SERVER_LIST_BRACKET));
-		html.replace("%max_players%", String.valueOf(LoginServerThread.getInstance().getMaxPlayer()));
+		html.replace("%max_players%", String.valueOf(GameServerRMI.getInstance().getMaxOnline()));
 		activeChar.sendPacket(html);
 	}
 

@@ -21,15 +21,14 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.LoginServerThread.SessionKey;
 import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.network.PacketReader;
 
 public final class AuthLogin implements IClientIncomingPacket {
 
 	// loginName + keys must match what the loginserver used.
 	private String _loginName;
-	/*
-	 * private final long _key1; private final long _key2; private final long _key3; private final long _key4;
-	 */
+
 	private int _playKey1;
 	private int _playKey2;
 	private int _loginKey1;
@@ -57,9 +56,10 @@ public final class AuthLogin implements IClientIncomingPacket {
 		// avoid potential exploits
 		if (client.getAccountName() == null) {
 			// Preventing duplicate login in case client login server socket was disconnected or this packet was not sent yet
-			if (LoginServerThread.getInstance().addGameServerLogin(_loginName, client)) {
+			if (GameServerRMI.getInstance().addAccountInGame(_loginName, client)) {
 				client.setAccountName(_loginName);
-				LoginServerThread.getInstance().addWaitingClientAndSendRequest(_loginName, client, key);
+				// TODO: RMI
+				//LoginServerThread.getInstance().addWaitingClientAndSendRequest(_loginName, client, key);
 			} else {
 				client.close(null);
 			}

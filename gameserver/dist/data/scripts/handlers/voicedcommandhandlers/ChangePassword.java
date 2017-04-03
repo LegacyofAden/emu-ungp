@@ -24,6 +24,7 @@ import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.service.GameServerRMI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,8 @@ public class ChangePassword implements IVoicedCommandHandler {
 						return false;
 					}
 
-					LoginServerThread.getInstance().sendChangePassword(activeChar.getAccountName(), activeChar.getName(), curpass, newpass);
+					GameServerRMI.getInstance().changePassword(activeChar, curpass, newpass);
+					activeChar.sendMessage("Password changed.");
 				} else {
 					activeChar.sendMessage("Invalid password data! You have to fill all boxes.");
 					return false;

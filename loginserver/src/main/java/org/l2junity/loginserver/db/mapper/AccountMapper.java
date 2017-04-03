@@ -31,6 +31,13 @@ import java.sql.SQLException;
 public class AccountMapper implements ResultSetMapper<Account> {
 	@Override
 	public Account map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-		return new Account(r.getLong("id"), r.getString("name"), r.getString("password"), r.getShort("last_server_id"), r.getTimestamp("created_at").toInstant());
+		return new Account(r.getLong("id"),
+				r.getString("name"),
+				r.getString("password"),
+				r.getShort("last_server_id"),
+				r.getInt("access_level"),
+				r.getString("last_ip"),
+				r.getTimestamp("last_time_access").toInstant(),
+				r.getTimestamp("created_at").toInstant());
 	}
 }

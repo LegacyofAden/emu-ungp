@@ -21,19 +21,21 @@ package org.l2junity.loginserver.manager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.LoginServerConfig;
 import org.l2junity.loginserver.db.AccountBansDAO;
-import org.l2junity.loginserver.db.AccountLoginsDAO;
 import org.l2junity.loginserver.db.AccountsDAO;
 import org.l2junity.loginserver.db.dto.Account;
 import org.l2junity.loginserver.network.client.ClientHandler;
 import org.l2junity.loginserver.network.client.ConnectionState;
-import org.l2junity.loginserver.network.client.send.*;
+import org.l2junity.loginserver.network.client.send.BlockedAccount;
+import org.l2junity.loginserver.network.client.send.LoginFail2;
+import org.l2junity.loginserver.network.client.send.LoginOk;
+import org.l2junity.loginserver.network.client.send.ServerList;
+import org.mindrot.jbcrypt.BCrypt;
 import org.skife.jdbi.v2.exceptions.DBIException;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Base64;
+import java.time.Instant;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -44,58 +46,52 @@ public class LoginManager {
 	@Getter(lazy = true)
 	private static final LoginManager instance = new LoginManager();
 
-	private MessageDigest _passwordHashCrypt;
 	private final AtomicInteger _connectionId = new AtomicInteger();
 
 	private LoginManager() {
-		try {
-			_passwordHashCrypt = MessageDigest.getInstance("SHA");
-		} catch (Exception e) {
-			log.error("Failed initializing:", e);
-		}
 	}
 
 	@SuppressWarnings("unused")
 	public void tryAuthLogin(ClientHandler client, String name, String password, int otp) {
 		try (AccountsDAO accountsDAO = DatabaseFactory.getInstance().getDAO(AccountsDAO.class)) {
-			final String passwordHashBase64 = Base64.getEncoder().encodeToString(_passwordHashCrypt.digest(password.getBytes(StandardCharsets.UTF_8)));
 			Account account = accountsDAO.findByName(name);
-			if ((account == null) && LoginServerConfig.AUTO_CREATE_ACCOUNTS) {
-				long accountId = accountsDAO.insert(name, passwordHashBase64);
-				account = accountsDAO.findById(accountId);
-				log.info("Auto created account [{}]", name);
-			}
+			if (account == null) {
+				if (LoginServerConfig.AUTO_CREATE_ACCOUNTS) {
+					long accountId = accountsDAO.insert(name, BCrypt.hashpw(password, BCrypt.gensalt()));
+					account = accountsDAO.findById(accountId);
+					log.info("Auto created account [{}]", name);
+				} else {
+					client.close(LoginFail2.SYSTEM_ERROR);
+					return;
+				}
+			} else {
+				if (!BCrypt.checkpw(password, account.getPassword())) {
+					client.close(LoginFail2.THE_USERNAME_AND_PASSWORD_DO_NOT_MATCH_PLEASE_CHECK_YOUR_ACCOUNT_INFORMATION_AND_TRY_LOGGING_IN_AGAIN);
+					return;
+				}
 
-			if ((account == null) || !account.getPassword().equals(passwordHashBase64)) {
-				client.close(LoginFail2.THE_USERNAME_AND_PASSWORD_DO_NOT_MATCH_PLEASE_CHECK_YOUR_ACCOUNT_INFORMATION_AND_TRY_LOGGING_IN_AGAIN);
-				return;
-			}
+				try (AccountBansDAO accountBansDAO = DatabaseFactory.getInstance().getDAO(AccountBansDAO.class)) {
+					if (!accountBansDAO.findActiveByAccountId(account).isEmpty()) {
+						client.close(BlockedAccount.YOUR_ACCOUNT_HAS_BEEN_RESTRICTED_IN_ACCORDANCE_WITH_OUR_TERMS_OF_SERVICE_DUE_TO_YOUR_CONFIRMED_ABUSE_OF_IN_GAME_SYSTEMS_RESULTING_IN_ABNORMAL_GAMEPLAY_FOR_MORE_DETAILS_PLEASE_VISIT_THE_LINEAGE_II_SUPPORT_WEBSITE_HTTPS_SUPPORT_LINEAGE2_COM);
+						return;
+					}
+				}
 
-			// TODO: check OTP
-			if (false) {
-				client.close(new LoginOtpFail());
-				return;
-			}
-
-			try (AccountBansDAO accountBansDAO = DatabaseFactory.getInstance().getDAO(AccountBansDAO.class)) {
-				if (!accountBansDAO.findActiveByAccountId(account).isEmpty()) {
-					client.close(BlockedAccount.YOUR_ACCOUNT_HAS_BEEN_RESTRICTED_IN_ACCORDANCE_WITH_OUR_TERMS_OF_SERVICE_DUE_TO_YOUR_CONFIRMED_ABUSE_OF_IN_GAME_SYSTEMS_RESULTING_IN_ABNORMAL_GAMEPLAY_FOR_MORE_DETAILS_PLEASE_VISIT_THE_LINEAGE_II_SUPPORT_WEBSITE_HTTPS_SUPPORT_LINEAGE2_COM);
+				if (LoginServerRMI.getInstance().isAccountOnServer(name)) {
+					LoginServerRMI.getInstance().kickPlayerByAccount(name);
+					client.close(LoginFail2.ACCOUNT_IS_ALREADY_IN_USE);
 					return;
 				}
 			}
 
-			// TODO: check if account is already logged in
-			if (false) {
-				// TODO: kick account
-				client.close(LoginFail2.ACCOUNT_IS_ALREADY_IN_USE);
-				return;
-			}
-
-			try (AccountLoginsDAO accountLoginsDAO = DatabaseFactory.getInstance().getDAO(AccountLoginsDAO.class)) {
-				client.setAccountLoginsId(accountLoginsDAO.insert(account, client.getInetAddress().getHostAddress()));
-			}
+			account.setLastIp(client.getInetAddress().getHostAddress());
+			account.setLastTimeAccess(Instant.now());
+			accountsDAO.updateLastIp(account);
+			accountsDAO.updateLastTimeAccess(account);
 
 			client.setAccount(account);
+			client.setLoginSessionId(Rnd.nextLong());
+
 			if (LoginServerConfig.SHOW_LICENCE) {
 				client.setConnectionState(ConnectionState.AUTHED_LICENCE);
 				client.sendPacket(new LoginOk(client.getLoginSessionId()));
@@ -118,10 +114,6 @@ public class LoginManager {
 		client.getAccount().setLastServerId(serverId);
 		try (AccountsDAO accountsDAO = DatabaseFactory.getInstance().getDAO(AccountsDAO.class)) {
 			accountsDAO.updateLastServerId(account);
-		}
-
-		try (AccountLoginsDAO accountLoginsDAO = DatabaseFactory.getInstance().getDAO(AccountLoginsDAO.class)) {
-			accountLoginsDAO.updateServerId(client.getAccountLoginsId(), (short) (serverId & 0xFF));
 		}
 	}
 

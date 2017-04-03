@@ -18,6 +18,7 @@
  */
 package org.l2junity.loginserver.network.client.send;
 
+import org.l2junity.commons.model.AccountInfo;
 import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.loginserver.manager.LoginServerRMI;
@@ -28,7 +29,7 @@ import org.l2junity.network.PacketWriter;
 import java.util.Collection;
 
 /**
- * @author NosBit
+ * @author ANZO
  */
 public class ServerList implements IOutgoingPacket {
 	private final ClientHandler client;
@@ -73,9 +74,18 @@ public class ServerList implements IOutgoingPacket {
 		packet.writeC(gameservers.size());
 		for (GameServerInfo server : gameservers) {
 			packet.writeC(server.getId());
-			packet.writeC(0); // Players on account
-			packet.writeC(0); // Players marked to delete
-			// packet.writeC((int) (t - System.currentTimeMillis() / 1000L)) // t - delete time
+			try {
+				AccountInfo accountInfo = server.getConnection().getAccountInfo(client.getAccount().getName());
+				packet.writeC(accountInfo.getCharCount());
+				packet.writeC(accountInfo.getDeleteTimeInfo().size());
+				for (Long deleteTimeInfo : accountInfo.getDeleteTimeInfo()) {
+					packet.writeC((int) (deleteTimeInfo - System.currentTimeMillis() / 1000L));
+				}
+			}
+			catch (Exception e) {
+				packet.writeC(0);
+				packet.writeC(0);
+			}
 		}
 
 		return true;
