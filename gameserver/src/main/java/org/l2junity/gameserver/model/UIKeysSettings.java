@@ -78,7 +78,7 @@ public class UIKeysSettings {
 	}
 
 	/**
-	 * Save Categories and Mapped Keys into GameServer DataBase
+	 * Save Categories and Mapped Keys into GameServerInfo DataBase
 	 */
 	public void saveInDB() {
 		String query;

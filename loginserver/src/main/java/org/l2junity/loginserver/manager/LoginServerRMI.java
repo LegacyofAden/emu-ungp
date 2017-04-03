@@ -1,7 +1,7 @@
 package org.l2junity.loginserver.manager;
 
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.model.GameServer;
+import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.RegisterResult;
 import org.l2junity.commons.model.enums.ServerStatus;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @StartupComponent("Network")
 public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerRMI, IXmlReader {
-	private final Map<Short, GameServer> gameservers = new HashMap<>();
+	private final Map<Short, GameServerInfo> gameservers = new HashMap<>();
 
 	private LoginServerRMI() throws RemoteException {
 		try {
@@ -42,7 +42,7 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 			log.error("Error loading game servers.", e);
 		}
 		finally {
-			log.info("Loaded {} active game servers.", gameservers.values().stream().filter(GameServer::isShowing).count());
+			log.info("Loaded {} active game servers.", gameservers.values().stream().filter(GameServerInfo::isShowing).count());
 			ThreadPool.getInstance().scheduleGeneralAtFixedRate(new GameServersStatusWatcher(), 0, 1, TimeUnit.SECONDS);
 		}
 	}
@@ -53,17 +53,17 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 	}
 
 	@Override
-	public RegisterResult registerGameServer(IGameServerRMI connection, GameServer registeringServer) {
+	public RegisterResult registerGameServer(IGameServerRMI connection, GameServerInfo registeringServer) {
 		if (gameservers.containsKey(registeringServer.getId())) {
-			GameServer gameServer = gameservers.get(registeringServer.getId());
-			if (!gameServer.isShowing()) {
+			GameServerInfo gameServerInfo = gameservers.get(registeringServer.getId());
+			if (!gameServerInfo.isShowing()) {
 				return RegisterResult.DISABLED_SERVER;
 			}
 			else if (gameservers.values().stream().anyMatch(server -> server.getId() == registeringServer.getId() && server.getConnection() != null)) {
 				return RegisterResult.ALREADY_REGISTERED;
 			}
 			else {
-				gameServer.update(connection, registeringServer);
+				gameServerInfo.update(connection, registeringServer);
 				return RegisterResult.SUCCESS;
 			}
 		}
@@ -72,20 +72,30 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 		}
 	}
 
-	public Collection<GameServer> getGameServers() {
-		return gameservers.values().stream().filter(GameServer::isShowing).collect(Collectors.toList());
+	@Override
+	public void updateGameServer(IGameServerRMI connection, GameServerInfo gameServerInfo) {
+		if (gameservers.values().stream().anyMatch(server -> server.getId() == gameServerInfo.getId() && server.getConnection() != null)) {
+			GameServerInfo gameServerInfoToUpdate = gameservers.get(gameServerInfo.getId());
+			if (gameServerInfoToUpdate != null) {
+				gameServerInfo.update(connection, gameServerInfo);
+			}
+		}
+	}
+
+	public Collection<GameServerInfo> getGameServers() {
+		return gameservers.values().stream().filter(GameServerInfo::isShowing).collect(Collectors.toList());
 	}
 
 	private class GameServersStatusWatcher implements Runnable {
 		@Override
 		public void run() {
-			for (Map.Entry<Short, GameServer> entry : gameservers.entrySet()) {
-				GameServer gameServer = entry.getValue();
+			for (Map.Entry<Short, GameServerInfo> entry : gameservers.entrySet()) {
+				GameServerInfo gameServerInfo = entry.getValue();
 				try {
-					gameServer.getConnection().testConnection();
+					gameServerInfo.getConnection().testConnection();
 				} catch (RemoteException e) {
-					gameServer.setConnection(null);
-					gameServer.setStatus(ServerStatus.DOWN);
+					gameServerInfo.setConnection(null);
+					gameServerInfo.setStatus(ServerStatus.DOWN);
 					log.info("Gameserver with id=[{}] disconnected.", entry.getKey());
 				}
 			}
@@ -117,7 +127,7 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 								}
 							}
 						}
-						gameservers.put(id, new GameServer(id, name, showing, ageLimit, serverTypes != null ? serverTypes : Collections.emptySet()));
+						gameservers.put(id, new GameServerInfo(id, name, showing, ageLimit, serverTypes != null ? serverTypes : Collections.emptySet()));
 					}
 				}
 			}

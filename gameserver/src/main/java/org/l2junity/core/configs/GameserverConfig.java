@@ -22,7 +22,7 @@ public class GameserverConfig {
 			"This is the server ID that the Game Server will request.",
 			"Example: 1 = Bartz"
 	})
-	public static int SERVER_ID;
+	public static short SERVER_ID;
 
 	@ConfigProperty(name = "DatapackRoot", value = ".")
 	@ConfigComments(comment = {

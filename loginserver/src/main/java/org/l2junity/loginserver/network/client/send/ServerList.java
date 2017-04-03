@@ -18,7 +18,7 @@
  */
 package org.l2junity.loginserver.network.client.send;
 
-import org.l2junity.commons.model.GameServer;
+import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.loginserver.manager.LoginServerRMI;
 import org.l2junity.loginserver.network.client.ClientHandler;
@@ -41,7 +41,7 @@ public class ServerList implements IOutgoingPacket {
 	public boolean write(PacketWriter packet) {
 		packet.writeC(0x04);
 
-		Collection<GameServer> gameservers = LoginServerRMI.getInstance().getGameServers();
+		Collection<GameServerInfo> gameservers = LoginServerRMI.getInstance().getGameServers();
 
 		packet.writeC(gameservers.size());
 
@@ -49,29 +49,29 @@ public class ServerList implements IOutgoingPacket {
 				&& server.getId() == client.getAccount().getLastServerId());
 		packet.writeC(isLastServerOn ? client.getAccount().getLastServerId() : 0);
 
-		for (GameServer gameServer : gameservers) {
-			packet.writeC(gameServer.getId());
+		for (GameServerInfo gameServerInfo : gameservers) {
+			packet.writeC(gameServerInfo.getId());
 
-			byte[] raw = gameServer.getAddress().getAddress();
+			byte[] raw = gameServerInfo.getAddress().getAddress();
 			packet.writeC(raw[0] & 0xff);
 			packet.writeC(raw[1] & 0xff);
 			packet.writeC(raw[2] & 0xff);
 			packet.writeC(raw[3] & 0xff);
-			packet.writeD(gameServer.getPort());
+			packet.writeD(gameServerInfo.getPort());
 
-			packet.writeC(gameServer.getAgeLimit().getAge());
+			packet.writeC(gameServerInfo.getAgeLimit().getAge());
 			packet.writeC(0); // isPvp - unused
-			packet.writeH(gameServer.getCurrentOnline());
-			packet.writeH(gameServer.getMaxOnline());
-			packet.writeC(gameServer.getStatus() == ServerStatus.DOWN ? 0 : 1);
-			packet.writeD(gameServer.getServerTypesMask());
+			packet.writeH(gameServerInfo.getCurrentOnline());
+			packet.writeH(gameServerInfo.getMaxOnline());
+			packet.writeC(gameServerInfo.getStatus() == ServerStatus.DOWN ? 0 : 1);
+			packet.writeD(gameServerInfo.getServerTypesMask());
 			packet.writeC(0); // Puts [NULL] in front of name due to missing file in NA client
 		}
 
 		packet.writeH(0); // Unused by client
 
 		packet.writeC(gameservers.size());
-		for (GameServer server : gameservers) {
+		for (GameServerInfo server : gameservers) {
 			packet.writeC(server.getId());
 			packet.writeC(0); // Players on account
 			packet.writeC(0); // Players marked to delete
