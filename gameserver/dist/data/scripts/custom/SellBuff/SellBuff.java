@@ -33,6 +33,7 @@ import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.util.Util;
 
 import java.util.StringTokenizer;
@@ -111,7 +112,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 				if (activeChar.isSellingBuffs() || (params == null) || params.isEmpty()) {
 					return false;
 				} else if (activeChar.getSellingBuffs().isEmpty()) {
-					activeChar.sendMessage("Your list of buffs is empty, please add some buffs first!");
+					activeChar.sendMessage(CustomMessage.YOUR_LIST_OF_BUFFS_IS_EMPTY_PLEASE_ADD_SOME_BUFFS_FIRST);
 					return false;
 				} else {
 					String title = "BUFF SELL: ";
@@ -121,7 +122,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 					}
 
 					if (title.length() > 40) {
-						activeChar.sendMessage("Your title cannot exceed 29 characters in length. Please try again.");
+						activeChar.sendMessage(CustomMessage.YOUR_TITLE_CANNOT_EXCEED_29_CHARACTERS_IN_LENGTH_PLEASE_TRY_AGAIN);
 						return false;
 					}
 
@@ -167,7 +168,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						try {
 							price = Integer.parseInt(st.nextToken());
 						} catch (NumberFormatException e) {
-							activeChar.sendMessage("Too big price! Maximal price is " + SellBuffConfig.SELLBUFF_MAX_PRICE);
+							activeChar.sendMessage(CustomMessage.TOO_BIG_PRICE_MAXIMAL_PRICE_IS_$, SellBuffConfig.SELLBUFF_MAX_PRICE);
 							SellBuffsManager.getInstance().sendBuffEditMenu(activeChar);
 						}
 					}

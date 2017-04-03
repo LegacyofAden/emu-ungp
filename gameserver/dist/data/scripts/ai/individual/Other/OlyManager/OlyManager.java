@@ -33,6 +33,7 @@ import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.*;
 import org.l2junity.gameserver.network.client.send.ExOlympiadMatchList;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,7 +290,7 @@ public final class OlyManager extends AbstractNpcAI implements IBypassHandler {
 					activeChar.sendPacket(SystemMessageId.THE_OLYMPIAD_GAMES_ARE_NOT_CURRENTLY_IN_PROGRESS);
 					return false;
 				} else if (activeChar.isOnEvent()) {
-					activeChar.sendMessage("You can not observe games while registered on an event");
+					activeChar.sendMessage(CustomMessage.YOU_CAN_NOT_OBSERVE_GAMES_WHILE_REGISTERED_ON_AN_EVENT);
 					return false;
 				} else {
 					final int arenaId = Integer.parseInt(command.substring(12).trim());

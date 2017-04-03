@@ -27,6 +27,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemauction.ItemAuction;
 import org.l2junity.gameserver.model.itemauction.ItemAuctionInstance;
 import org.l2junity.gameserver.network.client.send.ExItemAuctionInfoPacket;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 import java.text.SimpleDateFormat;
@@ -81,7 +82,8 @@ public class ItemAuctionLink implements IBypassHandler {
 					activeChar.sendPacket(SystemMessageId.IT_IS_NOT_AN_AUCTION_PERIOD);
 
 					if (nextAuction != null) {
-						activeChar.sendMessage("The next auction will begin on the " + fmt.format(new Date(nextAuction.getStartingTime())) + ".");
+						activeChar.sendMessage(CustomMessage.PRICE_OF_$_HAS_BEEN_CHANGED_TO_$,
+								fmt.format(new Date(nextAuction.getStartingTime())));
 					}
 					return true;
 				}
