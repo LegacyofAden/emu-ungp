@@ -1,0 +1,127 @@
+package org.l2junity.gameserver.model.skills;
+
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.skills.conditiontypes.*;
+
+import java.util.function.Function;
+
+/**
+ * @author ANZO
+ * @since 02.04.2017
+ */
+public enum SkillConditionType {
+	EquipWeapon(EquipWeaponSkillCondition::new),
+	EquipArmor(EquipArmorSkillCondition::new),
+	EquipShield(EquipShieldSkillCondition::new),
+	PossessHolything(PossessHolythingSkillCondition::new),
+	OpSkillAcquire(OpSkillAcquireSkillCondition::new),
+	TargetRace(TargetRaceSkillCondition::new),
+	TargetMyParty(TargetMyPartySkillCondition::new),
+	CanSummon(CanSummonSkillCondition::new),
+	BuildCamp(BuildCampSkillCondition::new),
+	NotInUnderwater(NotInUnderwaterSkillCondition::new),
+	OpNotOlympiad(OpNotOlympiadSkillCondition::new),
+	OpUnlock(OpUnlockSkillCondition::new),
+	OpEnergyMax(OpEnergyMaxSkillCondition::new),
+	RemainHpPer(RemainHpPerSkillCondition::new),
+	OpResurrection(OpResurrectionSkillCondition::new),
+	ConsumeBody(ConsumeBodySkillCondition::new),
+	OpSweeper(OpSweeperSkillCondition::new),
+	CanSummonCubic(CanSummonCubicSkillCondition::new),
+	OpCanEscape(OpCanEscapeSkillCondition::new),
+	OpNotTerritory(OpNotTerritorySkillCondition::new),
+	CanSummonSiegeGolem(CanSummonSiegeGolemSkillCondition::new),
+	RemainMpPer(RemainMpPerSkillCondition::new),
+	Op2hWeapon(Op2hWeaponSkillCondition::new),
+	OpEncumbered(OpEncumberedSkillCondition::new),
+	OpFishingCast(OpFishingCastSkillCondition::new),
+	OpFishingPumping(OpFishingPumpingSkillCondition::new),
+	OpFishingReeling(OpFishingReelingSkillCondition::new),
+	RemainCpPer(RemainCpPerSkillCondition::new),
+	CanUseInBattlefield(CanUseInBattlefieldSkillCondition::new),
+	OpCallPc(OpCallPcSkillCondition::new),
+	EnergySaved(EnergySavedSkillCondition::new),
+	OpExistNpc(OpExistNpcSkillCondition::new),
+	OpCheckCastRange(OpCheckCastRangeSkillCondition::new),
+	OpSoulMax(OpSoulMaxSkillCondition::new),
+	OpBlink(OpBlinkSkillCondition::new),
+	SoulSaved(SoulSavedSkillCondition::new),
+	OpCheckAbnormal(OpCheckAbnormalSkillCondition::new),
+	OpCheckClass(OpCheckClassSkillCondition::new),
+	CanTransform(CanTransformSkillCondition::new),
+	OpChangeWeapon(OpChangeWeaponSkillCondition::new),
+	CanUntransform(CanUntransformSkillCondition::new),
+	BuildAdvanceBase(BuildAdvanceBaseSkillCondition::new),
+	CanTransformInDominion(CanTransformInDominionSkillCondition::new),
+	OpTargetNpc(OpTargetNpcSkillCondition::new),
+	OpHaveSummon(OpHaveSummonSkillCondition::new),
+	OpNotInstantzone(OpNotInstantzoneSkillCondition::new),
+	OpCanNotUseAirship(OpCanNotUseAirshipSkillCondition::new),
+	TargetItemCrystalType(TargetItemCrystalTypeSkillCondition::new),
+	OpUseFirecracker(OpUseFirecrackerSkillCondition::new),
+	CanSummonPet(CanSummonPetSkillCondition::new),
+	CannotUseInTransform(CannotUseInTransformSkillCondition::new),
+	CheckSex(CheckSexSkillCondition::new),
+	CheckLevel(CheckLevelSkillCondition::new),
+	CanChangeVitalItemCount(CanChangeVitalItemCountSkillCondition::new),
+	OpHome(OpHomeSkillCondition::new),
+	OpCompanion(OpCompanionSkillCondition::new),
+	OpAlignment(OpAlignmentSkillCondition::new),
+	OpTerritory(OpTerritorySkillCondition::new),
+	OpCheckResidence(OpCheckResidenceSkillCondition::new),
+	CanEnchantAttribute(CanEnchantAttributeSkillCondition::new),
+	OpSkill(OpSkillSkillCondition::new),
+	OpCheckClassList(OpCheckClassListSkillCondition::new),
+	CanRestoreVitalPoint(CanRestoreVitalPointSkillCondition::new),
+	CanUseVitalityConsumeItem(CanUseVitalityConsumeItemSkillCondition::new),
+	CanBookmarkAddSlot(CanBookmarkAddSlotSkillCondition::new),
+	CanAddMaxEntranceInzone(CanAddMaxEntranceInzoneSkillCondition::new),
+	CanRefuelAirship(CanRefuelAirshipSkillCondition::new),
+	OpCheckPcbangPoint(OpCheckPcbangPointSkillCondition::new),
+	OpEnchantRange(OpEnchantRangeSkillCondition::new),
+	OpNeedAgathion(OpNeedAgathionSkillCondition::new),
+	OpCheckAccountType(OpCheckAccountTypeSkillCondition::new),
+	OpHaveSummonedNpc(OpHaveSummonedNpcSkillCondition::new),
+	TargetMyMentee(TargetMyMenteeSkillCondition::new),
+	OpPeacezone(OpPeacezoneSkillCondition::new),
+	OpPkcount(OpPkcountSkillCondition::new),
+	OpNotCursed(OpNotCursedSkillCondition::new),
+	TargetMyPledge(TargetMyPledgeSkillCondition::new),
+	OpTargetPc(OpTargetPcSkillCondition::new),
+	OpMainjob(OpMainjobSkillCondition::new),
+	OpCheckSkill(OpCheckSkillSkillCondition::new),
+	OpRestartPoint(OpRestartPointSkillCondition::new),
+	OpNeedSummonOrPet(OpNeedSummonOrPetSkillCondition::new),
+	OpUsePraseed(OpUsePraseedSkillCondition::new),
+	CanUseInDragonLair(CanUseInDragonLairSkillCondition::new),
+	OpTargetWeaponAttackType(OpTargetWeaponAttackTypeSkillCondition::new),
+	OpTargetArmorType(OpTargetArmorTypeSkillCondition::new),
+	OpTargetAllItemType(OpTargetAllItemTypeSkillCondition::new),
+	CanMountForEvent(CanMountForEventSkillCondition::new),
+	OpEquipItem(OpEquipItemSkillCondition::new),
+	OpInstantzone(OpInstantzoneSkillCondition::new),
+	OpSubjob(OpSubjobSkillCondition::new),
+	OpAgathionEnergy(OpAgathionEnergySkillCondition::new),
+	OpPledge(OpPledgeSkillCondition::new),
+	OpSocialClass(OpSocialClassSkillCondition::new),
+	OpSiegeHammer(OpSiegeHammerSkillCondition::new),
+	OpWyvern(OpWyvernSkillCondition::new),
+	CanUseSwoopCannon(CanUseSwoopCannonSkillCondition::new),
+	OpCheckCrtEffect(OpCheckCrtEffectSkillCondition::new),
+	OpInSiegeTime(OpInSiegeTimeSkillCondition::new),
+	OpCannotUseTargetWithPrivateStore(OpCannotUseTargetWithPrivateStoreSkillCondition::new),
+	OpCheckOnGoingEventCampaign(OpCheckOnGoingEventCampaignSkillCondition::new),
+	CanSummonMulti(CanSummonMultiSkillCondition::new),
+	OpTargetMyPledgeAcademy(OpTargetMyPledgeAcademySkillCondition::new),
+	OpCheckFlag(OpCheckFlagSkillCondition::new);
+
+	Function<StatsSet, ISkillCondition> function;
+
+	SkillConditionType(Function<StatsSet, ISkillCondition> function) {
+		this.function = function;
+	}
+
+	public ISkillCondition getNew(StatsSet set) {
+		return function.apply(set);
+	}
+}

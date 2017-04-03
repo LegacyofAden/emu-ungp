@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%xEx%n"/>
+		</Console>
+		<RollingFile name="ConsoleFile" fileName="log/console.log"
+					 filePattern="log/$${date:yyyy-MM}/console/console-%date{yyyy-MM-dd}.log">
+			<PatternLayout pattern="%d %-5level %class{36} %L %M - %msg%n"/>
+			<Policies>
+				<OnStartupTriggeringPolicy />
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="50 MB"/>
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.mchange" level="warn"/>
+		<Logger name="io.netty" level="warn"/>
+		<Root level="info">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="ConsoleFile"/>
+		</Root>
+	</Loggers>
+</Configuration>

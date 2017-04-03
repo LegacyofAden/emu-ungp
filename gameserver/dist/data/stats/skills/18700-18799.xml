@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/skills.xsd">
+	<skill id="18700" toLevel="1" name="Freya's Art of Seduction">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Dimensional Item\nFor 30 min., Max HP/MP/CP + 30%, P. Atk. + 10%, M. Atk. + 20%, P./M. Def + 30%, Speed + 20, Skill MP Consumption - 15%.\nAdditionally, Damage Reduction + 10%, All Attributes Defense + 100.\n\nBuff remains in place after death. -->
+		<icon>icon.bm_freya_rose_red_i00</icon>
+		<operateType>A2</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>1000</hitTime>
+		<reuseDelay>300000</reuseDelay>
+		<effectPoint>1</effectPoint>
+		<isMagic>4</isMagic>
+	</skill>
+	<skill id="18701" toLevel="1" name="Freya's Art of Seduction">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Dimensional Item\nFor 30 min., Max HP/MP/CP + 30%, P. Atk. + 10%, M. Atk. + 20%, P./M. Def + 30%, Speed + 20, Skill MP Consumption - 15%.\nAdditionally, XP Gain + 30%, Vitality Bonus + 12.\n\nBuff remains in place after death. -->
+		<icon>icon.bm_freya_rose_red_i00</icon>
+		<operateType>A2</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>1000</hitTime>
+		<reuseDelay>300000</reuseDelay>
+		<effectPoint>1</effectPoint>
+		<isMagic>4</isMagic>
+	</skill>
+	<skill id="18702" toLevel="1" name="Pa'agrio's Blessing">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Dimensional Item\nFor 30 min., Max HP/MP/CP + 10%, P. Atk. + 20%, M. Atk. + 30%, P./M. Def + 10%, P. Accuracy+ 4, M. Accuracy + 4, Atk./Casting Spd. + 10%, Speed + 10, Attack Attribute + 100, Skill MP Consumption - 10%.\nAdditionally, Damage + 10%, Skill Power + 10.\nBuff remains in place after death. -->
+		<icon>icon.nshop_bless_of_paagrio</icon>
+		<operateType>A2</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>1000</hitTime>
+		<reuseDelay>300000</reuseDelay>
+		<effectPoint>1</effectPoint>
+		<isMagic>4</isMagic>
+	</skill>
+	<skill id="18703" toLevel="1" name="Pa'agrio's Blessing">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Dimensional Item\nFor 30 min., Max HP/MP/CP + 10%, P. Atk. + 20%, M. Atk. + 30%, P./M. Def + 10%, P. Accuracy+ 4, M. Accuracy + 4, Atk./Casting Spd. + 10%, Speed + 10, Attack Attribute + 100, Skill MP Consumption - 10%.\nAdditionally, XP Gain + 30%, Vitality Bonus + 12.\nBuff remains in place after death. -->
+		<icon>icon.nshop_bless_of_paagrio</icon>
+		<operateType>A2</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>1000</hitTime>
+		<reuseDelay>300000</reuseDelay>
+		<effectPoint>1</effectPoint>
+		<isMagic>4</isMagic>
+	</skill>
+	<skill id="18713" toLevel="6" name="Red Cat's Eye">
+		<!-- Updated to Helios -->
+		<!-- Level 1: P. Critical Damage + 1%, P. Skill Critical Damage + 1%. -->
+		<!-- Level 2: P. Critical Damage + 2%, P. Skill Critical Damage + 2%. -->
+		<!-- Level 3: P. Critical Damage + 4%, P. Skill Critical Damage + 4%. -->
+		<!-- Level 4: P. Critical Damage + 7%, P. Skill Critical Damage + 7%. -->
+		<!-- Level 5: P. Critical Damage + 12%, P. Skill Critical Damage + 12%. -->
+		<!-- Level 6: P. Critical Damage + 12%, P. Skill Critical Damage + 12%, P. Skill Power + 5%. -->
+		<icon>
+			<value level="1">icon.bm_jewel_red_catseye</value>
+			<value level="2">icon.bm_jewel_red_catseye</value>
+			<value level="3">icon.bm_jewel_red_catseye</value>
+			<value level="4">icon.bm_jewel_red_catseye</value>
+			<value level="5">icon.bm_jewel_red_catseye</value>
+			<value level="6">icon.bm_jewel_red_catseye_high_lv1_lavianrose</value>
+		</icon>
+		<operateType>P</operateType>
+		<targetType>SELF</targetType>
+		<effects>
+			<effect name="p_critical_damage">
+				<amount>
+					<value level="1">1</value>
+					<value level="2">2</value>
+					<value level="3">4</value>
+					<value level="4">7</value>
+					<value fromLevel="5" toLevel="6">12</value>
+				</amount>
+				<mode>PER</mode>
+			</effect>
+			<effect name="p_skill_critical_damage">
+				<amount>
+					<value level="1">1</value>
+					<value level="2">2</value>
+					<value level="3">4</value>
+					<value level="4">7</value>
+					<value fromLevel="5" toLevel="6">12</value>
+				</amount>
+				<mode>PER</mode>
+			</effect>
+			<effect name="p_skill_power" level="6">
+				<amount>5</amount>
+				<mode>PER</mode>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18714" toLevel="6" name="Blue Cat's Eye">
+		<!-- Updated to Helios -->
+		<!-- Level 1: M. Skill Critical Damage + 1%. -->
+		<!-- Level 2: M. Skill Critical Damage + 2%. -->
+		<!-- Level 3: M. Skill Critical Damage + 4%. -->
+		<!-- Level 4: M. Skill Critical Damage + 7%. -->
+		<!-- Level 5: M. Skill Critical Damage + 12%. -->
+		<!-- Level 6: M. Skill Critical Damage + 12%, M. Skill Power + 5%. -->
+		<icon>
+			<value level="1">Icon.bm_jewel_blue_catseye</value>
+			<value level="2">Icon.bm_jewel_blue_catseye</value>
+			<value level="3">Icon.bm_jewel_blue_catseye</value>
+			<value level="4">Icon.bm_jewel_blue_catseye</value>
+			<value level="5">Icon.bm_jewel_blue_catseye</value>
+			<value level="6">icon.bm_jewel_blue_catseye_high_lv1_lavianrose</value>
+		</icon>
+		<operateType>P</operateType>
+		<targetType>SELF</targetType>
+		<effects>
+			<effect name="p_magic_critical_dmg">
+				<amount>
+					<value level="1">1</value>
+					<value level="2">2</value>
+					<value level="3">4</value>
+					<value level="4">7</value>
+					<value fromLevel="5" toLevel="6">12</value>
+				</amount>
+				<mode>PER</mode>
+			</effect>
+			<effect name="p_spell_power" level="6">
+				<amount>5</amount>
+				<mode>PER</mode>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18715" toLevel="1" name="Greater Ruby">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Soulshot damage + $s1. -->
+		<icon>icon.bm_jewel_ssdmg_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+	</skill>
+	<skill id="18716" toLevel="1" name="Greater Ruby">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Beast Soulshot damage + $s1. -->
+		<icon>icon.bm_jewel_ssdmg_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+	</skill>
+	<skill id="18717" toLevel="1" name="Greater Ruby">
+		<!-- Updated to Helios -->
+		<!-- P. Atk. + 9%. -->
+		<icon>icon.bm_jewel_ssdmg_high_lv1_lavianrose</icon>
+		<operateType>P</operateType>
+		<targetType>SELF</targetType>
+		<effects>
+			<effect name="p_physical_attack">
+				<amount>9</amount>
+				<mode>PER</mode>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18718" toLevel="2" name="Greater Sapphire">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Blessed Spiritshot Damage + $s1. -->
+		<icon>icon.bm_jewel_spsdmg_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+	</skill>
+	<skill id="18719" toLevel="1" name="Greater Sapphire">
+		<!-- Updated to Helios -->
+		<!-- M. Atk. + 13%. -->
+		<icon>icon.bm_jewel_spsdmg_high_lv1_lavianrose</icon>
+		<operateType>P</operateType>
+		<targetType>SELF</targetType>
+		<effects>
+			<effect name="p_magical_attack">
+				<amount>13</amount>
+				<mode>PER</mode>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18720" toLevel="1" name="Greater Obsidian - Cancel Target">
+		<!-- Updated to Helios -->
+		<!-- Cancels enemy's target on you. -->
+		<icon>icon.bm_jewel_pvpdef_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>ENEMY</targetType>
+		<affectScope>SINGLE</affectScope>
+		<reuseDelay>15000</reuseDelay>
+		<staticReuse>true</staticReuse>
+		<isTriggeredSkill>true</isTriggeredSkill>
+		<rideState>NONE</rideState>
+		<effects>
+			<effect name="i_target_cancel" />
+		</effects>
+	</skill>
+	<skill id="18721" toLevel="1" name="Greater Garnet - Cancel Stun/Silence">
+		<!-- Updated to Helios -->
+		<!-- Cancels Stun/Silence. -->
+		<icon>icon.bm_jewel_garnet_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+		<affectScope>SINGLE</affectScope>
+		<reuseDelay>15000</reuseDelay>
+		<staticReuse>true</staticReuse>
+		<isTriggeredSkill>true</isTriggeredSkill>
+		<rideState>NONE</rideState>
+		<effects>
+			<effect name="i_dispel_by_slot">
+				<dispel>
+					<value level="1">STUN,9;SILENCE,9;SILENCE_ALL,9;SILENCE_PHYSICAL,9;</value>
+				</dispel>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18722" toLevel="1" name="Greater Garnet - Cancel Debuffs">
+		<!-- Updated to Helios -->
+		<!-- Cancel all debuffs. -->
+		<icon>icon.bm_jewel_garnet_high_lv1_lavianrose</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>1000</hitTime>
+		<coolTime>500</coolTime>
+		<reuseDelay>30000</reuseDelay>
+		<staticReuse>true</staticReuse>
+		<rideState>NONE</rideState>
+		<targetType>SELF</targetType>
+		<affectScope>SINGLE</affectScope>
+		<effects>
+			<effect name="i_dispel_by_category">
+				<slot>DEBUFF</slot>
+				<rate>100</rate>
+				<max>10</max>
+			</effect>
+		</effects>
+	</skill>
+	<skill id="18723" toLevel="4" name="Ultimate Lv. 3 Jewelry Box">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Double-click to obtain 1 of the Lv. 3 jewels. -->
+		<icon>icon.skill0000</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>500</hitTime>
+		<coolTime>500</coolTime>
+	</skill>
+	<skill id="18724" toLevel="2" name="Red Cat's Eye Fortune Box">
+		<!-- AUTO GENERATED SKILL -->
+		<!-- Double-click to obtain 1 Red Cat's Eye Lv. 1-5. -->
+		<icon>icon.skill0000</icon>
+		<operateType>A1</operateType>
+		<targetType>SELF</targetType>
+		<hitTime>500</hitTime>
+		<coolTime>500</coolTime>
+	</skill>
+</list>
