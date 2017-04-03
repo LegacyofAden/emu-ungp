@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.data.xml.impl.FenceData;
 import org.l2junity.gameserver.enums.FenceState;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -30,9 +33,6 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 /**
  * @author Sahar, Nik64
@@ -178,7 +178,7 @@ public class AdminFence implements IAdminCommandHandler {
 		}).build();
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/fences.htm");
+		html.setFile(activeChar.getLang(), "admin/fences.htm");
 
 		if (result.getPages() > 0) {
 			html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");

@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Collection;
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.FortManager;
@@ -28,9 +31,6 @@ import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
-import java.util.Collection;
-import java.util.StringTokenizer;
 
 /**
  * This class handles all siege commands: Todo: change the class name, and neaten it up
@@ -117,7 +117,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 	private void showFortSelectPage(Player activeChar) {
 		int i = 0;
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/forts.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/forts.htm");
 
 		final Collection<Fort> forts = FortManager.getInstance().getForts();
 		final StringBuilder cList = new StringBuilder(forts.size() * 100);
@@ -140,7 +140,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 
 	private void showFortSiegePage(Player activeChar, Fort fort) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/fort.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/fort.htm");
 		adminReply.replace("%fortName%", fort.getName());
 		adminReply.replace("%fortId%", String.valueOf(fort.getResidenceId()));
 		activeChar.sendPacket(adminReply);

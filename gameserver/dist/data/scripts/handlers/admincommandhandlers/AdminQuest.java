@@ -18,6 +18,16 @@
  */
 package handlers.admincommandhandlers;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+
+import javax.tools.JavaFileObject.Kind;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
@@ -34,11 +44,6 @@ import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.tools.JavaFileObject.Kind;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.*;
 
 public class AdminQuest implements IAdminCommandHandler {
 	public static final Logger LOGGER = LoggerFactory.getLogger(AdminQuest.class);
@@ -149,7 +154,7 @@ public class AdminQuest implements IAdminCommandHandler {
 				}
 
 				final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-				msg.setFile(activeChar.getHtmlPrefix(), "admin/npc-quests.htm");
+				msg.setFile(activeChar.getLang(), "admin/npc-quests.htm");
 				msg.replace("%quests%", sb.toString());
 				msg.replace("%objid%", character.getObjectId());
 				msg.replace("%questName%", "");
@@ -234,7 +239,7 @@ public class AdminQuest implements IAdminCommandHandler {
 			}
 
 			final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-			msg.setFile(activeChar.getHtmlPrefix(), "admin/npc-quests.htm");
+			msg.setFile(activeChar.getLang(), "admin/npc-quests.htm");
 			msg.replace("%quests%", sb.toString());
 			final String fileToReload = quest.getPath() + "/" + quest.getName() + Kind.SOURCE.extension;
 			msg.replace("%questName%", "<table><tr><td width=\"50\" align=\"left\"><a action=\"bypass -h admin_script_load " + fileToReload + "\">Reload</a></td> <td width=\"150\"  align=\"center\"><a action=\"bypass -h admin_quest_info " + quest.getName() + "\">" + quest.getName() + "</a></td> <td width=\"50\" align=\"right\"><a action=\"bypass -h admin_script_unload " + quest.getName() + "\">Unload</a></td></tr></table>");
@@ -295,7 +300,7 @@ public class AdminQuest implements IAdminCommandHandler {
 			replace = replace.substring(0, 17200); // packetlimit
 		}
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/scriptdirectory.htm");
+		html.setFile(activeChar.getLang(), "admin/scriptdirectory.htm");
 		html.replace("%path%", currentPath);
 		html.replace("%list%", replace);
 		activeChar.sendPacket(html);

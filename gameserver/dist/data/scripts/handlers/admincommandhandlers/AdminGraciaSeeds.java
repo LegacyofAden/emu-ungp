@@ -18,14 +18,14 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Calendar;
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GraciaSeedsManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-
-import java.util.Calendar;
-import java.util.StringTokenizer;
 
 public class AdminGraciaSeeds implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
@@ -57,7 +57,7 @@ public class AdminGraciaSeeds implements IAdminCommandHandler {
 
 	private void showMenu(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/graciaseeds.htm");
+		html.setFile(activeChar.getLang(), "admin/graciaseeds.htm");
 		html.replace("%sodstate%", String.valueOf(GraciaSeedsManager.getInstance().getSoDState()));
 		html.replace("%sodtiatkill%", String.valueOf(GraciaSeedsManager.getInstance().getSoDTiatKilled()));
 		if (GraciaSeedsManager.getInstance().getSoDTimeForNextStateChange() > 0) {

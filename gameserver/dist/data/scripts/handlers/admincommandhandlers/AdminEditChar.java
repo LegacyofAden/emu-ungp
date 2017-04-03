@@ -18,6 +18,17 @@
  */
 package handlers.admincommandhandlers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PvpConfig;
@@ -39,14 +50,16 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
+import org.l2junity.gameserver.network.client.send.GMViewItemList;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowAll;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowDeleteAll;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.*;
 
 /**
  * EditChar admin command implementation.
@@ -733,7 +746,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		players.sort(Comparator.comparingLong(Player::getUptime));
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/charlist.htm");
+		html.setFile(activeChar.getLang(), "admin/charlist.htm");
 
 		final PageResult result = PageBuilder.newBuilder(players, 20, "bypass -h admin_show_characters").currentPage(page).bodyHandler((pages, player, sb) ->
 		{
@@ -792,7 +805,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/" + filename);
+		adminReply.setFile(activeChar.getLang(), "admin/" + filename);
 		adminReply.replace("%name%", player.getName());
 		adminReply.replace("%level%", String.valueOf(player.getLevel()));
 		adminReply.replace("%clan%", String.valueOf(player.getClan() != null ? "<a action=\"bypass -h admin_clan_info " + player.getObjectId() + "\">" + player.getClan().getName() + "</a>" : null));
@@ -883,7 +896,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		int CharactersFound = 0;
 		String name;
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/charfind.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/charfind.htm");
 
 		final StringBuilder replyMSG = new StringBuilder(1000);
 
@@ -948,7 +961,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		String name, ip = "0.0.0.0";
 		final StringBuilder replyMSG = new StringBuilder(1000);
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/ipfind.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/ipfind.htm");
 
 		final List<Player> players = new ArrayList<>(World.getInstance().getPlayers());
 		players.sort(Comparator.comparingLong(Player::getUptime));
@@ -1025,7 +1038,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		chars.values().stream().forEachOrdered(replyMSG::add);
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/accountinfo.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/accountinfo.htm");
 		adminReply.replace("%account%", player.getAccountName());
 		adminReply.replace("%player%", characterName);
 		adminReply.replace("%characters%", replyMSG.toString());
@@ -1075,7 +1088,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/dualbox.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/dualbox.htm");
 		adminReply.replace("%multibox%", String.valueOf(multibox));
 		adminReply.replace("%results%", results.toString());
 		adminReply.replace("%strict%", "");
@@ -1120,7 +1133,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/dualbox.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/dualbox.htm");
 		adminReply.replace("%multibox%", String.valueOf(multibox));
 		adminReply.replace("%results%", results.toString());
 		adminReply.replace("%strict%", "strict_");
@@ -1186,7 +1199,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 
 	private void gatherSummonInfo(Summon target, Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/petinfo.htm");
+		html.setFile(activeChar.getLang(), "admin/petinfo.htm");
 		String name = target.getName();
 		html.replace("%name%", name == null ? "N/A" : name);
 		html.replace("%level%", Integer.toString(target.getLevel()));
@@ -1218,7 +1231,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 	private void gatherPartyInfo(Player target, Player activeChar) {
 		boolean color = true;
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/partyinfo.htm");
+		html.setFile(activeChar.getLang(), "admin/partyinfo.htm");
 		StringBuilder text = new StringBuilder(400);
 		for (Player member : target.getParty().getMembers()) {
 			if (color) {
