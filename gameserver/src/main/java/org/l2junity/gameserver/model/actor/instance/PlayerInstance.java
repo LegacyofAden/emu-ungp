@@ -191,9 +191,6 @@ public final class PlayerInstance extends Playable {
 	private long _deleteTimer;
 	private Calendar _createDate = Calendar.getInstance();
 
-	private String _lang = null;
-	private String _htmlPrefix = null;
-
 	private volatile boolean _isOnline = false;
 	private long _onlineTime;
 	private long _onlineBeginTime;
@@ -5489,9 +5486,6 @@ public final class PlayerInstance extends Playable {
 					// character creation Time
 					player.getCreateDate().setTime(rset.getDate("createDate"));
 
-					// Language
-					player.setLang(rset.getString("language"));
-
 					// Retrieve the name and ID of the other characters assigned to this account.
 					try (PreparedStatement stmt = con.prepareStatement("SELECT charId, char_name FROM characters WHERE account_name=? AND charId<>?")) {
 						stmt.setString(1, player._accountName);
@@ -5906,7 +5900,7 @@ public final class PlayerInstance extends Playable {
 			statement.setString(43, getName());
 			statement.setInt(44, getBookMarkSlot());
 			statement.setInt(45, getStat().getBaseVitalityPoints());
-			statement.setString(46, getLang());
+			statement.setString(46, ""); // TODO: Remove
 			statement.setInt(47, getObjectId());
 			statement.execute();
 		} catch (Exception e) {
@@ -10288,35 +10282,12 @@ public final class PlayerInstance extends Playable {
 		return _uiKeySettings;
 	}
 
-	public String getHtmlPrefix() {
-		if (!L2JModsConfig.L2JMOD_MULTILANG_ENABLE) {
-			return null;
-		}
-
-		return _htmlPrefix;
+	public Language getLang() {
+		return getVariables().getEnum("language", Language.class, Language.ENGLISH);
 	}
 
-	public String getLang() {
-		return _lang;
-	}
-
-	public boolean setLang(String lang) {
-		boolean result = false;
-		if (L2JModsConfig.L2JMOD_MULTILANG_ENABLE) {
-			if (L2JModsConfig.L2JMOD_MULTILANG_ALLOWED.contains(lang)) {
-				_lang = lang;
-				result = true;
-			} else {
-				_lang = L2JModsConfig.L2JMOD_MULTILANG_DEFAULT;
-			}
-
-			_htmlPrefix = "data/lang/" + _lang + "/";
-		} else {
-			_lang = null;
-			_htmlPrefix = null;
-		}
-
-		return result;
+	public void setLang(Language lang) {
+		getVariables().set("language", lang);
 	}
 
 	public long getOfflineStartTime() {

@@ -1,6 +1,8 @@
 package org.l2junity.gameserver.model;
 
-public enum Language {
+import java.io.Serializable;
+
+public enum Language implements Serializable {
 	ENGLISH("en"),
 	RUSSIAN("ru");
 

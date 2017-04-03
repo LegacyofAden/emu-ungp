@@ -332,7 +332,7 @@ public class EnterWorld implements IClientIncomingPacket {
 
 		if (showClanNotice) {
 			final NpcHtmlMessage notice = new NpcHtmlMessage();
-			notice.setFile(activeChar.getHtmlPrefix(), "clanNotice.htm");
+			notice.setFile(activeChar.getLang(), "clanNotice.htm");
 			notice.replace("%clan_name%", activeChar.getClan().getName());
 			notice.replace("%notice_text%", activeChar.getClan().getNotice());
 			notice.disableValidation();

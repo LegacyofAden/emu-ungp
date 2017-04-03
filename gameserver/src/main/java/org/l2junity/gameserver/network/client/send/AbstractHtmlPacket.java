@@ -21,6 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.HtmlActionScope;
+import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.util.Util;
 
@@ -82,10 +83,10 @@ public abstract class AbstractHtmlPacket implements IClientOutgoingPacket {
 		_html = html;
 	}
 
-	public final boolean setFile(String prefix, String path) {
+	public final boolean setFile(Language language, String path) {
 		setPath(path);
 
-		String content = HtmRepository.getInstance().getCustomHtm(path);
+		String content = HtmRepository.getInstance().getCustomHtm(language, path);
 		if (content == null) {
 			setHtml("<html><body>My Text is missing:<br>" + path + "</body></html>");
 			_log.warn("Missing html page: " + path);
