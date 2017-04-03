@@ -237,7 +237,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	public void showChatWindow(PlayerInstance player, int val) {
 		String filename = getHtmlPath(getId(), val);
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -247,7 +247,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	public void onBypassFeedback(PlayerInstance player, String command) {
 		if (isBusy()) {
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-			html.setFile(player.getHtmlPrefix(), "npcbusy.htm");
+			html.setFile(player.getLang(), "npcbusy.htm");
 			html.replace("%busymessage%", ""); // busy message was never used.
 			html.replace("%npcname%", getName());
 			html.replace("%playername%", player.getName());
@@ -365,7 +365,7 @@ public class L2SepulcherNpcInstance extends Npc {
 
 	public void showHtmlFile(PlayerInstance player, String file) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), "SepulcherNpc/" + file);
+		html.setFile(player.getLang(), "SepulcherNpc/" + file);
 		html.replace("%npcname%", getName());
 		player.sendPacket(html);
 	}

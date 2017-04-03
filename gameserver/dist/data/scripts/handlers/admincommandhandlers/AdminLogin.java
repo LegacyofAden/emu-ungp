@@ -137,7 +137,7 @@ public class AdminLogin implements IAdminCommandHandler {
 	 */
 	private void showMainPage(PlayerInstance activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/login.htm");
+		html.setFile(activeChar.getHtmlPrefix(), "admin/login.htm");
 		html.replace("%status%", GameServerRMI.getInstance().getServerStatus().toString());
 		html.replace("%clock%", getServerTypeName(GeneralConfig.SERVER_LIST_TYPE));
 		html.replace("%brackets%", String.valueOf(GeneralConfig.SERVER_LIST_BRACKET));

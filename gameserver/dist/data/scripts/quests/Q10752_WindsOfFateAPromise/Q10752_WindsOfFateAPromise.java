@@ -366,10 +366,10 @@ public final class Q10752_WindsOfFateAPromise extends Quest {
 			if (qs == null) {
 				if (player.isInCategory(CategoryType.MAGE_GROUP)) {
 					player.sendPacket(new PlaySound(3, "Npcdialog1.aris_quest_1", 0, 0, 0, 0, 0));
-					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup1.html")));
+					player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popup1.html")));
 				} else {
 					player.sendPacket(new PlaySound(3, "Npcdialog1.katrina_quest_1", 0, 0, 0, 0, 0));
-					player.sendPacket(new TutorialShowHtml(getHtm(player.getHtmlPrefix(), "popup2.html")));
+					player.sendPacket(new TutorialShowHtml(getHtm(player.getLang(), "popup2.html")));
 				}
 			}
 		}

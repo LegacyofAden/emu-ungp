@@ -69,7 +69,7 @@ public final class RequestLinkHtml implements IClientIncomingPacket {
 		}
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(htmlObjectId);
-		html.setFile(player.getHtmlPrefix(), "" + _link);
+		html.setFile(player.getLang(), "" + _link);
 		player.sendPacket(html);
 	}
 }

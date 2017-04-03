@@ -50,7 +50,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 		}
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcname%", getName());
 		player.sendPacket(html);
@@ -98,7 +98,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 			}
 			if (!ok) {
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-				html.setFile(player.getHtmlPrefix(), "petmanager/evolve_no.htm");
+				html.setFile(player.getLang(), "petmanager/evolve_no.htm");
 				player.sendPacket(html);
 			}
 			return;
@@ -126,7 +126,7 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 			}
 			if (!ok) {
 				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-				html.setFile(player.getHtmlPrefix(), "petmanager/restore_no.htm");
+				html.setFile(player.getLang(), "petmanager/restore_no.htm");
 				player.sendPacket(html);
 			}
 			return;
@@ -139,10 +139,10 @@ public class L2PetManagerInstance extends L2MerchantInstance {
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		if (player.destroyItemByItemId("Consume", itemIdtake, 1, this, true)) {
 			player.addItem("", itemIdgive, 1, this, true);
-			html.setFile(player.getHtmlPrefix(), "petmanager/" + getId() + ".htm");
+			html.setFile(player.getLang(), "petmanager/" + getId() + ".htm");
 			player.sendPacket(html);
 		} else {
-			html.setFile(player.getHtmlPrefix(), "petmanager/exchange_no.htm");
+			html.setFile(player.getLang(), "petmanager/exchange_no.htm");
 			player.sendPacket(html);
 		}
 	}

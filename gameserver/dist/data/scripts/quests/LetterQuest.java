@@ -128,7 +128,7 @@ public abstract class LetterQuest extends Quest {
 	public void onPlayerPressTutorialMark(OnPlayerPressTutorialMark event) {
 		final PlayerInstance player = event.getActiveChar();
 		if ((event.getQuestId() == getId()) && canStartQuest(player)) {
-			final String html = getHtm(player.getHtmlPrefix(), "popup.html").replace("%teleport%", getTeleportCommand());
+			final String html = getHtm(player.getLang(), "popup.html").replace("%teleport%", getTeleportCommand());
 			final QuestState st = getQuestState(player, true);
 			st.startQuest();
 

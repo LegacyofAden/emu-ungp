@@ -178,7 +178,7 @@ public class AdminFence implements IAdminCommandHandler {
 		}).build();
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/fences.htm");
+		html.setFile(activeChar.getHtmlPrefix(), "admin/fences.htm");
 
 		if (result.getPages() > 0) {
 			html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");

@@ -51,7 +51,7 @@ public class NpcActionShift implements IActionShiftHandler {
 			final Npc npc = (Npc) target;
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 			final ClanHall clanHall = ClanHallData.getInstance().getClanHallByNpcId(npc.getId());
-			html.setFile(activeChar.getHtmlPrefix(), "data/html/admin/npcinfo.htm");
+			html.setFile(activeChar.getLang(), "admin/npcinfo.htm");
 
 			html.replace("%objid%", String.valueOf(target.getObjectId()));
 			html.replace("%class%", target.getClass().getSimpleName());

@@ -65,7 +65,7 @@ public final class Proclaimer extends AbstractNpcAI {
 			final L2Clan ownerClan = npc.getCastle().getOwner();
 			if (ownerClan != null) {
 				final NpcHtmlMessage packet = new NpcHtmlMessage(npc.getObjectId());
-				packet.setHtml(getHtm(player.getHtmlPrefix(), "proclaimer.html"));
+				packet.setHtml(getHtm(player.getLang(), "proclaimer.html"));
 				packet.replace("%leaderName%", ownerClan.getLeaderName());
 				packet.replace("%clanName%", ownerClan.getName());
 				packet.replace("%castleName%", npc.getCastle().getName());

@@ -61,7 +61,7 @@ public final class CastleWarehouse extends AbstractNpcAI {
 			case "warehouse-03.html":
 				break;
 			case "warehouse-04.html":
-				htmltext = (!isMyLord) ? "warehouse-no.html" : getHtm(player.getHtmlPrefix(), "warehouse-04.html").replace("%blood%", Integer.toString(player.getClan().getBloodAllianceCount()));
+				htmltext = (!isMyLord) ? "warehouse-no.html" : getHtm(player.getLang(), "warehouse-04.html").replace("%blood%", Integer.toString(player.getClan().getBloodAllianceCount()));
 				break;
 			case "Receive":
 				if (!isMyLord) {

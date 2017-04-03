@@ -93,7 +93,7 @@ public class Loto implements IBypassHandler {
 		if (val == 0) // 0 - first buy lottery ticket window
 		{
 			filename = (npc.getHtmlPath(npcId, 1));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 		} else if ((val >= 1) && (val <= 21)) // 1-20 - buttons, 21 - second buy lottery ticket window
 		{
 			if (!Lottery.getInstance().isStarted()) {
@@ -108,7 +108,7 @@ public class Loto implements IBypassHandler {
 			}
 
 			filename = (npc.getHtmlPath(npcId, 5));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 
 			int count = 0;
 			int found = 0;
@@ -210,15 +210,15 @@ public class Loto implements IBypassHandler {
 			player.sendInventoryUpdate(iu);
 
 			filename = (npc.getHtmlPath(npcId, 6));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 		} else if (val == 23) // 23 - current lottery jackpot
 		{
 			filename = (npc.getHtmlPath(npcId, 3));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 		} else if (val == 24) // 24 - Previous winning numbers/Prize claim
 		{
 			filename = (npc.getHtmlPath(npcId, 4));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 
 			int lotonumber = Lottery.getInstance().getId();
 			String message = "";
@@ -260,7 +260,7 @@ public class Loto implements IBypassHandler {
 		} else if (val == 25) // 25 - lottery instructions
 		{
 			filename = (npc.getHtmlPath(npcId, 2));
-			html.setFile(player.getHtmlPrefix(), filename);
+			html.setFile(player.getLang(), filename);
 		} else if (val > 25) // >25 - check lottery ticket by item object id
 		{
 			int lotonumber = Lottery.getInstance().getId();

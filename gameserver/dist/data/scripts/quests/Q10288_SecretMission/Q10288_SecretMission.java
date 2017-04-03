@@ -96,7 +96,7 @@ public class Q10288_SecretMission extends Quest {
 		if ((st != null) && st.isCompleted()) {
 			return "32780-05.html";
 		}
-		return "data/html/default/32780.htm";
+		return "default/32780.htm";
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class Link implements IBypassHandler {
 			return false;
 		}
 
-		String filename = "data/html/" + htmlPath;
+		String filename = "" + htmlPath;
 		final NpcHtmlMessage html = new NpcHtmlMessage(target != null ? target.getObjectId() : 0);
 		html.setFile(activeChar.getHtmlPrefix(), filename);
 		html.replace("%objectId%", String.valueOf(target != null ? target.getObjectId() : 0));

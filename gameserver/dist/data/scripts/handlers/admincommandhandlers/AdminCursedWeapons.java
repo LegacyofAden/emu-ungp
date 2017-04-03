@@ -79,7 +79,7 @@ public class AdminCursedWeapons implements IAdminCommandHandler {
 				final Collection<CursedWeapon> cws = CursedWeaponsManager.getInstance().getCursedWeapons();
 				final StringBuilder replyMSG = new StringBuilder(cws.size() * 300);
 				final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-				adminReply.setFile(activeChar.getHtmlPrefix(), "data/html/admin/cwinfo.htm");
+				adminReply.setFile(activeChar.getHtmlPrefix(), "admin/cwinfo.htm");
 				for (CursedWeapon cw : CursedWeaponsManager.getInstance().getCursedWeapons()) {
 					itemId = cw.getItemId();
 

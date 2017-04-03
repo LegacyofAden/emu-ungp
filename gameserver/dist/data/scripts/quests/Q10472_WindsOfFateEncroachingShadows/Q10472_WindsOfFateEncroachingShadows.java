@@ -152,7 +152,7 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest {
 			}
 			case "31092-02.html": // Black Marketeer Mammon
 			{
-				htmltext = getHtm(player.getHtmlPrefix(), event).replace("%playerName%", player.getName());
+				htmltext = getHtm(player.getLang(), event).replace("%playerName%", player.getName());
 				break;
 			}
 			case "31092-03.html": {
@@ -349,14 +349,14 @@ public final class Q10472_WindsOfFateEncroachingShadows extends Quest {
 			}
 		} else if ((npc.getId() == KARLA) && qs.isStarted()) {
 			if (qs.isCond(18)) {
-				htmltext = getHtm(player.getHtmlPrefix(), "33933-01.html");
+				htmltext = getHtm(player.getLang(), "33933-01.html");
 				htmltext = htmltext.replace("%playerName%", player.getName());
 			} else if (qs.isCond(19)) {
 				htmltext = "33933-04.html";
 			}
 		} else if ((npc.getId() == RAINA)) {
 			if (qs.isStarted() && qs.isCond(19)) {
-				htmltext = getHtm(player.getHtmlPrefix(), "33491-01.html");
+				htmltext = getHtm(player.getLang(), "33491-01.html");
 				htmltext = htmltext.replace("%playerName%", player.getName());
 			} else if (qs.isCompleted()) {
 				htmltext = getAlreadyCompletedMsg(player);

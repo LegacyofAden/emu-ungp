@@ -38,7 +38,7 @@ public class ExPCCafeRequestOpenWindowWithoutNPC implements IClientIncomingPacke
 		final PlayerInstance player = client.getActiveChar();
 		if (player != null) {
 			final NpcHtmlMessage html = new NpcHtmlMessage();
-			html.setFile(player.getHtmlPrefix(), "pccafe.htm");
+			html.setFile(player.getLang(), "pccafe.htm");
 			player.sendPacket(html);
 		}
 	}

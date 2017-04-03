@@ -72,7 +72,7 @@ public class AdminHtml implements IAdminCommandHandler {
 	 * @param path       relative path from directory data/html/admin/ to html
 	 */
 	public static void showAdminHtml(PlayerInstance activeChar, String path) {
-		showHtml(activeChar, "data/html/admin/" + path, false);
+		showHtml(activeChar, "admin/" + path, false);
 	}
 
 	/**

@@ -88,7 +88,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 
 					if (clan.getFortId() == fortress.getResidenceId()) {
 						final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-						html.setHtml(getHtm(player.getHtmlPrefix(), "FortressSiegeManager-12.html"));
+						html.setHtml(getHtm(player.getLang(), "FortressSiegeManager-12.html"));
 						html.replace("%clanName%", fortress.getOwnerClan().getName());
 						return html.getHtml();
 					} else if (!player.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE)) {
@@ -136,7 +136,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 
 					if (clan.getFortId() == fortress.getResidenceId()) {
 						final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-						html.setHtml(getHtm(player.getHtmlPrefix(), "FortressSiegeManager-12.html"));
+						html.setHtml(getHtm(player.getLang(), "FortressSiegeManager-12.html"));
 						html.replace("%clanName%", fortress.getOwnerClan().getName());
 						return html.getHtml();
 					} else if (!player.hasClanPrivilege(ClanPrivilege.CS_MANAGE_SIEGE)) {
@@ -165,7 +165,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 			return "FortressSiegeManager.html";
 		}
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-		html.setHtml(getHtm(player.getHtmlPrefix(), "FortressSiegeManager-01.html"));
+		html.setHtml(getHtm(player.getLang(), "FortressSiegeManager-01.html"));
 		html.replace("%clanName%", fortress.getOwnerClan().getName());
 		html.replace("%objectId%", npc.getObjectId());
 		return html.getHtml();

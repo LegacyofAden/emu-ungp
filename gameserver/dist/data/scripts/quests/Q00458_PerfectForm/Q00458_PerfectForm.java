@@ -171,7 +171,7 @@ public class Q00458_PerfectForm extends Quest {
 		}
 
 		if (overHitHtml) {
-			htmltext = getHtm(player.getHtmlPrefix(), htmltext);
+			htmltext = getHtm(player.getLang(), htmltext);
 			htmltext = htmltext.replace("<?number?>", String.valueOf(overHits));
 		}
 		return htmltext;

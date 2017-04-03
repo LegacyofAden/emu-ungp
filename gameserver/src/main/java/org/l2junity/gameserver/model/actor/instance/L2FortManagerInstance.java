@@ -89,12 +89,12 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 			if (actualCommand.equalsIgnoreCase("expel")) {
 				if (player.hasClanPrivilege(ClanPrivilege.CS_DISMISS)) {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-expel.htm");
+					html.setFile(player.getLang(), "fortress/foreman-expel.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					player.sendPacket(html);
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+					html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					player.sendPacket(html);
 				}
@@ -103,12 +103,12 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 				if (player.hasClanPrivilege(ClanPrivilege.CS_DISMISS)) {
 					getFort().banishForeigners(); // Move non-clan members off fortress area
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-expeled.htm");
+					html.setFile(player.getLang(), "fortress/foreman-expeled.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					player.sendPacket(html);
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+					html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					player.sendPacket(html);
 				}
@@ -116,7 +116,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 			} else if (actualCommand.equalsIgnoreCase("receive_report")) {
 				if (getFort().getFortState() < 2) {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-report.htm");
+					html.setFile(player.getLang(), "fortress/foreman-report.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					if (FeatureConfig.FS_MAX_OWN_TIME > 0) {
 						int hour = (int) Math.floor(getFort().getTimeTillRebelArmy() / 3600);
@@ -132,7 +132,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 					player.sendPacket(html);
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-castlereport.htm");
+					html.setFile(player.getLang(), "fortress/foreman-castlereport.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					int hour, minutes;
 					if (FeatureConfig.FS_MAX_OWN_TIME > 0) {
@@ -165,25 +165,25 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 						}
 						if (open) {
 							final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-							html.setFile(player.getHtmlPrefix(), "fortress/foreman-opened.htm");
+							html.setFile(player.getLang(), "fortress/foreman-opened.htm");
 							html.replace("%objectId%", String.valueOf(getObjectId()));
 							player.sendPacket(html);
 						} else {
 							final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-							html.setFile(player.getHtmlPrefix(), "fortress/foreman-closed.htm");
+							html.setFile(player.getLang(), "fortress/foreman-closed.htm");
 							html.replace("%objectId%", String.valueOf(getObjectId()));
 							player.sendPacket(html);
 						}
 					} else {
 						final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "fortress/" + getTemplate().getId() + "-d.htm");
+						html.setFile(player.getLang(), "fortress/" + getTemplate().getId() + "-d.htm");
 						html.replace("%objectId%", String.valueOf(getObjectId()));
 						html.replace("%npcname%", getName());
 						player.sendPacket(html);
 					}
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+					html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 					html.replace("%objectId%", String.valueOf(getObjectId()));
 					player.sendPacket(html);
 				}
@@ -196,11 +196,11 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 					} else if (val.equalsIgnoreCase("withdraw")) {
 						showVaultWindowWithdraw(player);
 					} else {
-						html.setFile(player.getHtmlPrefix(), "fortress/foreman-vault.htm");
+						html.setFile(player.getLang(), "fortress/foreman-vault.htm");
 						sendHtmlMessage(player, html);
 					}
 				} else {
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+					html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 					sendHtmlMessage(player, html);
 				}
 				return;
@@ -209,7 +209,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 					final FortFunction func = getFort().getFortFunction(Fort.FUNC_TELEPORT);
 					if (func == null) {
 						final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "fortress/foreman-nac.htm");
+						html.setFile(player.getLang(), "fortress/foreman-nac.htm");
 						sendHtmlMessage(player, html);
 					} else {
 						final String listName = "tel" + func.getLvl();
@@ -221,9 +221,9 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 				} else if (val.equalsIgnoreCase("support")) {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 					if (getFort().getFortFunction(Fort.FUNC_SUPPORT) == null) {
-						html.setFile(player.getHtmlPrefix(), "fortress/foreman-nac.htm");
+						html.setFile(player.getLang(), "fortress/foreman-nac.htm");
 					} else {
-						html.setFile(player.getHtmlPrefix(), "fortress/support" + getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() + ".htm");
+						html.setFile(player.getLang(), "fortress/support" + getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() + ".htm");
 						html.replace("%mp%", String.valueOf((int) getCurrentMp()));
 					}
 					sendHtmlMessage(player, html);
@@ -231,7 +231,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 					showChatWindow(player);
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-functions.htm");
+					html.setFile(player.getLang(), "fortress/foreman-functions.htm");
 					if (getFort().getFortFunction(Fort.FUNC_RESTORE_EXP) != null) {
 						html.replace("%xp_regen%", String.valueOf(getFort().getFortFunction(Fort.FUNC_RESTORE_EXP).getLvl()));
 					} else {
@@ -261,26 +261,26 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							val = st.nextToken();
 							if (val.equalsIgnoreCase("hp_cancel")) {
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel.htm");
+								html.setFile(player.getLang(), "fortress/functions-cancel.htm");
 								html.replace("%apply%", "recovery hp 0");
 								sendHtmlMessage(player, html);
 								return;
 							} else if (val.equalsIgnoreCase("mp_cancel")) {
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel.htm");
+								html.setFile(player.getLang(), "fortress/functions-cancel.htm");
 								html.replace("%apply%", "recovery mp 0");
 								sendHtmlMessage(player, html);
 								return;
 							} else if (val.equalsIgnoreCase("exp_cancel")) {
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel.htm");
+								html.setFile(player.getLang(), "fortress/functions-cancel.htm");
 								html.replace("%apply%", "recovery exp 0");
 								sendHtmlMessage(player, html);
 								return;
 							} else if (val.equalsIgnoreCase("edit_hp")) {
 								val = st.nextToken();
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-apply.htm");
+								html.setFile(player.getLang(), "fortress/functions-apply.htm");
 								html.replace("%name%", "(HP Recovery Device)");
 								int percent = Integer.parseInt(val);
 								int cost;
@@ -301,7 +301,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							} else if (val.equalsIgnoreCase("edit_mp")) {
 								val = st.nextToken();
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-apply.htm");
+								html.setFile(player.getLang(), "fortress/functions-apply.htm");
 								html.replace("%name%", "(MP Recovery)");
 								int percent = Integer.parseInt(val);
 								int cost;
@@ -321,7 +321,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							} else if (val.equalsIgnoreCase("edit_exp")) {
 								val = st.nextToken();
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-apply.htm");
+								html.setFile(player.getLang(), "fortress/functions-apply.htm");
 								html.replace("%name%", "(EXP Recovery Device)");
 								int percent = Integer.parseInt(val);
 								int cost;
@@ -343,10 +343,10 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									int fee;
 									val = st.nextToken();
 									final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-									html.setFile(player.getHtmlPrefix(), "fortress/functions-apply_confirmed.htm");
+									html.setFile(player.getLang(), "fortress/functions-apply_confirmed.htm");
 									if (getFort().getFortFunction(Fort.FUNC_RESTORE_HP) != null) {
 										if (getFort().getFortFunction(Fort.FUNC_RESTORE_HP).getLvl() == Integer.parseInt(val)) {
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-used.htm");
+											html.setFile(player.getLang(), "fortress/functions-used.htm");
 											html.replace("%val%", String.valueOf(val) + "%");
 											sendHtmlMessage(player, html);
 											return;
@@ -356,7 +356,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									switch (percent) {
 										case 0:
 											fee = 0;
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel_confirmed.htm");
+											html.setFile(player.getLang(), "fortress/functions-cancel_confirmed.htm");
 											break;
 										case 300:
 											fee = FeatureConfig.FS_HPREG1_FEE;
@@ -366,7 +366,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 											break;
 									}
 									if (!getFort().updateFunctions(player, Fort.FUNC_RESTORE_HP, percent, fee, FeatureConfig.FS_HPREG_FEE_RATIO, (getFort().getFortFunction(Fort.FUNC_RESTORE_HP) == null))) {
-										html.setFile(player.getHtmlPrefix(), "fortress/low_adena.htm");
+										html.setFile(player.getLang(), "fortress/low_adena.htm");
 										sendHtmlMessage(player, html);
 									}
 									sendHtmlMessage(player, html);
@@ -377,10 +377,10 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									int fee;
 									val = st.nextToken();
 									final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-									html.setFile(player.getHtmlPrefix(), "fortress/functions-apply_confirmed.htm");
+									html.setFile(player.getLang(), "fortress/functions-apply_confirmed.htm");
 									if (getFort().getFortFunction(Fort.FUNC_RESTORE_MP) != null) {
 										if (getFort().getFortFunction(Fort.FUNC_RESTORE_MP).getLvl() == Integer.parseInt(val)) {
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-used.htm");
+											html.setFile(player.getLang(), "fortress/functions-used.htm");
 											html.replace("%val%", String.valueOf(val) + "%");
 											sendHtmlMessage(player, html);
 											return;
@@ -390,7 +390,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									switch (percent) {
 										case 0:
 											fee = 0;
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel_confirmed.htm");
+											html.setFile(player.getLang(), "fortress/functions-cancel_confirmed.htm");
 											break;
 										case 40:
 											fee = FeatureConfig.FS_MPREG1_FEE;
@@ -400,7 +400,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 											break;
 									}
 									if (!getFort().updateFunctions(player, Fort.FUNC_RESTORE_MP, percent, fee, FeatureConfig.FS_MPREG_FEE_RATIO, (getFort().getFortFunction(Fort.FUNC_RESTORE_MP) == null))) {
-										html.setFile(player.getHtmlPrefix(), "fortress/low_adena.htm");
+										html.setFile(player.getLang(), "fortress/low_adena.htm");
 										sendHtmlMessage(player, html);
 									}
 									sendHtmlMessage(player, html);
@@ -411,10 +411,10 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									int fee;
 									val = st.nextToken();
 									final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-									html.setFile(player.getHtmlPrefix(), "fortress/functions-apply_confirmed.htm");
+									html.setFile(player.getLang(), "fortress/functions-apply_confirmed.htm");
 									if (getFort().getFortFunction(Fort.FUNC_RESTORE_EXP) != null) {
 										if (getFort().getFortFunction(Fort.FUNC_RESTORE_EXP).getLvl() == Integer.parseInt(val)) {
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-used.htm");
+											html.setFile(player.getLang(), "fortress/functions-used.htm");
 											html.replace("%val%", String.valueOf(val) + "%");
 											sendHtmlMessage(player, html);
 											return;
@@ -424,7 +424,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									switch (percent) {
 										case 0:
 											fee = 0;
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel_confirmed.htm");
+											html.setFile(player.getLang(), "fortress/functions-cancel_confirmed.htm");
 											break;
 										case 45:
 											fee = FeatureConfig.FS_EXPREG1_FEE;
@@ -434,7 +434,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 											break;
 									}
 									if (!getFort().updateFunctions(player, Fort.FUNC_RESTORE_EXP, percent, fee, FeatureConfig.FS_EXPREG_FEE_RATIO, (getFort().getFortFunction(Fort.FUNC_RESTORE_EXP) == null))) {
-										html.setFile(player.getHtmlPrefix(), "fortress/low_adena.htm");
+										html.setFile(player.getLang(), "fortress/low_adena.htm");
 										sendHtmlMessage(player, html);
 									}
 									sendHtmlMessage(player, html);
@@ -443,7 +443,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							}
 						}
 						final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "fortress/edit_recovery.htm");
+						html.setFile(player.getLang(), "fortress/edit_recovery.htm");
 						String hp = "[<a action=\"bypass -h npc_%objectId%_manage recovery edit_hp 300\">300%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_hp 400\">400%</a>]";
 						String exp = "[<a action=\"bypass -h npc_%objectId%_manage recovery edit_exp 45\">45%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_exp 50\">50%</a>]";
 						String mp = "[<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 40\">40%</a>][<a action=\"bypass -h npc_%objectId%_manage recovery edit_mp 50\">50%</a>]";
@@ -484,20 +484,20 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							val = st.nextToken();
 							if (val.equalsIgnoreCase("tele_cancel")) {
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel.htm");
+								html.setFile(player.getLang(), "fortress/functions-cancel.htm");
 								html.replace("%apply%", "other tele 0");
 								sendHtmlMessage(player, html);
 								return;
 							} else if (val.equalsIgnoreCase("support_cancel")) {
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel.htm");
+								html.setFile(player.getLang(), "fortress/functions-cancel.htm");
 								html.replace("%apply%", "other support 0");
 								sendHtmlMessage(player, html);
 								return;
 							} else if (val.equalsIgnoreCase("edit_support")) {
 								val = st.nextToken();
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-apply.htm");
+								html.setFile(player.getLang(), "fortress/functions-apply.htm");
 								html.replace("%name%", "Insignia (Supplementary Magic)");
 								int stage = Integer.parseInt(val);
 								int cost;
@@ -517,7 +517,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							} else if (val.equalsIgnoreCase("edit_tele")) {
 								val = st.nextToken();
 								final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-								html.setFile(player.getHtmlPrefix(), "fortress/functions-apply.htm");
+								html.setFile(player.getLang(), "fortress/functions-apply.htm");
 								html.replace("%name%", "Mirror (Teleportation Device)");
 								int stage = Integer.parseInt(val);
 								int cost;
@@ -539,10 +539,10 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									int fee;
 									val = st.nextToken();
 									final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-									html.setFile(player.getHtmlPrefix(), "fortress/functions-apply_confirmed.htm");
+									html.setFile(player.getLang(), "fortress/functions-apply_confirmed.htm");
 									if (getFort().getFortFunction(Fort.FUNC_TELEPORT) != null) {
 										if (getFort().getFortFunction(Fort.FUNC_TELEPORT).getLvl() == Integer.parseInt(val)) {
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-used.htm");
+											html.setFile(player.getLang(), "fortress/functions-used.htm");
 											html.replace("%val%", "Stage " + String.valueOf(val));
 											sendHtmlMessage(player, html);
 											return;
@@ -552,7 +552,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									switch (lvl) {
 										case 0:
 											fee = 0;
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel_confirmed.htm");
+											html.setFile(player.getLang(), "fortress/functions-cancel_confirmed.htm");
 											break;
 										case 1:
 											fee = FeatureConfig.FS_TELE1_FEE;
@@ -562,7 +562,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 											break;
 									}
 									if (!getFort().updateFunctions(player, Fort.FUNC_TELEPORT, lvl, fee, FeatureConfig.FS_TELE_FEE_RATIO, (getFort().getFortFunction(Fort.FUNC_TELEPORT) == null))) {
-										html.setFile(player.getHtmlPrefix(), "fortress/low_adena.htm");
+										html.setFile(player.getLang(), "fortress/low_adena.htm");
 										sendHtmlMessage(player, html);
 									}
 									sendHtmlMessage(player, html);
@@ -573,10 +573,10 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									int fee;
 									val = st.nextToken();
 									final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-									html.setFile(player.getHtmlPrefix(), "fortress/functions-apply_confirmed.htm");
+									html.setFile(player.getLang(), "fortress/functions-apply_confirmed.htm");
 									if (getFort().getFortFunction(Fort.FUNC_SUPPORT) != null) {
 										if (getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() == Integer.parseInt(val)) {
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-used.htm");
+											html.setFile(player.getLang(), "fortress/functions-used.htm");
 											html.replace("%val%", "Stage " + String.valueOf(val));
 											sendHtmlMessage(player, html);
 											return;
@@ -586,7 +586,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 									switch (lvl) {
 										case 0:
 											fee = 0;
-											html.setFile(player.getHtmlPrefix(), "fortress/functions-cancel_confirmed.htm");
+											html.setFile(player.getLang(), "fortress/functions-cancel_confirmed.htm");
 											break;
 										case 1:
 											fee = FeatureConfig.FS_SUPPORT1_FEE;
@@ -596,7 +596,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 											break;
 									}
 									if (!getFort().updateFunctions(player, Fort.FUNC_SUPPORT, lvl, fee, FeatureConfig.FS_SUPPORT_FEE_RATIO, (getFort().getFortFunction(Fort.FUNC_SUPPORT) == null))) {
-										html.setFile(player.getHtmlPrefix(), "fortress/low_adena.htm");
+										html.setFile(player.getLang(), "fortress/low_adena.htm");
 										sendHtmlMessage(player, html);
 									} else {
 										sendHtmlMessage(player, html);
@@ -606,7 +606,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							}
 						}
 						final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "fortress/edit_other.htm");
+						html.setFile(player.getLang(), "fortress/edit_other.htm");
 						String tele = "[<a action=\"bypass -h npc_%objectId%_manage other edit_tele 1\">Level 1</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_tele 2\">Level 2</a>]";
 						String support = "[<a action=\"bypass -h npc_%objectId%_manage other edit_support 1\">Level 1</a>][<a action=\"bypass -h npc_%objectId%_manage other edit_support 2\">Level 2</a>]";
 						if (getFort().getFortFunction(Fort.FUNC_TELEPORT) != null) {
@@ -632,12 +632,12 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 						showChatWindow(player);
 					} else {
 						final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-						html.setFile(player.getHtmlPrefix(), "fortress/manage.htm");
+						html.setFile(player.getLang(), "fortress/manage.htm");
 						sendHtmlMessage(player, html);
 					}
 				} else {
 					final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-					html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+					html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 					sendHtmlMessage(player, html);
 				}
 				return;
@@ -669,13 +669,13 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 							if (!((skill.getMpConsume() + skill.getMpInitialConsume()) > getCurrentMp())) {
 								this.doCast(skill);
 							} else {
-								html.setFile(player.getHtmlPrefix(), "fortress/support-no_mana.htm");
+								html.setFile(player.getLang(), "fortress/support-no_mana.htm");
 								html.replace("%mp%", String.valueOf((int) getCurrentMp()));
 								sendHtmlMessage(player, html);
 								return;
 							}
 						}
-						html.setFile(player.getHtmlPrefix(), "fortress/support-done.htm");
+						html.setFile(player.getLang(), "fortress/support-done.htm");
 						html.replace("%mp%", String.valueOf((int) getCurrentMp()));
 						sendHtmlMessage(player, html);
 					} catch (Exception e) {
@@ -690,7 +690,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 				if (getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() == 0) {
 					return;
 				}
-				html.setFile(player.getHtmlPrefix(), "fortress/support" + getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() + ".htm");
+				html.setFile(player.getLang(), "fortress/support" + getFort().getFortFunction(Fort.FUNC_SUPPORT).getLvl() + ".htm");
 				html.replace("%mp%", String.valueOf((int) getStatus().getCurrentMp()));
 				sendHtmlMessage(player, html);
 				return;
@@ -729,7 +729,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 		}
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(player.getHtmlPrefix(), filename);
+		html.setFile(player.getLang(), filename);
 		html.replace("%objectId%", String.valueOf(getObjectId()));
 		html.replace("%npcname%", getName());
 		player.sendPacket(html);
@@ -761,7 +761,7 @@ public class L2FortManagerInstance extends L2MerchantInstance {
 			player.sendPacket(new WareHouseWithdrawalList(player, WareHouseWithdrawalList.CLAN));
 		} else {
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-			html.setFile(player.getHtmlPrefix(), "fortress/foreman-noprivs.htm");
+			html.setFile(player.getLang(), "fortress/foreman-noprivs.htm");
 			sendHtmlMessage(player, html);
 		}
 	}
