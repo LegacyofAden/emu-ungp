@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.AccountInfo;
 import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.AgeLimit;
+import org.l2junity.commons.model.enums.RegisterResult;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.commons.rmi.IGameServerRMI;
 import org.l2junity.commons.rmi.ILoginServerRMI;
@@ -21,6 +22,8 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.ConnectException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -58,19 +61,32 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		gameServerInfo.setAgeLimit(AgeLimit.valueOf(GeneralConfig.SERVER_LIST_AGE));
 		gameServerInfo.setServerType(GeneralConfig.SERVER_LIST_TYPE);
 		connectToLoginServer();
+		ThreadPool.getInstance().scheduleGeneralAtFixedRate(new LoginServerStatusWatcher(), 0, 1, TimeUnit.SECONDS);
 	}
 
 	private void connectToLoginServer() {
 		try {
 			Registry registry = LocateRegistry.getRegistry(GameserverConfig.GAME_SERVER_LOGIN_HOST, GameserverConfig.GAME_SERVER_LOGIN_PORT);
 			connection = (ILoginServerRMI) registry.lookup("loginServer");
-			connection.registerGameServer(this, gameServerInfo);
-			reconnectTask = null;
-		} catch (Exception e) {
-			log.error("Connection to login server failed", e);
-			onConnectionLost();
+			RegisterResult registerResult = connection.registerGameServer(this, gameServerInfo);
+			switch (registerResult) {
+				case SUCCESS:
+					log.info("Connected to login server successfully.");
+					break;
+				default:
+					log.warn("Connection to login server failed. Reason: {}", registerResult.toString());
+					break;
+			}
 		}
-		log.info("Connected to login server successfully.");
+		catch (ConnectException e) {
+			log.warn("Loginserver isn't available. Make sure it's up and running.");
+		}
+		catch (Exception e) {
+			log.error("Connection to login server failed", e);
+		}
+		finally {
+			reconnectTask = null;
+		}
 	}
 
 	@Override
@@ -123,8 +139,8 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		try {
 			connection.changePassword(player.getAccountName(), oldPass, newPass);
 		}
-		catch (Exception e) {
-			log.error("Error while changePassword");
+		catch (RemoteException e) {
+			log.error("Error while changePassword", e);
 			onConnectionLost();
 		}
 	}
@@ -133,8 +149,8 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		try {
 			connection.changeAccessLevel(accountName, accessLevel);
 		}
-		catch (Exception e) {
-			log.error("Error while changeAccessLevel");
+		catch (RemoteException e) {
+			log.error("Error while changeAccessLevel", e);
 			onConnectionLost();
 		}
 	}
@@ -143,23 +159,10 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		try {
 			connection.updateGameServer(this, gameServerInfo);
 		}
-		catch (Exception e) {
-			log.error("Error while updating game server status");
+		catch (RemoteException e) {
+			log.error("Error while updating game server status", e);
 			onConnectionLost();
 		}
-	}
-
-	private void onConnectionLost() {
-		if (reconnectTask != null)
-			return;
-
-		log.info("Connection with login server lost.");
-		connection = null;
-
-		reconnectTask = ThreadPool.getInstance().scheduleGeneral(() -> {
-			log.info("Reconnecting to login server...");
-			connectToLoginServer();
-		}, 2, TimeUnit.SECONDS);
 	}
 
 	@Override
@@ -201,6 +204,33 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 
 	public int getMaxOnline() {
 		return gameServerInfo.getMaxOnline();
+	}
+
+	private void onConnectionLost() {
+		if (reconnectTask != null)
+			return;
+
+		log.info("Connection with login server lost.");
+		connection = null;
+
+		reconnectTask = ThreadPool.getInstance().scheduleGeneral(() -> {
+			log.info("Reconnecting to login server...");
+			connectToLoginServer();
+		}, 2, TimeUnit.SECONDS);
+	}
+
+	private class LoginServerStatusWatcher implements Runnable {
+		@Override
+		public void run() {
+			try {
+				connection.testConnection();
+			}
+			catch (Exception e) {
+				if (reconnectTask == null) {
+					onConnectionLost();
+				}
+			}
+		}
 	}
 
 	public static GameServerRMI getInstance() {
