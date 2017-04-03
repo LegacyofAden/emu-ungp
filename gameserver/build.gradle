@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'propdeps-idea'
+apply plugin: 'application'
+
+run.workingDir = new File("./dist")
+mainClassName = "org.l2junity.gameserver.GameServer"
+
+applicationDefaultJvmArgs = [
+		"-server",
+		"-Xms2G",
+		"-Xmx8G"
+]
+
+defaultTasks 'assemble'
+distTar.enabled = false
+bootRepackage.enabled = false
+
+sourceSets {
+	scripts {
+		java {
+			srcDir('dist/data/scripts')
+		}
+		compileClasspath += main.output + sourceSets.main.runtimeClasspath
+		runtimeClasspath += main.output + sourceSets.main.runtimeClasspath
+	}
+}
+
+dependencies {
+	provided('org.projectlombok:lombok:+')
+	compile project(':commons')
+	compile project(':geodriver')
+	compile project(':network')
+	compile project(':mmocore')
+
+	compile('com.googlecode.htmlcompressor:htmlcompressor:1.5.2')
+	compile('com.google.javascript:closure-compiler:v20151216')
+	compile('com.yahoo.platform.yui:yuicompressor:2.4.8')
+
+	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')
+	compile(group: 'it.sauronsoftware.cron4j', name: 'cron4j', version: '2.2.5')
+	compile(group: 'net.objecthunter', name: 'exp4j', version: '0.4.8')
+
+	runtime(group: 'org.eclipse.jdt.core.compiler', name: 'ecj', version: '4.4.2')
+}
+
+configurations {
+	compile.exclude group: 'ch.qos.logback'
+}
+
+distZip {
+	from('dist') {
+		into(baseName + '/bin/')
+	}
+}
