@@ -18,9 +18,9 @@
  */
 package handlers.voicedcommandhandlers;
 
-import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
+import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
@@ -34,18 +34,14 @@ public class Lang implements IVoicedCommandHandler {
 
 	@Override
 	public boolean useVoicedCommand(String command, PlayerInstance activeChar, String params) {
-		if (!L2JModsConfig.L2JMOD_MULTILANG_ENABLE || !L2JModsConfig.L2JMOD_MULTILANG_VOICED_ALLOW) {
-			return false;
-		}
-
 		final NpcHtmlMessage msg = new NpcHtmlMessage();
 		if (params == null) {
 			final StringBuilder html = new StringBuilder(100);
-			for (String lang : L2JModsConfig.L2JMOD_MULTILANG_ALLOWED) {
-				html.append("<button value=\"" + lang.toUpperCase() + "\" action=\"bypass -h voice .lang " + lang + "\" width=60 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><br>");
+			for (Language lang : Language.values()) {
+				html.append("<button value=\"").append(lang.getShortName()).append("\" action=\"bypass -h voice .lang ").append(lang.toString()).append("\" width=60 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><br>");
 			}
 
-			msg.setFile(activeChar.getHtmlPrefix(), "data/html/mods/Lang/LanguageSelect.htm");
+			msg.setFile(activeChar.getLang(), "data/html/mods/lang/languageselect.htm");
 			msg.replace("%list%", html.toString());
 			activeChar.sendPacket(msg);
 			return true;
@@ -54,12 +50,14 @@ public class Lang implements IVoicedCommandHandler {
 		final StringTokenizer st = new StringTokenizer(params);
 		if (st.hasMoreTokens()) {
 			final String lang = st.nextToken().trim();
-			if (activeChar.setLang(lang)) {
-				msg.setFile(activeChar.getHtmlPrefix(), "data/html/mods/Lang/Ok.htm");
-				activeChar.sendPacket(msg);
-				return true;
+			try {
+				Language language = Language.valueOf(lang);
+				activeChar.setLang(language);
+				msg.setFile(language, "data/html/mods/lang/ok.htm");
 			}
-			msg.setFile(activeChar.getHtmlPrefix(), "data/html/mods/Lang/Error.htm");
+			catch (Exception e) {
+				msg.setFile(activeChar.getLang(), "data/html/mods/lang/error.htm");
+			}
 			activeChar.sendPacket(msg);
 			return true;
 		}

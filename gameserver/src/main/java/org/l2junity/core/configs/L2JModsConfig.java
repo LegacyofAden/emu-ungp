@@ -308,30 +308,6 @@ public class L2JModsConfig {
 			})
 	public static boolean L2JMOD_CHAT_ADMIN;
 
-	@ConfigProperty(name = "MultiLangEnable", value = "false", comment =
-			{
-					"Enable or disable multilingual support."
-			})
-	public static boolean L2JMOD_MULTILANG_ENABLE;
-
-	@ConfigProperty(name = "MultiLangAllowed", value = "en,ru", comment =
-			{
-					"List of allowed languages, semicolon separated."
-			})
-	public static List<String> L2JMOD_MULTILANG_ALLOWED = new ArrayList<>();
-
-	@ConfigProperty(name = "MultiLangDefault", value = "en", comment =
-			{
-					"Default language, if not defined."
-			})
-	public static String L2JMOD_MULTILANG_DEFAULT;
-
-	@ConfigProperty(name = "MultiLangVoiceCommand", value = "true", comment =
-			{
-					"Enable or disable voice command .lang for changing languages on the fly."
-			})
-	public static boolean L2JMOD_MULTILANG_VOICED_ALLOW;
-
 	@ConfigProperty(name = "L2WalkerProtection", value = "false", comment =
 			{
 					"Basic protection against L2Walker."
