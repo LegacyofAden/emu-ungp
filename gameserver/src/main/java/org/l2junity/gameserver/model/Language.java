@@ -15,4 +15,13 @@ public enum Language implements Serializable {
 	public String getShortName() {
 		return shortName;
 	}
+
+	public Language valueOfShort(String shortName) {
+		for (Language language : Language.values()) {
+			if (language.getShortName().equals(shortName)) {
+				return language;
+			}
+		}
+		return null;
+	}
 }
