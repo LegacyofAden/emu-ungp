@@ -30,7 +30,7 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
@@ -178,7 +178,7 @@ public final class SellBuffsManager implements IGameXmlReader {
 				continue;
 			}
 
-			final L2Item item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
+			final ItemTemplate item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
 
 			sb.append("<tr>");
 			sb.append("<td fixwidth=\"20\"></td>");

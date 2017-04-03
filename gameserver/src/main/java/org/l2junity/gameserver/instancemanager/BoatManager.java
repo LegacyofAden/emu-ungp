@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
 import java.util.HashMap;
@@ -96,7 +96,7 @@ public class BoatManager {
 		npcDat.set("baseMpReg", 3.e-3f);
 		npcDat.set("basePDef", 100);
 		npcDat.set("baseMDef", 100);
-		L2CharTemplate template = new L2CharTemplate(npcDat);
+		CharTemplate template = new CharTemplate(npcDat);
 		L2BoatInstance boat = new L2BoatInstance(template);
 		_boats.put(boat.getObjectId(), boat);
 		boat.setHeading(heading);

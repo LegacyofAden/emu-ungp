@@ -37,7 +37,7 @@ import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -72,7 +72,7 @@ public class ClanTable {
 	@Getter(lazy = true)
 	private static final ClanTable instance = new ClanTable();
 
-	private final Map<Integer, L2Clan> _clans = new ConcurrentHashMap<>();
+	private final Map<Integer, Clan> _clans = new ConcurrentHashMap<>();
 
 	protected ClanTable() {
 		// forums has to be loaded before clan data, because of last forum id used should have also memo included
@@ -80,7 +80,7 @@ public class ClanTable {
 			ForumsBBSManager.getInstance().initRoot();
 		}
 
-		L2Clan clan;
+		Clan clan;
 		// Count the clans
 		int clanCount = 0;
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
@@ -88,7 +88,7 @@ public class ClanTable {
 			 ResultSet rs = s.executeQuery("SELECT clan_id FROM clan_data")) {
 			while (rs.next()) {
 				int clanId = rs.getInt("clan_id");
-				_clans.put(clanId, new L2Clan(clanId));
+				_clans.put(clanId, new Clan(clanId));
 				clan = getClan(clanId);
 				if (clan.getDissolvingExpiryTime() != 0) {
 					scheduleRemoveClan(clan.getId());
@@ -108,7 +108,7 @@ public class ClanTable {
 	 *
 	 * @return the clans
 	 */
-	public Collection<L2Clan> getClans() {
+	public Collection<Clan> getClans() {
 		return _clans.values();
 	}
 
@@ -125,11 +125,11 @@ public class ClanTable {
 	 * @param clanId
 	 * @return
 	 */
-	public L2Clan getClan(int clanId) {
+	public Clan getClan(int clanId) {
 		return _clans.get(clanId);
 	}
 
-	public L2Clan getClanByName(String clanName) {
+	public Clan getClanByName(String clanName) {
 		return getClans().stream().filter(c -> c.getName().equalsIgnoreCase(clanName)).findFirst().orElse(null);
 	}
 
@@ -140,7 +140,7 @@ public class ClanTable {
 	 * @param clanName
 	 * @return NULL if clan with same name already exists
 	 */
-	public L2Clan createClan(Player player, String clanName) {
+	public Clan createClan(Player player, String clanName) {
 		if (player == null) {
 			return null;
 		}
@@ -174,7 +174,7 @@ public class ClanTable {
 			return null;
 		}
 
-		final L2Clan clan = new L2Clan(IdFactory.getInstance().getNextId(), clanName);
+		final Clan clan = new Clan(IdFactory.getInstance().getNextId(), clanName);
 		final ClanMember leader = new ClanMember(clan, player);
 		clan.setLeader(leader);
 		leader.setPlayerInstance(player);
@@ -198,7 +198,7 @@ public class ClanTable {
 	}
 
 	public synchronized void destroyClan(int clanId) {
-		L2Clan clan = getClan(clanId);
+		Clan clan = getClan(clanId);
 		if (clan == null) {
 			return;
 		}
@@ -272,7 +272,7 @@ public class ClanTable {
 			if (fortId != 0) {
 				Fort fort = FortManager.getInstance().getFortById(fortId);
 				if (fort != null) {
-					L2Clan owner = fort.getOwnerClan();
+					Clan owner = fort.getOwnerClan();
 					if (clan == owner) {
 						fort.removeOwner(true);
 					}
@@ -299,7 +299,7 @@ public class ClanTable {
 	}
 
 	public boolean isAllyExists(String allyName) {
-		for (L2Clan clan : getClans()) {
+		for (Clan clan : getClans()) {
 			if ((clan.getAllyName() != null) && clan.getAllyName().equalsIgnoreCase(allyName)) {
 				return true;
 			}
@@ -325,8 +325,8 @@ public class ClanTable {
 	}
 
 	public void deleteClansWar(int clanId1, int clanId2) {
-		final L2Clan clan1 = ClanTable.getInstance().getClan(clanId1);
-		final L2Clan clan2 = ClanTable.getInstance().getClan(clanId2);
+		final Clan clan1 = ClanTable.getInstance().getClan(clanId1);
+		final Clan clan2 = ClanTable.getInstance().getClan(clanId2);
 
 		EventDispatcher.getInstance().notifyEventAsync(new OnClanWarFinish(clan1, clan2));
 
@@ -350,8 +350,8 @@ public class ClanTable {
 			 Statement statement = con.createStatement();
 			 ResultSet rset = statement.executeQuery("SELECT clan1, clan2, clan1Kill, clan2Kill, winnerClan, startTime, endTime, state FROM clan_wars")) {
 			while (rset.next()) {
-				final L2Clan attacker = getClan(rset.getInt("clan1"));
-				final L2Clan attacked = getClan(rset.getInt("clan2"));
+				final Clan attacker = getClan(rset.getInt("clan1"));
+				final Clan attacked = getClan(rset.getInt("clan2"));
 				if ((attacker != null) && (attacked != null)) {
 					final ClanWarState state = ClanWarState.values()[rset.getInt("state")];
 
@@ -371,7 +371,7 @@ public class ClanTable {
 	 * Check for nonexistent alliances
 	 */
 	private void allianceCheck() {
-		for (L2Clan clan : _clans.values()) {
+		for (Clan clan : _clans.values()) {
 			int allyId = clan.getAllyId();
 			if ((allyId != 0) && (clan.getId() != allyId)) {
 				if (!_clans.containsKey(allyId)) {
@@ -385,10 +385,10 @@ public class ClanTable {
 		}
 	}
 
-	public List<L2Clan> getClanAllies(int allianceId) {
-		final List<L2Clan> clanAllies = new ArrayList<>();
+	public List<Clan> getClanAllies(int allianceId) {
+		final List<Clan> clanAllies = new ArrayList<>();
 		if (allianceId != 0) {
-			for (L2Clan clan : _clans.values()) {
+			for (Clan clan : _clans.values()) {
 				if ((clan != null) && (clan.getAllyId() == allianceId)) {
 					clanAllies.add(clan);
 				}
@@ -398,7 +398,7 @@ public class ClanTable {
 	}
 
 	public void shutdown() {
-		for (L2Clan clan : _clans.values()) {
+		for (Clan clan : _clans.values()) {
 			clan.updateInDB();
 		}
 	}

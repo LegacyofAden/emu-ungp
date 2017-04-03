@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * This class is dedicated to the management of EtcItem.
  */
-public final class EtcItem extends L2Item {
+public final class EtcItem extends ItemTemplate {
 	private String _handler;
 	private EtcItemType _type;
 	private List<ExtractableProduct> _extractableItems;
@@ -48,13 +48,13 @@ public final class EtcItem extends L2Item {
 	public void set(StatsSet set) {
 		super.set(set);
 		_type = set.getEnum("etcitem_type", EtcItemType.class, EtcItemType.NONE);
-		_type1 = L2Item.TYPE1_ITEM_QUESTITEM_ADENA;
-		_type2 = L2Item.TYPE2_OTHER; // default is other
+		_type1 = ItemTemplate.TYPE1_ITEM_QUESTITEM_ADENA;
+		_type2 = ItemTemplate.TYPE2_OTHER; // default is other
 
 		if (isQuestItem()) {
-			_type2 = L2Item.TYPE2_QUEST;
+			_type2 = ItemTemplate.TYPE2_QUEST;
 		} else if ((getId() == Inventory.ADENA_ID) || (getId() == Inventory.ANCIENT_ADENA_ID)) {
-			_type2 = L2Item.TYPE2_MONEY;
+			_type2 = ItemTemplate.TYPE2_MONEY;
 		}
 
 		_handler = set.getString("handler", null); // ! null !

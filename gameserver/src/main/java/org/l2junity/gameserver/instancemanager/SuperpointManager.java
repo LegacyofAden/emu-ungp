@@ -27,7 +27,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveNodeArrived;
@@ -191,8 +191,8 @@ public class SuperpointManager implements IGameXmlReader {
 	 */
 	public boolean isOnWalk(Npc npc) {
 		if (npc.isMonster()) {
-			if (((L2MonsterInstance) npc).getLeader() != null) {
-				npc = ((L2MonsterInstance) npc).getLeader();
+			if (((MonsterInstance) npc).getLeader() != null) {
+				npc = ((MonsterInstance) npc).getLeader();
 			}
 		}
 
@@ -213,8 +213,8 @@ public class SuperpointManager implements IGameXmlReader {
 	 */
 	public void stopMoving(Npc npc, boolean suspend, boolean stoppedByAttack) {
 		if (npc.isMonster()) {
-			if (((L2MonsterInstance) npc).getLeader() != null) {
-				npc = ((L2MonsterInstance) npc).getLeader();
+			if (((MonsterInstance) npc).getLeader() != null) {
+				npc = ((MonsterInstance) npc).getLeader();
 			}
 		}
 

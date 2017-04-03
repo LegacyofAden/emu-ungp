@@ -26,7 +26,7 @@ import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.data.xml.impl.StaticObjectData;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.entity.Fort;
 
@@ -90,7 +90,7 @@ public final class FortManager {
 		return null;
 	}
 
-	public final Fort getFortByOwner(L2Clan clan) {
+	public final Fort getFortByOwner(Clan clan) {
 		for (Fort f : getForts()) {
 			if (f.getOwnerClan() == clan) {
 				return f;

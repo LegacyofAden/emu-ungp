@@ -34,7 +34,7 @@ import org.l2junity.gameserver.network.client.send.ConfirmDlg;
 public class DoorInstanceAction implements IActionHandler {
 	@Override
 	public boolean action(Player activeChar, WorldObject target, boolean interact) {
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (activeChar.getTarget() != target) {
 			activeChar.setTarget(target);
 		} else if (interact) {

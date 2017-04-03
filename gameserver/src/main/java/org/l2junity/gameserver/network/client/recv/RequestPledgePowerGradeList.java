@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.L2Clan.RankPrivs;
+import org.l2junity.gameserver.model.Clan;
+import org.l2junity.gameserver.model.Clan.RankPrivs;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.PledgePowerGradeList;
@@ -43,7 +43,7 @@ public final class RequestPledgePowerGradeList implements IClientIncomingPacket 
 			return;
 		}
 
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		if (clan != null) {
 			RankPrivs[] privs = clan.getAllRankPrivs();
 			player.sendPacket(new PledgePowerGradeList(privs));

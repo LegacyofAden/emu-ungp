@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.model.buylist.Product;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.WarehouseItem;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
@@ -39,9 +39,9 @@ public class ItemInfo {
 	private int _objectId;
 
 	/**
-	 * The L2Item template of the L2ItemInstance
+	 * The ItemTemplate template of the L2ItemInstance
 	 */
-	private L2Item _item;
+	private ItemTemplate _item;
 
 	/**
 	 * The level of enchant on the L2ItemInstance
@@ -116,7 +116,7 @@ public class ItemInfo {
 		// Get the Identifier of the L2ItemInstance
 		_objectId = item.getObjectId();
 
-		// Get the L2Item of the L2ItemInstance
+		// Get the ItemTemplate of the L2ItemInstance
 		_item = item.getItem();
 
 		// Get the enchant level of the L2ItemInstance
@@ -181,7 +181,7 @@ public class ItemInfo {
 		// Get the Identifier of the L2ItemInstance
 		_objectId = item.getObjectId();
 
-		// Get the L2Item of the L2ItemInstance
+		// Get the ItemTemplate of the L2ItemInstance
 		_item = item.getItem();
 
 		// Get the enchant level of the L2ItemInstance
@@ -231,7 +231,7 @@ public class ItemInfo {
 		// Get the Identifier of the L2ItemInstance
 		_objectId = 0;
 
-		// Get the L2Item of the L2ItemInstance
+		// Get the ItemTemplate of the L2ItemInstance
 		_item = item.getItem();
 
 		// Get the enchant level of the L2ItemInstance
@@ -271,7 +271,7 @@ public class ItemInfo {
 		// Get the Identifier of the L2ItemInstance
 		_objectId = item.getObjectId();
 
-		// Get the L2Item of the L2ItemInstance
+		// Get the ItemTemplate of the L2ItemInstance
 		_item = item.getItem();
 
 		// Get the enchant level of the L2ItemInstance
@@ -309,7 +309,7 @@ public class ItemInfo {
 		return _objectId;
 	}
 
-	public L2Item getItem() {
+	public ItemTemplate getItem() {
 		return _item;
 	}
 

@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -112,7 +112,7 @@ public final class Orfen extends AbstractNpcAI {
 				} else {
 					loc = POS[3];
 				}
-				L2GrandBossInstance orfen = (L2GrandBossInstance) addSpawn(ORFEN, loc, false, 0);
+				GrandBossInstance orfen = (GrandBossInstance) addSpawn(ORFEN, loc, false, 0);
 				GrandBossManager.getInstance().setBossStatus(ORFEN, ALIVE);
 				spawnBoss(orfen);
 			}
@@ -123,7 +123,7 @@ public final class Orfen extends AbstractNpcAI {
 			int heading = info.getInt("heading");
 			double hp = info.getDouble("currentHP");
 			double mp = info.getDouble("currentMP");
-			L2GrandBossInstance orfen = (L2GrandBossInstance) addSpawn(ORFEN, loc_x, loc_y, loc_z, heading, false, 0);
+			GrandBossInstance orfen = (GrandBossInstance) addSpawn(ORFEN, loc_x, loc_y, loc_z, heading, false, 0);
 			orfen.setCurrentHpMp(hp, mp);
 			spawnBoss(orfen);
 		}
@@ -137,7 +137,7 @@ public final class Orfen extends AbstractNpcAI {
 		npc.teleToLocation(POS[index], false);
 	}
 
-	public void spawnBoss(L2GrandBossInstance npc) {
+	public void spawnBoss(GrandBossInstance npc) {
 		GrandBossManager.getInstance().addBoss(npc);
 		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 		startQuestTimer("check_orfen_pos", 10000, npc, null, true);
@@ -172,7 +172,7 @@ public final class Orfen extends AbstractNpcAI {
 			} else {
 				loc = POS[3];
 			}
-			L2GrandBossInstance orfen = (L2GrandBossInstance) addSpawn(ORFEN, loc, false, 0);
+			GrandBossInstance orfen = (GrandBossInstance) addSpawn(ORFEN, loc, false, 0);
 			GrandBossManager.getInstance().setBossStatus(ORFEN, ALIVE);
 			spawnBoss(orfen);
 		} else if (event.equalsIgnoreCase("check_orfen_pos")) {

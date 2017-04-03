@@ -21,7 +21,7 @@ package handlers.usercommandhandlers;
 import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.zone.type.SiegeZone;
@@ -56,7 +56,7 @@ public class SiegeStatus implements IUserCommandHandler {
 				continue;
 			}
 
-			final L2Clan clan = activeChar.getClan();
+			final Clan clan = activeChar.getClan();
 			if (!siege.checkIsAttacker(clan) && !siege.checkIsDefender(clan)) {
 				continue;
 			}

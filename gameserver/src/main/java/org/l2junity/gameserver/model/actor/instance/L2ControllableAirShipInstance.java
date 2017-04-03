@@ -22,7 +22,7 @@ import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.stat.ControllableAirShipStat;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.network.client.send.DeleteObject;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -45,7 +45,7 @@ public class L2ControllableAirShipInstance extends L2AirShipInstance {
 	private Future<?> _consumeFuelTask;
 	private Future<?> _checkTask;
 
-	public L2ControllableAirShipInstance(L2CharTemplate template, int ownerId) {
+	public L2ControllableAirShipInstance(CharTemplate template, int ownerId) {
 		super(template);
 		setInstanceType(InstanceType.L2ControllableAirShipInstance);
 		_ownerId = ownerId;

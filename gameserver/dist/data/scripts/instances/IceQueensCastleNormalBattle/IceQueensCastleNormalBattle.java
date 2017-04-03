@@ -218,7 +218,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						break;
 					}
 					case "STAGE_1_START": {
-						final L2GrandBossInstance frey = (L2GrandBossInstance) addSpawn(FREYA_THRONE, FREYA_SPAWN, false, 0, true, world.getId());
+						final GrandBossInstance frey = (GrandBossInstance) addSpawn(FREYA_THRONE, FREYA_SPAWN, false, 0, true, world.getId());
 						frey.setUndying(true);
 						manageScreenMsg(world, NpcStringId.BEGIN_STAGE_1);
 						startQuestTimer("CAST_BLIZZARD", 50000, controller, null);
@@ -241,7 +241,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						break;
 					}
 					case "STAGE_1_PAUSE": {
-						final L2GrandBossInstance frey = (L2GrandBossInstance) addSpawn(FREYA_SPELLING, FREYA_SPELLING_SPAWN, false, 0, true, world.getId());
+						final GrandBossInstance frey = (GrandBossInstance) addSpawn(FREYA_SPELLING, FREYA_SPELLING_SPAWN, false, 0, true, world.getId());
 						frey.setIsInvul(true);
 						frey.disableCoreAI(true);
 						manageTimer(world, 60, NpcStringId.TIME_REMAINING_UNTIL_NEXT_BATTLE);
@@ -276,7 +276,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 							}
 						}
 
-						final L2RaidBossInstance glakias = (L2RaidBossInstance) addSpawn((isHardMode ? GLAKIAS_HARD : GLAKIAS_EASY), GLAKIAS_SPAWN, false, 0, true, world.getId());
+						final RaidBossInstance glakias = (RaidBossInstance) addSpawn((isHardMode ? GLAKIAS_HARD : GLAKIAS_EASY), GLAKIAS_SPAWN, false, 0, true, world.getId());
 						startQuestTimer("LEADER_DELAY", 5000, glakias, null);
 
 						if (isHardMode) {
@@ -307,7 +307,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 							}
 						}
 						freya.deleteMe();
-						final L2GrandBossInstance frey = (L2GrandBossInstance) addSpawn((isHardMode ? FREYA_STAND_HARD : FREYA_STAND_EASY), FREYA_SPAWN, false, 0, true, world.getId());
+						final GrandBossInstance frey = (GrandBossInstance) addSpawn((isHardMode ? FREYA_STAND_HARD : FREYA_STAND_EASY), FREYA_SPAWN, false, 0, true, world.getId());
 						world.setStatus(4);
 						world.setParameter("canSpawnMobs", true);
 						world.setParameter("freya", frey);
@@ -970,7 +970,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 
 	private void manageDespawnMinions(Instance world) {
 		world.setParameter("canSpawnMobs", false);
-		for (L2MonsterInstance mobs : world.getAliveNpcs(L2MonsterInstance.class, BREATH, GLACIER, KNIGHT_EASY, KNIGHT_HARD)) {
+		for (MonsterInstance mobs : world.getAliveNpcs(MonsterInstance.class, BREATH, GLACIER, KNIGHT_EASY, KNIGHT_HARD)) {
 			mobs.doDie(null);
 		}
 	}

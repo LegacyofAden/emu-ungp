@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.FortSiegeSpawn;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class L2FortCommanderInstance extends L2DefenderInstance {
 	private boolean _canTalk;
 
-	public L2FortCommanderInstance(L2NpcTemplate template) {
+	public L2FortCommanderInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortCommanderInstance);
 		_canTalk = true;

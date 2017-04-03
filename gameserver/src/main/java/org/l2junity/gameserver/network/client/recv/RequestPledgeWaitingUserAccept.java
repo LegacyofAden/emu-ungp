@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -54,7 +54,7 @@ public class RequestPledgeWaitingUserAccept implements IClientIncomingPacket {
 		if (_acceptRequest) {
 			final Player player = World.getInstance().getPlayer(_playerId);
 			if (player != null) {
-				final L2Clan clan = activeChar.getClan();
+				final Clan clan = activeChar.getClan();
 				clan.addClanMember(player);
 				player.sendPacket(new JoinPledge(_clanId));
 				final UserInfo ui = new UserInfo(player);

@@ -21,7 +21,7 @@ package ai.uncategorized;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -426,7 +426,7 @@ public final class MinionSpawnManager extends AbstractNpcAI {
 	@Override
 	public String onSpawn(Npc npc) {
 		if (npc.getParameters().getSet().get("SummonPrivateRate") == null) {
-			((L2MonsterInstance) npc).getMinionList().spawnMinions(npc.getParameters().getMinionList("Privates"));
+			((MonsterInstance) npc).getMinionList().spawnMinions(npc.getParameters().getMinionList("Privates"));
 		}
 		return super.onSpawn(npc);
 	}
@@ -434,11 +434,11 @@ public final class MinionSpawnManager extends AbstractNpcAI {
 	@Override
 	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon) {
 		if (npc.isMonster()) {
-			final L2MonsterInstance monster = (L2MonsterInstance) npc;
+			final MonsterInstance monster = (MonsterInstance) npc;
 			if (!monster.isTeleporting()) {
 				if (getRandom(1, 100) <= npc.getParameters().getInt("SummonPrivateRate", 0)) {
 					for (MinionHolder is : npc.getParameters().getMinionList("Privates")) {
-						addMinion((L2MonsterInstance) npc, is.getId());
+						addMinion((MonsterInstance) npc, is.getId());
 					}
 					npc.broadcastSay(ChatType.NPC_GENERAL, ON_ATTACK_MSG[getRandom(ON_ATTACK_MSG.length)]);
 				}

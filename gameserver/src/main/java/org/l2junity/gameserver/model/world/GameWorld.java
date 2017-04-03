@@ -53,7 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GameWorld {
 	private final Map<Integer, WorldObject> objects = new ConcurrentHashMap<>();
 	private final Map<Integer, Player> players = new ConcurrentHashMap<>();
-	private final Map<Integer, L2PetInstance> pets = new ConcurrentHashMap<>();
+	private final Map<Integer, PetInstance> pets = new ConcurrentHashMap<>();
 	
 	@Getter(AccessLevel.PROTECTED) private final Region[][][] regions = new Region[REGIONS_X + 1][REGIONS_Y + 1][REGIONS_Z + 1];
 	
@@ -168,7 +168,7 @@ public class GameWorld {
 	 * @param ownerId ID of the owner
 	 * @return the pet instance from the given ownerId.
 	 */
-	public L2PetInstance getPet(int ownerId) {
+	public PetInstance getPet(int ownerId) {
 		return pets.get(ownerId);
 	}
 
@@ -176,10 +176,10 @@ public class GameWorld {
 	 * Add the given pet instance from the given ownerId.
 	 *
 	 * @param ownerId ID of the owner
-	 * @param pet     L2PetInstance of the pet
+	 * @param pet     PetInstance of the pet
 	 * @return
 	 */
-	public L2PetInstance addPet(int ownerId, L2PetInstance pet) {
+	public PetInstance addPet(int ownerId, PetInstance pet) {
 		return pets.put(ownerId, pet);
 	}
 

@@ -28,7 +28,7 @@ import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -41,7 +41,7 @@ public class L2DefenderInstance extends Attackable {
 	private Castle _castle = null; // the castle which the instance should defend
 	private Fort _fort = null; // the fortress which the instance should defend
 
-	public L2DefenderInstance(L2NpcTemplate template) {
+	public L2DefenderInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2DefenderInstance);
 	}
@@ -128,7 +128,7 @@ public class L2DefenderInstance extends Attackable {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);

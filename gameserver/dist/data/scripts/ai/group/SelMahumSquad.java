@@ -27,7 +27,7 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -163,7 +163,7 @@ public final class SelMahumSquad extends AbstractNpcAI {
 			}
 			case "return_from_fire": {
 				if (npc.isMonster() && !npc.isDead()) {
-					((L2MonsterInstance) npc).returnHome();
+					((MonsterInstance) npc).returnHome();
 				}
 				break;
 			}

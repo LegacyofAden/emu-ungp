@@ -20,13 +20,13 @@ package org.l2junity.gameserver.model.actor.stat;
 
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.data.xml.impl.PetDataTable;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 public class PetStat extends PlayableStat {
-	public PetStat(L2PetInstance activeChar) {
+	public PetStat(PetInstance activeChar) {
 		super(activeChar);
 	}
 
@@ -87,8 +87,8 @@ public class PetStat extends PlayableStat {
 	}
 
 	@Override
-	public L2PetInstance getActiveChar() {
-		return (L2PetInstance) super.getActiveChar();
+	public PetInstance getActiveChar() {
+		return (PetInstance) super.getActiveChar();
 	}
 
 	public final int getFeedBattle() {

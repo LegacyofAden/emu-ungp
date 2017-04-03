@@ -27,7 +27,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -49,7 +49,7 @@ import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
 // In addition, it can be fed in order to increase its duration.
 // This class handles the running tasks, AI, and feed of the mob.
 // The (mostly optional) AI on feeding the spawn is handled by the datapack ai script
-public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
+public final class TamedBeastInstance extends FeedableBeastInstance {
 	private int _foodSkillId;
 	private static final int MAX_DISTANCE_FROM_HOME = 30000;
 	private static final int MAX_DISTANCE_FROM_OWNER = 2000;
@@ -65,13 +65,13 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 	protected boolean _isFreyaBeast;
 	private List<Skill> _beastSkills = null;
 
-	public L2TamedBeastInstance(L2NpcTemplate template) {
+	public TamedBeastInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2TamedBeastInstance);
 		setHome(this);
 	}
 
-	public L2TamedBeastInstance(int npcTemplateId, Player owner, int foodSkillId, double x, double y, double z) {
+	public TamedBeastInstance(int npcTemplateId, Player owner, int foodSkillId, double x, double y, double z) {
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = false;
 		setInstanceType(InstanceType.L2TamedBeastInstance);
@@ -83,7 +83,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 		spawnMe(x, y, z);
 	}
 
-	public L2TamedBeastInstance(int npcTemplateId, Player owner, int food, double x, double y, double z, boolean isFreyaBeast) {
+	public TamedBeastInstance(int npcTemplateId, Player owner, int food, double x, double y, double z, boolean isFreyaBeast) {
 		super(NpcData.getInstance().getTemplate(npcTemplateId));
 		_isFreyaBeast = isFreyaBeast;
 		setInstanceType(InstanceType.L2TamedBeastInstance);
@@ -354,9 +354,9 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 	}
 
 	private static class CheckDuration implements Runnable {
-		private final L2TamedBeastInstance _tamedBeast;
+		private final TamedBeastInstance _tamedBeast;
 
-		CheckDuration(L2TamedBeastInstance tamedBeast) {
+		CheckDuration(TamedBeastInstance tamedBeast) {
 			_tamedBeast = tamedBeast;
 		}
 
@@ -413,10 +413,10 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 	}
 
 	private class CheckOwnerBuffs implements Runnable {
-		private final L2TamedBeastInstance _tamedBeast;
+		private final TamedBeastInstance _tamedBeast;
 		private final int _numBuffs;
 
-		CheckOwnerBuffs(L2TamedBeastInstance tamedBeast, int numBuffs) {
+		CheckOwnerBuffs(TamedBeastInstance tamedBeast, int numBuffs) {
 			_tamedBeast = tamedBeast;
 			_numBuffs = numBuffs;
 		}
@@ -475,7 +475,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);

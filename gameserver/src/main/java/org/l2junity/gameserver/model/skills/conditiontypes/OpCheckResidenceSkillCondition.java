@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.skills.conditiontypes;
 
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -44,7 +44,7 @@ public class OpCheckResidenceSkillCondition implements ISkillCondition {
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
 		if (caster.isPlayer()) {
-			final L2Clan clan = caster.getActingPlayer().getClan();
+			final Clan clan = caster.getActingPlayer().getClan();
 			if (clan != null) {
 				final ClanHall clanHall = ClanHallData.getInstance().getClanHallByClan(clan);
 				if (clanHall != null) {

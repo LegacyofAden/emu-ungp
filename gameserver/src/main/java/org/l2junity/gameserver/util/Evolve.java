@@ -26,9 +26,9 @@ import org.l2junity.gameserver.data.xml.impl.PetDataTable;
 import org.l2junity.gameserver.model.PetData;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.MagicSkillLaunched;
@@ -58,7 +58,7 @@ public final class Evolve {
 			return false;
 		}
 
-		final L2PetInstance currentPet = (L2PetInstance) pet;
+		final PetInstance currentPet = (PetInstance) pet;
 		if (currentPet.isAlikeDead()) {
 			Util.handleIllegalPlayerAction(player, "Player " + player.getName() + " tried to use death pet exploit!", GeneralConfig.DEFAULT_PUNISH);
 			return false;
@@ -95,7 +95,7 @@ public final class Evolve {
 			return false;
 		}
 
-		L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcID);
+		NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcID);
 
 		currentPet.unSummon(player);
 
@@ -105,7 +105,7 @@ public final class Evolve {
 		item = player.getInventory().addItem("Evolve", itemIdgive, 1, player, npc);
 
 		// Summoning new pet
-		L2PetInstance petSummon = L2PetInstance.spawnPet(npcTemplate, player, item);
+		PetInstance petSummon = PetInstance.spawnPet(npcTemplate, player, item);
 
 		if (petSummon == null) {
 			return false;
@@ -175,7 +175,7 @@ public final class Evolve {
 			return false;
 		}
 
-		L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcId);
+		NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(npcId);
 
 		// deleting old pet item
 		ItemInstance removedItem = player.getInventory().destroyItem("PetRestore", item, player, npc);
@@ -187,7 +187,7 @@ public final class Evolve {
 		ItemInstance addedItem = player.getInventory().addItem("PetRestore", itemIdgive, 1, player, npc);
 
 		// Summoning new pet
-		L2PetInstance petSummon = L2PetInstance.spawnPet(npcTemplate, player, addedItem);
+		PetInstance petSummon = PetInstance.spawnPet(npcTemplate, player, addedItem);
 		if (petSummon == null) {
 			return false;
 		}
@@ -237,9 +237,9 @@ public final class Evolve {
 
 	static final class EvolveFeedWait implements Runnable {
 		private final Player _activeChar;
-		private final L2PetInstance _petSummon;
+		private final PetInstance _petSummon;
 
-		EvolveFeedWait(Player activeChar, L2PetInstance petSummon) {
+		EvolveFeedWait(Player activeChar, PetInstance petSummon) {
 			_activeChar = activeChar;
 			_petSummon = petSummon;
 		}
@@ -260,9 +260,9 @@ public final class Evolve {
 
 	static final class EvolveFinalizer implements Runnable {
 		private final Player _activeChar;
-		private final L2PetInstance _petSummon;
+		private final PetInstance _petSummon;
 
-		EvolveFinalizer(Player activeChar, L2PetInstance petSummon) {
+		EvolveFinalizer(Player activeChar, PetInstance petSummon) {
 			_activeChar = activeChar;
 			_petSummon = petSummon;
 		}

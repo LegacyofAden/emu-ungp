@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.recv.pledgebonus;
 
 import org.l2junity.gameserver.enums.ClanRewardType;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -53,7 +53,7 @@ public class RequestPledgeBonusReward implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		final ClanRewardType type = ClanRewardType.values()[_type];
 		final ClanMember member = clan.getClanMember(player.getObjectId());
 		if (member.isRewardClaimed(type)) {

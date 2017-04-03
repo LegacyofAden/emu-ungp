@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.clan.entry.PledgeRecruitInfo;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -58,7 +58,7 @@ public class RequestPledgeRecruitBoardAccess implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 
 		if (clan == null) {
 			activeChar.sendPacket(SystemMessageId.ONLY_THE_CLAN_LEADER_OR_SOMEONE_WITH_RANK_MANAGEMENT_AUTHORITY_MAY_REGISTER_THE_CLAN);

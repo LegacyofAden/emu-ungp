@@ -22,11 +22,11 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Siegable;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -34,11 +34,11 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 public class L2SiegeFlagInstance extends Npc {
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private Siegable _siege;
 	private long _nextTalkTime;
 
-	public L2SiegeFlagInstance(Player player, L2NpcTemplate template, boolean advanced) {
+	public L2SiegeFlagInstance(Player player, NpcTemplate template, boolean advanced) {
 		super(template);
 		setInstanceType(InstanceType.L2SiegeFlagInstance);
 
@@ -96,7 +96,7 @@ public class L2SiegeFlagInstance extends Npc {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);

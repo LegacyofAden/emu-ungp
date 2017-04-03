@@ -21,7 +21,7 @@ package org.l2junity.gameserver.taskmanager;
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,8 +48,8 @@ public final class DecayTaskManager {
 		}
 
 		long delay;
-		if (character.getTemplate() instanceof L2NpcTemplate) {
-			delay = ((L2NpcTemplate) character.getTemplate()).getCorpseTime();
+		if (character.getTemplate() instanceof NpcTemplate) {
+			delay = ((NpcTemplate) character.getTemplate()).getCorpseTime();
 		} else {
 			delay = NpcConfig.DEFAULT_CORPSE_TIME;
 		}

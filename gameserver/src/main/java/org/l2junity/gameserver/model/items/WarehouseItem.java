@@ -40,7 +40,7 @@ import java.util.Objects;
  * @version $Revision: 1.7.2.2.2.5 $ $Date: 2005/04/06 18:25:18 $
  */
 public class WarehouseItem {
-	private final L2Item _item;
+	private final ItemTemplate _item;
 	private final int _object;
 	private final long _count;
 	private final int _owner;
@@ -99,7 +99,7 @@ public class WarehouseItem {
 	/**
 	 * @return the item.
 	 */
-	public L2Item getItem() {
+	public ItemTemplate getItem() {
 		return _item;
 	}
 

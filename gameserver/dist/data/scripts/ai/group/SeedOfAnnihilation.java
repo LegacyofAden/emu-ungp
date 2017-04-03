@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.EffectZone;
@@ -261,7 +261,7 @@ public final class SeedOfAnnihilation extends AbstractNpcAI {
 		startQuestTimer("ChangeSeedsStatus", _seedsNextStatusChange - System.currentTimeMillis(), null, null);
 	}
 
-	private void spawnGroupOfMinion(L2MonsterInstance npc, int[] mobIds) {
+	private void spawnGroupOfMinion(MonsterInstance npc, int[] mobIds) {
 		for (int mobId : mobIds) {
 			addMinion(npc, mobId);
 		}
@@ -271,7 +271,7 @@ public final class SeedOfAnnihilation extends AbstractNpcAI {
 	public String onSpawn(Npc npc) {
 		for (SeedRegion element : _regionsData) {
 			if (ArrayUtil.contains(element.elite_mob_ids, npc.getId())) {
-				spawnGroupOfMinion((L2MonsterInstance) npc, element.minion_lists[getRandom(element.minion_lists.length)]);
+				spawnGroupOfMinion((MonsterInstance) npc, element.minion_lists[getRandom(element.minion_lists.length)]);
 			}
 		}
 		return super.onSpawn(npc);

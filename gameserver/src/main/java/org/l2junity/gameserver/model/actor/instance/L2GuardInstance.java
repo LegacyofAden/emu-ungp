@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldRegion;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
@@ -33,13 +33,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive L2MonsterInstance.
+ * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive MonsterInstance.
  */
 public class L2GuardInstance extends Attackable {
 	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
 
 	/**
-	 * Constructor of L2GuardInstance (use L2Character and L2NpcInstance constructor).<br>
+	 * Constructor of L2GuardInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
 	 * <li>Call the L2Character constructor to set the _template of the L2GuardInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
@@ -49,7 +49,7 @@ public class L2GuardInstance extends Attackable {
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2GuardInstance(L2NpcTemplate template) {
+	public L2GuardInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2GuardInstance);
 	}
@@ -90,7 +90,7 @@ public class L2GuardInstance extends Attackable {
 	 * <li>if page number > 0 : <B>data/html/guard/12006-1.htm</B> (npcId-page number)</li>
 	 * </ul>
 	 *
-	 * @param npcId The Identifier of the L2NpcInstance whose text must be display
+	 * @param npcId The Identifier of the NpcInstance whose text must be display
 	 * @param val   The number of the page to display
 	 */
 	@Override
@@ -141,7 +141,7 @@ public class L2GuardInstance extends Attackable {
 				// Set the L2PcInstance Intention to AI_INTENTION_ATTACK
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, this);
 			} else {
-				// Calculate the distance between the L2PcInstance and the L2NpcInstance
+				// Calculate the distance between the L2PcInstance and the NpcInstance
 				if (!canInteract(player)) {
 					// Set the L2PcInstance Intention to AI_INTENTION_INTERACT
 					player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);

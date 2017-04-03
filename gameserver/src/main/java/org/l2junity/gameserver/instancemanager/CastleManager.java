@@ -24,8 +24,8 @@ import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
@@ -104,7 +104,7 @@ public final class CastleManager {
 		return _castles.get(castleId);
 	}
 
-	public final Castle getCastleByOwner(L2Clan clan) {
+	public final Castle getCastleByOwner(Clan clan) {
 		for (Castle temp : getCastles()) {
 			if (temp.getOwnerId() == clan.getId()) {
 				return temp;
@@ -164,7 +164,7 @@ public final class CastleManager {
 	}
 
 	// remove this castle's circlets from the clan
-	public void removeCirclet(L2Clan clan, int castleId) {
+	public void removeCirclet(Clan clan, int castleId) {
 		for (ClanMember member : clan.getMembers()) {
 			removeCirclet(member, castleId);
 		}

@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.VehicleStat;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -62,7 +62,7 @@ public abstract class Vehicle extends Creature {
 	protected VehiclePathPoint[] _currentPath = null;
 	protected int _runState = 0;
 
-	public Vehicle(L2CharTemplate template) {
+	public Vehicle(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2Vehicle);
 		setIsFlying(true);

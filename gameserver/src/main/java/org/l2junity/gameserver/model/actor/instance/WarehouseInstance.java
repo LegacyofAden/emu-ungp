@@ -19,17 +19,39 @@
 package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
-// This class is here mostly for convenience and for avoidance of hardcoded IDs.
-// It refers to Beast (mobs) that can be attacked but can also be fed
-// For example, the Beast Farm's Alpen Buffalo.
-// This class is only truly used by the handlers in order to check the correctness
-// of the target.  However, no additional tasks are needed, since they are all
-// handled by scripted AI.
-public class L2FeedableBeastInstance extends L2MonsterInstance {
-	public L2FeedableBeastInstance(L2NpcTemplate template) {
+public class WarehouseInstance extends NpcInstance {
+	public WarehouseInstance(NpcTemplate template) {
 		super(template);
-		setInstanceType(InstanceType.L2FeedableBeastInstance);
+		setInstanceType(InstanceType.L2WarehouseInstance);
+	}
+
+	@Override
+	public boolean isAutoAttackable(Creature attacker) {
+		if (attacker.isMonster()) {
+			return true;
+		}
+
+		return super.isAutoAttackable(attacker);
+	}
+
+	@Override
+	public boolean isWarehouse() {
+		return true;
+	}
+
+	@Override
+	public String getHtmlPath(int npcId, int val) {
+		String pom = "";
+
+		if (val == 0) {
+			pom = "" + npcId;
+		} else {
+			pom = npcId + "-" + val;
+		}
+
+		return "warehouse/" + pom + ".htm";
 	}
 }

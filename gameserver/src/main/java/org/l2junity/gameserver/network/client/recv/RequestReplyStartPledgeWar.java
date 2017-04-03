@@ -19,9 +19,9 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -54,8 +54,8 @@ public final class RequestReplyStartPledgeWar implements IClientIncomingPacket {
 		}
 
 		if (_answer == 1) {
-			final L2Clan attacked = activeChar.getClan();
-			final L2Clan attacker = requestor.getClan();
+			final Clan attacked = activeChar.getClan();
+			final Clan attacker = requestor.getClan();
 			if ((attacked != null) && (attacker != null)) {
 				final ClanWar clanWar = attacker.getWarWith(attacked.getId());
 				if (clanWar.getState() == ClanWarState.BLOOD_DECLARATION) {

@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -139,7 +139,7 @@ public final class PailakaDevilsLegacy extends AbstractInstance {
 			switch (npc.getId()) {
 				case POWDER_KEG: {
 					if ((damage > 0) && npc.isScriptValue(0)) {
-						World.getInstance().forEachVisibleObjectInRadius(npc, L2MonsterInstance.class, 600, monster ->
+						World.getInstance().forEachVisibleObjectInRadius(npc, MonsterInstance.class, 600, monster ->
 						{
 							monster.addDamageHate(npc, 0, 999);
 							monster.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, npc);

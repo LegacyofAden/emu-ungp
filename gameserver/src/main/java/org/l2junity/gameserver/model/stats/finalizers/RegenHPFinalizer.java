@@ -28,7 +28,7 @@ import org.l2junity.gameserver.instancemanager.SiegeManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
@@ -127,7 +127,7 @@ public class RegenHPFinalizer implements IStatsFunction {
 				baseValue *= 0.7; // Running
 			}
 		} else if (creature.isPet()) {
-			baseValue = ((L2PetInstance) creature).getPetLevelData().getPetRegenHP() * NpcConfig.PET_HP_REGEN_MULTIPLIER;
+			baseValue = ((PetInstance) creature).getPetLevelData().getPetRegenHP() * NpcConfig.PET_HP_REGEN_MULTIPLIER;
 		}
 
 		return DoubleStat.defaultValue(creature, stat, baseValue * creature.getLevelMod() * (creature.getCON() > 0 ? BaseStats.CON.calcBonus(creature) : 1.));

@@ -23,10 +23,10 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -80,13 +80,13 @@ public final class RequestRefundItem implements IClientIncomingPacket {
 		}
 
 		WorldObject target = player.getTarget();
-		if (!player.isGM() && ((target == null) || !(target instanceof L2MerchantInstance) || (player.getInstanceWorld() != target.getInstanceWorld()) || !player.isInRadius3d(target, INTERACTION_DISTANCE))) {
+		if (!player.isGM() && ((target == null) || !(target instanceof MerchantInstance) || (player.getInstanceWorld() != target.getInstanceWorld()) || !player.isInRadius3d(target, INTERACTION_DISTANCE))) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
 
 		Creature merchant = null;
-		if (target instanceof L2MerchantInstance) {
+		if (target instanceof MerchantInstance) {
 			merchant = (Creature) target;
 		} else if (!player.isGM()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
@@ -132,7 +132,7 @@ public final class RequestRefundItem implements IClientIncomingPacket {
 			}
 
 			final ItemInstance item = refund[idx];
-			final L2Item template = item.getItem();
+			final ItemTemplate template = item.getItem();
 			objectIds[i] = item.getObjectId();
 
 			// second check for duplicates - object ids

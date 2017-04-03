@@ -25,7 +25,7 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.SpecialItemType;
 import org.l2junity.gameserver.model.ItemInfo;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.holders.PreparedMultisellListHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.enchant.attribute.AttributeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -184,7 +184,7 @@ public class MultiSellChoose implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		final PcInventory inventory = player.getInventory();
 
 		try {
@@ -201,7 +201,7 @@ public class MultiSellChoose implements IClientIncomingPacket {
 					continue;
 				}
 
-				final L2Item template = ItemTable.getInstance().getTemplate(product.getId());
+				final ItemTemplate template = ItemTable.getInstance().getTemplate(product.getId());
 				if (template == null) {
 					player.setMultiSell(null);
 					return;
@@ -442,7 +442,7 @@ public class MultiSellChoose implements IClientIncomingPacket {
 	 * @param totalCount
 	 * @return {@code false} if ingredient amount is not enough, {@code true} otherwise.
 	 */
-	private boolean checkIngredients(final Player player, PreparedMultisellListHolder list, final PcInventory inventory, final L2Clan clan, final int ingredientId, final long totalCount) {
+	private boolean checkIngredients(final Player player, PreparedMultisellListHolder list, final PcInventory inventory, final Clan clan, final int ingredientId, final long totalCount) {
 		final SpecialItemType specialItem = SpecialItemType.getByClientId(ingredientId);
 		if (specialItem != null) {
 			// Check special item.

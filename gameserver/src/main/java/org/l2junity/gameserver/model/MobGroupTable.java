@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
+import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,7 +51,7 @@ public class MobGroupTable {
 		return _groupMap.size();
 	}
 
-	public MobGroup getGroupForMob(L2ControllableMobInstance mobInst) {
+	public MobGroup getGroupForMob(ControllableMobInstance mobInst) {
 		for (MobGroup mobGroup : _groupMap.values()) {
 			if (mobGroup.isGroupMember(mobInst)) {
 				return mobGroup;

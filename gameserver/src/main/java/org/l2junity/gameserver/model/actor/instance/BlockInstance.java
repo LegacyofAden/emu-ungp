@@ -22,7 +22,7 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.BlockCheckerEngine;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -33,10 +33,10 @@ import org.l2junity.gameserver.network.client.send.NpcInfo;
 /**
  * @author BiggBoss
  */
-public class L2BlockInstance extends L2MonsterInstance {
+public class BlockInstance extends MonsterInstance {
 	private int _colorEffect;
 
-	public L2BlockInstance(L2NpcTemplate template) {
+	public BlockInstance(NpcTemplate template) {
 		super(template);
 	}
 

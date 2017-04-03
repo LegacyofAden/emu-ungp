@@ -28,9 +28,9 @@ import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2BlockInstance;
+import org.l2junity.gameserver.model.actor.instance.BlockInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -427,7 +427,7 @@ public final class BlockCheckerEngine {
 			// if != 0, will spawn a blue block
 			byte random = 2;
 			// common template
-			final L2NpcTemplate template = NpcData.getInstance().getTemplate(18672);
+			final NpcTemplate template = NpcData.getInstance().getTemplate(18672);
 			// Spawn blocks
 			try {
 				// Creates 50 new blocks
@@ -439,7 +439,7 @@ public final class BlockCheckerEngine {
 					spawn.setRespawnDelay(1);
 					SpawnTable.getInstance().addNewSpawn(spawn, false);
 					spawn.init();
-					L2BlockInstance block = (L2BlockInstance) spawn.getLastSpawn();
+					BlockInstance block = (BlockInstance) spawn.getLastSpawn();
 					// switch color
 					if ((random % 2) == 0) {
 						block.setRed(true);

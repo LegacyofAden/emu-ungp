@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.skills.conditiontypes;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -35,7 +35,7 @@ public class EquipShieldSkillCondition implements ISkillCondition {
 
 	@Override
 	public boolean canUse(Creature caster, Skill skill, WorldObject target) {
-		final L2Item shield = caster.getSecondaryWeaponItem();
+		final ItemTemplate shield = caster.getSecondaryWeaponItem();
 		return (shield != null) && (shield.getItemType() == ArmorType.SHIELD);
 	}
 }

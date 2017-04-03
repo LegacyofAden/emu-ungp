@@ -23,7 +23,7 @@ import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.NpcInfoType;
 import org.l2junity.gameserver.enums.Team;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2GuardInstance;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
@@ -174,7 +174,7 @@ public class NpcInfo extends AbstractMaskPacket<NpcInfoType> {
 		}
 
 		if (npc.getClanId() > 0) {
-			L2Clan clan = ClanTable.getInstance().getClan(npc.getClanId());
+			Clan clan = ClanTable.getInstance().getClan(npc.getClanId());
 			if (clan != null) {
 				_clanId = clan.getId();
 				_clanCrest = clan.getCrestId();

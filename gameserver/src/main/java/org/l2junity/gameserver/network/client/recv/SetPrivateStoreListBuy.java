@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.ensoul.EnsoulOption;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -63,7 +63,7 @@ public final class SetPrivateStoreListBuy implements IClientIncomingPacket {
 		for (int i = 0; i < count; i++) {
 			int itemId = packet.readD();
 
-			final L2Item template = ItemTable.getInstance().getTemplate(itemId);
+			final ItemTemplate template = ItemTable.getInstance().getTemplate(itemId);
 			if (template == null) {
 				_items = null;
 				return false;

@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -64,7 +64,7 @@ public final class OrcBarracks extends AbstractNpcAI {
 		final boolean hasMinions = npc.getParameters().getBoolean("hasMinions", false);
 		if (hasMinions) {
 			for (int i = 0; i < MINION_COUNT; i++) {
-				addMinion((L2MonsterInstance) npc, TUREK_WAR_HOUND);
+				addMinion((MonsterInstance) npc, TUREK_WAR_HOUND);
 			}
 		}
 		return super.onSpawn(npc);

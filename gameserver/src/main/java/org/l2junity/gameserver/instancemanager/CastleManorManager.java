@@ -240,7 +240,7 @@ public final class CastleManorManager implements IGameXmlReader, IStorable {
 
 				// Update manor period
 				for (Castle castle : CastleManager.getInstance().getCastles()) {
-					final L2Clan owner = castle.getOwner();
+					final Clan owner = castle.getOwner();
 					if (owner == null) {
 						continue;
 					}
@@ -299,7 +299,7 @@ public final class CastleManorManager implements IGameXmlReader, IStorable {
 			case MAINTENANCE: {
 				// Notify clan leader about manor mode change
 				for (Castle castle : CastleManager.getInstance().getCastles()) {
-					final L2Clan owner = castle.getOwner();
+					final Clan owner = castle.getOwner();
 					if (owner != null) {
 						final ClanMember clanLeader = owner.getLeader();
 						if ((clanLeader != null) && clanLeader.isOnline()) {
@@ -314,7 +314,7 @@ public final class CastleManorManager implements IGameXmlReader, IStorable {
 				_mode = ManorMode.APPROVED;
 
 				for (Castle castle : CastleManager.getInstance().getCastles()) {
-					final L2Clan owner = castle.getOwner();
+					final Clan owner = castle.getOwner();
 					if (owner == null) {
 						continue;
 					}

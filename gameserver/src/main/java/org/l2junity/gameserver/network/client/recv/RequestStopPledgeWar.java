@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -44,12 +44,12 @@ public final class RequestStopPledgeWar implements IClientIncomingPacket {
 		if (player == null) {
 			return;
 		}
-		L2Clan playerClan = player.getClan();
+		Clan playerClan = player.getClan();
 		if (playerClan == null) {
 			return;
 		}
 
-		L2Clan clan = ClanTable.getInstance().getClanByName(_pledgeName);
+		Clan clan = ClanTable.getInstance().getClanByName(_pledgeName);
 
 		if (clan == null) {
 			player.sendPacket(SystemMessageId.THAT_CLAN_DOES_NOT_EXIST);

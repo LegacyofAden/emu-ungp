@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.StatModifierType;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
@@ -107,7 +107,7 @@ public abstract class AbstractDoubleStatEffect extends AbstractEffect {
 
 							boolean chestOk = (type.mask() & chest.getItem().getItemMask()) != 0;
 
-							if (chestOk && (chest.getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)) {
+							if (chestOk && (chest.getItem().getBodyPart() == ItemTemplate.SLOT_FULL_ARMOR)) {
 								return true;
 							}
 

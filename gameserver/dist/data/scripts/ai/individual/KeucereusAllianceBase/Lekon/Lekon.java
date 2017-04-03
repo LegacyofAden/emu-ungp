@@ -20,7 +20,7 @@ package ai.individual.KeucereusAllianceBase.Lekon;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.AirShipManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -55,7 +55,7 @@ public final class Lekon extends AbstractNpcAI {
 				break;
 			}
 			case "licence": {
-				final L2Clan clan = player.getClan();
+				final Clan clan = player.getClan();
 				if ((clan == null) || !player.isClanLeader() || (clan.getLevel() < MIN_CLAN_LV)) {
 					htmltext = "32557-02.html";
 				} else if (hasAtLeastOneQuestItem(player, LICENCE)) {

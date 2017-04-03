@@ -23,7 +23,7 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
@@ -195,7 +195,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 			if (htmlFile != null) {
 				for (int i = 1; i < 5; i++) {
 					final int itemId = qs.getMemoStateEx(i);
-					final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+					final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 					if (item != null) {
 						htmlFile.replace("%slot" + i + "%", item.getName());
 					}
@@ -205,7 +205,7 @@ public final class Q10814_BefittingOfTheStatus extends Quest {
 
 				for (int itemId : HATS) {
 					if (!itemList.contains(itemId)) {
-						final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+						final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 						if (item != null) {
 							sb.append("<Button ALIGN=LEFT ICON=\"NORMAL\" action=\"bypass -h Quest Q10814_BefittingOfTheStatus insertItem_" + itemId + "\">" + item.getName() + "</Button>");
 						}

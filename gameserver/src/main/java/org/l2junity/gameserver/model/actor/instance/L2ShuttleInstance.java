@@ -22,7 +22,7 @@ import org.l2junity.gameserver.ai.ShuttleAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Vehicle;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleData;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleStop;
 import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleGetOff;
@@ -38,7 +38,7 @@ import java.util.List;
 public class L2ShuttleInstance extends Vehicle {
 	private L2ShuttleData _shuttleData;
 
-	public L2ShuttleInstance(L2CharTemplate template) {
+	public L2ShuttleInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ShuttleInstance);
 		setAI(new ShuttleAI(this));

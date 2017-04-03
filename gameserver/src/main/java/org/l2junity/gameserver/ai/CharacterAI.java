@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveFinished;
@@ -1005,7 +1005,7 @@ public class CharacterAI extends AbstractAI {
 		}
 
 		public void init() {
-			switch (((L2NpcTemplate) _actor.getTemplate()).getAIType()) {
+			switch (((NpcTemplate) _actor.getTemplate()).getAIType()) {
 				case MAGE:
 					isMage = true;
 					break;

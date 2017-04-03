@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.clanhallauction;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -28,17 +28,17 @@ import java.time.format.DateTimeFormatter;
  * @author Sdw
  */
 public class Bidder {
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final long _bid;
 	private final long _time;
 
-	public Bidder(L2Clan clan, long bid, long time) {
+	public Bidder(Clan clan, long bid, long time) {
 		_clan = clan;
 		_bid = bid;
 		_time = time == 0 ? Instant.now().toEpochMilli() : time;
 	}
 
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 

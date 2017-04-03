@@ -18,17 +18,17 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class GMViewPledgeInfo implements IClientOutgoingPacket {
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final Player _activeChar;
 
-	public GMViewPledgeInfo(L2Clan clan, Player activeChar) {
+	public GMViewPledgeInfo(Clan clan, Player activeChar) {
 		_clan = clan;
 		_activeChar = activeChar;
 	}

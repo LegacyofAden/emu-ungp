@@ -22,24 +22,24 @@ import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.util.MinionList;
 
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * This class manages all Monsters. L2MonsterInstance:
+ * This class manages all Monsters. MonsterInstance:
  * <ul>
  * <li>L2MinionInstance</li>
- * <li>L2RaidBossInstance</li>
- * <li>L2GrandBossInstance</li>
+ * <li>RaidBossInstance</li>
+ * <li>GrandBossInstance</li>
  * </ul>
  */
-public class L2MonsterInstance extends Attackable {
+public class MonsterInstance extends Attackable {
 	private boolean _isAgressive = false;
 	protected boolean _enableMinions = true;
 
-	private L2MonsterInstance _master = null;
+	private MonsterInstance _master = null;
 	private volatile MinionList _minionList = null;
 
 	protected ScheduledFuture<?> _maintenanceTask = null;
@@ -47,17 +47,17 @@ public class L2MonsterInstance extends Attackable {
 	private static final int MONSTER_MAINTENANCE_INTERVAL = 1000;
 
 	/**
-	 * Constructor of L2MonsterInstance (use L2Character and L2NpcInstance constructor).<br>
+	 * Constructor of MonsterInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
-	 * <li>Call the L2Character constructor to set the _template of the L2MonsterInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
-	 * <li>Set the name of the L2MonsterInstance</li>
+	 * <li>Call the L2Character constructor to set the _template of the MonsterInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
+	 * <li>Set the name of the MonsterInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2MonsterInstance(L2NpcTemplate template) {
+	public MonsterInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2MonsterInstance);
 		setAutoAttackable(true);
@@ -65,11 +65,11 @@ public class L2MonsterInstance extends Attackable {
 	}
 
 	/**
-	 * Return True if the attacker is not another L2MonsterInstance.
+	 * Return True if the attacker is not another MonsterInstance.
 	 */
 	@Override
 	public boolean isAutoAttackable(Creature attacker) {
-		// Check if the L2MonsterInstance target is aggressive
+		// Check if the MonsterInstance target is aggressive
 		if (NpcConfig.GUARD_ATTACK_AGGRO_MOB && isAggressive() && (attacker instanceof L2GuardInstance)) {
 			return true;
 		}
@@ -87,7 +87,7 @@ public class L2MonsterInstance extends Attackable {
 	}
 
 	/**
-	 * Return True if the L2MonsterInstance is Aggressive (aggroRange > 0).
+	 * Return True if the MonsterInstance is Aggressive (aggroRange > 0).
 	 */
 	@Override
 	public boolean isAggressive() {
@@ -168,11 +168,11 @@ public class L2MonsterInstance extends Attackable {
 	}
 
 	@Override
-	public L2MonsterInstance getLeader() {
+	public MonsterInstance getLeader() {
 		return _master;
 	}
 
-	public void setLeader(L2MonsterInstance leader) {
+	public void setLeader(MonsterInstance leader) {
 		_master = leader;
 	}
 
@@ -201,12 +201,12 @@ public class L2MonsterInstance extends Attackable {
 	}
 
 	@Override
-	public L2MonsterInstance asMonster() {
+	public MonsterInstance asMonster() {
 		return this;
 	}
 
 	/**
-	 * @return true if this L2MonsterInstance (or its master) is registered in WalkingManager
+	 * @return true if this MonsterInstance (or its master) is registered in WalkingManager
 	 */
 	@Override
 	public boolean isWalker() {
@@ -214,7 +214,7 @@ public class L2MonsterInstance extends Attackable {
 	}
 
 	/**
-	 * @return {@code true} if this L2MonsterInstance is not raid minion, master state otherwise.
+	 * @return {@code true} if this MonsterInstance is not raid minion, master state otherwise.
 	 */
 	@Override
 	public boolean giveRaidCurse() {

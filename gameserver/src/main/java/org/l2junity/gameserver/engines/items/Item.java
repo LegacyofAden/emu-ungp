@@ -19,12 +19,12 @@
 package org.l2junity.gameserver.engines.items;
 
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 
 public class Item {
 	public int id;
 	public String type;
 	public String name;
 	public StatsSet set;
-	public L2Item item;
+	public ItemTemplate item;
 }

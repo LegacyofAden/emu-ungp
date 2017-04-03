@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.custom;
 
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -70,7 +70,7 @@ public final class ResurrectionSpecial extends AbstractBooleanStatEffect {
 		if (target.isPlayer()) {
 			target.getActingPlayer().reviveRequest(caster, skill, false, _power);
 		} else if (target.isPet()) {
-			final L2PetInstance pet = (L2PetInstance) target;
+			final PetInstance pet = (PetInstance) target;
 			target.getActingPlayer().reviveRequest(pet.getActingPlayer(), skill, true, _power);
 		}
 	}

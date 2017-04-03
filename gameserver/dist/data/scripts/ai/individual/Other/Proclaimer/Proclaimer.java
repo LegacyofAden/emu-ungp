@@ -20,7 +20,7 @@ package ai.individual.Other.Proclaimer;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -62,7 +62,7 @@ public final class Proclaimer extends AbstractNpcAI {
 		if (!player.isOnDarkSide()) {
 			player.sendPacket(new NpcSay(npc.getObjectId(), ChatType.WHISPER, npc.getId(), NpcStringId.WHEN_THE_WORLD_PLUNGES_INTO_CHAOS_WE_WILL_NEED_YOUR_HELP_WE_HOPE_YOU_JOIN_US_WHEN_THE_TIME_COMES));
 
-			final L2Clan ownerClan = npc.getCastle().getOwner();
+			final Clan ownerClan = npc.getCastle().getOwner();
 			if (ownerClan != null) {
 				final NpcHtmlMessage packet = new NpcHtmlMessage(npc.getObjectId());
 				packet.setHtml(getHtm(player.getLang(), "proclaimer.html"));

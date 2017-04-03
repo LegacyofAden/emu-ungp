@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanInfo;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.recv.RequestAllyInfo;
 import org.l2junity.network.PacketWriter;
@@ -41,15 +41,15 @@ public class AllianceInfo implements IClientOutgoingPacket {
 	private final ClanInfo[] _allies;
 
 	public AllianceInfo(int allianceId) {
-		final L2Clan leader = ClanTable.getInstance().getClan(allianceId);
+		final Clan leader = ClanTable.getInstance().getClan(allianceId);
 		_name = leader.getAllyName();
 		_leaderC = leader.getName();
 		_leaderP = leader.getLeaderName();
 
-		final Collection<L2Clan> allies = ClanTable.getInstance().getClanAllies(allianceId);
+		final Collection<Clan> allies = ClanTable.getInstance().getClanAllies(allianceId);
 		_allies = new ClanInfo[allies.size()];
 		int idx = 0, total = 0, online = 0;
-		for (final L2Clan clan : allies) {
+		for (final Clan clan : allies) {
 			final ClanInfo ci = new ClanInfo(clan);
 			_allies[idx++] = ci;
 			total += ci.getTotal();

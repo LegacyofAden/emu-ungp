@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -38,7 +38,7 @@ public final class UnsummonPet implements IPlayerActionHandler {
 
 		if (pet == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_A_PET);
-		} else if (((L2PetInstance) pet).isUncontrollable()) {
+		} else if (((PetInstance) pet).isUncontrollable()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);
 		} else if (pet.isBetrayed()) {
 			activeChar.sendPacket(SystemMessageId.WHEN_YOUR_PET_S_HUNGER_GAUGE_IS_AT_0_YOU_CANNOT_USE_YOUR_PET);

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Tower;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class L2ControlTowerInstance extends Tower {
 
 	private volatile Set<L2Spawn> _guards;
 
-	public L2ControlTowerInstance(L2NpcTemplate template) {
+	public L2ControlTowerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ControlTowerInstance);
 	}

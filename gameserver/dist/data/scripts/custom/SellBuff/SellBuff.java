@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
 
@@ -333,7 +333,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 							seller.reduceCurrentMp(skillToBuy.getMpConsume() * SellBuffConfig.SELLBUFF_MP_MULTIPLER);
 							skillToBuy.activateSkill(seller, activeChar);
 						} else {
-							final L2Item item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
+							final ItemTemplate item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
 							if (item != null) {
 								activeChar.sendMessage("Not enough " + item.getName() + "!");
 							} else {

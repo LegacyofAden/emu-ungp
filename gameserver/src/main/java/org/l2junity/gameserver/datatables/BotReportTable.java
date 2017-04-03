@@ -25,7 +25,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -460,7 +460,7 @@ public final class BotReportTable {
 			_reporters.put(objectId, reportTime);
 		}
 
-		boolean reportedBySameClan(L2Clan clan) {
+		boolean reportedBySameClan(Clan clan) {
 			if (clan == null) {
 				return false;
 			}

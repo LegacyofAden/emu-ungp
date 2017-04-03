@@ -22,7 +22,7 @@ import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -104,7 +104,7 @@ public final class Cannon extends AbstractNpcAI {
 				break;
 			}
 			case "LIGHT_CHECK": {
-				World.getInstance().forEachVisibleObjectInRadius(npc, L2MonsterInstance.class, 1000, monster ->
+				World.getInstance().forEachVisibleObjectInRadius(npc, MonsterInstance.class, 1000, monster ->
 				{
 					final int monsterId = monster.getId();
 					if (TRANSFORM_DATA.containsKey(monsterId)) {

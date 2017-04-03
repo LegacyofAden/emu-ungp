@@ -25,7 +25,7 @@ import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2BlockInstance;
+import org.l2junity.gameserver.model.actor.instance.BlockInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -76,7 +76,7 @@ public class EventItem implements IItemHandler {
 			return false;
 		}
 
-		final L2BlockInstance block = (L2BlockInstance) castor.getTarget();
+		final BlockInstance block = (BlockInstance) castor.getTarget();
 
 		final ArenaParticipantsHolder holder = HandysBlockCheckerManager.getInstance().getHolder(blockCheckerArena);
 		if (holder != null) {

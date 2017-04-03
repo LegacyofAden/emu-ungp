@@ -38,7 +38,7 @@ import java.sql.SQLException;
 public class ClanMember {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClanMember.class);
 
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private int _objectId;
 	private String _name;
 	private String _title;
@@ -60,7 +60,7 @@ public class ClanMember {
 	 * @param clanMember the clan member result set
 	 * @throws SQLException if the columnLabel is not valid or a database error occurs
 	 */
-	public ClanMember(L2Clan clan, ResultSet clanMember) throws SQLException {
+	public ClanMember(Clan clan, ResultSet clanMember) throws SQLException {
 		if (clan == null) {
 			throw new IllegalArgumentException("Cannot create a Clan Member with a null clan.");
 		}
@@ -84,7 +84,7 @@ public class ClanMember {
 	 * @param clan   the clan where the player belongs
 	 * @param player the player from which the clan member will be created
 	 */
-	public ClanMember(L2Clan clan, Player player) {
+	public ClanMember(Clan clan, Player player) {
 		if (clan == null) {
 			throw new IllegalArgumentException("Cannot create a Clan Member if player has a null clan.");
 		}
@@ -376,12 +376,12 @@ public class ClanMember {
 	 *
 	 * @return the clan
 	 */
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 
 	public boolean isAcademyMember() {
-		return getPledgeType() == L2Clan.SUBUNIT_ACADEMY;
+		return getPledgeType() == Clan.SUBUNIT_ACADEMY;
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class ClanMember {
 			return pledgeClass;
 		}
 
-		L2Clan clan = player.getClan();
+		Clan clan = player.getClan();
 		if (clan != null) {
 			switch (clan.getLevel()) {
 				case 4:

@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public final class PledgeStatusChanged implements IClientOutgoingPacket {
-	private final L2Clan _clan;
+	private final Clan _clan;
 
-	public PledgeStatusChanged(L2Clan clan) {
+	public PledgeStatusChanged(Clan clan) {
 		_clan = clan;
 	}
 

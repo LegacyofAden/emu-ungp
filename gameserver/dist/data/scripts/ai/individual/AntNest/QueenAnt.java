@@ -30,8 +30,8 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.CommonSkill;
@@ -82,9 +82,9 @@ public final class QueenAnt extends AbstractNpcAI {
 	private static SkillHolder HEAL1 = new SkillHolder(4020, 1);
 	private static SkillHolder HEAL2 = new SkillHolder(4024, 1);
 
-	private L2MonsterInstance _queen = null;
-	private L2MonsterInstance _larva = null;
-	private final Set<L2MonsterInstance> _nurses = ConcurrentHashMap.newKeySet();
+	private MonsterInstance _queen = null;
+	private MonsterInstance _larva = null;
+	private final Set<MonsterInstance> _nurses = ConcurrentHashMap.newKeySet();
 
 	private QueenAnt() {
 		addSpawnId(MOBS);
@@ -104,7 +104,7 @@ public final class QueenAnt extends AbstractNpcAI {
 				startQuestTimer("queen_unlock", temp, null, null);
 			} else {
 				// the time has already expired while the server was offline. Immediately spawn queen ant.
-				L2GrandBossInstance queen = (L2GrandBossInstance) addSpawn(QUEEN, QUEEN_X, QUEEN_Y, QUEEN_Z, 0, false, 0);
+				GrandBossInstance queen = (GrandBossInstance) addSpawn(QUEEN, QUEEN_X, QUEEN_Y, QUEEN_Z, 0, false, 0);
 				GrandBossManager.getInstance().setBossStatus(QUEEN, ALIVE);
 				spawnBoss(queen);
 			}
@@ -120,13 +120,13 @@ public final class QueenAnt extends AbstractNpcAI {
 				loc_y = QUEEN_Y;
 				loc_z = QUEEN_Z;
 			}
-			L2GrandBossInstance queen = (L2GrandBossInstance) addSpawn(QUEEN, loc_x, loc_y, loc_z, heading, false, 0);
+			GrandBossInstance queen = (GrandBossInstance) addSpawn(QUEEN, loc_x, loc_y, loc_z, heading, false, 0);
 			queen.setCurrentHpMp(hp, mp);
 			spawnBoss(queen);
 		}
 	}
 
-	private void spawnBoss(L2GrandBossInstance npc) {
+	private void spawnBoss(GrandBossInstance npc) {
 		GrandBossManager.getInstance().addBoss(npc);
 		if (getRandom(100) < 33) {
 			_zone.movePlayersTo(OUST_LOC_1);
@@ -140,7 +140,7 @@ public final class QueenAnt extends AbstractNpcAI {
 		startQuestTimer("heal", 1000, null, null, true);
 		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 		_queen = npc;
-		_larva = (L2MonsterInstance) addSpawn(LARVA, -21600, 179482, -5846, getRandom(360), false, 0);
+		_larva = (MonsterInstance) addSpawn(LARVA, -21600, 179482, -5846, getRandom(360), false, 0);
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public final class QueenAnt extends AbstractNpcAI {
 			boolean notCasting;
 			final boolean larvaNeedHeal = (_larva != null) && (_larva.getCurrentHp() < _larva.getMaxHp());
 			final boolean queenNeedHeal = (_queen != null) && (_queen.getCurrentHp() < _queen.getMaxHp());
-			for (L2MonsterInstance nurse : _nurses) {
+			for (MonsterInstance nurse : _nurses) {
 				if ((nurse == null) || nurse.isDead() || nurse.isCastingNow(SkillCaster::isAnyNormalType)) {
 					continue;
 				}
@@ -187,7 +187,7 @@ public final class QueenAnt extends AbstractNpcAI {
 				}
 			}
 		} else if (event.equalsIgnoreCase("queen_unlock")) {
-			L2GrandBossInstance queen = (L2GrandBossInstance) addSpawn(QUEEN, QUEEN_X, QUEEN_Y, QUEEN_Z, 0, false, 0);
+			GrandBossInstance queen = (GrandBossInstance) addSpawn(QUEEN, QUEEN_X, QUEEN_Y, QUEEN_Z, 0, false, 0);
 			GrandBossManager.getInstance().setBossStatus(QUEEN, ALIVE);
 			spawnBoss(queen);
 		}
@@ -196,7 +196,7 @@ public final class QueenAnt extends AbstractNpcAI {
 
 	@Override
 	public String onSpawn(Npc npc) {
-		final L2MonsterInstance mob = (L2MonsterInstance) npc;
+		final MonsterInstance mob = (MonsterInstance) npc;
 		switch (npc.getId()) {
 			case LARVA:
 				mob.setIsImmobilized(true);
@@ -298,12 +298,12 @@ public final class QueenAnt extends AbstractNpcAI {
 			_queen = null;
 		} else if ((_queen != null) && !_queen.isAlikeDead()) {
 			if (npcId == ROYAL) {
-				L2MonsterInstance mob = (L2MonsterInstance) npc;
+				MonsterInstance mob = (MonsterInstance) npc;
 				if (mob.getLeader() != null) {
 					mob.getLeader().getMinionList().onMinionDie(mob, (280 + getRandom(40)) * 1000);
 				}
 			} else if (npcId == NURSE) {
-				L2MonsterInstance mob = (L2MonsterInstance) npc;
+				MonsterInstance mob = (MonsterInstance) npc;
 				_nurses.remove(mob);
 				if (mob.getLeader() != null) {
 					mob.getLeader().getMinionList().onMinionDie(mob, 10000);

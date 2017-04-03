@@ -20,8 +20,8 @@ package ai.individual.Other.FortressSiegeManager;
 
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
@@ -82,7 +82,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 				if (player.getClan() == null) {
 					htmltext = "FortressSiegeManager-02.html";
 				} else {
-					final L2Clan clan = player.getClan();
+					final Clan clan = player.getClan();
 					final Fort fortress = npc.getFort();
 					final Castle castle = npc.getCastle();
 
@@ -131,7 +131,7 @@ public final class FortressSiegeManager extends AbstractNpcAI {
 				if (player.getClan() == null) {
 					htmltext = "FortressSiegeManager-02.html";
 				} else {
-					final L2Clan clan = player.getClan();
+					final Clan clan = player.getClan();
 					final Fort fortress = npc.getFort();
 
 					if (clan.getFortId() == fortress.getResidenceId()) {

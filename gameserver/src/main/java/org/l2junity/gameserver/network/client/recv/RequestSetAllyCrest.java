@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.sql.impl.CrestTable;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.model.Crest.CrestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -68,7 +68,7 @@ public final class RequestSetAllyCrest implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan leaderClan = ClanTable.getInstance().getClan(activeChar.getAllyId());
+		final Clan leaderClan = ClanTable.getInstance().getClan(activeChar.getAllyId());
 
 		if ((activeChar.getClanId() != leaderClan.getId()) || !activeChar.isClanLeader()) {
 			activeChar.sendPacket(SystemMessageId.THIS_FEATURE_IS_ONLY_AVAILABLE_TO_ALLIANCE_LEADERS);

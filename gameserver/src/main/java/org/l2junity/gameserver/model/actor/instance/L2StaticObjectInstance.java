@@ -22,7 +22,7 @@ import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -64,7 +64,7 @@ public final class L2StaticObjectInstance extends Creature {
 	 * @param template
 	 * @param staticId
 	 */
-	public L2StaticObjectInstance(L2CharTemplate template, int staticId) {
+	public L2StaticObjectInstance(CharTemplate template, int staticId) {
 		super(template);
 		setInstanceType(InstanceType.L2StaticObjectInstance);
 		_staticObjectId = staticId;

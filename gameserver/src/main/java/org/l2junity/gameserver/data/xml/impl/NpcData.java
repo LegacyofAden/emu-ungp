@@ -29,7 +29,7 @@ import org.l2junity.gameserver.enums.MpRewardAffectType;
 import org.l2junity.gameserver.enums.MpRewardType;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.drops.DropListScope;
 import org.l2junity.gameserver.model.drops.GeneralDropItem;
 import org.l2junity.gameserver.model.drops.GroupedGeneralDropItem;
@@ -57,7 +57,7 @@ public class NpcData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final NpcData instance = new NpcData();
 
-	private final Map<Integer, L2NpcTemplate> _npcs = new ConcurrentHashMap<>();
+	private final Map<Integer, NpcTemplate> _npcs = new ConcurrentHashMap<>();
 	private final Map<String, Integer> _clans = new ConcurrentHashMap<>();
 	private MinionData _minionData;
 
@@ -398,9 +398,9 @@ public class NpcData implements IGameXmlReader {
 							}
 						}
 
-						L2NpcTemplate template = _npcs.get(npcId);
+						NpcTemplate template = _npcs.get(npcId);
 						if (template == null) {
-							template = new L2NpcTemplate(set);
+							template = new NpcTemplate(set);
 							_npcs.put(template.getId(), template);
 						} else {
 							template.set(set);
@@ -557,7 +557,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param id the template Id to get.
 	 * @return the template for the given id.
 	 */
-	public L2NpcTemplate getTemplate(int id) {
+	public NpcTemplate getTemplate(int id) {
 		return _npcs.get(id);
 	}
 
@@ -567,8 +567,8 @@ public class NpcData implements IGameXmlReader {
 	 * @param name of the template to get.
 	 * @return the template for the given name.
 	 */
-	public L2NpcTemplate getTemplateByName(String name) {
-		for (L2NpcTemplate npcTemplate : _npcs.values()) {
+	public NpcTemplate getTemplateByName(String name) {
+		for (NpcTemplate npcTemplate : _npcs.values()) {
 			if (npcTemplate.getName().equalsIgnoreCase(name)) {
 				return npcTemplate;
 			}
@@ -582,7 +582,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param filter
 	 * @return the template list for the given filter
 	 */
-	public List<L2NpcTemplate> getTemplates(Predicate<L2NpcTemplate> filter) {
+	public List<NpcTemplate> getTemplates(Predicate<NpcTemplate> filter) {
 		return _npcs.values().stream()
 				.filter(filter)
 				.collect(Collectors.toList());
@@ -594,7 +594,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param lvls of all the templates to get.
 	 * @return the template list for the given level.
 	 */
-	public List<L2NpcTemplate> getAllOfLevel(int... lvls) {
+	public List<NpcTemplate> getAllOfLevel(int... lvls) {
 		return getTemplates(template -> ArrayUtil.contains(lvls, template.getLevel()));
 	}
 
@@ -604,7 +604,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param lvls of all the monster templates to get.
 	 * @return the template list for the given level.
 	 */
-	public List<L2NpcTemplate> getAllMonstersOfLevel(int... lvls) {
+	public List<NpcTemplate> getAllMonstersOfLevel(int... lvls) {
 		return getTemplates(template -> ArrayUtil.contains(lvls, template.getLevel()) && template.isType("L2Monster"));
 	}
 
@@ -614,7 +614,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param text of all the NPC templates which its name start with.
 	 * @return the template list for the given letter.
 	 */
-	public List<L2NpcTemplate> getAllNpcStartingWith(String text) {
+	public List<NpcTemplate> getAllNpcStartingWith(String text) {
 		return getTemplates(template -> template.isType("L2Npc") && template.getName().startsWith(text));
 	}
 
@@ -624,7 +624,7 @@ public class NpcData implements IGameXmlReader {
 	 * @param classTypes of all the templates to get.
 	 * @return the template list for the given class type.
 	 */
-	public List<L2NpcTemplate> getAllNpcOfClassType(String... classTypes) {
+	public List<NpcTemplate> getAllNpcOfClassType(String... classTypes) {
 		return getTemplates(template -> ArrayUtil.contains(classTypes, template.getType(), true));
 	}
 }

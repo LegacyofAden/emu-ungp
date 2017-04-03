@@ -26,7 +26,7 @@ import org.l2junity.gameserver.enums.PartySmallWindowUpdateType;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLevelChanged;
@@ -108,7 +108,7 @@ public class PcStat extends PlayableStat {
 		// if this player has a pet and it is in his range he takes from the owner's Exp, give the pet Exp now
 		final Summon sPet = activeChar.getPet();
 		if ((sPet != null) && Util.checkIfInShortRange(PlayerConfig.ALT_PARTY_RANGE, activeChar, sPet, false)) {
-			L2PetInstance pet = (L2PetInstance) sPet;
+			PetInstance pet = (PetInstance) sPet;
 			ratioTakenByPlayer = pet.getPetLevelData().getOwnerExpTaken() / 100f;
 
 			// only give exp/sp to the pet by taking from the owner if the pet has a non-zero, positive ratio
@@ -213,7 +213,7 @@ public class PcStat extends PlayableStat {
 		// Synchronize level with pet if possible.
 		final Summon sPet = getActiveChar().getPet();
 		if (sPet != null) {
-			final L2PetInstance pet = (L2PetInstance) sPet;
+			final PetInstance pet = (PetInstance) sPet;
 			if (pet.getPetData().isSynchLevel() && (pet.getLevel() != getLevel())) {
 				pet.getStat().setLevel(getLevel());
 				pet.getStat().getExpForLevel(getActiveChar().getLevel());

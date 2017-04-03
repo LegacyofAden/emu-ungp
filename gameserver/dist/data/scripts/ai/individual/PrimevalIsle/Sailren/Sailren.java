@@ -24,7 +24,7 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2RaidBossInstance;
+import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
@@ -124,7 +124,7 @@ public final class Sailren extends AbstractNpcAI {
 				break;
 			}
 			case "SPAWN_SAILREN": {
-				final L2RaidBossInstance sailren = (L2RaidBossInstance) addSpawn(SAILREN, 27549, -6638, -2008, 0, false, 0);
+				final RaidBossInstance sailren = (RaidBossInstance) addSpawn(SAILREN, 27549, -6638, -2008, 0, false, 0);
 				final Npc movieNpc = addSpawn(MOVIE_NPC, sailren.getX(), sailren.getY(), sailren.getZ() + 30, 0, false, 26000);
 				sailren.setIsInvul(true);
 				sailren.setIsImmobilized(true);

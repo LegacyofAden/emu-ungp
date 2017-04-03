@@ -18,16 +18,16 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class ManagePledgePower implements IClientOutgoingPacket {
 	private final int _action;
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final int _rank;
 
-	public ManagePledgePower(L2Clan clan, int action, int rank) {
+	public ManagePledgePower(Clan clan, int action, int rank) {
 		_clan = clan;
 		_action = action;
 		_rank = rank;

@@ -18,9 +18,9 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -48,7 +48,7 @@ public final class RequestPledgeSetAcademyMaster implements IClientIncomingPacke
 	@Override
 	public void run(L2GameClient client) {
 		Player activeChar = client.getActiveChar();
-		L2Clan clan = activeChar.getClan();
+		Clan clan = activeChar.getClan();
 		if (clan == null) {
 			return;
 		}

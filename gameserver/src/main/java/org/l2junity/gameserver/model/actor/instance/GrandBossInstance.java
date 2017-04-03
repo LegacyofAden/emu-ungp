@@ -19,23 +19,23 @@
 package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * This class manages all Grand Bosses.
  *
  * @version $Revision: 1.0.0.0 $ $Date: 2006/06/16 $
  */
-public final class L2GrandBossInstance extends L2MonsterInstance {
+public final class GrandBossInstance extends MonsterInstance {
 	private static final int BOSS_MAINTENANCE_INTERVAL = 10000;
 	private boolean _useRaidCurse = true;
 
 	/**
-	 * Constructor for L2GrandBossInstance. This represent all grandbosses.
+	 * Constructor for GrandBossInstance. This represent all grandbosses.
 	 *
-	 * @param template L2NpcTemplate of the instance
+	 * @param template NpcTemplate of the instance
 	 */
-	public L2GrandBossInstance(L2NpcTemplate template) {
+	public GrandBossInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2GrandBossInstance);
 		setIsRaid(true);

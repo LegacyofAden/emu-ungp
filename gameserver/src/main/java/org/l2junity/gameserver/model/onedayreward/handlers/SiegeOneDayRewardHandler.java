@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.onedayreward.handlers;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.OneDayRewardStatus;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.OneDayRewardPlayerEntry;
 import org.l2junity.gameserver.model.SiegeClan;
@@ -63,7 +63,7 @@ public class SiegeOneDayRewardHandler extends AbstractOneDayRewardHandler {
 	}
 
 	private void processSiegeClan(SiegeClan siegeClan) {
-		final L2Clan clan = ClanTable.getInstance().getClan(siegeClan.getClanId());
+		final Clan clan = ClanTable.getInstance().getClan(siegeClan.getClanId());
 		if (clan != null) {
 			clan.getOnlineMembers(0).forEach(player ->
 			{

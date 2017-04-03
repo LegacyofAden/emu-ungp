@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.itemcontainer;
 
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanWHItemAdd;
@@ -29,9 +29,9 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerClanWH
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 
 public final class ClanWarehouse extends Warehouse {
-	private final L2Clan _clan;
+	private final Clan _clan;
 
-	public ClanWarehouse(L2Clan clan) {
+	public ClanWarehouse(Clan clan) {
 		_clan = clan;
 	}
 

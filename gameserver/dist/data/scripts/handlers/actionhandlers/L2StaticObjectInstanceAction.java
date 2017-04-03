@@ -37,12 +37,12 @@ public class L2StaticObjectInstanceAction implements IActionHandler {
 			_log.info("L2StaticObjectInstance: StaticObject with invalid type! StaticObjectId: " + staticObject.getId());
 		}
 
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (activeChar.getTarget() != staticObject) {
 			// Set the target of the L2PcInstance activeChar
 			activeChar.setTarget(staticObject);
 		} else if (interact) {
-			// Calculate the distance between the L2PcInstance and the L2NpcInstance
+			// Calculate the distance between the L2PcInstance and the NpcInstance
 			if (!activeChar.isInRadius2d(staticObject, Npc.INTERACTION_DISTANCE)) {
 				// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 				activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, staticObject);

@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ public class MultisellEntryHolder {
 	public MultisellEntryHolder(List<ItemHolder> ingredients, List<ItemChanceHolder> products) {
 		_ingredients = Collections.unmodifiableList(ingredients);
 		_products = Collections.unmodifiableList(products);
-		_stackable = products.stream().map(i -> ItemTable.getInstance().getTemplate(i.getId())).filter(Objects::nonNull).allMatch(L2Item::isStackable);
+		_stackable = products.stream().map(i -> ItemTable.getInstance().getTemplate(i.getId())).filter(Objects::nonNull).allMatch(ItemTemplate::isStackable);
 	}
 
 	public final List<ItemHolder> getIngredients() {

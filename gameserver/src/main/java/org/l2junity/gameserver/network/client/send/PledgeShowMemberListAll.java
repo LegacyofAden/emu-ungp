@@ -20,9 +20,9 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.L2Clan;
-import org.l2junity.gameserver.model.L2Clan.SubPledge;
+import org.l2junity.gameserver.model.Clan.SubPledge;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -30,14 +30,14 @@ import org.l2junity.network.PacketWriter;
 import java.util.Collection;
 
 public class PledgeShowMemberListAll implements IClientOutgoingPacket {
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final SubPledge _pledge;
 	private final String _name;
 	private final String _leaderName;
 	private final Collection<ClanMember> _members;
 	private int _pledgeType;
 
-	private PledgeShowMemberListAll(L2Clan clan, SubPledge pledge) {
+	private PledgeShowMemberListAll(Clan clan, SubPledge pledge) {
 		_clan = clan;
 		_pledge = pledge;
 		_leaderName = pledge == null ? clan.getLeaderName() : CharNameTable.getInstance().getNameById(pledge.getLeaderId());
@@ -46,7 +46,7 @@ public class PledgeShowMemberListAll implements IClientOutgoingPacket {
 	}
 
 	public static void sendAllTo(Player player) {
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		if (clan != null) {
 			player.sendPacket(new PledgeShowMemberListAll(clan, null));
 			for (SubPledge subPledge : clan.getAllSubPledges()) {

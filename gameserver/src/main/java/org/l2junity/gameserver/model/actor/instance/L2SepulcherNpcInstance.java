@@ -27,7 +27,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
@@ -57,7 +57,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	private static final String HTML_FILE_PATH = "SepulcherNpc/";
 	private static final int HALLS_KEY = 7260;
 
-	public L2SepulcherNpcInstance(L2NpcTemplate template) {
+	public L2SepulcherNpcInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2SepulcherNpcInstance);
 		setShowSummonAnimation(true);
@@ -105,7 +105,7 @@ public class L2SepulcherNpcInstance extends Npc {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2NpcInstance
+		// Check if the L2PcInstance already target the NpcInstance
 		if (this != player.getTarget()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
@@ -129,14 +129,14 @@ public class L2SepulcherNpcInstance extends Npc {
 
 			if (!isAutoAttackable(player)) {
 				// Calculate the distance between the L2PcInstance and the
-				// L2NpcInstance
+				// NpcInstance
 				if (!canInteract(player)) {
 					// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 					player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);
 				} else {
 					// Send a Server->Client packet SocialAction to the all
-					// L2PcInstance on the _knownPlayer of the L2NpcInstance
-					// to display a social action of the L2NpcInstance on their
+					// L2PcInstance on the _knownPlayer of the NpcInstance
+					// to display a social action of the NpcInstance on their
 					// client
 					SocialAction sa = new SocialAction(getObjectId(), Rnd.get(8));
 					broadcastPacket(sa);

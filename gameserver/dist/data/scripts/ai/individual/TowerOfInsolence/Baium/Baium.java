@@ -34,7 +34,7 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -99,7 +99,7 @@ public final class Baium extends AbstractNpcAI {
 					new Location(114239, 17168, 10136, -1992)
 			};
 	// Misc
-	private L2GrandBossInstance _baium = null;
+	private GrandBossInstance _baium = null;
 	private static long _lastAttack = 0;
 	private static Player _standbyPlayer = null;
 
@@ -130,7 +130,7 @@ public final class Baium extends AbstractNpcAI {
 				final int loc_z = info.getInt("loc_z");
 				final int heading = info.getInt("heading");
 
-				_baium = (L2GrandBossInstance) addSpawn(BAIUM, loc_x, loc_y, loc_z, heading, false, 0);
+				_baium = (GrandBossInstance) addSpawn(BAIUM, loc_x, loc_y, loc_z, heading, false, 0);
 				_baium.setCurrentHpMp(curr_hp, curr_mp);
 				_lastAttack = System.currentTimeMillis();
 				addBoss(_baium);
@@ -183,7 +183,7 @@ public final class Baium extends AbstractNpcAI {
 				if (getStatus() == ALIVE) {
 					npc.deleteMe();
 					setStatus(IN_FIGHT);
-					_baium = (L2GrandBossInstance) addSpawn(BAIUM, BAIUM_LOC, false, 0);
+					_baium = (GrandBossInstance) addSpawn(BAIUM, BAIUM_LOC, false, 0);
 					_baium.disableCoreAI(true);
 					addBoss(_baium);
 					_lastAttack = System.currentTimeMillis();
@@ -520,7 +520,7 @@ public final class Baium extends AbstractNpcAI {
 		return GrandBossManager.getInstance().getBossStatus(BAIUM);
 	}
 
-	private void addBoss(L2GrandBossInstance grandboss) {
+	private void addBoss(GrandBossInstance grandboss) {
 		GrandBossManager.getInstance().addBoss(grandboss);
 	}
 

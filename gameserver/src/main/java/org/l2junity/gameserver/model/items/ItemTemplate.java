@@ -62,8 +62,8 @@ import java.util.stream.Collectors;
  * <li>L2Weapon</li>
  * </ul>
  */
-public abstract class L2Item extends ListenersContainer implements IIdentifiable {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(L2Item.class);
+public abstract class ItemTemplate extends ListenersContainer implements IIdentifiable {
+	protected static final Logger LOGGER = LoggerFactory.getLogger(ItemTemplate.class);
 
 	public static final int TYPE1_WEAPON_RING_EARRING_NECKLACE = 0;
 	public static final int TYPE1_SHIELD_ARMOR = 1;
@@ -169,12 +169,12 @@ public abstract class L2Item extends ListenersContainer implements IIdentifiable
 	private boolean _isBlessed;
 
 	/**
-	 * Constructor of the L2Item that fill class variables.<BR>
+	 * Constructor of the ItemTemplate that fill class variables.<BR>
 	 * <BR>
 	 *
 	 * @param set : StatsSet corresponding to a set of couples (key,value) for description of the item
 	 */
-	protected L2Item(StatsSet set) {
+	protected ItemTemplate(StatsSet set) {
 		set(set);
 	}
 

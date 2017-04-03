@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2ControllableMobInstance;
+import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
@@ -100,7 +100,7 @@ public class AdminRes implements IAdminCommandHandler {
 			obj = activeChar;
 		}
 
-		if (obj instanceof L2ControllableMobInstance) {
+		if (obj instanceof ControllableMobInstance) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}
@@ -127,7 +127,7 @@ public class AdminRes implements IAdminCommandHandler {
 
 				World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, knownChar ->
 				{
-					if (!(knownChar instanceof Player) && !(knownChar instanceof L2ControllableMobInstance)) {
+					if (!(knownChar instanceof Player) && !(knownChar instanceof ControllableMobInstance)) {
 						doResurrect(knownChar);
 					}
 				});
@@ -139,7 +139,7 @@ public class AdminRes implements IAdminCommandHandler {
 			return;
 		}
 
-		if ((obj instanceof Player) || (obj instanceof L2ControllableMobInstance)) {
+		if ((obj instanceof Player) || (obj instanceof ControllableMobInstance)) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			return;
 		}

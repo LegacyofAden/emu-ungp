@@ -19,12 +19,12 @@
 package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Evolve;
 
-public class L2PetManagerInstance extends L2MerchantInstance {
-	public L2PetManagerInstance(L2NpcTemplate template) {
+public class PetManagerInstance extends MerchantInstance {
+	public PetManagerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2PetManagerInstance);
 	}

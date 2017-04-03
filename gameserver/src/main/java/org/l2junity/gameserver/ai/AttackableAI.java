@@ -275,7 +275,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 	 * <li>Update every 1s the _globalAggro counter to come close to 0</li>
 	 * <li>If the actor is Aggressive and can attack, add all autoAttackable L2Character in its Aggro Range to its _aggroList, chose a target and order to attack it</li>
 	 * <li>If the actor is a L2GuardInstance that can't attack, order to it to return to its home location</li>
-	 * <li>If the actor is a L2MonsterInstance that can't attack, order to it to random walk (1/100)</li>
+	 * <li>If the actor is a MonsterInstance that can't attack, order to it to random walk (1/100)</li>
 	 * </ul>
 	 */
 	protected void thinkActive() {
@@ -350,8 +350,8 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			npc.clearAggroList();
 			npc.getAttackByList().clear();
 			if (npc.isMonster()) {
-				if (((L2MonsterInstance) npc).hasMinions()) {
-					((L2MonsterInstance) npc).getMinionList().deleteReusedMinions();
+				if (((MonsterInstance) npc).hasMinions()) {
+					((MonsterInstance) npc).getMinionList().deleteReusedMinions();
 				}
 			}
 		}
@@ -416,7 +416,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 				}
 			}
 		}
-		// Order to the L2MonsterInstance to random walk (1/100)
+		// Order to the MonsterInstance to random walk (1/100)
 		else if ((npc.getSpawn() != null) && (Rnd.nextInt(RANDOM_WALK_RATE) == 0) && npc.isRandomWalkingEnabled()) {
 			double x1 = 0;
 			double y1 = 0;
@@ -606,10 +606,10 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		if (npc.isRaid() || npc.isRaidMinion()) {
 			chaostime++;
 			boolean changeTarget = false;
-			if ((npc instanceof L2RaidBossInstance) && (chaostime > NpcConfig.RAID_CHAOS_TIME)) {
-				double multiplier = ((L2MonsterInstance) npc).hasMinions() ? 200 : 100;
+			if ((npc instanceof RaidBossInstance) && (chaostime > NpcConfig.RAID_CHAOS_TIME)) {
+				double multiplier = ((MonsterInstance) npc).hasMinions() ? 200 : 100;
 				changeTarget = Rnd.get(100) <= (100 - ((npc.getCurrentHp() * multiplier) / npc.getMaxHp()));
-			} else if ((npc instanceof L2GrandBossInstance) && (chaostime > NpcConfig.GRAND_CHAOS_TIME)) {
+			} else if ((npc instanceof GrandBossInstance) && (chaostime > NpcConfig.GRAND_CHAOS_TIME)) {
 				double chaosRate = 100 - ((npc.getCurrentHp() * 300) / npc.getMaxHp());
 				changeTarget = ((chaosRate <= 10) && (Rnd.get(100) <= 10)) || ((chaosRate > 10) && (Rnd.get(100) <= chaosRate));
 			} else if (chaostime > NpcConfig.MINION_CHAOS_TIME) {
@@ -949,7 +949,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		}
 
 		if (me.isMonster()) {
-			L2MonsterInstance master = (L2MonsterInstance) me;
+			MonsterInstance master = (MonsterInstance) me;
 
 			if (master.hasMinions()) {
 				master.getMinionList().onAssist(me, attacker);
@@ -996,7 +996,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			}
 
 			if (me.isMonster()) {
-				L2MonsterInstance master = (L2MonsterInstance) me;
+				MonsterInstance master = (MonsterInstance) me;
 
 				if (master.hasMinions()) {
 					master.getMinionList().onAssist(me, target);

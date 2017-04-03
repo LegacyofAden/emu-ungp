@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -41,7 +41,7 @@ import java.util.List;
 public class PetFood implements IItemHandler {
 	@Override
 	public boolean useItem(Playable playable, ItemInstance item, boolean forceUse) {
-		if (playable.isPet() && !((L2PetInstance) playable).canEatFoodId(item.getId())) {
+		if (playable.isPet() && !((PetInstance) playable).canEatFoodId(item.getId())) {
 			playable.sendPacket(SystemMessageId.THIS_PET_CANNOT_USE_THIS_ITEM);
 			return false;
 		}
@@ -57,7 +57,7 @@ public class PetFood implements IItemHandler {
 		final Skill skill = SkillData.getInstance().getSkill(skillId, skillLevel);
 		if (skill != null) {
 			if (activeChar.isPet()) {
-				final L2PetInstance pet = (L2PetInstance) activeChar;
+				final PetInstance pet = (PetInstance) activeChar;
 				if (pet.destroyItem("Consume", item.getObjectId(), 1, null, false)) {
 					pet.broadcastPacket(new MagicSkillUse(pet, pet, skillId, skillLevel, 0, 0));
 					skill.applyEffects(pet, pet);

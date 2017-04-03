@@ -28,7 +28,7 @@ import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2BlockInstance;
+import org.l2junity.gameserver.model.actor.instance.BlockInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.debugger.DebugType;
@@ -1043,7 +1043,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 
 		// Consume clan reputation points
 		if ((getPledgeNvConsume() > 0) && (activeChar.getClan() != null)) {
-			final L2Clan clan = activeChar.getClan();
+			final Clan clan = activeChar.getClan();
 			if (clan.getReputationScore() < getPledgeNvConsume()) {
 				activeChar.sendPacket(SystemMessageId.THE_CLAN_REPUTATION_IS_TOO_LOW);
 				return false;
@@ -1375,7 +1375,7 @@ public final class Skill extends ListenersContainer implements IIdentifiable {
 		switch (getId()) {
 			case 5852:
 			case 5853: {
-				final L2BlockInstance block = targets[0] instanceof L2BlockInstance ? (L2BlockInstance) targets[0] : null;
+				final BlockInstance block = targets[0] instanceof BlockInstance ? (BlockInstance) targets[0] : null;
 				final Player player = caster.isPlayer() ? (Player) caster : null;
 				if ((block == null) || (player == null)) {
 					return;

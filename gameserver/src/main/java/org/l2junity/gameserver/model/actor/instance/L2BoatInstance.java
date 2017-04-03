@@ -22,7 +22,7 @@ import org.l2junity.gameserver.ai.BoatAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Vehicle;
-import org.l2junity.gameserver.model.actor.templates.L2CharTemplate;
+import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.VehicleDeparture;
 import org.l2junity.gameserver.network.client.send.VehicleInfo;
 import org.l2junity.gameserver.network.client.send.VehicleStarted;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class L2BoatInstance extends Vehicle {
 	protected static final Logger _logBoat = LoggerFactory.getLogger(L2BoatInstance.class);
 
-	public L2BoatInstance(L2CharTemplate template) {
+	public L2BoatInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2BoatInstance);
 		setAI(new BoatAI(this));

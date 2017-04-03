@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.CrestTable;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.model.Crest.CrestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -55,7 +55,7 @@ public final class RequestExSetPledgeCrestLarge implements IClientIncomingPacket
 			return;
 		}
 
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 		if (clan == null) {
 			return;
 		}

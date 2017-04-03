@@ -69,8 +69,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class L2Clan implements IIdentifiable, INamable {
-	private static final Logger _log = LoggerFactory.getLogger(L2Clan.class);
+public class Clan implements IIdentifiable, INamable {
+	private static final Logger _log = LoggerFactory.getLogger(Clan.class);
 
 	// SQL queries
 	private static final String INSERT_CLAN_DATA = "INSERT INTO clan_data (clan_id,clan_name,clan_level,hasCastle,blood_alliance_count,blood_oath_count,ally_id,ally_name,leader_id,crest_id,crest_large_id,ally_crest_id,new_leader_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -177,7 +177,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 *
 	 * @param clanId A valid clan Id to create and restore
 	 */
-	public L2Clan(int clanId) {
+	public Clan(int clanId) {
 		_clanId = clanId;
 		initializePrivs();
 		restore();
@@ -200,7 +200,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	 * @param clanId   A valid clan Id to create
 	 * @param clanName A valid clan name
 	 */
-	public L2Clan(int clanId, String clanName) {
+	public Clan(int clanId, String clanName) {
 		_clanId = clanId;
 		_name = clanName;
 		initializePrivs();
@@ -1080,7 +1080,7 @@ public class L2Clan implements IIdentifiable, INamable {
 					int level = rset.getInt("skill_level");
 					// Create a L2Skill object for each record
 					Skill skill = SkillData.getInstance().getSkill(id, level);
-					// Add the L2Skill object to the L2Clan _skills
+					// Add the L2Skill object to the Clan _skills
 					int subType = rset.getInt("sub_pledge_id");
 
 					if (subType == -2) {
@@ -1121,7 +1121,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Used to add a skill to skill list of this L2Clan
+	 * Used to add a skill to skill list of this Clan
 	 *
 	 * @param newSkill
 	 * @return
@@ -1321,7 +1321,7 @@ public class L2Clan implements IIdentifiable, INamable {
 	}
 
 	public void broadcastToOnlineAllyMembers(IClientOutgoingPacket packet) {
-		for (L2Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
+		for (Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
 			clan.broadcastToOnlineMembers(packet);
 		}
 	}
@@ -1363,7 +1363,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		return _atWarWith.containsKey(clanId);
 	}
 
-	public boolean isAtWarWith(L2Clan clan) {
+	public boolean isAtWarWith(Clan clan) {
 		if (clan == null) {
 			return false;
 		}
@@ -1542,7 +1542,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		SubPledge subPledge = null;
 		pledgeType = getAvailablePledgeTypes(pledgeType);
 		if (pledgeType == 0) {
-			if (pledgeType == L2Clan.SUBUNIT_ACADEMY) {
+			if (pledgeType == Clan.SUBUNIT_ACADEMY) {
 				player.sendPacket(SystemMessageId.YOUR_CLAN_HAS_ALREADY_ESTABLISHED_A_CLAN_ACADEMY);
 			} else {
 				player.sendMessage("You can't create any more sub-units of this type");
@@ -1556,7 +1556,7 @@ public class L2Clan implements IIdentifiable, INamable {
 
 		// Royal Guard 5000 points per each
 		// Order of Knights 10000 points per each
-		if ((pledgeType != -1) && (((getReputationScore() < FeatureConfig.ROYAL_GUARD_COST) && (pledgeType < L2Clan.SUBUNIT_KNIGHT1)) || ((getReputationScore() < FeatureConfig.KNIGHT_UNIT_COST) && (pledgeType > L2Clan.SUBUNIT_ROYAL2)))) {
+		if ((pledgeType != -1) && (((getReputationScore() < FeatureConfig.ROYAL_GUARD_COST) && (pledgeType < Clan.SUBUNIT_KNIGHT1)) || ((getReputationScore() < FeatureConfig.KNIGHT_UNIT_COST) && (pledgeType > Clan.SUBUNIT_ROYAL2)))) {
 			player.sendPacket(SystemMessageId.THE_CLAN_REPUTATION_IS_TOO_LOW);
 			return null;
 		}
@@ -1575,7 +1575,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			if (pledgeType != -1) {
 				// Royal Guard 5000 points per each
 				// Order of Knights 10000 points per each
-				if (pledgeType < L2Clan.SUBUNIT_KNIGHT1) {
+				if (pledgeType < Clan.SUBUNIT_KNIGHT1) {
 					setReputationScore(getReputationScore() - FeatureConfig.ROYAL_GUARD_COST, true);
 				} else {
 					setReputationScore(getReputationScore() - FeatureConfig.KNIGHT_UNIT_COST, true);
@@ -1887,7 +1887,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			activeChar.sendPacket(SystemMessageId.THIS_FEATURE_IS_ONLY_AVAILABLE_TO_ALLIANCE_LEADERS);
 			return false;
 		}
-		L2Clan leaderClan = activeChar.getClan();
+		Clan leaderClan = activeChar.getClan();
 		if (leaderClan.getAllyPenaltyExpiryTime() > System.currentTimeMillis()) {
 			if (leaderClan.getAllyPenaltyType() == PENALTY_TYPE_DISMISS_CLAN) {
 				activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_ACCEPT_ANY_CLAN_WITHIN_A_DAY_AFTER_EXPELLING_ANOTHER_CLAN);
@@ -1912,7 +1912,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			activeChar.sendPacket(sm);
 			return false;
 		}
-		L2Clan targetClan = target.getClan();
+		Clan targetClan = target.getClan();
 		if (target.getAllyId() != 0) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_ALREADY_A_MEMBER_OF_S2_ALLIANCE);
 			sm.addString(targetClan.getName());
@@ -2001,7 +2001,7 @@ public class L2Clan implements IIdentifiable, INamable {
 			return;
 		}
 		if (getAllyPenaltyExpiryTime() > System.currentTimeMillis()) {
-			if (getAllyPenaltyType() == L2Clan.PENALTY_TYPE_DISSOLVE_ALLY) {
+			if (getAllyPenaltyType() == Clan.PENALTY_TYPE_DISSOLVE_ALLY) {
 				player.sendPacket(SystemMessageId.YOU_CANNOT_CREATE_A_NEW_ALLIANCE_WITHIN_1_DAY_OF_DISSOLUTION);
 				return;
 			}
@@ -2051,7 +2051,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		broadcastToOnlineAllyMembers(SystemMessage.getSystemMessage(SystemMessageId.THE_ALLIANCE_HAS_BEEN_DISSOLVED));
 
 		long currentTime = System.currentTimeMillis();
-		for (L2Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
+		for (Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
 			if (clan.getId() != getId()) {
 				clan.setAllyId(0);
 				clan.setAllyName(null);
@@ -2063,7 +2063,7 @@ public class L2Clan implements IIdentifiable, INamable {
 		setAllyId(0);
 		setAllyName(null);
 		changeAllyCrest(0, false);
-		setAllyPenaltyExpiryTime(currentTime + (PlayerConfig.ALT_CREATE_ALLY_DAYS_WHEN_DISSOLVED * 86400000L), L2Clan.PENALTY_TYPE_DISSOLVE_ALLY); // 24*60*60*1000 = 86400000
+		setAllyPenaltyExpiryTime(currentTime + (PlayerConfig.ALT_CREATE_ALLY_DAYS_WHEN_DISSOLVED * 86400000L), Clan.PENALTY_TYPE_DISSOLVE_ALLY); // 24*60*60*1000 = 86400000
 		updateClanInDB();
 	}
 
@@ -2341,7 +2341,7 @@ public class L2Clan implements IIdentifiable, INamable {
 				member.broadcastUserInfo();
 			}
 		} else {
-			for (L2Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
+			for (Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
 				clan.setAllyCrestId(crestId);
 				for (Player member : clan.getOnlineMembers(0)) {
 					member.broadcastUserInfo();

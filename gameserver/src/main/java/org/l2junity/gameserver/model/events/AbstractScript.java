@@ -39,10 +39,10 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.events.annotations.*;
@@ -72,7 +72,7 @@ import org.l2junity.gameserver.model.interfaces.IPositionable;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.items.EtcItem;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.enchant.attribute.AttributeHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
@@ -217,7 +217,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 						}
 
 						for (int level = range.from(); level <= range.to(); level++) {
-							final List<L2NpcTemplate> templates = NpcData.getInstance().getAllOfLevel(level);
+							final List<NpcTemplate> templates = NpcData.getInstance().getAllOfLevel(level);
 							templates.forEach(template -> ids.add(template.getId()));
 						}
 
@@ -233,7 +233,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 							}
 
 							for (int level = range.from(); level <= range.to(); level++) {
-								final List<L2NpcTemplate> templates = NpcData.getInstance().getAllOfLevel(level);
+								final List<NpcTemplate> templates = NpcData.getInstance().getAllOfLevel(level);
 								templates.forEach(template -> ids.add(template.getId()));
 							}
 						}
@@ -1057,7 +1057,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides instant callback operation when {@link L2Item} receives an event from {@link Player}.
+	 * Provides instant callback operation when {@link ItemTemplate} receives an event from {@link Player}.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -1068,7 +1068,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	}
 
 	/**
-	 * Provides instant callback operation when {@link L2Item} receives an event from {@link Player}.
+	 * Provides instant callback operation when {@link ItemTemplate} receives an event from {@link Player}.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -1081,7 +1081,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides instant callback operation when {@link Player} talk to {@link L2Item}.
+	 * Provides instant callback operation when {@link Player} talk to {@link ItemTemplate}.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -1092,7 +1092,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	}
 
 	/**
-	 * Provides instant callback operation when {@link Player} talk to {@link L2Item}.
+	 * Provides instant callback operation when {@link Player} talk to {@link ItemTemplate}.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -1468,7 +1468,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 			for (int id : ids) {
 				switch (registerType) {
 					case NPC: {
-						final L2NpcTemplate template = NpcData.getInstance().getTemplate(id);
+						final NpcTemplate template = NpcData.getInstance().getTemplate(id);
 						if (template != null) {
 							listeners.add(template.addListener(action.apply(template)));
 						}
@@ -1482,7 +1482,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 						break;
 					}
 					case ITEM: {
-						final L2Item template = ItemTable.getInstance().getTemplate(id);
+						final ItemTemplate template = ItemTable.getInstance().getTemplate(id);
 						if (template != null) {
 							listeners.add(template.addListener(action.apply(template)));
 						}
@@ -1568,7 +1568,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 			for (int id : ids) {
 				switch (registerType) {
 					case NPC: {
-						final L2NpcTemplate template = NpcData.getInstance().getTemplate(id);
+						final NpcTemplate template = NpcData.getInstance().getTemplate(id);
 						if (template != null) {
 							listeners.add(template.addListener(action.apply(template)));
 						}
@@ -1582,7 +1582,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 						break;
 					}
 					case ITEM: {
-						final L2Item template = ItemTable.getInstance().getTemplate(id);
+						final ItemTemplate template = ItemTable.getInstance().getTemplate(id);
 						if (template != null) {
 							listeners.add(template.addListener(action.apply(template)));
 						}
@@ -2011,7 +2011,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	 * @return
 	 */
 	public L2TrapInstance addTrap(int trapId, double x, double y, double z, int heading, Skill skill, int instanceId) {
-		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(trapId);
+		final NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(trapId);
 		L2TrapInstance trap = new L2TrapInstance(npcTemplate, instanceId);
 		trap.setCurrentHp(trap.getMaxHp());
 		trap.setCurrentMp(trap.getMaxMp());
@@ -2026,7 +2026,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	 * @param minionId
 	 * @return
 	 */
-	public Npc addMinion(L2MonsterInstance master, int minionId) {
+	public Npc addMinion(MonsterInstance master, int minionId) {
 		return MinionList.spawnMinion(master, minionId);
 	}
 
@@ -2218,7 +2218,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 			return;
 		}
 
-		final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+		final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 		if (item == null) {
 			return;
 		}

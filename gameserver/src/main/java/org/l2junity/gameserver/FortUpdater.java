@@ -19,7 +19,7 @@
 package org.l2junity.gameserver;
 
 import org.l2junity.core.configs.FeatureConfig;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FortUpdater implements Runnable {
 	protected static Logger LOGGER = LoggerFactory.getLogger(FortUpdater.class);
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final Fort _fort;
 	private int _runCount;
 	private final UpdaterType _updaterType;
@@ -42,7 +42,7 @@ public class FortUpdater implements Runnable {
 		PERIODIC_UPDATE // raise blood oath/supply level
 	}
 
-	public FortUpdater(Fort fort, L2Clan clan, int runCount, UpdaterType ut) {
+	public FortUpdater(Fort fort, Clan clan, int runCount, UpdaterType ut) {
 		_fort = fort;
 		_clan = clan;
 		_runCount = runCount;

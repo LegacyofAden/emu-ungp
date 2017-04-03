@@ -23,7 +23,7 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.xml.impl.BuyListData;
 import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
 import org.l2junity.gameserver.model.holders.UniqueItemHolder;
@@ -97,14 +97,14 @@ public final class RequestSellItem implements IClientIncomingPacket {
 		}
 
 		WorldObject target = player.getTarget();
-		L2MerchantInstance merchant = null;
+		MerchantInstance merchant = null;
 		if (!player.isGM()) {
 			if ((target == null) || (!player.isInRadius3d(target, INTERACTION_DISTANCE)) || (player.getInstanceWorld() != target.getInstanceWorld())) {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-			if (target instanceof L2MerchantInstance) {
-				merchant = (L2MerchantInstance) target;
+			if (target instanceof MerchantInstance) {
+				merchant = (MerchantInstance) target;
 			} else {
 				client.sendPacket(ActionFailed.STATIC_PACKET);
 				return;

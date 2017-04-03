@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -38,23 +38,23 @@ public interface Siegable {
 
 	SiegeClan getAttackerClan(int clanId);
 
-	SiegeClan getAttackerClan(L2Clan clan);
+	SiegeClan getAttackerClan(Clan clan);
 
 	Collection<SiegeClan> getAttackerClans();
 
 	List<Player> getAttackersInZone();
 
-	boolean checkIsAttacker(L2Clan clan);
+	boolean checkIsAttacker(Clan clan);
 
 	SiegeClan getDefenderClan(int clanId);
 
-	SiegeClan getDefenderClan(L2Clan clan);
+	SiegeClan getDefenderClan(Clan clan);
 
 	List<SiegeClan> getDefenderClans();
 
-	boolean checkIsDefender(L2Clan clan);
+	boolean checkIsDefender(Clan clan);
 
-	Set<Npc> getFlag(L2Clan clan);
+	Set<Npc> getFlag(Clan clan);
 
 	Calendar getSiegeDate();
 

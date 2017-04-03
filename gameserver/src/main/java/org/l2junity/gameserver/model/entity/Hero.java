@@ -30,11 +30,11 @@ import org.l2junity.gameserver.data.xml.impl.ClassListData;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
@@ -215,7 +215,7 @@ public class Hero {
 					_diaryentry.set("date", date);
 
 					if (action == ACTION_RAID_KILLED) {
-						L2NpcTemplate template = NpcData.getInstance().getTemplate(param);
+						NpcTemplate template = NpcData.getInstance().getTemplate(param);
 						if (template != null) {
 							_diaryentry.set("action", template.getName() + " was defeated");
 						}
@@ -663,7 +663,7 @@ public class Hero {
 	public void setRBkilled(int charId, int npcId) {
 		setDiaryData(charId, ACTION_RAID_KILLED, npcId);
 
-		L2NpcTemplate template = NpcData.getInstance().getTemplate(npcId);
+		NpcTemplate template = NpcData.getInstance().getTemplate(npcId);
 
 		if (_herodiary.containsKey(charId) && (template != null)) {
 			// Get Data
@@ -799,7 +799,7 @@ public class Hero {
 
 		hero.set(CLAIMED, true);
 
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 		if ((clan != null) && (clan.getLevel() >= 5)) {
 			clan.addReputationScore(FeatureConfig.HERO_POINTS, true);
 			final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_C1_WAS_NAMED_A_HERO_S2_POINTS_HAVE_BEEN_ADDED_TO_YOUR_CLAN_REPUTATION);

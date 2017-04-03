@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
+import org.l2junity.gameserver.model.actor.instance.NpcInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class SkillList implements IBypassHandler {
@@ -33,11 +33,11 @@ public class SkillList implements IBypassHandler {
 
 	@Override
 	public boolean useBypass(String command, Player activeChar, Creature target) {
-		if (!(target instanceof L2NpcInstance)) {
+		if (!(target instanceof NpcInstance)) {
 			return false;
 		}
 
-		L2NpcInstance.showSkillList(activeChar, (Npc) target, activeChar.getClassId());
+		NpcInstance.showSkillList(activeChar, (Npc) target, activeChar.getClassId());
 		return true;
 	}
 

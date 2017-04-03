@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.SummonStatus;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonSpawn;
 import org.l2junity.gameserver.model.interfaces.ILocational;
@@ -74,7 +74,7 @@ public abstract class Summon extends Playable {
 			};
 	// @formatter:on
 
-	public Summon(L2NpcTemplate template, Player owner) {
+	public Summon(NpcTemplate template, Player owner) {
 		super(template);
 		setInstanceType(InstanceType.L2Summon);
 		setInstance(owner.getInstanceWorld()); // set instance to same as owner
@@ -132,8 +132,8 @@ public abstract class Summon extends Playable {
 	}
 
 	@Override
-	public L2NpcTemplate getTemplate() {
-		return (L2NpcTemplate) super.getTemplate();
+	public NpcTemplate getTemplate() {
+		return (NpcTemplate) super.getTemplate();
 	}
 
 	// this defines the action buttons, 1 for Summon, 2 for Pets

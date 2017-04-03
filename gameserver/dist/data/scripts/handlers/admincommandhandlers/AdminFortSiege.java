@@ -21,7 +21,7 @@ package handlers.admincommandhandlers;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -97,7 +97,7 @@ public class AdminFortSiege implements IAdminCommandHandler {
 					fort.endOfSiege(player.getClan());
 				}
 			} else if (command.equalsIgnoreCase("admin_removefort")) {
-				L2Clan clan = fort.getOwnerClan();
+				Clan clan = fort.getOwnerClan();
 				if (clan != null) {
 					fort.removeOwner(true);
 				} else {

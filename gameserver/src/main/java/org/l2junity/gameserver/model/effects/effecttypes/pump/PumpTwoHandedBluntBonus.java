@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
@@ -51,7 +51,7 @@ public class PumpTwoHandedBluntBonus extends AbstractEffect {
 		if (caster.isPlayer()) {
 			final Inventory inv = caster.getInventory();
 
-			return ((WeaponType.BLUNT.mask() & inv.getWearedMask()) != 0) && ((caster.getActiveWeaponItem().getBodyPart() & L2Item.SLOT_LR_HAND) != 0);
+			return ((WeaponType.BLUNT.mask() & inv.getWearedMask()) != 0) && ((caster.getActiveWeaponItem().getBodyPart() & ItemTemplate.SLOT_LR_HAND) != 0);
 		}
 		return true;
 	}

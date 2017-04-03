@@ -58,10 +58,10 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.stat.PetStat;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.PetInventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.AbnormalType;
@@ -81,8 +81,8 @@ import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class L2PetInstance extends Summon {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(L2PetInstance.class);
+public class PetInstance extends Summon {
+	protected static final Logger LOGGER = LoggerFactory.getLogger(PetInstance.class);
 
 	private static final String ADD_SKILL_SAVE = "INSERT INTO character_pet_skills_save (petObjItemId,skill_id,skill_level,skill_sub_level,remaining_time,buff_index) VALUES (?,?,?,?,?,?)";
 	private static final String RESTORE_SKILL_SAVE = "SELECT petObjItemId,skill_id,skill_level,skill_sub_level,remaining_time,buff_index FROM character_pet_skills_save WHERE petObjItemId=? ORDER BY buff_index ASC";
@@ -127,7 +127,7 @@ public class L2PetInstance extends Summon {
 	 * Manage Feeding Task.<BR>
 	 * Feed or kill the pet depending on hunger level.<br>
 	 * If pet has food in inventory and feed level drops below 55% then consume food from inventory.<br>
-	 * Send a broadcastStatusUpdate packet for this L2PetInstance
+	 * Send a broadcastStatusUpdate packet for this PetInstance
 	 */
 	class FeedTask implements Runnable {
 		@Override
@@ -174,7 +174,7 @@ public class L2PetInstance extends Summon {
 						SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.YOUR_PET_WAS_HUNGRY_SO_IT_ATE_S1);
 						sm.addItemName(food.getId());
 						sendPacket(sm);
-						handler.useItem(L2PetInstance.this, food, false);
+						handler.useItem(PetInstance.this, food, false);
 					}
 				}
 
@@ -195,13 +195,13 @@ public class L2PetInstance extends Summon {
 		}
 	}
 
-	public synchronized static L2PetInstance spawnPet(L2NpcTemplate template, Player owner, ItemInstance control) {
+	public synchronized static PetInstance spawnPet(NpcTemplate template, Player owner, ItemInstance control) {
 		if (World.getInstance().getPet(owner.getObjectId()) != null) {
 			return null; // owner has a pet listed in world
 		}
 		final PetData data = PetDataTable.getInstance().getPetData(template.getId());
 
-		L2PetInstance pet = restore(control, template, owner);
+		PetInstance pet = restore(control, template, owner);
 		// add the pet instance to world
 		if (pet != null) {
 			pet.setTitle(owner.getName());
@@ -221,7 +221,7 @@ public class L2PetInstance extends Summon {
 	 * @param owner
 	 * @param control
 	 */
-	public L2PetInstance(L2NpcTemplate template, Player owner, ItemInstance control) {
+	public PetInstance(NpcTemplate template, Player owner, ItemInstance control) {
 		this(template, owner, control, (byte) (template.getDisplayId() == 12564 ? owner.getLevel() : template.getLevel()));
 	}
 
@@ -233,7 +233,7 @@ public class L2PetInstance extends Summon {
 	 * @param control
 	 * @param level
 	 */
-	public L2PetInstance(L2NpcTemplate template, Player owner, ItemInstance control, byte level) {
+	public PetInstance(NpcTemplate template, Player owner, ItemInstance control, byte level) {
 		super(template, owner);
 		setInstanceType(InstanceType.L2PetInstance);
 		_inventory.restore();
@@ -295,7 +295,7 @@ public class L2PetInstance extends Summon {
 	@Override
 	public ItemInstance getActiveWeaponInstance() {
 		if (getInventory() != null) {
-			return getInventory().getItems(item -> (item.getItemLocation() == ItemLocation.PET_EQUIP) && (item.getItem().getBodyPart() == L2Item.SLOT_R_HAND)).stream().findAny().orElse(null);
+			return getInventory().getItems(item -> (item.getItemLocation() == ItemLocation.PET_EQUIP) && (item.getItem().getBodyPart() == ItemTemplate.SLOT_R_HAND)).stream().findAny().orElse(null);
 		}
 		return null;
 	}
@@ -715,17 +715,17 @@ public class L2PetInstance extends Summon {
 		return _mountable;
 	}
 
-	private static L2PetInstance restore(ItemInstance control, L2NpcTemplate template, Player owner) {
+	private static PetInstance restore(ItemInstance control, NpcTemplate template, Player owner) {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement statement = con.prepareStatement("SELECT item_obj_id, name, level, curHp, curMp, exp, sp, fed FROM pets WHERE item_obj_id=?")) {
-			L2PetInstance pet;
+			PetInstance pet;
 			statement.setInt(1, control.getObjectId());
 			try (ResultSet rset = statement.executeQuery()) {
 				if (!rset.next()) {
-					return new L2PetInstance(template, owner, control);
+					return new PetInstance(template, owner, control);
 				}
 
-				pet = new L2PetInstance(template, owner, control, rset.getByte("level"));
+				pet = new PetInstance(template, owner, control, rset.getByte("level"));
 
 				pet._respawned = true;
 				pet.setName(rset.getString("name"));
@@ -966,7 +966,7 @@ public class L2PetInstance extends Summon {
 	}
 
 	/**
-	 * Restore the specified % of experience this L2PetInstance has lost.<BR>
+	 * Restore the specified % of experience this PetInstance has lost.<BR>
 	 * <BR>
 	 *
 	 * @param restorePercent
@@ -991,7 +991,7 @@ public class L2PetInstance extends Summon {
 		// Get the Experience before applying penalty
 		_expBeforeDeath = getStat().getExp();
 
-		// Set the new Experience value of the L2PetInstance
+		// Set the new Experience value of the PetInstance
 		getStat().addExp(-lostExp);
 	}
 
@@ -1165,7 +1165,7 @@ public class L2PetInstance extends Summon {
 	}
 
 	@Override
-	public L2PetInstance asPet() {
+	public PetInstance asPet() {
 		return this;
 	}
 

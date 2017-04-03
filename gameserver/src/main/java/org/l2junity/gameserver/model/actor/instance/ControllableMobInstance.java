@@ -22,12 +22,12 @@ import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.ai.ControllableMobAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * @author littlecrow
  */
-public class L2ControllableMobInstance extends L2MonsterInstance {
+public class ControllableMobInstance extends MonsterInstance {
 	private boolean _isInvul;
 
 	@Override
@@ -41,7 +41,7 @@ public class L2ControllableMobInstance extends L2MonsterInstance {
 		return 500;
 	}
 
-	public L2ControllableMobInstance(L2NpcTemplate template) {
+	public ControllableMobInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ControllableMobInstance);
 	}

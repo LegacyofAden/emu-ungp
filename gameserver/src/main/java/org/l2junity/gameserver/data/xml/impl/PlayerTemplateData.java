@@ -25,7 +25,7 @@ import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.templates.L2PcTemplate;
+import org.l2junity.gameserver.model.actor.templates.PcTemplate;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.w3c.dom.Document;
 
@@ -46,7 +46,7 @@ public final class PlayerTemplateData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final PlayerTemplateData instance = new PlayerTemplateData();
 
-	private final Map<Integer, L2PcTemplate> _playerTemplates = new HashMap<>();
+	private final Map<Integer, PcTemplate> _playerTemplates = new HashMap<>();
 
 	private PlayerTemplateData() {
 		_playerTemplates.clear();
@@ -133,14 +133,14 @@ public final class PlayerTemplateData implements IGameXmlReader {
 					set.set("basePDef", (set.getInt("basePDefchest", 0) + set.getInt("basePDeflegs", 0) + set.getInt("basePDefhead", 0) + set.getInt("basePDeffeet", 0) + set.getInt("basePDefgloves", 0) + set.getInt("basePDefunderwear", 0) + set.getInt("basePDefcloak", 0)));
 					set.set("baseMDef", (set.getInt("baseMDefrear", 0) + set.getInt("baseMDeflear", 0) + set.getInt("baseMDefrfinger", 0) + set.getInt("baseMDefrfinger", 0) + set.getInt("baseMDefneck", 0)));
 
-					_playerTemplates.put(set.getInt("classId"), new L2PcTemplate(set));
+					_playerTemplates.put(set.getInt("classId"), new PcTemplate(set));
 					break;
 				}
 				case "lvlUpgainData": {
 					forEach(firstNode, "level", lvlUpNode ->
 					{
 						final int level = parseInteger(lvlUpNode.getAttributes(), "val");
-						final L2PcTemplate template = _playerTemplates.get(set.getInt("classId"));
+						final PcTemplate template = _playerTemplates.get(set.getInt("classId"));
 						if (template == null) {
 							log.warn("No template but parsing lvlUpgainData?? file: {}", path);
 							return;
@@ -171,11 +171,11 @@ public final class PlayerTemplateData implements IGameXmlReader {
 		return _playerTemplates.size();
 	}
 
-	public L2PcTemplate getTemplate(int classId) {
+	public PcTemplate getTemplate(int classId) {
 		return _playerTemplates.get(classId);
 	}
 
-	public L2PcTemplate getTemplate(ClassId classId) {
+	public PcTemplate getTemplate(ClassId classId) {
 		return _playerTemplates.get(classId.getId());
 	}
 }

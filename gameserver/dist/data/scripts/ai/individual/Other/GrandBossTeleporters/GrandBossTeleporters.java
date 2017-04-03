@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -95,7 +95,7 @@ public final class GrandBossTeleporters extends AbstractNpcAI {
 							playerCount++;
 
 							if (status == 0) {
-								L2GrandBossInstance valakas = GrandBossManager.getInstance().getBoss(29028);
+								GrandBossInstance valakas = GrandBossManager.getInstance().getBoss(29028);
 								valakasAI().startQuestTimer("beginning", GrandBossConfig.VALAKAS_WAIT_TIME * 60000, valakas, null);
 								GrandBossManager.getInstance().setBossStatus(29028, 1);
 							}

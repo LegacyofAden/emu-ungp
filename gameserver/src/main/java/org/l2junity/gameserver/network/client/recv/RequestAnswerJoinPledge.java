@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ClanInvitationRequest;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -60,8 +60,8 @@ public final class RequestAnswerJoinPledge implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2Clan clan = request.getClan();
-		final L2Clan requestorClan = requestor.getClan();
+		final Clan clan = request.getClan();
+		final Clan requestorClan = requestor.getClan();
 		if ((requestorClan == null) || (requestorClan != clan)) {
 			return;
 		}
@@ -79,7 +79,7 @@ public final class RequestAnswerJoinPledge implements IClientIncomingPacket {
 				activeChar.sendPacket(new JoinPledge(requestor.getClanId()));
 
 				activeChar.setPledgeType(request.getPledgeType());
-				if (request.getPledgeType() == L2Clan.SUBUNIT_ACADEMY) {
+				if (request.getPledgeType() == Clan.SUBUNIT_ACADEMY) {
 					activeChar.setPowerGrade(9); // adademy
 					activeChar.setLvlJoinedAcademy(activeChar.getLevel());
 				} else {

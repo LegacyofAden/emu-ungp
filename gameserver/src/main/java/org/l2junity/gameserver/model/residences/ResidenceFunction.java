@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.residences;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.ResidenceFunctionsData;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.AgitDecoInfo;
@@ -125,7 +125,7 @@ public class ResidenceFunction {
 		if (!reactivate()) {
 			_residense.removeFunction(this);
 
-			final L2Clan clan = ClanTable.getInstance().getClan(_residense.getOwnerId());
+			final Clan clan = ClanTable.getInstance().getClan(_residense.getOwnerId());
 			if (clan != null) {
 				clan.broadcastToOnlineMembers(new AgitDecoInfo(_residense));
 			}
@@ -141,7 +141,7 @@ public class ResidenceFunction {
 			return false;
 		}
 
-		final L2Clan clan = ClanTable.getInstance().getClan(_residense.getOwnerId());
+		final Clan clan = ClanTable.getInstance().getClan(_residense.getOwnerId());
 		if (clan == null) {
 			return false;
 		}

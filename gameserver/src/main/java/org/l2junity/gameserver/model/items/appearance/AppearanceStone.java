@@ -23,7 +23,7 @@ import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.AppearanceHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ArmorType;
 import org.l2junity.gameserver.model.items.type.CrystalType;
@@ -95,7 +95,7 @@ public class AppearanceStone {
 		}
 
 		final int bodyPart = ItemTable._slots.get(set.getString("bodyPart", "none"));
-		if (bodyPart != L2Item.SLOT_NONE) {
+		if (bodyPart != ItemTemplate.SLOT_NONE) {
 			addBodyPart(bodyPart);
 		}
 
@@ -243,7 +243,7 @@ public class AppearanceStone {
 					return false;
 				}
 
-				if (((targetItem.getItem().getBodyPart() == L2Item.SLOT_HAIR) || (targetItem.getItem().getBodyPart() == L2Item.SLOT_HAIR2) || (targetItem.getItem().getBodyPart() == L2Item.SLOT_HAIRALL)) && !getTargetTypes().contains(AppearanceTargetType.ACCESSORY)) {
+				if (((targetItem.getItem().getBodyPart() == ItemTemplate.SLOT_HAIR) || (targetItem.getItem().getBodyPart() == ItemTemplate.SLOT_HAIR2) || (targetItem.getItem().getBodyPart() == ItemTemplate.SLOT_HAIRALL)) && !getTargetTypes().contains(AppearanceTargetType.ACCESSORY)) {
 					player.sendPacket(SystemMessageId.THIS_ITEM_DOES_NOT_MEET_REQUIREMENTS);
 					return false;
 				}
@@ -285,7 +285,7 @@ public class AppearanceStone {
 						break;
 					}
 					case ACCESSORY: {
-						if ((targetItem.getItem().getBodyPart() != L2Item.SLOT_HAIR) && (targetItem.getItem().getBodyPart() != L2Item.SLOT_HAIR2) && (targetItem.getItem().getBodyPart() != L2Item.SLOT_HAIRALL)) {
+						if ((targetItem.getItem().getBodyPart() != ItemTemplate.SLOT_HAIR) && (targetItem.getItem().getBodyPart() != ItemTemplate.SLOT_HAIR2) && (targetItem.getItem().getBodyPart() != ItemTemplate.SLOT_HAIRALL)) {
 							player.sendPacket(SystemMessageId.HAIR_ACCESSORIES_ONLY);
 							return false;
 						}
@@ -327,14 +327,14 @@ public class AppearanceStone {
 
 			switch (getHandType()) {
 				case ONE_HANDED: {
-					if ((targetItem.getItem().getBodyPart() & L2Item.SLOT_R_HAND) != L2Item.SLOT_R_HAND) {
+					if ((targetItem.getItem().getBodyPart() & ItemTemplate.SLOT_R_HAND) != ItemTemplate.SLOT_R_HAND) {
 						player.sendPacket(SystemMessageId.THIS_ITEM_DOES_NOT_MEET_REQUIREMENTS);
 						return false;
 					}
 					break;
 				}
 				case TWO_HANDED: {
-					if ((targetItem.getItem().getBodyPart() & L2Item.SLOT_LR_HAND) != L2Item.SLOT_LR_HAND) {
+					if ((targetItem.getItem().getBodyPart() & ItemTemplate.SLOT_LR_HAND) != ItemTemplate.SLOT_LR_HAND) {
 						player.sendPacket(SystemMessageId.THIS_ITEM_DOES_NOT_MEET_REQUIREMENTS);
 						return false;
 					}
@@ -393,13 +393,13 @@ public class AppearanceStone {
 
 				switch (holder.getHandType()) {
 					case ONE_HANDED: {
-						if ((targetItem.getItem().getBodyPart() & L2Item.SLOT_R_HAND) != L2Item.SLOT_R_HAND) {
+						if ((targetItem.getItem().getBodyPart() & ItemTemplate.SLOT_R_HAND) != ItemTemplate.SLOT_R_HAND) {
 							continue;
 						}
 						break;
 					}
 					case TWO_HANDED: {
-						if ((targetItem.getItem().getBodyPart() & L2Item.SLOT_LR_HAND) != L2Item.SLOT_LR_HAND) {
+						if ((targetItem.getItem().getBodyPart() & ItemTemplate.SLOT_LR_HAND) != ItemTemplate.SLOT_LR_HAND) {
 							continue;
 						}
 						break;

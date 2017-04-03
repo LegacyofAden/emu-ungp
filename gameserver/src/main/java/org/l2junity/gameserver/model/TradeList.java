@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -248,7 +248,7 @@ public class TradeList {
 			return null;
 		}
 
-		L2Item item = ItemTable.getInstance().getTemplate(itemId);
+		ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 		if (item == null) {
 			_log.warn(_owner.getName() + ": Attempt to add invalid item to TradeList!");
 			return null;
@@ -484,7 +484,7 @@ public class TradeList {
 			if (item == null) {
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
+			ItemTemplate template = ItemTable.getInstance().getTemplate(item.getItem().getId());
 			if (template == null) {
 				continue;
 			}
@@ -508,7 +508,7 @@ public class TradeList {
 			if (item == null) {
 				continue;
 			}
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItem().getId());
+			ItemTemplate template = ItemTable.getInstance().getTemplate(item.getItem().getId());
 			if (template == null) {
 				continue;
 			}
@@ -637,7 +637,7 @@ public class TradeList {
 				return 2;
 			}
 
-			L2Item template = ItemTable.getInstance().getTemplate(item.getItemId());
+			ItemTemplate template = ItemTable.getInstance().getTemplate(item.getItemId());
 			if (template == null) {
 				continue;
 			}

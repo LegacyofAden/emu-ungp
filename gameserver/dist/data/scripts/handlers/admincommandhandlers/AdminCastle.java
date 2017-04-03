@@ -25,7 +25,7 @@ import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -144,7 +144,7 @@ public final class AdminCastle implements IAdminCommandHandler {
 							break;
 						}
 						case "takeCastle": {
-							final L2Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
+							final Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
 							if (clan != null) {
 								castle.removeOwner(clan);
 							} else {
@@ -179,7 +179,7 @@ public final class AdminCastle implements IAdminCommandHandler {
 		final Castle castle = CastleManager.getInstance().getCastleById(castleId);
 
 		if (castle != null) {
-			final L2Clan ownerClan = castle.getOwner();
+			final Clan ownerClan = castle.getOwner();
 			final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 			html.setHtml(HtmRepository.getInstance().getCustomHtm("admin/castlemanage_selected.htm"));
 			html.replace("%castleId%", castle.getResidenceId());

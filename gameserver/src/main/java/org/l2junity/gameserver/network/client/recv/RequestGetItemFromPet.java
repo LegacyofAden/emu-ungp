@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -56,7 +56,7 @@ public final class RequestGetItemFromPet implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2PetInstance pet = player.getPet();
+		final PetInstance pet = player.getPet();
 		final ItemInstance item = pet.getInventory().getItemByObjectId(_objectId);
 		if (item == null) {
 			return;

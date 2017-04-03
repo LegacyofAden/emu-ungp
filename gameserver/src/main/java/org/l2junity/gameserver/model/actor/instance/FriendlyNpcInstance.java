@@ -24,7 +24,7 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.ai.FriendlyNpcAI;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
@@ -35,7 +35,7 @@ import org.l2junity.gameserver.network.client.send.SocialAction;
  * @author Sdw
  */
 public class FriendlyNpcInstance extends Attackable {
-	public FriendlyNpcInstance(L2NpcTemplate template) {
+	public FriendlyNpcInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.FriendlyNpcInstance);
 	}
@@ -56,12 +56,12 @@ public class FriendlyNpcInstance extends Attackable {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
 		} else if (interact) {
-			// Calculate the distance between the L2PcInstance and the L2NpcInstance
+			// Calculate the distance between the L2PcInstance and the NpcInstance
 			if (!canInteract(player)) {
 				// Set the L2PcInstance Intention to AI_INTENTION_INTERACT
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);
 			} else {
-				// Send a Server->Client packet SocialAction to the all L2PcInstance on the _knownPlayer of the L2NpcInstance
+				// Send a Server->Client packet SocialAction to the all L2PcInstance on the _knownPlayer of the NpcInstance
 				// to display a social action of the L2GuardInstance on their client
 				broadcastPacket(new SocialAction(getObjectId(), Rnd.nextInt(8)));
 

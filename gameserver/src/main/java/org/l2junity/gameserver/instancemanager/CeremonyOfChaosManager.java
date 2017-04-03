@@ -21,7 +21,7 @@ package org.l2junity.gameserver.instancemanager;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.CeremonyOfChaosState;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -235,7 +235,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 	public boolean canRegister(Player player, boolean sendMessage) {
 		boolean canRegister = true;
 
-		final L2Clan clan = player.getClan();
+		final Clan clan = player.getClan();
 
 		SystemMessageId sm = null;
 

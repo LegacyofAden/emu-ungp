@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -42,7 +42,7 @@ public class PledgeSkillList implements IClientOutgoingPacket {
 		}
 	}
 
-	public PledgeSkillList(L2Clan clan) {
+	public PledgeSkillList(Clan clan) {
 		_skills = clan.getAllSkills();
 		_subSkills = clan.getAllSubSkills();
 	}

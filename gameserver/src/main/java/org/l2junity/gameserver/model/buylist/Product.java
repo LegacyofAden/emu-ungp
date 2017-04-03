@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.buylist;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.RatesConfig;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public final class Product {
 	private static final Logger _log = LoggerFactory.getLogger(Product.class);
 
 	private final int _buyListId;
-	private final L2Item _item;
+	private final ItemTemplate _item;
 	private final long _price;
 	private final long _restockDelay;
 	private final long _maxCount;
@@ -48,7 +48,7 @@ public final class Product {
 	private AtomicLong _count = null;
 	private ScheduledFuture<?> _restockTask = null;
 
-	public Product(int buyListId, L2Item item, long price, long restockDelay, long maxCount, int baseTax) {
+	public Product(int buyListId, ItemTemplate item, long price, long restockDelay, long maxCount, int baseTax) {
 		Objects.requireNonNull(item);
 		_buyListId = buyListId;
 		_item = item;
@@ -61,7 +61,7 @@ public final class Product {
 		}
 	}
 
-	public L2Item getItem() {
+	public ItemTemplate getItem() {
 		return _item;
 	}
 

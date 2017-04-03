@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -110,7 +110,7 @@ public final class Antharas extends AbstractNpcAI {
 	private static final int DEAD = 3;
 	// Misc
 	private static final int MAX_PEOPLE = 200; // Max allowed players
-	private L2GrandBossInstance _antharas = null;
+	private GrandBossInstance _antharas = null;
 	private static long _lastAttack = 0;
 	private static int _minionCount = 0;
 	private static int minionMultipler = 0;
@@ -146,20 +146,20 @@ public final class Antharas extends AbstractNpcAI {
 
 		switch (getStatus()) {
 			case ALIVE: {
-				_antharas = (L2GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
+				_antharas = (GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
 				_antharas.setCurrentHpMp(curr_hp, curr_mp);
 				addBoss(_antharas);
 				break;
 			}
 			case WAITING: {
-				_antharas = (L2GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
+				_antharas = (GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
 				_antharas.setCurrentHpMp(curr_hp, curr_mp);
 				addBoss(_antharas);
 				startQuestTimer("SPAWN_ANTHARAS", GrandBossConfig.ANTHARAS_WAIT_TIME * 60000, null, null);
 				break;
 			}
 			case IN_FIGHT: {
-				_antharas = (L2GrandBossInstance) addSpawn(ANTHARAS, loc_x, loc_y, loc_z, heading, false, 0);
+				_antharas = (GrandBossInstance) addSpawn(ANTHARAS, loc_x, loc_y, loc_z, heading, false, 0);
 				_antharas.setCurrentHpMp(curr_hp, curr_mp);
 				addBoss(_antharas);
 				_lastAttack = System.currentTimeMillis();
@@ -173,7 +173,7 @@ public final class Antharas extends AbstractNpcAI {
 					startQuestTimer("CLEAR_STATUS", remain, null, null);
 				} else {
 					setStatus(ALIVE);
-					_antharas = (L2GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
+					_antharas = (GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
 					addBoss(_antharas);
 				}
 				break;
@@ -403,7 +403,7 @@ public final class Antharas extends AbstractNpcAI {
 				break;
 			}
 			case "CLEAR_STATUS": {
-				_antharas = (L2GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
+				_antharas = (GrandBossInstance) addSpawn(ANTHARAS, 185708, 114298, -8221, 0, false, 0);
 				addBoss(_antharas);
 				Broadcast.toAllOnlinePlayers(new Earthquake(185708, 114298, -8221, 20, 10));
 				setStatus(ALIVE);
@@ -594,7 +594,7 @@ public final class Antharas extends AbstractNpcAI {
 		return GrandBossManager.getInstance().getBossStatus(ANTHARAS);
 	}
 
-	private void addBoss(L2GrandBossInstance grandboss) {
+	private void addBoss(GrandBossInstance grandboss) {
 		GrandBossManager.getInstance().addBoss(grandboss);
 	}
 

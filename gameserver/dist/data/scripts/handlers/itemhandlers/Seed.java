@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.holders.ItemSkillHolder;
@@ -53,12 +53,12 @@ public class Seed implements IItemHandler {
 		if (!tgt.isNpc()) {
 			playable.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;
-		} else if (!tgt.isMonster() || ((L2MonsterInstance) tgt).isRaid() || tgt.isTreasure()) {
+		} else if (!tgt.isMonster() || ((MonsterInstance) tgt).isRaid() || tgt.isTreasure()) {
 			playable.sendPacket(SystemMessageId.THE_TARGET_IS_UNAVAILABLE_FOR_SEEDING);
 			return false;
 		}
 
-		final L2MonsterInstance target = (L2MonsterInstance) tgt;
+		final MonsterInstance target = (MonsterInstance) tgt;
 		if (target.isDead()) {
 			playable.sendPacket(SystemMessageId.INVALID_TARGET);
 			return false;

@@ -21,9 +21,9 @@ package org.l2junity.gameserver.model.stats;
 import org.l2junity.core.configs.OlympiadConfig;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.CrystalType;
 
@@ -60,7 +60,7 @@ public interface IStatsFunction {
 		final double baseValue = creature.getTransformation().map(transform -> transform.getStats(creature, stat, baseTemplateBalue)).orElseGet(() ->
 		{
 			if (creature.isPet()) {
-				final L2PetInstance pet = (L2PetInstance) creature;
+				final PetInstance pet = (PetInstance) creature;
 				final ItemInstance weapon = pet.getActiveWeaponInstance();
 				final double baseVal = stat == DoubleStat.PHYSICAL_ATTACK ? pet.getPetLevelData().getPetPAtk() : stat == DoubleStat.MAGIC_ATTACK ? pet.getPetLevelData().getPetMAtk() : baseTemplateBalue;
 				return baseVal + (weapon != null ? weapon.getItem().getStats(stat, baseVal) : 0);
@@ -261,7 +261,7 @@ public interface IStatsFunction {
 		double value = 0;
 		switch (item.getItem().getCrystalTypePlus()) {
 			case R: {
-				if (item.getWeaponItem().getBodyPart() == L2Item.SLOT_LR_HAND) {
+				if (item.getWeaponItem().getBodyPart() == ItemTemplate.SLOT_LR_HAND) {
 					if (item.getWeaponItem().getItemType().isRanged()) {
 						//@formatter:off
 						/* P. Atk. increases by 12 for bows.
@@ -390,7 +390,7 @@ public interface IStatsFunction {
 				break;
 			}
 			case S: {
-				if (item.getWeaponItem().getBodyPart() == L2Item.SLOT_LR_HAND) {
+				if (item.getWeaponItem().getBodyPart() == ItemTemplate.SLOT_LR_HAND) {
 					if (item.getWeaponItem().getItemType().isRanged()) {
 						// P. Atk. increases by 10 for bows.
 						// Starting at +4, P. Atk. bonus double.
@@ -408,7 +408,7 @@ public interface IStatsFunction {
 				break;
 			}
 			case A: {
-				if (item.getWeaponItem().getBodyPart() == L2Item.SLOT_LR_HAND) {
+				if (item.getWeaponItem().getBodyPart() == ItemTemplate.SLOT_LR_HAND) {
 					if (item.getWeaponItem().getItemType().isRanged()) {
 						// P. Atk. increases by 8 for bows.
 						// Starting at +4, P. Atk. bonus double.
@@ -427,7 +427,7 @@ public interface IStatsFunction {
 			}
 			case B:
 			case C: {
-				if (item.getWeaponItem().getBodyPart() == L2Item.SLOT_LR_HAND) {
+				if (item.getWeaponItem().getBodyPart() == ItemTemplate.SLOT_LR_HAND) {
 					if (item.getWeaponItem().getItemType().isRanged()) {
 						// P. Atk. increases by 6 for bows.
 						// Starting at +4, P. Atk. bonus double.

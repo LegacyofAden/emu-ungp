@@ -28,7 +28,7 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -272,7 +272,7 @@ public abstract class ItemContainer {
 			}
 
 			for (int i = 0; i < count; i++) {
-				L2Item template = ItemTable.getInstance().getTemplate(itemId);
+				ItemTemplate template = ItemTable.getInstance().getTemplate(itemId);
 				if (template == null) {
 					_log.warn((actor != null ? "[" + actor.getName() + "] " : "") + "Invalid ItemId requested: ", itemId);
 					return null;
@@ -686,7 +686,7 @@ public abstract class ItemContainer {
 	 * @return {@code true} if the item doesn't exists or it validates its slot count
 	 */
 	public boolean validateCapacityByItemId(int itemId, long count) {
-		final L2Item template = ItemTable.getInstance().getTemplate(itemId);
+		final ItemTemplate template = ItemTable.getInstance().getTemplate(itemId);
 		return (template == null) || (template.isStackable() ? validateCapacity(1) : validateCapacity(count));
 	}
 
@@ -696,7 +696,7 @@ public abstract class ItemContainer {
 	 * @return {@code true} if the item doesn't exists or it validates its weight
 	 */
 	public boolean validateWeightByItemId(int itemId, long count) {
-		final L2Item template = ItemTable.getInstance().getTemplate(itemId);
+		final ItemTemplate template = ItemTable.getInstance().getTemplate(itemId);
 		return (template == null) || validateWeight(template.getWeight() * count);
 	}
 

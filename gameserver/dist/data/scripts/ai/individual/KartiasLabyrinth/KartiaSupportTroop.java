@@ -24,7 +24,7 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
@@ -54,9 +54,9 @@ public final class KartiaSupportTroop extends AbstractNpcAI {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DEFEAT_ALL_THE_MONSTERS);
 		} else if (event.equals("CHECK_TARGET")) {
 			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
-				final List<L2MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, L2MonsterInstance.class);
+				final List<MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, MonsterInstance.class);
 				if (!monsterList.isEmpty()) {
-					final L2MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
+					final MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
 
 					if (monster.isTargetable() && GeoData.getInstance().canSeeTarget(npc, monster)) {
 						addAttackDesire(npc, monster);

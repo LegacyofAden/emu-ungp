@@ -65,17 +65,17 @@ public class Loto implements IBypassHandler {
 	}
 
 	/**
-	 * Open a Loto window on client with the text of the L2NpcInstance.<BR>
+	 * Open a Loto window on client with the text of the NpcInstance.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
 	 * <li>Get the text of the selected HTML file in function of the npcId and of the page number</li>
-	 * <li>Send a Server->Client NpcHtmlMessage containing the text of the L2NpcInstance to the L2PcInstance</li>
+	 * <li>Send a Server->Client NpcHtmlMessage containing the text of the NpcInstance to the L2PcInstance</li>
 	 * <li>Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet</li><BR>
 	 *
-	 * @param player The L2PcInstance that talk with the L2NpcInstance
+	 * @param player The L2PcInstance that talk with the NpcInstance
 	 * @param npc    L2Npc loto instance
-	 * @param val    The number of the page of the L2NpcInstance to display
+	 * @param val    The number of the page of the NpcInstance to display
 	 */
 	// 0 - first buy lottery ticket window
 	// 1-20 - buttons

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.ItemGrade;
 import org.l2junity.gameserver.enums.UserInfoType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
@@ -328,7 +328,7 @@ public class UserInfo extends AbstractMaskPacket<UserInfoType> {
 	private int calculateRelation(Player activeChar) {
 		int relation = 0;
 		final Party party = activeChar.getParty();
-		final L2Clan clan = activeChar.getClan();
+		final Clan clan = activeChar.getClan();
 
 		if (party != null) {
 			relation |= 0x08; // Party member

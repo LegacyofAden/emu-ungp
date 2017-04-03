@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.conditions;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 
 /**
@@ -88,7 +88,7 @@ public abstract class Condition {
 		return test(caster, target, skill, null);
 	}
 
-	public final boolean test(Creature caster, Creature target, Skill skill, L2Item item) {
+	public final boolean test(Creature caster, Creature target, Skill skill, ItemTemplate item) {
 		return testImpl(caster, target, skill, item);
 	}
 
@@ -101,5 +101,5 @@ public abstract class Condition {
 	 * @param item     the item
 	 * @return {@code true} if successful, {@code false} otherwise
 	 */
-	public abstract boolean testImpl(Creature effector, Creature effected, Skill skill, L2Item item);
+	public abstract boolean testImpl(Creature effector, Creature effected, Skill skill, ItemTemplate item);
 }

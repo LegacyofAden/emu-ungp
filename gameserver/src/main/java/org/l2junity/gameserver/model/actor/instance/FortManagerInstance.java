@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.entity.Fort.FortFunction;
@@ -43,14 +43,14 @@ import java.util.StringTokenizer;
 /**
  * Fortress Foreman implementation used for: Area Teleports, Support Magic, Clan Warehouse, Exp Loss Reduction
  */
-public class L2FortManagerInstance extends L2MerchantInstance {
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2FortManagerInstance.class);
+public class FortManagerInstance extends MerchantInstance {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FortManagerInstance.class);
 
 	protected static final int COND_ALL_FALSE = 0;
 	protected static final int COND_BUSY_BECAUSE_OF_SIEGE = 1;
 	protected static final int COND_OWNER = 2;
 
-	public L2FortManagerInstance(L2NpcTemplate template) {
+	public FortManagerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortManagerInstance);
 	}

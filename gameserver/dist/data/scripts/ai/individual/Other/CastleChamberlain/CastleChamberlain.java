@@ -27,12 +27,12 @@ import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.CastleSide;
 import org.l2junity.gameserver.instancemanager.CastleManorManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2MerchantInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Castle.CastleFunction;
@@ -505,7 +505,7 @@ public final class CastleChamberlain extends AbstractNpcAI {
 					if (castle.getSiege().isInProgress()) {
 						htmltext = "chamberlain-07.html";
 					} else {
-						final L2Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
+						final Clan clan = ClanTable.getInstance().getClan(castle.getOwnerId());
 						final NpcHtmlMessage html = getHtmlPacket(player, npc, "chamberlain-02.html");
 						html.replace("%clanleadername%", clan.getLeaderName());
 						html.replace("%clanname%", clan.getName());
@@ -823,7 +823,7 @@ public final class CastleChamberlain extends AbstractNpcAI {
 			}
 			case "buy": {
 				if (isOwner(player, npc) && player.hasClanPrivilege(ClanPrivilege.CS_USE_FUNCTIONS)) {
-					((L2MerchantInstance) npc).showBuyWindow(player, Integer.parseInt(st.nextToken()));
+					((MerchantInstance) npc).showBuyWindow(player, Integer.parseInt(st.nextToken()));
 				} else {
 					htmltext = "chamberlain-21.html";
 				}

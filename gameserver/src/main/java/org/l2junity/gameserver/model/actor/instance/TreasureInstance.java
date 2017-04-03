@@ -20,17 +20,17 @@ package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 
 /**
  * This class manages all chest.
  *
  * @author Julian
  */
-public final class TreasureInstance extends L2MonsterInstance {
+public final class TreasureInstance extends MonsterInstance {
 	private volatile boolean _dropEnabled;
 
-	public TreasureInstance(L2NpcTemplate template) {
+	public TreasureInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ChestInstance);
 		setRandomWalking(false);
@@ -41,7 +41,7 @@ public final class TreasureInstance extends L2MonsterInstance {
 	}
 
 	@Override
-	public void doItemDrop(L2NpcTemplate npcTemplate, Creature lastAttacker) {
+	public void doItemDrop(NpcTemplate npcTemplate, Creature lastAttacker) {
 		if (!_dropEnabled) {
 			return;
 		}

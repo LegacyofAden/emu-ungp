@@ -20,7 +20,7 @@ package quests.Q00501_ProofOfClanAlliance;
 
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.QuestType;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -283,7 +283,7 @@ public final class Q00501_ProofOfClanAlliance extends Quest {
 				switch (qs.getState()) {
 					case State.CREATED: {
 						if (player.isClanLeader()) {
-							final L2Clan clan = player.getClan();
+							final Clan clan = player.getClan();
 							if (clan.getLevel() < CLAN_MIN_LEVEL) {
 								htmltext = "30756-01.html";
 							} else if (clan.getLevel() == CLAN_MIN_LEVEL) {

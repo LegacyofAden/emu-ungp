@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.status.FolkStatus;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.network.client.send.ExAcquirableSkillListByClass;
@@ -34,8 +34,8 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import java.util.List;
 import java.util.Map;
 
-public class L2NpcInstance extends Npc {
-	public L2NpcInstance(L2NpcTemplate template) {
+public class NpcInstance extends Npc {
+	public NpcInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2NpcInstance);
 		setIsInvul(false);

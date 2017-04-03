@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.request;
 
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 public class ClanInvitationRequest extends AbstractRequest {
 	private final Player _targetPlayer;
-	private final L2Clan _clan;
+	private final Clan _clan;
 	private final int _pledgeType;
 
 	public ClanInvitationRequest(Player activeChar, Player targetPlayer, int pledgeType) {
@@ -44,7 +44,7 @@ public class ClanInvitationRequest extends AbstractRequest {
 		return _targetPlayer;
 	}
 
-	public L2Clan getClan() {
+	public Clan getClan() {
 		return _clan;
 	}
 

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.stats.finalizers;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.IStatsFunction;
@@ -40,7 +40,7 @@ public class MAttackFinalizer implements IStatsFunction {
 		baseValue += calcEnchantedItemBonus(creature, stat);
 		if (creature.isPlayer()) {
 			// Enchanted chest bonus
-			baseValue += calcEnchantBodyPart(creature, L2Item.SLOT_CHEST, L2Item.SLOT_FULL_ARMOR);
+			baseValue += calcEnchantBodyPart(creature, ItemTemplate.SLOT_CHEST, ItemTemplate.SLOT_FULL_ARMOR);
 		}
 
 		if (L2JModsConfig.L2JMOD_CHAMPION_ENABLE && creature.isChampion()) {

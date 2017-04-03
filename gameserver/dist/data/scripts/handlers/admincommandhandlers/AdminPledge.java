@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.GMViewPledgeInfo;
@@ -53,7 +53,7 @@ public class AdminPledge implements IAdminCommandHandler {
 		final String cmd = st.nextToken();
 		final WorldObject target = activeChar.getTarget();
 		final Player targetPlayer = target instanceof Player ? (Player) target : null;
-		L2Clan clan = targetPlayer != null ? targetPlayer.getClan() : null;
+		Clan clan = targetPlayer != null ? targetPlayer.getClan() : null;
 		if (targetPlayer == null) {
 			activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 			showMainPage(activeChar);

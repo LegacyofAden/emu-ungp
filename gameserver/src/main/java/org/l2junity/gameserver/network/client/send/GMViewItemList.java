@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -40,7 +40,7 @@ public class GMViewItemList extends AbstractItemPacket {
 		}
 	}
 
-	public GMViewItemList(L2PetInstance cha) {
+	public GMViewItemList(PetInstance cha) {
 		_playerName = cha.getName();
 		_limit = cha.getInventoryLimit();
 		for (ItemInstance item : cha.getInventory().getItems()) {

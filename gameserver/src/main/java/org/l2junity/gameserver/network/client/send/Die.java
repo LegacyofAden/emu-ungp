@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
-import org.l2junity.gameserver.model.L2Clan;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.SiegeClan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.entity.Castle;
@@ -66,7 +66,7 @@ public class Die implements IClientOutgoingPacket {
 				return;
 			}
 
-			final L2Clan clan = activeChar.getActingPlayer().getClan();
+			final Clan clan = activeChar.getActingPlayer().getClan();
 			boolean isInCastleDefense = false;
 			boolean isInFortDefense = false;
 

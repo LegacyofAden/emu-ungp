@@ -26,14 +26,13 @@ import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.SubclassType;
 import org.l2junity.gameserver.enums.UserInfoType;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.L2Clan;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2FishermanInstance;
-import org.l2junity.gameserver.model.actor.instance.L2NpcInstance;
-import org.l2junity.gameserver.model.actor.instance.L2VillageMasterInstance;
-import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.instance.FishermanInstance;
+import org.l2junity.gameserver.model.actor.instance.NpcInstance;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -106,7 +105,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 		}
 
 		final Npc trainer = activeChar.getLastFolkNPC();
-		if (!(trainer instanceof L2NpcInstance) && (_skillType != AcquireSkillType.CLASS)) {
+		if (!(trainer instanceof NpcInstance) && (_skillType != AcquireSkillType.CLASS)) {
 			return;
 		}
 
@@ -172,7 +171,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 					return;
 				}
 
-				final L2Clan clan = activeChar.getClan();
+				final Clan clan = activeChar.getClan();
 				int repCost = s.getLevelUpSp();
 				if (clan.getReputationScore() >= repCost) {
 					if (PlayerConfig.LIFE_CRYSTAL_NEEDED) {
@@ -180,7 +179,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 							if (!activeChar.destroyItemByItemId("Consume", item.getId(), item.getCount(), trainer, false)) {
 								// Doesn't have required item.
 								activeChar.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_NECESSARY_MATERIALS_OR_PREREQUISITES_TO_LEARN_THIS_SKILL);
-								L2VillageMasterInstance.showPledgeSkillList(activeChar);
+								VillageMasterInstance.showPledgeSkillList(activeChar);
 								return;
 							}
 
@@ -203,10 +202,10 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 
 					activeChar.sendPacket(new AcquireSkillDone());
 
-					L2VillageMasterInstance.showPledgeSkillList(activeChar);
+					VillageMasterInstance.showPledgeSkillList(activeChar);
 				} else {
 					activeChar.sendPacket(SystemMessageId.THE_ATTEMPT_TO_ACQUIRE_THE_SKILL_HAS_FAILED_BECAUSE_OF_AN_INSUFFICIENT_CLAN_REPUTATION);
-					L2VillageMasterInstance.showPledgeSkillList(activeChar);
+					VillageMasterInstance.showPledgeSkillList(activeChar);
 				}
 				break;
 			}
@@ -215,7 +214,7 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 					return;
 				}
 
-				final L2Clan clan = activeChar.getClan();
+				final Clan clan = activeChar.getClan();
 				if ((clan.getFortId() == 0) && (clan.getCastleId() == 0)) {
 					return;
 				}
@@ -624,8 +623,8 @@ public final class RequestAcquireSkill implements IClientIncomingPacket {
 			showSubSkillList(player);
 		} else if (_skillType == AcquireSkillType.DUALCLASS) {
 			showDualSkillList(player);
-		} else if (trainer instanceof L2FishermanInstance) {
-			L2FishermanInstance.showFishSkillList(player);
+		} else if (trainer instanceof FishermanInstance) {
+			FishermanInstance.showFishSkillList(player);
 		}
 	}
 }

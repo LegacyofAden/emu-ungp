@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.interfaces.IIdentifiable;
  *
  * @author JIV
  */
-public class DoorTemplate extends L2CharTemplate implements IIdentifiable {
+public class DoorTemplate extends CharTemplate implements IIdentifiable {
 	private final int _doorId;
 	private final int _nodeX[];
 	private final int _nodeY[];

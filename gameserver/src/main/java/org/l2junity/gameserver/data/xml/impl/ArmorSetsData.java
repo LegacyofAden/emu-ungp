@@ -25,7 +25,7 @@ import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.model.ArmorSet;
 import org.l2junity.gameserver.model.holders.ArmorsetSkillHolder;
-import org.l2junity.gameserver.model.items.L2Item;
+import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.BaseStats;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -77,7 +77,7 @@ public final class ArmorSetsData implements IGameXmlReader {
 									{
 										final NamedNodeMap attrs = node.getAttributes();
 										final int itemId = parseInteger(attrs, "id");
-										final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+										final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 										if (item == null) {
 											log.warn("Attempting to register non existing required item: {} to a set: {}", itemId, path);
 										} else if (!set.addRequiredItem(itemId)) {
@@ -91,7 +91,7 @@ public final class ArmorSetsData implements IGameXmlReader {
 									{
 										final NamedNodeMap attrs = node.getAttributes();
 										final int itemId = parseInteger(attrs, "id");
-										final L2Item item = ItemTable.getInstance().getTemplate(itemId);
+										final ItemTemplate item = ItemTable.getInstance().getTemplate(itemId);
 										if (item == null) {
 											log.warn("Attempting to register non existing optional item: {} to a set: {}", itemId, path);
 										} else if (!set.addOptionalItem(itemId)) {

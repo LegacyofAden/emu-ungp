@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.BuffInfo;
@@ -135,7 +135,7 @@ public final class Valakas extends AbstractNpcAI {
 				// The time has expired while the server was offline. Spawn valakas in his cave as DORMANT.
 				final Npc valakas = addSpawn(VALAKAS, -105200, -253104, -15264, 0, false, 0);
 				GrandBossManager.getInstance().setBossStatus(VALAKAS, DORMANT);
-				GrandBossManager.getInstance().addBoss((L2GrandBossInstance) valakas);
+				GrandBossManager.getInstance().addBoss((GrandBossInstance) valakas);
 
 				valakas.setIsInvul(true);
 				valakas.setRunning();
@@ -151,7 +151,7 @@ public final class Valakas extends AbstractNpcAI {
 			final double mp = info.getDouble("currentMP");
 
 			final Npc valakas = addSpawn(VALAKAS, loc_x, loc_y, loc_z, heading, false, 0);
-			GrandBossManager.getInstance().addBoss((L2GrandBossInstance) valakas);
+			GrandBossManager.getInstance().addBoss((GrandBossInstance) valakas);
 
 			valakas.setCurrentHpMp(hp, mp);
 			valakas.setRunning();
@@ -304,7 +304,7 @@ public final class Valakas extends AbstractNpcAI {
 		} else {
 			if (event.equalsIgnoreCase("valakas_unlock")) {
 				final Npc valakas = addSpawn(VALAKAS, -105200, -253104, -15264, 32768, false, 0);
-				GrandBossManager.getInstance().addBoss((L2GrandBossInstance) valakas);
+				GrandBossManager.getInstance().addBoss((GrandBossInstance) valakas);
 				GrandBossManager.getInstance().setBossStatus(VALAKAS, DORMANT);
 			} else if (event.equalsIgnoreCase("remove_players")) {
 				ZONE.oustAllPlayers();

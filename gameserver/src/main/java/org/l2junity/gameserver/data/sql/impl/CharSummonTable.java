@@ -24,10 +24,10 @@ import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.data.xml.impl.PetDataTable;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.PetData;
-import org.l2junity.gameserver.model.actor.instance.L2PetInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.templates.L2NpcTemplate;
+import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.PetItemList;
@@ -120,13 +120,13 @@ public class CharSummonTable {
 			LOGGER.warn("Null pet data for: " + activeChar + " and summoning item: " + item);
 			return;
 		}
-		final L2NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(petData.getNpcId());
+		final NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(petData.getNpcId());
 		if (npcTemplate == null) {
 			LOGGER.warn("Null pet NPC template for: " + activeChar + " and pet Id:" + petData.getNpcId());
 			return;
 		}
 
-		final L2PetInstance pet = L2PetInstance.spawnPet(npcTemplate, activeChar, item);
+		final PetInstance pet = PetInstance.spawnPet(npcTemplate, activeChar, item);
 		if (pet == null) {
 			LOGGER.warn("Null pet instance for: " + activeChar + " and pet NPC template:" + npcTemplate);
 			return;
@@ -179,7 +179,7 @@ public class CharSummonTable {
 					skill.applyEffects(activeChar, activeChar);
 
 					if (activeChar.hasServitors()) {
-						final L2ServitorInstance summon = activeChar.getServitors().values().stream().map(s -> ((L2ServitorInstance) s)).filter(s -> s.getReferenceSkill() == skillId).findAny().orElse(null);
+						final ServitorInstance summon = activeChar.getServitors().values().stream().map(s -> ((ServitorInstance) s)).filter(s -> s.getReferenceSkill() == skillId).findAny().orElse(null);
 						summon.setCurrentHp(curHp);
 						summon.setCurrentMp(curMp);
 						summon.setLifeTimeRemaining(time);
@@ -191,7 +191,7 @@ public class CharSummonTable {
 		}
 	}
 
-	public void saveSummon(L2ServitorInstance summon) {
+	public void saveSummon(ServitorInstance summon) {
 		if (summon == null) {
 			return;
 		}
