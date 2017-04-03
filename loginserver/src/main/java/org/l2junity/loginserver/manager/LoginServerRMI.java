@@ -53,17 +53,17 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 	}
 
 	@Override
-	public RegisterResult registerGameServer(IGameServerRMI connection, GameServer gameServerInfo) {
-		if (gameservers.containsKey(gameServerInfo.getId())) {
-			GameServer gameServer = gameservers.get(gameServerInfo.getId());
+	public RegisterResult registerGameServer(IGameServerRMI connection, GameServer registeringServer) {
+		if (gameservers.containsKey(registeringServer.getId())) {
+			GameServer gameServer = gameservers.get(registeringServer.getId());
 			if (!gameServer.isShowing()) {
 				return RegisterResult.DISABLED_SERVER;
 			}
-			else if (gameservers.values().stream().anyMatch(server -> server.getId() == gameServerInfo.getId() && server.getConnection() != null)) {
+			else if (gameservers.values().stream().anyMatch(server -> server.getId() == registeringServer.getId() && server.getConnection() != null)) {
 				return RegisterResult.ALREADY_REGISTERED;
 			}
 			else {
-				gameServer.setConnection(connection);
+				gameServer.update(connection, registeringServer);
 				return RegisterResult.SUCCESS;
 			}
 		}
