@@ -33,8 +33,8 @@ public class GameServer {
 	private final short id;
 	private final String name;
 	private final boolean showing;
-	private final AgeLimit ageLimit;
-	private final Set<ServerType> serverTypes;
+	private AgeLimit ageLimit;
+	private Set<ServerType> serverTypes;
 
 	private InetAddress address;
 	private int port;
@@ -50,6 +50,17 @@ public class GameServer {
 		this.showing = showing;
 		this.ageLimit = ageLimit;
 		this.serverTypes = serverTypes;
+	}
+
+	public void update(IGameServerRMI connection, GameServer gameserver) {
+		this.connection = connection;
+
+		this.ageLimit = gameserver.getAgeLimit();
+		this.serverTypes = gameserver.getServerTypes();
+		this.address = gameserver.getAddress();
+		this.port = gameserver.getPort();
+		this.currentOnline = gameserver.getCurrentOnline();
+		this.maxOnline = gameserver.getMaxOnline();
 	}
 
 	public short getId() {
