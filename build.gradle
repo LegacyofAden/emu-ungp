@@ -1,0 +1,84 @@
+System.setProperty("file.encoding", "UTF-8")
+
+import org.tmatesoft.svn.core.wc.*
+
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.tmatesoft.svnkit:svnkit:+")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath("org.springframework.build.gradle:propdeps-plugin:+")
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+	apply plugin: 'eclipse'
+
+    sourceCompatibility = '1.8'
+
+	repositories {
+		mavenCentral()
+	}
+
+	eclipse {
+		project {
+			natures('org.springsource.ide.eclipse.gradle.core.nature')
+		}
+	}
+
+	tasks.eclipse.doLast {
+		copy {
+			from('../eclipse-settings')
+			into('.settings')
+		}
+	}
+
+	tasks.cleanEclipse.doLast {
+		delete('.settings')
+	}
+	
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+	}
+
+    tasks.withType(Jar) {
+        manifest {
+            attributes('Implementation-Title': project.name,
+                    'Implementation-Version': getSvnRevision(),
+                    'Built-Date': new java.util.Date().toString(),
+                    'Built-By': System.getProperty('user.name'),
+                    'Built-JDK': System.getProperty('java.version'),
+                    'Source-Compatibility': project.sourceCompatibility,
+                    'Target-Compatibility': project.targetCompatibility
+            )
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.3'
+}
+
+def getSvnRevision(){
+    try {
+        ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+        SVNClientManager clientManager = SVNClientManager.newInstance(options);
+        SVNStatusClient statusClient = clientManager.getStatusClient();
+        SVNStatus status = statusClient.doStatus(projectDir, false);
+        SVNRevision revision = status.getRevision();
+        return revision.getNumber();
+    }
+    catch (Exception ignored) {
+        return "DEV"
+    }
+}
