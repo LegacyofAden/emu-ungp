@@ -18,6 +18,8 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
@@ -25,11 +27,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-
-
 import org.l2junity.gameserver.service.GameServerRMI;
-
-import java.util.StringTokenizer;
 
 /**
  * This class handles the admin commands that acts on the login
@@ -137,7 +135,7 @@ public class AdminLogin implements IAdminCommandHandler {
 	 */
 	private void showMainPage(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/login.htm");
+		html.setFile(activeChar.getLang(), "admin/login.htm");
 		html.replace("%status%", GameServerRMI.getInstance().getServerStatus().toString());
 		html.replace("%clock%", getServerTypeName(GeneralConfig.SERVER_LIST_TYPE));
 		html.replace("%brackets%", String.valueOf(GeneralConfig.SERVER_LIST_BRACKET));

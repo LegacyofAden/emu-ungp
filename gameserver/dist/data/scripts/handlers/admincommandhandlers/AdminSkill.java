@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.ClassListData;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
@@ -37,9 +40,6 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands:
@@ -337,7 +337,7 @@ public class AdminSkill implements IAdminCommandHandler {
 		}
 		final Player player = target.getActingPlayer();
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/charskills.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/charskills.htm");
 		adminReply.replace("%name%", player.getName());
 		adminReply.replace("%level%", String.valueOf(player.getLevel()));
 		adminReply.replace("%class%", ClassListData.getInstance().getClass(player.getClassId()).getClientCode());

@@ -18,14 +18,14 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
 
 /**
  * Handler provides ability to override server's conditions for admin.<br>
@@ -52,7 +52,7 @@ public class AdminPcCondOverride implements IAdminCommandHandler {
 			{
 				case "admin_exceptions": {
 					final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-					msg.setFile(activeChar.getHtmlPrefix(), "admin/cond_override.htm");
+					msg.setFile(activeChar.getLang(), "admin/cond_override.htm");
 					StringBuilder sb = new StringBuilder();
 					for (PcCondOverride ex : PcCondOverride.values()) {
 						sb.append("<tr><td fixwidth=\"180\">" + ex.getDescription() + ":</td><td><a action=\"bypass -h admin_set_exception " + ex.ordinal() + "\">" + (activeChar.canOverrideCond(ex) ? "Disable" : "Enable") + "</a></td></tr>");

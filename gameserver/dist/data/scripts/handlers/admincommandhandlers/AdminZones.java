@@ -18,7 +18,18 @@
  */
 package handlers.admincommandhandlers;
 
-import ai.AbstractNpcAI;
+import java.awt.Color;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.PlayerAction;
@@ -48,14 +59,7 @@ import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import ai.AbstractNpcAI;
 
 /**
  * @author UnAfraid
@@ -227,7 +231,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-		msg.setFile(activeChar.getHtmlPrefix(), "admin/zone_editor.htm");
+		msg.setFile(activeChar.getLang(), "admin/zone_editor.htm");
 		msg.replace("%zones%", sb.toString());
 		activeChar.sendPacket(msg);
 	}
@@ -471,7 +475,7 @@ public class AdminZones extends AbstractNpcAI implements IAdminCommandHandler {
 
 	private void buildHtmlWindow(final Player activeChar, final int page) {
 		final NpcHtmlMessage msg = new NpcHtmlMessage(0, 1);
-		msg.setFile(activeChar.getHtmlPrefix(), "admin/zone_editor_create.htm");
+		msg.setFile(activeChar.getLang(), "admin/zone_editor_create.htm");
 		final ZoneNodeHolder holder = _zones.computeIfAbsent(activeChar.getObjectId(), key -> new ZoneNodeHolder(activeChar));
 		final AtomicInteger position = new AtomicInteger(page * 20);
 

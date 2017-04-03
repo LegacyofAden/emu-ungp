@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Team;
@@ -33,13 +36,20 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.Earthquake;
+import org.l2junity.gameserver.network.client.send.ExRedSky;
+import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.MagicSkillUse;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.OnEventTrigger;
+import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.SunRise;
+import org.l2junity.gameserver.network.client.send.SunSet;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands:
@@ -400,7 +410,7 @@ public class AdminEffects implements IAdminCommandHandler {
 				}).build();
 
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-				html.setFile(activeChar.getHtmlPrefix(), "admin/ave_abnormal.htm");
+				html.setFile(activeChar.getLang(), "admin/ave_abnormal.htm");
 
 				if (result.getPages() > 0) {
 					html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");

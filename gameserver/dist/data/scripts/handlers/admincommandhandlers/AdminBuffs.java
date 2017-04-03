@@ -18,6 +18,12 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
@@ -38,12 +44,6 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.GMAudit;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 public class AdminBuffs implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
@@ -281,7 +281,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 		}
 
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/getbuffs.htm");
+		html.setFile(activeChar.getLang(), "admin/getbuffs.htm");
 
 		if (result.getPages() > 0) {
 			html.replace("%pages%", "<table width=280 cellspacing=0><tr>" + result.getPagerTemplate() + "</tr></table>");

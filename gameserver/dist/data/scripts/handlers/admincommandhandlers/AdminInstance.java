@@ -18,6 +18,13 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -35,13 +42,6 @@ import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.BypassParser;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Instance admin commands.
@@ -81,7 +81,7 @@ public final class AdminInstance implements IAdminCommandHandler {
 			case "admin_instance":
 			case "admin_instances": {
 				final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-				html.setFile(activeChar.getHtmlPrefix(), "admin/instances.htm");
+				html.setFile(activeChar.getLang(), "admin/instances.htm");
 				html.replace("%instCount%", InstanceManager.getInstance().getInstances().size());
 				html.replace("%tempCount%", InstanceManager.getInstance().getInstanceTemplates().size());
 				activeChar.sendPacket(html);

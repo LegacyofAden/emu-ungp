@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+import java.util.function.Predicate;
+
 import org.l2junity.gameserver.datatables.SpawnTable;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
@@ -36,9 +39,6 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.BypassBuilder;
 import org.l2junity.gameserver.util.BypassParser;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
-import java.util.function.Predicate;
 
 /**
  * @author NosBit
@@ -147,7 +147,7 @@ public class AdminScan implements IAdminCommandHandler {
 	private void sendNpcList(Player activeChar, int radius, int page, Predicate<Npc> condition, BypassParser parser) {
 		final BypassBuilder bypassParser = createBypassBuilder(parser, "bypass -h admin_scan");
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
-		html.setFile(activeChar.getHtmlPrefix(), "admin/scan.htm");
+		html.setFile(activeChar.getLang(), "admin/scan.htm");
 
 		//@formatter:off
 		final PageResult result = PageBuilder.newBuilder(World.getInstance().getVisibleObjects(activeChar, Npc.class, radius, condition), 15, bypassParser.toString())

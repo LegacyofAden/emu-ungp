@@ -18,6 +18,9 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.config.utils.ConfigLoader;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.CrestTable;
@@ -31,9 +34,6 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.StringJoiner;
-import java.util.StringTokenizer;
 
 /**
  * @author NosBit
@@ -123,7 +123,7 @@ public final class AdminReload implements IAdminCommandHandler {
 
 	private static void showPage(Player activeChar, String filename) {
 		final NpcHtmlMessage html = new NpcHtmlMessage();
-		html.setFile(activeChar.getHtmlPrefix(), filename);
+		html.setFile(activeChar.getLang(), filename);
 		html.replace("%reloadables%", RELOAD_USAGE);
 		activeChar.sendPacket(html);
 	}

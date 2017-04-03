@@ -44,12 +44,12 @@ public class TerritoryStatus implements IBypassHandler {
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		{
 			if (npc.getCastle().getOwnerId() > 0) {
-				html.setFile(activeChar.getHtmlPrefix(), "territorystatus.htm");
+				html.setFile(activeChar.getLang(), "territorystatus.htm");
 				Clan clan = ClanTable.getInstance().getClan(npc.getCastle().getOwnerId());
 				html.replace("%clanname%", clan.getName());
 				html.replace("%clanleadername%", clan.getLeaderName());
 			} else {
-				html.setFile(activeChar.getHtmlPrefix(), "territorynoclan.htm");
+				html.setFile(activeChar.getLang(), "territorynoclan.htm");
 			}
 		}
 		html.replace("%castlename%", npc.getCastle().getName());

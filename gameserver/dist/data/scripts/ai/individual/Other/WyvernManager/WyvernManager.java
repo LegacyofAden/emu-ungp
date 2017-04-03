@@ -18,15 +18,17 @@
  */
 package ai.individual.Other.WyvernManager;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.core.configs.FeatureConfig;
+import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Fort;
 
-import java.util.HashMap;
-import java.util.Map;
+import ai.AbstractNpcAI;
 
 /**
  * Wyvern Manager
@@ -171,12 +173,12 @@ public final class WyvernManager extends AbstractNpcAI {
 		}
 	}
 
-	private String replaceAll(Npc npc, String htmlPrefix) {
-		return replacePart(htmlPrefix, "wyvernmanager-01.html").replace("%residence_name%", getResidenceName(npc));
+	private String replaceAll(Npc npc, Language lang) {
+		return replacePart(lang, "wyvernmanager-01.html").replace("%residence_name%", getResidenceName(npc));
 	}
 
-	private String replacePart(String htmlPrefix, String htmlFile) {
-		return getHtm(htmlPrefix, htmlFile).replace("%wyvern_fee%", String.valueOf(WYVERN_FEE)).replace("%strider_level%", String.valueOf(STRIDER_LVL));
+	private String replacePart(Language lang, String htmlFile) {
+		return getHtm(lang, htmlFile).replace("%wyvern_fee%", String.valueOf(WYVERN_FEE)).replace("%strider_level%", String.valueOf(STRIDER_LVL));
 	}
 
 	@Override

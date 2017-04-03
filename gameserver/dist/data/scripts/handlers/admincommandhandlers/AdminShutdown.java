@@ -18,6 +18,8 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.lang.management.ShutdownManager;
 import org.l2junity.commons.lang.management.TerminationStatus;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
@@ -26,8 +28,6 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - server_shutdown [sec] = shows menu or shuts down server in sec seconds
@@ -83,7 +83,7 @@ public class AdminShutdown implements IAdminCommandHandler {
 
 	private void sendHtmlForm(Player activeChar) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
-		adminReply.setFile(activeChar.getHtmlPrefix(), "admin/shutdown.htm");
+		adminReply.setFile(activeChar.getLang(), "admin/shutdown.htm");
 		adminReply.replace("%count%", String.valueOf(World.getInstance().getPlayers().size()));
 		adminReply.replace("%used%", String.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
 		adminReply.replace("%time%", GameTimeManager.getInstance().getGameTime().toString());
