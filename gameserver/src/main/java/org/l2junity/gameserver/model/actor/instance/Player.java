@@ -7270,8 +7270,14 @@ public final class Player extends Playable {
 	public void sendMessage(String message) {
 		sendPacket(SystemMessage.sendString(message));
 	}
-	
+
+	@Override
 	public void sendMessage(CustomMessage msg, String ... args) {
+		msg.send(this, args);
+	}
+
+	@Override
+	public void sendMessage(CustomMessage msg, Object ... args) {
 		msg.send(this, args);
 	}
 

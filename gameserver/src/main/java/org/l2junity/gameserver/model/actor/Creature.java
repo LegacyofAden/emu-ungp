@@ -148,6 +148,7 @@ import org.l2junity.gameserver.network.client.send.StopMove;
 import org.l2junity.gameserver.network.client.send.StopRotation;
 import org.l2junity.gameserver.network.client.send.TeleportToLocation;
 import org.l2junity.gameserver.network.client.send.UserInfo;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.taskmanager.MovementController;
@@ -750,6 +751,15 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	public void sendMessage(String text) {
 		// default implementation
 	}
+
+	public void sendMessage(CustomMessage msg, String ... args) {
+
+	}
+
+	public void sendMessage(CustomMessage msg, Object ... args) {
+
+	}
+
 
 	/**
 	 * Teleport a L2Character and its pet if necessary.<br>

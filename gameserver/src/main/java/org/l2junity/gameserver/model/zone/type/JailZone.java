@@ -26,6 +26,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.tasks.player.TeleportTask;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 import java.util.concurrent.TimeUnit;
@@ -73,7 +74,7 @@ public class JailZone extends ZoneType {
 			if (player.isJailed()) {
 				// when a player wants to exit jail even if he is still jailed, teleport him back to jail
 				ThreadPool.getInstance().scheduleGeneral(new TeleportTask(player, JAIL_IN_LOC), 2000, TimeUnit.MILLISECONDS);
-				character.sendMessage("You cannot cheat your way out of here. You must wait until your jail time is over.");
+				character.sendMessage(CustomMessage.YOU_CANNOT_CHEAT_YOUR_WAY_OUT_OF_HERE_YOU_MUST_WAIT_UNTIL_YOUR_JAIL_TIME_IS_OVER);
 			}
 			if (GeneralConfig.JAIL_DISABLE_TRANSACTION) {
 				character.setInsideZone(ZoneId.NO_STORE, false);
