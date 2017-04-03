@@ -3,6 +3,7 @@ package org.l2junity.commons.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class AccountInfo {
+public class AccountInfo implements Serializable {
 	private String accountName;
 	private int charCount;
 	private List<Long> deleteTimeInfo = new ArrayList<>();
