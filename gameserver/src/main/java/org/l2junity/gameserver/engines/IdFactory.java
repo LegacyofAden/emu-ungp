@@ -37,6 +37,7 @@ public class IdFactory extends AbstractIdFactory {
 		setAllCharacterOffline();
 		cleanUpDB();
 		cleanUpTimeStamps();
+		lockIds();
 	}
 
 	/**
