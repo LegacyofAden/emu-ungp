@@ -25,7 +25,7 @@ public class CustomMessageData implements IGameXmlReader {
     }
 
     private void reload() {
-        parseDatapackFile("data/lang/custom_messages.xml");
+        parseDatapackFile("data/message/custom_messages.xml");
     }
 
     @Override
