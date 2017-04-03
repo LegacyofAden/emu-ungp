@@ -41,7 +41,7 @@ public class Lang implements IVoicedCommandHandler {
 				html.append("<button value=\"").append(lang.getShortName()).append("\" action=\"bypass -h voice .lang ").append(lang.toString()).append("\" width=60 height=21 back=\"L2UI_ct1.button_df\" fore=\"L2UI_ct1.button_df\"><br>");
 			}
 
-			msg.setFile(activeChar.getLang(), "data/html/mods/lang/languageselect.htm");
+			msg.setFile(activeChar.getLang(), "mods/lang/languageselect.htm");
 			msg.replace("%list%", html.toString());
 			activeChar.sendPacket(msg);
 			return true;
@@ -53,10 +53,10 @@ public class Lang implements IVoicedCommandHandler {
 			try {
 				Language language = Language.valueOf(lang);
 				activeChar.setLang(language);
-				msg.setFile(language, "data/html/mods/lang/ok.htm");
+				msg.setFile(language, "mods/lang/ok.htm");
 			}
 			catch (Exception e) {
-				msg.setFile(activeChar.getLang(), "data/html/mods/lang/error.htm");
+				msg.setFile(activeChar.getLang(), "mods/lang/error.htm");
 			}
 			activeChar.sendPacket(msg);
 			return true;
