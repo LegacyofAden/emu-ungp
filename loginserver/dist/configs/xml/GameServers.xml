@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gameServers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="xsd/GameServers.xsd">
 	<gameServer id="0" name="Bartz" showing="true"/>
-	<gameServer id="1" name="Sieghardt"/>
+	<gameServer id="1" name="Sieghardt" showing="true"/>
 	<gameServer id="2" name="Kain"/>
 	<gameServer id="3" name="Lionna"/>
 	<gameServer id="4" name="Erica"/>
