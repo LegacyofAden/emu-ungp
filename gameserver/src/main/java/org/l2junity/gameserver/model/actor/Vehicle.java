@@ -18,6 +18,11 @@
  */
 package org.l2junity.gameserver.model.actor;
 
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.InstanceType;
@@ -27,7 +32,6 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.VehicleStat;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
@@ -42,11 +46,6 @@ import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author DS
@@ -259,7 +258,7 @@ public abstract class Vehicle extends Creature {
 	 * @param oustZ
 	 */
 	public void payForRide(int itemId, int count, int oustX, int oustY, int oustZ) {
-		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, 1000, player ->
+		getWorld().forEachVisibleObjectInRadius(this, Player.class, 1000, player ->
 		{
 			if (player.isInBoat() && (player.getBoat() == this)) {
 				if (itemId > 0) {

@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.recv.friend;
 
 import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.L2FriendSay;
@@ -58,7 +58,7 @@ public final class RequestSendFriendMsg implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player targetPlayer = World.getInstance().getPlayer(_reciever);
+		final Player targetPlayer = WorldManager.getInstance().getPlayer(_reciever);
 		if ((targetPlayer == null) || !targetPlayer.getFriendList().contains(activeChar.getObjectId())) {
 			activeChar.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 			return;

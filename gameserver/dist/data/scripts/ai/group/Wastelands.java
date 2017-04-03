@@ -18,11 +18,9 @@
  */
 package ai.group;
 
-import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -35,6 +33,8 @@ import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
 import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import ai.AbstractNpcAI;
 
 /**
  * Wastelands AI.
@@ -89,7 +89,7 @@ public final class Wastelands extends AbstractNpcAI {
 				npc.broadcastSocialAction(4);
 				npc.broadcastSay(ChatType.NPC_GENERAL, GUARD_SHOUT[getRandom(2)], 1000);
 
-				World.getInstance().getVisibleObjects(npc, Npc.class, 500).stream().filter(n -> n.getId() == GUARD).forEach(guard ->
+				npc.getWorld().getVisibleObjects(npc, Npc.class, 500).stream().filter(n -> n.getId() == GUARD).forEach(guard ->
 				{
 					startQuestTimer("SOCIAL_ACTION", getRandom(2500, 3500), guard, null);
 				});
@@ -125,7 +125,7 @@ public final class Wastelands extends AbstractNpcAI {
 
 				if (attackId > 0) {
 					//@formatter:off
-					final Npc monster = World.getInstance().getVisibleObjects(guard, Npc.class, 1000)
+					final Npc monster = guard.getWorld().getVisibleObjects(guard, Npc.class, 1000)
 							.stream()
 							.filter(obj -> (obj.getId() == attackId))
 							.findFirst()
@@ -143,7 +143,7 @@ public final class Wastelands extends AbstractNpcAI {
 
 						if (guard.getId() == SCHUAZEN) {
 							//@formatter:off
-							final L2QuestGuardInstance decoGuard = (L2QuestGuardInstance) World.getInstance().getVisibleObjects(guard, Npc.class, 500)
+							final L2QuestGuardInstance decoGuard = (L2QuestGuardInstance) guard.getWorld().getVisibleObjects(guard, Npc.class, 500)
 									.stream()
 									.filter(obj -> (obj.getId() == DECO_GUARD2))
 									.findFirst()
@@ -187,7 +187,7 @@ public final class Wastelands extends AbstractNpcAI {
 			case REGENERATED_POSLOF: {
 				final int guardId = npc.getId() == REGENERATED_KANILOV ? JOEL : SCHUAZEN;
 				//@formatter:off
-				final L2QuestGuardInstance guard = (L2QuestGuardInstance) World.getInstance().getVisibleObjects(npc, Npc.class, 500)
+				final L2QuestGuardInstance guard = (L2QuestGuardInstance) npc.getWorld().getVisibleObjects(npc, Npc.class, 500)
 						.stream()
 						.filter(obj -> (obj.getId() == guardId))
 						.findFirst()
@@ -219,14 +219,14 @@ public final class Wastelands extends AbstractNpcAI {
 	@Override
 	public String onKill(Npc npc, Player killer, boolean isSummon) {
 		if (npc.getId() == REGENERATED_POSLOF) {
-			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
 			{
 				if ((guard.getId() == DECO_GUARD2)) {
 					guard.deleteMe();
 				}
 			});
 		} else if (npc.getId() == SAKUM) {
-			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, guard ->
 			{
 				if ((guard.getId() == COMMANDO) || (guard.getId() == COMMANDO_CAPTAIN)) {
 					guard.deleteMe();
@@ -244,7 +244,7 @@ public final class Wastelands extends AbstractNpcAI {
 		final Attackable guard = (Attackable) event.getTarget();
 
 		//@formatter:off
-		final Attackable sakum = World.getInstance().getVisibleObjects(guard, Attackable.class, 1000)
+		final Attackable sakum = guard.getWorld().getVisibleObjects(guard, Attackable.class, 1000)
 				.stream()
 				.filter(obj -> (obj.getId() == SAKUM))
 				.findFirst()

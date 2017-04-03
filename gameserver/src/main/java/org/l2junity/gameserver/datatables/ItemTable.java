@@ -18,18 +18,35 @@
  */
 package org.l2junity.gameserver.datatables;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.l2junity.gameserver.engines.IdFactory;
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.engines.items.DocumentItem;
 import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.instance.EventMonsterInstance;
@@ -40,20 +57,13 @@ import org.l2junity.gameserver.model.items.Armor;
 import org.l2junity.gameserver.model.items.EtcItem;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.*;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class serves as a container for all item templates in the game.
@@ -237,8 +247,7 @@ public class ItemTable {
 			log.debug("Item created: {}", item);
 		}
 
-		// Add the L2ItemInstance object to _allObjects of L2world
-		World.getInstance().addObject(item);
+		WorldManager.getInstance().getMainWorld().addObject(item);
 
 		// Set Item parameters
 		if (item.isStackable() && (count > 1)) {
@@ -301,7 +310,7 @@ public class ItemTable {
 			item.setItemLocation(ItemLocation.VOID);
 			item.setLastChange(ItemInstance.REMOVED);
 
-			World.getInstance().removeObject(item);
+			WorldManager.getInstance().removeObject(item);
 			IdFactory.getInstance().releaseId(item.getObjectId());
 
 			if (GeneralConfig.LOG_ITEMS) {

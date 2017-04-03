@@ -18,6 +18,9 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -25,7 +28,6 @@ import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.instancemanager.FourSepulchersManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -37,12 +39,8 @@ import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author sandman
@@ -356,11 +354,7 @@ public class L2SepulcherNpcInstance extends Npc {
 		}
 
 		final CreatureSay creatureSay = new CreatureSay(0, ChatType.NPC_SHOUT, getName(), msg);
-		for (Player player : World.getInstance().getPlayers()) {
-			if (Util.checkIfInRange(15000, player, this, true)) {
-				player.sendPacket(creatureSay);
-			}
-		}
+		getWorld().forEachVisibleObjectInRadius(this, Player.class, 15_000, player -> player.sendPacket(creatureSay));
 	}
 
 	public void showHtmlFile(Player player, String file) {

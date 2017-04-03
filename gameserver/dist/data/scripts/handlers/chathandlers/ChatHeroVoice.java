@@ -24,8 +24,8 @@ import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -58,11 +58,9 @@ public final class ChatHeroVoice implements IChatHandler {
 		}
 
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		for (Player player : World.getInstance().getPlayers()) {
-			if ((player != null) && !BlockList.isBlocked(player, activeChar)) {
-				player.sendPacket(cs);
-			}
-		}
+		WorldManager.getInstance().getAllPlayers().stream()
+			.filter(player -> !BlockList.isBlocked(player, activeChar))
+			.forEach(player -> player.sendPacket(cs));
 	}
 
 	@Override

@@ -18,16 +18,16 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding;
 
+import java.util.List;
+
 import org.l2junity.core.configs.GeoDataConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.geodata.pathfinding.cellnodes.CellPathFinding;
 import org.l2junity.gameserver.geodata.pathfinding.empty.EmptyPathFinding;
 import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoNode;
 import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoPathFinding;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.instancezone.Instance;
-
-import java.util.List;
+import org.l2junity.gameserver.model.world.WorldData;
 
 /**
  * @author -Nemesiss-
@@ -188,11 +188,11 @@ public abstract class PathFinding {
 	}
 
 	public byte getRegionX(int node_pos) {
-		return (byte) ((node_pos >> 8) + World.TILE_X_MIN);
+		return (byte) ((node_pos >> 8) + WorldData.TILE_X_MIN);
 	}
 
 	public byte getRegionY(int node_pos) {
-		return (byte) ((node_pos >> 8) + World.TILE_Y_MIN);
+		return (byte) ((node_pos >> 8) + WorldData.TILE_Y_MIN);
 	}
 
 	public short getRegionOffset(byte rx, byte ry) {
@@ -206,7 +206,7 @@ public abstract class PathFinding {
 	 * @return
 	 */
 	public int calculateWorldX(short node_x) {
-		return World.MAP_MIN_X + (node_x * 128) + 48;
+		return WorldData.MAP_MIN_X + (node_x * 128) + 48;
 	}
 
 	/**
@@ -216,7 +216,7 @@ public abstract class PathFinding {
 	 * @return
 	 */
 	public int calculateWorldY(short node_y) {
-		return World.MAP_MIN_Y + (node_y * 128) + 48;
+		return WorldData.MAP_MIN_Y + (node_y * 128) + 48;
 	}
 
 	public String[] getStat() {

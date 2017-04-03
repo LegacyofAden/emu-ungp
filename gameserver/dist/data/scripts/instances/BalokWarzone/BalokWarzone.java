@@ -18,11 +18,9 @@
  */
 package instances.BalokWarzone;
 
-import instances.AbstractInstance;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
@@ -35,6 +33,8 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import instances.AbstractInstance;
 
 /**
  * Balok Warzone instance zone.
@@ -346,7 +346,7 @@ public final class BalokWarzone extends AbstractInstance {
 		showOnScreenMsg(instance, NpcStringId.S1_LOCKED_AWAY_IN_THE_PRISON, ExShowScreenMessage.TOP_CENTER, 4000, player.getName());
 		player.teleToLocation(PRISON_LOCS[jailId]);
 
-		final Npc doorWarder = World.getInstance().getVisibleObjects(player, Npc.class, 1000).stream().findFirst().orElse(null);
+		final Npc doorWarder = player.getWorld().getVisibleObjects(player, Npc.class, 1000).stream().findFirst().orElse(null);
 		if (doorWarder != null) {
 			doorWarder.stopSkillEffects(INVUL.getSkill());
 		}

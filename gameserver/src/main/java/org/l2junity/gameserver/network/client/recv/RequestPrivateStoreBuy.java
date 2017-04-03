@@ -18,23 +18,22 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.ItemRequest;
 import org.l2junity.gameserver.model.TradeList;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
 
 public final class RequestPrivateStoreBuy implements IClientIncomingPacket {
 	private static final int BATCH_LENGTH = 20; // length of the one item
@@ -83,7 +82,7 @@ public final class RequestPrivateStoreBuy implements IClientIncomingPacket {
 			return;
 		}
 
-		WorldObject object = World.getInstance().getPlayer(_storePlayerId);
+		WorldObject object = player.getWorld().getPlayer(_storePlayerId);
 		if ((object == null) || player.isCursedWeaponEquipped()) {
 			return;
 		}

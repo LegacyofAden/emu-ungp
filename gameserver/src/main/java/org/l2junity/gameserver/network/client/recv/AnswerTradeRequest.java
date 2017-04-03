@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -61,7 +60,7 @@ public final class AnswerTradeRequest implements IClientIncomingPacket {
 			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE));
 			player.setActiveRequester(null);
 			return;
-		} else if (World.getInstance().getPlayer(partner.getObjectId()) == null) {
+		} else if (player.getWorld().getPlayer(partner.getObjectId()) == null) {
 			// Trade partner not found, cancel trade
 			player.sendPacket(new TradeDone(0));
 			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE));

@@ -25,8 +25,8 @@ import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -57,22 +57,18 @@ public final class ChatTrade implements IChatHandler {
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
 		if (GeneralConfig.DEFAULT_TRADE_CHAT.equalsIgnoreCase("on") || (GeneralConfig.DEFAULT_TRADE_CHAT.equalsIgnoreCase("gm") && activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS))) {
 			int region = MapRegionManager.getInstance().getMapRegionLocId(activeChar);
-			for (Player player : World.getInstance().getPlayers()) {
-				if ((region == MapRegionManager.getInstance().getMapRegionLocId(player)) && !BlockList.isBlocked(player, activeChar) && (player.getInstanceWorld() == activeChar.getInstanceWorld())) {
-					player.sendPacket(cs);
-				}
-			}
+			activeChar.getWorld().getPlayers().stream()
+				.filter(player -> region == MapRegionManager.getInstance().getMapRegionLocId(player) && !BlockList.isBlocked(player, activeChar))
+				.forEach(player -> player.sendPacket(cs));
 		} else if (GeneralConfig.DEFAULT_TRADE_CHAT.equalsIgnoreCase("global")) {
 			if (!activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS) && !activeChar.getFloodProtectors().getGlobalChat().tryPerformAction("global chat")) {
 				activeChar.sendMessage("Do not spam trade channel.");
 				return;
 			}
 
-			for (Player player : World.getInstance().getPlayers()) {
-				if (!BlockList.isBlocked(player, activeChar)) {
-					player.sendPacket(cs);
-				}
-			}
+			WorldManager.getInstance().getAllPlayers().stream()
+				.filter(player -> !BlockList.isBlocked(player, activeChar))
+				.forEach(player -> player.sendPacket(cs));
 		}
 	}
 

@@ -23,7 +23,6 @@ import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -32,6 +31,7 @@ import org.l2junity.gameserver.model.events.returns.ChatFilterReturn;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.stats.BooleanStat;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
@@ -182,7 +182,7 @@ public final class Say2 implements IClientIncomingPacket {
 			}
 		}
 
-		final ChatFilterReturn filter = EventDispatcher.getInstance().notifyEvent(new OnPlayerChat(activeChar, World.getInstance().getPlayer(_target), _text, chatType), activeChar, ChatFilterReturn.class);
+		final ChatFilterReturn filter = EventDispatcher.getInstance().notifyEvent(new OnPlayerChat(activeChar, WorldManager.getInstance().getPlayer(_target), _text, chatType), activeChar, ChatFilterReturn.class);
 		if (filter != null) {
 			if (filter.terminate()) {
 				return;

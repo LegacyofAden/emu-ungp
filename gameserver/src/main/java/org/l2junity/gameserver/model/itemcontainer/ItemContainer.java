@@ -18,21 +18,6 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.core.configs.RatesConfig;
-import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.ItemTemplate;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,6 +27,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.configs.RatesConfig;
+import org.l2junity.gameserver.datatables.ItemTable;
+import org.l2junity.gameserver.enums.ItemLocation;
+import org.l2junity.gameserver.instancemanager.GameTimeManager;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.items.ItemTemplate;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Advi
@@ -624,7 +624,7 @@ public abstract class ItemContainer {
 			for (ItemInstance item : _items.values()) {
 				item.updateDatabase(true);
 				item.deleteMe();
-				World.getInstance().removeObject(item);
+				WorldManager.getInstance().removeObject(item);
 			}
 		}
 		_items.clear();
@@ -652,10 +652,10 @@ public abstract class ItemContainer {
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					final ItemInstance item = new ItemInstance(rs);
-					World.getInstance().addObject(item);
+					
+					WorldManager.getInstance().getMainWorld().addObject(item);
 
 					final Player owner = getOwner() != null ? getOwner().getActingPlayer() : null;
-
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {
 						addItem("Restore", item, owner, null);

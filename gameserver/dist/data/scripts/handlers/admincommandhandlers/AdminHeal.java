@@ -21,10 +21,10 @@ package handlers.admincommandhandlers;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,14 +74,14 @@ public class AdminHeal implements IAdminCommandHandler {
 
 		WorldObject obj = activeChar.getTarget();
 		if (player != null) {
-			Player plyr = World.getInstance().getPlayer(player);
+			Player plyr = WorldManager.getInstance().getPlayer(player);
 
 			if (plyr != null) {
 				obj = plyr;
 			} else {
 				try {
 					int radius = Integer.parseInt(player);
-					World.getInstance().forEachVisibleObject(activeChar, Creature.class, character ->
+					activeChar.getWorld().forEachVisibleObject(activeChar, Creature.class, character ->
 					{
 						character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
 						if (character instanceof Player) {

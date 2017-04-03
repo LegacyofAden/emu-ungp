@@ -18,12 +18,12 @@
  */
 package org.l2junity.gameserver.model.debugger;
 
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
 /**
  * @author UnAfraid
@@ -47,7 +47,7 @@ public class Debugger {
 	}
 
 	public Player getPlayer() {
-		return World.getInstance().getPlayer(_objectId);
+		return WorldManager.getInstance().getPlayer(_objectId);
 	}
 
 	public boolean hasDebugType(DebugType... types) {

@@ -20,7 +20,6 @@ package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -44,7 +43,7 @@ public final class PumpHide extends AbstractEffect {
 				effected.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 			}
 
-			World.getInstance().forEachVisibleObject(effected, Creature.class, target ->
+			effected.getWorld().forEachVisibleObject(effected, Creature.class, target ->
 			{
 				if ((target.getTarget() == effected)) {
 					target.setTarget(null);

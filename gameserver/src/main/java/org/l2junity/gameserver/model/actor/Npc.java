@@ -55,10 +55,12 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.MpRewardTask;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.instance.FishermanInstance;
+import org.l2junity.gameserver.model.actor.instance.L2TeleporterInstance;
+import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.WarehouseInstance;
 import org.l2junity.gameserver.model.actor.status.NpcStatus;
 import org.l2junity.gameserver.model.actor.tasks.npc.RandomAnimationTask;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
@@ -355,7 +357,7 @@ public class Npc extends Creature {
 	 */
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -1269,7 +1271,7 @@ public class Npc extends Creature {
 	 * @param reference - L2Object to pass, if needed
 	 */
 	public void broadcastEvent(String eventName, int radius, WorldObject reference) {
-		World.getInstance().forEachVisibleObjectInRadius(this, Npc.class, radius, obj ->
+		getWorld().forEachVisibleObjectInRadius(this, Npc.class, radius, obj ->
 		{
 			if (obj.hasListener(EventType.ON_NPC_EVENT_RECEIVED)) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnNpcEventReceived(eventName, this, obj, reference), obj);

@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.model.effects.effecttypes.pump;
 
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -38,7 +37,7 @@ public final class PumpDisappearTarget extends AbstractBooleanStatEffect {
 	@Override
 	public void pumpStart(Creature caster, Creature target, Skill skill) {
 		// Remove target from those that have the untargetable creature on target.
-		World.getInstance().forEachVisibleObject(target, Creature.class, c ->
+		target.getWorld().forEachVisibleObject(target, Creature.class, c ->
 		{
 			if (c.getTarget() == target) {
 				c.setTarget(null);

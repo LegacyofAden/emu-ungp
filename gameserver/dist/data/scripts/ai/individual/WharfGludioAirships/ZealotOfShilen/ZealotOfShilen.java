@@ -18,13 +18,13 @@
  */
 package ai.individual.WharfGludioAirships.ZealotOfShilen;
 
-import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+
+import ai.AbstractNpcAI;
 
 /**
  * Zealot of Shilen AI.
@@ -54,7 +54,7 @@ public final class ZealotOfShilen extends AbstractNpcAI {
 
 		startQuestTimer("WATCHING", 10000, npc, null, true);
 		if (event.equalsIgnoreCase("WATCHING") && !npc.isAttackingNow()) {
-			World.getInstance().forEachVisibleObject(npc, MonsterInstance.class, character ->
+			npc.getWorld().forEachVisibleObject(npc, MonsterInstance.class, character ->
 			{
 				if (!character.isDead() && !character.isDecayed()) {
 					npc.setRunning();

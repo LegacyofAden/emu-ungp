@@ -20,7 +20,6 @@ package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
@@ -60,7 +59,7 @@ public class L2DecoyInstance extends Npc {
 
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(new CharInfo(this, isInvisible() && player.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS)));

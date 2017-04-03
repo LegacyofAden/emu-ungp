@@ -18,12 +18,43 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import org.l2junity.gameserver.engines.IdFactory;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.core.configs.*;
+import org.l2junity.core.configs.AdminConfig;
+import org.l2junity.core.configs.FeatureConfig;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.core.configs.PvpConfig;
+import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.ItemsAutoDestroy;
 import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -35,23 +66,124 @@ import org.l2junity.gameserver.communitybbs.Manager.ForumsBBSManager;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.CharSummonTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
-import org.l2junity.gameserver.data.xml.impl.*;
+import org.l2junity.gameserver.data.xml.impl.AdminData;
+import org.l2junity.gameserver.data.xml.impl.CategoryData;
+import org.l2junity.gameserver.data.xml.impl.ClassListData;
+import org.l2junity.gameserver.data.xml.impl.ExperienceData;
+import org.l2junity.gameserver.data.xml.impl.FactionData;
+import org.l2junity.gameserver.data.xml.impl.HennaData;
+import org.l2junity.gameserver.data.xml.impl.NpcData;
+import org.l2junity.gameserver.data.xml.impl.PetDataTable;
+import org.l2junity.gameserver.data.xml.impl.PlayerTemplateData;
+import org.l2junity.gameserver.data.xml.impl.PlayerXpPercentLostData;
+import org.l2junity.gameserver.data.xml.impl.RecipeData;
+import org.l2junity.gameserver.data.xml.impl.SkillData;
+import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.enums.*;
+import org.l2junity.gameserver.engines.IdFactory;
+import org.l2junity.gameserver.enums.AdminTeleportType;
+import org.l2junity.gameserver.enums.CastleSide;
+import org.l2junity.gameserver.enums.CategoryType;
+import org.l2junity.gameserver.enums.ChatType;
+import org.l2junity.gameserver.enums.Faction;
+import org.l2junity.gameserver.enums.GroupType;
+import org.l2junity.gameserver.enums.HtmlActionScope;
+import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
+import org.l2junity.gameserver.enums.InstanceType;
+import org.l2junity.gameserver.enums.ItemGrade;
+import org.l2junity.gameserver.enums.MountType;
+import org.l2junity.gameserver.enums.NextActionType;
+import org.l2junity.gameserver.enums.NobleStatus;
+import org.l2junity.gameserver.enums.PartyDistributionType;
+import org.l2junity.gameserver.enums.PartySmallWindowUpdateType;
+import org.l2junity.gameserver.enums.PcCafeConsumeType;
+import org.l2junity.gameserver.enums.PlayerAction;
+import org.l2junity.gameserver.enums.PrivateStoreType;
+import org.l2junity.gameserver.enums.Race;
+import org.l2junity.gameserver.enums.Sex;
+import org.l2junity.gameserver.enums.ShortcutType;
+import org.l2junity.gameserver.enums.ShotType;
+import org.l2junity.gameserver.enums.StatusUpdateType;
+import org.l2junity.gameserver.enums.SubclassInfoType;
+import org.l2junity.gameserver.enums.Team;
+import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
-import org.l2junity.gameserver.instancemanager.*;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.instancemanager.AntiFeedManager;
+import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
+import org.l2junity.gameserver.instancemanager.DuelManager;
+import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.instancemanager.FortSiegeManager;
+import org.l2junity.gameserver.instancemanager.GameTimeManager;
+import org.l2junity.gameserver.instancemanager.GlobalVariablesManager;
+import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
+import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
+import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
+import org.l2junity.gameserver.instancemanager.MentorManager;
+import org.l2junity.gameserver.instancemanager.PunishmentManager;
+import org.l2junity.gameserver.instancemanager.QuestManager;
+import org.l2junity.gameserver.instancemanager.SellBuffsManager;
+import org.l2junity.gameserver.instancemanager.SiegeManager;
+import org.l2junity.gameserver.instancemanager.ZoneManager;
+import org.l2junity.gameserver.model.AccessLevel;
+import org.l2junity.gameserver.model.ArenaParticipantsHolder;
+import org.l2junity.gameserver.model.BlockList;
+import org.l2junity.gameserver.model.Clan;
+import org.l2junity.gameserver.model.ClanMember;
+import org.l2junity.gameserver.model.ClanPrivilege;
+import org.l2junity.gameserver.model.ClanWar;
 import org.l2junity.gameserver.model.ClanWar.ClanWarState;
+import org.l2junity.gameserver.model.CommandChannel;
+import org.l2junity.gameserver.model.ContactList;
+import org.l2junity.gameserver.model.Fishing;
+import org.l2junity.gameserver.model.L2Request;
+import org.l2junity.gameserver.model.Language;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.Macro;
+import org.l2junity.gameserver.model.MacroList;
+import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.Party.MessageType;
-import org.l2junity.gameserver.model.actor.*;
+import org.l2junity.gameserver.model.PcCondOverride;
+import org.l2junity.gameserver.model.PetData;
+import org.l2junity.gameserver.model.PetLevelData;
+import org.l2junity.gameserver.model.PremiumItem;
+import org.l2junity.gameserver.model.Radar;
+import org.l2junity.gameserver.model.ShortCuts;
+import org.l2junity.gameserver.model.Shortcut;
+import org.l2junity.gameserver.model.SkillLearn;
+import org.l2junity.gameserver.model.TeleportBookmark;
+import org.l2junity.gameserver.model.TeleportWhereType;
+import org.l2junity.gameserver.model.TimeStamp;
+import org.l2junity.gameserver.model.TradeList;
+import org.l2junity.gameserver.model.UIKeysSettings;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.actor.Attackable;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.Npc;
+import org.l2junity.gameserver.model.actor.Playable;
+import org.l2junity.gameserver.model.actor.Summon;
+import org.l2junity.gameserver.model.actor.Vehicle;
 import org.l2junity.gameserver.model.actor.appearance.PcAppearance;
 import org.l2junity.gameserver.model.actor.request.AbstractRequest;
 import org.l2junity.gameserver.model.actor.request.SayuneRequest;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 import org.l2junity.gameserver.model.actor.status.PcStatus;
-import org.l2junity.gameserver.model.actor.tasks.player.*;
+import org.l2junity.gameserver.model.actor.tasks.player.DismountTask;
+import org.l2junity.gameserver.model.actor.tasks.player.FameTask;
+import org.l2junity.gameserver.model.actor.tasks.player.InventoryEnableTask;
+import org.l2junity.gameserver.model.actor.tasks.player.PetFeedTask;
+import org.l2junity.gameserver.model.actor.tasks.player.PvPFlagTask;
+import org.l2junity.gameserver.model.actor.tasks.player.RecoGiveTask;
+import org.l2junity.gameserver.model.actor.tasks.player.RentPetTask;
+import org.l2junity.gameserver.model.actor.tasks.player.ResetChargesTask;
+import org.l2junity.gameserver.model.actor.tasks.player.ResetSoulsTask;
+import org.l2junity.gameserver.model.actor.tasks.player.SitDownTask;
+import org.l2junity.gameserver.model.actor.tasks.player.StandUpTask;
+import org.l2junity.gameserver.model.actor.tasks.player.TeleportWatchdogTask;
+import org.l2junity.gameserver.model.actor.tasks.player.WarnUserTakeBreakTask;
+import org.l2junity.gameserver.model.actor.tasks.player.WaterTask;
 import org.l2junity.gameserver.model.actor.templates.PcTemplate;
 import org.l2junity.gameserver.model.actor.transform.Transform;
 import org.l2junity.gameserver.model.base.ClassId;
@@ -60,22 +192,66 @@ import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.effects.L2EffectType;
-import org.l2junity.gameserver.model.entity.*;
+import org.l2junity.gameserver.model.entity.Castle;
+import org.l2junity.gameserver.model.entity.Duel;
+import org.l2junity.gameserver.model.entity.Fort;
+import org.l2junity.gameserver.model.entity.Hero;
+import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.eventengine.AbstractEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
-import org.l2junity.gameserver.model.events.impl.character.player.*;
-import org.l2junity.gameserver.model.events.impl.restriction.*;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerAbilityPointsChanged;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDeathExpPenalty;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDeathPenalty;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerEquipItem;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFameChanged;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerHennaAdd;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerHennaRemove;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogin;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeStatus;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMentorStatus;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPKChanged;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerProfessionChange;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPvPChanged;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPvPKill;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerReputationChanged;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSubChange;
+import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerLeaveParty;
+import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerLogout;
+import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerPickUp;
+import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerStandUp;
+import org.l2junity.gameserver.model.events.impl.restriction.GetPlayerCombatState;
+import org.l2junity.gameserver.model.events.impl.restriction.IsPlayerInvul;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
 import org.l2junity.gameserver.model.events.returns.CombatStateReturn;
 import org.l2junity.gameserver.model.events.returns.LongReturn;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
-import org.l2junity.gameserver.model.holders.*;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+import org.l2junity.gameserver.model.holders.MovieHolder;
+import org.l2junity.gameserver.model.holders.PreparedMultisellListHolder;
+import org.l2junity.gameserver.model.holders.RecipeHolder;
+import org.l2junity.gameserver.model.holders.SellBuffHolder;
+import org.l2junity.gameserver.model.holders.SkillUseHolder;
+import org.l2junity.gameserver.model.holders.TrainingHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.interfaces.ILocational;
-import org.l2junity.gameserver.model.itemcontainer.*;
-import org.l2junity.gameserver.model.items.*;
+import org.l2junity.gameserver.model.itemcontainer.Inventory;
+import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
+import org.l2junity.gameserver.model.itemcontainer.PcFreight;
+import org.l2junity.gameserver.model.itemcontainer.PcInventory;
+import org.l2junity.gameserver.model.itemcontainer.PcRefund;
+import org.l2junity.gameserver.model.itemcontainer.PcWarehouse;
+import org.l2junity.gameserver.model.itemcontainer.PetInventory;
+import org.l2junity.gameserver.model.items.Armor;
+import org.l2junity.gameserver.model.items.EtcItem;
+import org.l2junity.gameserver.model.items.Henna;
+import org.l2junity.gameserver.model.items.ItemTemplate;
+import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.items.type.*;
+import org.l2junity.gameserver.model.items.type.ActionType;
+import org.l2junity.gameserver.model.items.type.ArmorType;
+import org.l2junity.gameserver.model.items.type.CrystalType;
+import org.l2junity.gameserver.model.items.type.EtcItemType;
+import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
@@ -85,15 +261,93 @@ import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-import org.l2junity.gameserver.model.skills.*;
-import org.l2junity.gameserver.model.stats.*;
+import org.l2junity.gameserver.model.skills.AbnormalType;
+import org.l2junity.gameserver.model.skills.BuffInfo;
+import org.l2junity.gameserver.model.skills.CommonSkill;
+import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.skills.SkillCaster;
+import org.l2junity.gameserver.model.skills.SkillCastingType;
+import org.l2junity.gameserver.model.stats.BaseStats;
+import org.l2junity.gameserver.model.stats.BooleanStat;
+import org.l2junity.gameserver.model.stats.DoubleStat;
+import org.l2junity.gameserver.model.stats.Formulas;
+import org.l2junity.gameserver.model.stats.MoveType;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.AbstractHtmlPacket;
+import org.l2junity.gameserver.network.client.send.AcquireSkillList;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.ChangeWaitType;
+import org.l2junity.gameserver.network.client.send.CharInfo;
+import org.l2junity.gameserver.network.client.send.ConfirmDlg;
+import org.l2junity.gameserver.network.client.send.CreatureSay;
+import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
+import org.l2junity.gameserver.network.client.send.ExAbnormalStatusUpdateFromTarget;
+import org.l2junity.gameserver.network.client.send.ExAdenaInvenCount;
+import org.l2junity.gameserver.network.client.send.ExAutoSoulShot;
+import org.l2junity.gameserver.network.client.send.ExBrPremiumState;
+import org.l2junity.gameserver.network.client.send.ExDuelUpdateUserInfo;
+import org.l2junity.gameserver.network.client.send.ExGetBookMarkInfoPacket;
+import org.l2junity.gameserver.network.client.send.ExGetOnAirShip;
+import org.l2junity.gameserver.network.client.send.ExMagicAttackInfo;
+import org.l2junity.gameserver.network.client.send.ExOlympiadMode;
+import org.l2junity.gameserver.network.client.send.ExPCCafePointInfo;
+import org.l2junity.gameserver.network.client.send.ExPledgeCount;
+import org.l2junity.gameserver.network.client.send.ExPrivateStoreSetWholeMsg;
+import org.l2junity.gameserver.network.client.send.ExQuestItemList;
+import org.l2junity.gameserver.network.client.send.ExSetCompassZoneCode;
+import org.l2junity.gameserver.network.client.send.ExStartScenePlayer;
+import org.l2junity.gameserver.network.client.send.ExStopScenePlayer;
+import org.l2junity.gameserver.network.client.send.ExStorageMaxCount;
+import org.l2junity.gameserver.network.client.send.ExSubjobInfo;
+import org.l2junity.gameserver.network.client.send.ExUseSharedGroupItem;
+import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
+import org.l2junity.gameserver.network.client.send.ExUserInfoCubic;
+import org.l2junity.gameserver.network.client.send.ExUserInfoInvenWeight;
+import org.l2junity.gameserver.network.client.send.GetOnVehicle;
+import org.l2junity.gameserver.network.client.send.HennaInfo;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.ItemList;
+import org.l2junity.gameserver.network.client.send.MagicSkillUse;
+import org.l2junity.gameserver.network.client.send.MyTargetSelected;
+import org.l2junity.gameserver.network.client.send.NicknameChanged;
+import org.l2junity.gameserver.network.client.send.ObservationMode;
+import org.l2junity.gameserver.network.client.send.ObservationReturn;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowUpdate;
+import org.l2junity.gameserver.network.client.send.PetInventoryUpdate;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListDelete;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListUpdate;
+import org.l2junity.gameserver.network.client.send.PrivateStoreListBuy;
+import org.l2junity.gameserver.network.client.send.PrivateStoreListSell;
+import org.l2junity.gameserver.network.client.send.PrivateStoreManageListBuy;
+import org.l2junity.gameserver.network.client.send.PrivateStoreMsgBuy;
+import org.l2junity.gameserver.network.client.send.PrivateStoreMsgSell;
+import org.l2junity.gameserver.network.client.send.RecipeShopMsg;
+import org.l2junity.gameserver.network.client.send.RecipeShopSellList;
+import org.l2junity.gameserver.network.client.send.RelationChanged;
+import org.l2junity.gameserver.network.client.send.Ride;
+import org.l2junity.gameserver.network.client.send.SetupGauge;
+import org.l2junity.gameserver.network.client.send.ShortCutInit;
+import org.l2junity.gameserver.network.client.send.SkillCoolTime;
+import org.l2junity.gameserver.network.client.send.SkillList;
+import org.l2junity.gameserver.network.client.send.Snoop;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.StatusUpdate;
+import org.l2junity.gameserver.network.client.send.StopMove;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.TargetSelected;
+import org.l2junity.gameserver.network.client.send.TargetUnselected;
+import org.l2junity.gameserver.network.client.send.TradeDone;
+import org.l2junity.gameserver.network.client.send.TradeOtherDone;
+import org.l2junity.gameserver.network.client.send.TradeStart;
+import org.l2junity.gameserver.network.client.send.UserInfo;
+import org.l2junity.gameserver.network.client.send.ValidateLocation;
 import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
 import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionInfo;
 import org.l2junity.gameserver.network.client.send.friend.L2FriendStatus;
@@ -107,15 +361,6 @@ import org.l2junity.gameserver.util.FloodProtectors;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.*;
-import java.sql.Date;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 /**
  * This class represents all player characters in the world.<br>
@@ -1218,7 +1463,7 @@ public final class Player extends Playable {
 		if ((target != null) && isInRadius2d(target, Npc.INTERACTION_DISTANCE)) {
 			quest.notifyEvent(event, target, this);
 		} else if (getLastQuestNpcObject() > 0) {
-			final WorldObject object = World.getInstance().findObject(getLastQuestNpcObject());
+			final WorldObject object = getWorld().findObject(getLastQuestNpcObject());
 			if (object.isNpc() && isInRadius2d(object, Npc.INTERACTION_DISTANCE)) {
 				quest.notifyEvent(event, (Npc) object, this);
 			}
@@ -1594,7 +1839,7 @@ public final class Player extends Playable {
 		super.setReputation(reputation);
 
 		if ((getReputation() >= 0) && (reputation < 0)) {
-			World.getInstance().forEachVisibleObject(this, L2GuardInstance.class, object ->
+			getWorld().forEachVisibleObject(this, L2GuardInstance.class, object ->
 			{
 				if (object.getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 					object.getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
@@ -3135,7 +3380,7 @@ public final class Player extends Playable {
 
 	public ItemInstance checkItemManipulation(int objectId, long count, String action) {
 		// TODO: if we remove objects that are not visisble from the L2World, we'll have to remove this check
-		if (World.getInstance().findObject(objectId) == null) {
+		if (WorldManager.getInstance().getMainWorld().findObject(objectId) == null) {
 			LOGGER.trace(getObjectId() + ": player tried to " + action + " item not available in L2World");
 			return null;
 		}
@@ -3430,7 +3675,7 @@ public final class Player extends Playable {
 
 	public final void broadcastCharInfo() {
 		final CharInfo charInfo = new CharInfo(this, false);
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				if (isInvisible() && player.canOverrideCond(PcCondOverride.SEE_ALL_PLAYERS)) {
@@ -3462,7 +3707,7 @@ public final class Player extends Playable {
 
 		sendPacket(mov);
 
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -3480,7 +3725,7 @@ public final class Player extends Playable {
 
 		sendPacket(mov);
 
-		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
+		getWorld().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -3514,7 +3759,7 @@ public final class Player extends Playable {
 	}
 
 	public void broadcastRelationChanged() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (!isVisibleFor(player)) {
 				return;
@@ -5543,7 +5788,7 @@ public final class Player extends Playable {
 			}
 
 			// Restore pet if exists in the world
-			player.setPet(World.getInstance().getPet(player.getObjectId()));
+			player.setPet(WorldManager.getInstance().getPet(player.getObjectId()));
 			final Summon pet = player.getPet();
 			if (pet != null) {
 				pet.setOwner(player);
@@ -6930,7 +7175,7 @@ public final class Player extends Playable {
 	}
 
 	public boolean isInLooterParty(int LooterId) {
-		Player looter = World.getInstance().getPlayer(LooterId);
+		Player looter = getWorld().getPlayer(LooterId);
 
 		// if L2PcInstance is in a CommandChannel
 		if (isInParty() && getParty().isInCommandChannel() && (looter != null)) {
@@ -8241,7 +8486,7 @@ public final class Player extends Playable {
 		}
 
 		// Update record online players if a new record is reached.
-		final int currentOnlinePlayers = World.getInstance().getPlayers().size();
+		final int currentOnlinePlayers = WorldManager.getInstance().getPlayerCount();
 		if (currentOnlinePlayers > GlobalVariablesManager.getInstance().getInt(GlobalVariablesManager.RECORD_ONLINE_PLAYERS_VAR, 0)) {
 			GlobalVariablesManager.getInstance().set(GlobalVariablesManager.RECORD_ONLINE_PLAYERS_VAR, currentOnlinePlayers);
 		}
@@ -10040,15 +10285,15 @@ public final class Player extends Playable {
 		if (type == L2FriendStatus.MODE_ONLINE) {
 			CreatureSay cs = new CreatureSay(0, ChatType.NPC_WHISPER, "", SystemMessageId.YOUR_FRIEND_S1_JUST_LOGGED_IN);
 			cs.addStringParameter(getName());
-			getFriendList().stream().map(World.getInstance()::findObject).filter(Objects::nonNull).forEach(cs::sendTo);
+			getFriendList().stream().map(WorldManager.getInstance()::getPlayer).filter(Objects::nonNull).forEach(cs::sendTo);
 		} else if (type == L2FriendStatus.MODE_OFFLINE) {
 			CreatureSay cs = new CreatureSay(0, ChatType.NPC_WHISPER, "", SystemMessageId.YOUR_FRIEND_S1_JUST_LOGGED_OUT);
 			cs.addStringParameter(getName());
-			getFriendList().stream().map(World.getInstance()::findObject).filter(Objects::nonNull).forEach(cs::sendTo);
+			getFriendList().stream().map(WorldManager.getInstance()::getPlayer).filter(Objects::nonNull).forEach(cs::sendTo);
 		}
 
 		L2FriendStatus pkt = new L2FriendStatus(this, type);
-		getFriendList().stream().map(World.getInstance()::findObject).filter(Objects::nonNull).forEach(pkt::sendTo);
+		getFriendList().stream().map(WorldManager.getInstance()::getPlayer).filter(Objects::nonNull).forEach(pkt::sendTo);
 	}
 
 	/**

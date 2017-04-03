@@ -18,6 +18,8 @@
  */
 package custom.SellBuff;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.SellBuffConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.handler.BypassHandler;
@@ -25,7 +27,6 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.instancemanager.SellBuffsManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -33,10 +34,9 @@ import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
 
 /**
  * Sell Buffs voice command
@@ -276,7 +276,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						index = Integer.parseInt(st.nextToken());
 					}
 
-					final Player seller = World.getInstance().getPlayer(objId);
+					final Player seller = WorldManager.getInstance().getPlayer(objId);
 					if (seller != null) {
 						if (!seller.isSellingBuffs() || !activeChar.isInRadius3d(seller, Npc.INTERACTION_DISTANCE)) {
 							return false;
@@ -310,7 +310,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						return false;
 					}
 
-					final Player seller = World.getInstance().getPlayer(objId);
+					final Player seller = WorldManager.getInstance().getPlayer(objId);
 					if (seller == null) {
 						return false;
 					}

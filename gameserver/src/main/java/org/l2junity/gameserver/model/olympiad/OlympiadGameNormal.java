@@ -18,22 +18,6 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.core.configs.OlympiadConfig;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.events.EventDispatcher;
-import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
-import org.l2junity.gameserver.model.instancezone.Instance;
-import org.l2junity.gameserver.network.client.send.ExOlympiadMatchResult;
-import org.l2junity.gameserver.network.client.send.ExOlympiadUserInfo;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -41,6 +25,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.core.configs.OlympiadConfig;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.events.EventDispatcher;
+import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
+import org.l2junity.gameserver.model.instancezone.Instance;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.ExOlympiadMatchResult;
+import org.l2junity.gameserver.network.client.send.ExOlympiadUserInfo;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * @author GodKratos, Pere, DS
@@ -82,7 +82,7 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame {
 				}
 			}
 
-			playerOne = World.getInstance().getPlayer(playerOneObjectId);
+			playerOne = WorldManager.getInstance().getMainWorld().getPlayer(playerOneObjectId);
 			if ((playerOne == null) || !playerOne.isOnline()) {
 				continue;
 			}
@@ -97,7 +97,7 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame {
 				}
 			}
 
-			playerTwo = World.getInstance().getPlayer(playerTwoObjectId);
+			playerTwo = WorldManager.getInstance().getMainWorld().getPlayer(playerTwoObjectId);
 			if ((playerTwo == null) || !playerTwo.isOnline()) {
 				set.add(playerOneObjectId);
 				continue;

@@ -25,13 +25,13 @@ import org.l2junity.gameserver.data.xml.impl.FenceData;
 import org.l2junity.gameserver.enums.FenceState;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.FenceInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 /**
@@ -82,7 +82,7 @@ public class AdminFence implements IAdminCommandHandler {
 					if ((fenceTypeOrdinal < 0) || (fenceTypeOrdinal >= FenceState.values().length)) {
 						activeChar.sendMessage("Specified FenceType is out of range. Only 0-" + (FenceState.values().length - 1) + " are permitted.");
 					} else {
-						final WorldObject obj = World.getInstance().findObject(objId);
+						final WorldObject obj = WorldManager.getInstance().getObject(objId);
 						if (obj instanceof FenceInstance) {
 							final FenceInstance fence = (FenceInstance) obj;
 							final FenceState state = FenceState.values()[fenceTypeOrdinal];
@@ -101,7 +101,7 @@ public class AdminFence implements IAdminCommandHandler {
 			case "admin_removefence": {
 				try {
 					final int objId = Integer.parseInt(st.nextToken());
-					final WorldObject obj = World.getInstance().findObject(objId);
+					final WorldObject obj = WorldManager.getInstance().getObject(objId);
 					if (obj instanceof FenceInstance) {
 						((FenceInstance) obj).deleteMe();
 						activeChar.sendMessage("Fence removed succesfully.");
@@ -126,7 +126,7 @@ public class AdminFence implements IAdminCommandHandler {
 			case "admin_gofence": {
 				try {
 					final int objId = Integer.parseInt(st.nextToken());
-					final WorldObject obj = World.getInstance().findObject(objId);
+					final WorldObject obj = WorldManager.getInstance().getObject(objId);
 					if (obj != null) {
 						activeChar.teleToLocation(obj);
 					}

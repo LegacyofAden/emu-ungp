@@ -18,9 +18,10 @@
  */
 package org.l2junity.gameserver.model.effects.effecttypes.instant;
 
+import java.util.List;
+
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -28,8 +29,6 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
-
-import java.util.List;
 
 /**
  * Randomize Hate effect implementation.
@@ -57,7 +56,7 @@ public final class InstantRandomizeHate extends AbstractEffect {
 			return;
 		}
 
-		final List<Creature> targetList = World.getInstance().getVisibleObjects(targetAttackable, Creature.class, c -> !c.equals(caster) && (!c.isAttackable() || !c.asAttackable().isInMyClan(targetAttackable)));
+		final List<Creature> targetList = targetAttackable.getWorld().getVisibleObjects(targetAttackable, Creature.class, c -> !c.equals(caster) && (!c.isAttackable() || !c.asAttackable().isInMyClan(targetAttackable)));
 		if (targetList.isEmpty()) {
 			return;
 		}

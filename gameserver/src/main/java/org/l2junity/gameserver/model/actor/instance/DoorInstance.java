@@ -18,6 +18,11 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
+import java.util.Collection;
+import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.commons.util.Rnd;
@@ -31,7 +36,6 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.stat.DoorStat;
 import org.l2junity.gameserver.model.actor.templates.DoorTemplate;
@@ -48,11 +52,6 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public final class DoorInstance extends Creature {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoorInstance.class);
@@ -281,8 +280,8 @@ public final class DoorInstance extends Creature {
 
 	@Override
 	public void broadcastStatusUpdate(Creature caster) {
-		final Collection<Player> knownPlayers = World.getInstance().getVisibleObjects(this, Player.class);
-		if ((knownPlayers == null) || knownPlayers.isEmpty()) {
+		final Collection<Player> knownPlayers = getWorld().getVisibleObjects(this, Player.class);
+		if (knownPlayers.isEmpty()) {
 			return;
 		}
 

@@ -18,25 +18,25 @@
  */
 package org.l2junity.gameserver.model.itemauction;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.ItemInfo;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.enums.ItemLocation;
+import org.l2junity.gameserver.model.ItemInfo;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Forsaiken
@@ -86,7 +86,7 @@ public final class ItemAuction {
 		final ItemInstance item = _auctionItem.createNewItemInstance();
 		item.setItemLocation(ItemLocation.LEASE);
 		_itemInfo = new ItemInfo(item);
-		World.getInstance().removeObject(item);
+		WorldManager.getInstance().removeObject(item);
 
 		for (final ItemAuctionBid bid : _auctionBids) {
 			if ((_highestBid == null) || (_highestBid.getLastBid() < bid.getLastBid())) {

@@ -18,10 +18,10 @@
  */
 package ai.individual.TalkingIsland;
 
-import ai.AbstractNpcAI;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
+
+import ai.AbstractNpcAI;
 
 /**
  * Drill Sergeant AI.
@@ -47,7 +47,7 @@ public final class DrillSergeant extends AbstractNpcAI {
 			final int socialActionId = SOCIAL_ACTIONS[getRandom(SOCIAL_ACTIONS.length)];
 			npc.broadcastSocialAction(socialActionId);
 
-			World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, 500, chars ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Npc.class, 500, chars ->
 			{
 				if (chars.getId() == GUARD) {
 					chars.getVariables().set("SOCIAL_ACTION_ID", socialActionId);

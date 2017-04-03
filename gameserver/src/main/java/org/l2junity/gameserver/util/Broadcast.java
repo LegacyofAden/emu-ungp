@@ -19,14 +19,12 @@
 package org.l2junity.gameserver.util;
 
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
@@ -34,7 +32,6 @@ import org.slf4j.LoggerFactory;
  * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
  */
 public final class Broadcast {
-	private static Logger _log = LoggerFactory.getLogger(Broadcast.class);
 
 	/**
 	 * Send a packet to all L2PcInstance in the _KnownPlayers of the L2Character that have the Character targeted.<BR>
@@ -47,7 +44,7 @@ public final class Broadcast {
 	 * @param mov
 	 */
 	public static void toPlayersTargettingMyself(Creature character, IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(character, Player.class, player ->
+		character.getWorld().forEachVisibleObject(character, Player.class, player ->
 		{
 			if (player.getTarget() == character) {
 				player.sendPacket(mov);
@@ -67,14 +64,7 @@ public final class Broadcast {
 	 * @param mov
 	 */
 	public static void toKnownPlayers(Creature character, IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(character, Player.class, player ->
-		{
-			try {
-				player.sendPacket(mov);
-			} catch (NullPointerException e) {
-				_log.warn(e.getMessage(), e);
-			}
-		});
+		character.getWorld().forEachVisibleObject(character, Player.class, player -> player.sendPacket(mov));
 	}
 
 	/**
@@ -93,7 +83,7 @@ public final class Broadcast {
 			radius = 1500;
 		}
 
-		World.getInstance().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
+		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
 	}
 
 	/**
@@ -123,11 +113,11 @@ public final class Broadcast {
 			character.sendPacket(mov);
 		}
 
-		World.getInstance().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
+		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
 	}
 
 	/**
-	 * Send a packet to all L2PcInstance present in the world.<BR>
+	 * Send a packet to all L2PcInstance present in the game.<BR>
 	 * <B><U> Concept</U> :</B><BR>
 	 * In order to inform other players of state modification on the L2Character, server just need to go through _allPlayers to send Server->Client Packet<BR>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packet to this L2Character (to do this use method toSelfAndKnownPlayers)</B></FONT><BR>
@@ -135,7 +125,7 @@ public final class Broadcast {
 	 * @param packet
 	 */
 	public static void toAllOnlinePlayers(IClientOutgoingPacket packet) {
-		for (Player player : World.getInstance().getPlayers()) {
+		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(packet);
 			}

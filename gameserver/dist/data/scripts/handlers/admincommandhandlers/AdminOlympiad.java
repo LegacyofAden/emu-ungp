@@ -18,17 +18,22 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.olympiad.*;
+import org.l2junity.gameserver.model.olympiad.Olympiad;
+import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
+import org.l2junity.gameserver.model.olympiad.OlympiadGameNonClassed;
+import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
+import org.l2junity.gameserver.model.olympiad.OlympiadManager;
+import org.l2junity.gameserver.model.olympiad.Participant;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
 
 /**
  * @author UnAfraid
@@ -53,7 +58,7 @@ public class AdminOlympiad implements IAdminCommandHandler {
 					return false;
 				}
 
-				final Player player = World.getInstance().getPlayer(st.nextToken());
+				final Player player = WorldManager.getInstance().getMainWorld().getPlayer(st.nextToken());
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.YOUR_TARGET_CANNOT_BE_FOUND);
 					return false;

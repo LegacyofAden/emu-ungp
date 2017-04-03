@@ -19,11 +19,11 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToAlly;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.AskJoinAlly;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -46,7 +46,7 @@ public final class RequestJoinAlly implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player target = World.getInstance().getPlayer(_objectId);
+		final Player target = WorldManager.getInstance().getPlayer(_objectId);
 
 		if (target == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);

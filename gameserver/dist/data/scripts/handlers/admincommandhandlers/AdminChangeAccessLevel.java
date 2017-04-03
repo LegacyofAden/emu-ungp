@@ -18,20 +18,20 @@
  */
 package handlers.admincommandhandlers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.AccessLevel;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * Change access level command handler.
@@ -59,7 +59,7 @@ public final class AdminChangeAccessLevel implements IAdminCommandHandler {
 		} else if (parts.length == 3) {
 			String name = parts[1];
 			int lvl = Integer.parseInt(parts[2]);
-			Player player = World.getInstance().getPlayer(name);
+			Player player = WorldManager.getInstance().getPlayer(name);
 			if (player != null) {
 				onlineChange(activeChar, player, lvl);
 			} else {

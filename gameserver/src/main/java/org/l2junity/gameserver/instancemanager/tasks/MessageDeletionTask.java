@@ -19,9 +19,9 @@
 package org.l2junity.gameserver.instancemanager.tasks;
 
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public final class MessageDeletionTask implements Runnable {
 
 		if (msg.hasAttachments()) {
 			try {
-				final Player sender = World.getInstance().getPlayer(msg.getSenderId());
+				final Player sender = WorldManager.getInstance().getPlayer(msg.getSenderId());
 				if (sender != null) {
 					msg.getAttachments().returnToWh(sender.getWarehouse());
 					sender.sendPacket(SystemMessageId.THE_MAIL_WAS_RETURNED_DUE_TO_THE_EXCEEDED_WAITING_TIME);
@@ -61,7 +61,7 @@ public final class MessageDeletionTask implements Runnable {
 				msg.getAttachments().deleteMe();
 				msg.removeAttachments();
 
-				final Player receiver = World.getInstance().getPlayer(msg.getReceiverId());
+				final Player receiver = WorldManager.getInstance().getPlayer(msg.getReceiverId());
 				if (receiver != null) {
 					SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_MAIL_WAS_RETURNED_DUE_TO_THE_EXCEEDED_WAITING_TIME);
 					// sm.addString(msg.getReceiverName());

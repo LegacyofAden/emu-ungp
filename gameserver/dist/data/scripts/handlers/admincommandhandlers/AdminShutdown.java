@@ -25,8 +25,8 @@ import org.l2junity.commons.lang.management.TerminationStatus;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 /**
@@ -84,7 +84,7 @@ public class AdminShutdown implements IAdminCommandHandler {
 	private void sendHtmlForm(Player activeChar) {
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
 		adminReply.setFile(activeChar.getLang(), "admin/shutdown.htm");
-		adminReply.replace("%count%", String.valueOf(World.getInstance().getPlayers().size()));
+		adminReply.replace("%count%", String.valueOf(WorldManager.getInstance().getPlayerCount()));
 		adminReply.replace("%used%", String.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
 		adminReply.replace("%time%", GameTimeManager.getInstance().getGameTime().toString());
 		activeChar.sendPacket(adminReply);

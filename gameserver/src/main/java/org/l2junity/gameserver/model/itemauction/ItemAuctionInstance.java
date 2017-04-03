@@ -18,6 +18,22 @@
  */
 package org.l2junity.gameserver.model.itemauction;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
@@ -26,25 +42,15 @@ import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.instancemanager.ItemAuctionManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ItemAuctionInstance {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(ItemAuctionInstance.class);
@@ -406,7 +412,7 @@ public final class ItemAuctionInstance {
 				item.setOwnerId(bid.getPlayerObjId());
 				item.setItemLocation(ItemLocation.WAREHOUSE);
 				item.updateDatabase();
-				World.getInstance().removeObject(item);
+				WorldManager.getInstance().removeObject(item);
 
 				LOGGER.info("Auction {} has finished. Highest bid by {} for instance {}", auction.getAuctionId(), CharNameTable.getInstance().getNameById(bid.getPlayerObjId()), _instanceId);
 			}

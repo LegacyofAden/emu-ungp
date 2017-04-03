@@ -18,6 +18,8 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.ClanHallData;
@@ -27,14 +29,12 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanMember;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
 
 /**
  * @author UnAfraid, Zoey76
@@ -159,13 +159,13 @@ public class AdminClan implements IAdminCommandHandler {
 			val = st.nextToken();
 			// From the HTML we receive player's object Id.
 			if (Util.isDigit(val)) {
-				player = World.getInstance().getPlayer(Integer.parseInt(val));
+				player = WorldManager.getInstance().getPlayer(Integer.parseInt(val));
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 					return null;
 				}
 			} else {
-				player = World.getInstance().getPlayer(val);
+				player = WorldManager.getInstance().getPlayer(val);
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.INCORRECT_NAME_PLEASE_TRY_AGAIN);
 					return null;

@@ -26,13 +26,16 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.ai.SummonAI;
 import org.l2junity.gameserver.data.xml.impl.ExperienceData;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.enums.*;
+import org.l2junity.gameserver.enums.InstanceType;
+import org.l2junity.gameserver.enums.NpcInfoType;
+import org.l2junity.gameserver.enums.Race;
+import org.l2junity.gameserver.enums.ShotType;
+import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.AggroInfo;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.status.SummonStatus;
@@ -52,7 +55,22 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.AbstractMaskPacket;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.ExPartyPetWindowAdd;
+import org.l2junity.gameserver.network.client.send.ExPartyPetWindowDelete;
+import org.l2junity.gameserver.network.client.send.ExPartyPetWindowUpdate;
+import org.l2junity.gameserver.network.client.send.ExPetInfo;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.MyPetSummonInfo;
+import org.l2junity.gameserver.network.client.send.PetDelete;
+import org.l2junity.gameserver.network.client.send.PetItemList;
+import org.l2junity.gameserver.network.client.send.PetStatusUpdate;
+import org.l2junity.gameserver.network.client.send.RelationChanged;
+import org.l2junity.gameserver.network.client.send.SummonInfo;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.TeleportToLocation;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
@@ -96,7 +114,7 @@ public abstract class Summon extends Playable {
 		setFollowStatus(true);
 		updateAndBroadcastStatus(0);
 		sendPacket(new RelationChanged(this, getOwner().getRelation(getOwner()), false));
-		World.getInstance().forEachVisibleObject(getOwner(), Player.class, player ->
+		getOwner().getWorld().forEachVisibleObject(getOwner(), Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(new RelationChanged(this, getOwner().getRelation(player), isAutoAttackable(player)));
@@ -153,7 +171,7 @@ public abstract class Summon extends Playable {
 
 	@Override
 	public void updateAbnormalVisualEffects() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));
@@ -254,7 +272,7 @@ public abstract class Summon extends Playable {
 
 		final Player owner = getOwner();
 		if (owner != null) {
-			World.getInstance().forEachVisibleObject(this, Attackable.class, TgMob ->
+			getWorld().forEachVisibleObject(this, Attackable.class, TgMob ->
 			{
 				if (TgMob.isDead()) {
 					return;
@@ -656,7 +674,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastNpcInfo(int val) {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if ((player == getOwner())) {
 				return;
@@ -671,7 +689,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastReputation() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));
@@ -691,7 +709,7 @@ public abstract class Summon extends Playable {
 	}
 
 	public void broadcastPvpFlag() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (player == getOwner()) {
 				player.sendPacket(new MyPetSummonInfo(this, 1));

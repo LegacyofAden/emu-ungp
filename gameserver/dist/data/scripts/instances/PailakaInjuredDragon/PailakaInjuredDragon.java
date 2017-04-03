@@ -18,12 +18,10 @@
  */
 package instances.PailakaInjuredDragon;
 
-import instances.AbstractInstance;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -42,6 +40,8 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.TeleportZone;
 import org.l2junity.gameserver.network.client.send.SpecialCamera;
+
+import instances.AbstractInstance;
 import quests.Q00144_PailakaInjuredDragon.Q00144_PailakaInjuredDragon;
 
 /**
@@ -187,7 +187,7 @@ public final class PailakaInjuredDragon extends AbstractInstance {
 					break;
 				}
 				case "LOOK_NEIGHBOR": {
-					World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, HEAL.getSkill().getCastRange(), npcs ->
+					npc.getWorld().forEachVisibleObjectInRadius(npc, Npc.class, HEAL.getSkill().getCastRange(), npcs ->
 					{
 						if ((npcs.getCurrentHpPercent() < 70) && (getRandom(100) < 10)) {
 							addSkillCastDesire(npc, npcs, HEAL, 1000000);

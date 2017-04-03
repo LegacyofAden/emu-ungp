@@ -20,24 +20,20 @@ package org.l2junity.gameserver.model.actor.instance;
 
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.WorldRegion;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
+import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive MonsterInstance.
  */
 public class L2GuardInstance extends Attackable {
-	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
-
+	
 	/**
 	 * Constructor of L2GuardInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
@@ -76,8 +72,8 @@ public class L2GuardInstance extends Attackable {
 		super.onSpawn();
 
 		// check the region where this mob is, do not activate the AI if region is inactive.
-		WorldRegion region = World.getInstance().getRegion(this);
-		if ((region != null) && (!region.isActive())) {
+		final Region region = getWorldRegion();
+		if (region != null && !region.isActive()) {
 			getAI().stopAITask();
 		}
 	}

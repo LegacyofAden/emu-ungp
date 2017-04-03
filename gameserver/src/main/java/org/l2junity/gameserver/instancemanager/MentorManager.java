@@ -18,14 +18,6 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.Mentee;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,6 +28,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.Mentee;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
@@ -117,13 +117,13 @@ public class MentorManager {
 	}
 
 	public void setPenalty(int mentorId, long penalty) {
-		final Player player = World.getInstance().getPlayer(mentorId);
+		final Player player = WorldManager.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		vars.set("Mentor-Penalty-" + mentorId, String.valueOf(System.currentTimeMillis() + penalty));
 	}
 
 	public long getMentorPenalty(int mentorId) {
-		final Player player = World.getInstance().getPlayer(mentorId);
+		final Player player = WorldManager.getInstance().getPlayer(mentorId);
 		final PlayerVariables vars = player != null ? player.getVariables() : new PlayerVariables(mentorId);
 		return vars.getLong("Mentor-Penalty-" + mentorId, 0);
 	}

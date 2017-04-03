@@ -18,19 +18,20 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.GameWorld;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.ExAdenaInvenCount;
 import org.l2junity.gameserver.network.client.send.GMViewItemList;
-
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - itemcreate = show menu - create_item <id> [num] = creates num items with respective id, if num is not specified, assumes 1.
@@ -151,11 +152,13 @@ public class AdminCreateItem implements IAdminCommandHandler {
 				activeChar.sendMessage("This item does not stack - Creation aborted.");
 				return false;
 			}
-			for (Player onlinePlayer : World.getInstance().getPlayers()) {
-				if ((activeChar != onlinePlayer) && onlinePlayer.isOnline() && ((onlinePlayer.getClient() != null) && !onlinePlayer.getClient().isDetached())) {
-					onlinePlayer.getInventory().addItem("Admin", idval, numval, onlinePlayer, activeChar);
-					onlinePlayer.sendMessage("Admin spawned " + numval + " " + template.getName() + " in your inventory.");
-					counter++;
+			for(GameWorld world : WorldManager.getInstance().getWorlds()) {
+				for (Player onlinePlayer : world.getPlayers()) {
+					if ((activeChar != onlinePlayer) && onlinePlayer.isOnline() && ((onlinePlayer.getClient() != null) && !onlinePlayer.getClient().isDetached())) {
+						onlinePlayer.getInventory().addItem("Admin", idval, numval, onlinePlayer, activeChar);
+						onlinePlayer.sendMessage("Admin spawned " + numval + " " + template.getName() + " in your inventory.");
+						counter++;
+					}
 				}
 			}
 			activeChar.sendMessage(counter + " players rewarded with " + template.getName());
@@ -174,10 +177,10 @@ public class AdminCreateItem implements IAdminCommandHandler {
 				idval = Integer.parseInt(id);
 				numval = 1;
 			}
-			ItemInstance item = (ItemInstance) World.getInstance().findObject(idval);
+			ItemInstance item = (ItemInstance) WorldManager.getInstance().getObject(idval);
 			int ownerId = item.getOwnerId();
 			if (ownerId > 0) {
-				Player player = World.getInstance().getPlayer(ownerId);
+				Player player = WorldManager.getInstance().getPlayer(ownerId);
 				if (player == null) {
 					activeChar.sendMessage("Player is not online.");
 					return false;
@@ -197,10 +200,10 @@ public class AdminCreateItem implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_use_item")) {
 			String val = command.substring(15);
 			int idval = Integer.parseInt(val);
-			ItemInstance item = (ItemInstance) World.getInstance().findObject(idval);
+			ItemInstance item = (ItemInstance) WorldManager.getInstance().getObject(idval);
 			int ownerId = item.getOwnerId();
 			if (ownerId > 0) {
-				Player player = World.getInstance().getPlayer(ownerId);
+				Player player = WorldManager.getInstance().getPlayer(ownerId);
 				if (player == null) {
 					activeChar.sendMessage("Player is not online.");
 					return false;

@@ -18,19 +18,18 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
+
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.ItemRequest;
 import org.l2junity.gameserver.model.TradeList;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
-
-import static org.l2junity.gameserver.model.actor.Npc.INTERACTION_DISTANCE;
 
 public final class RequestPrivateStoreSell implements IClientIncomingPacket {
 	private int _storePlayerId;
@@ -95,7 +94,7 @@ public final class RequestPrivateStoreSell implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player storePlayer = World.getInstance().getPlayer(_storePlayerId);
+		final Player storePlayer = player.getWorld().getPlayer(_storePlayerId);
 		if ((storePlayer == null) || !player.isInRadius3d(storePlayer, INTERACTION_DISTANCE)) {
 			return;
 		}

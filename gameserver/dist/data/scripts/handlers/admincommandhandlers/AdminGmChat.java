@@ -22,9 +22,9 @@ import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -62,7 +62,7 @@ public class AdminGmChat implements IAdminCommandHandler {
 	private void snoop(String command, Player activeChar) {
 		WorldObject target = null;
 		if (command.length() > 12) {
-			target = World.getInstance().getPlayer(command.substring(12));
+			target = WorldManager.getInstance().getPlayer(command.substring(12));
 		}
 		if (target == null) {
 			target = activeChar.getTarget();

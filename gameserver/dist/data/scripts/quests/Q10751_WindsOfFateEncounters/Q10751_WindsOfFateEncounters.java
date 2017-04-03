@@ -18,12 +18,14 @@
  */
 package quests.Q10751_WindsOfFateEncounters;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.enums.HtmlActionScope;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
@@ -39,12 +41,14 @@ import org.l2junity.gameserver.model.holders.NpcLogListHolder;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
+import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.TutorialCloseHtml;
+import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
+import org.l2junity.gameserver.network.client.send.TutorialShowQuestionMark;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Winds of Fate: Encounters (10751)
@@ -331,7 +335,7 @@ public final class Q10751_WindsOfFateEncounters extends Quest {
 				sendNpcLogList(killer);
 			}
 
-			if ((killCount >= 5) && !World.getInstance().getVisibleObjects(npc, Npc.class, 1000).stream().anyMatch(n -> ((n.getId() == TELESHA) && (n.getSummoner() == killer)))) {
+			if ((killCount >= 5) && !npc.getWorld().getVisibleObjects(npc, Npc.class, 1000).stream().anyMatch(n -> ((n.getId() == TELESHA) && (n.getSummoner() == killer)))) {
 				final Npc telsha = addSpawn(TELESHA, npc, false, 30000);
 				telsha.setSummoner(killer);
 				telsha.setTitle(killer.getAppearance().getVisibleName());

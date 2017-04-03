@@ -19,9 +19,9 @@
 package org.l2junity.gameserver.network.client.recv.friend;
 
 import org.l2junity.gameserver.model.BlockList;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -45,7 +45,7 @@ public final class RequestFriendInvite implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player friend = World.getInstance().getPlayer(_name);
+		final Player friend = WorldManager.getInstance().getPlayer(_name);
 
 		// Target is not found in the game.
 		if ((friend == null) || !friend.isOnline() || friend.isInvisible()) {

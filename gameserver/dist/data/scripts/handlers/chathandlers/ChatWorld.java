@@ -18,22 +18,22 @@
  */
 package handlers.chathandlers;
 
-import org.l2junity.core.configs.GeneralConfig;
-import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.handler.ChatHandler;
-import org.l2junity.gameserver.handler.IChatHandler;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.enums.ChatType;
+import org.l2junity.gameserver.handler.ChatHandler;
+import org.l2junity.gameserver.handler.IChatHandler;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.CreatureSay;
+import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
 /**
  * World chat handler.
@@ -77,7 +77,7 @@ public final class ChatWorld implements IChatHandler {
 			}
 
 			final CreatureSay cs = new CreatureSay(activeChar, type, text);
-			World.getInstance().getPlayers().stream().filter(activeChar::isNotBlocked).forEach(cs::sendTo);
+			WorldManager.getInstance().getAllPlayers().stream().filter(activeChar::isNotBlocked).forEach(cs::sendTo);
 
 			activeChar.setWorldChatUsed(activeChar.getWorldChatUsed() + 1);
 			activeChar.sendPacket(new ExWorldChatCnt(activeChar));

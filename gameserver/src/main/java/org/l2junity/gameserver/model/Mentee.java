@@ -18,15 +18,16 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
@@ -95,7 +96,7 @@ public class Mentee {
 	}
 
 	public Player getPlayerInstance() {
-		return World.getInstance().getPlayer(_objectId);
+		return WorldManager.getInstance().getPlayer(_objectId);
 	}
 
 	public boolean isOnline() {

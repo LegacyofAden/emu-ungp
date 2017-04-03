@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver;
 
-import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.lang.management.ShutdownManager;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
@@ -26,11 +25,18 @@ import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.sql.impl.OfflineTradersTable;
 import org.l2junity.gameserver.datatables.BotReportTable;
-import org.l2junity.gameserver.instancemanager.*;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.instancemanager.CastleManorManager;
+import org.l2junity.gameserver.instancemanager.CeremonyOfChaosManager;
+import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
+import org.l2junity.gameserver.instancemanager.DBSpawnManager;
+import org.l2junity.gameserver.instancemanager.GlobalVariablesManager;
+import org.l2junity.gameserver.instancemanager.GrandBossManager;
+import org.l2junity.gameserver.instancemanager.ItemAuctionManager;
+import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
+import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.EventLoopGroupManager;
 import org.l2junity.gameserver.network.client.ClientNetworkManager;
 import org.l2junity.gameserver.network.client.Disconnection;
@@ -38,6 +44,8 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.util.Broadcast;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author lord_rex
@@ -144,7 +152,7 @@ public final class ShutdownHooks {
 
 		ShutdownManager.getInstance().addShutdownCounterListener((shutdownCounter, i) ->
 		{
-			final int players = World.getInstance().getPlayers().size();
+			final int players = WorldManager.getInstance().getPlayerCount();
 
 			if (players > 0) {
 				final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SERVER_WILL_BE_COMING_DOWN_IN_S1_SECOND_S_PLEASE_FIND_A_SAFE_PLACE_TO_LOG_OUT);
@@ -172,9 +180,7 @@ public final class ShutdownHooks {
 	 * This disconnects all clients from the server.
 	 */
 	private static void disconnectAllCharacters() {
-		for (Player player : World.getInstance().getPlayers()) {
-			Disconnection.of(player).defaultSequence(true);
-		}
+		WorldManager.getInstance().getAllPlayers().forEach(player -> Disconnection.of(player).defaultSequence(true));
 	}
 
 	/**

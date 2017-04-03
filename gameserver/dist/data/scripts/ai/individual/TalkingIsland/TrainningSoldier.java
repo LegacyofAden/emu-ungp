@@ -18,12 +18,12 @@
  */
 package ai.individual.TalkingIsland;
 
-import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
+
+import ai.AbstractNpcAI;
 
 /**
  * Trainning Soldier AI.
@@ -43,7 +43,7 @@ public final class TrainningSoldier extends AbstractNpcAI {
 	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("START_ATTACK")) {
 			//@formatter:off
-			final Npc dummy = World.getInstance().getVisibleObjects(npc, Npc.class, 150)
+			final Npc dummy = npc.getWorld().getVisibleObjects(npc, Npc.class, 150)
 					.stream()
 					.filter(obj -> (obj.getId() == DUMMY))
 					.findFirst()

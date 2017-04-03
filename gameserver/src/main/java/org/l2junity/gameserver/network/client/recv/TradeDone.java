@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.TradeList;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -59,7 +58,7 @@ public final class TradeDone implements IClientIncomingPacket {
 		}
 
 		if (_response == 1) {
-			if ((trade.getPartner() == null) || (World.getInstance().getPlayer(trade.getPartner().getObjectId()) == null)) {
+			if ((trade.getPartner() == null) || (player.getWorld().getPlayer(trade.getPartner().getObjectId()) == null)) {
 				// Trade partner not found, cancel trade
 				player.cancelActiveTrade();
 				player.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);

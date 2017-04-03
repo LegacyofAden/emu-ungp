@@ -18,13 +18,13 @@
  */
 package vehicles.AirShipGludioGracia;
 
-import ai.AbstractNpcAI;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import java.util.concurrent.TimeUnit;
+import ai.AbstractNpcAI;
 
 /**
  * @author DS
@@ -142,7 +142,7 @@ public final class AirShipGludioGracia extends AbstractNpcAI implements Runnable
 
 	private final Npc findController() {
 		// check objects around the ship
-		for (Npc obj : World.getInstance().getVisibleObjects(_ship, Npc.class, 600)) {
+		for (Npc obj : _ship.getWorld().getVisibleObjects(_ship, Npc.class, 600)) {
 			for (int id : CONTROLLERS) {
 				if (obj.getId() == id) {
 					return obj;

@@ -32,20 +32,67 @@ import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.PcCafeConsumeType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.enums.SubclassInfoType;
-import org.l2junity.gameserver.instancemanager.*;
+import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
+import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.instancemanager.FortSiegeManager;
+import org.l2junity.gameserver.instancemanager.InstanceManager;
+import org.l2junity.gameserver.instancemanager.MailManager;
+import org.l2junity.gameserver.instancemanager.PetitionManager;
+import org.l2junity.gameserver.instancemanager.SiegeManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.TeleportWhereType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.entity.*;
+import org.l2junity.gameserver.model.entity.Castle;
+import org.l2junity.gameserver.model.entity.ClanHall;
+import org.l2junity.gameserver.model.entity.Fort;
+import org.l2junity.gameserver.model.entity.FortSiege;
+import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.Die;
+import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
+import org.l2junity.gameserver.network.client.send.ExAdenaInvenCount;
+import org.l2junity.gameserver.network.client.send.ExAutoSoulShot;
+import org.l2junity.gameserver.network.client.send.ExBasicActionList;
+import org.l2junity.gameserver.network.client.send.ExBeautyItemList;
+import org.l2junity.gameserver.network.client.send.ExCastleState;
+import org.l2junity.gameserver.network.client.send.ExConnectedTimeAndGettableReward;
+import org.l2junity.gameserver.network.client.send.ExGetBookMarkInfoPacket;
+import org.l2junity.gameserver.network.client.send.ExNoticePostArrived;
+import org.l2junity.gameserver.network.client.send.ExNotifyPremiumItem;
+import org.l2junity.gameserver.network.client.send.ExPCCafePointInfo;
+import org.l2junity.gameserver.network.client.send.ExPledgeCount;
+import org.l2junity.gameserver.network.client.send.ExPledgeWaitingListAlarm;
+import org.l2junity.gameserver.network.client.send.ExQuestItemList;
+import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
+import org.l2junity.gameserver.network.client.send.ExShowUsm;
+import org.l2junity.gameserver.network.client.send.ExStorageMaxCount;
+import org.l2junity.gameserver.network.client.send.ExSubjobInfo;
+import org.l2junity.gameserver.network.client.send.ExUnReadMailCount;
+import org.l2junity.gameserver.network.client.send.ExUserInfoEquipSlot;
+import org.l2junity.gameserver.network.client.send.ExUserInfoInvenWeight;
+import org.l2junity.gameserver.network.client.send.ExVitalityEffectInfo;
+import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
+import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
+import org.l2junity.gameserver.network.client.send.HennaInfo;
+import org.l2junity.gameserver.network.client.send.ItemList;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.PledgeShowInfoUpdate;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListAll;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListUpdate;
+import org.l2junity.gameserver.network.client.send.PledgeSkillList;
+import org.l2junity.gameserver.network.client.send.QuestList;
+import org.l2junity.gameserver.network.client.send.ShortCutInit;
+import org.l2junity.gameserver.network.client.send.SkillCoolTime;
+import org.l2junity.gameserver.network.client.send.SkillList;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
 import org.l2junity.gameserver.network.client.send.friend.L2FriendList;
 import org.l2junity.gameserver.network.client.send.onedayreward.ExOneDayReceiveRewardList;
@@ -108,7 +155,7 @@ public class EnterWorld implements IClientIncomingPacket {
 			vars.remove(PlayerVariables.INSTANCE_RESTORE);
 		}
 
-		if (World.getInstance().findObject(activeChar.getObjectId()) != null) {
+		if (WorldManager.getInstance().getObject(activeChar.getObjectId()) != null) {
 			if (GeneralConfig.DEBUG) {
 				_log.warn("User already exists in Object ID map! User " + activeChar.getName() + " is a character clone.");
 			}
@@ -466,14 +513,14 @@ public class EnterWorld implements IClientIncomingPacket {
 	 */
 	private void notifySponsorOrApprentice(Player activeChar) {
 		if (activeChar.getSponsor() != 0) {
-			final Player sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
+			final Player sponsor = WorldManager.getInstance().getPlayer(activeChar.getSponsor());
 			if (sponsor != null) {
 				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN);
 				msg.addString(activeChar.getName());
 				sponsor.sendPacket(msg);
 			}
 		} else if (activeChar.getApprentice() != 0) {
-			final Player apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
+			final Player apprentice = WorldManager.getInstance().getPlayer(activeChar.getApprentice());
 			if (apprentice != null) {
 				final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_C1_HAS_LOGGED_IN);
 				msg.addString(activeChar.getName());

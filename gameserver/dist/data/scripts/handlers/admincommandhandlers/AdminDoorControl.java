@@ -18,18 +18,18 @@
  */
 package handlers.admincommandhandlers;
 
+import java.awt.Color;
+
 import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CastleManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
-
-import java.awt.*;
 
 /**
  * This class handles following admin commands: - open1 = open coloseum door 24190001 - open2 = open coloseum door 24190002 - open3 = open coloseum door 24190003 - open4 = open coloseum door 24190004 - openall = open all coloseum door - close1 = close coloseum door 24190001 - close2 = close coloseum
@@ -58,7 +58,7 @@ public class AdminDoorControl implements IAdminCommandHandler {
 					activeChar.sendPacket(exsp);
 				} else {
 					final int objId = Integer.parseInt(command.substring(17));
-					final WorldObject target = World.getInstance().findObject(objId);
+					final WorldObject target = WorldManager.getInstance().getMainWorld().findObject(objId);
 					if ((target != null) && target.isDoor()) {
 						final DoorInstance door = (DoorInstance) target;
 						final ExServerPrimitive exsp = new ExServerPrimitive("DebugPoint_" + activeChar.getObjectId(), activeChar.getX(), activeChar.getY(), activeChar.getZ());

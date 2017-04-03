@@ -20,10 +20,16 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.GMHennaInfo;
+import org.l2junity.gameserver.network.client.send.GMViewCharacterInfo;
+import org.l2junity.gameserver.network.client.send.GMViewItemList;
+import org.l2junity.gameserver.network.client.send.GMViewPledgeInfo;
+import org.l2junity.gameserver.network.client.send.GMViewSkillInfo;
+import org.l2junity.gameserver.network.client.send.GMViewWarehouseWithdrawList;
+import org.l2junity.gameserver.network.client.send.GmViewQuestInfo;
 import org.l2junity.network.PacketReader;
 
 /**
@@ -50,7 +56,7 @@ public final class RequestGMCommand implements IClientIncomingPacket {
 			return;
 		}
 
-		Player player = World.getInstance().getPlayer(_targetName);
+		Player player = WorldManager.getInstance().getPlayer(_targetName);
 
 		Clan clan = ClanTable.getInstance().getClanByName(_targetName);
 

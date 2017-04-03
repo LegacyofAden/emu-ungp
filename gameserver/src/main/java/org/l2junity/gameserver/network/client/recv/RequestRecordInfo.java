@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -42,7 +41,7 @@ public class RequestRecordInfo implements IClientIncomingPacket {
 
 		client.sendPacket(new UserInfo(activeChar));
 
-		World.getInstance().forEachVisibleObject(activeChar, WorldObject.class, object ->
+		activeChar.getWorld().forEachVisibleObject(activeChar, WorldObject.class, object ->
 		{
 			if (object.getPoly().isMorphed() && object.getPoly().getPolyType().equals("item")) {
 				client.sendPacket(new SpawnItem(object));
