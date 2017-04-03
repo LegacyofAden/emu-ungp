@@ -138,7 +138,7 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 				}
 			}
 			catch (Exception e) {
-				log.error("Error while calling isAccountOnServer on serverId={}", gameServerInfo.getId());
+				log.error("Error while calling isAccountOnServer on serverId={}", gameServerInfo.getId(), e);
 			}
 		}
 		return false;
@@ -149,8 +149,8 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 			try {
 				gameServerInfo.getConnection().kickPlayerByAccount(account);
 			}
-			catch (Exception e) {
-				log.error("Error while calling kickPlayerByAccount on serverId={}", gameServerInfo.getId());
+			catch (RemoteException e) {
+				log.error("Error while calling kickPlayerByAccount on serverId={}", gameServerInfo.getId(), e);
 			}
 		}
 	}
@@ -170,7 +170,7 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 					} catch (RemoteException e) {
 						gameServerInfo.setConnection(null);
 						gameServerInfo.setStatus(ServerStatus.DOWN);
-						log.info("Gameserver with id=[{}] disconnected.", entry.getKey());
+						log.info("Gameserver with id {} disconnected.", entry.getKey());
 					}
 				}
 			}

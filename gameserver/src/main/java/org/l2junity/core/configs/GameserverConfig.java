@@ -17,10 +17,10 @@ import java.util.regex.Pattern;
  */
 @ConfigFile(name = "configs/gameserver.properties")
 public class GameserverConfig {
-	@ConfigProperty(name = "RequestServerID", value = "1")
+	@ConfigProperty(name = "RequestServerID", value = "0")
 	@ConfigComments(comment = {
 			"This is the server ID that the Game Server will request.",
-			"Example: 1 = Bartz"
+			"Example: 0 = Bartz"
 	})
 	public static short SERVER_ID;
 
