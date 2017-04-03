@@ -24,6 +24,7 @@ import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.commons.model.enums.ServerType;
 import org.l2junity.commons.rmi.IGameServerRMI;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -33,7 +34,7 @@ import java.util.Set;
  * @author ANZO
  */
 @Slf4j
-public class GameServerInfo {
+public class GameServerInfo implements Serializable {
 	private final short id;
 	private String name;
 	private boolean showing;
