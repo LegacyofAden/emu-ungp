@@ -99,6 +99,7 @@ import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
 import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionInfo;
 import org.l2junity.gameserver.network.client.send.friend.L2FriendStatus;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.EnumIntBitmask;
@@ -5216,7 +5217,7 @@ public final class PlayerInstance extends Playable {
 	}
 
 	public void setAccountAccesslevel(int level) {
-		LoginServerThread.getInstance().sendAccessLevel(getAccountName(), level);
+		GameServerRMI.getInstance().changeAccessLevel(getAccountName(), level);
 	}
 
 	/**

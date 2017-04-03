@@ -23,7 +23,6 @@ import io.netty.channel.ChannelHandlerContext;
 import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.LoginServerThread.SessionKey;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
@@ -39,6 +38,7 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
+import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.util.FloodProtectors;
 import org.l2junity.network.ChannelInboundHandler;
 import org.l2junity.network.ICrypt;
@@ -112,8 +112,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) {
 		LOG_ACCOUNTING.debug("Client Disconnected: {}", ctx.channel());
-
-		LoginServerThread.getInstance().sendLogout(getAccountName());
+		GameServerRMI.getInstance().removeAccountInGame(getAccountName());
 		IdFactory.getInstance().releaseId(getObjectId());
 
 		Disconnection.of(this).onDisconnection();

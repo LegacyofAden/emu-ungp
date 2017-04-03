@@ -31,6 +31,7 @@ import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.service.GameServerRMI;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,7 +43,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 @Slf4j
-@StartupComponent("Data")
+@StartupComponent("Service")
 public class OfflineTradersTable {
 	@Getter(lazy = true)
 	private static final OfflineTradersTable instance = new OfflineTradersTable();
@@ -201,7 +202,9 @@ public class OfflineTradersTable {
 					}
 
 					player.spawnMe(player.getX(), player.getY(), player.getZ());
-					LoginServerThread.getInstance().addGameServerLogin(player.getAccountName(), client);
+
+					GameServerRMI.getInstance().addAccountInGame(player.getAccountName(), client);
+
 					try (PreparedStatement stm_items = con.prepareStatement(LOAD_OFFLINE_ITEMS)) {
 						stm_items.setInt(1, player.getObjectId());
 						try (ResultSet items = stm_items.executeQuery()) {

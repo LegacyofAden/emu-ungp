@@ -29,22 +29,20 @@ public enum AgeLimit {
 	EIGHTEEN(18);
 
 	private final int _age;
-
-	/**
-	 * Creates an age limit instance.
-	 *
-	 * @param age the age
-	 */
 	AgeLimit(int age) {
 		_age = age;
 	}
 
-	/**
-	 * Gets the age.
-	 *
-	 * @return the age
-	 */
 	public int getAge() {
 		return _age;
+	}
+
+	public static AgeLimit valueOf(int age) {
+		for(AgeLimit ageLimit : AgeLimit.values()) {
+			if (ageLimit.getAge() == age) {
+				return ageLimit;
+			}
+		}
+		return null;
 	}
 }

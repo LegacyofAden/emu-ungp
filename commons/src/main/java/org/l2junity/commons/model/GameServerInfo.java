@@ -18,23 +18,27 @@
  */
 package org.l2junity.commons.model;
 
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.commons.model.enums.ServerType;
 import org.l2junity.commons.rmi.IGameServerRMI;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author NosBit
+ * @author ANZO
  */
+@Slf4j
 public class GameServerInfo {
 	private final short id;
 	private String name;
 	private boolean showing;
 	private AgeLimit ageLimit;
-	private Set<ServerType> serverTypes;
+	private Set<ServerType> serverTypes = new HashSet<>();
 
 	private InetAddress address;
 	private int port;
@@ -44,8 +48,14 @@ public class GameServerInfo {
 	private ServerStatus status = ServerStatus.DOWN;
 	private IGameServerRMI connection;
 
-	public GameServerInfo(short id) {
+	public GameServerInfo(short id, String host, int port) {
 		this.id = id;
+		try {
+			this.address = InetAddress.getByName(host);
+		} catch (UnknownHostException e) {
+			log.error("Error while parsing IP", e);
+		}
+		this.port = port;
 	}
 
 	public GameServerInfo(short id, String name, boolean showing, AgeLimit ageLimit, Set<ServerType> serverTypes) {

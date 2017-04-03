@@ -62,17 +62,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@StartupComponent("Network")
 // TODO: Rework to RMI
 public class LoginServerThread extends Thread {
 	@Getter(lazy = true)
 	private static final LoginServerThread instance = new LoginServerThread();
-	protected static final Logger ACCOUNTING_LOGGER = LoggerFactory.getLogger("accounting");
-
-	private static final int REVISION = 0x0106;
 	private final String _hostname;
 	private final int _port;
-	private final int _gamePort;
 	private Socket _loginSocket;
 	private OutputStream _out;
 
@@ -86,15 +81,8 @@ public class LoginServerThread extends Thread {
 	 * in blowfishKey
 	 */
 	private NewCrypt _blowfish;
-	private byte[] _hexID;
-	private final boolean _acceptAlternate;
-	private int _requestID;
-	private final boolean _reserveHost;
-	private int _maxPlayer;
 	private final Set<WaitingClient> _waitingClients = ConcurrentHashMap.newKeySet();
-	private final Map<String, L2GameClient> _accountsInGameServer = new ConcurrentHashMap<>();
-	private int _status;
-	private String _serverName;
+
 	private int _serverId;
 
 	/**
@@ -104,15 +92,6 @@ public class LoginServerThread extends Thread {
 		super("LoginServerThread");
 		_hostname = GameserverConfig.GAME_SERVER_LOGIN_HOST;
 		_port = GameserverConfig.GAME_SERVER_LOGIN_PORT;
-		_gamePort = NetworkConfig.PORT;
-
-		_requestID = GameserverConfig.SERVER_ID;
-		_hexID = HexUtil.generateHex(16);
-
-		_acceptAlternate = false;
-		_reserveHost = false;
-		_maxPlayer = GameserverConfig.MAXIMUM_ONLINE_USERS;
-		start();
 	}
 
 	@Override
@@ -169,69 +148,6 @@ public class LoginServerThread extends Thread {
 
 					int packetType = incoming[0] & 0xff;
 					switch (packetType) {
-						case 0x00:
-							InitLS init = new InitLS(incoming);
-							if (init.getRevision() != REVISION) {
-								// TODO: revision mismatch
-								log.warn("/!\\ Revision mismatch between LS and GS /!\\");
-								break;
-							}
-
-							RSAPublicKey publicKey;
-
-							try {
-								KeyFactory kfac = KeyFactory.getInstance("RSA");
-								BigInteger modulus = new BigInteger(init.getRSAKey());
-								RSAPublicKeySpec kspec1 = new RSAPublicKeySpec(modulus, RSAKeyGenParameterSpec.F4);
-								publicKey = (RSAPublicKey) kfac.generatePublic(kspec1);
-							} catch (GeneralSecurityException e) {
-								log.warn("Trouble while init the public key send by login");
-								break;
-							}
-							// send the blowfish key through the rsa encryption
-							sendPacket(new BlowFishKey(blowfishKey, publicKey));
-							// now, only accept packet with the new encryption
-							_blowfish = new NewCrypt(blowfishKey);
-							sendPacket(new AuthRequest(_requestID, _acceptAlternate, _hexID, _gamePort, _reserveHost, _maxPlayer, Collections.singletonList("0.0.0.0/0"), Collections.singletonList("127.0.0.1")));
-							break;
-						case 0x01:
-							LoginServerFail lsf = new LoginServerFail(incoming);
-							log.info("Damn! Registeration Failed: {}", lsf.getReasonString());
-							// login will close the connection here
-							break;
-						case 0x02:
-							AuthResponse aresp = new AuthResponse(incoming);
-							_serverId = aresp.getServerId();
-							_serverName = aresp.getServerName();
-							log.info("Registered on login as Server {}: {}", _serverId, _serverName);
-							ServerStatus st = new ServerStatus();
-							if (GeneralConfig.SERVER_LIST_BRACKET) {
-								st.addAttribute(ServerStatus.SERVER_LIST_SQUARE_BRACKET, ServerStatus.ON);
-							} else {
-								st.addAttribute(ServerStatus.SERVER_LIST_SQUARE_BRACKET, ServerStatus.OFF);
-							}
-							st.addAttribute(ServerStatus.SERVER_TYPE, GeneralConfig.SERVER_LIST_TYPE);
-							if (GeneralConfig.SERVER_GMONLY) {
-								st.addAttribute(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_GM_ONLY);
-							} else {
-								st.addAttribute(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_AUTO);
-							}
-							if (GeneralConfig.SERVER_LIST_AGE == 15) {
-								st.addAttribute(ServerStatus.SERVER_AGE, ServerStatus.SERVER_AGE_15);
-							} else if (GeneralConfig.SERVER_LIST_AGE == 18) {
-								st.addAttribute(ServerStatus.SERVER_AGE, ServerStatus.SERVER_AGE_18);
-							} else {
-								st.addAttribute(ServerStatus.SERVER_AGE, ServerStatus.SERVER_AGE_ALL);
-							}
-							sendPacket(st);
-							if (World.getInstance().getPlayers().size() > 0) {
-								final List<String> playerList = new ArrayList<>();
-								for (PlayerInstance player : World.getInstance().getPlayers()) {
-									playerList.add(player.getAccountName());
-								}
-								sendPacket(new PlayerInGame(playerList));
-							}
-							break;
 						case 0x03:
 							PlayerAuthResponse par = new PlayerAuthResponse(incoming);
 							String account = par.getAccount();
@@ -244,6 +160,7 @@ public class LoginServerThread extends Thread {
 								}
 							}
 							if (wcToRemove != null) {
+								// TODO: RMI
 								if (par.isAuthed()) {
 									PlayerInGame pig = new PlayerInGame(par.getAccount());
 									sendPacket(pig);
@@ -257,21 +174,10 @@ public class LoginServerThread extends Thread {
 									log.warn("Session key is not correct. Closing connection for account {}", wcToRemove.account);
 									// wcToRemove.gameClient.getConnection().sendPacket(new LoginFail(LoginFail.SYSTEM_ERROR_LOGIN_LATER));
 									wcToRemove.gameClient.close(new LoginFail(LoginFail.SYSTEM_ERROR_LOGIN_LATER));
-									_accountsInGameServer.remove(wcToRemove.account);
+									//_accountsInGameServer.remove(wcToRemove.account);
 								}
 								_waitingClients.remove(wcToRemove);
 							}
-							break;
-						case 0x04:
-							KickPlayer kp = new KickPlayer(incoming);
-							doKickPlayer(kp.getAccount());
-							break;
-						case 0x05:
-							RequestCharacters rc = new RequestCharacters(incoming);
-							getCharsOnServer(rc.getAccount());
-							break;
-						case 0x06:
-							new ChangePasswordResponse(incoming);
 							break;
 					}
 				}
@@ -339,149 +245,6 @@ public class LoginServerThread extends Thread {
 	}
 
 	/**
-	 * Send logout for the given account.
-	 *
-	 * @param account the account
-	 */
-	public void sendLogout(String account) {
-		if (account == null) {
-			return;
-		}
-		PlayerLogout pl = new PlayerLogout(account);
-		try {
-			sendPacket(pl);
-		} catch (IOException e) {
-			log.warn("Error while sending logout packet to login");
-		} finally {
-			_accountsInGameServer.remove(account);
-		}
-	}
-
-	/**
-	 * Adds the game server login.
-	 *
-	 * @param account the account
-	 * @param client  the client
-	 * @return {@code true} if account was not already logged in, {@code false} otherwise
-	 */
-	public boolean addGameServerLogin(String account, L2GameClient client) {
-		return _accountsInGameServer.putIfAbsent(account, client) == null;
-	}
-
-	/**
-	 * Send access level.
-	 *
-	 * @param account the account
-	 * @param level   the access level
-	 */
-	public void sendAccessLevel(String account, int level) {
-		ChangeAccessLevel cal = new ChangeAccessLevel(account, level);
-		try {
-			sendPacket(cal);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Send client tracert.
-	 *
-	 * @param account the account
-	 * @param address the address
-	 */
-	public void sendClientTracert(String account, String[] address) {
-		PlayerTracert ptc = new PlayerTracert(account, address[0], address[1], address[2], address[3], address[4]);
-		try {
-			sendPacket(ptc);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Send mail.
-	 *
-	 * @param account the account
-	 * @param mailId  the mail id
-	 * @param args    the args
-	 */
-	public void sendMail(String account, String mailId, String... args) {
-		SendMail sem = new SendMail(account, mailId, args);
-		try {
-			sendPacket(sem);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Send temp ban.
-	 *
-	 * @param account the account
-	 * @param ip      the ip
-	 * @param time    the time
-	 */
-	public void sendTempBan(String account, String ip, long time) {
-		TempBan tbn = new TempBan(account, ip, time);
-		try {
-			sendPacket(tbn);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Hex to string.
-	 *
-	 * @param hex the hex value
-	 * @return the hex value as string
-	 */
-	private String hexToString(byte[] hex) {
-		return new BigInteger(hex).toString(16);
-	}
-
-	/**
-	 * Kick player for the given account.
-	 *
-	 * @param account the account
-	 */
-	public void doKickPlayer(String account) {
-		L2GameClient client = _accountsInGameServer.get(account);
-		if (client != null) {
-			ACCOUNTING_LOGGER.info("Kicked by login, {}", client);
-			client.close(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_LOGGED_IN_TO_TWO_PLACES_IF_YOU_SUSPECT_ACCOUNT_THEFT_WE_RECOMMEND_CHANGING_YOUR_PASSWORD_SCANNING_YOUR_COMPUTER_FOR_VIRUSES_AND_USING_AN_ANTI_VIRUS_SOFTWARE));
-		}
-	}
-
-	/**
-	 * Gets the chars on server.
-	 *
-	 * @param account the account
-	 */
-	private void getCharsOnServer(String account) {
-
-		int chars = 0;
-		List<Long> charToDel = new ArrayList<>();
-		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			 PreparedStatement ps = con.prepareStatement("SELECT deletetime FROM characters WHERE account_name=?")) {
-			ps.setString(1, account);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					chars++;
-					long delTime = rs.getLong("deletetime");
-					if (delTime != 0) {
-						charToDel.add(delTime);
-					}
-				}
-			}
-		} catch (SQLException e) {
-			log.warn("Exception: getCharsOnServer: " + e.getMessage(), e);
-		}
-
-		ReplyCharacters rec = new ReplyCharacters(account, chars, charToDel);
-		try {
-			sendPacket(rec);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
 	 * Send packet.
 	 *
 	 * @param sl the sendable packet
@@ -500,133 +263,6 @@ public class LoginServerThread extends Thread {
 			_out.write(data);
 			_out.flush();
 		}
-	}
-
-	/**
-	 * Sets the max player.
-	 *
-	 * @param maxPlayer The maxPlayer to set.
-	 */
-	public void setMaxPlayer(int maxPlayer) {
-		sendServerStatus(ServerStatus.MAX_PLAYERS, maxPlayer);
-		_maxPlayer = maxPlayer;
-	}
-
-	/**
-	 * Gets the max player.
-	 *
-	 * @return Returns the maxPlayer.
-	 */
-	public int getMaxPlayer() {
-		return _maxPlayer;
-	}
-
-	/**
-	 * Send server status.
-	 *
-	 * @param id    the id
-	 * @param value the value
-	 */
-	public void sendServerStatus(int id, int value) {
-		ServerStatus ss = new ServerStatus();
-		ss.addAttribute(id, value);
-		try {
-			sendPacket(ss);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Send Server Type Config to LS.
-	 */
-	public void sendServerType() {
-		ServerStatus ss = new ServerStatus();
-		ss.addAttribute(ServerStatus.SERVER_TYPE, GeneralConfig.SERVER_LIST_TYPE);
-		try {
-			sendPacket(ss);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Send change password.
-	 *
-	 * @param accountName the account name
-	 * @param charName    the char name
-	 * @param oldpass     the old pass
-	 * @param newpass     the new pass
-	 */
-	public void sendChangePassword(String accountName, String charName, String oldpass, String newpass) {
-		ChangePassword cp = new ChangePassword(accountName, charName, oldpass, newpass);
-		try {
-			sendPacket(cp);
-		} catch (IOException e) {
-		}
-	}
-
-	/**
-	 * Gets the status string.
-	 *
-	 * @return the status string
-	 */
-	public String getStatusString() {
-		return ServerStatus.STATUS_STRING[_status];
-	}
-
-	/**
-	 * Gets the server name.
-	 *
-	 * @return the server name.
-	 */
-	public String getServerName() {
-		return _serverName;
-	}
-
-	/**
-	 * @return the server ID which this gameserver has accepted from the loginserver, or {@code 0} if this gameserver has not yet obtained any id from the loginserver.
-	 */
-	public int getServerId() {
-		return _serverId;
-	}
-
-	/**
-	 * Sets the server status.
-	 *
-	 * @param status the new server status
-	 */
-	public void setServerStatus(int status) {
-		switch (status) {
-			case ServerStatus.STATUS_AUTO:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_AUTO);
-				_status = status;
-				break;
-			case ServerStatus.STATUS_DOWN:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_DOWN);
-				_status = status;
-				break;
-			case ServerStatus.STATUS_FULL:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_FULL);
-				_status = status;
-				break;
-			case ServerStatus.STATUS_GM_ONLY:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_GM_ONLY);
-				_status = status;
-				break;
-			case ServerStatus.STATUS_GOOD:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_GOOD);
-				_status = status;
-				break;
-			case ServerStatus.STATUS_NORMAL:
-				sendServerStatus(ServerStatus.SERVER_LIST_STATUS, ServerStatus.STATUS_NORMAL);
-				_status = status;
-				break;
-			default:
-				throw new IllegalArgumentException("Status does not exists:" + status);
-		}
-	}
-
-	public L2GameClient getClient(String name) {
-		return name != null ? _accountsInGameServer.get(name) : null;
 	}
 
 	public static class SessionKey {

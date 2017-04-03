@@ -37,6 +37,7 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.JailZone;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.service.GameServerRMI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +74,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = LoginServerThread.getInstance().getClient(account);
+				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
 				if (client != null) {
 					final PlayerInstance player = client.getActiveChar();
 					if (player != null) {
@@ -116,7 +117,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = LoginServerThread.getInstance().getClient(account);
+				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
 				if (client != null) {
 					final PlayerInstance player = client.getActiveChar();
 					if (player != null) {

@@ -40,11 +40,20 @@ public interface AccountsDAO extends Closeable {
 	@SqlUpdate("UPDATE `accounts` SET `password` = :password WHERE `id` = :id")
 	int updatePassword(@BindBean Account account);
 
+	@SqlUpdate("UPDATE `accounts` SET `last_ip` = :last_ip WHERE `id` = :id")
+	int updateLastIp(@BindBean Account account);
+
+	@SqlUpdate("UPDATE `accounts` SET `last_time_access` = :last_time_access WHERE `id` = :id")
+	int updateLastTimeAccess(@BindBean Account account);
+
 	@SqlUpdate("UPDATE `accounts` SET `last_server_id` = :lastServerId WHERE `id` = :id")
 	int updateLastServerId(@Bind("id") long id, @Bind("lastServerId") short lastServerId);
 
 	@SqlUpdate("UPDATE `accounts` SET `last_server_id` = :lastServerId WHERE `id` = :id")
 	int updateLastServerId(@BindBean Account account);
+
+	@SqlUpdate("UPDATE `accounts` SET `access_level` = :access_level WHERE `id` = :id")
+	int updateAccessLevel(@BindBean Account account);
 
 	@SqlQuery("SELECT * FROM `accounts` WHERE `id` = :id")
 	Account findById(@Bind("id") long id);

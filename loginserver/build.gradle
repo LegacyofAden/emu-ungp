@@ -24,6 +24,7 @@ dependencies {
 	compile project(':commons')
 	compile project(':network')
 
+	compile('org.mindrot:jbcrypt:+')
 	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')
 }
 

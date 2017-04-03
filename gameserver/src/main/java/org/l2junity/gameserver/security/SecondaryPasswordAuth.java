@@ -112,8 +112,9 @@ public class SecondaryPasswordAuth {
 				_activeClient.sendPacket(new Ex2ndPasswordVerify(Ex2ndPasswordVerify.PASSWORD_WRONG, wrongAttempts));
 				insertWrongAttempt(wrongAttempts);
 			} else {
-				LoginServerThread.getInstance().sendTempBan(_activeClient.getAccountName(), _activeClient.getIP(), SecondaryAuthData.getInstance().getBanTime());
-				LoginServerThread.getInstance().sendMail(_activeClient.getAccountName(), "SATempBan", _activeClient.getIP(), Integer.toString(SecondaryAuthData.getInstance().getMaxAttempts()), Long.toString(SecondaryAuthData.getInstance().getBanTime()), SecondaryAuthData.getInstance().getRecoveryLink());
+				// TODO: RMI
+				//LoginServerThread.getInstance().sendTempBan(_activeClient.getAccountName(), _activeClient.getIP(), SecondaryAuthData.getInstance().getBanTime());
+				//LoginServerThread.getInstance().sendMail(_activeClient.getAccountName(), "SATempBan", _activeClient.getIP(), Integer.toString(SecondaryAuthData.getInstance().getMaxAttempts()), Long.toString(SecondaryAuthData.getInstance().getBanTime()), SecondaryAuthData.getInstance().getRecoveryLink());
 				LOGGER.warn("{} - ({}) has inputted the wrong password {} times in row.", _activeClient.getAccountName(), _activeClient.getIP(), wrongAttempts);
 				insertWrongAttempt(0);
 				_activeClient.close(new Ex2ndPasswordVerify(Ex2ndPasswordVerify.PASSWORD_BAN, SecondaryAuthData.getInstance().getMaxAttempts()));

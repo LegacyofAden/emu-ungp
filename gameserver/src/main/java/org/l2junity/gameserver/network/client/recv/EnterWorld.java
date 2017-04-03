@@ -91,13 +91,10 @@ public class EnterWorld implements IClientIncomingPacket {
 			return;
 		}
 
-		String[] adress = new String[5];
+		String[] address = new String[5];
 		for (int i = 0; i < 5; i++) {
-			adress[i] = tracert[i][0] + "." + tracert[i][1] + "." + tracert[i][2] + "." + tracert[i][3];
+			address[i] = tracert[i][0] + "." + tracert[i][1] + "." + tracert[i][2] + "." + tracert[i][3];
 		}
-
-		LoginServerThread.getInstance().sendClientTracert(activeChar.getAccountName(), adress);
-
 		client.setClientTracert(tracert);
 
 		activeChar.broadcastUserInfo();
