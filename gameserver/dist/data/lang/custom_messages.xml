@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom_messages.xsd">
+	<message name="YOU_CANNOT_CHEAT_YOUR_WAY_OUT_OF_HERE_YOU_MUST_WAIT_UNTIL_YOUR_JAIL_TIME_IS_OVER">
+		<lang name="ru">Нельзя нарушать правила. Вы останетесь здесь до окончания вашего времени заключения.</lang>
+		<lang name="en">You cannot cheat your way out of here. You must wait until your jail time is over</lang>
+	</message>
+	<message name="PRICE_OF_$_HAS_BEEN_CHANGED_TO_$">
+		<lang name="ru">Цена %s% изменена на %s%</lang>
+		<lang name="en">Price of %s% has been changed to %s%</lang>
+	</message>
+</list>

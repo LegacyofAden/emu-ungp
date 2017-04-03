@@ -98,6 +98,7 @@ import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
 import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionInfo;
 import org.l2junity.gameserver.network.client.send.friend.L2FriendStatus;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
@@ -1677,7 +1678,7 @@ public final class PlayerInstance extends Playable {
 		int armorPenalty = 0;
 		int weaponPenalty = 0;
 
-		for (ItemInstance item : getInventory().getPaperdollItems(item -> (item != null) && ((item.getItemType() != EtcItemType.ARROW) && (item.getItemType() != EtcItemType.BOLT)) && item.getItem().getCrystalType().isGreater(expertiseLevel))) {
+		for (ItemInstance item : getInventory().getPaperdollItems(i -> (i != null) && ((i.getItemType() != EtcItemType.ARROW) && (i.getItemType() != EtcItemType.BOLT)) && i.getItem().getCrystalType().isGreater(expertiseLevel))) {
 			if (item.isArmor()) {
 				// Armor penalty level increases depending on amount of penalty armors equipped, not grade level difference.
 				armorPenalty = CommonUtil.constrain(armorPenalty + 1, 0, 4);
@@ -7271,9 +7272,14 @@ public final class PlayerInstance extends Playable {
 		sendPacket(new ExGetBookMarkInfoPacket(this));
 	}
 
+	@Deprecated
 	@Override
 	public void sendMessage(String message) {
 		sendPacket(SystemMessage.sendString(message));
+	}
+	
+	public void sendMessage(CustomMessage msg, String ... args) {
+		msg.send(this, args);
 	}
 
 	public void setObserving(boolean state) {
