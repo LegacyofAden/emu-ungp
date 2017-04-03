@@ -16,12 +16,12 @@ public enum Language implements Serializable {
 		return shortName;
 	}
 
-	public Language valueOfShort(String shortName) {
+	public static Language valueOfShort(String shortName) {
 		for (Language language : Language.values()) {
 			if (language.getShortName().equals(shortName)) {
 				return language;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("Cannot find presented language.");
 	}
 }

@@ -8,4 +8,8 @@
 		<lang name="ru">Цена %s% изменена на %s%</lang>
 		<lang name="en">Price of %s% has been changed to %s%</lang>
 	</message>
+	<message name="THE_NEXT_AUCTION_WILL_BEGIN_ON_THE_$">
+		<lang name="en">The next auction will begin on the %s%.</lang>
+		<lang name="ru">Следующий аукцион начнется в %s%.</lang>
+	</message>
 </list>

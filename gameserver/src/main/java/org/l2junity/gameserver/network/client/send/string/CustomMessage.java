@@ -1,5 +1,6 @@
 package org.l2junity.gameserver.network.client.send.string;
 
+import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 
@@ -15,17 +16,17 @@ public enum CustomMessage {
     PRICE_OF_$_HAS_BEEN_CHANGED_TO_$,
     ;
 
-    private Map<String, String> messages;
+    private Map<Language, String> messages;
 
     CustomMessage() {
         messages = new HashMap<>(5);
     }
 
-    public void addMessage(String lang, String message) {
+    public void addMessage(Language lang, String message) {
         messages.put(lang, message);
     }
 
-    public String get(String lang, String ... args) {
+    public String get(Language lang, String ... args) {
         String message = messages.get(lang);
         if (message == null)
             return "Error: message not found for your language.";
