@@ -18,13 +18,17 @@
  */
 package handlers.admincommandhandlers;
 
+import org.l2junity.commons.model.enums.AgeLimit;
+import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.PlayerInstance;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.gameserverpackets.ServerStatus;
+
+
+import org.l2junity.gameserver.service.GameServerRMI;
 
 import java.util.StringTokenizer;
 
@@ -47,11 +51,14 @@ public class AdminLogin implements IAdminCommandHandler {
 	@Override
 	public boolean useAdminCommand(String command, PlayerInstance activeChar) {
 		if (command.equals("admin_server_gm_only")) {
-			gmOnly();
+			GameServerRMI.getInstance().setServerStatus(ServerStatus.GM_ONLY);
+			GeneralConfig.SERVER_GMONLY = true;
+
 			activeChar.sendMessage("Server is now GM only");
 			showMainPage(activeChar);
 		} else if (command.equals("admin_server_all")) {
-			allowToAll();
+			GameServerRMI.getInstance().setServerStatus(ServerStatus.AUTO);
+			GeneralConfig.SERVER_GMONLY = false;
 			activeChar.sendMessage("Server is not GM only anymore");
 			showMainPage(activeChar);
 		} else if (command.startsWith("admin_server_max_player")) {
@@ -60,7 +67,7 @@ public class AdminLogin implements IAdminCommandHandler {
 				st.nextToken();
 				String number = st.nextToken();
 				try {
-					LoginServerThread.getInstance().setMaxPlayer(Integer.parseInt(number));
+					GameServerRMI.getInstance().setMaxOnline(Integer.parseInt(number));
 					activeChar.sendMessage("maxPlayer set to " + number);
 					showMainPage(activeChar);
 				} catch (NumberFormatException e) {
@@ -87,7 +94,7 @@ public class AdminLogin implements IAdminCommandHandler {
 				}
 				if (GeneralConfig.SERVER_LIST_TYPE != newType) {
 					GeneralConfig.SERVER_LIST_TYPE = newType;
-					LoginServerThread.getInstance().sendServerType();
+					GameServerRMI.getInstance().setServerType(newType);
 					activeChar.sendMessage("Server Type changed to " + getServerTypeName(newType));
 					showMainPage(activeChar);
 				} else {
@@ -106,8 +113,8 @@ public class AdminLogin implements IAdminCommandHandler {
 				try {
 					age = Integer.parseInt(mode);
 					if (GeneralConfig.SERVER_LIST_AGE != age) {
-						GeneralConfig.SERVER_LIST_TYPE = age;
-						LoginServerThread.getInstance().sendServerStatus(ServerStatus.SERVER_AGE, age);
+						GeneralConfig.SERVER_LIST_AGE = age;
+						GameServerRMI.getInstance().setServerAge(AgeLimit.values()[age]);
 						activeChar.sendMessage("Server Age changed to " + age);
 						showMainPage(activeChar);
 					} else {
@@ -141,57 +148,41 @@ public class AdminLogin implements IAdminCommandHandler {
 	}
 
 	private String getServerTypeName(int serverType) {
-		String nameType = "";
+		StringBuilder nameType = new StringBuilder();
 		for (int i = 0; i < 7; i++) {
 			int currentType = serverType & (int) Math.pow(2, i);
 
 			if (currentType > 0) {
-				if (!nameType.isEmpty()) {
-					nameType += "+";
+				if (nameType.length() > 0) {
+					nameType.append("+");
 				}
 
 				switch (currentType) {
 					case 0x01:
-						nameType += "Normal";
+						nameType.append("Normal");
 						break;
 					case 0x02:
-						nameType += "Relax";
+						nameType.append("Relax");
 						break;
 					case 0x04:
-						nameType += "Test";
+						nameType.append("Test");
 						break;
 					case 0x08:
-						nameType += "NoLabel";
+						nameType.append("NoLabel");
 						break;
 					case 0x10:
-						nameType += "Restricted";
+						nameType.append("Restricted");
 						break;
 					case 0x20:
-						nameType += "Event";
+						nameType.append("Event");
 						break;
 					case 0x40:
-						nameType += "Free";
+						nameType.append("Free");
 						break;
 				}
 			}
 		}
-		return nameType;
-	}
-
-	/**
-	 *
-	 */
-	private void allowToAll() {
-		LoginServerThread.getInstance().setServerStatus(ServerStatus.STATUS_AUTO);
-		GeneralConfig.SERVER_GMONLY = false;
-	}
-
-	/**
-	 *
-	 */
-	private void gmOnly() {
-		LoginServerThread.getInstance().setServerStatus(ServerStatus.STATUS_GM_ONLY);
-		GeneralConfig.SERVER_GMONLY = true;
+		return nameType.toString();
 	}
 
 	@Override

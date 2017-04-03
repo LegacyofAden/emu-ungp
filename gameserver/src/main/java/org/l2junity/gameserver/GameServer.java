@@ -27,7 +27,7 @@ public final class GameServer {
 		try {
 			instance = new GameServer();
 		} catch (Exception e) {
-			log.error("Error while starting GameServer", e);
+			log.error("Error while starting GameServerInfo", e);
 		}
 	}
 }

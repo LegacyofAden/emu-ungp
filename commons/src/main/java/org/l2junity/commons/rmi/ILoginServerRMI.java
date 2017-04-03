@@ -1,6 +1,6 @@
 package org.l2junity.commons.rmi;
 
-import org.l2junity.commons.model.GameServer;
+import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.RegisterResult;
 
 import java.rmi.Remote;
@@ -12,5 +12,6 @@ import java.rmi.RemoteException;
  */
 public interface ILoginServerRMI extends Remote {
 	boolean testConnection() throws RemoteException;
-	RegisterResult registerGameServer(IGameServerRMI connection, GameServer gameServerInfo) throws RemoteException;
+	RegisterResult registerGameServer(IGameServerRMI connection, GameServerInfo gameServerInfo) throws RemoteException;
+	void updateGameServer(IGameServerRMI connection, GameServerInfo gameServerInfo) throws RemoteException;
 }

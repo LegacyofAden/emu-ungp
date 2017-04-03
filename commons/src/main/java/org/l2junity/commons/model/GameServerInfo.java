@@ -29,10 +29,10 @@ import java.util.Set;
 /**
  * @author NosBit
  */
-public class GameServer {
+public class GameServerInfo {
 	private final short id;
-	private final String name;
-	private final boolean showing;
+	private String name;
+	private boolean showing;
 	private AgeLimit ageLimit;
 	private Set<ServerType> serverTypes;
 
@@ -44,7 +44,11 @@ public class GameServer {
 	private ServerStatus status = ServerStatus.DOWN;
 	private IGameServerRMI connection;
 
-	public GameServer(short id, String name, boolean showing, AgeLimit ageLimit, Set<ServerType> serverTypes) {
+	public GameServerInfo(short id) {
+		this.id = id;
+	}
+
+	public GameServerInfo(short id, String name, boolean showing, AgeLimit ageLimit, Set<ServerType> serverTypes) {
 		this.id = id;
 		this.name = name;
 		this.showing = showing;
@@ -52,7 +56,7 @@ public class GameServer {
 		this.serverTypes = serverTypes;
 	}
 
-	public void update(IGameServerRMI connection, GameServer gameserver) {
+	public void update(IGameServerRMI connection, GameServerInfo gameserver) {
 		this.connection = connection;
 
 		this.ageLimit = gameserver.getAgeLimit();
@@ -75,8 +79,21 @@ public class GameServer {
 		return showing;
 	}
 
+	public void setAgeLimit(AgeLimit ageLimit) {
+		this.ageLimit = ageLimit;
+	}
+
 	public AgeLimit getAgeLimit() {
 		return ageLimit;
+	}
+
+	public void setServerType(int type) {
+		serverTypes.clear();
+		for (ServerType serverType : ServerType.values()) {
+			if ((type & serverType.getMask()) == serverType.getMask()) {
+				serverTypes.add(serverType);
+			}
+		}
 	}
 
 	public Set<ServerType> getServerTypes() {
