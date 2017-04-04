@@ -18,12 +18,18 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.xml.impl.CastleData;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
@@ -33,13 +39,6 @@ import org.l2junity.gameserver.model.interfaces.IPositionable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Siege Guard Manager.
@@ -76,7 +75,6 @@ public final class SiegeGuardManager {
 					final ItemInstance dropticket = new ItemInstance(holder.getItemId());
 					dropticket.setItemLocation(ItemLocation.VOID);
 					dropticket.dropMe(null, x, y, z);
-					World.getInstance().addObject(dropticket);
 					_droppedTickets.add(dropticket);
 				}
 			}
@@ -168,7 +166,6 @@ public final class SiegeGuardManager {
 			final ItemInstance dropticket = new ItemInstance(itemId);
 			dropticket.setItemLocation(ItemLocation.VOID);
 			dropticket.dropMe(null, player.getX(), player.getY(), player.getZ());
-			World.getInstance().addObject(dropticket);
 			_droppedTickets.add(dropticket);
 		}
 	}

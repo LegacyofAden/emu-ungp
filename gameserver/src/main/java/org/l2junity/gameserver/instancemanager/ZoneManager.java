@@ -18,17 +18,32 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Constructor;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
+
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.zone.*;
+import org.l2junity.gameserver.model.world.WorldData;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.model.zone.AbstractZoneSettings;
+import org.l2junity.gameserver.model.zone.L2ZoneForm;
+import org.l2junity.gameserver.model.zone.L2ZoneRespawn;
+import org.l2junity.gameserver.model.zone.ZoneRegion;
+import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.form.ZoneCuboid;
 import org.l2junity.gameserver.model.zone.form.ZoneCylinder;
 import org.l2junity.gameserver.model.zone.form.ZoneNPoly;
@@ -40,9 +55,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import java.lang.reflect.Constructor;
-import java.nio.file.Path;
-import java.util.*;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class manages the zones
@@ -59,15 +73,15 @@ public final class ZoneManager implements IGameXmlReader {
 	private static final Map<String, AbstractZoneSettings> SETTINGS = new HashMap<>();
 
 	private static final int SHIFT_BY = 15;
-	private static final int OFFSET_X = Math.abs(World.MAP_MIN_X >> SHIFT_BY);
-	private static final int OFFSET_Y = Math.abs(World.MAP_MIN_Y >> SHIFT_BY);
+	private static final int OFFSET_X = Math.abs(WorldData.MAP_MIN_X >> SHIFT_BY);
+	private static final int OFFSET_Y = Math.abs(WorldData.MAP_MIN_Y >> SHIFT_BY);
 
 	private final Map<Class<? extends ZoneType>, Map<Integer, ? extends ZoneType>> _classZones = new HashMap<>();
 	private final Map<String, SpawnTerritory> _spawnTerritories = new HashMap<>();
 	private int _lastDynamicId = 300000;
 	private List<ItemInstance> _debugItems;
 
-	private final ZoneRegion[][] _zoneRegions = new ZoneRegion[(World.MAP_MAX_X >> SHIFT_BY) + OFFSET_X + 1][(World.MAP_MAX_Y >> SHIFT_BY) + OFFSET_Y + 1];
+	private final ZoneRegion[][] _zoneRegions = new ZoneRegion[(WorldData.MAP_MAX_X >> SHIFT_BY) + OFFSET_X + 1][(WorldData.MAP_MAX_Y >> SHIFT_BY) + OFFSET_Y + 1];
 
 	/**
 	 * Instantiates a new zone manager.
@@ -355,11 +369,11 @@ public final class ZoneManager implements IGameXmlReader {
 		load();
 
 		// Re-validate all characters in zones
-		for (WorldObject obj : World.getInstance().getVisibleObjects()) {
-			if (obj instanceof Creature) {
-				((Creature) obj).revalidateZone(true);
-			}
-		}
+		WorldManager.getInstance().getWorlds().forEach(world -> 
+			world.getVisibleObjects().stream()
+				.filter(o -> o instanceof Creature)
+				.forEach(o -> ((Creature) o).revalidateZone(true))
+		);
 
 		SETTINGS.clear();
 	}

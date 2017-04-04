@@ -18,19 +18,19 @@
  */
 package org.l2junity.gameserver.network.client.send.friend;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.OutgoingPackets;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.network.PacketWriter;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.data.sql.impl.CharNameTable;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.OutgoingPackets;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.network.PacketWriter;
 
 /**
  * Support for "Chat with Friends" dialog. <br />
@@ -60,7 +60,7 @@ public class FriendList implements IClientOutgoingPacket {
 	public FriendList(Player player) {
 		for (int objId : player.getFriendList()) {
 			String name = CharNameTable.getInstance().getNameById(objId);
-			Player player1 = World.getInstance().getPlayer(objId);
+			Player player1 = WorldManager.getInstance().getPlayer(objId);
 
 			boolean online = false;
 			int classid = 0;

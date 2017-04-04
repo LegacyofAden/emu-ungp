@@ -18,16 +18,18 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExChangePostState;
@@ -36,8 +38,6 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
-
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 /**
  * @author Migi, DS
@@ -201,7 +201,7 @@ public final class RequestPostAttachment implements IClientIncomingPacket {
 		msg.removeAttachments();
 
 		SystemMessage sm;
-		final Player sender = World.getInstance().getPlayer(msg.getSenderId());
+		final Player sender = WorldManager.getInstance().getPlayer(msg.getSenderId());
 		if (adena > 0) {
 			if (sender != null) {
 				sender.addAdena("PayMail", adena, activeChar, false);
@@ -214,7 +214,6 @@ public final class RequestPostAttachment implements IClientIncomingPacket {
 				paidAdena.setOwnerId(msg.getSenderId());
 				paidAdena.setItemLocation(ItemLocation.INVENTORY);
 				paidAdena.updateDatabase(true);
-				World.getInstance().removeObject(paidAdena);
 			}
 		} else if (sender != null) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_ACQUIRED_THE_ATTACHED_ITEM_TO_YOUR_MAIL);

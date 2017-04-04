@@ -26,7 +26,6 @@ import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -36,6 +35,7 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.ExRedSky;
 import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
@@ -190,7 +190,7 @@ public class AdminEffects implements IAdminCommandHandler {
 				activeChar.sendMessage("Usage: //play_sound <soundname>");
 			}
 		} else if (command.equals("admin_para_all")) {
-			World.getInstance().forEachVisibleObject(activeChar, Player.class, player ->
+			activeChar.getWorld().forEachVisibleObject(activeChar, Player.class, player ->
 			{
 				if (!player.isGM()) {
 					player.getEffectList().startAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
@@ -200,7 +200,7 @@ public class AdminEffects implements IAdminCommandHandler {
 				}
 			});
 		} else if (command.equals("admin_unpara_all")) {
-			World.getInstance().forEachVisibleObject(activeChar, Player.class, player ->
+			activeChar.getWorld().forEachVisibleObject(activeChar, Player.class, player ->
 			{
 				player.getEffectList().stopAbnormalVisualEffect(AbnormalVisualEffect.PARALYZE);
 				player.setBlockActions(false);
@@ -285,7 +285,7 @@ public class AdminEffects implements IAdminCommandHandler {
 			activeChar.getPoly().setPolyInfo(null, "1");
 			activeChar.broadcastUserInfo();
 		} else if (command.equals("admin_clearteams")) {
-			World.getInstance().forEachVisibleObject(activeChar, Player.class, player ->
+			activeChar.getWorld().forEachVisibleObject(activeChar, Player.class, player ->
 			{
 				player.setTeam(Team.NONE);
 				player.broadcastUserInfo();
@@ -299,7 +299,7 @@ public class AdminEffects implements IAdminCommandHandler {
 				}
 				Team team = Team.valueOf(val.toUpperCase());
 
-				World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, radius, player -> player.setTeam(team));
+				activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Player.class, radius, player -> player.setTeam(team));
 			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //setteam_close <none|blue|red> [radius]");
 			}
@@ -324,7 +324,7 @@ public class AdminEffects implements IAdminCommandHandler {
 					int social = Integer.parseInt(st.nextToken());
 					target = st.nextToken();
 					if (target != null) {
-						Player player = World.getInstance().getPlayer(target);
+						Player player = WorldManager.getInstance().getPlayer(target);
 						if (player != null) {
 							if (performSocial(social, player, activeChar)) {
 								activeChar.sendMessage(player.getName() + " was affected by your request.");
@@ -332,7 +332,7 @@ public class AdminEffects implements IAdminCommandHandler {
 						} else {
 							try {
 								int radius = Integer.parseInt(target);
-								World.getInstance().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performSocial(social, object, activeChar));
+								activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performSocial(social, object, activeChar));
 								activeChar.sendMessage(radius + " units radius affected by your request.");
 							} catch (NumberFormatException nbe) {
 								activeChar.sendMessage("Incorrect parameter");
@@ -384,7 +384,7 @@ public class AdminEffects implements IAdminCommandHandler {
 				}
 
 				if (radius > 0) {
-					World.getInstance().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performAbnormalVisualEffect(ave, object));
+					activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, WorldObject.class, radius, object -> performAbnormalVisualEffect(ave, object));
 					activeChar.sendMessage("Affected all characters in radius " + param2 + " by " + param1 + " abnormal visual effect.");
 				} else {
 					final WorldObject obj = activeChar.getTarget() != null ? activeChar.getTarget() : activeChar;
@@ -472,7 +472,7 @@ public class AdminEffects implements IAdminCommandHandler {
 			try {
 				int triggerId = Integer.parseInt(st.nextToken());
 				boolean enable = Boolean.parseBoolean(st.nextToken());
-				World.getInstance().forEachVisibleObject(activeChar, Player.class, player -> player.sendPacket(new OnEventTrigger(triggerId, enable)));
+				activeChar.getWorld().forEachVisibleObject(activeChar, Player.class, player -> player.sendPacket(new OnEventTrigger(triggerId, enable)));
 				activeChar.sendPacket(new OnEventTrigger(triggerId, enable));
 			} catch (Exception e) {
 				activeChar.sendMessage("Usage: //event_trigger id [true | false]");

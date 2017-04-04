@@ -30,7 +30,6 @@ import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -40,6 +39,7 @@ import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -101,7 +101,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 			command = st.nextToken();
 			if (st.hasMoreTokens()) {
 				final String playername = st.nextToken();
-				Player player = World.getInstance().getPlayer(playername);
+				Player player = WorldManager.getInstance().getPlayer(playername);
 				if (player != null) {
 					int page = 0;
 					if (st.hasMoreTokens()) {
@@ -165,7 +165,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 			try {
 				int radius = Integer.parseInt(val);
 
-				World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, radius, Creature::stopAllEffects);
+				activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Player.class, radius, Creature::stopAllEffects);
 
 				activeChar.sendMessage("All effects canceled within radius " + radius);
 				return true;
@@ -182,7 +182,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 				String playername = st.nextToken();
 
 				try {
-					player = World.getInstance().getPlayer(playername);
+					player = WorldManager.getInstance().getPlayer(playername);
 				} catch (Exception e) {
 				}
 
@@ -303,7 +303,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 	private static void removeBuff(Player activeChar, int objId, int skillId) {
 		Creature target = null;
 		try {
-			target = (Creature) World.getInstance().findObject(objId);
+			target = (Creature) WorldManager.getInstance().getObject(objId);
 		} catch (Exception e) {
 		}
 
@@ -323,7 +323,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 	private static void removeAllBuffs(Player activeChar, int objId) {
 		Creature target = null;
 		try {
-			target = (Creature) World.getInstance().findObject(objId);
+			target = (Creature) WorldManager.getInstance().getObject(objId);
 		} catch (Exception e) {
 		}
 
@@ -340,7 +340,7 @@ public class AdminBuffs implements IAdminCommandHandler {
 	private static void viewBlockedEffects(Player activeChar, int objId) {
 		Creature target = null;
 		try {
-			target = (Creature) World.getInstance().findObject(objId);
+			target = (Creature) WorldManager.getInstance().getObject(objId);
 		} catch (Exception e) {
 			activeChar.sendMessage("Target with object id " + objId + " not found.");
 			return;

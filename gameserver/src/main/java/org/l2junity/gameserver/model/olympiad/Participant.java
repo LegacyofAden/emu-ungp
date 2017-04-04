@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.model.olympiad;
 
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 
 /**
  * @author DS, Zoey76
@@ -66,7 +66,7 @@ public final class Participant {
 	 */
 	public final boolean updatePlayer() {
 		if ((player == null) || !player.isOnline()) {
-			player = World.getInstance().getPlayer(getObjectId());
+			player = WorldManager.getInstance().getPlayer(getObjectId());
 		}
 		return (player != null);
 	}

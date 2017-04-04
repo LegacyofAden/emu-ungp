@@ -18,13 +18,13 @@
  */
 package org.l2junity.gameserver.network.client.send.friend;
 
-import org.l2junity.gameserver.model.World;
+import java.util.Calendar;
+
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
-
-import java.util.Calendar;
 
 /**
  * @author Sdw
@@ -38,7 +38,7 @@ public class ExFriendDetailInfo implements IClientOutgoingPacket {
 	public ExFriendDetailInfo(Player player, String name) {
 		_objectId = player.getObjectId();
 		_name = name;
-		_friend = World.getInstance().getPlayer(_name);
+		_friend = WorldManager.getInstance().getPlayer(_name);
 		_lastAccess = _friend.isBlocked(player) ? 0 : _friend.isOnline() ? (int) System.currentTimeMillis() : (int) (System.currentTimeMillis() - _friend.getLastAccess()) / 1000;
 	}
 

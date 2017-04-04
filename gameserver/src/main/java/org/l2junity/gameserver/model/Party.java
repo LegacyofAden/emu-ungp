@@ -18,6 +18,18 @@
  */
 package org.l2junity.gameserver.model;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.PlayerConfig;
@@ -30,25 +42,32 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.ExAskModifyPartyLooting;
+import org.l2junity.gameserver.network.client.send.ExCloseMPCC;
+import org.l2junity.gameserver.network.client.send.ExOpenMPCC;
+import org.l2junity.gameserver.network.client.send.ExPartyPetWindowAdd;
+import org.l2junity.gameserver.network.client.send.ExPartyPetWindowDelete;
+import org.l2junity.gameserver.network.client.send.ExSetPartyLooting;
+import org.l2junity.gameserver.network.client.send.ExTacticalSign;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.PartyMemberPosition;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowAdd;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowAll;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowDelete;
+import org.l2junity.gameserver.network.client.send.PartySmallWindowDeleteAll;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class serves as a container for player parties.
@@ -111,7 +130,7 @@ public class Party extends AbstractPlayerGroup {
 		_members.add(leader);
 		_partyLvl = leader.getLevel();
 		_distributionType = partyDistributionType;
-		World.getInstance().incrementParty();
+		WorldManager.getInstance().incrementPartyCount();
 	}
 
 	/**
@@ -340,7 +359,7 @@ public class Party extends AbstractPlayerGroup {
 			}, PARTY_POSITION_BROADCAST_INTERVAL.toMillis() / 2, PARTY_POSITION_BROADCAST_INTERVAL.toMillis(), TimeUnit.MILLISECONDS);
 		}
 		applyTacticalSigns(player, false);
-		World.getInstance().incrementPartyMember();
+		WorldManager.getInstance().incrementPartyMemberCount();
 	}
 
 	private Map<Integer, Creature> getTacticalSigns() {
@@ -473,7 +492,7 @@ public class Party extends AbstractPlayerGroup {
 				broadcastPacket(msg);
 			}
 
-			World.getInstance().decrementPartyMember();
+			WorldManager.getInstance().decrementPartyMemberCount();
 
 			// UI update.
 			player.sendPacket(PartySmallWindowDeleteAll.STATIC_PACKET);
@@ -537,7 +556,7 @@ public class Party extends AbstractPlayerGroup {
 				}
 			}
 		}
-		World.getInstance().decrementParty();
+		WorldManager.getInstance().decrementPartyCount();
 	}
 
 	/**

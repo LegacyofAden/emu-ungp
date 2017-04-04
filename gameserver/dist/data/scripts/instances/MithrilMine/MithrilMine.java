@@ -18,10 +18,10 @@
  */
 package instances.MithrilMine;
 
-import instances.AbstractInstance;
+import java.util.List;
+
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -30,9 +30,9 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import quests.Q10284_AcquisitionOfDivineSword.Q10284_AcquisitionOfDivineSword;
 
-import java.util.List;
+import instances.AbstractInstance;
+import quests.Q10284_AcquisitionOfDivineSword.Q10284_AcquisitionOfDivineSword;
 
 /**
  * Mithril Mine instance zone.
@@ -85,7 +85,7 @@ public final class MithrilMine extends AbstractInstance {
 				break;
 			}
 			case "FINISH": {
-				World.getInstance().forEachVisibleObject(npc, Creature.class, knownChar ->
+				npc.getWorld().forEachVisibleObject(npc, Creature.class, knownChar ->
 				{
 					if (knownChar.getId() == KEGOR) {
 						final Npc kegor = (Npc) knownChar;

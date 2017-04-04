@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send.friend;
 
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -43,7 +43,7 @@ public class L2Friend implements IClientOutgoingPacket {
 		_action = action;
 		_objid = objId;
 		_name = CharNameTable.getInstance().getNameById(objId);
-		_online = World.getInstance().getPlayer(objId) != null;
+		_online = WorldManager.getInstance().getPlayer(objId) != null;
 	}
 
 	@Override

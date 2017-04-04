@@ -18,13 +18,14 @@
  */
 package instances.EvilIncubator;
 
-import instances.AbstractInstance;
+import java.util.EnumMap;
+import java.util.List;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
@@ -37,15 +38,14 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import instances.AbstractInstance;
 import quests.Q10341_DayOfDestinyHumansFate.Q10341_DayOfDestinyHumansFate;
 import quests.Q10342_DayOfDestinyElvenFate.Q10342_DayOfDestinyElvenFate;
 import quests.Q10343_DayOfDestinyDarkElfsFate.Q10343_DayOfDestinyDarkElfsFate;
 import quests.Q10344_DayOfDestinyOrcsFate.Q10344_DayOfDestinyOrcsFate;
 import quests.Q10345_DayOfDestinyDwarfsFate.Q10345_DayOfDestinyDwarfsFate;
 import quests.Q10346_DayOfDestinyKamaelsFate.Q10346_DayOfDestinyKamaelsFate;
-
-import java.util.EnumMap;
-import java.util.List;
 
 /**
  * Evil Incubator instance zone.
@@ -229,7 +229,8 @@ public final class EvilIncubator extends AbstractInstance {
 
 							if (helperCount == 2) {
 								st.setCond(7, true);
-								World.getInstance().getVisibleObjects(world.getNpc(ADOLPH), FriendlyNpcInstance.class, 1000).forEach(c -> c.deleteMe());
+								final Npc adolph = world.getNpc(ADOLPH);
+								adolph.getWorld().getVisibleObjects(adolph, FriendlyNpcInstance.class, 1000).forEach(c -> c.deleteMe());
 							}
 						}
 						break;
@@ -460,7 +461,8 @@ public final class EvilIncubator extends AbstractInstance {
 	}
 
 	private void managerWorldAttack(Instance world, List<Npc> spawnedNpcs) {
-		final List<FriendlyNpcInstance> helperList = World.getInstance().getVisibleObjects(world.getFirstPlayer(), FriendlyNpcInstance.class);
+		final Player firstPlayer = world.getFirstPlayer();
+		final List<FriendlyNpcInstance> helperList = firstPlayer.getWorld().getVisibleObjects(firstPlayer, FriendlyNpcInstance.class);
 
 		if ((spawnedNpcs != null) && !spawnedNpcs.isEmpty()) {
 			for (Npc npc : spawnedNpcs) {
@@ -478,7 +480,7 @@ public final class EvilIncubator extends AbstractInstance {
 		}
 
 		for (FriendlyNpcInstance helper : helperList) {
-			for (Attackable monster : World.getInstance().getVisibleObjects(helper, Attackable.class)) {
+			for (Attackable monster : helper.getWorld().getVisibleObjects(helper, Attackable.class)) {
 				if (!(monster instanceof FriendlyNpcInstance)) {
 					addAttackDesire(helper, monster);
 				}

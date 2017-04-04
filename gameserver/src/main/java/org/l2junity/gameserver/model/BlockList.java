@@ -18,15 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.BlockListPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.data.sql.impl.CharNameTable;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.BlockListPacket;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class ...
@@ -168,7 +169,7 @@ public class BlockList {
 		sm.addString(charName);
 		listOwner.sendPacket(sm);
 
-		Player player = World.getInstance().getPlayer(targetId);
+		Player player = WorldManager.getInstance().getPlayer(targetId);
 
 		if (player != null) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.C1_HAS_PLACED_YOU_ON_HIS_HER_IGNORE_LIST);
@@ -221,7 +222,7 @@ public class BlockList {
 	 * @return true if blocked
 	 */
 	public static boolean isInBlockList(int ownerId, int targetId) {
-		Player player = World.getInstance().getPlayer(ownerId);
+		Player player = WorldManager.getInstance().getPlayer(ownerId);
 		if (player != null) {
 			return BlockList.isBlocked(player, targetId);
 		}

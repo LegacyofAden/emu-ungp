@@ -18,24 +18,29 @@
  */
 package org.l2junity.gameserver.ai;
 
-import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.*;
-import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.effects.L2EffectType;
-import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.util.Util;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
 
 import java.util.Collection;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.*;
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.gameserver.geodata.GeoData;
+import org.l2junity.gameserver.instancemanager.GameTimeManager;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.actor.Attackable;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.Npc;
+import org.l2junity.gameserver.model.actor.Playable;
+import org.l2junity.gameserver.model.actor.Summon;
+import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.effects.L2EffectType;
+import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.util.Util;
 
 /**
  * This class manages AI of L2Attackable.
@@ -168,7 +173,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 				Attackable npc = (Attackable) _actor;
 
 				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
-				if (!World.getInstance().getVisibleObjects(npc, Player.class).isEmpty()) {
+				if (!npc.getWorld().getVisibleObjects(npc, Player.class).isEmpty()) {
 					intention = AI_INTENTION_ACTIVE;
 				} else {
 					intention = AI_INTENTION_IDLE;
@@ -240,7 +245,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 		// Add all autoAttackable L2Character in L2Attackable Aggro Range to its _aggroList with 0 damage and 1 hate
 		// A L2Attackable isn't aggressive during 10s after its spawn because _globalAggro is set to -10
 		if (_globalAggro >= 0) {
-			World.getInstance().forEachVisibleObjectInRadius(npc, Creature.class, _attackRange, t ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Creature.class, _attackRange, t ->
 			{
 				if (autoAttackCondition(t)) // check aggression
 				{
@@ -347,7 +352,7 @@ public class SiegeGuardAI extends CharacterAI implements Runnable {
 
 		// Go through all L2Character that belong to its faction
 		// for (L2Character cha : _actor.getKnownList().getKnownCharactersInRadius(((NpcInstance) _actor).getFactionRange()+_actor.getTemplate().collisionRadius))
-		for (Creature cha : World.getInstance().getVisibleObjects(_actor, Creature.class, 1000)) {
+		for (Creature cha : _actor.getWorld().getVisibleObjects(_actor, Creature.class, 1000)) {
 			if (!cha.isNpc()) {
 				if (_selfAnalysis.hasHealOrResurrect && cha.isPlayer() && (((Npc) _actor).getCastle().getSiege().checkIsDefender(cha.getClan()))) {
 					// heal friends

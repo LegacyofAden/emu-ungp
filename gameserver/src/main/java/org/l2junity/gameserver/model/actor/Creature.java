@@ -72,8 +72,16 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.TimersManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.AccessLevel;
+import org.l2junity.gameserver.model.CharEffectList;
 import org.l2junity.gameserver.model.Clan;
+import org.l2junity.gameserver.model.CreatureContainer;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.Party;
+import org.l2junity.gameserver.model.PcCondOverride;
+import org.l2junity.gameserver.model.TeleportWhereType;
+import org.l2junity.gameserver.model.TimeStamp;
+import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
 import org.l2junity.gameserver.model.actor.status.CharStatus;
@@ -127,6 +135,8 @@ import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.Formulas;
 import org.l2junity.gameserver.model.stats.MoveType;
+import org.l2junity.gameserver.model.world.Region;
+import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
 import org.l2junity.gameserver.network.client.Disconnection;
@@ -656,7 +666,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param mov
 	 */
 	public void broadcastPacket(IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(mov);
@@ -674,7 +684,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param radiusInKnownlist
 	 */
 	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
-		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
+		getWorld().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (isVisibleFor(player)) {
 				player.sendPacket(mov);
@@ -1396,7 +1406,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		final List<Creature> list = new LinkedList<>();
 		final int maxRadius = getStat().getPhysicalAttackRadius();
 		final int maxAngleDiff = getStat().getPhysicalAttackAngle();
-		for (Creature obj : World.getInstance().getVisibleObjects(this, Creature.class, maxRadius)) {
+		for (Creature obj : getWorld().getVisibleObjects(this, Creature.class, maxRadius)) {
 			if (obj == target) {
 				continue;
 			}
@@ -2017,7 +2027,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		} else if (isSummon()) {
 			broadcastStatusUpdate();
 		} else if (isNpc()) {
-			World.getInstance().forEachVisibleObject(this, Player.class, player ->
+			getWorld().forEachVisibleObject(this, Player.class, player ->
 			{
 				if (!isVisibleFor(player)) {
 					return;
@@ -2523,7 +2533,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 				}
 			} else if (isNpc()) {
 				if (broadcastFull) {
-					World.getInstance().forEachVisibleObject(this, Player.class, player ->
+					getWorld().forEachVisibleObject(this, Player.class, player ->
 					{
 						if (!isVisibleFor(player)) {
 							return;
@@ -3029,8 +3039,8 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 			double originalX = x;
 			double originalY = y;
 			double originalZ = z;
-			int gtx = (int) (originalX - World.MAP_MIN_X) >> 4;
-			int gty = (int) (originalY - World.MAP_MIN_Y) >> 4;
+			int gtx = (int) (originalX - WorldData.MAP_MIN_X) >> 4;
+			int gty = (int) (originalY - WorldData.MAP_MIN_Y) >> 4;
 
 			Location destiny = GeoData.getInstance().moveCheck(curX, curY, curZ, x, y, z, getInstanceWorld());
 
@@ -3053,7 +3063,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					}
 				}
 
-				if ((curX < World.MAP_MIN_X) || (curX > World.MAP_MAX_X) || (curY < World.MAP_MIN_Y) || (curY > World.MAP_MAX_Y)) {
+				if ((curX < WorldData.MAP_MIN_X) || (curX > WorldData.MAP_MAX_X) || (curY < WorldData.MAP_MIN_Y) || (curY > WorldData.MAP_MAX_Y)) {
 					// Temporary fix for character outside world region errors
 					LOGGER.warn("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
 					getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
@@ -3538,8 +3548,8 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @return true if this character is inside an active grid.
 	 */
 	public boolean isInActiveRegion() {
-		WorldRegion region = getWorldRegion();
-		return ((region != null) && (region.isActive()));
+		final Region region = getWorldRegion();
+		return region != null && region.isActive();
 	}
 
 	/**

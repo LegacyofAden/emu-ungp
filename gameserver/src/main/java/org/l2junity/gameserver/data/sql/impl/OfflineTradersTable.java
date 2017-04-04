@@ -18,20 +18,6 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.core.configs.L2JModsConfig;
-import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.holders.SellBuffHolder;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.service.GameServerRMI;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +26,21 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.enums.PrivateStoreType;
+import org.l2junity.gameserver.model.TradeItem;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.holders.SellBuffHolder;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.Disconnection;
+import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.service.GameServerRMI;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @StartupComponent("Service")
@@ -71,7 +72,7 @@ public class OfflineTradersTable {
 			stm2.execute();
 			con.setAutoCommit(false); // avoid halfway done
 
-			for (Player pc : World.getInstance().getPlayers()) {
+			for (Player pc : WorldManager.getInstance().getAllPlayers()) {
 				try {
 					if ((pc.getPrivateStoreType() != PrivateStoreType.NONE) && ((pc.getClient() == null) || pc.getClient().isDetached())) {
 						stm3.setInt(1, pc.getObjectId()); // Char Id

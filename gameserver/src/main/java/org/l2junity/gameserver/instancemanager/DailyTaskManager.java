@@ -18,14 +18,18 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Collections;
+import java.util.List;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
-import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.Clan;
+import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
 import org.l2junity.gameserver.model.base.SubClass;
@@ -39,15 +43,11 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
 import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author UnAfraid
@@ -103,7 +103,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 
 	@ScheduleTarget
 	private void onVitalityReset() {
-		for (Player player : World.getInstance().getPlayers()) {
+		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			player.setVitalityPoints(PcStat.MAX_VITALITY_POINTS, false);
 
 			for (SubClass subclass : player.getSubClasses().values()) {
@@ -143,7 +143,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 		}
 
 		// Update data for online players.
-		World.getInstance().getPlayers().stream().forEach(player ->
+		WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 		{
 			player.getVariables().remove(PlayerVariables.EXTEND_DROP);
 			player.getVariables().storeMe();
@@ -179,7 +179,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 		}
 
 		// Update data for online players.
-		World.getInstance().getPlayers().stream().forEach(player ->
+		WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 		{
 			player.setWorldChatUsed(0);
 			player.sendPacket(new ExWorldChatCnt(player));
@@ -204,7 +204,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 			LOGGER.error("Could not reset Recommendations System: ", e);
 		}
 
-		World.getInstance().getPlayers().stream().forEach(player ->
+		WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 		{
 			player.setRecomLeft(0);
 			player.setRecomHave(player.getRecomHave() - 20);
@@ -225,7 +225,7 @@ public class DailyTaskManager extends AbstractEventManager<AbstractEvent<?>> {
 			}
 
 			// Update data for online players.
-			World.getInstance().getPlayers().stream().forEach(player ->
+			WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 			{
 				player.getAccountVariables().remove(AccountVariables.TRAINING_CAMP_DURATION);
 				player.getAccountVariables().storeMe();

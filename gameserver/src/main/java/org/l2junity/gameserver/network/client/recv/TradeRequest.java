@@ -22,7 +22,6 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.BlockList;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -60,7 +59,7 @@ public final class TradeRequest implements IClientIncomingPacket {
 			return;
 		}
 
-		final WorldObject target = World.getInstance().findObject(_objectId);
+		final WorldObject target = player.getWorld().findObject(_objectId);
 		// If there is no target, target is far away or
 		// they are in different instances
 		// trade request is ignored and there is no system message.

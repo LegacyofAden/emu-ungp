@@ -18,7 +18,10 @@
  */
 package ai.individual.LairOfAntharas.Antharas;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.core.configs.GrandBossConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -28,7 +31,6 @@ import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -38,13 +40,15 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.Earthquake;
+import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
+import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.SpecialCamera;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Broadcast;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ai.AbstractNpcAI;
 
 /**
  * Antharas AI.
@@ -271,7 +275,7 @@ public final class Antharas extends AbstractNpcAI {
 				break;
 			}
 			case "START_MOVE": {
-				for (Player players : World.getInstance().getVisibleObjects(npc, Player.class, 4000)) {
+				for (Player players : npc.getWorld().getVisibleObjects(npc, Player.class, 4000)) {
 					if (players.isHero()) {
 						zone.broadcastPacket(new ExShowScreenMessage(NpcStringId.S1_YOU_CANNOT_HOPE_TO_DEFEAT_ME_WITH_YOUR_MEAGER_STRENGTH, 2, 4000, players.getName()));
 						break;

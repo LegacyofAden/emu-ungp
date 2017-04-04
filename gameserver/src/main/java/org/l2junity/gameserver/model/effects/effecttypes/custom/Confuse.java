@@ -18,11 +18,12 @@
  */
 package org.l2junity.gameserver.model.effects.effecttypes.custom;
 
+import java.util.List;
+
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractBooleanStatEffect;
@@ -30,8 +31,6 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.stats.Formulas;
-
-import java.util.List;
 
 /**
  * Confuse effect implementation.
@@ -61,7 +60,7 @@ public final class Confuse extends AbstractBooleanStatEffect {
 		targetCreature.getAI().notifyEvent(CtrlEvent.EVT_CONFUSED);
 
 		// Getting the possible targets
-		final List<Creature> targetList = World.getInstance().getVisibleObjects(targetCreature, Creature.class);
+		final List<Creature> targetList = targetCreature.getWorld().getVisibleObjects(targetCreature, Creature.class);
 		// if there is no target, exit function
 		if (!targetList.isEmpty()) {
 			// Choosing randomly a new target

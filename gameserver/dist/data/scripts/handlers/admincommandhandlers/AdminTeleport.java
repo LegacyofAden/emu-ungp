@@ -18,6 +18,12 @@
  */
 package handlers.admincommandhandlers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -31,24 +37,19 @@ import org.l2junity.gameserver.instancemanager.DBSpawnManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
-import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
+import org.l2junity.gameserver.model.world.WorldData;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - show_moves - show_teleport - teleport_to_character - move_to - teleport_character
@@ -158,7 +159,7 @@ public class AdminTeleport implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_teleportto ")) {
 			try {
 				String targetName = command.substring(17);
-				Player player = World.getInstance().getPlayer(targetName);
+				Player player = WorldManager.getInstance().getPlayer(targetName);
 				teleportToCharacter(activeChar, player);
 			} catch (StringIndexOutOfBoundsException e) {
 			}
@@ -168,7 +169,7 @@ public class AdminTeleport implements IAdminCommandHandler {
 				st.nextToken();
 				final double x = Float.parseFloat(st.nextToken());
 				final double y = Float.parseFloat(st.nextToken());
-				final double z = st.hasMoreTokens() ? ((int) Float.parseFloat(st.nextToken())) : GeoData.getInstance().getHeight(x, y, World.MAP_MAX_Z);
+				final double z = st.hasMoreTokens() ? ((int) Float.parseFloat(st.nextToken())) : GeoData.getInstance().getHeight(x, y, WorldData.MAP_MAX_Z);
 
 				activeChar.teleToLocation(x, y, z);
 			} catch (Exception e) {
@@ -182,7 +183,7 @@ public class AdminTeleport implements IAdminCommandHandler {
 					return false;
 				}
 				String targetName = param[1];
-				Player player = World.getInstance().getPlayer(targetName);
+				Player player = WorldManager.getInstance().getPlayer(targetName);
 				if (player != null) {
 					teleportCharacter(player, activeChar.getLocation(), activeChar);
 				} else {
@@ -227,7 +228,7 @@ public class AdminTeleport implements IAdminCommandHandler {
 				activeChar.sendMessage("Usage: //sendhome <playername>");
 			} else if (st.countTokens() == 1) {
 				final String name = st.nextToken();
-				final Player player = World.getInstance().getPlayer(name);
+				final Player player = WorldManager.getInstance().getPlayer(name);
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.THAT_PLAYER_IS_NOT_ONLINE);
 					return false;

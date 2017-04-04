@@ -18,6 +18,10 @@
  */
 package org.l2junity.gameserver.model;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.ShotType;
@@ -26,25 +30,45 @@ import org.l2junity.gameserver.handler.ActionShiftHandler;
 import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.model.actor.*;
-import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.Attackable;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.Npc;
+import org.l2junity.gameserver.model.actor.Playable;
+import org.l2junity.gameserver.model.actor.Summon;
+import org.l2junity.gameserver.model.actor.Vehicle;
+import org.l2junity.gameserver.model.actor.instance.DoorInstance;
+import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.TreasureInstance;
 import org.l2junity.gameserver.model.actor.poly.ObjectPoly;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.model.events.impl.restriction.IsWorldObjectVisibleFor;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
 import org.l2junity.gameserver.model.instancezone.Instance;
-import org.l2junity.gameserver.model.interfaces.*;
+import org.l2junity.gameserver.model.interfaces.IDecayable;
+import org.l2junity.gameserver.model.interfaces.IIdentifiable;
+import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.model.interfaces.INamable;
+import org.l2junity.gameserver.model.interfaces.IPositionable;
+import org.l2junity.gameserver.model.interfaces.ISpawnable;
+import org.l2junity.gameserver.model.interfaces.IUniqueId;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.GameWorld;
+import org.l2junity.gameserver.model.world.Region;
+import org.l2junity.gameserver.model.world.WorldData;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.DeleteObject;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Base class for all interactive objects.
@@ -61,7 +85,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	/**
 	 * World Region
 	 */
-	private WorldRegion _worldRegion;
+	@Getter @Setter private Region worldRegion;
 	/**
 	 * Instance type
 	 */
@@ -155,32 +179,34 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 	@Override
 	public boolean decayMe() {
-		final WorldRegion reg = getWorldRegion();
+		final Region reg = getWorldRegion();
 		synchronized (this) {
 			_isSpawned = false;
 			setWorldRegion(null);
 		}
 
-		World.getInstance().removeVisibleObject(this, reg);
-		World.getInstance().removeObject(this);
+		final GameWorld world = getWorld();
+		world.removeVisibleObject(this, reg);
+		world.removeObject(this);
 		return true;
 	}
 
 	public void refreshID() {
-		World.getInstance().removeObject(this);
+		WorldManager.getInstance().removeObject(this);
 		IdFactory.getInstance().releaseId(getObjectId());
 		_objectId = IdFactory.getInstance().getNextId();
 	}
 
 	@Override
 	public final boolean spawnMe() {
+		final GameWorld world = WorldManager.getInstance().getWorld(getInstanceId());
 		synchronized (this) {
 			// Set the x,y,z position of the L2Object spawn and update its _worldregion
 			_isSpawned = true;
-			setWorldRegion(World.getInstance().getRegion(getLocation()));
+			setWorldRegion(world.getRegion(getLocation()));
 
 			// Add the L2Object spawn in the _allobjects of L2World
-			World.getInstance().addObject(this);
+			world.addObject(this);
 
 			// Add the L2Object spawn to _visibleObjects and if necessary to _allplayers of its L2WorldRegion
 			getWorldRegion().addVisibleObject(this);
@@ -188,7 +214,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 		// this can synchronize on others instances, so it's out of synchronized, to avoid deadlocks
 		// Add the L2Object spawn in the world as a visible object
-		World.getInstance().addVisibleObject(this, getWorldRegion());
+		world.addVisibleObject(this, getWorldRegion());
 
 		onSpawn();
 
@@ -197,23 +223,23 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 	public final void spawnMe(double x, double y, double z) {
 		synchronized (this) {
-			if (x > World.MAP_MAX_X) {
-				x = World.MAP_MAX_X - 5000;
+			if (x > WorldData.MAP_MAX_X) {
+				x = WorldData.MAP_MAX_X - 5000;
 			}
-			if (x < World.MAP_MIN_X) {
-				x = World.MAP_MIN_X + 5000;
+			if (x < WorldData.MAP_MIN_X) {
+				x = WorldData.MAP_MIN_X + 5000;
 			}
-			if (y > World.MAP_MAX_Y) {
-				y = World.MAP_MAX_Y - 5000;
+			if (y > WorldData.MAP_MAX_Y) {
+				y = WorldData.MAP_MAX_Y - 5000;
 			}
-			if (y < World.MAP_MIN_Y) {
-				y = World.MAP_MIN_Y + 5000;
+			if (y < WorldData.MAP_MIN_Y) {
+				y = WorldData.MAP_MIN_Y + 5000;
 			}
-			if (z > World.MAP_MAX_Z) {
-				z = World.MAP_MAX_Z - 1000;
+			if (z > WorldData.MAP_MAX_Z) {
+				z = WorldData.MAP_MAX_Z - 1000;
 			}
-			if (z < World.MAP_MIN_Z) {
-				z = World.MAP_MIN_Z + 1000;
+			if (z < WorldData.MAP_MIN_Z) {
+				z = WorldData.MAP_MIN_Z + 1000;
 			}
 
 			// Set the x,y,z position of the WorldObject. If flagged with _isSpawned, setXYZ will automatically update world region, so avoid that.
@@ -514,8 +540,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		if (_isTargetable != targetable) {
 			_isTargetable = targetable;
 			if (!targetable) {
-				World.getInstance().getVisibleObjects(this, Creature.class, creature -> this == creature.getTarget()).forEach(creature ->
-				{
+				getWorld().getVisibleObjects(this, Creature.class, creature -> this == creature.getTarget()).forEach(creature -> {
 					creature.setTarget(null);
 					creature.abortAttack();
 					creature.abortCast();
@@ -619,17 +644,17 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	public final void setXYZInvisible(double x, double y, double z) {
-		if (x > World.MAP_MAX_X) {
-			x = World.MAP_MAX_X - 5000;
+		if (x > WorldData.MAP_MAX_X) {
+			x = WorldData.MAP_MAX_X - 5000;
 		}
-		if (x < World.MAP_MIN_X) {
-			x = World.MAP_MIN_X + 5000;
+		if (x < WorldData.MAP_MIN_X) {
+			x = WorldData.MAP_MIN_X + 5000;
 		}
-		if (y > World.MAP_MAX_Y) {
-			y = World.MAP_MAX_Y - 5000;
+		if (y > WorldData.MAP_MAX_Y) {
+			y = WorldData.MAP_MAX_Y - 5000;
 		}
-		if (y < World.MAP_MIN_Y) {
-			y = World.MAP_MIN_Y + 5000;
+		if (y < WorldData.MAP_MIN_Y) {
+			y = WorldData.MAP_MIN_Y + 5000;
 		}
 
 		setXYZ(x, y, z);
@@ -638,14 +663,6 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 	public final void setLocationInvisible(ILocational loc) {
 		setXYZInvisible(loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	public final WorldRegion getWorldRegion() {
-		return _worldRegion;
-	}
-
-	public void setWorldRegion(WorldRegion value) {
-		_worldRegion = value;
 	}
 
 	/**
@@ -695,7 +712,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 */
 	public int getInstanceId() {
 		final Instance instance = _instance;
-		return (instance != null) ? instance.getId() : 0;
+		return (instance != null) ? instance.getId() : WorldManager.MAIN_WORLD_ID;
 	}
 
 	/**
@@ -739,14 +756,15 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		_z = z;
 
 		if (_isSpawned) {
-			final WorldRegion oldRegion = getWorldRegion();
-			final WorldRegion newRegion = World.getInstance().getRegion(this);
+			final GameWorld world = getWorld();
+			final Region oldRegion = getWorldRegion();
+			final Region newRegion = world.getRegion(this);
 			if (newRegion != oldRegion) {
 				if (oldRegion != null) {
 					oldRegion.removeVisibleObject(this);
 				}
 				newRegion.addVisibleObject(this);
-				World.getInstance().switchRegion(this, newRegion);
+				world.switchRegion(this, newRegion);
 				setWorldRegion(newRegion);
 			}
 		}
@@ -770,6 +788,10 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	@Override
 	public void setHeading(int newHeading) {
 		_heading.set(newHeading);
+	}
+	
+	public final GameWorld getWorld() {
+		return WorldManager.getInstance().getWorld(getInstanceId());
 	}
 
 	/**
@@ -804,6 +826,19 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		if (_instance != null) {
 			_instance.onInstanceChange(this, false);
 		}
+		
+		final GameWorld newWorld = WorldManager.getInstance().getWorld(newInstance == null ? WorldManager.MAIN_WORLD_ID : newInstance.getId());
+		final Region newRegion = newWorld.getRegion(getLocation());
+		
+		final GameWorld oldWorld = WorldManager.getInstance().getWorld(_instance == null ? WorldManager.MAIN_WORLD_ID : _instance.getId());
+		final Region oldRegion = oldWorld.getRegion(getLocation());
+		
+		oldRegion.removeVisibleObject(this);
+		newRegion.addVisibleObject(this);
+		
+		oldWorld.switchRegion(this, newRegion);
+		oldWorld.removeObject(this);
+		newWorld.addObject(this);
 
 		// Set new instance
 		_instance = newInstance;
@@ -843,7 +878,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		_isInvisible = invis;
 		if (invis) {
 			final DeleteObject deletePacket = new DeleteObject(this);
-			World.getInstance().forEachVisibleObject(this, Player.class, player ->
+			getWorld().forEachVisibleObject(this, Player.class, player ->
 			{
 				if (!isVisibleFor(player)) {
 					player.sendPacket(deletePacket);
@@ -872,7 +907,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 * Broadcasts describing info to known players.
 	 */
 	public void broadcastInfo() {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
 				sendInfo(player);
@@ -889,12 +924,12 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 			return false;
 		}
 
-		final WorldRegion worldRegion1 = worldObject.getWorldRegion();
+		final Region worldRegion1 = worldObject.getWorldRegion();
 		if (worldRegion1 == null) {
 			return false;
 		}
 
-		final WorldRegion worldRegion2 = getWorldRegion();
+		final Region worldRegion2 = getWorldRegion();
 		if (worldRegion2 == null) {
 			return false;
 		}

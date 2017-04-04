@@ -20,9 +20,9 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
@@ -48,7 +48,7 @@ public final class RequestOustFromPartyRoom implements IClientIncomingPacket {
 			return;
 		}
 
-		Player member = World.getInstance().getPlayer(_charObjId);
+		Player member = WorldManager.getInstance().getPlayer(_charObjId);
 		if (member == null) {
 			return;
 		}

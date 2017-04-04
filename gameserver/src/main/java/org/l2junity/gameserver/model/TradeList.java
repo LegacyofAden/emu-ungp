@@ -18,6 +18,12 @@
  */
 package org.l2junity.gameserver.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
@@ -27,18 +33,14 @@ import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.ItemStorage;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Advi
@@ -187,13 +189,12 @@ public class TradeList {
 			return null;
 		}
 
-		WorldObject o = World.getInstance().findObject(objectId);
-		if (!(o instanceof ItemInstance)) {
+		ItemInstance item = ItemStorage.getInstance().get(objectId);
+		if (item == null) {
 			_log.warn(_owner.getName() + ": Trying to add something other than an item!");
 			return null;
 		}
 
-		ItemInstance item = (ItemInstance) o;
 		if (!(item.isTradeable() || (getOwner().isGM() && AdminConfig.GM_TRADE_RESTRICTED_ITEMS)) || item.isQuestItem()) {
 			_log.warn(_owner.getName() + ": Attempt to add a restricted item!");
 			return null;
@@ -417,7 +418,7 @@ public class TradeList {
 	 */
 	private boolean validate() {
 		// Check for Owner validity
-		if ((_owner == null) || (World.getInstance().getPlayer(_owner.getObjectId()) == null)) {
+		if ((_owner == null) || (WorldManager.getInstance().getPlayer(_owner.getObjectId()) == null)) {
 			_log.warn("Invalid owner of TradeList");
 			return false;
 		}

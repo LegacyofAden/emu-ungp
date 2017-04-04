@@ -18,13 +18,13 @@
  */
 package ai.individual.KartiasLabyrinth;
 
-import ai.AbstractNpcAI;
+import java.util.List;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
@@ -39,7 +39,7 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
-import java.util.List;
+import ai.AbstractNpcAI;
 
 /**
  * Kartia Helper Adolph AI.
@@ -84,7 +84,7 @@ public final class KartiaHelperAdolph extends AbstractNpcAI {
 			boolean actionFound = false;
 
 			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
-				final List<MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, MonsterInstance.class, 500);
+				final List<MonsterInstance> monsterList = npc.getWorld().getVisibleObjects(npc, MonsterInstance.class, 500);
 				if (!monsterList.isEmpty()) {
 					final MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
 

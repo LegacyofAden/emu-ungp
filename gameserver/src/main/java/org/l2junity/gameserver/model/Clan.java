@@ -18,6 +18,21 @@
  */
 package org.l2junity.gameserver.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.FeatureConfig;
@@ -48,26 +63,27 @@ import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.pledge.ClanRewardBonus;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.ClanVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.CreatureSay;
+import org.l2junity.gameserver.network.client.send.ExSubPledgeSkillAdd;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.PledgeReceiveSubPledgeCreated;
+import org.l2junity.gameserver.network.client.send.PledgeShowInfoUpdate;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListAll;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListDeleteAll;
+import org.l2junity.gameserver.network.client.send.PledgeShowMemberListUpdate;
+import org.l2junity.gameserver.network.client.send.PledgeSkillList;
 import org.l2junity.gameserver.network.client.send.PledgeSkillList.SubPledgeSkill;
+import org.l2junity.gameserver.network.client.send.PledgeSkillListAdd;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.pledgebonus.ExPledgeBonusMarkReset;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.EnumIntBitmask;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class Clan implements IIdentifiable, INamable {
 	private static final Logger _log = LoggerFactory.getLogger(Clan.class);
@@ -2462,7 +2478,7 @@ public class Clan implements IIdentifiable, INamable {
 	}
 
 	public Player getNewLeader() {
-		return World.getInstance().getPlayer(_newLeaderId);
+		return WorldManager.getInstance().getPlayer(_newLeaderId);
 	}
 
 	public String getNewLeaderName() {

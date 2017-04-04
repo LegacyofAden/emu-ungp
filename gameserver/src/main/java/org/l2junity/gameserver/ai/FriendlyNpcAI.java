@@ -18,15 +18,16 @@
  */
 package org.l2junity.gameserver.ai;
 
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_REST;
+
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
-
-import static org.l2junity.gameserver.ai.CtrlIntention.*;
 
 /**
  * @author Sdw
@@ -110,7 +111,7 @@ public class FriendlyNpcAI extends AttackableAI {
 		final int combinedCollision = collision + originalAttackTarget.getTemplate().getCollisionRadius();
 
 		if (!npc.isMovementDisabled() && (Rnd.nextInt(100) <= 3)) {
-			for (Attackable nearby : World.getInstance().getVisibleObjects(npc, Attackable.class)) {
+			for (Attackable nearby : npc.getWorld().getVisibleObjects(npc, Attackable.class)) {
 				if (npc.isInRadius2d(nearby, collision) && (nearby != originalAttackTarget)) {
 					double newX = combinedCollision + Rnd.get(40);
 					if (Rnd.nextBoolean()) {

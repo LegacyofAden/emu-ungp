@@ -20,7 +20,6 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -76,7 +75,7 @@ public final class Attack implements IClientIncomingPacket {
 		if (activeChar.getTargetId() == _objectId) {
 			target = activeChar.getTarget();
 		} else {
-			target = World.getInstance().findObject(_objectId);
+			target = activeChar.getWorld().findObject(_objectId);
 		}
 
 		if (target == null) {

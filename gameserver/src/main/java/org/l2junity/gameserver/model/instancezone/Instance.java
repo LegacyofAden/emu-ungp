@@ -18,6 +18,23 @@
  */
 package org.l2junity.gameserver.model.instancezone;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
@@ -26,7 +43,10 @@ import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.enums.InstanceReenterType;
 import org.l2junity.gameserver.enums.InstanceTeleportType;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.StatsSet;
+import org.l2junity.gameserver.model.TeleportWhereType;
+import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
@@ -34,54 +54,54 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.DoorTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
-import org.l2junity.gameserver.model.events.impl.instance.*;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceCreated;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceDestroy;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceEnter;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceFinish;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceLeave;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.interfaces.INamable;
 import org.l2junity.gameserver.model.spawns.SpawnGroup;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.GameWorld;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Instance world.
  *
  * @author malyelfik
  */
+@Slf4j
 public final class Instance implements IIdentifiable, INamable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Instance.class);
 
+	private final Map<Integer, DoorInstance> doors = new ConcurrentHashMap<>();
+	
 	// Basic instance parameters
-	private final int _id;
 	private final InstanceTemplate _template;
 	private final long _startTime;
 	private long _endTime;
+	
 	// Advanced instance parameters
 	private final Set<Integer> _allowed = ConcurrentHashMap.newKeySet(); // ObjectId of players which can enter to instance
-	private final Set<Player> _players = ConcurrentHashMap.newKeySet(); // Players inside instance
-	private final Set<Npc> _npcs = ConcurrentHashMap.newKeySet(); // Spawned NPCs inside instance
-	private final Map<Integer, DoorInstance> _doors = new HashMap<>(); // Spawned doors inside instance
 	private final StatsSet _parameters = new StatsSet();
+	
 	// Timers
 	private final Map<Integer, ScheduledFuture<?>> _ejectDeadTasks = new ConcurrentHashMap<>();
 	private ScheduledFuture<?> _cleanUpTask = null;
 	private ScheduledFuture<?> _emptyDestroyTask = null;
 	private final List<SpawnTemplate> _spawns;
 
+	@Getter private final GameWorld world;
+	
 	/**
 	 * Create instance world.
 	 *
@@ -89,9 +109,10 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param template template of instance world
 	 * @param player   player who create instance world.
 	 */
-	public Instance(int id, InstanceTemplate template, Player player) {
+	public Instance(GameWorld world, InstanceTemplate template, Player player) {
+		this.world = world;
+		
 		// Set basic instance info
-		_id = id;
 		_template = template;
 		_startTime = System.currentTimeMillis();
 		_spawns = new ArrayList<>(template.getSpawns().size());
@@ -117,13 +138,13 @@ public final class Instance implements IIdentifiable, INamable {
 
 		// Debug logger
 		if (GeneralConfig.DEBUG_INSTANCES) {
-			LOGGER.info("Instance {} ({}) has been created with instance id {}.", _template.getName(), _template.getId(), getId());
+			log.info("Instance {} ({}) has been created with instance id {}.", _template.getName(), _template.getId(), getId());
 		}
 	}
 
 	@Override
 	public int getId() {
-		return _id;
+		return world.getId();
 	}
 
 	@Override
@@ -241,43 +262,13 @@ public final class Instance implements IIdentifiable, INamable {
 	}
 
 	/**
-	 * Add player to instance
-	 *
-	 * @param player player instance
-	 */
-	public void addPlayer(Player player) {
-		_players.add(player);
-		if (_emptyDestroyTask != null) {
-			_emptyDestroyTask.cancel(false);
-			_emptyDestroyTask = null;
-		}
-	}
-
-	/**
-	 * Remove player from instance.
-	 *
-	 * @param player player instance
-	 */
-	public void removePlayer(Player player) {
-		_players.remove(player);
-		if (_players.isEmpty()) {
-			final long emptyTime = _template.getEmptyDestroyTime();
-			if ((_template.getDuration() == 0) || (emptyTime == 0)) {
-				destroy();
-			} else if ((emptyTime >= 0) && (_emptyDestroyTask == null) && (getRemainingTime() < emptyTime)) {
-				_emptyDestroyTask = ThreadPool.getInstance().scheduleGeneral(this::destroy, emptyTime, TimeUnit.MILLISECONDS);
-			}
-		}
-	}
-
-	/**
 	 * Check if player is inside instance.
 	 *
 	 * @param player player to be checked
 	 * @return {@code true} if player is inside, otherwise {@code false}
 	 */
 	public boolean containsPlayer(Player player) {
-		return _players.contains(player);
+		return getWorld().getPlayer(player.getObjectId()) != null;
 	}
 
 	/**
@@ -285,8 +276,8 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @return players within instance
 	 */
-	public Set<Player> getPlayers() {
-		return _players;
+	public Collection<Player> getPlayers() {
+		return getWorld().getPlayers();
 	}
 
 	/**
@@ -295,7 +286,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return players count inside instance
 	 */
 	public int getPlayersCount() {
-		return _players.size();
+		return getWorld().getPlayers().size();
 	}
 
 	/**
@@ -305,7 +296,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return first found player, otherwise {@code null}
 	 */
 	public Player getFirstPlayer() {
-		return _players.stream().findFirst().orElse(null);
+		return getWorld().getPlayers().stream().findFirst().orElse(null);
 	}
 
 	/**
@@ -315,7 +306,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return first player by ID, otherwise {@code null}
 	 */
 	public Player getPlayerById(int id) {
-		return _players.stream().filter(p -> p.getObjectId() == id).findFirst().orElse(null);
+		return getWorld().getPlayer(id);
 	}
 
 	/**
@@ -326,7 +317,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return players within radius
 	 */
 	public Set<Player> getPlayersInsideRadius(ILocational object, int radius) {
-		return _players.stream().filter(p -> p.isInRadius3d(object, radius)).collect(Collectors.toSet());
+		return getPlayers().stream().filter(p -> p.isInRadius3d(object, radius)).collect(Collectors.toSet());
 	}
 
 	/**
@@ -335,7 +326,7 @@ public final class Instance implements IIdentifiable, INamable {
 	private void spawnDoors() {
 		for (DoorTemplate template : _template.getDoors().values()) {
 			// Create new door instance
-			_doors.put(template.getId(), DoorData.getInstance().spawnDoor(template, this));
+			doors.put(template.getId(), DoorData.getInstance().spawnDoor(template, this));
 		}
 	}
 
@@ -345,7 +336,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return collection of spawned doors
 	 */
 	public Collection<DoorInstance> getDoors() {
-		return _doors.values();
+		return doors.values();
 	}
 
 	/**
@@ -355,7 +346,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return instance of door if found, otherwise {@code null}
 	 */
 	public DoorInstance getDoor(int id) {
-		return _doors.get(id);
+		return doors.get(id);
 	}
 
 	/**
@@ -365,7 +356,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param open {@code true} means open door, {@code false} means close door
 	 */
 	public void openCloseDoor(int id, boolean open) {
-		final DoorInstance door = _doors.get(id);
+		final DoorInstance door = doors.get(id);
 		if (door != null) {
 			if (open) {
 				if (!door.isOpen()) {
@@ -455,7 +446,7 @@ public final class Instance implements IIdentifiable, INamable {
 	public List<Npc> spawnGroup(String name) {
 		final List<SpawnGroup> spawns = getSpawnGroup(name);
 		if (spawns == null) {
-			LOGGER.warn("Spawn group {} doesn't exist for instance {} ({})!", name, getName(), _id);
+			log.warn("Spawn group {} doesn't exist for instance {} ({})!", name, getName(), getId());
 			return Collections.emptyList();
 		}
 
@@ -466,7 +457,7 @@ public final class Instance implements IIdentifiable, INamable {
 				holder.getSpawns().forEach(spawn -> npcs.addAll(spawn.getSpawnedNpcs()));
 			}
 		} catch (Exception e) {
-			LOGGER.warn("Unable to spawn group {} inside instance {} ({})", name, getName(), _id);
+			log.warn("Unable to spawn group {} inside instance {} ({})", name, getName(), getId());
 		}
 		return npcs;
 	}
@@ -479,14 +470,14 @@ public final class Instance implements IIdentifiable, INamable {
 	public void despawnGroup(String name) {
 		final List<SpawnGroup> spawns = getSpawnGroup(name);
 		if (spawns == null) {
-			LOGGER.warn("Spawn group {} doesn't exist for instance {} ({})!", name, getName(), _id);
+			log.warn("Spawn group {} doesn't exist for instance {} ({})!", name, getName(), getId());
 			return;
 		}
 
 		try {
 			spawns.forEach(SpawnGroup::despawnAll);
 		} catch (Exception e) {
-			LOGGER.warn("Unable to spawn group {} inside instance {} ({})", name, getName(), _id);
+			log.warn("Unable to spawn group {} inside instance {} ({})", name, getName(), getId());
 		}
 	}
 
@@ -495,8 +486,8 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @return set of NPCs from instance
 	 */
-	public Set<Npc> getNpcs() {
-		return _npcs;
+	public Set<Npc> getNpcs() { //XXX 
+		return getNpcStream().collect(Collectors.toSet());
 	}
 
 	/**
@@ -505,7 +496,9 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return set of NPCs from instance
 	 */
 	public Set<Npc> getAliveNpcs() {
-		return _npcs.stream().filter(n -> !n.isDead()).collect(Collectors.toSet());
+		return getNpcStream()
+				.filter(npc -> !npc.isDead())
+				.collect(Collectors.toSet());
 	}
 
 	/**
@@ -515,7 +508,9 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return list of filtered NPCs from instance
 	 */
 	public List<Npc> getNpcs(int... id) {
-		return _npcs.stream().filter(n -> ArrayUtil.contains(id, n.getId())).collect(Collectors.toList());
+		return getNpcStream()
+				.filter(npc -> ArrayUtil.contains(id, npc.getId()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -528,7 +523,10 @@ public final class Instance implements IIdentifiable, INamable {
 	 */
 	@SafeVarargs
 	public final <T extends Creature> List<T> getNpcs(Class<T> clazz, int... ids) {
-		return _npcs.stream().filter(n -> (ids.length == 0) || ArrayUtil.contains(ids, n.getId())).filter(clazz::isInstance).map(clazz::cast).collect(Collectors.toList());
+		return getNpcStream()
+				.filter(n -> (ids.length == 0 || ArrayUtil.contains(ids, n.getId())) && clazz.isInstance(n))
+				.map(clazz::cast)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -541,7 +539,10 @@ public final class Instance implements IIdentifiable, INamable {
 	 */
 	@SafeVarargs
 	public final <T extends Creature> List<T> getAliveNpcs(Class<T> clazz, int... ids) {
-		return _npcs.stream().filter(n -> ((ids.length == 0) || ArrayUtil.contains(ids, n.getId())) && !n.isDead()).filter(clazz::isInstance).map(clazz::cast).collect(Collectors.toList());
+		return getNpcStream()
+				.filter(n -> (ids.length == 0 || ArrayUtil.contains(ids, n.getId())) && !n.isDead() && clazz.isInstance(n))
+				.map(clazz::cast)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -551,7 +552,9 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return list of filtered NPCs from instance
 	 */
 	public List<Npc> getAliveNpcs(int... id) {
-		return _npcs.stream().filter(n -> !n.isDead() && ArrayUtil.contains(id, n.getId())).collect(Collectors.toList());
+		return getNpcStream()
+				.filter(npc -> !npc.isDead() && ArrayUtil.contains(id, npc.getId()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -561,31 +564,28 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @return first found NPC with specified ID, otherwise {@code null}
 	 */
 	public Npc getNpc(int id) {
-		return _npcs.stream().filter(n -> n.getId() == id).findFirst().orElse(null);
+		return getNpcStream().filter(npc -> npc.getId() == id).findFirst().orElse(null);
 	}
-
-	public void addNpc(Npc npc) {
-		_npcs.add(npc);
-	}
-
-	public void removeNpc(Npc npc) {
-		_npcs.remove(npc);
+	
+	private Stream<Npc> getNpcStream() {
+		return getWorld().getVisibleObjects().stream()
+				.filter(WorldObject::isNpc)
+				.map(object -> (Npc) object);
 	}
 
 	/**
 	 * Remove all players from instance world.
 	 */
 	private void removePlayers() {
-		_players.forEach(this::ejectPlayer);
-		_players.clear();
+		getWorld().getPlayers().forEach(this::ejectPlayer);
 	}
 
 	/**
 	 * Despawn doors inside instance world.
 	 */
 	private void removeDoors() {
-		_doors.values().stream().filter(Objects::nonNull).forEach(DoorInstance::decayMe);
-		_doors.clear();
+		doors.values().stream().filter(Objects::nonNull).forEach(DoorInstance::decayMe);
+		doors.clear();
 	}
 
 	/**
@@ -593,8 +593,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 */
 	public void removeNpcs() {
 		_spawns.forEach(SpawnTemplate::despawnAll);
-		_npcs.forEach(Npc::deleteMe);
-		_npcs.clear();
+		getNpcStream().forEach(Npc::deleteMe);
 	}
 
 	/**
@@ -611,14 +610,12 @@ public final class Instance implements IIdentifiable, INamable {
 
 		// Stop running tasks
 		final long millis = TimeUnit.MINUTES.toMillis(minutes);
-		if (_cleanUpTask != null) {
-			_cleanUpTask.cancel(true);
-			_cleanUpTask = null;
+		if (_cleanUpTask != null && !_cleanUpTask.isDone()) {
+			_cleanUpTask.cancel(false);
 		}
 
-		if ((_emptyDestroyTask != null) && (millis < _emptyDestroyTask.getDelay(TimeUnit.MILLISECONDS))) {
-			_emptyDestroyTask.cancel(true);
-			_emptyDestroyTask = null;
+		if (_emptyDestroyTask != null && millis < _emptyDestroyTask.getDelay(TimeUnit.MILLISECONDS)) {
+			_emptyDestroyTask.cancel(false);
 		}
 
 		// Set new cleanup task
@@ -643,14 +640,12 @@ public final class Instance implements IIdentifiable, INamable {
 	 * <b><font color=red>Use this method to destroy instance world properly.</font></b>
 	 */
 	public synchronized void destroy() {
-		if (_cleanUpTask != null) {
+		if (_cleanUpTask != null && !_emptyDestroyTask.isDone()) {
 			_cleanUpTask.cancel(false);
-			_cleanUpTask = null;
 		}
 
-		if (_emptyDestroyTask != null) {
+		if (_emptyDestroyTask != null && !_emptyDestroyTask.isDone()) {
 			_emptyDestroyTask.cancel(false);
-			_emptyDestroyTask = null;
 		}
 
 		_ejectDeadTasks.values().forEach(t -> t.cancel(true));
@@ -666,6 +661,7 @@ public final class Instance implements IIdentifiable, INamable {
 		removeNpcs();
 
 		InstanceManager.getInstance().unregister(getId());
+		WorldManager.getInstance().destroyWorld(getWorld());
 	}
 
 	/**
@@ -690,7 +686,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param packets packets to be send
 	 */
 	public void broadcastPacket(IClientOutgoingPacket... packets) {
-		for (Player player : _players) {
+		for (Player player : getWorld().getPlayers()) {
 			for (IClientOutgoingPacket packet : packets) {
 				player.sendPacket(packet);
 			}
@@ -773,13 +769,13 @@ public final class Instance implements IIdentifiable, INamable {
 			_allowed.forEach(objId ->
 			{
 				InstanceManager.getInstance().setReenterPenalty(objId, getTemplateId(), time);
-				final Player player = World.getInstance().getPlayer(objId);
+				final Player player = WorldManager.getInstance().getPlayer(objId);
 				if ((player != null) && player.isOnline()) {
 					player.sendPacket(msg);
 				}
 			});
 		} catch (Exception e) {
-			LOGGER.warn("Could not insert character instance reenter data: ", e);
+			log.warn("Could not insert character instance reenter data: ", e);
 		}
 	}
 
@@ -804,11 +800,12 @@ public final class Instance implements IIdentifiable, INamable {
 		if (_template.getReenterType().equals(InstanceReenterType.ON_FINISH)) {
 			setReenterTime();
 		}
+		
 		// Change instance duration
 		setDuration(delay);
 		_allowed.forEach(objId ->
 		{
-			final Player player = World.getInstance().getPlayer(objId);
+			final Player player = WorldManager.getInstance().getPlayer(objId);
 			if ((player != null) && player.isOnline()) {
 				EventDispatcher.getInstance().notifyEventAsync(new OnInstanceFinish(player, this), player);
 			}
@@ -861,7 +858,7 @@ public final class Instance implements IIdentifiable, INamable {
 		if (object.isPlayer()) {
 			final Player player = object.getActingPlayer();
 			if (enter) {
-				addPlayer(player);
+				onAddPlayer(player);
 
 				// Set origin return location if enabled
 				if (_template.getExitLocationType().equals(InstanceTeleportType.ORIGIN)) {
@@ -878,7 +875,7 @@ public final class Instance implements IIdentifiable, INamable {
 					EventDispatcher.getInstance().notifyEventAsync(new OnInstanceEnter(player, this), _template);
 				}
 			} else {
-				removePlayer(player);
+				onRemovePlayer(player);
 				// Notify DP scripts
 				if (!isDynamic()) {
 					EventDispatcher.getInstance().notifyEventAsync(new OnInstanceLeave(player, this), _template);
@@ -887,12 +884,12 @@ public final class Instance implements IIdentifiable, INamable {
 		} else if (object.isNpc()) {
 			final Npc npc = (Npc) object;
 			if (enter) {
-				addNpc(npc);
+				onAddNpc(npc);
 			} else {
 				if (npc.getSpawn() != null) {
 					npc.getSpawn().stopRespawn();
 				}
-				removeNpc(npc);
+				onRemoveNpc(npc);
 			}
 		}
 	}
@@ -903,7 +900,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 * @param player player who logout
 	 */
 	public void onPlayerLogout(Player player) {
-		removePlayer(player);
+		onRemovePlayer(player);
 		if (GeneralConfig.RESTORE_PLAYER_INSTANCE) {
 			player.getVariables().set(PlayerVariables.INSTANCE_RESTORE, getId());
 		} else {
@@ -917,6 +914,31 @@ public final class Instance implements IIdentifiable, INamable {
 				}
 			}
 		}
+	}
+	
+	private void onAddPlayer(Player player) {
+		if (_emptyDestroyTask != null && !_emptyDestroyTask.isDone()) {
+			_emptyDestroyTask.cancel(false);
+		}
+	}
+
+	private void onRemovePlayer(Player player) {
+		if (getWorld().getPlayers().isEmpty()) {
+			final long emptyTime = _template.getEmptyDestroyTime();
+			if ((_template.getDuration() == 0) || (emptyTime == 0)) {
+				destroy();
+			} else if ((emptyTime >= 0) && (_emptyDestroyTask == null) && (getRemainingTime() < emptyTime)) {
+				_emptyDestroyTask = ThreadPool.getInstance().scheduleGeneral(this::destroy, emptyTime, TimeUnit.MILLISECONDS);
+			}
+		}
+	}
+	
+	public void onAddNpc(Npc npc) {
+		
+	}
+
+	public void onRemoveNpc(Npc npc) {
+		
 	}
 
 	// ----------------------------------------------

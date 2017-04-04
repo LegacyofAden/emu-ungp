@@ -18,11 +18,15 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.TrapAction;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.tasks.npc.trap.TrapTask;
@@ -41,11 +45,6 @@ import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Trap instance.
@@ -87,7 +86,7 @@ public final class TrapInstance extends Npc {
 
 	@Override
 	public void broadcastPacket(IClientOutgoingPacket mov) {
-		World.getInstance().forEachVisibleObject(this, Player.class, player ->
+		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (_isTriggered || canBeSeen(player)) {
 				player.sendPacket(mov);
@@ -97,7 +96,7 @@ public final class TrapInstance extends Npc {
 
 	@Override
 	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
-		World.getInstance().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
+		getWorld().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (_isTriggered || canBeSeen(player)) {
 				player.sendPacket(mov);

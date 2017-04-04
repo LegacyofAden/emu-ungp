@@ -23,10 +23,10 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.MobGroup;
 import org.l2junity.gameserver.model.MobGroupTable;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.MagicSkillUse;
 import org.l2junity.gameserver.network.client.send.SetupGauge;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -457,7 +457,7 @@ public class AdminMobGroup implements IAdminCommandHandler {
 			targetPlayerStr = command.split(" ")[2];
 
 			if (targetPlayerStr != null) {
-				targetPlayer = World.getInstance().getPlayer(targetPlayerStr);
+				targetPlayer = WorldManager.getInstance().getPlayer(targetPlayerStr);
 			}
 
 			if (targetPlayer == null) {

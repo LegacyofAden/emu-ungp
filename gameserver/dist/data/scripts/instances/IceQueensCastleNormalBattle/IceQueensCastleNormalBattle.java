@@ -18,18 +18,24 @@
  */
 package instances.IceQueensCastleNormalBattle;
 
-import instances.AbstractInstance;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.MountType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
+import org.l2junity.gameserver.model.actor.instance.L2QuestGuardInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
@@ -37,14 +43,16 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.variables.NpcVariables;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.ExChangeClientEffectInfo;
+import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
+import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
+import org.l2junity.gameserver.network.client.send.OnEventTrigger;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
-import quests.Q10286_ReunionWithSirra.Q10286_ReunionWithSirra;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import instances.AbstractInstance;
+import quests.Q10286_ReunionWithSirra.Q10286_ReunionWithSirra;
 
 /**
  * Ice Queen's Castle (Normal Battle) instance zone.
@@ -530,7 +538,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 						final Attackable mob = (Attackable) npc;
 						mob.clearAggroList();
 
-						World.getInstance().forEachVisibleObjectInRadius(npc, Player.class, 1000, characters ->
+						npc.getWorld().forEachVisibleObjectInRadius(npc, Player.class, 1000, characters ->
 						{
 							mob.addDamageHate(characters, 0, getRandom(10000, 20000));
 						});
@@ -991,7 +999,7 @@ public final class IceQueensCastleNormalBattle extends AbstractInstance {
 
 	private void manageMovie(Instance world, Movie movie) {
 		final Npc controller = world.getParameters().getObject("controller", Npc.class);
-		playMovie(World.getInstance().getVisibleObjects(controller, Player.class, 8000), movie);
+		playMovie(controller.getWorld().getVisibleObjects(controller, Player.class, 8000), movie);
 	}
 
 	private List<Npc> getKnightStatues(Instance world) {

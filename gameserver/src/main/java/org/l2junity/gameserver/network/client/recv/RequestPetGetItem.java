@@ -22,8 +22,8 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.instancemanager.SiegeGuardManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.PetInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -42,9 +42,13 @@ public final class RequestPetGetItem implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		World world = World.getInstance();
-		ItemInstance item = (ItemInstance) world.findObject(_objectId);
-		if ((item == null) || (client.getActiveChar() == null) || !client.getActiveChar().hasPet()) {
+		final Player player = client.getActiveChar();
+		if(player == null) {
+			return;
+		}
+		
+		ItemInstance item = (ItemInstance) player.getWorld().findObject(_objectId);
+		if ((item == null) || !player.hasPet()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
@@ -60,7 +64,7 @@ public final class RequestPetGetItem implements IClientIncomingPacket {
 			return;
 		}
 
-		final PetInstance pet = client.getActiveChar().getPet();
+		final PetInstance pet = player.getPet();
 		if (pet.isDead() || pet.isControlBlocked()) {
 			client.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

@@ -4,8 +4,14 @@ syntax: regexp
 ^.*\.classpath$
 ^.*\.settings
 ^.*\.iml$
-^.*\bin
 syntax: glob
+bin
+commons/bin
+gameserver/bin
+loginserver/bin
+geodriver/bin
+mmocore/bin
+network/bin
 .idea
 .gradle
 commons/build

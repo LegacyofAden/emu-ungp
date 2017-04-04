@@ -18,10 +18,15 @@
  */
 package org.l2junity.gameserver.ai;
 
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.MobGroup;
 import org.l2junity.gameserver.model.MobGroupTable;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -31,12 +36,6 @@ import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
 
 /**
  * AI for controllable mobs
@@ -240,7 +239,7 @@ public final class ControllableMobAI extends AttackableAI {
 			// notify aggression
 			final Creature finalTarget = target;
 			if (((Npc) _actor).getTemplate().getClans() != null) {
-				World.getInstance().forEachVisibleObject(_actor, Npc.class, npc ->
+				_actor.getWorld().forEachVisibleObject(_actor, Npc.class, npc ->
 				{
 					if (!npc.isInMyClan((Npc) _actor)) {
 						return;
@@ -365,7 +364,7 @@ public final class ControllableMobAI extends AttackableAI {
 
 	private Creature findNextRndTarget() {
 		final List<Creature> potentialTarget = new ArrayList<>();
-		World.getInstance().forEachVisibleObject(_actor, Creature.class, target ->
+		_actor.getWorld().forEachVisibleObject(_actor, Creature.class, target ->
 		{
 			if (Util.checkIfInShortRange(((Attackable) _actor).getAggroRange(), _actor, target, true) && checkAutoAttackCondition(target)) {
 				potentialTarget.add(target);

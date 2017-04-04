@@ -18,11 +18,24 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Constructor;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.IXmlReader;
-import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
@@ -40,20 +53,13 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.model.instancezone.conditions.Condition;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import java.lang.reflect.Constructor;
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Instance manager.
@@ -73,8 +79,7 @@ public final class InstanceManager implements IGameXmlReader {
 	private final Map<Integer, String> _instanceNames = new HashMap<>();
 	// Instance templates holder
 	private final Map<Integer, InstanceTemplate> _instanceTemplates = new HashMap<>();
-	// Created instance worlds
-	private int _currentInstanceId = 0;
+	
 	private final Map<Integer, Instance> _instanceWorlds = new ConcurrentHashMap<>();
 	// Player reenter times
 	private final Map<Integer, Map<Integer, Long>> _playerInstanceTimes = new ConcurrentHashMap<>();
@@ -324,7 +329,7 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @return newly created default instance.
 	 */
 	public Instance createInstance() {
-		return new Instance(getNewInstanceId(), new InstanceTemplate(StatsSet.EMPTY_STATSET), null);
+		return new Instance(WorldManager.getInstance().createWorld(), new InstanceTemplate(StatsSet.EMPTY_STATSET), null);
 	}
 
 	/**
@@ -335,7 +340,11 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @return newly created instance if success, otherwise {@code null}
 	 */
 	public Instance createInstance(InstanceTemplate template, Player player) {
-		return (template != null) ? new Instance(getNewInstanceId(), template, player) : null;
+		if(template == null) {
+			return null;
+		}
+		
+		return new Instance(WorldManager.getInstance().createWorld(), template, player);
 	}
 
 	/**
@@ -350,7 +359,8 @@ public final class InstanceManager implements IGameXmlReader {
 			LOGGER.warn("Missing template for instance with id {}!", id);
 			return null;
 		}
-		return new Instance(getNewInstanceId(), _instanceTemplates.get(id), player);
+		
+		return new Instance(WorldManager.getInstance().createWorld(), _instanceTemplates.get(id), player);
 	}
 
 	/**
@@ -381,25 +391,6 @@ public final class InstanceManager implements IGameXmlReader {
 	 */
 	public Instance getPlayerInstance(Player player, boolean isInside) {
 		return _instanceWorlds.values().stream().filter(i -> (isInside) ? i.containsPlayer(player) : i.isAllowed(player)).findFirst().orElse(null);
-	}
-
-	/**
-	 * Get ID for newly created instance.
-	 *
-	 * @return instance id
-	 */
-	private synchronized int getNewInstanceId() {
-		do {
-			if (_currentInstanceId == Integer.MAX_VALUE) {
-				if (GeneralConfig.DEBUG_INSTANCES) {
-					LOGGER.info("Instance id owerflow, starting from zero.");
-				}
-				_currentInstanceId = 0;
-			}
-			_currentInstanceId++;
-		}
-		while (_instanceWorlds.containsKey(_currentInstanceId));
-		return _currentInstanceId;
 	}
 
 	/**

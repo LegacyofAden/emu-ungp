@@ -18,16 +18,16 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Collection;
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.Collection;
-import java.util.StringTokenizer;
 
 /**
  * Admin Pc Cafe Points manage admin commands.
@@ -97,10 +97,10 @@ public final class AdminPcCafePoints implements IAdminCommandHandler {
 						}
 
 						if (range <= 0) {
-							final int count = increaseForAll(World.getInstance().getPlayers(), value);
+							final int count = increaseForAll(WorldManager.getInstance().getAllPlayers(), value);
 							activeChar.sendMessage("You increased Pc Cafe Point(s) of all online players (" + count + ") by " + value + ".");
 						} else if (range > 0) {
-							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, Player.class, range), value);
+							final int count = increaseForAll(activeChar.getWorld().getVisibleObjects(activeChar, Player.class, range), value);
 							activeChar.sendMessage("You increased Pc Cafe Point(s) of all players (" + count + ") in range " + range + " by " + value + ".");
 						}
 						break;

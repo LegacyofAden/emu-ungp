@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.model.effects.effecttypes.instant;
 
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -52,7 +51,7 @@ public final class InstantTransferHate extends AbstractEffect {
 			return;
 		}
 
-		World.getInstance().forEachVisibleObjectInRadius(caster, Attackable.class, skill.getEffectRange(), hater ->
+		caster.getWorld().forEachVisibleObjectInRadius(caster, Attackable.class, skill.getEffectRange(), hater ->
 		{
 			if (hater.isDead()) {
 				return;

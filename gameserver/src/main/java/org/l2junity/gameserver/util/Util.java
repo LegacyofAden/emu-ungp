@@ -18,23 +18,6 @@
  */
 package org.l2junity.gameserver.util;
 
-import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.enums.HtmlActionScope;
-import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.tasks.player.IllegalPlayerActionTask;
-import org.l2junity.gameserver.model.interfaces.ILocational;
-import org.l2junity.gameserver.network.client.send.AbstractHtmlPacket;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.ShowBoard;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -46,6 +29,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.commons.util.Rnd;
+import org.l2junity.gameserver.enums.HtmlActionScope;
+import org.l2junity.gameserver.enums.IllegalActionPunishmentType;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.tasks.player.IllegalPlayerActionTask;
+import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.network.client.send.AbstractHtmlPacket;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.ShowBoard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * General Utility functions related to game server.
@@ -520,7 +519,7 @@ public final class Util {
 	}
 
 	public static boolean isInsideRangeOfObjectId(WorldObject obj, int targetObjId, int radius) {
-		final WorldObject target = World.getInstance().findObject(targetObjId);
+		final WorldObject target = obj.getWorld().findObject(targetObjId);
 		return (target != null) && obj.isInRadius3d(target, radius);
 	}
 

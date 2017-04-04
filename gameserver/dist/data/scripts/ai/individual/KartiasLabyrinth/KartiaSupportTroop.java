@@ -18,17 +18,17 @@
  */
 package ai.individual.KartiasLabyrinth;
 
-import ai.AbstractNpcAI;
+import java.util.List;
+
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.util.List;
+import ai.AbstractNpcAI;
 
 /**
  * Kartia Support Troop AI.
@@ -54,7 +54,7 @@ public final class KartiaSupportTroop extends AbstractNpcAI {
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.DEFEAT_ALL_THE_MONSTERS);
 		} else if (event.equals("CHECK_TARGET")) {
 			if (!npc.isInCombat() || !npc.isAttackingNow() || (npc.getTarget() == null)) {
-				final List<MonsterInstance> monsterList = World.getInstance().getVisibleObjects(npc, MonsterInstance.class);
+				final List<MonsterInstance> monsterList = npc.getWorld().getVisibleObjects(npc, MonsterInstance.class);
 				if (!monsterList.isEmpty()) {
 					final MonsterInstance monster = monsterList.get(getRandom(monsterList.size()));
 

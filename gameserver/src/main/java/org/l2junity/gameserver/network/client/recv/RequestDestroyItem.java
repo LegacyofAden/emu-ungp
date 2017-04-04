@@ -18,26 +18,25 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 public final class RequestDestroyItem implements IClientIncomingPacket {
 	private int _objectId;
@@ -87,10 +86,10 @@ public final class RequestDestroyItem implements IClientIncomingPacket {
 		if (itemToRemove == null) {
 			// gm can destroy other player items
 			if (activeChar.isGM()) {
-				final WorldObject obj = World.getInstance().findObject(_objectId);
-				if (obj instanceof ItemInstance) {
-					if (_count > ((ItemInstance) obj).getCount()) {
-						count = ((ItemInstance) obj).getCount();
+				final ItemInstance obj = ItemStorage.getInstance().get(_objectId);
+				if(obj != null) {
+					if (_count > obj.getCount()) {
+						count = obj.getCount();
 					}
 					AdminCommandHandler.getInstance().useAdminCommand(activeChar, "admin_delete_item " + _objectId + " " + count, true);
 				}

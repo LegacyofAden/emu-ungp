@@ -21,11 +21,11 @@ package handlers.admincommandhandlers;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.slf4j.Logger;
@@ -73,7 +73,7 @@ public class AdminRes implements IAdminCommandHandler {
 
 		if (resParam != null) {
 			// Check if a player name was specified as a param.
-			Player plyr = World.getInstance().getPlayer(resParam);
+			Player plyr = WorldManager.getInstance().getPlayer(resParam);
 
 			if (plyr != null) {
 				obj = plyr;
@@ -82,10 +82,7 @@ public class AdminRes implements IAdminCommandHandler {
 				try {
 					int radius = Integer.parseInt(resParam);
 
-					World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, radius, knownPlayer ->
-					{
-						doResurrect(knownPlayer);
-					});
+					activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Player.class, radius, this::doResurrect);
 
 					activeChar.sendMessage("Resurrected all players within a " + radius + " unit radius.");
 					return;
@@ -125,7 +122,7 @@ public class AdminRes implements IAdminCommandHandler {
 			if (!radiusStr.isEmpty()) {
 				radius = Integer.parseInt(radiusStr);
 
-				World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, knownChar ->
+				activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, knownChar ->
 				{
 					if (!(knownChar instanceof Player) && !(knownChar instanceof ControllableMobInstance)) {
 						doResurrect(knownChar);

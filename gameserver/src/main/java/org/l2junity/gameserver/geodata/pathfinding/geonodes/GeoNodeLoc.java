@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.geodata.pathfinding.geonodes;
 
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
-import org.l2junity.gameserver.model.World;
+import org.l2junity.gameserver.model.world.WorldData;
 
 /**
  * @author -Nemesiss-
@@ -37,12 +37,12 @@ public class GeoNodeLoc extends AbstractNodeLoc {
 
 	@Override
 	public int getX() {
-		return World.MAP_MIN_X + (_x * 128) + 48;
+		return WorldData.MAP_MIN_X + (_x * 128) + 48;
 	}
 
 	@Override
 	public int getY() {
-		return World.MAP_MIN_Y + (_y * 128) + 48;
+		return WorldData.MAP_MIN_Y + (_y * 128) + 48;
 	}
 
 	@Override

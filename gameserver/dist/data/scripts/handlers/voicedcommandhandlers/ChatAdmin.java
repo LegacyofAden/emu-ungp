@@ -18,19 +18,19 @@
  */
 package handlers.voicedcommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.instancemanager.PunishmentManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.util.Util;
-
-import java.util.StringTokenizer;
 
 public class ChatAdmin implements IVoicedCommandHandler {
 	private static final String[] VOICED_COMMANDS =
@@ -64,7 +64,7 @@ public class ChatAdmin implements IVoicedCommandHandler {
 
 				int objId = CharNameTable.getInstance().getIdByName(name);
 				if (objId > 0) {
-					Player player = World.getInstance().getPlayer(objId);
+					Player player = WorldManager.getInstance().getPlayer(objId);
 					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;
@@ -111,7 +111,7 @@ public class ChatAdmin implements IVoicedCommandHandler {
 
 				int objId = CharNameTable.getInstance().getIdByName(name);
 				if (objId > 0) {
-					Player player = World.getInstance().getPlayer(objId);
+					Player player = WorldManager.getInstance().getPlayer(objId);
 					if ((player == null) || !player.isOnline()) {
 						activeChar.sendMessage("Player not online !");
 						return false;

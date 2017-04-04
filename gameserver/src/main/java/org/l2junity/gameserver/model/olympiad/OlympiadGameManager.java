@@ -18,19 +18,19 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.type.OlympiadStadiumZone;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author GodKratos, DS
@@ -134,7 +134,7 @@ public class OlympiadGameManager implements Runnable {
 							continue;
 						}
 
-						Player noble = World.getInstance().getPlayer(id);
+						Player noble = WorldManager.getInstance().getMainWorld().getPlayer(id);
 						if (noble != null) {
 							noble.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_GAMES_MAY_BE_DELAYED_DUE_TO_AN_INSUFFICIENT_NUMBER_OF_PLAYERS_WAITING));
 						}
@@ -146,7 +146,7 @@ public class OlympiadGameManager implements Runnable {
 								continue;
 							}
 
-							Player noble = World.getInstance().getPlayer(id);
+							Player noble = WorldManager.getInstance().getMainWorld().getPlayer(id);
 							if (noble != null) {
 								noble.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.THE_GAMES_MAY_BE_DELAYED_DUE_TO_AN_INSUFFICIENT_NUMBER_OF_PLAYERS_WAITING));
 							}

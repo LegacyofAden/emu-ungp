@@ -18,7 +18,9 @@
  */
 package ai.individual.ForgeOfTheGods;
 
-import ai.AbstractNpcAI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.l2junity.core.configs.GrandBossConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.data.xml.impl.SkillData;
@@ -28,7 +30,6 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.GrandBossInstance;
@@ -43,8 +44,7 @@ import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.SpecialCamera;
 import org.l2junity.gameserver.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
+import ai.AbstractNpcAI;
 
 /**
  * Valakas' AI.
@@ -437,7 +437,7 @@ public final class Valakas extends AbstractNpcAI {
 		}
 
 		// Valakas will use mass spells if he feels surrounded.
-		if (World.getInstance().getVisibleObjects(npc, Player.class, 1200).size() >= 20) {
+		if (npc.getWorld().getVisibleObjects(npc, Player.class, 1200).size() >= 20) {
 			return VALAKAS_AOE_SKILLS[getRandom(VALAKAS_AOE_SKILLS.length)];
 		}
 
@@ -457,7 +457,7 @@ public final class Valakas extends AbstractNpcAI {
 	private Playable getRandomTarget(Npc npc) {
 		List<Playable> result = new ArrayList<>();
 
-		World.getInstance().forEachVisibleObject(npc, Playable.class, obj ->
+		npc.getWorld().forEachVisibleObject(npc, Playable.class, obj ->
 		{
 			if (!obj.isPet() && !obj.isDead()) {
 				result.add(obj);

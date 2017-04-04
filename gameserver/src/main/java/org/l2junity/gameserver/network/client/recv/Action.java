@@ -20,7 +20,6 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -65,7 +64,7 @@ public final class Action implements IClientIncomingPacket {
 		} else if (activeChar.isInAirShip() && (activeChar.getAirShip().getHelmObjectId() == _objectId)) {
 			obj = activeChar.getAirShip();
 		} else {
-			obj = World.getInstance().findObject(_objectId);
+			obj = activeChar.getWorld().findObject(_objectId);
 		}
 
 		// If object requested does not exist, add warn msg into logs

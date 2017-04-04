@@ -18,14 +18,20 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import java.util.List;
+
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.data.xml.impl.*;
+import org.l2junity.gameserver.data.xml.impl.CategoryData;
+import org.l2junity.gameserver.data.xml.impl.InitialEquipmentData;
+import org.l2junity.gameserver.data.xml.impl.InitialShortcutData;
+import org.l2junity.gameserver.data.xml.impl.PlayerTemplateData;
+import org.l2junity.gameserver.data.xml.impl.SkillData;
+import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.SkillLearn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.appearance.PcAppearance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.PcStat;
@@ -36,6 +42,7 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerCreate;
 import org.l2junity.gameserver.model.items.PcItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.CharCreateFail;
@@ -45,8 +52,6 @@ import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public final class CharacterCreate implements IClientIncomingPacket {
@@ -173,7 +178,7 @@ public final class CharacterCreate implements IClientIncomingPacket {
 	}
 
 	private void initNewChar(L2GameClient client, Player newChar) {
-		World.getInstance().addObject(newChar);
+		WorldManager.getInstance().getMainWorld().addObject(newChar);
 
 		if (PlayerConfig.STARTING_ADENA > 0) {
 			newChar.addAdena("Init", PlayerConfig.STARTING_ADENA, null, false);

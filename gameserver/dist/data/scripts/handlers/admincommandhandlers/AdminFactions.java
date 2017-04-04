@@ -18,18 +18,18 @@
  */
 package handlers.admincommandhandlers;
 
-import org.l2junity.gameserver.data.HtmRepository;
-import org.l2junity.gameserver.enums.Faction;
-import org.l2junity.gameserver.handler.AdminCommandHandler;
-import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
+
+import org.l2junity.gameserver.data.HtmRepository;
+import org.l2junity.gameserver.enums.Faction;
+import org.l2junity.gameserver.handler.AdminCommandHandler;
+import org.l2junity.gameserver.handler.IAdminCommandHandler;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 
 /**
  * Admin Factions manage admin commands.
@@ -88,10 +88,10 @@ public final class AdminFactions implements IAdminCommandHandler {
 						}
 
 						if (range <= 0) {
-							final int count = increaseForAll(World.getInstance().getPlayers(), faction, value);
+							final int count = increaseForAll(WorldManager.getInstance().getAllPlayers(), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all online players (" + count + ") by " + value + ".");
 						} else if (range > 0) {
-							final int count = increaseForAll(World.getInstance().getVisibleObjects(activeChar, Player.class, range), faction, value);
+							final int count = increaseForAll(activeChar.getWorld().getVisibleObjects(activeChar, Player.class, range), faction, value);
 							activeChar.sendMessage("You increased Faction " + faction + " Point(s) of all players (" + count + ") in range " + range + " by " + value + ".");
 						}
 						break;

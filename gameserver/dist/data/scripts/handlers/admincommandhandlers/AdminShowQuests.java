@@ -18,26 +18,26 @@
  */
 package handlers.admincommandhandlers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.enums.QuestType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.QuestManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.ExShowQuestMark;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.QuestList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * TODO: Rework and cleanup.
@@ -69,7 +69,7 @@ public class AdminShowQuests implements IAdminCommandHandler {
 		val[0] = null;
 
 		if (cmdParams.length > 1) {
-			target = World.getInstance().getPlayer(cmdParams[1]);
+			target = WorldManager.getInstance().getPlayer(cmdParams[1]);
 			if (cmdParams.length > 2) {
 				if (cmdParams[2].equals("0")) {
 					val[0] = "var";

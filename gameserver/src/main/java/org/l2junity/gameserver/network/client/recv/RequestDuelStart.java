@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExDuelAskStart;
@@ -46,10 +45,11 @@ public final class RequestDuelStart implements IClientIncomingPacket {
 	@Override
 	public void run(L2GameClient client) {
 		Player activeChar = client.getActiveChar();
-		Player targetChar = World.getInstance().getPlayer(_player);
 		if (activeChar == null) {
 			return;
 		}
+		
+		Player targetChar = activeChar.getWorld().getPlayer(_player);
 		if (targetChar == null) {
 			activeChar.sendPacket(SystemMessageId.THERE_IS_NO_OPPONENT_TO_RECEIVE_YOUR_CHALLENGE_FOR_A_DUEL);
 			return;

@@ -18,9 +18,11 @@
  */
 package org.l2junity.gameserver.network.client.recv.mentoring;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.instancemanager.MentorManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeAdd;
@@ -30,9 +32,6 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.mentoring.ExMentorList;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * @author Gnacik, UnAfraid
@@ -57,7 +56,7 @@ public class ConfirmMenteeAdd implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player mentor = World.getInstance().getPlayer(_mentor);
+		final Player mentor = mentee.getWorld().getPlayer(_mentor);
 		if (mentor == null) {
 			return;
 		}

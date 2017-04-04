@@ -19,9 +19,9 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.enums.MatchingRoomType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.network.PacketReader;
 
@@ -48,7 +48,7 @@ public class RequestExOustFromMpccRoom implements IClientIncomingPacket {
 		final MatchingRoom room = activeChar.getMatchingRoom();
 
 		if ((room != null) && (room.getLeader() == activeChar) && (room.getRoomType() == MatchingRoomType.COMMAND_CHANNEL)) {
-			Player player = World.getInstance().getPlayer(_objectId);
+			Player player = WorldManager.getInstance().getPlayer(_objectId);
 
 			if (player != null) {
 				room.deleteMember(player, true);
