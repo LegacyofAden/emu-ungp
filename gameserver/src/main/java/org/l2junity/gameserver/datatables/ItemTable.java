@@ -57,7 +57,6 @@ import org.l2junity.gameserver.model.items.Armor;
 import org.l2junity.gameserver.model.items.EtcItem;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -247,8 +246,6 @@ public class ItemTable {
 			log.debug("Item created: {}", item);
 		}
 
-		WorldManager.getInstance().getMainWorld().addObject(item);
-
 		// Set Item parameters
 		if (item.isStackable() && (count > 1)) {
 			item.setCount(count);
@@ -310,7 +307,6 @@ public class ItemTable {
 			item.setItemLocation(ItemLocation.VOID);
 			item.setLastChange(ItemInstance.REMOVED);
 
-			WorldManager.getInstance().removeObject(item);
 			IdFactory.getInstance().releaseId(item.getObjectId());
 
 			if (GeneralConfig.LOG_ITEMS) {

@@ -32,7 +32,6 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.instancemanager.FortSiegeManager;
-import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -44,7 +43,7 @@ import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ActionType;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.ExUseSharedGroupItem;
@@ -94,8 +93,8 @@ public final class UseItem implements IClientIncomingPacket {
 		if (item == null) {
 			// gm can use other player item
 			if (activeChar.isGM()) {
-				final WorldObject obj = WorldManager.getInstance().getMainWorld().findObject(_objectId);
-				if (obj instanceof ItemInstance) {
+				final ItemInstance obj = ItemStorage.getInstance().get(_objectId);
+				if (obj != null) {
 					AdminCommandHandler.getInstance().useAdminCommand(activeChar, "admin_use_item " + _objectId, true);
 				}
 			}

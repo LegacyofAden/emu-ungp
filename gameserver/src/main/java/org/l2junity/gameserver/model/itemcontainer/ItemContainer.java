@@ -39,7 +39,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -597,6 +597,7 @@ public abstract class ItemContainer {
 	 * @param item : L2ItemInstance to be added from inventory
 	 */
 	protected void addItem(ItemInstance item) {
+		ItemStorage.getInstance().add(item);
 		_items.put(item.getObjectId(), item);
 	}
 
@@ -607,7 +608,11 @@ public abstract class ItemContainer {
 	 * @return
 	 */
 	protected boolean removeItem(ItemInstance item) {
-		return _items.remove(item.getObjectId()) != null;
+		if(_items.remove(item.getObjectId()) != null) {
+			ItemStorage.getInstance().remove(item);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -624,7 +629,7 @@ public abstract class ItemContainer {
 			for (ItemInstance item : _items.values()) {
 				item.updateDatabase(true);
 				item.deleteMe();
-				WorldManager.getInstance().removeObject(item);
+				ItemStorage.getInstance().remove(item);
 			}
 		}
 		_items.clear();
@@ -653,8 +658,6 @@ public abstract class ItemContainer {
 				while (rs.next()) {
 					final ItemInstance item = new ItemInstance(rs);
 					
-					WorldManager.getInstance().getMainWorld().addObject(item);
-
 					final Player owner = getOwner() != null ? getOwner().getActingPlayer() : null;
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

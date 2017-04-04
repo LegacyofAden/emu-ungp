@@ -51,7 +51,6 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.ExUserInfoEquipSlot;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 import org.slf4j.Logger;
@@ -1463,8 +1462,6 @@ public abstract class Inventory extends ItemContainer {
 							item.setItemLocation(ItemLocation.INVENTORY);
 						}
 					}
-					
-					WorldManager.getInstance().getMainWorld().addObject(item);
 
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

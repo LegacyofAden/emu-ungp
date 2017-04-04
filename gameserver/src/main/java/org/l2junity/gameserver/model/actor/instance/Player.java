@@ -274,6 +274,7 @@ import org.l2junity.gameserver.model.stats.Formulas;
 import org.l2junity.gameserver.model.stats.MoveType;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
@@ -3380,13 +3381,12 @@ public final class Player extends Playable {
 
 	public ItemInstance checkItemManipulation(int objectId, long count, String action) {
 		// TODO: if we remove objects that are not visisble from the L2World, we'll have to remove this check
-		if (WorldManager.getInstance().getMainWorld().findObject(objectId) == null) {
+		if (!ItemStorage.getInstance().contains(objectId)) {
 			LOGGER.trace(getObjectId() + ": player tried to " + action + " item not available in L2World");
 			return null;
 		}
 
 		ItemInstance item = getInventory().getItemByObjectId(objectId);
-
 		if ((item == null) || (item.getOwnerId() != getObjectId())) {
 			LOGGER.trace(getObjectId() + ": player tried to " + action + " item he is not owner of");
 			return null;

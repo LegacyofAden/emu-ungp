@@ -214,7 +214,6 @@ public final class RequestPostAttachment implements IClientIncomingPacket {
 				paidAdena.setOwnerId(msg.getSenderId());
 				paidAdena.setItemLocation(ItemLocation.INVENTORY);
 				paidAdena.updateDatabase(true);
-				WorldManager.getInstance().removeObject(paidAdena);
 			}
 		} else if (sender != null) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_ACQUIRED_THE_ATTACHED_ITEM_TO_YOUR_MAIL);

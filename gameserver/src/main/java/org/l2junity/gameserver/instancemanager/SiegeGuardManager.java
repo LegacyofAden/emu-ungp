@@ -37,7 +37,6 @@ import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.holders.SiegeGuardHolder;
 import org.l2junity.gameserver.model.interfaces.IPositionable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.world.WorldManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +75,6 @@ public final class SiegeGuardManager {
 					final ItemInstance dropticket = new ItemInstance(holder.getItemId());
 					dropticket.setItemLocation(ItemLocation.VOID);
 					dropticket.dropMe(null, x, y, z);
-					WorldManager.getInstance().getMainWorld().addObject(dropticket);
 					_droppedTickets.add(dropticket);
 				}
 			}
@@ -168,7 +166,6 @@ public final class SiegeGuardManager {
 			final ItemInstance dropticket = new ItemInstance(itemId);
 			dropticket.setItemLocation(ItemLocation.VOID);
 			dropticket.dropMe(null, player.getX(), player.getY(), player.getZ());
-			WorldManager.getInstance().getMainWorld().addObject(dropticket);
 			_droppedTickets.add(dropticket);
 		}
 	}

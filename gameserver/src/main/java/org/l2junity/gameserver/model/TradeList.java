@@ -33,6 +33,7 @@ import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.InventoryUpdate;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -188,13 +189,12 @@ public class TradeList {
 			return null;
 		}
 
-		WorldObject o = WorldManager.getInstance().getMainWorld().findObject(objectId);
-		if (!(o instanceof ItemInstance)) {
+		ItemInstance item = ItemStorage.getInstance().get(objectId);
+		if (item == null) {
 			_log.warn(_owner.getName() + ": Trying to add something other than an item!");
 			return null;
 		}
 
-		ItemInstance item = (ItemInstance) o;
 		if (!(item.isTradeable() || (getOwner().isGM() && AdminConfig.GM_TRADE_RESTRICTED_ITEMS)) || item.isQuestItem()) {
 			_log.warn(_owner.getName() + ": Attempt to add a restricted item!");
 			return null;

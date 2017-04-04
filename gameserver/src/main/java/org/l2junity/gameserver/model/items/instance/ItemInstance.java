@@ -85,6 +85,7 @@ import org.l2junity.gameserver.model.options.EnchantOptions;
 import org.l2junity.gameserver.model.options.Options;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.ItemVariables;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.DropItem;
@@ -340,6 +341,7 @@ public final class ItemInstance extends WorldObject {
 		// outside of synchronized to avoid deadlocks
 		// Remove the L2ItemInstance from the world
 		getWorld().removeVisibleObject(this, oldregion);
+		getWorld().removeObject(this);
 
 		if (player.isPlayer()) {
 			// Notify to scripts
@@ -1364,6 +1366,7 @@ public final class ItemInstance extends WorldObject {
 
 			// Add the L2ItemInstance dropped in the world as a visible object
 			_itеm.getWorld().addVisibleObject(_itеm, _itеm.getWorldRegion());
+			
 			if (GeneralConfig.SAVE_DROPPED_ITEM) {
 				ItemsOnGroundManager.getInstance().save(_itеm);
 			}
@@ -1661,7 +1664,7 @@ public final class ItemInstance extends WorldObject {
 		if (GeneralConfig.SAVE_DROPPED_ITEM) {
 			ItemsOnGroundManager.getInstance().removeObject(this);
 		}
-
+		
 		return super.decayMe();
 	}
 
@@ -2092,5 +2095,10 @@ public final class ItemInstance extends WorldObject {
 				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_RESTORED_TO_ITS_PREVIOUS_APPEARANCE_AS_ITS_TEMPORARY_MODIFICATION_HAS_EXPIRED).addItemName(this));
 			}
 		}
+	}
+	
+	@Override
+	public void onSpawn() {
+		ItemStorage.getInstance().remove(this);
 	}
 }

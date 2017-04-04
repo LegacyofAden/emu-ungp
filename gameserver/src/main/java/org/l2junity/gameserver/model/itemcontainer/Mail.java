@@ -104,7 +104,6 @@ public class Mail extends ItemContainer {
 			try (ResultSet inv = statement.executeQuery()) {
 				while (inv.next()) {
 					final ItemInstance item = new ItemInstance(inv);
-					WorldManager.getInstance().getMainWorld().addObject(item);
 
 					// If stackable item is found just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

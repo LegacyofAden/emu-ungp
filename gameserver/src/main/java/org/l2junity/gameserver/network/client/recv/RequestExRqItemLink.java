@@ -18,9 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExRpItemLink;
 import org.l2junity.network.PacketReader;
@@ -39,12 +38,9 @@ public class RequestExRqItemLink implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		final WorldObject object = WorldManager.getInstance().getMainWorld().findObject(_objectId);
-		if (object instanceof ItemInstance) {
-			final ItemInstance item = (ItemInstance) object;
-			if (item.isPublished()) {
-				client.sendPacket(new ExRpItemLink(item));
-			}
+		final ItemInstance item = ItemStorage.getInstance().get(_objectId);
+		if (item.isPublished()) {
+			client.sendPacket(new ExRpItemLink(item));
 		}
 	}
 }
