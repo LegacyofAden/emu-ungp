@@ -36,7 +36,6 @@ dependencies {
 	compile project(':commons')
 	compile project(':geodriver')
 	compile project(':network')
-	compile project(':mmocore')
 
 	compile('com.googlecode.htmlcompressor:htmlcompressor:1.5.2')
 	compile('com.google.javascript:closure-compiler:v20151216')
