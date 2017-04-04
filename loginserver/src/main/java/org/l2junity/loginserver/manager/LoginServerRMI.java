@@ -1,8 +1,8 @@
 package org.l2junity.loginserver.manager;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.GameServerInfo;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.RegisterResult;
 import org.l2junity.commons.model.enums.ServerStatus;
@@ -100,6 +100,12 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 				gameServerInfo.update(connection, gameServerInfo);
 			}
 		}
+	}
+
+	@Override
+	public boolean checkSession(SessionInfo sessionInfo) {
+		SessionInfo currentSessionInfo = SessionManager.getInstance().getSession(sessionInfo.getAccountName());
+		return currentSessionInfo != null && currentSessionInfo.equals(sessionInfo);
 	}
 
 	@Override

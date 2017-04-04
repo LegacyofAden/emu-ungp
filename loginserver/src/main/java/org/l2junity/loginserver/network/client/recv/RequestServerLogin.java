@@ -29,22 +29,22 @@ import org.l2junity.network.PacketReader;
  * @author NosBit
  */
 public class RequestServerLogin implements IIncomingPacket<ClientHandler> {
-	private long _loginSessionId;
-	private short _serverId;
+	private long loginKey;
+	private short serverId;
 
 	@Override
 	public boolean read(ClientHandler client, PacketReader packet) {
-		_loginSessionId = packet.readQ();
-		_serverId = packet.readC();
+		loginKey = packet.readQ();
+		serverId = packet.readC();
 		return true;
 	}
 
 	@Override
 	public void run(ClientHandler client) {
-		if (LoginServerConfig.SHOW_LICENCE && (client.getLoginSessionId() != _loginSessionId)) {
+		if (LoginServerConfig.SHOW_LICENCE && (client.getSessionInfo().getLoginKey() != loginKey)) {
 			client.close(LoginFail2.ACCESS_FAILED_PLEASE_TRY_AGAIN_LATER);
 			return;
 		}
-		LoginManager.getInstance().tryServerLogin(client, _serverId);
+		LoginManager.getInstance().tryServerLogin(client, serverId);
 	}
 }

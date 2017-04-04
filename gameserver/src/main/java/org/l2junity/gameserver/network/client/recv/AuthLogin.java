@@ -18,50 +18,41 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
-import org.l2junity.gameserver.LoginServerThread;
-import org.l2junity.gameserver.LoginServerThread.SessionKey;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.client.send.LoginFail;
 import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.network.PacketReader;
 
+@Slf4j
 public final class AuthLogin implements IClientIncomingPacket {
+	private String accountName;
 
-	// loginName + keys must match what the loginserver used.
-	private String _loginName;
-
-	private int _playKey1;
-	private int _playKey2;
-	private int _loginKey1;
-	private int _loginKey2;
+	private int playKey;
+	private long loginKey;
 
 	@Override
 	public boolean read(L2GameClient client, PacketReader packet) {
-		_loginName = packet.readS().toLowerCase();
-		_playKey2 = packet.readD();
-		_playKey1 = packet.readD();
-		_loginKey1 = packet.readD();
-		_loginKey2 = packet.readD();
+		accountName = packet.readS().toLowerCase();
+		packet.readD();
+		playKey = packet.readD();
+		loginKey = packet.readQ();
 		return true;
 	}
 
 	@Override
 	public void run(L2GameClient client) {
-		if (_loginName.isEmpty() || !client.isProtocolOk()) {
+		if (accountName.isEmpty() || !client.isProtocolOk()) {
 			client.closeNow();
 			return;
 		}
 
-		SessionKey key = new SessionKey(_loginKey1, _loginKey2, _playKey1, _playKey2);
-
-		// avoid potential exploits
 		if (client.getAccountName() == null) {
-			// Preventing duplicate login in case client login server socket was disconnected or this packet was not sent yet
-			if (GameServerRMI.getInstance().addAccountInGame(_loginName, client)) {
-				client.setAccountName(_loginName);
-				// TODO: RMI
-				//LoginServerThread.getInstance().addWaitingClientAndSendRequest(_loginName, client, key);
-			} else {
-				client.close(null);
+			SessionInfo sessionInfo = new SessionInfo(accountName, loginKey, playKey);
+			if (!GameServerRMI.getInstance().tryAddGameClient(client, sessionInfo)) {
+				log.warn("Session key isn't correct. Closing connection for account {}", accountName);
+				client.close(new LoginFail(LoginFail.SYSTEM_ERROR_LOGIN_LATER));
 			}
 		}
 	}

@@ -20,8 +20,8 @@ package org.l2junity.loginserver.manager;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.LoginServerConfig;
 import org.l2junity.loginserver.db.AccountBansDAO;
 import org.l2junity.loginserver.db.AccountsDAO;
@@ -90,11 +90,13 @@ public class LoginManager {
 			accountsDAO.updateLastTimeAccess(account);
 
 			client.setAccount(account);
-			client.setLoginSessionId(Rnd.nextLong());
+
+			SessionInfo sessionInfo = SessionManager.getInstance().openSession(name);
+			client.setSessionInfo(sessionInfo);
 
 			if (LoginServerConfig.SHOW_LICENCE) {
 				client.setConnectionState(ConnectionState.AUTHED_LICENCE);
-				client.sendPacket(new LoginOk(client.getLoginSessionId()));
+				client.sendPacket(new LoginOk(client.getSessionInfo()));
 			} else {
 				client.setConnectionState(ConnectionState.AUTHED_SERVER_LIST);
 				client.sendPacket(new ServerList(client));
