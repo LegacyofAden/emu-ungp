@@ -35,6 +35,6 @@ public class RequestGotoLobby implements IClientIncomingPacket {
 
 	@Override
 	public void run(L2GameClient client) {
-		client.sendPacket(new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1));
+		client.sendPacket(new CharSelectionInfo(client.getSessionInfo()));
 	}
 }

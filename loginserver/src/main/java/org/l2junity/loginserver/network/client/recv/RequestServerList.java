@@ -29,18 +29,18 @@ import org.l2junity.network.PacketReader;
  * @author NosBit
  */
 public class RequestServerList implements IIncomingPacket<ClientHandler> {
-	private long _loginSessionId;
+	private long loginKey;
 
 	@Override
 	public boolean read(ClientHandler client, PacketReader packet) {
-		_loginSessionId = packet.readQ();
+		loginKey = packet.readQ();
 		// packet.readC() // hardcoded as 5
 		return true;
 	}
 
 	@Override
 	public void run(ClientHandler client) {
-		if (client.getLoginSessionId() == _loginSessionId) {
+		if (client.getSessionInfo().getLoginKey() == loginKey) {
 			client.setConnectionState(ConnectionState.AUTHED_SERVER_LIST);
 			client.sendPacket(new ServerList(client));
 		} else {
