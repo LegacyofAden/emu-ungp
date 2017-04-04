@@ -71,7 +71,14 @@ compileJava {
 }
 
 distZip {
-	from('dist') {
-		into(baseName + '/bin/')
+	from('dist/configs') {
+		into(baseName + '/bin/configs')
+		exclude('**.properties')
+	}
+	from('dist/data') {
+		into(baseName + '/bin/data')
+	}
+	from('dist/sql') {
+		into(baseName + '/sql')
 	}
 }
