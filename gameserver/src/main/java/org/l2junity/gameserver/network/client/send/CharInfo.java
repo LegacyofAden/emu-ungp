@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.client.send;
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.VariationInstance;
-import org.l2junity.gameserver.model.actor.instance.L2DecoyInstance;
+import org.l2junity.gameserver.model.actor.instance.DecoyInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosMember;
@@ -97,7 +97,7 @@ public class CharInfo implements IClientOutgoingPacket {
 		_gmSeeInvis = gmSeeInvis;
 	}
 
-	public CharInfo(L2DecoyInstance decoy, boolean gmSeeInvis) {
+	public CharInfo(DecoyInstance decoy, boolean gmSeeInvis) {
 		this(decoy.getActingPlayer(), gmSeeInvis); // init
 		_objId = decoy.getObjectId();
 		_x = (int) decoy.getX();

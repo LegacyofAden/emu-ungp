@@ -27,7 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.gameserver.LoginServerThread.SessionKey;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
@@ -73,7 +73,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 	private InetAddress _addr;
 	private Channel _channel;
 	private String _accountName;
-	private SessionKey _sessionId;
+	private SessionInfo sessionInfo;
 	private Player _activeChar;
 	private final ReentrantLock _activeCharLock = new ReentrantLock();
 	private SecondaryPasswordAuth _secondaryAuth;
@@ -89,7 +89,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 
 	private volatile boolean _isDetached = false;
 
-	private boolean _protocol;
+	private boolean _protocolOk;
 
 	private int[][] trace;
 
@@ -207,12 +207,12 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 		return _accountName;
 	}
 
-	public void setSessionId(SessionKey sk) {
-		_sessionId = sk;
+	public void setSessionId(SessionInfo sessionInfo) {
+		this.sessionInfo = sessionInfo;
 	}
 
-	public SessionKey getSessionId() {
-		return _sessionId;
+	public SessionInfo getSessionInfo() {
+		return sessionInfo;
 	}
 
 	public void sendPacket(IClientOutgoingPacket packet) {
@@ -512,11 +512,11 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 	}
 
 	public boolean isProtocolOk() {
-		return _protocol;
+		return _protocolOk;
 	}
 
 	public void setProtocolOk(boolean b) {
-		_protocol = b;
+		_protocolOk = b;
 	}
 
 	public void setClientTracert(int[][] tracert) {

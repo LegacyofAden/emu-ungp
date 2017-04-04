@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2QuestGuardInstance;
+import org.l2junity.gameserver.model.actor.instance.QuestGuardInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.ListenerRegisterType;
@@ -143,7 +143,7 @@ public final class Wastelands extends AbstractNpcAI {
 
 						if (guard.getId() == SCHUAZEN) {
 							//@formatter:off
-							final L2QuestGuardInstance decoGuard = (L2QuestGuardInstance) guard.getWorld().getVisibleObjects(guard, Npc.class, 500)
+							final QuestGuardInstance decoGuard = (QuestGuardInstance) guard.getWorld().getVisibleObjects(guard, Npc.class, 500)
 									.stream()
 									.filter(obj -> (obj.getId() == DECO_GUARD2))
 									.findFirst()
@@ -187,7 +187,7 @@ public final class Wastelands extends AbstractNpcAI {
 			case REGENERATED_POSLOF: {
 				final int guardId = npc.getId() == REGENERATED_KANILOV ? JOEL : SCHUAZEN;
 				//@formatter:off
-				final L2QuestGuardInstance guard = (L2QuestGuardInstance) npc.getWorld().getVisibleObjects(npc, Npc.class, 500)
+				final QuestGuardInstance guard = (QuestGuardInstance) npc.getWorld().getVisibleObjects(npc, Npc.class, 500)
 						.stream()
 						.filter(obj -> (obj.getId() == guardId))
 						.findFirst()

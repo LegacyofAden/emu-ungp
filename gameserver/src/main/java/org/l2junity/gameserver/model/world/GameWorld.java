@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.L2FriendlyMobInstance;
-import org.l2junity.gameserver.model.actor.instance.L2GuardInstance;
+import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
+import org.l2junity.gameserver.model.actor.instance.FriendlyMobInstance;
+import org.l2junity.gameserver.model.actor.instance.GuardInstance;
 import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
@@ -227,18 +227,18 @@ public class GameWorld {
 					final CharacterAI ai = ((Creature) wo).getAI();
 					if (ai != null) {
 						ai.describeStateToPlayer(player);
-						if (wo.isMonster() || (wo instanceof L2FriendlyMobInstance)) {
+						if (wo.isMonster() || (wo instanceof FriendlyMobInstance)) {
 							if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 								ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 							}
-						} else if (wo instanceof L2DefenderInstance) {
+						} else if (wo instanceof DefenderInstance) {
 							final Castle castle = ((Npc) wo).getCastle();
 							final Fort fortress = ((Npc) wo).getFort();
 							final int activeSiegeId = (fortress != null ? fortress.getResidenceId() : (castle != null ? castle.getResidenceId() : 0));
 							if ((((player.getSiegeState() == 2) && !player.isRegisteredOnThisSiegeField(activeSiegeId)) || (player.getSiegeState() == 0)) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 								ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 							}
-						} else if ((wo instanceof L2GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
+						} else if ((wo instanceof GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 							ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 						}
 					}
@@ -252,18 +252,18 @@ public class GameWorld {
 					final CharacterAI ai = ((Creature) object).getAI();
 					if (ai != null) {
 						ai.describeStateToPlayer(player);
-						if (object.isMonster() || (object instanceof L2FriendlyMobInstance)) {
+						if (object.isMonster() || (object instanceof FriendlyMobInstance)) {
 							if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 								ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 							}
-						} else if (object instanceof L2DefenderInstance) {
+						} else if (object instanceof DefenderInstance) {
 							final Castle castle = ((Npc) object).getCastle();
 							final Fort fortress = ((Npc) object).getFort();
 							final int activeSiegeId = (fortress != null ? fortress.getResidenceId() : (castle != null ? castle.getResidenceId() : 0));
 							if ((((player.getSiegeState() == 2) && !player.isRegisteredOnThisSiegeField(activeSiegeId)) || (player.getSiegeState() == 0)) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 								ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 							}
-						} else if ((object instanceof L2GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
+						} else if ((object instanceof GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 							ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 						}
 					}
@@ -409,18 +409,18 @@ public class GameWorld {
 							final CharacterAI ai = ((Creature) wo).getAI();
 							if (ai != null) {
 								ai.describeStateToPlayer((Player) object);
-								if (wo.isMonster() || wo instanceof L2FriendlyMobInstance) {
+								if (wo.isMonster() || wo instanceof FriendlyMobInstance) {
 									if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 									}
-								} else if (wo instanceof L2DefenderInstance) {
+								} else if (wo instanceof DefenderInstance) {
 									final Castle castle = ((Npc) wo).getCastle();
 									final Fort fortress = ((Npc) wo).getFort();
 									final int activeSiegeId = (fortress != null ? fortress.getResidenceId() : (castle != null ? castle.getResidenceId() : 0));
 									if ((((player.getSiegeState() == 2) && !player.isRegisteredOnThisSiegeField(activeSiegeId)) || (player.getSiegeState() == 0)) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 									}
-								} else if ((wo instanceof L2GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
+								} else if ((wo instanceof GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 									ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 								}
 							}
@@ -434,18 +434,18 @@ public class GameWorld {
 							final CharacterAI ai = ((Creature) object).getAI();
 							if (ai != null) {
 								ai.describeStateToPlayer((Player) wo);
-								if (object.isMonster() || (object instanceof L2FriendlyMobInstance)) {
+								if (object.isMonster() || (object instanceof FriendlyMobInstance)) {
 									if (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 									}
-								} else if (object instanceof L2DefenderInstance) {
+								} else if (object instanceof DefenderInstance) {
 									final Castle castle = ((Npc) object).getCastle();
 									final Fort fortress = ((Npc) object).getFort();
 									final int activeSiegeId = (fortress != null ? fortress.getResidenceId() : (castle != null ? castle.getResidenceId() : 0));
 									if ((((player.getSiegeState() == 2) && !player.isRegisteredOnThisSiegeField(activeSiegeId)) || (player.getSiegeState() == 0)) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 										ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 									}
-								} else if ((object instanceof L2GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
+								} else if ((object instanceof GuardInstance) && (player.getReputation() < 0) && (ai.getIntention() == CtrlIntention.AI_INTENTION_IDLE)) {
 									ai.setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
 								}
 							}

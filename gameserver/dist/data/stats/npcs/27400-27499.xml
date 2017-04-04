@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="27400" level="51" type="L2Monster" name="Shilen's Evil Thoughts">
+	<npc id="27400" level="51" type="Monster" name="Shilen's Evil Thoughts">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<skill name="Skill01_ID" id="5975" level="1" />
@@ -44,7 +44,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="27401" level="61" type="L2Monster" name="Shilen's Evil Thoughts">
+	<npc id="27401" level="61" type="Monster" name="Shilen's Evil Thoughts">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<skill name="Skill01_ID" id="5975" level="1" />
@@ -88,7 +88,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="27402" level="79" type="L2Monster" name="Shilen's Evil Thoughts">
+	<npc id="27402" level="79" type="Monster" name="Shilen's Evil Thoughts">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -137,7 +137,7 @@
 			<height normal="27.5" />
 		</collision>
 	</npc>
-	<npc id="27403" level="80" type="L2Monster" name="Trainee of Rest">
+	<npc id="27403" level="80" type="Monster" name="Trainee of Rest">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -177,7 +177,7 @@
 			<height normal="28.4" />
 		</collision>
 	</npc>
-	<npc id="27404" level="80" type="L2Monster" name="Supplicant of Rest">
+	<npc id="27404" level="80" type="Monster" name="Supplicant of Rest">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -217,7 +217,7 @@
 			<height normal="44" />
 		</collision>
 	</npc>
-	<npc id="27405" level="80" type="L2Monster" name="Monastic Pilgrim">
+	<npc id="27405" level="80" type="Monster" name="Monastic Pilgrim">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -258,7 +258,7 @@
 			<height normal="27.8" />
 		</collision>
 	</npc>
-	<npc id="27406" level="80" type="L2Monster" name="Monastic Crusader">
+	<npc id="27406" level="80" type="Monster" name="Monastic Crusader">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -298,7 +298,7 @@
 			<height normal="37.5" />
 		</collision>
 	</npc>
-	<npc id="27407" level="80" type="L2Monster" name="Solina Lay Brother">
+	<npc id="27407" level="80" type="Monster" name="Solina Lay Brother">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -340,7 +340,7 @@
 			<height normal="23.4" />
 		</collision>
 	</npc>
-	<npc id="27408" level="80" type="L2Monster" name="Savior Solina">
+	<npc id="27408" level="80" type="Monster" name="Savior Solina">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -401,7 +401,7 @@
 			<height normal="25.4" />
 		</collision>
 	</npc>
-	<npc id="27409" level="81" type="L2Monster" name="Solina Knight Captain">
+	<npc id="27409" level="81" type="Monster" name="Solina Knight Captain">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -462,7 +462,7 @@
 			<height normal="31.5" />
 		</collision>
 	</npc>
-	<npc id="27410" level="80" type="L2Monster" name="Solina Knights">
+	<npc id="27410" level="80" type="Monster" name="Solina Knights">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -527,7 +527,7 @@
 			<height normal="28.4" />
 		</collision>
 	</npc>
-	<npc id="27411" level="80" type="L2Monster" name="Divinity Manager">
+	<npc id="27411" level="80" type="Monster" name="Divinity Manager">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -587,7 +587,7 @@
 			<height normal="38.5" grown="46.5" />
 		</collision>
 	</npc>
-	<npc id="27412" level="80" type="L2Monster" name="Divinity Supervisor">
+	<npc id="27412" level="80" type="Monster" name="Divinity Supervisor">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -646,7 +646,7 @@
 			<height normal="47" />
 		</collision>
 	</npc>
-	<npc id="27413" level="80" type="L2Monster" name="Divinity Fighter">
+	<npc id="27413" level="80" type="Monster" name="Divinity Fighter">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -705,7 +705,7 @@
 			<height normal="49" />
 		</collision>
 	</npc>
-	<npc id="27414" level="80" type="L2Monster" name="Divinity Magus">
+	<npc id="27414" level="80" type="Monster" name="Divinity Magus">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -765,7 +765,7 @@
 			<height normal="44" />
 		</collision>
 	</npc>
-	<npc id="27415" level="80" type="L2Monster" name="Guide Solina">
+	<npc id="27415" level="80" type="Monster" name="Guide Solina">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -823,7 +823,7 @@
 			<height normal="23.4" />
 		</collision>
 	</npc>
-	<npc id="27416" level="80" type="L2Monster" name="Relic Manager Golem">
+	<npc id="27416" level="80" type="Monster" name="Relic Manager Golem">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -864,7 +864,7 @@
 			<height normal="41.5" />
 		</collision>
 	</npc>
-	<npc id="27417" level="80" type="L2Monster" name="Mutant Archer">
+	<npc id="27417" level="80" type="Monster" name="Mutant Archer">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -906,7 +906,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="27418" level="80" type="L2Monster" name="Mutant Warrior">
+	<npc id="27418" level="80" type="Monster" name="Mutant Warrior">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -947,7 +947,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27419" level="80" type="L2Monster" name="Divinity Watcher">
+	<npc id="27419" level="80" type="Monster" name="Divinity Watcher">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -986,7 +986,7 @@
 			<height normal="49" />
 		</collision>
 	</npc>
-	<npc id="27420" level="80" type="L2Monster" name="Instructor Solina">
+	<npc id="27420" level="80" type="Monster" name="Instructor Solina">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1024,7 +1024,7 @@
 			<height normal="31.5" />
 		</collision>
 	</npc>
-	<npc id="27421" level="79" type="L2Monster" name="Creature of the Dusk">
+	<npc id="27421" level="79" type="Monster" name="Creature of the Dusk">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="W_LongRangeDDMagic" id="4603" level="9" />
@@ -1070,7 +1070,7 @@
 			<height normal="28.5" />
 		</collision>
 	</npc>
-	<npc id="27422" level="79" type="L2Monster" name="Creature of the Dusk">
+	<npc id="27422" level="79" type="Monster" name="Creature of the Dusk">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="SpiritShot" value="100" />
@@ -1121,7 +1121,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="27423" level="79" type="L2Monster" name="Creature of the Dusk">
+	<npc id="27423" level="79" type="Monster" name="Creature of the Dusk">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="SoulShot" value="100" />
@@ -1168,7 +1168,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27424" level="79" type="L2Monster" name="Creature of the Dusk">
+	<npc id="27424" level="79" type="Monster" name="Creature of the Dusk">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="IsTeleport" value="0" />
@@ -1215,7 +1215,7 @@
 			<height normal="28" grown="33" />
 		</collision>
 	</npc>
-	<npc id="27425" level="79" type="L2Monster" name="Death Wound" title="Shilen's Creation">
+	<npc id="27425" level="79" type="Monster" name="Death Wound" title="Shilen's Creation">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1259,7 +1259,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27426" level="79" type="L2Monster" name="Death Wound" title="Shilen's Creation">
+	<npc id="27426" level="79" type="Monster" name="Death Wound" title="Shilen's Creation">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1304,7 +1304,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27427" level="79" type="L2Monster" name="Death Wound" title="Shilen's Creation">
+	<npc id="27427" level="79" type="Monster" name="Death Wound" title="Shilen's Creation">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1347,7 +1347,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27428" level="79" type="L2Monster" name="Death Wound" title="Shilen's Creation">
+	<npc id="27428" level="79" type="Monster" name="Death Wound" title="Shilen's Creation">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1392,7 +1392,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27429" level="79" type="L2Monster" name="Death Wound" title="Shilen's Creation">
+	<npc id="27429" level="79" type="Monster" name="Death Wound" title="Shilen's Creation">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1437,7 +1437,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27430" level="76" type="L2Monster" name="Screaming Shaman" title="Resurrected">
+	<npc id="27430" level="76" type="Monster" name="Screaming Shaman" title="Resurrected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1480,7 +1480,7 @@
 			<height normal="40.48" />
 		</collision>
 	</npc>
-	<npc id="27431" level="76" type="L2Monster" name="Slayer" title="Resurrected">
+	<npc id="27431" level="76" type="Monster" name="Slayer" title="Resurrected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1523,7 +1523,7 @@
 			<height normal="32.5" />
 		</collision>
 	</npc>
-	<npc id="27432" level="76" type="L2Monster" name="Tracker" title="Resurrected">
+	<npc id="27432" level="76" type="Monster" name="Tracker" title="Resurrected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1566,7 +1566,7 @@
 			<height normal="28.5" />
 		</collision>
 	</npc>
-	<npc id="27433" level="76" type="L2Monster" name="Priest of Darkness" title="Resurrected">
+	<npc id="27433" level="76" type="Monster" name="Priest of Darkness" title="Resurrected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1608,7 +1608,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="27434" level="76" type="L2Monster" name="Guardian of Darkness" title="Resurrected">
+	<npc id="27434" level="76" type="Monster" name="Guardian of Darkness" title="Resurrected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1651,7 +1651,7 @@
 			<height normal="31" grown="36" />
 		</collision>
 	</npc>
-	<npc id="27435" level="76" type="L2Monster" name="Victim's Spirit" title="">
+	<npc id="27435" level="76" type="Monster" name="Victim's Spirit" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1685,7 +1685,7 @@
 			<height normal="21" />
 		</collision>
 	</npc>
-	<npc id="27436" level="77" type="L2Monster" name="Resurrected Chaos" title="">
+	<npc id="27436" level="77" type="Monster" name="Resurrected Chaos" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -1719,7 +1719,7 @@
 			<height normal="41" />
 		</collision>
 	</npc>
-	<npc id="27437" level="85" type="L2Monster" name="Krakia Bathus" title="Tyrr Warrior">
+	<npc id="27437" level="85" type="Monster" name="Krakia Bathus" title="Tyrr Warrior">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14676" level="1" />
@@ -1800,7 +1800,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27438" level="85" type="L2Monster" name="Krakia Carcass" title="Yul Archer">
+	<npc id="27438" level="85" type="Monster" name="Krakia Carcass" title="Yul Archer">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14682" level="1" />
@@ -1885,7 +1885,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27439" level="85" type="L2Monster" name="Krakia Lotus" title="Wynn Summoner">
+	<npc id="27439" level="85" type="Monster" name="Krakia Lotus" title="Wynn Summoner">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14688" level="1" />
@@ -1966,7 +1966,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27440" level="85" type="L2Monster" name="Rakzan" title="Sigel Knight">
+	<npc id="27440" level="85" type="Monster" name="Rakzan" title="Sigel Knight">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14673" level="1" />
@@ -2045,7 +2045,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27441" level="85" type="L2Monster" name="Weiss Khan" title="Feoh Wizard">
+	<npc id="27441" level="85" type="Monster" name="Weiss Khan" title="Feoh Wizard">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14685" level="1" />
@@ -2127,7 +2127,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27442" level="85" type="L2Monster" name="Bamonti" title="Othell Rogue">
+	<npc id="27442" level="85" type="Monster" name="Bamonti" title="Othell Rogue">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14679" level="1" />
@@ -2208,7 +2208,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27443" level="85" type="L2Monster" name="Seknus" title="Iss Enchanter">
+	<npc id="27443" level="85" type="Monster" name="Seknus" title="Iss Enchanter">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<skill name="Skill01_ID" id="14691" level="1" />
@@ -2293,7 +2293,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27444" level="85" type="L2Monster" name="Noctum" title="Watchman of the Seal">
+	<npc id="27444" level="85" type="Monster" name="Noctum" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Attack_BoostValue" value="126" />
@@ -2367,7 +2367,7 @@
 			<height normal="60.5" />
 		</collision>
 	</npc>
-	<npc id="27445" level="85" type="L2Monster" name="Harnak's Wraith" title="Giant's Watchman">
+	<npc id="27445" level="85" type="Monster" name="Harnak's Wraith" title="Giant's Watchman">
 		<!-- TODO: Must be confirmed -->
 		<parameters>
 			<param name="Skill01_Probablity" value="500" />
@@ -2438,7 +2438,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27446" level="85" type="L2Monster" name="Demonic Bathus" title="Watchman of the Seal">
+	<npc id="27446" level="85" type="Monster" name="Demonic Bathus" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMANOID</race>
 		<sex>MALE</sex>
@@ -2495,7 +2495,7 @@
 			<height normal="46.15" grown="55" />
 		</collision>
 	</npc>
-	<npc id="27447" level="85" type="L2Monster" name="Demonic Carcass" title="Watchman of the Seal">
+	<npc id="27447" level="85" type="Monster" name="Demonic Carcass" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -2557,7 +2557,7 @@
 			<height normal="46.15" grown="55" />
 		</collision>
 	</npc>
-	<npc id="27448" level="85" type="L2Monster" name="Demonic Rakzan" title="Watchman of the Seal">
+	<npc id="27448" level="85" type="Monster" name="Demonic Rakzan" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMANOID</race>
 		<sex>MALE</sex>
@@ -2611,7 +2611,7 @@
 			<height normal="79" grown="93" />
 		</collision>
 	</npc>
-	<npc id="27449" level="85" type="L2Monster" name="Demonic Weiss Khan" title="Watchman of the Seal">
+	<npc id="27449" level="85" type="Monster" name="Demonic Weiss Khan" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -2669,7 +2669,7 @@
 			<height normal="42.5" grown="46" />
 		</collision>
 	</npc>
-	<npc id="27450" level="85" type="L2Monster" name="Demonic Bamonti" title="Watchman of the Seal">
+	<npc id="27450" level="85" type="Monster" name="Demonic Bamonti" title="Watchman of the Seal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -2730,7 +2730,7 @@
 			<height normal="43" grown="50" />
 		</collision>
 	</npc>
-	<npc id="27451" level="29" type="L2Monster" name="Kanilov" title="Quest Monster">
+	<npc id="27451" level="29" type="Monster" name="Kanilov" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="4073" level="3" />
@@ -2768,7 +2768,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="27452" level="34" type="L2Monster" name="Poslof" title="Quest Monster">
+	<npc id="27452" level="34" type="Monster" name="Poslof" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="4073" level="4" />
@@ -2806,7 +2806,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="27453" level="40" type="L2Monster" name="Sakum" title="Quest Monster">
+	<npc id="27453" level="40" type="Monster" name="Sakum" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14095" level="1" />
@@ -2845,7 +2845,7 @@
 			<height normal="37" />
 		</collision>
 	</npc>
-	<npc id="27454" level="85" type="L2Monster" name="Weiss Ele" title="Aeore Healer">
+	<npc id="27454" level="85" type="Monster" name="Weiss Ele" title="Aeore Healer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14694" level="1" />
@@ -2927,7 +2927,7 @@
 			<skill id="4388" level="5" /> <!-- Paralysis Resistance -->
 		</skill_list>
 	</npc>
-	<npc id="27456" level="10" type="L2Monster" name="Wisp" title="">
+	<npc id="27456" level="10" type="Monster" name="Wisp" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -2956,7 +2956,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="27457" level="3" type="L2Monster" name="Scarecrow" title="Training">
+	<npc id="27457" level="3" type="Monster" name="Scarecrow" title="Training">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>ETC</race>
 		<sex>ETC</sex>
@@ -2986,7 +2986,7 @@
 			<height normal="22" />
 		</collision>
 	</npc>
-	<npc id="27458" level="30" type="L2Monster" name="Bat" title="">
+	<npc id="27458" level="30" type="Monster" name="Bat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>ANIMAL</race>
 		<sex>MALE</sex>
@@ -3021,7 +3021,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="27459" level="38" type="L2Monster" name="Regenerated Kanilov" title="">
+	<npc id="27459" level="38" type="Monster" name="Regenerated Kanilov" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="4073" level="4" />
@@ -3060,7 +3060,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="27460" level="38" type="L2Monster" name="Regenerated Poslof" title="">
+	<npc id="27460" level="38" type="Monster" name="Regenerated Poslof" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="4073" level="4" />
@@ -3100,7 +3100,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="27461" level="38" type="L2Monster" name="Sakum's Summoned Pet" title="">
+	<npc id="27461" level="38" type="Monster" name="Sakum's Summoned Pet" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14095" level="1" />
@@ -3138,7 +3138,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27462" level="85" type="L2Monster" name="Rakzan" title="Sigel Knight">
+	<npc id="27462" level="85" type="Monster" name="Rakzan" title="Sigel Knight">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14673" level="1" />
@@ -3205,7 +3205,7 @@
 			<height normal="79" grown="93" />
 		</collision>
 	</npc>
-	<npc id="27463" level="85" type="L2Monster" name="Krakia Bathus" title="Tyrr Warrior">
+	<npc id="27463" level="85" type="Monster" name="Krakia Bathus" title="Tyrr Warrior">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14676" level="1" />
@@ -3274,7 +3274,7 @@
 			<height normal="46.15" grown="55" />
 		</collision>
 	</npc>
-	<npc id="27464" level="85" type="L2Monster" name="Bamonti" title="Othell Rogue">
+	<npc id="27464" level="85" type="Monster" name="Bamonti" title="Othell Rogue">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14679" level="1" />
@@ -3343,7 +3343,7 @@
 			<height normal="43" grown="50" />
 		</collision>
 	</npc>
-	<npc id="27465" level="85" type="L2Monster" name="Krakia Carcass" title="Yul Archer">
+	<npc id="27465" level="85" type="Monster" name="Krakia Carcass" title="Yul Archer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14682" level="1" />
@@ -3416,7 +3416,7 @@
 			<height normal="46.15" grown="55" />
 		</collision>
 	</npc>
-	<npc id="27466" level="85" type="L2Monster" name="Weiss Khan" title="Feoh Wizard">
+	<npc id="27466" level="85" type="Monster" name="Weiss Khan" title="Feoh Wizard">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14685" level="1" />
@@ -3486,7 +3486,7 @@
 			<height normal="42.5" grown="46" />
 		</collision>
 	</npc>
-	<npc id="27467" level="85" type="L2Monster" name="Seknus" title="Iss Enchanter">
+	<npc id="27467" level="85" type="Monster" name="Seknus" title="Iss Enchanter">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14691" level="1" />
@@ -3558,7 +3558,7 @@
 			<height normal="69" grown="76" />
 		</collision>
 	</npc>
-	<npc id="27468" level="85" type="L2Monster" name="Krakia Lotus" title="Wynn Summoner">
+	<npc id="27468" level="85" type="Monster" name="Krakia Lotus" title="Wynn Summoner">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14688" level="2" />
@@ -3627,7 +3627,7 @@
 			<height normal="46.15" grown="55" />
 		</collision>
 	</npc>
-	<npc id="27469" level="85" type="L2Monster" name="Weiss Ele" title="Aeore Healer">
+	<npc id="27469" level="85" type="Monster" name="Weiss Ele" title="Aeore Healer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill01_ID" id="14694" level="1" />
@@ -3668,7 +3668,7 @@
 			<height normal="35" grown="42" />
 		</collision>
 	</npc>
-	<npc id="27470" level="70" type="L2Monster" name="Shilen's Messenger Cabrio" title="Quest Monster">
+	<npc id="27470" level="70" type="Monster" name="Shilen's Messenger Cabrio" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<minions name="Privates">
@@ -3709,7 +3709,7 @@
 			<height normal="63" />
 		</collision>
 	</npc>
-	<npc id="27471" level="69" type="L2Monster" name="Cabrio Captor" title="Quest Monster">
+	<npc id="27471" level="69" type="Monster" name="Cabrio Captor" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -3746,7 +3746,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="27472" level="69" type="L2Monster" name="Cabrio Blader" title="Quest Monster">
+	<npc id="27472" level="69" type="Monster" name="Cabrio Blader" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -3781,7 +3781,7 @@
 			<height normal="12" />
 		</collision>
 	</npc>
-	<npc id="27473" level="75" type="L2Monster" name="Kernon" title="Quest Monster">
+	<npc id="27473" level="75" type="Monster" name="Kernon" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<minions name="Privates">
@@ -3824,7 +3824,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27474" level="74" type="L2Monster" name="Taliadon" title="Quest Monster">
+	<npc id="27474" level="74" type="Monster" name="Taliadon" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -3861,7 +3861,7 @@
 			<height normal="45" grown="52" />
 		</collision>
 	</npc>
-	<npc id="27475" level="74" type="L2Monster" name="Vemsk" title="Quest Monster">
+	<npc id="27475" level="74" type="Monster" name="Vemsk" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -3896,7 +3896,7 @@
 			<height normal="31" grown="36" />
 		</collision>
 	</npc>
-	<npc id="27476" level="79" type="L2Monster" name="Longhorn Golkonda" title="Quest Monster">
+	<npc id="27476" level="79" type="Monster" name="Longhorn Golkonda" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveArounding" value="0" />
@@ -3931,7 +3931,7 @@
 			<height normal="94" />
 		</collision>
 	</npc>
-	<npc id="27477" level="73" type="L2Monster" name="Death Lord Hallate" title="Quest Monster">
+	<npc id="27477" level="73" type="Monster" name="Death Lord Hallate" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<minions name="Privates">
@@ -3973,7 +3973,7 @@
 			<height normal="40" grown="48" />
 		</collision>
 	</npc>
-	<npc id="27478" level="72" type="L2Monster" name="Death Mage Krician" title="Quest Monster">
+	<npc id="27478" level="72" type="Monster" name="Death Mage Krician" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -4011,7 +4011,7 @@
 			<height normal="45" grown="52" />
 		</collision>
 	</npc>
-	<npc id="27479" level="72" type="L2Monster" name="Death Fighter Harik" title="Quest Monster">
+	<npc id="27479" level="72" type="Monster" name="Death Fighter Harik" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Party_Type" value="1" />
@@ -4048,7 +4048,7 @@
 			<height normal="31" grown="36" />
 		</collision>
 	</npc>
-	<npc id="27480" level="84" type="L2Monster" name="Sehkmeti" title="">
+	<npc id="27480" level="84" type="Monster" name="Sehkmeti" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="50" />
@@ -4101,7 +4101,7 @@
 			<height normal="12" />
 		</collision>
 	</npc>
-	<npc id="27481" level="84" type="L2Monster" name="Blood Thirst" title="Succubus Lord">
+	<npc id="27481" level="84" type="Monster" name="Blood Thirst" title="Succubus Lord">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -4144,7 +4144,7 @@
 			<height normal="68" />
 		</collision>
 	</npc>
-	<npc id="27482" level="75" type="L2Monster" name="One Who Eats Prophecies" title="Quest Monster">
+	<npc id="27482" level="75" type="Monster" name="One Who Eats Prophecies" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>BEAST</race>
 		<sex>FEMALE</sex>
@@ -4173,7 +4173,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="27483" level="75" type="L2Npc" name="Flame Flower" title="">
+	<npc id="27483" level="75" type="Npc" name="Flame Flower" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4197,7 +4197,7 @@
 			<height normal="0" />
 		</collision>
 	</npc>
-	<npc id="27484" level="80" type="L2Npc" name="" title="">
+	<npc id="27484" level="80" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4226,7 +4226,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="27485" level="80" type="L2Npc" name="" title="">
+	<npc id="27485" level="80" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4283,7 +4283,7 @@
 			<height normal="50.5" />
 		</collision>
 	</npc>
-	<npc id="27487" level="90" type="L2Npc" name="" title="">
+	<npc id="27487" level="90" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4313,7 +4313,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="27488" level="90" type="L2Npc" name="" title="">
+	<npc id="27488" level="90" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4343,7 +4343,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="27489" level="90" type="L2Npc" name="" title="">
+	<npc id="27489" level="90" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4373,7 +4373,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="27490" level="90" type="L2Npc" name="" title="">
+	<npc id="27490" level="90" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -4403,7 +4403,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="27491" level="40" type="L2Npc" name="Corpse of the Chamberlain of Darkness" title="">
+	<npc id="27491" level="40" type="Npc" name="Corpse of the Chamberlain of Darkness" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DEMONIC</race>
 		<sex>FEMALE</sex>
@@ -4432,7 +4432,7 @@
 			<height normal="34" />
 		</collision>
 	</npc>
-	<npc id="27492" level="85" type="L2Monster" name="Shilen's Messenger" title="">
+	<npc id="27492" level="85" type="Monster" name="Shilen's Messenger" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>MALE</sex>
@@ -4491,7 +4491,7 @@
 			<height normal="41.6" />
 		</collision>
 	</npc>
-	<npc id="27493" level="85" type="L2Monster" name="Grotesque Bug" title="">
+	<npc id="27493" level="85" type="Monster" name="Grotesque Bug" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>BUG</race>
 		<sex>MALE</sex>
@@ -4519,7 +4519,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="27494" level="86" type="L2Monster" name="Grotesque Giant Bug" title="">
+	<npc id="27494" level="86" type="Monster" name="Grotesque Giant Bug" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>BUG</race>
 		<sex>MALE</sex>
@@ -4548,7 +4548,7 @@
 			<height normal="35" />
 		</collision>
 	</npc>
-	<npc id="27495" level="99" type="L2Monster" name="Lindvior's Minion" title="">
+	<npc id="27495" level="99" type="Monster" name="Lindvior's Minion" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DRAGON</race>
 		<sex>FEMALE</sex>
@@ -4577,7 +4577,7 @@
 			<height normal="37" />
 		</collision>
 	</npc>
-	<npc id="27496" level="85" type="L2Monster" name="Unconscious Dwarf Workman" title="">
+	<npc id="27496" level="85" type="Monster" name="Unconscious Dwarf Workman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DWARF</race>
 		<sex>MALE</sex>
@@ -4605,7 +4605,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="27497" level="82" type="L2Monster" name="Tanta Lizardman Chief Loygen" title="Quest Monster">
+	<npc id="27497" level="82" type="Monster" name="Tanta Lizardman Chief Loygen" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMANOID</race>
 		<sex>FEMALE</sex>
@@ -4630,7 +4630,7 @@
 			<height normal="47" />
 		</collision>
 	</npc>
-	<npc id="27498" level="82" type="L2Monster" name="Sel Mahum Chief Keltron" title="Quest Monster">
+	<npc id="27498" level="82" type="Monster" name="Sel Mahum Chief Keltron" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMANOID</race>
 		<sex>FEMALE</sex>
@@ -4655,7 +4655,7 @@
 			<height normal="39" />
 		</collision>
 	</npc>
-	<npc id="27499" level="75" type="L2Monster" name="Daimon the White-eyed" title="Quest Monster">
+	<npc id="27499" level="75" type="Monster" name="Daimon the White-eyed" title="Quest Monster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>

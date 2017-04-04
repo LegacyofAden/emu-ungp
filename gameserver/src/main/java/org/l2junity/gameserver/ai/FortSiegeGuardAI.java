@@ -36,8 +36,8 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.L2FortCommanderInstance;
+import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
+import org.l2junity.gameserver.model.actor.instance.FortCommanderInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.skills.Skill;
@@ -91,7 +91,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 	}
 
 	/**
-	 * <B><U> Actor is a L2GuardInstance</U> :</B>
+	 * <B><U> Actor is a GuardInstance</U> :</B>
 	 * <ul>
 	 * <li>The target isn't a Folk or a Door</li>
 	 * <li>The target isn't dead, isn't invulnerable, isn't in silent moving mode AND too far (>100)</li>
@@ -107,7 +107,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 	 * <li>A siege is in progress</li>
 	 * <li>The L2PcInstance target isn't a Defender</li>
 	 * </ul>
-	 * <B><U> Actor is a L2FriendlyMobInstance</U> :</B>
+	 * <B><U> Actor is a FriendlyMobInstance</U> :</B>
 	 * <ul>
 	 * <li>The target isn't a Folk, a Door or another NpcInstance</li>
 	 * <li>The target isn't dead, isn't invulnerable, isn't in silent moving mode AND too far (>100)</li>
@@ -127,7 +127,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 	 */
 	private boolean autoAttackCondition(Creature target) {
 		// Check if the target isn't another guard, folk or a door
-		if ((target == null) || (target instanceof L2DefenderInstance) || target.isNpc() || target.isDoor() || target.isAlikeDead() || (target instanceof L2FortCommanderInstance) || target.isPlayable()) {
+		if ((target == null) || (target instanceof DefenderInstance) || target.isNpc() || target.isDoor() || target.isAlikeDead() || (target instanceof FortCommanderInstance) || target.isPlayable()) {
 			Player player = null;
 			if (target instanceof Player) {
 				player = ((Player) target);
@@ -296,10 +296,10 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 		}
 		// Order to the L2SiegeGuardInstance to return to its home location because there's no target to attack
 		if (_actor.getWalkSpeed() >= 0) {
-			if (_actor instanceof L2DefenderInstance) {
-				((L2DefenderInstance) _actor).returnHome();
+			if (_actor instanceof DefenderInstance) {
+				((DefenderInstance) _actor).returnHome();
 			} else {
-				((L2FortCommanderInstance) _actor).returnHome();
+				((FortCommanderInstance) _actor).returnHome();
 			}
 		}
 	}
@@ -465,11 +465,11 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 		Collection<Skill> skills = null;
 		double dist = 0;
 		int range = 0;
-		L2DefenderInstance sGuard;
-		if (_actor instanceof L2FortCommanderInstance) {
-			sGuard = (L2FortCommanderInstance) _actor;
+		DefenderInstance sGuard;
+		if (_actor instanceof FortCommanderInstance) {
+			sGuard = (FortCommanderInstance) _actor;
 		} else {
-			sGuard = (L2DefenderInstance) _actor;
+			sGuard = (DefenderInstance) _actor;
 		}
 
 		try {
@@ -725,7 +725,7 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
 	 * <li>Add the target to the actor _aggroList or update hate if already present</li>
-	 * <li>Set the actor Intention to AI_INTENTION_ATTACK (if actor is L2GuardInstance check if it isn't too far from its home location)</li>
+	 * <li>Set the actor Intention to AI_INTENTION_ATTACK (if actor is GuardInstance check if it isn't too far from its home location)</li>
 	 * </ul>
 	 *
 	 * @param aggro The value of hate to add to the actor against the target
@@ -760,11 +760,11 @@ public class FortSiegeGuardAI extends CharacterAI implements Runnable {
 					_actor.setRunning();
 				}
 
-				L2DefenderInstance sGuard;
-				if (_actor instanceof L2FortCommanderInstance) {
-					sGuard = (L2FortCommanderInstance) _actor;
+				DefenderInstance sGuard;
+				if (_actor instanceof FortCommanderInstance) {
+					sGuard = (FortCommanderInstance) _actor;
 				} else {
-					sGuard = (L2DefenderInstance) _actor;
+					sGuard = (DefenderInstance) _actor;
 				}
 				double homeX = target.getX() - sGuard.getSpawn().getX();
 				double homeY = target.getY() - sGuard.getSpawn().getY();

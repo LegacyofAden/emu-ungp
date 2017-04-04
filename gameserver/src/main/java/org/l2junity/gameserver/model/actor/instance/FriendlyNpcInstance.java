@@ -51,7 +51,7 @@ public class FriendlyNpcInstance extends Attackable {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2GuardInstance
+		// Check if the L2PcInstance already target the GuardInstance
 		if (getObjectId() != player.getTargetId()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
@@ -62,12 +62,12 @@ public class FriendlyNpcInstance extends Attackable {
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);
 			} else {
 				// Send a Server->Client packet SocialAction to the all L2PcInstance on the _knownPlayer of the NpcInstance
-				// to display a social action of the L2GuardInstance on their client
+				// to display a social action of the GuardInstance on their client
 				broadcastPacket(new SocialAction(getObjectId(), Rnd.nextInt(8)));
 
 				player.setLastFolkNPC(this);
 
-				// Open a chat window on client with the text of the L2GuardInstance
+				// Open a chat window on client with the text of the GuardInstance
 				if (hasListener(EventType.ON_NPC_QUEST_START)) {
 					player.setLastQuestNpcObject(getObjectId());
 				}

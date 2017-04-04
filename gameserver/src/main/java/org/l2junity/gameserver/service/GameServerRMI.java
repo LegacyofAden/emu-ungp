@@ -3,6 +3,7 @@ package org.l2junity.gameserver.service;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.AccountInfo;
 import org.l2junity.commons.model.GameServerInfo;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.RegisterResult;
 import org.l2junity.commons.model.enums.ServerStatus;
@@ -15,7 +16,10 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.NetworkConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.network.client.ConnectionState;
 import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.client.send.CharSelectionInfo;
+import org.l2junity.gameserver.network.client.send.LoginFail;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
@@ -50,6 +54,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	private GameServerInfo gameServerInfo;
 	private transient ScheduledFuture<?> reconnectTask;
 
+	private final Map<String, SessionInfo> loginSessions = new ConcurrentHashMap<>();
 	private final Map<String, L2GameClient> accountsInGameServer = new ConcurrentHashMap<>();
 
 	GameServerRMI() throws RemoteException {
@@ -111,6 +116,11 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	}
 
 	@Override
+	public void addLoginSession(SessionInfo sessionInfo) throws RemoteException {
+		loginSessions.put(sessionInfo.getAccountName(), sessionInfo);
+	}
+
+	@Override
 	public boolean isAccountOnServer(String account) throws RemoteException {
 		return accountsInGameServer.containsKey(account);
 	}
@@ -123,6 +133,23 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 			ACCOUNTING_LOGGER.info("Kicked by login, {}", client);
 			removeAccountInGame(account);
 		}
+	}
+
+	public boolean tryAddGameClient(L2GameClient client, SessionInfo sessionInfo) {
+		if (checkSession(sessionInfo)) {
+			client.setAccountName(sessionInfo.getAccountName());
+			if (addAccountInGame(sessionInfo.getAccountName(), client)) {
+				client.setConnectionState(ConnectionState.AUTHENTICATED);
+				client.setSessionId(sessionInfo);
+				client.sendPacket(LoginFail.LOGIN_SUCCESS);
+
+				final CharSelectionInfo cl = new CharSelectionInfo(sessionInfo);
+				client.sendPacket(cl);
+				client.setCharSelection(cl.getCharInfo());
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean addAccountInGame(String account, L2GameClient client) {
@@ -151,6 +178,16 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 			log.error("Error while changeAccessLevel", e);
 			onConnectionLost();
 		}
+	}
+
+	public boolean checkSession(SessionInfo sessionInfo) {
+		try {
+			return connection.checkSession(sessionInfo);
+		} catch (RemoteException e) {
+			log.error("Error while checkSession", e);
+			onConnectionLost();
+		}
+		return false;
 	}
 
 	private void sendUpdate() {

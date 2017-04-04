@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -45,7 +45,7 @@ public final class StaticObjectData implements IGameXmlReader {
 	@Getter(lazy = true)
 	private static final StaticObjectData instance = new StaticObjectData();
 
-	private final Map<Integer, L2StaticObjectInstance> _staticObjects = new HashMap<>();
+	private final Map<Integer, StaticObjectInstance> _staticObjects = new HashMap<>();
 
 	/**
 	 * Instantiates a new static objects.
@@ -85,7 +85,7 @@ public final class StaticObjectData implements IGameXmlReader {
 	 * @param set the stats set to add.
 	 */
 	private void addObject(StatsSet set) {
-		L2StaticObjectInstance obj = new L2StaticObjectInstance(new CharTemplate(new StatsSet()), set.getInt("id"));
+		StaticObjectInstance obj = new StaticObjectInstance(new CharTemplate(new StatsSet()), set.getInt("id"));
 		obj.setType(set.getInt("type", 0));
 		obj.setName(set.getString("name"));
 		obj.setMap(set.getString("texture", "none"), set.getInt("map_x", 0), set.getInt("map_y", 0));
@@ -98,7 +98,7 @@ public final class StaticObjectData implements IGameXmlReader {
 	 *
 	 * @return a collection of static objects.
 	 */
-	public Collection<L2StaticObjectInstance> getStaticObjects() {
+	public Collection<StaticObjectInstance> getStaticObjects() {
 		return _staticObjects.values();
 	}
 }

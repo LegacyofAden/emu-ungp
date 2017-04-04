@@ -31,4 +31,7 @@ public class DatabaseConfig {
 
 	@ConfigProperty(name = "MaximumDbConnections", value = "100")
 	public static int DATABASE_MAX_CONNECTIONS;
+
+	@ConfigProperty(name = "DatabasePoolType", value = "org.l2junity.commons.database.HikariDatabaseFactory")
+	public static String DATABASE_POOL_TYPE;
 }

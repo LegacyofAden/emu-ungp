@@ -26,7 +26,7 @@ import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
@@ -101,7 +101,7 @@ public final class AirShipGludioGracia extends AbstractNpcAI implements Runnable
 					new VehiclePathPoint(-149378, 252552, 198)
 			};
 
-	private final L2AirShipInstance _ship;
+	private final AirShipInstance _ship;
 	private int _cycle = 0;
 
 	private boolean _foundAtcGludio = false;

@@ -20,7 +20,7 @@ package org.l2junity.gameserver.ai;
 
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerAttack;
@@ -280,7 +280,7 @@ public class PlayerAI extends PlayableAI {
 		if (maybeMoveToPawn(target, 36)) {
 			return;
 		}
-		if (!(target instanceof L2StaticObjectInstance)) {
+		if (!(target instanceof StaticObjectInstance)) {
 			getActor().doInteract((Creature) target);
 		}
 		setIntention(AI_INTENTION_IDLE);

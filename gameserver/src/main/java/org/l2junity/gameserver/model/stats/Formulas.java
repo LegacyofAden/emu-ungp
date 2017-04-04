@@ -27,8 +27,8 @@ import org.l2junity.gameserver.data.xml.impl.HitConditionBonusData;
 import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2SiegeFlagInstance;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.SiegeFlagInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.cubic.CubicInstance;
 import org.l2junity.gameserver.model.effects.L2EffectType;
@@ -556,7 +556,7 @@ public final class Formulas {
 	 */
 	public static boolean calcEffectSuccess(Creature attacker, Creature target, Skill skill) {
 		// StaticObjects can not receive continuous effects.
-		if (target.isDoor() || (target instanceof L2SiegeFlagInstance) || (target instanceof L2StaticObjectInstance)) {
+		if (target.isDoor() || (target instanceof SiegeFlagInstance) || (target instanceof StaticObjectInstance)) {
 			return false;
 		}
 

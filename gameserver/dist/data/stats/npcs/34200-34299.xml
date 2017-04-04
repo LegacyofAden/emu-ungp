@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="34200" level="100" type="L2Npc" name="Mystic Summoning" title="">
+	<npc id="34200" level="100" type="Npc" name="Mystic Summoning" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -17,7 +17,7 @@
 			<height normal="6" />
 		</collision>
 	</npc>
-	<npc id="34201" level="100" type="L2Npc" name="Miss Patch" title="Master of Exclusives">
+	<npc id="34201" level="100" type="Npc" name="Miss Patch" title="Master of Exclusives">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -37,7 +37,7 @@
 			<height normal="18" />
 		</collision>
 	</npc>
-	<npc id="34202" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34202" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -57,7 +57,7 @@
 			<height normal="21" />
 		</collision>
 	</npc>
-	<npc id="34203" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34203" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -77,7 +77,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="34204" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34204" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -97,7 +97,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="34205" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34205" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -117,7 +117,7 @@
 			<height normal="21" />
 		</collision>
 	</npc>
-	<npc id="34206" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34206" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -137,7 +137,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="34207" level="100" type="L2Npc" name="Tavern Employee" title="">
+	<npc id="34207" level="100" type="Npc" name="Tavern Employee" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -157,7 +157,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="34208" level="100" type="L2Npc" name="Bartman" title="Blacksmith">
+	<npc id="34208" level="100" type="Npc" name="Bartman" title="Blacksmith">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -177,7 +177,7 @@
 			<height normal="16.5" />
 		</collision>
 	</npc>
-	<npc id="34209" level="100" type="L2Npc" name="Roa" title="Assistant">
+	<npc id="34209" level="100" type="Npc" name="Roa" title="Assistant">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -197,7 +197,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="34210" level="100" type="L2Npc" name="Red" title="Wealthy Merchant">
+	<npc id="34210" level="100" type="Npc" name="Red" title="Wealthy Merchant">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -217,7 +217,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34211" level="100" type="L2Npc" name="Green" title="Elder">
+	<npc id="34211" level="100" type="Npc" name="Green" title="Elder">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -237,7 +237,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34212" level="100" type="L2Npc" name="Black" title="Artisan">
+	<npc id="34212" level="100" type="Npc" name="Black" title="Artisan">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -257,7 +257,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34213" level="100" type="L2Npc" name="Pink" title="Grocer">
+	<npc id="34213" level="100" type="Npc" name="Pink" title="Grocer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -277,7 +277,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34214" level="100" type="L2Npc" name="Blue" title="Bodyguard">
+	<npc id="34214" level="100" type="Npc" name="Blue" title="Bodyguard">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -297,7 +297,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34215" level="100" type="L2Npc" name="" title="">
+	<npc id="34215" level="100" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -314,7 +314,7 @@
 			<height normal="36" />
 		</collision>
 	</npc>
-	<npc id="34216" level="100" type="L2Npc" name="" title="">
+	<npc id="34216" level="100" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -331,7 +331,7 @@
 			<height normal="70" />
 		</collision>
 	</npc>
-	<npc id="34217" level="100" type="L2Npc" name="Schumadriba" title="">
+	<npc id="34217" level="100" type="Npc" name="Schumadriba" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -348,7 +348,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34218" level="100" type="L2Npc" name="Retbach" title="Giant's Minion">
+	<npc id="34218" level="100" type="Npc" name="Retbach" title="Giant's Minion">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -365,7 +365,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34219" level="100" type="L2Npc" name="Sthor" title="">
+	<npc id="34219" level="100" type="Npc" name="Sthor" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -382,7 +382,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34220" level="100" type="L2Npc" name="Vetle" title="">
+	<npc id="34220" level="100" type="Npc" name="Vetle" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -399,7 +399,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34221" level="84" type="L2Npc" name="Stena" title="Researcher">
+	<npc id="34221" level="84" type="Npc" name="Stena" title="Researcher">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -416,7 +416,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="34222" level="101" type="L2Teleporter" name="Kekropus" title="Hierarch">
+	<npc id="34222" level="101" type="Teleporter" name="Kekropus" title="Hierarch">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -433,7 +433,7 @@
 			<height normal="28.0" />
 		</collision>
 	</npc>
-	<npc id="34223" level="101" type="L2Npc" name="Giant Trackers Teleport Device" title="">
+	<npc id="34223" level="101" type="Npc" name="Giant Trackers Teleport Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -450,7 +450,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34224" level="100" type="L2Npc" name="Sthor" title="">
+	<npc id="34224" level="100" type="Npc" name="Sthor" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -467,7 +467,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34225" level="100" type="L2Npc" name="Vetle" title="">
+	<npc id="34225" level="100" type="Npc" name="Vetle" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -484,7 +484,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34226" level="100" type="L2Npc" name="Relic Control Device" title="">
+	<npc id="34226" level="100" type="Npc" name="Relic Control Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -501,7 +501,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34227" level="99" type="L2Npc" name="Beloa" title="Dimensional Pursuer">
+	<npc id="34227" level="99" type="Npc" name="Beloa" title="Dimensional Pursuer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -518,7 +518,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34228" level="99" type="L2Npc" name="Subi" title="Beloa's Guardian Spirit">
+	<npc id="34228" level="99" type="Npc" name="Subi" title="Beloa's Guardian Spirit">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -535,7 +535,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34229" level="99" type="L2Npc" name="Ruine" title="Dimensional Seeker">
+	<npc id="34229" level="99" type="Npc" name="Ruine" title="Dimensional Seeker">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -552,7 +552,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34230" level="99" type="L2Npc" name="Sporcha" title="Commando Captain">
+	<npc id="34230" level="99" type="Npc" name="Sporcha" title="Commando Captain">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -569,7 +569,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34231" level="99" type="L2Npc" name="Commando" title="">
+	<npc id="34231" level="99" type="Npc" name="Commando" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -586,7 +586,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34232" level="99" type="L2Npc" name="Commando" title="">
+	<npc id="34232" level="99" type="Npc" name="Commando" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -603,7 +603,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="34233" level="100" type="L2Npc" name="Irene" title="Guardian">
+	<npc id="34233" level="100" type="Npc" name="Irene" title="Guardian">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -620,7 +620,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34234" level="100" type="L2Npc" name="Celestiel" title="">
+	<npc id="34234" level="100" type="Npc" name="Celestiel" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -637,7 +637,7 @@
 			<height normal="24.0" />
 		</collision>
 	</npc>
-	<npc id="34235" level="101" type="L2Npc" name="Logart Van Dyke" title="Royal Guard Captain">
+	<npc id="34235" level="101" type="Npc" name="Logart Van Dyke" title="Royal Guard Captain">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -654,7 +654,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34236" level="101" type="L2Npc" name="Dinford" title="Quartermaster">
+	<npc id="34236" level="101" type="Npc" name="Dinford" title="Quartermaster">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -671,7 +671,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34237" level="100" type="L2Npc" name="Krenaht" title="Giant Tracker Leader">
+	<npc id="34237" level="100" type="Npc" name="Krenaht" title="Giant Tracker Leader">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -688,7 +688,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34238" level="100" type="L2Npc" name="Eubina" title="">
+	<npc id="34238" level="100" type="Npc" name="Eubina" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -705,7 +705,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34239" level="100" type="L2Npc" name="Rotoeh" title="">
+	<npc id="34239" level="100" type="Npc" name="Rotoeh" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -722,7 +722,7 @@
 			<height normal="19.5" />
 		</collision>
 	</npc>
-	<npc id="34241" level="100" type="L2Npc" name="Mother Tree Guardians Teleport Device" title="">
+	<npc id="34241" level="100" type="Npc" name="Mother Tree Guardians Teleport Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -739,7 +739,7 @@
 			<height normal="47.5" />
 		</collision>
 	</npc>
-	<npc id="34242" level="101" type="L2Npc" name="Kingdom's Royal Guard Teleport Device" title="">
+	<npc id="34242" level="101" type="Npc" name="Kingdom's Royal Guard Teleport Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -756,7 +756,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="34243" level="100" type="L2Npc" name="Histie" title="">
+	<npc id="34243" level="100" type="Npc" name="Histie" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -773,7 +773,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34244" level="100" type="L2Npc" name="Roukedas" title="Giant Tracker">
+	<npc id="34244" level="100" type="Npc" name="Roukedas" title="Giant Tracker">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -790,7 +790,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34245" level="100" type="L2Npc" name="Tior" title="Giant Tracker">
+	<npc id="34245" level="100" type="Npc" name="Tior" title="Giant Tracker">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -807,7 +807,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34246" level="100" type="L2Npc" name="Systic" title="Giant Trackers">
+	<npc id="34246" level="100" type="Npc" name="Systic" title="Giant Trackers">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -824,7 +824,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34247" level="101" type="L2Npc" name="Miner" title="Captive">
+	<npc id="34247" level="101" type="Npc" name="Miner" title="Captive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -841,7 +841,7 @@
 			<height normal="18.5" />
 		</collision>
 	</npc>
-	<npc id="34248" level="101" type="L2Npc" name="Miner" title="Freed">
+	<npc id="34248" level="101" type="Npc" name="Miner" title="Freed">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -858,7 +858,7 @@
 			<height normal="18.5" />
 		</collision>
 	</npc>
-	<npc id="34249" level="101" type="L2Npc" name="Scout" title="Captive">
+	<npc id="34249" level="101" type="Npc" name="Scout" title="Captive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -875,7 +875,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34250" level="101" type="L2Npc" name="Scout" title="Freed">
+	<npc id="34250" level="101" type="Npc" name="Scout" title="Freed">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -892,7 +892,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34251" level="101" type="L2Npc" name="Chef" title="Captive">
+	<npc id="34251" level="101" type="Npc" name="Chef" title="Captive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -909,7 +909,7 @@
 			<height normal="17.5" />
 		</collision>
 	</npc>
-	<npc id="34252" level="101" type="L2Npc" name="Chef" title="Freed">
+	<npc id="34252" level="101" type="Npc" name="Chef" title="Freed">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -926,7 +926,7 @@
 			<height normal="17.5" />
 		</collision>
 	</npc>
-	<npc id="34253" level="101" type="L2Npc" name="Wizard" title="Captive">
+	<npc id="34253" level="101" type="Npc" name="Wizard" title="Captive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -943,7 +943,7 @@
 			<height normal="26.0" />
 		</collision>
 	</npc>
-	<npc id="34254" level="101" type="L2Npc" name="Wizard" title="Freed">
+	<npc id="34254" level="101" type="Npc" name="Wizard" title="Freed">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -960,7 +960,7 @@
 			<height normal="26.0" />
 		</collision>
 	</npc>
-	<npc id="34255" level="101" type="L2Npc" name="Citizen" title="Captive">
+	<npc id="34255" level="101" type="Npc" name="Citizen" title="Captive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -977,7 +977,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34256" level="101" type="L2Npc" name="Citizen" title="Freed">
+	<npc id="34256" level="101" type="Npc" name="Citizen" title="Freed">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -994,7 +994,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="34257" level="99" type="L2Npc" name="Masa" title="">
+	<npc id="34257" level="99" type="Npc" name="Masa" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1011,7 +1011,7 @@
 			<height normal="23.0" />
 		</collision>
 	</npc>
-	<npc id="34258" level="101" type="L2Npc" name="Atelia Supplies" title="">
+	<npc id="34258" level="101" type="Npc" name="Atelia Supplies" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1028,7 +1028,7 @@
 			<height normal="14.0" />
 		</collision>
 	</npc>
-	<npc id="34259" level="99" type="L2Npc" name="Dandy" title="Dreaming">
+	<npc id="34259" level="99" type="Npc" name="Dandy" title="Dreaming">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1045,7 +1045,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34260" level="99" type="L2Npc" name="Dandy" title="Successful">
+	<npc id="34260" level="99" type="Npc" name="Dandy" title="Successful">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1062,7 +1062,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34261" level="99" type="L2Npc" name="Dandy" title="Successful">
+	<npc id="34261" level="99" type="Npc" name="Dandy" title="Successful">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1079,7 +1079,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34262" level="99" type="L2Npc" name="Sibis" title="Balthus Knights' Supply Officer">
+	<npc id="34262" level="99" type="Npc" name="Sibis" title="Balthus Knights' Supply Officer">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1096,7 +1096,7 @@
 			<height normal="17.5" />
 		</collision>
 	</npc>
-	<npc id="34263" level="99" type="L2Npc" name="Dandy" title="Celebrating">
+	<npc id="34263" level="99" type="Npc" name="Dandy" title="Celebrating">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1113,7 +1113,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34264" level="99" type="L2Npc" name="Dandy" title="Celebrating">
+	<npc id="34264" level="99" type="Npc" name="Dandy" title="Celebrating">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1130,7 +1130,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34265" level="101" type="L2Npc" name="Lias" title="Dimensional Researcher">
+	<npc id="34265" level="101" type="Npc" name="Lias" title="Dimensional Researcher">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1147,7 +1147,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="34266" level="99" type="L2Npc" name="Freya" title="Event Manager">
+	<npc id="34266" level="99" type="Npc" name="Freya" title="Event Manager">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1164,7 +1164,7 @@
 			<height normal="28.0" />
 		</collision>
 	</npc>
-	<npc id="34267" level="100" type="L2Npc" name="Arcturus" title="Hunter Guild Leader">
+	<npc id="34267" level="100" type="Npc" name="Arcturus" title="Hunter Guild Leader">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1181,7 +1181,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34277" level="75" type="L2Npc" name="Lau" title="Arena Manager">
+	<npc id="34277" level="75" type="Npc" name="Lau" title="Arena Manager">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1198,7 +1198,7 @@
 			<height normal="18.4" />
 		</collision>
 	</npc>
-	<npc id="34278" level="75" type="L2Npc" name="2015 Christmas Tree, Large" title="">
+	<npc id="34278" level="75" type="Npc" name="2015 Christmas Tree, Large" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1215,7 +1215,7 @@
 			<height normal="140.0" />
 		</collision>
 	</npc>
-	<npc id="34279" level="75" type="L2Npc" name="2015 Christmas Tree, Medium" title="">
+	<npc id="34279" level="75" type="Npc" name="2015 Christmas Tree, Medium" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1232,7 +1232,7 @@
 			<height normal="35.0" />
 		</collision>
 	</npc>
-	<npc id="34280" level="75" type="L2Npc" name="2015 Christmas Tree, Small" title="">
+	<npc id="34280" level="75" type="Npc" name="2015 Christmas Tree, Small" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1249,7 +1249,7 @@
 			<height normal="27.4" />
 		</collision>
 	</npc>
-	<npc id="34281" level="75" type="L2Npc" name="2015 Santa Claus" title="">
+	<npc id="34281" level="75" type="Npc" name="2015 Santa Claus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1266,7 +1266,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34282" level="75" type="L2Npc" name="2015 Santa Girl" title="">
+	<npc id="34282" level="75" type="Npc" name="2015 Santa Girl" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1283,7 +1283,7 @@
 			<height normal="17.0" />
 		</collision>
 	</npc>
-	<npc id="34283" level="75" type="L2Npc" name="2015 Blue Snow Man" title="">
+	<npc id="34283" level="75" type="Npc" name="2015 Blue Snow Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1300,7 +1300,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34284" level="75" type="L2Npc" name="2015 Red Snow Man" title="">
+	<npc id="34284" level="75" type="Npc" name="2015 Red Snow Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1317,7 +1317,7 @@
 			<height normal="30.0" />
 		</collision>
 	</npc>
-	<npc id="34285" level="75" type="L2Npc" name="2015 Baby Rudolph" title="">
+	<npc id="34285" level="75" type="Npc" name="2015 Baby Rudolph" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1334,7 +1334,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34286" level="75" type="L2Npc" name="2015 Rudolph, Small" title="">
+	<npc id="34286" level="75" type="Npc" name="2015 Rudolph, Small" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1351,7 +1351,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34287" level="75" type="L2Npc" name="2015 Rudolph, Medium" title="">
+	<npc id="34287" level="75" type="Npc" name="2015 Rudolph, Medium" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1368,7 +1368,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34288" level="75" type="L2Npc" name="2015 Rudolph, Large" title="">
+	<npc id="34288" level="75" type="Npc" name="2015 Rudolph, Large" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1385,7 +1385,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34289" level="75" type="L2Npc" name="2015 Rudolph Girl" title="">
+	<npc id="34289" level="75" type="Npc" name="2015 Rudolph Girl" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1402,7 +1402,7 @@
 			<height normal="25.0" />
 		</collision>
 	</npc>
-	<npc id="34290" level="101" type="L2Npc" name="Piore" title="Dimensional Researcher">
+	<npc id="34290" level="101" type="Npc" name="Piore" title="Dimensional Researcher">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1419,7 +1419,7 @@
 			<height normal="20.4" />
 		</collision>
 	</npc>
-	<npc id="34291" level="75" type="L2Npc" name="Nana" title="Healer of the Arena">
+	<npc id="34291" level="75" type="Npc" name="Nana" title="Healer of the Arena">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -1436,7 +1436,7 @@
 			<height normal="53.0" />
 		</collision>
 	</npc>
-	<npc id="34292" level="75" type="L2Npc" name="Chef Monkey" title="Event Manager">
+	<npc id="34292" level="75" type="Npc" name="Chef Monkey" title="Event Manager">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>

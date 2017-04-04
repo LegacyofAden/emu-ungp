@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -72,7 +72,7 @@ public final class InstantSummonTrap extends AbstractEffect {
 			return;
 		}
 
-		final L2TrapInstance trap = new L2TrapInstance(npcTemplate, casterPlayer);
+		final TrapInstance trap = new TrapInstance(npcTemplate, casterPlayer);
 		trap.setCurrentHp(trap.getMaxHp());
 		trap.setCurrentMp(trap.getMaxMp());
 		trap.setIsInvul(true);

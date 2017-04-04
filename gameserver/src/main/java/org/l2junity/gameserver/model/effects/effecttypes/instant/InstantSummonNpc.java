@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2DecoyInstance;
-import org.l2junity.gameserver.model.actor.instance.L2EffectPointInstance;
+import org.l2junity.gameserver.model.actor.instance.DecoyInstance;
+import org.l2junity.gameserver.model.actor.instance.EffectPointInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
@@ -104,7 +104,7 @@ public final class InstantSummonNpc extends AbstractEffect {
 
 		switch (npcTemplate.getType()) {
 			case "L2Decoy": {
-				final L2DecoyInstance decoy = new L2DecoyInstance(npcTemplate, casterPlayer, _despawnDelay);
+				final DecoyInstance decoy = new DecoyInstance(npcTemplate, casterPlayer, _despawnDelay);
 				decoy.setCurrentHp(decoy.getMaxHp());
 				decoy.setCurrentMp(decoy.getMaxMp());
 				decoy.setHeading(casterPlayer.getHeading());
@@ -115,7 +115,7 @@ public final class InstantSummonNpc extends AbstractEffect {
 			}
 			case "L2EffectPoint": // TODO: Implement proper signet skills.
 			{
-				final L2EffectPointInstance effectPoint = new L2EffectPointInstance(npcTemplate, casterPlayer);
+				final EffectPointInstance effectPoint = new EffectPointInstance(npcTemplate, casterPlayer);
 				effectPoint.setCurrentHp(effectPoint.getMaxHp());
 				effectPoint.setCurrentMp(effectPoint.getMaxMp());
 				effectPoint.setIsInvul(true);

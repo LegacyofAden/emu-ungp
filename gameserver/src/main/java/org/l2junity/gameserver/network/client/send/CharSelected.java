@@ -24,45 +24,39 @@ import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class CharSelected implements IClientOutgoingPacket {
-	private final Player _activeChar;
-	private final int _sessionId;
+	private final Player activePlayer;
 
-	/**
-	 * @param cha
-	 * @param sessionId
-	 */
-	public CharSelected(Player cha, int sessionId) {
-		_activeChar = cha;
-		_sessionId = sessionId;
+	public CharSelected(Player cha) {
+		activePlayer = cha;
 	}
 
 	@Override
 	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_SELECTED.writeId(packet);
 
-		packet.writeS(_activeChar.getName());
-		packet.writeD(_activeChar.getObjectId());
-		packet.writeS(_activeChar.getTitle());
-		packet.writeD(_sessionId);
-		packet.writeD(_activeChar.getClanId());
+		packet.writeS(activePlayer.getName());
+		packet.writeD(activePlayer.getObjectId());
+		packet.writeS(activePlayer.getTitle());
+		packet.writeD(activePlayer.getClient().getSessionInfo().getPlayKey());
+		packet.writeD(activePlayer.getClanId());
 		packet.writeD(0x00); // ??
-		packet.writeD(_activeChar.getAppearance().getSex() ? 1 : 0);
-		packet.writeD(_activeChar.getRace().ordinal());
-		packet.writeD(_activeChar.getClassId().getId());
+		packet.writeD(activePlayer.getAppearance().getSex() ? 1 : 0);
+		packet.writeD(activePlayer.getRace().ordinal());
+		packet.writeD(activePlayer.getClassId().getId());
 		packet.writeD(0x01); // active ??
-		packet.writeD((int) _activeChar.getX());
-		packet.writeD((int) _activeChar.getY());
-		packet.writeD((int) _activeChar.getZ());
-		packet.writeF(_activeChar.getCurrentHp());
-		packet.writeF(_activeChar.getCurrentMp());
-		packet.writeQ(_activeChar.getSp());
-		packet.writeQ(_activeChar.getExp());
-		packet.writeD(_activeChar.getLevel());
-		packet.writeD(_activeChar.getReputation());
-		packet.writeD(_activeChar.getPkKills());
+		packet.writeD((int) activePlayer.getX());
+		packet.writeD((int) activePlayer.getY());
+		packet.writeD((int) activePlayer.getZ());
+		packet.writeF(activePlayer.getCurrentHp());
+		packet.writeF(activePlayer.getCurrentMp());
+		packet.writeQ(activePlayer.getSp());
+		packet.writeQ(activePlayer.getExp());
+		packet.writeD(activePlayer.getLevel());
+		packet.writeD(activePlayer.getReputation());
+		packet.writeD(activePlayer.getPkKills());
 		packet.writeD(GameTimeManager.getInstance().getGameTimeInMinutesOfDay());
 		packet.writeD(0x00);
-		packet.writeD(_activeChar.getClassId().getId());
+		packet.writeD(activePlayer.getClassId().getId());
 
 		packet.writeB(new byte[16]);
 
