@@ -966,7 +966,7 @@ public class Npc extends Creature {
 		// Remove from instance world
 		final Instance instance = getInstanceWorld();
 		if (instance != null) {
-			instance.removeNpc(this);
+			instance.onRemoveNpc(this);
 		}
 	}
 

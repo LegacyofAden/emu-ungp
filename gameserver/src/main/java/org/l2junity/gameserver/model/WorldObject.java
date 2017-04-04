@@ -712,7 +712,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 */
 	public int getInstanceId() {
 		final Instance instance = _instance;
-		return (instance != null) ? instance.getId() : 0;
+		return (instance != null) ? instance.getId() : WorldManager.MAIN_WORLD_ID;
 	}
 
 	/**
@@ -826,6 +826,19 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		if (_instance != null) {
 			_instance.onInstanceChange(this, false);
 		}
+		
+		final GameWorld newWorld = WorldManager.getInstance().getWorld(newInstance == null ? WorldManager.MAIN_WORLD_ID : newInstance.getId());
+		final Region newRegion = newWorld.getRegion(getLocation());
+		
+		final GameWorld oldWorld = WorldManager.getInstance().getWorld(_instance == null ? WorldManager.MAIN_WORLD_ID : _instance.getId());
+		final Region oldRegion = oldWorld.getRegion(getLocation());
+		
+		oldRegion.removeVisibleObject(this);
+		newRegion.addVisibleObject(this);
+		
+		oldWorld.switchRegion(this, newRegion);
+		oldWorld.removeObject(this);
+		newWorld.addObject(this);
 
 		// Set new instance
 		_instance = newInstance;

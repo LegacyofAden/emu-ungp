@@ -96,7 +96,8 @@ public class Region {
 	public boolean isSurroundingRegion(Region region) {
 		return region != null && x >= region.getX() - 1 && x <= region.getX() + 1 
 				&& y >= region.getY() - 1 && y <= region.getY() + 1 
-				&& z >= region.getZ() - 1 && z <= region.getZ() + 1;
+				&& z >= region.getZ() - 1 && z <= region.getZ() + 1
+				&& worldId == region.getWorldId();
 	}
 	
 	public boolean isNeighborsEmpty() {

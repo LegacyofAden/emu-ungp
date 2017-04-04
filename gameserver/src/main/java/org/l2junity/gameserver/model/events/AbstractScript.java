@@ -18,6 +18,21 @@
  */
 package org.l2junity.gameserver.model.events;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.core.configs.RatesConfig;
@@ -29,7 +44,11 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.enums.QuestSound;
-import org.l2junity.gameserver.instancemanager.*;
+import org.l2junity.gameserver.instancemanager.CastleManager;
+import org.l2junity.gameserver.instancemanager.FortManager;
+import org.l2junity.gameserver.instancemanager.GameTimeManager;
+import org.l2junity.gameserver.instancemanager.InstanceManager;
+import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
@@ -39,25 +58,69 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
-import org.l2junity.gameserver.model.events.annotations.*;
+import org.l2junity.gameserver.model.events.annotations.Id;
+import org.l2junity.gameserver.model.events.annotations.Ids;
+import org.l2junity.gameserver.model.events.annotations.NpcLevelRange;
+import org.l2junity.gameserver.model.events.annotations.NpcLevelRanges;
+import org.l2junity.gameserver.model.events.annotations.Priority;
+import org.l2junity.gameserver.model.events.annotations.Range;
+import org.l2junity.gameserver.model.events.annotations.Ranges;
+import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
+import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
-import org.l2junity.gameserver.model.events.impl.character.*;
-import org.l2junity.gameserver.model.events.impl.character.npc.*;
-import org.l2junity.gameserver.model.events.impl.character.player.*;
-import org.l2junity.gameserver.model.events.impl.instance.*;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureSee;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureZoneEnter;
+import org.l2junity.gameserver.model.events.impl.character.OnCreatureZoneExit;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAggroRangeEnter;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableAttack;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableFactionCall;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableHate;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnAttackableKill;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCanBeSeen;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCreatureSee;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcDespawn;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcEventReceived;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcFirstTalk;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveFinished;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveNodeArrived;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveRouteFinished;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillFinished;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSkillSee;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcSpawn;
+import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleport;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogin;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogout;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerProfessionChange;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSkillLearn;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonSpawn;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSummonTalk;
+import org.l2junity.gameserver.model.events.impl.character.player.OnTrapAction;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceCreated;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceDestroy;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceEnter;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceLeave;
+import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
 import org.l2junity.gameserver.model.events.impl.item.OnItemBypassEvent;
 import org.l2junity.gameserver.model.events.impl.item.OnItemTalk;
 import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeFinish;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeOwnerChange;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeStart;
-import org.l2junity.gameserver.model.events.listeners.*;
+import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
+import org.l2junity.gameserver.model.events.listeners.AnnotationEventListener;
+import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
+import org.l2junity.gameserver.model.events.listeners.DummyEventListener;
+import org.l2junity.gameserver.model.events.listeners.FunctionEventListener;
+import org.l2junity.gameserver.model.events.listeners.RunnableEventListener;
 import org.l2junity.gameserver.model.events.returns.AbstractEventReturn;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.events.timers.IEventTimerCancel;
@@ -81,21 +144,19 @@ import org.l2junity.gameserver.model.spawns.SpawnGroup;
 import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.ExAdenaInvenCount;
+import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
+import org.l2junity.gameserver.network.client.send.ExUserInfoInvenWeight;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.client.send.SpecialCamera;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.scripting.ManagedScript;
 import org.l2junity.gameserver.util.MinionList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * @author UnAfraid
@@ -3019,6 +3080,10 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	 * @param movie   the movie
 	 */
 	public void playMovie(Set<Player> players, Movie movie) {
+		new MovieHolder(new ArrayList<>(players), movie);
+	}
+	
+	public void playMovie(Collection<Player> players, Movie movie) {
 		new MovieHolder(new ArrayList<>(players), movie);
 	}
 
