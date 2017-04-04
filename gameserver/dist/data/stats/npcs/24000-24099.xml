@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
+	<npc id="24000" level="75" type="Npc" name="Leona Blackbird" title="Dragon's Advocate">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2676" hpRegen="7.5" mp="1507" mpRegen="2.7" />
+			<speed>
+				<walk ground="64.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="9.5" />
+			<height normal="22.4" />
+		</collision>
+	</npc>
+	<npc id="24001" level="75" type="Npc" name="Kain Van Halter" title="Prince of the Second Dimension">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2676" hpRegen="7.5" mp="1507" mpRegen="2.7" />
+			<speed>
+				<walk ground="64.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="9.0" />
+			<height normal="20.0" />
+		</collision>
+	</npc>
+	<npc id="24002" level="76" type="Npc" name="Princess Ant" title="Successor in the Ant Nest">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2758" hpRegen="7.5" mp="1540" mpRegen="2.7" />
+			<speed>
+				<walk ground="80.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<drop_lists>
+			<death>
+				<group chance="100">
+					<item id="57" min="140000" max="1170000" chance="100" /> <!-- Adena -->
+				</group>
+				<group chance="68.749">
+					<item id="630" min="1" max="3" chance="27.665856957919" /> <!-- Square Shield -->
+					<item id="70" min="1" max="1" chance="8.6663078735691" /> <!-- Claymore -->
+					<item id="2499" min="1" max="1" chance="8.6299437082721" /> <!-- Elven Long Sword -->
+					<item id="225" min="1" max="1" chance="8.0568444631922" /> <!-- Mithril Dagger -->
+					<item id="189" min="1" max="1" chance="8.046662496909" /> <!-- Staff of Life -->
+					<item id="188" min="1" max="1" chance="7.9593885001964" /> <!-- Ghost Staff -->
+					<item id="159" min="1" max="1" chance="7.9346608677944" /> <!-- Bonebreaker -->
+					<item id="297" min="1" max="1" chance="7.9244789015113" /> <!-- Glaive -->
+					<item id="280" min="1" max="1" chance="7.9201152016757" /> <!-- Light Crossbow -->
+					<item id="262" min="1" max="1" chance="7.1957410289604" /> <!-- Scallop Jamadhr -->
+				</group>
+				<group chance="37.54">
+					<item id="380" min="1" max="2" chance="100" /> <!-- Plate Gaiters -->
+				</group>
+				<group chance="100">
+					<item id="438" min="1" max="2" chance="23.667711598746" /> <!-- Sage's Rags -->
+					<item id="396" min="1" max="2" chance="23.04625199362" /> <!-- Salamander Skin Mail -->
+					<item id="353" min="1" max="2" chance="19.914205576638" /> <!-- Half Plate Armor -->
+					<item id="607" min="1" max="3" chance="11.50525215861" /> <!-- Ogre Power Gauntlets -->
+					<item id="1125" min="1" max="3" chance="10.960787548809" /> <!-- Assault Boots -->
+					<item id="2412" min="1" max="3" chance="10.905791123577" /> <!-- Plate Helmet -->
+				</group>
+				<group chance="100">
+					<item id="851" min="1" max="2" chance="27.814418921992" /> <!-- Onyx Beast's Eye Earring -->
+					<item id="882" min="1" max="2" chance="26.199681601092" /> <!-- Mithril Ring -->
+					<item id="6660" min="1" max="1" chance="23.099082707907" /> <!-- Queen Ant's Ring -->
+					<item id="914" min="1" max="2" chance="22.886816769009" /> <!-- Dark Necklace -->
+				</group>
+				<group chance="100">
+					<item id="36514" min="1" max="2" chance="43.262699765516" /> <!-- Elcyum Crystal -->
+					<item id="36252" min="1" max="1" chance="29.842610298253" /> <!-- Bottle of Queen Ant's Soul -->
+					<item id="955" min="1" max="3" chance="9.0029678212039" /> <!-- Scroll: Enchant Weapon (D-grade) -->
+					<item id="46474" min="1" max="1" chance="4.1307225736115" /> <!-- Leona's Soul Crystal - Stage 1 -->
+					<item id="46504" min="1" max="1" chance="4.1203395256678" /> <!-- Lionel's Soul Crystal - Stage 1 -->
+					<item id="46489" min="1" max="1" chance="4.1160132556912" /> <!-- Pantheon's Soul Crystal - Stage 1 -->
+					<item id="46459" min="1" max="1" chance="2.771408546979" /> <!-- Mermoden's Soul Crystal - Stage 1 -->
+					<item id="46444" min="1" max="1" chance="2.7532382130774" /> <!-- Kain's Soul Crystal - Stage 1 -->
+				</group>
+			</death>
+			<luck>
+				<item id="39629" min="1" max="1" chance="60.76" /> <!-- Fortune Pocket - Stage 1 -->
+			</luck>
+		</drop_lists>
+		<collision>
+			<radius normal="45.0" />
+			<height normal="53.0" />
+		</collision>
+	</npc>
+	<npc id="24003" level="76" type="Npc" name="Escort Ant" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2758" hpRegen="7.5" mp="1540" mpRegen="2.7" />
+			<speed>
+				<walk ground="40.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<drop_lists>
+			<death>
+				<group chance="70">
+					<item id="57" min="10" max="23" chance="100" /> <!-- Adena -->
+				</group>
+				<group chance="0.075">
+					<item id="955" min="1" max="1" chance="100" /> <!-- Scroll: Enchant Weapon (D-grade) -->
+				</group>
+			</death>
+			<corpse>
+				<item id="36531" min="1" max="1" chance="3.645" /> <!-- Thread -->
+				<item id="36532" min="1" max="1" chance="0.075" /> <!-- Thin Braid -->
+				<item id="36533" min="1" max="1" chance="0.03" /> <!-- Synthetic Braid -->
+			</corpse>
+			<luck>
+				<item id="39629" min="1" max="1" chance="100" /> <!-- Fortune Pocket - Stage 1 -->
+			</luck>
+		</drop_lists>
+		<collision>
+			<radius normal="26.0" />
+			<height normal="15.0" />
+		</collision>
+	</npc>
+	<npc id="24004" level="76" type="Npc" name="Royal Guard Ant" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2758" hpRegen="7.5" mp="1540" mpRegen="2.7" />
+			<speed>
+				<walk ground="40.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="26.0" />
+			<height normal="15.0" />
+		</collision>
+	</npc>
+	<npc id="24005" level="77" type="Npc" name="Urfen" title="Orfen Kin">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="60.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="31.5" />
+			<height normal="128.4" />
+		</collision>
+	</npc>
+	<npc id="24006" level="77" type="Npc" name="Laikel" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="60.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="18.5" />
+			<height normal="30.5" />
+		</collision>
+	</npc>
+	<npc id="24007" level="77" type="Npc" name="Riba" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="60.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="12.5" />
+			<height normal="34.5" />
+		</collision>
+	</npc>
+	<npc id="24008" level="77" type="Npc" name="Zaken" title="Unworldly Pirate King">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="42.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="16.0" />
+			<height normal="32.0" />
+		</collision>
+	</npc>
+	<npc id="24009" level="77" type="Npc" name="Zaken" title="Unworldly Pirate King">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="42.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="16.0" />
+			<height normal="32.0" />
+		</collision>
+	</npc>
+	<npc id="24010" level="77" type="Npc" name="Pirate Zombie Captain" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="14.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="17.0" />
+			<height normal="28.0" />
+		</collision>
+	</npc>
+	<npc id="24011" level="77" type="Npc" name="Pirate Zombie" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2856" hpRegen="7.5" mp="1574" mpRegen="2.7" />
+			<speed>
+				<walk ground="11.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="10.0" />
+			<height normal="23.0" />
+		</collision>
+	</npc>
+	<npc id="24012" level="78" type="Npc" name="Saium" title="Relative of the Emperor">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2974" hpRegen="7.5" mp="1607" mpRegen="2.7" />
+			<speed>
+				<walk ground="80.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="26.0" />
+			<height normal="67.8" />
+		</collision>
+	</npc>
+	<npc id="24013" level="78" type="Npc" name="Traitor Angel" title="">
+		<!-- AUTO GENERATED NPC TODO: FIX IT -->
+		<race>HUMAN</race>
+		<sex>FEMALE</sex>
+		<stats str="88" int="79" dex="55" wit="78" con="82" men="78">
+			<vitals hp="2974" hpRegen="7.5" mp="1607" mpRegen="2.7" />
+			<speed>
+				<walk ground="50.0" />
+				<run ground="180.0" />
+			</speed>
+		</stats>
+		<status attackable="false" />
+		<collision>
+			<radius normal="13.0" />
+			<height normal="37.5" />
+		</collision>
+	</npc>
+</list>

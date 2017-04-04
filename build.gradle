@@ -1,0 +1,97 @@
+System.setProperty("file.encoding", "UTF-8")
+
+import com.aragost.javahg.Changeset
+import com.aragost.javahg.Repository
+import com.aragost.javahg.commands.ParentsCommand
+
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+		classpath("com.aragost.javahg:javahg:+")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath("org.springframework.build.gradle:propdeps-plugin:+")
+    }
+}
+
+distTar.enabled = false
+distZip.dependsOn(":loginserver:distZip")
+distZip.dependsOn(":gameserver:distZip")
+
+distributions {
+	main {
+		baseName = 'UNGP'
+		contents {
+			from 'loginserver/build/distributions'
+			from 'gameserver/build/distributions'
+		}
+	}
+}
+
+subprojects {
+    apply plugin: 'idea'
+	apply plugin: 'eclipse'
+
+    sourceCompatibility = '1.8'
+
+	repositories {
+		mavenCentral()
+	}
+
+	eclipse {
+		project {
+			natures('org.springsource.ide.eclipse.gradle.core.nature')
+		}
+	}
+
+	tasks.eclipse.doLast {
+		copy {
+			from('../eclipse-settings')
+			into('.settings')
+		}
+	}
+
+	tasks.cleanEclipse.doLast {
+		delete('.settings')
+	}
+	
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+	}
+
+    tasks.withType(Jar) {
+        manifest {
+            attributes('Implementation-Title': project.name,
+                    'Implementation-Version': getHgRevision(),
+                    'Built-Date': new java.util.Date().toString(),
+                    'Built-By': System.getProperty('user.name'),
+                    'Built-JDK': System.getProperty('java.version'),
+                    'Source-Compatibility': project.sourceCompatibility,
+                    'Target-Compatibility': project.targetCompatibility
+            )
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.3'
+}
+
+String getHgRevision() {
+	def repo = Repository.open(projectDir)
+	def parentsCommand = new ParentsCommand(repo)
+	List<Changeset> changesets = parentsCommand.execute()
+	if (changesets == null || changesets.size() != 1) {
+		def message = "Exactly one was parent expected. " + changesets
+		throw new Exception(message)
+	}
+	return changesets[0].node
+}

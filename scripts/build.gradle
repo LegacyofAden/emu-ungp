@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+defaultTasks('build')
+
+dependencies {
+	compile project(':commons')
+}
