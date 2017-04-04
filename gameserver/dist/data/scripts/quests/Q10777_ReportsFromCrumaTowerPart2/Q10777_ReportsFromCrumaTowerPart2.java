@@ -22,7 +22,6 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
@@ -30,6 +29,7 @@ import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
 import quests.Q10776_TheWrathOfTheGiants.Q10776_TheWrathOfTheGiants;
 
 /**
@@ -77,7 +77,7 @@ public final class Q10777_ReportsFromCrumaTowerPart2 extends Quest {
 				break;
 			}
 			case "summon": {
-				if (qs.isCond(1) && !World.getInstance().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL)) {
+				if (qs.isCond(1) && !player.getWorld().getVisibleObjects(player, Npc.class, 700).stream().anyMatch(n -> n.getId() == MAGIC_OWL)) {
 					final Npc owl = addSpawn(MAGIC_OWL, OWL_LOC);
 					getTimers().addTimer("DESPAWN_OWL", 20000, owl, null);
 				}

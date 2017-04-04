@@ -18,10 +18,8 @@
  */
 package ai.group;
 
-import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -31,6 +29,8 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import ai.AbstractNpcAI;
 
 /**
  * Monastery of Silence AI.
@@ -85,7 +85,7 @@ public final class MonasteryOfSilence extends AbstractNpcAI {
 	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "TRAINING": {
-				World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, 400, character ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, Npc.class, 400, character ->
 				{
 					if ((getRandom(100) < 30) && !character.isDead() && !character.isInCombat()) {
 						if ((character.getId() == CAPTAIN) && (getRandom(100) < 10) && npc.isScriptValue(0)) {

@@ -20,12 +20,12 @@ package quests.Q10787_ASpyMission;
 
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
+
 import quests.Q10786_ResidentProblemSolver.Q10786_ResidentProblemSolver;
 
 /**
@@ -79,7 +79,7 @@ public final class Q10787_ASpyMission extends Quest {
 						htmltext = "33994-03.html";
 					}
 					// @formatter:off
-					World.getInstance().getVisibleObjects(npc, Npc.class, 150).stream()
+					npc.getWorld().getVisibleObjects(npc, Npc.class, 150).stream()
 							.filter(n -> (n.getId() == EMBRYO_PURIFIER))
 							.forEach(mob -> addAttackPlayerDesire(mob, player));
 					// @formatter:on

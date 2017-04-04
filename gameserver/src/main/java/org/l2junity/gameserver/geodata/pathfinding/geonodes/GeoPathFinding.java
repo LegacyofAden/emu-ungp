@@ -18,20 +18,6 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding.geonodes;
 
-import org.l2junity.commons.lang.management.ShutdownManager;
-import org.l2junity.commons.lang.management.TerminationStatus;
-import org.l2junity.commons.util.BasePathProvider;
-import org.l2junity.core.configs.GeoDataConfig;
-import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.geodata.pathfinding.AbstractNode;
-import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
-import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.instancezone.Instance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -43,6 +29,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.l2junity.commons.lang.management.ShutdownManager;
+import org.l2junity.commons.lang.management.TerminationStatus;
+import org.l2junity.commons.util.BasePathProvider;
+import org.l2junity.core.configs.GeoDataConfig;
+import org.l2junity.gameserver.geodata.GeoData;
+import org.l2junity.gameserver.geodata.pathfinding.AbstractNode;
+import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
+import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.instancezone.Instance;
+import org.l2junity.gameserver.model.world.WorldData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author -Nemesiss-
@@ -66,8 +66,8 @@ public final class GeoPathFinding extends PathFinding {
 
 		int loadedRegions = 0;
 		try {
-			for (int regionX = World.TILE_X_MIN; regionX <= World.TILE_X_MAX; regionX++) {
-				for (int regionY = World.TILE_Y_MIN; regionY <= World.TILE_Y_MAX; regionY++) {
+			for (int regionX = WorldData.TILE_X_MIN; regionX <= WorldData.TILE_X_MAX; regionX++) {
+				for (int regionY = WorldData.TILE_Y_MIN; regionY <= WorldData.TILE_Y_MAX; regionY++) {
 					final Path pnFilePath = BasePathProvider.resolveDatapackPath(GeoDataConfig.PATHNODE_PATH, String.format(FILE_NAME_FORMAT, regionX, regionY));
 					LOGGER.debug("Loading " + pnFilePath.getFileName() + "...");
 					loadPathNodeFile(pnFilePath, (byte) regionX, (byte) regionY);
@@ -89,11 +89,11 @@ public final class GeoPathFinding extends PathFinding {
 
 	@Override
 	public List<AbstractNodeLoc> findPath(double x, double y, double z, double tx, double ty, double tz, Instance instance, boolean playable) {
-		int gx = ((int) x - World.MAP_MIN_X) >> 4;
-		int gy = ((int) y - World.MAP_MIN_Y) >> 4;
+		int gx = ((int) x - WorldData.MAP_MIN_X) >> 4;
+		int gy = ((int) y - WorldData.MAP_MIN_Y) >> 4;
 		short gz = (short) z;
-		int gtx = ((int) tx - World.MAP_MIN_X) >> 4;
-		int gty = ((int) ty - World.MAP_MIN_Y) >> 4;
+		int gtx = ((int) tx - WorldData.MAP_MIN_X) >> 4;
+		int gty = ((int) ty - WorldData.MAP_MIN_Y) >> 4;
 		short gtz = (short) tz;
 
 		GeoNode start = readNode(gx, gy, gz);
@@ -363,7 +363,7 @@ public final class GeoPathFinding extends PathFinding {
 	}
 
 	private void loadPathNodeFile(Path pnFilePath, byte rx, byte ry) {
-		if ((rx < World.TILE_X_MIN) || (rx > World.TILE_X_MAX) || (ry < World.TILE_Y_MIN) || (ry > World.TILE_Y_MAX)) {
+		if ((rx < WorldData.TILE_X_MIN) || (rx > WorldData.TILE_X_MAX) || (ry < WorldData.TILE_Y_MIN) || (ry > WorldData.TILE_Y_MAX)) {
 			LOGGER.warn("Failed to Load PathNode File: invalid region " + rx + "," + ry + System.lineSeparator());
 			return;
 		}

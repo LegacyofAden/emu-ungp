@@ -18,6 +18,22 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.xml.impl.ArmorSetsData;
@@ -28,7 +44,6 @@ import org.l2junity.gameserver.enums.PrivateStoreType;
 import org.l2junity.gameserver.model.ArmorSet;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.VariationInstance;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.ArmorsetSkillHolder;
 import org.l2junity.gameserver.model.items.ItemTemplate;
@@ -40,16 +55,6 @@ import org.l2junity.gameserver.network.client.send.ExUserInfoEquipSlot;
 import org.l2junity.gameserver.network.client.send.SkillCoolTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * This class manages inventory
@@ -1457,8 +1462,6 @@ public abstract class Inventory extends ItemContainer {
 							item.setItemLocation(ItemLocation.INVENTORY);
 						}
 					}
-
-					World.getInstance().addObject(item);
 
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

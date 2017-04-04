@@ -14,10 +14,9 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.data.xml.impl.FenceData;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.FenceState;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.IDeletable;
@@ -96,7 +95,7 @@ public final class FenceInstance extends WorldObject implements IDeletable {
 				deleteObjects[i] = new DeleteObject(_heightFences[i]);
 			}
 
-			World.getInstance().forEachVisibleObject(this, Player.class, player -> player.sendPacket(deleteObjects));
+			getWorld().forEachVisibleObject(this, Player.class, player -> player.sendPacket(deleteObjects));
 		}
 
 		return super.decayMe();

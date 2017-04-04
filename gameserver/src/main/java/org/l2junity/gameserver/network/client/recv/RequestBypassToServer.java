@@ -18,13 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.CommunityBoardHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -43,8 +44,6 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
 import org.l2junity.network.PacketReader;
-
-import java.util.StringTokenizer;
 
 /**
  * RequestBypassToServer client packet implementation.
@@ -141,7 +140,7 @@ public final class RequestBypassToServer implements IClientIncomingPacket {
 				}
 
 				if (Util.isDigit(id)) {
-					WorldObject object = World.getInstance().findObject(Integer.parseInt(id));
+					WorldObject object = activeChar.getWorld().findObject(Integer.parseInt(id));
 
 					if ((object != null) && object.isNpc() && (endOfId > 0) && activeChar.isInRadius2d(object, Npc.INTERACTION_DISTANCE)) {
 						((Npc) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
@@ -214,7 +213,7 @@ public final class RequestBypassToServer implements IClientIncomingPacket {
 				final IBypassHandler handler = BypassHandler.getInstance().getHandler(_command);
 				if (handler != null) {
 					if (bypassOriginId > 0) {
-						WorldObject bypassOrigin = World.getInstance().findObject(bypassOriginId);
+						WorldObject bypassOrigin = activeChar.getWorld().findObject(bypassOriginId);
 						if ((bypassOrigin != null) && bypassOrigin.isCreature()) {
 							handler.useBypass(_command, activeChar, (Creature) bypassOrigin);
 						} else {

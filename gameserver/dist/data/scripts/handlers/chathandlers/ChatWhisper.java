@@ -25,8 +25,8 @@ import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -59,7 +59,7 @@ public final class ChatWhisper implements IChatHandler {
 			return;
 		}
 
-		final Player receiver = World.getInstance().getPlayer(target);
+		final Player receiver = WorldManager.getInstance().getPlayer(target);
 
 		if ((receiver != null) && !receiver.isSilenceMode(activeChar.getObjectId())) {
 			if (GeneralConfig.JAIL_DISABLE_CHAT && receiver.isJailed() && !activeChar.canOverrideCond(PcCondOverride.CHAT_CONDITIONS)) {

@@ -18,12 +18,10 @@
  */
 package instances.IceQueensCastle;
 
-import instances.AbstractInstance;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -33,6 +31,8 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import instances.AbstractInstance;
 import quests.Q10285_MeetingSirra.Q10285_MeetingSirra;
 
 /**
@@ -68,7 +68,7 @@ public final class IceQueensCastle extends AbstractInstance {
 	public String onAdvEvent(String event, Npc npc, Player player) {
 		switch (event) {
 			case "ATTACK_KNIGHT": {
-				World.getInstance().forEachVisibleObject(npc, Npc.class, mob ->
+				npc.getWorld().forEachVisibleObject(npc, Npc.class, mob ->
 				{
 					if ((mob.getId() == ARCHERY_KNIGHT) && !mob.isDead() && !mob.isDecayed()) {
 						npc.setIsRunning(true);
@@ -132,7 +132,7 @@ public final class IceQueensCastle extends AbstractInstance {
 			npc.setScriptValue(1);
 			npc.broadcastSay(ChatType.NPC_GENERAL, NpcStringId.S1_MAY_THE_PROTECTION_OF_THE_GODS_BE_UPON_YOU, creature.getName());
 
-			World.getInstance().forEachVisibleObject(npc, Npc.class, mob ->
+			npc.getWorld().forEachVisibleObject(npc, Npc.class, mob ->
 			{
 				if ((mob.getId() == ARCHERY_KNIGHT) && !mob.isDead() && !mob.isDecayed()) {
 					npc.setIsRunning(true);

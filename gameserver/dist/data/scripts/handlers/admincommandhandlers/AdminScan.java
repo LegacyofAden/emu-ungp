@@ -26,7 +26,6 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.DBSpawnManager;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -35,6 +34,7 @@ import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.formatters.BypassParserFormatter;
 import org.l2junity.gameserver.model.html.pagehandlers.NextPrevPageHandler;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.BypassBuilder;
 import org.l2junity.gameserver.util.BypassParser;
@@ -75,7 +75,7 @@ public class AdminScan implements IAdminCommandHandler {
 						activeChar.sendMessage("objectId is not set!");
 					}
 
-					final WorldObject target = World.getInstance().findObject(objectId);
+					final WorldObject target = WorldManager.getInstance().getObject(objectId);
 					final Npc npc = target instanceof Npc ? (Npc) target : null;
 					if (npc == null) {
 						activeChar.sendMessage("NPC does not exist or object_id does not belong to an NPC");
@@ -150,7 +150,7 @@ public class AdminScan implements IAdminCommandHandler {
 		html.setFile(activeChar.getLang(), "admin/scan.htm");
 
 		//@formatter:off
-		final PageResult result = PageBuilder.newBuilder(World.getInstance().getVisibleObjects(activeChar, Npc.class, radius, condition), 15, bypassParser.toString())
+		final PageResult result = PageBuilder.newBuilder(activeChar.getWorld().getVisibleObjects(activeChar, Npc.class, radius, condition), 15, bypassParser.toString())
 				.currentPage(page)
 				.pageHandler(NextPrevPageHandler.INSTANCE)
 				.formatter(BypassParserFormatter.INSTANCE)

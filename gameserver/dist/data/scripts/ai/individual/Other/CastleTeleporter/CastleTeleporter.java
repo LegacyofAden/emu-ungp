@@ -18,21 +18,21 @@
  */
 package ai.individual.Other.CastleTeleporter;
 
-import ai.AbstractNpcAI;
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Siege;
 import org.l2junity.gameserver.network.client.send.NpcSay;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.util.StringTokenizer;
+import ai.AbstractNpcAI;
 
 /**
  * Castle Teleporter AI.
@@ -135,7 +135,7 @@ public final class CastleTeleporter extends AbstractNpcAI {
 				msg.addStringParameter(npc.getCastle().getName());
 				npc.getCastle().oustAllPlayers();
 				npc.setScriptValue(0);
-				for (Player pl : World.getInstance().getPlayers()) // TODO: Is it possible to get all the players for that region, instead of all players?
+				for (Player pl : npc.getWorld().getPlayers()) // TODO: Is it possible to get all the players for that region, instead of all players?
 				{
 					if (region == MapRegionManager.getInstance().getMapRegionLocId(pl)) {
 						pl.sendPacket(msg);

@@ -18,7 +18,6 @@
  */
 package ai.individual.TowerOfInsolence.Baium;
 
-import ai.AbstractNpcAI;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.core.configs.GrandBossConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -29,7 +28,6 @@ import org.l2junity.gameserver.instancemanager.GrandBossManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -46,6 +44,8 @@ import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+
+import ai.AbstractNpcAI;
 
 /**
  * Baium AI.
@@ -256,7 +256,7 @@ public final class Baium extends AbstractNpcAI {
 				} else if ((_standbyPlayer != null) && !_standbyPlayer.isDead()) {
 					addAttackPlayerDesire(npc, _standbyPlayer);
 				} else {
-					for (Creature creature : World.getInstance().getVisibleObjects(npc, Player.class, 2000)) {
+					for (Creature creature : npc.getWorld().getVisibleObjects(npc, Player.class, 2000)) {
 						if (zone.isInsideZone(creature) && !creature.isDead()) {
 							addAttackPlayerDesire(npc, (Playable) creature);
 							break;
@@ -282,7 +282,7 @@ public final class Baium extends AbstractNpcAI {
 						addAttackPlayerDesire(mob, (Playable) mostHated);
 					} else {
 						boolean found = false;
-						for (Playable creature : World.getInstance().getVisibleObjects(mob, Playable.class, 1000)) {
+						for (Playable creature : mob.getWorld().getVisibleObjects(mob, Playable.class, 1000)) {
 							if (zone.isInsideZone(creature) && !creature.isDead()) {
 								if (mob.getTarget() != creature) {
 									mob.clearAggroList();

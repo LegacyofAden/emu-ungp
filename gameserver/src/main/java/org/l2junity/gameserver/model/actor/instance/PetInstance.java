@@ -53,7 +53,6 @@ import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
 import org.l2junity.gameserver.model.PetData;
 import org.l2junity.gameserver.model.PetLevelData;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
@@ -69,6 +68,7 @@ import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.EffectScope;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.ExChangeNpcState;
@@ -196,7 +196,7 @@ public class PetInstance extends Summon {
 	}
 
 	public synchronized static PetInstance spawnPet(NpcTemplate template, Player owner, ItemInstance control) {
-		if (World.getInstance().getPet(owner.getObjectId()) != null) {
+		if (WorldManager.getInstance().getPet(owner.getObjectId()) != null) {
 			return null; // owner has a pet listed in world
 		}
 		final PetData data = PetDataTable.getInstance().getPetData(template.getId());
@@ -209,7 +209,6 @@ public class PetInstance extends Summon {
 				pet.getStat().setLevel((byte) owner.getLevel());
 				pet.getStat().setExp(pet.getStat().getExpForLevel(owner.getLevel()));
 			}
-			World.getInstance().addPet(owner.getObjectId(), pet);
 		}
 		return pet;
 	}
@@ -642,7 +641,7 @@ public class PetInstance extends Summon {
 	 */
 	public void destroyControlItem(Player owner, boolean evolve) {
 		// remove the pet instance from world
-		World.getInstance().removePet(owner.getObjectId());
+		WorldManager.getInstance().removePet(owner.getObjectId());
 
 		// delete from inventory
 		try {
@@ -961,7 +960,7 @@ public class PetInstance extends Summon {
 			if (getInventory() != null) {
 				getInventory().deleteMe();
 			}
-			World.getInstance().removePet(owner.getObjectId());
+			WorldManager.getInstance().removePet(owner.getObjectId());
 		}
 	}
 
@@ -1053,8 +1052,8 @@ public class PetInstance extends Summon {
 		final int oldOwnerId = getOwner().getObjectId();
 
 		setOwner(owner);
-		World.getInstance().removePet(oldOwnerId);
-		World.getInstance().addPet(oldOwnerId, this);
+		WorldManager.getInstance().removePet(oldOwnerId);
+		owner.getWorld().addPet(oldOwnerId, this);
 	}
 
 	public int getInventoryLimit() {

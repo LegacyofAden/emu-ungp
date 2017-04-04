@@ -18,18 +18,19 @@
  */
 package ai.individual.Other.TersisHerald;
 
-import ai.AbstractNpcAI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.util.ArrayList;
-import java.util.List;
+import ai.AbstractNpcAI;
 
 /**
  * Tersi's Herald AI.
@@ -115,7 +116,7 @@ public final class TersisHerald extends AbstractNpcAI {
 				return super.onKill(npc, killer, isSummon);
 		}
 
-		World.getInstance().getPlayers().stream().forEach(p -> showOnScreenMsg(p, npcStringId, 2, 10000, true));
+		WorldManager.getInstance().getAllPlayers().stream().forEach(p -> showOnScreenMsg(p, npcStringId, 2, 10000, true));
 
 		if (!SPAWNED_NPCS.isEmpty()) {
 			getTimers().cancelTimers("DESPAWN_NPCS");

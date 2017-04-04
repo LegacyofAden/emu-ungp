@@ -18,7 +18,6 @@
  */
 package ai.group;
 
-import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.ChatType;
@@ -26,7 +25,6 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -37,6 +35,8 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
+
+import ai.AbstractNpcAI;
 
 /**
  * Primeval Isle AI.
@@ -278,7 +278,7 @@ public final class PrimevalIsle extends AbstractNpcAI {
 			if ((getRandom(100) <= 80) && npc.isScriptValue(0)) {
 				npc.setScriptValue(1);
 				final Playable playable = isSummon ? attacker.getServitors().values().stream().findFirst().orElse(attacker.getPet()) : attacker;
-				World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 500, monster ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, Attackable.class, 500, monster ->
 				{
 					if ((getRandomBoolean())) {
 						addAttackPlayerDesire(monster, playable);

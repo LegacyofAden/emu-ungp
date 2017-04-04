@@ -18,11 +18,16 @@
  */
 package org.l2junity.gameserver.network.client;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import org.l2junity.commons.model.SessionInfo;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
@@ -33,9 +38,13 @@ import org.l2junity.gameserver.instancemanager.MailManager;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.client.send.LeaveWorld;
+import org.l2junity.gameserver.network.client.send.ServerClose;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
 import org.l2junity.gameserver.service.GameServerRMI;
@@ -46,12 +55,8 @@ import org.l2junity.network.IIncomingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.concurrent.locks.ReentrantLock;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Represents a client connected on Game Server.
@@ -435,7 +440,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 			return null;
 		}
 
-		Player player = World.getInstance().getPlayer(objectId);
+		Player player = WorldManager.getInstance().getPlayer(objectId);
 		if (player != null) {
 			// exploit prevention, should not happens in normal way
 			LOGGER.error("Attempt of double login: {}({}) {}", player.getName(), objectId, getAccountName());

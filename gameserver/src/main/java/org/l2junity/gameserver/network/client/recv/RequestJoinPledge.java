@@ -19,12 +19,12 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ClanInvitationRequest;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToClan;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.AskJoinPledge;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -58,7 +58,7 @@ public final class RequestJoinPledge implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player target = World.getInstance().getPlayer(_target);
+		final Player target = WorldManager.getInstance().getPlayer(_target);
 		if (target == null) {
 			activeChar.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return;

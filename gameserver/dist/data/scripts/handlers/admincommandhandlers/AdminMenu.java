@@ -18,21 +18,21 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - handles every admin menu command
@@ -64,7 +64,7 @@ public class AdminMenu implements IAdminCommandHandler {
 			String[] data = command.split(" ");
 			if (data.length == 5) {
 				String playerName = data[1];
-				Player player = World.getInstance().getPlayer(playerName);
+				Player player = WorldManager.getInstance().getPlayer(playerName);
 				if (player != null) {
 					teleportCharacter(player, new Location(Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4])), activeChar, "Admin is teleporting you.");
 				}
@@ -73,14 +73,14 @@ public class AdminMenu implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_recall_char_menu")) {
 			try {
 				String targetName = command.substring(23);
-				Player player = World.getInstance().getPlayer(targetName);
+				Player player = WorldManager.getInstance().getPlayer(targetName);
 				teleportCharacter(player, activeChar.getLocation(), activeChar, "Admin is teleporting you.");
 			} catch (StringIndexOutOfBoundsException e) {
 			}
 		} else if (command.startsWith("admin_recall_party_menu")) {
 			try {
 				String targetName = command.substring(24);
-				Player player = World.getInstance().getPlayer(targetName);
+				Player player = WorldManager.getInstance().getPlayer(targetName);
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 					return true;
@@ -99,7 +99,7 @@ public class AdminMenu implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_recall_clan_menu")) {
 			try {
 				String targetName = command.substring(23);
-				Player player = World.getInstance().getPlayer(targetName);
+				Player player = WorldManager.getInstance().getPlayer(targetName);
 				if (player == null) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 					return true;
@@ -119,7 +119,7 @@ public class AdminMenu implements IAdminCommandHandler {
 			}
 		} else if (command.startsWith("admin_goto_char_menu")) {
 			try {
-				final Player player = World.getInstance().getPlayer(command.substring(21));
+				final Player player = WorldManager.getInstance().getPlayer(command.substring(21));
 				teleportToCharacter(activeChar, player);
 			} catch (StringIndexOutOfBoundsException e) {
 			}
@@ -130,7 +130,7 @@ public class AdminMenu implements IAdminCommandHandler {
 			if (st.countTokens() > 1) {
 				st.nextToken();
 				String player = st.nextToken();
-				Player plyr = World.getInstance().getPlayer(player);
+				Player plyr = WorldManager.getInstance().getPlayer(player);
 				String text;
 				if (plyr != null) {
 					Disconnection.of(plyr).defaultSequence(false);
@@ -173,7 +173,7 @@ public class AdminMenu implements IAdminCommandHandler {
 		Creature target = (Creature) obj;
 		String filename = "main_menu.htm";
 		if (player != null) {
-			Player plyr = World.getInstance().getPlayer(player);
+			Player plyr = WorldManager.getInstance().getPlayer(player);
 			if (plyr != null) {
 				target = plyr;
 				activeChar.sendMessage("You killed " + plyr.getName());

@@ -22,6 +22,7 @@ import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ItemLocation;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.ItemStorage;
 
 /**
  * @author DS
@@ -74,6 +75,7 @@ public class PcRefund extends ItemContainer {
 			for (ItemInstance item : _items.values()) {
 				ItemTable.getInstance().destroyItem("ClearRefund", item, getOwner(), null);
 				item.updateDatabase(true);
+				ItemStorage.getInstance().remove(item);
 			}
 		} catch (Exception e) {
 			_log.error("deleteMe()", e);

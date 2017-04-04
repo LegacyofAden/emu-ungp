@@ -18,6 +18,10 @@
  */
 package handlers.admincommandhandlers;
 
+import java.time.DateTimeException;
+import java.time.LocalTime;
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.core.configs.RatesConfig;
@@ -26,11 +30,11 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -38,10 +42,6 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.DateTimeException;
-import java.time.LocalTime;
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - admin|admin1/admin2/admin3/admin4/admin5 = slots for the 5 starting admin menus - gmliston/gmlistoff = includes/excludes active character from /gmlist results - silence = toggles private messages acceptance mode - diet = toggles weight penalty mode -
@@ -212,7 +212,7 @@ public class AdminAdmin implements IAdminCommandHandler {
 					}
 
 					final CreatureSay cs = new CreatureSay(activeChar, ChatType.WORLD, sb.toString());
-					World.getInstance().getPlayers().stream().filter(activeChar::isNotBlocked).forEach(cs::sendTo);
+					WorldManager.getInstance().getMainWorld().getPlayers().stream().filter(activeChar::isNotBlocked).forEach(cs::sendTo);
 					break;
 				}
 				case "see": {

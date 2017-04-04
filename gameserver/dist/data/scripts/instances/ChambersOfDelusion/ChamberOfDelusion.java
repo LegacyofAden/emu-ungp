@@ -18,7 +18,13 @@
  */
 package instances.ChambersOfDelusion;
 
-import instances.AbstractInstance;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.core.configs.GeneralConfig;
@@ -26,22 +32,17 @@ import org.l2junity.core.configs.RatesConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
+import instances.AbstractInstance;
 
 /**
  * Chambers of Delusion.
@@ -116,7 +117,7 @@ public final class ChamberOfDelusion extends AbstractInstance {
 				task.cancel(false);
 			} else {
 				for (int objId : instance.getAllowed()) {
-					final Player pl = World.getInstance().getPlayer(objId);
+					final Player pl = WorldManager.getInstance().getPlayer(objId);
 					if ((pl != null) && pl.isOnline() && !pl.isInParty()) {
 						instance.finishInstance(0);
 						break;

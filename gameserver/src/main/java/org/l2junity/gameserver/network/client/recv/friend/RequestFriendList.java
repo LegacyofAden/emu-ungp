@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.recv.friend;
 
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -59,7 +59,7 @@ public final class RequestFriendList implements IClientIncomingPacket {
 				continue;
 			}
 
-			friend = World.getInstance().getPlayer(friendName);
+			friend = WorldManager.getInstance().getPlayer(friendName);
 
 			if ((friend == null) || !friend.isOnline()) {
 				// (Currently: Offline)

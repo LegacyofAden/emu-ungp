@@ -19,8 +19,8 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.core.configs.GeoDataConfig;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.GetOnVehicle;
@@ -110,7 +110,7 @@ public class ValidatePosition implements IClientIncomingPacket {
 		// }
 
 		// Don't allow flying transformations outside gracia area!
-		if (activeChar.isFlyingMounted() && (_x > World.GRACIA_MAX_X)) {
+		if (activeChar.isFlyingMounted() && (_x > WorldData.GRACIA_MAX_X)) {
 			activeChar.untransform();
 		}
 

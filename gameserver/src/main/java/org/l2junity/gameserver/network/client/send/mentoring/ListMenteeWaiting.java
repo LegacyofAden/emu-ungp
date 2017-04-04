@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.send.mentoring;
 
-import org.l2junity.gameserver.model.World;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author UnAfraid
@@ -37,7 +37,7 @@ public class ListMenteeWaiting implements IClientOutgoingPacket {
 
 	public ListMenteeWaiting(int page, int minLevel, int maxLevel) {
 		_page = page;
-		for (Player player : World.getInstance().getPlayers()) {
+		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			if ((player.getLevel() >= minLevel) && (player.getLevel() <= maxLevel) && !player.isMentee() && !player.isMentor() && !player.isAwakenedClass()) {
 				_possibleCandiates.add(player);
 			}

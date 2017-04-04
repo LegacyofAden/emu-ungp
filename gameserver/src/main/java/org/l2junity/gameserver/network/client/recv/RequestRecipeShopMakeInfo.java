@@ -20,7 +20,6 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
 import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -51,7 +50,7 @@ public final class RequestRecipeShopMakeInfo implements IClientIncomingPacket {
 			return;
 		}
 
-		final Player manufacturer = World.getInstance().getPlayer(_playerObjectId);
+		final Player manufacturer = player.getWorld().getPlayer(_playerObjectId);
 		if ((manufacturer == null) || (manufacturer.getPrivateStoreType() != PrivateStoreType.MANUFACTURE)) {
 			return;
 		}

@@ -21,7 +21,6 @@ package org.l2junity.gameserver.model.items;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.ItemSkillType;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -252,7 +251,7 @@ public final class Weapon extends ItemTemplate {
 			if (type == ItemSkillType.ON_MAGIC_SKILL) {
 				// notify quests of a skill use
 				if (caster instanceof Player) {
-					World.getInstance().forEachVisibleObjectInRadius(caster, Npc.class, 1000, npc ->
+					caster.getWorld().forEachVisibleObjectInRadius(caster, Npc.class, 1000, npc ->
 					{
 						EventDispatcher.getInstance().notifyEventAsync(new OnNpcSkillSee(npc, caster.getActingPlayer(), skill, false, target), npc);
 						EventDispatcher.getInstance().notifyEventAsync(new OnCreatureSkillUsed(caster, target, skill, skill.isWithoutAction()), caster, skill);

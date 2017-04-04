@@ -18,20 +18,19 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
+import java.awt.Color;
+import java.util.function.Consumer;
+
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.gameserver.util.Util;
-
-import java.awt.*;
-import java.util.function.Consumer;
 
 /**
  * Fan point blank affect scope implementation. Gathers objects in a certain angle of circular area around yourself without taking target into account.
@@ -52,7 +51,7 @@ public class FanPB implements IAffectScopeHandler {
 		final MutableInt affected = new MutableInt(0);
 
 		// Check and add targets.
-		World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, fanRadius, c ->
+		activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Creature.class, fanRadius, c ->
 		{
 			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;

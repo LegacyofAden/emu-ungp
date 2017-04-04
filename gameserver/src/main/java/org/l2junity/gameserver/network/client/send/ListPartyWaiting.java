@@ -18,16 +18,16 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
-import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.matching.MatchingRoom;
-import org.l2junity.gameserver.network.client.OutgoingPackets;
-import org.l2junity.network.PacketWriter;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.l2junity.gameserver.enums.PartyMatchingRoomLevelType;
+import org.l2junity.gameserver.instancemanager.MatchingRoomManager;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.matching.MatchingRoom;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.OutgoingPackets;
+import org.l2junity.network.PacketWriter;
 
 /**
  * @author Gnacik
@@ -72,8 +72,8 @@ public class ListPartyWaiting implements IClientOutgoingPacket {
 				packet.writeS(member.getName());
 			}
 		}
-		packet.writeD(World.getInstance().getPartyCount());
-		packet.writeD(World.getInstance().getPartyMemberCount());
+		packet.writeD(WorldManager.getInstance().getPartyCount());
+		packet.writeD(WorldManager.getInstance().getPartyMemberCount());
 		return true;
 	}
 }

@@ -18,12 +18,17 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.enums.CeremonyOfChaosState;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
@@ -42,6 +47,7 @@ import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
@@ -49,12 +55,6 @@ import org.l2junity.gameserver.network.client.send.ceremonyofchaos.ExCuriousHous
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Sdw
@@ -90,7 +90,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		}
 
 		// Update data for online players.
-		World.getInstance().getPlayers().stream().forEach(player ->
+		WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 		{
 			player.getVariables().remove(PlayerVariables.CEREMONY_OF_CHAOS_PROHIBITED_PENALTIES);
 			player.getVariables().storeMe();
@@ -118,7 +118,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		}
 
 		setState(CeremonyOfChaosState.REGISTRATION);
-		for (Player player : World.getInstance().getPlayers()) {
+		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(SystemMessageId.REGISTRATION_FOR_THE_CEREMONY_OF_CHAOS_HAS_BEGUN);
 				if (canRegister(player, false)) {
@@ -135,7 +135,7 @@ public class CeremonyOfChaosManager extends AbstractEventManager<CeremonyOfChaos
 		}
 
 		setState(CeremonyOfChaosState.PREPARING_FOR_TELEPORT);
-		for (Player player : World.getInstance().getPlayers()) {
+		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(SystemMessageId.REGISTRATION_FOR_THE_CEREMONY_OF_CHAOS_HAS_ENDED);
 				if (!isRegistered(player)) {

@@ -22,13 +22,13 @@ import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.enums.PartyDistributionType;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.PartyRequest;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerInviteToParty;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.AskJoinParty;
@@ -55,7 +55,7 @@ public final class RequestJoinParty implements IClientIncomingPacket {
 	@Override
 	public void run(L2GameClient client) {
 		final Player requestor = client.getActiveChar();
-		final Player target = World.getInstance().getPlayer(_name);
+		final Player target = WorldManager.getInstance().getPlayer(_name);
 
 		if (requestor == null) {
 			return;

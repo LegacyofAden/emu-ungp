@@ -18,9 +18,9 @@
  */
 package ai;
 
-import lombok.extern.slf4j.Slf4j;
+import java.awt.Color;
+
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
@@ -33,7 +33,7 @@ import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
 
-import java.awt.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract NPC AI class for datapack based AIs.
@@ -107,7 +107,7 @@ public abstract class AbstractNpcAI extends Quest {
 
 	protected void followNpc(final Npc npc, int followedNpcId, int followingAngle, int minDistance, int maxDistance) {
 		// TODO: Handle if someone buffs Rinne for speed the same speed has to be synchronized with Allada (Verified on NCWest)
-		World.getInstance().forEachVisibleObject(npc, Npc.class, npcAround ->
+		npc.getWorld().forEachVisibleObject(npc, Npc.class, npcAround ->
 		{
 			if (npcAround.getId() != followedNpcId) {
 				return;

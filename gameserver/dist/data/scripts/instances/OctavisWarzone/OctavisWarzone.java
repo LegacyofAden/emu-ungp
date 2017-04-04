@@ -18,14 +18,12 @@
  */
 package instances.OctavisWarzone;
 
-import instances.AbstractInstance;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.enums.Movie;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
@@ -39,6 +37,8 @@ import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.ScriptZone;
 import org.l2junity.gameserver.network.client.send.ExShowUsm;
 import org.l2junity.gameserver.util.Util;
+
+import instances.AbstractInstance;
 
 /**
  * Octavis Warzone instance zone.
@@ -277,7 +277,7 @@ public final class OctavisWarzone extends AbstractInstance {
 				case "MINION_CALL": {
 					final Player mostHated = ((Attackable) npc).getMostHated().getActingPlayer();
 					if ((mostHated != null) && (mostHated.distance3d(npc) < 5000)) {
-						World.getInstance().getVisibleObjects(npc, Attackable.class, 4000, obj -> ArrayUtil.contains(BEASTS_MINIONS, obj.getId()) || ArrayUtil.contains(GLADIATORS, obj.getId())).forEach(minion ->
+						npc.getWorld().getVisibleObjects(npc, Attackable.class, 4000, obj -> ArrayUtil.contains(BEASTS_MINIONS, obj.getId()) || ArrayUtil.contains(GLADIATORS, obj.getId())).forEach(minion ->
 						{
 							addAttackPlayerDesire(minion, mostHated, 23);
 						});

@@ -18,29 +18,29 @@
  */
 package org.l2junity.gameserver.geodata;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.l2junity.commons.lang.management.ShutdownManager;
 import org.l2junity.commons.lang.management.TerminationStatus;
-import org.l2junity.commons.util.BasePathProvider;
 import org.l2junity.core.configs.GeoDataConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.FenceData;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.util.GeoUtils;
 import org.l2junity.gameserver.util.LinePointIterator;
 import org.l2junity.gameserver.util.LinePointIterator3D;
 import org.l2junity.geodriver.Cell;
 import org.l2junity.geodriver.GeoDriver;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author -Nemesiss-, HorridoJoho
@@ -61,8 +61,8 @@ public final class GeoData {
 	protected GeoData() {
 		int loadedRegions = 0;
 		try {
-			for (int regionX = World.TILE_X_MIN; regionX <= World.TILE_X_MAX; regionX++) {
-				for (int regionY = World.TILE_Y_MIN; regionY <= World.TILE_Y_MAX; regionY++) {
+			for (int regionX = WorldData.TILE_X_MIN; regionX <= WorldData.TILE_X_MAX; regionX++) {
+				for (int regionY = WorldData.TILE_Y_MIN; regionY <= WorldData.TILE_Y_MAX; regionY++) {
 					final Path geoFilePath = Paths.get(GeoDataConfig.GEODATA_PATH.toString(), String.format(FILE_NAME_FORMAT, regionX, regionY));
 					if (Files.exists(geoFilePath)) {
 						log.debug("Loading " + geoFilePath.getFileName() + "...");

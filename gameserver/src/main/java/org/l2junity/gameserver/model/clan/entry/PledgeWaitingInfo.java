@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.clan.entry;
 
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 
 /**
  * @author Sdw
@@ -73,7 +73,7 @@ public class PledgeWaitingInfo {
 	}
 
 	public Player getPlayerInstance() {
-		return World.getInstance().getPlayer(_playerId);
+		return WorldManager.getInstance().getPlayer(_playerId);
 	}
 
 	public boolean isOnline() {

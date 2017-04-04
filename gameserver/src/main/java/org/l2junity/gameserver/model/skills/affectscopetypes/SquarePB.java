@@ -18,20 +18,19 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
+import java.awt.Color;
+import java.util.function.Consumer;
+
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
 import org.l2junity.gameserver.util.Util;
-
-import java.awt.*;
-import java.util.function.Consumer;
 
 /**
  * Square point blank affect scope implementation (actually more like a rectangle). Gathers objects around yourself except target itself.
@@ -57,7 +56,7 @@ public class SquarePB implements IAffectScopeHandler {
 		final MutableInt affected = new MutableInt(0);
 
 		// Check and add targets.
-		World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, c ->
+		activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, c ->
 		{
 			if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 				return;

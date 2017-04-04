@@ -18,20 +18,19 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
+import java.awt.Color;
+import java.util.function.Consumer;
+
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
-import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.ILocational;
+import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.TargetType;
 import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
-
-import java.awt.*;
-import java.util.function.Consumer;
 
 /**
  * Range affect scope implementation. Gathers objects in area of target origin (including origin itself).
@@ -52,7 +51,7 @@ public class Range implements IAffectScopeHandler {
 			if (activeChar.isPlayable()) {
 				ILocational worldPosition = activeChar.getActingPlayer().getCurrentSkillWorldPosition();
 				if (worldPosition != null) {
-					World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, (int) (affectRange + activeChar.distance2d(worldPosition)), c ->
+					activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Creature.class, (int) (affectRange + activeChar.distance2d(worldPosition)), c ->
 					{
 						if (!c.isInRadius3d(worldPosition, affectRange)) {
 							return;
@@ -80,7 +79,7 @@ public class Range implements IAffectScopeHandler {
 			// Always accept main target.
 			action.accept(target);
 
-			World.getInstance().forEachVisibleObjectInRadius(target, Creature.class, affectRange, c ->
+			target.getWorld().forEachVisibleObjectInRadius(target, Creature.class, affectRange, c ->
 			{
 				if ((affectLimit > 0) && (affected.intValue() >= affectLimit)) {
 					return;

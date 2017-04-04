@@ -18,6 +18,20 @@
  */
 package org.l2junity.gameserver.model.entity;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.FeatureConfig;
@@ -33,13 +47,13 @@ import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.type.FortZone;
 import org.l2junity.gameserver.model.zone.type.SiegeZone;
 import org.l2junity.gameserver.network.client.send.PlaySound;
@@ -48,14 +62,6 @@ import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 public final class Fort extends AbstractResidence {
 	protected static final Logger _log = LoggerFactory.getLogger(Fort.class);
@@ -676,7 +682,7 @@ public final class Fort extends AbstractResidence {
 				sm = SystemMessage.getSystemMessage(SystemMessageId.S1_IS_VICTORIOUS_IN_THE_FORTRESS_BATTLE_OF_S2);
 				sm.addString(clan.getName());
 				sm.addCastleId(getResidenceId());
-				World.getInstance().getPlayers().forEach(p -> p.sendPacket(sm));
+				WorldManager.getInstance().getAllPlayers().forEach(p -> p.sendPacket(sm));
 				clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
 				clan.broadcastToOnlineMembers(new PlaySound(1, "Siege_Victory", 0, 0, 0, 0, 0));
 				if (_FortUpdater[0] != null) {

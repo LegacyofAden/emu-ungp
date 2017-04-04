@@ -22,9 +22,9 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
@@ -71,7 +71,7 @@ public class MoveToLocationAirShip implements IClientIncomingPacket {
 				if (!ship.canBeControlled()) {
 					return;
 				}
-				if (_param1 < World.GRACIA_MAX_X) {
+				if (_param1 < WorldData.GRACIA_MAX_X) {
 					ship.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(_param1, _param2, z));
 				}
 				break;
@@ -85,8 +85,8 @@ public class MoveToLocationAirShip implements IClientIncomingPacket {
 				if (!ship.canBeControlled()) {
 					return;
 				}
-				if (z < World.GRACIA_MAX_Z) {
-					z = Math.min(z + STEP, World.GRACIA_MAX_Z);
+				if (z < WorldData.GRACIA_MAX_Z) {
+					z = Math.min(z + STEP, WorldData.GRACIA_MAX_Z);
 					ship.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(ship.getX(), ship.getY(), z));
 				}
 				break;
@@ -94,8 +94,8 @@ public class MoveToLocationAirShip implements IClientIncomingPacket {
 				if (!ship.canBeControlled()) {
 					return;
 				}
-				if (z > World.GRACIA_MIN_Z) {
-					z = Math.max(z - STEP, World.GRACIA_MIN_Z);
+				if (z > WorldData.GRACIA_MIN_Z) {
+					z = Math.max(z - STEP, WorldData.GRACIA_MIN_Z);
 					ship.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new Location(ship.getX(), ship.getY(), z));
 				}
 				break;

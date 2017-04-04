@@ -18,9 +18,10 @@
  */
 package ai.individual.PrisonOfDarkness.Cannon;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -30,8 +31,7 @@ import org.l2junity.gameserver.network.client.send.Earthquake;
 import org.l2junity.gameserver.network.client.send.OnEventTrigger;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.util.HashMap;
-import java.util.Map;
+import ai.AbstractNpcAI;
 
 /**
  * Cannon AI.
@@ -104,7 +104,7 @@ public final class Cannon extends AbstractNpcAI {
 				break;
 			}
 			case "LIGHT_CHECK": {
-				World.getInstance().forEachVisibleObjectInRadius(npc, MonsterInstance.class, 1000, monster ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, MonsterInstance.class, 1000, monster ->
 				{
 					final int monsterId = monster.getId();
 					if (TRANSFORM_DATA.containsKey(monsterId)) {

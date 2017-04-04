@@ -22,9 +22,9 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.enums.ClanEntryStatus;
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
 import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.clan.entry.PledgeApplicantInfo;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExPledgeRecruitApplyInfo;
 import org.l2junity.gameserver.network.client.send.ExPledgeWaitingListAlarm;
@@ -64,7 +64,7 @@ public class RequestPledgeWaitingApply implements IClientIncomingPacket {
 		if (ClanEntryManager.getInstance().addPlayerApplicationToClan(_clanId, info)) {
 			client.sendPacket(new ExPledgeRecruitApplyInfo(ClanEntryStatus.WAITING));
 
-			final Player clanLeader = World.getInstance().getPlayer(clan.getLeaderId());
+			final Player clanLeader = WorldManager.getInstance().getPlayer(clan.getLeaderId());
 			if (clanLeader != null) {
 				clanLeader.sendPacket(ExPledgeWaitingListAlarm.STATIC_PACKET);
 			}

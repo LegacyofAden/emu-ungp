@@ -18,13 +18,13 @@
  */
 package ai.individual.TalkingIsland;
 
-import ai.AbstractNpcAI;
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
+
+import ai.AbstractNpcAI;
 
 /**
  * Ye Segira Combat Soldier AI.
@@ -57,7 +57,7 @@ public class YeSegiraCombatSoldier extends AbstractNpcAI {
 	public void onTimerEvent(String event, StatsSet params, Npc npc, Player player) {
 		if (event.equals("LOOK_AROUND") && (npc != null)) {
 			if (npc.getAI().getIntention() != CtrlIntention.AI_INTENTION_ATTACK) {
-				World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, 500, chars ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, Npc.class, 500, chars ->
 				{
 					if (ArrayUtil.contains(MONSTERS, chars.getId())) {
 						addAttackDesire(npc, chars);

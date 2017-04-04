@@ -18,13 +18,6 @@
  */
 package org.l2junity.gameserver.model.variables;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,8 +26,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
@@ -174,7 +178,7 @@ public class PlayerVariables extends AbstractVariables {
 	}
 
 	public Player getPlayer() {
-		return World.getInstance().getPlayer(_objectId);
+		return WorldManager.getInstance().getPlayer(_objectId);
 	}
 
 	public void addOneDayReward(int rewardId) {

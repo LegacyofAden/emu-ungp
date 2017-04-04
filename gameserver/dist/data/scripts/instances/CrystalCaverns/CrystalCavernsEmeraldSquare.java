@@ -18,10 +18,8 @@
  */
 package instances.CrystalCaverns;
 
-import instances.AbstractInstance;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
@@ -35,6 +33,8 @@ import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
 import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
+
+import instances.AbstractInstance;
 
 /**
  * Crystal Caverns - Emerald Square instance zone.
@@ -199,7 +199,7 @@ public final class CrystalCavernsEmeraldSquare extends AbstractInstance {
 					npc.setState(4);
 					showOnScreenMsg(instance, NpcStringId.SUCCESSFUL_DESTRUCTION_OF_STRONGHOLD_S1, ExShowScreenMessage.MIDDLE_CENTER, 4000, String.valueOf(npc.getParameters().getInt("base_id", -1)));
 
-					World.getInstance().getVisibleObjects(npc, MonsterInstance.class, 400).forEach(monster ->
+					npc.getWorld().getVisibleObjects(npc, MonsterInstance.class, 400).forEach(monster ->
 					{
 						if ((monster.getId() == STRONGHOLD_PROTECTOR) || (monster.getId() == SQUARE_INTRUDER) || (monster.getId() == SQUARE_ATTACKER)) {
 							monster.doDie(null);

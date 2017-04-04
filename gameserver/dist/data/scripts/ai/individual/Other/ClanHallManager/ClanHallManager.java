@@ -18,14 +18,16 @@
  */
 package ai.individual.Other.ClanHallManager;
 
-import ai.AbstractNpcAI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.xml.impl.ResidenceFunctionsData;
 import org.l2junity.gameserver.data.xml.impl.TeleportersData;
 import org.l2junity.gameserver.enums.ClanHallGrade;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
@@ -39,9 +41,7 @@ import org.l2junity.gameserver.model.teleporter.TeleportHolder;
 import org.l2junity.gameserver.network.client.send.AgitDecoInfo;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.StringTokenizer;
+import ai.AbstractNpcAI;
 
 /**
  * Clan Hall Manager AI.
@@ -369,7 +369,7 @@ public final class ClanHallManager extends AbstractNpcAI {
 	}
 
 	private void updateVisualEffects(ClanHall clanHall, Npc npc) {
-		World.getInstance().forEachVisibleObject(npc, Player.class, player -> player.sendPacket(new AgitDecoInfo(clanHall)));
+		npc.getWorld().forEachVisibleObject(npc, Player.class, player -> player.sendPacket(new AgitDecoInfo(clanHall)));
 	}
 
 	private String getFunctionInfo(ResidenceFunction func, String htmltext, String name) {

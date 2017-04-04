@@ -18,20 +18,20 @@
  */
 package ai.individual.Parnassus.EntrancePortalToCrystalCaverns;
 
-import ai.AbstractNpcAI;
-import instances.CrystalCaverns.CrystalCavernsCoralGarden;
-import instances.CrystalCaverns.CrystalCavernsEmeraldSquare;
-import instances.CrystalCaverns.CrystalCavernsSteamCorridor;
+import java.util.Calendar;
+
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.network.client.send.OnEventTrigger;
 
-import java.util.Calendar;
+import ai.AbstractNpcAI;
+import instances.CrystalCaverns.CrystalCavernsCoralGarden;
+import instances.CrystalCaverns.CrystalCavernsEmeraldSquare;
+import instances.CrystalCaverns.CrystalCavernsSteamCorridor;
 
 /**
  * Entrance Portal to Crystal Caverns AI.
@@ -99,7 +99,7 @@ public final class EntrancePortalToCrystalCaverns extends AbstractNpcAI {
 		if (event.equals("LOOP_TIMER")) {
 			final int currentTemplateId = getCurrentInstanceTemplateId();
 
-			World.getInstance().forEachVisibleObjectInRadius(npc, Player.class, 5000, pl ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Player.class, 5000, pl ->
 			{
 				updateTriggersForPlayer(player, currentTemplateId);
 			});

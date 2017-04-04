@@ -18,15 +18,15 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.items.instance.ItemInstance;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.enums.ItemLocation;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.model.world.WorldManager;
 
 /**
  * @author DS
@@ -104,7 +104,6 @@ public class Mail extends ItemContainer {
 			try (ResultSet inv = statement.executeQuery()) {
 				while (inv.next()) {
 					final ItemInstance item = new ItemInstance(inv);
-					World.getInstance().addObject(item);
 
 					// If stackable item is found just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {
@@ -124,7 +123,7 @@ public class Mail extends ItemContainer {
 		for (ItemInstance item : _items.values()) {
 			item.updateDatabase(true);
 			item.deleteMe();
-			World.getInstance().removeObject(item);
+			WorldManager.getInstance().removeObject(item);
 		}
 
 		_items.clear();

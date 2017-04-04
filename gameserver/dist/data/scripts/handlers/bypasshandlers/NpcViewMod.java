@@ -18,6 +18,12 @@
  */
 package handlers.bypasshandlers;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
+
 import org.l2junity.commons.util.StringUtil;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.datatables.ItemTable;
@@ -25,7 +31,6 @@ import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -39,12 +44,6 @@ import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.HtmlUtil;
 import org.l2junity.gameserver.util.Util;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author NosBit
@@ -73,7 +72,7 @@ public class NpcViewMod implements IBypassHandler {
 				final WorldObject target;
 				if (st.hasMoreElements()) {
 					try {
-						target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+						target = activeChar.getWorld().findObject(Integer.parseInt(st.nextToken()));
 					} catch (NumberFormatException e) {
 						return false;
 					}
@@ -98,7 +97,7 @@ public class NpcViewMod implements IBypassHandler {
 				final String dropListScopeString = st.nextToken();
 				try {
 					final DropListScope dropListScope = Enum.valueOf(DropListScope.class, dropListScopeString);
-					final WorldObject target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+					final WorldObject target = activeChar.getWorld().findObject(Integer.parseInt(st.nextToken()));
 					final Npc npc = target instanceof Npc ? (Npc) target : null;
 					if (npc == null) {
 						return false;
@@ -117,7 +116,7 @@ public class NpcViewMod implements IBypassHandler {
 				final WorldObject target;
 				if (st.hasMoreElements()) {
 					try {
-						target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+						target = activeChar.getWorld().findObject(Integer.parseInt(st.nextToken()));
 					} catch (NumberFormatException e) {
 						return false;
 					}
@@ -137,7 +136,7 @@ public class NpcViewMod implements IBypassHandler {
 				final WorldObject target;
 				if (st.hasMoreElements()) {
 					try {
-						target = World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+						target = activeChar.getWorld().findObject(Integer.parseInt(st.nextToken()));
 					} catch (NumberFormatException e) {
 						return false;
 					}

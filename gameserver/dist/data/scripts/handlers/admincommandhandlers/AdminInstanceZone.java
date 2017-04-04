@@ -18,16 +18,16 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.util.GMAudit;
-
-import java.util.Map;
-import java.util.StringTokenizer;
 
 public class AdminInstanceZone implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =
@@ -46,7 +46,7 @@ public class AdminInstanceZone implements IAdminCommandHandler {
 				StringTokenizer st = new StringTokenizer(command, " ");
 
 				st.nextToken();
-				final Player player = World.getInstance().getPlayer(st.nextToken());
+				final Player player = WorldManager.getInstance().getPlayer(st.nextToken());
 				final int instanceId = Integer.parseInt(st.nextToken());
 				final String name = InstanceManager.getInstance().getInstanceName(instanceId);
 				InstanceManager.getInstance().deleteInstanceTime(player, instanceId);
@@ -68,7 +68,7 @@ public class AdminInstanceZone implements IAdminCommandHandler {
 				String playername = st.nextToken();
 
 				try {
-					player = World.getInstance().getPlayer(playername);
+					player = WorldManager.getInstance().getPlayer(playername);
 				} catch (Exception e) {
 				}
 

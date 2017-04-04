@@ -20,7 +20,6 @@ package org.l2junity.gameserver.ai;
 
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
@@ -133,7 +132,7 @@ public class DoorAI extends CharacterAI {
 
 		@Override
 		public void run() {
-			World.getInstance().forEachVisibleObject(_door, DefenderInstance.class, guard ->
+			_door.getWorld().forEachVisibleObject(_door, DefenderInstance.class, guard ->
 			{
 				if (_actor.isInRadius3d(guard, guard.getTemplate().getClanHelpRange())) {
 					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);

@@ -18,6 +18,17 @@
  */
 package org.l2junity.gameserver.ai;
 
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.L2JModsConfig;
@@ -27,7 +38,6 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.AggroInfo;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -45,15 +55,6 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-
-import static org.l2junity.gameserver.ai.CtrlIntention.*;
 
 /**
  * This class manages AI of L2Attackable.
@@ -191,7 +192,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			Attackable npc = getActiveChar();
 			if (!npc.isAlikeDead()) {
 				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
-				if (!World.getInstance().getVisibleObjects(npc, Player.class).isEmpty()) {
+				if (!npc.getWorld().getVisibleObjects(npc, Player.class).isEmpty()) {
 					intention = AI_INTENTION_ACTIVE;
 				} else {
 					if (npc.getSpawn() != null) {
@@ -295,7 +296,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		if (_globalAggro >= 0) {
 			if (npc.isAggressive() || (npc instanceof GuardInstance)) {
 				final int range = npc instanceof GuardInstance ? 500 : npc.getAggroRange(); // TODO Make sure how guards behave towards players.
-				World.getInstance().forEachVisibleObjectInRadius(npc, Creature.class, range, t ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, Creature.class, range, t ->
 				{
 					// For each L2Character check if the target is autoattackable
 					if (isAggressiveTowards(t)) // check aggression
@@ -498,7 +499,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			// Go through all L2Object that belong to its faction
 			try {
 				final Creature finalTarget = target;
-				World.getInstance().forEachVisibleObjectInRadius(npc, Npc.class, factionRange, called ->
+				npc.getWorld().forEachVisibleObjectInRadius(npc, Npc.class, factionRange, called ->
 				{
 					if (!getActiveChar().getTemplate().isClan(called.getTemplate().getClans())) {
 						return;
@@ -547,7 +548,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		// On l2js because of that sometimes mobs don't attack player only running
 		// around player without any sense, so decrease chance for now
 		if (!npc.isMovementDisabled() && (Rnd.nextInt(100) <= 3)) {
-			for (Attackable nearby : World.getInstance().getVisibleObjects(npc, Attackable.class)) {
+			for (Attackable nearby : npc.getWorld().getVisibleObjects(npc, Attackable.class)) {
 				if (npc.isInRadius2d(nearby, collision) && (nearby != target)) {
 					double newX = combinedCollision + Rnd.get(40);
 					if (Rnd.nextBoolean()) {
@@ -832,7 +833,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 					.sorted(Comparator.<Creature>comparingInt(npc::getHating).reversed());
 			//@formatter:on
 		} else {
-			stream = World.getInstance().getVisibleObjects(npc, Creature.class, range, c -> checkSkillTarget(skill, c)).stream();
+			stream = npc.getWorld().getVisibleObjects(npc, Creature.class, range, c -> checkSkillTarget(skill, c)).stream();
 
 			// Maybe add self to the list of targets since getVisibleObjects doesn't return yourself.
 			if (checkSkillTarget(skill, npc)) {
@@ -858,7 +859,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 
 			// If npc is aggressive, add characters within aggro range too
 			if (npc.isAggressive()) {
-				stream = Stream.concat(stream, World.getInstance().getVisibleObjects(npc, Creature.class, npc.getAggroRange(), this::checkTarget).stream());
+				stream = Stream.concat(stream, npc.getWorld().getVisibleObjects(npc, Creature.class, npc.getAggroRange(), this::checkTarget).stream());
 			}
 
 			return stream.findAny().orElse(null);
@@ -870,7 +871,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 				.sorted(Comparator.comparingInt(AggroInfo::getHate))
 				.map(AggroInfo::getAttacker)
 				.findFirst()
-				.orElse(npc.isAggressive() ? World.getInstance().getVisibleObjects(npc, Creature.class, npc.getAggroRange(), this::checkTarget).stream().findAny().orElse(null) : null);
+				.orElse(npc.isAggressive() ? npc.getWorld().getVisibleObjects(npc, Creature.class, npc.getAggroRange(), this::checkTarget).stream().findAny().orElse(null) : null);
 		//@formatter:on
 	}
 

@@ -18,21 +18,21 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.FriendlyNpcInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.StringTokenizer;
 
 /**
  * This class handles following admin commands: - kill = kills target L2Character - kill_monster = kills target non-player - kill <radius> = If radius is specified, then ALL players only in that radius will be killed. - kill_monster <radius> = If radius is specified, then ALL non-players only in
@@ -57,12 +57,12 @@ public class AdminKill implements IAdminCommandHandler {
 
 			if (st.hasMoreTokens()) {
 				String firstParam = st.nextToken();
-				Player plyr = World.getInstance().getPlayer(firstParam);
+				Player plyr = WorldManager.getInstance().getPlayer(firstParam);
 				if (plyr != null) {
 					if (st.hasMoreTokens()) {
 						try {
 							int radius = Integer.parseInt(st.nextToken());
-							World.getInstance().forEachVisibleObjectInRadius(plyr, Creature.class, radius, knownChar ->
+							plyr.getWorld().forEachVisibleObjectInRadius(plyr, Creature.class, radius, knownChar ->
 							{
 								if ((knownChar instanceof ControllableMobInstance) || (knownChar instanceof FriendlyNpcInstance) || (knownChar == activeChar)) {
 									return;
@@ -83,7 +83,7 @@ public class AdminKill implements IAdminCommandHandler {
 					try {
 						int radius = Integer.parseInt(firstParam);
 
-						World.getInstance().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, wo ->
+						activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Creature.class, radius, wo ->
 						{
 							if ((wo instanceof ControllableMobInstance) || (wo instanceof FriendlyNpcInstance)) {
 								return;

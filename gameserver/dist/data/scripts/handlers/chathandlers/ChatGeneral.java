@@ -18,6 +18,8 @@
  */
 package handlers.chathandlers;
 
+import java.util.StringTokenizer;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.handler.ChatHandler;
@@ -26,15 +28,13 @@ import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.BlockList;
 import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.StringTokenizer;
 
 /**
  * General Chat Handler.
@@ -98,15 +98,13 @@ public final class ChatGeneral implements IChatHandler {
 					return;
 				}
 
-				for (Player player : World.getInstance().getPlayers()) {
-					if (!BlockList.isBlocked(player, activeChar)) {
-						player.sendPacket(cs);
-					}
-				}
+				WorldManager.getInstance().getAllPlayers().stream()
+					.filter(player -> !BlockList.isBlocked(player, activeChar))
+					.forEach(player -> player.sendPacket(cs));
 				return;
 			}
 
-			World.getInstance().forEachVisibleObjectInRadius(activeChar, Player.class, 1250, player ->
+			activeChar.getWorld().forEachVisibleObjectInRadius(activeChar, Player.class, 1250, player ->
 			{
 				if (!BlockList.isBlocked(player, activeChar)) {
 					player.sendPacket(cs);

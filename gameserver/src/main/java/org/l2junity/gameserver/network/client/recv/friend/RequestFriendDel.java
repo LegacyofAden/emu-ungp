@@ -18,19 +18,19 @@
  */
 package org.l2junity.gameserver.network.client.recv.friend;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.friend.FriendRemove;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.network.PacketReader;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * This class ...
@@ -87,7 +87,7 @@ public final class RequestFriendDel implements IClientIncomingPacket {
 			activeChar.getFriendList().remove(Integer.valueOf(id));
 			activeChar.sendPacket(new FriendRemove(_name, 1));
 
-			Player player = World.getInstance().getPlayer(_name);
+			Player player = WorldManager.getInstance().getPlayer(_name);
 			if (player != null) {
 				player.getFriendList().remove(Integer.valueOf(activeChar.getObjectId()));
 				player.sendPacket(new FriendRemove(activeChar.getName(), 1));

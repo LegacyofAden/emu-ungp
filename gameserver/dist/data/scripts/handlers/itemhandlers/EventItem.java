@@ -23,7 +23,6 @@ import org.l2junity.gameserver.handler.IItemHandler;
 import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.BlockInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -81,7 +80,7 @@ public class EventItem implements IItemHandler {
 		final ArenaParticipantsHolder holder = HandysBlockCheckerManager.getInstance().getHolder(blockCheckerArena);
 		if (holder != null) {
 			final int team = holder.getPlayerTeam(castor);
-			World.getInstance().forEachVisibleObjectInRadius(block, Player.class, sk.getEffectRange(), pc ->
+			block.getWorld().forEachVisibleObjectInRadius(block, Player.class, sk.getEffectRange(), pc ->
 			{
 				final int enemyTeam = holder.getPlayerTeam(pc);
 				if ((enemyTeam != -1) && (enemyTeam != team)) {

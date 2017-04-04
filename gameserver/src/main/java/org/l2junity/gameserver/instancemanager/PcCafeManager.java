@@ -18,9 +18,11 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.eventengine.AbstractEvent;
 import org.l2junity.gameserver.model.eventengine.AbstractEventManager;
@@ -33,11 +35,9 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPvPKil
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * @author Sdw
@@ -75,7 +75,7 @@ public class PcCafeManager extends AbstractEventManager<AbstractEvent<?>> {
 	private void rewardPoint() {
 		if (getVariables().getBoolean(ENABLE_TIMER_BONUS_KEY, false)) {
 			long pointsToAdd = getVariables().getLong(TIMER_POINTS_KEY, 10L);
-			World.getInstance().getPlayers().stream().forEach(player ->
+			WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 			{
 				player.increasePcCafePoints(pointsToAdd, (Rnd.get(100) < getVariables().getInt(TIMER_DOUBLE_POINTS_PROBABILITY_KEY, 10)));
 
@@ -98,7 +98,7 @@ public class PcCafeManager extends AbstractEventManager<AbstractEvent<?>> {
 		}
 
 		// Update data for online players.
-		World.getInstance().getPlayers().stream().forEach(player ->
+		WorldManager.getInstance().getAllPlayers().stream().forEach(player ->
 		{
 			player.getAccountVariables().remove(AccountVariables.PC_CAFE_POINTS_TODAY);
 			player.getAccountVariables().storeMe();

@@ -18,7 +18,23 @@
  */
 package org.l2junity.gameserver.model.items.instance;
 
-import org.l2junity.gameserver.engines.IdFactory;
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GeneralConfig;
@@ -28,12 +44,21 @@ import org.l2junity.gameserver.data.xml.impl.EnchantItemOptionsData;
 import org.l2junity.gameserver.data.xml.impl.EnsoulData;
 import org.l2junity.gameserver.data.xml.impl.OptionData;
 import org.l2junity.gameserver.datatables.ItemTable;
-import org.l2junity.gameserver.enums.*;
+import org.l2junity.gameserver.engines.IdFactory;
+import org.l2junity.gameserver.enums.AttributeType;
+import org.l2junity.gameserver.enums.InstanceType;
+import org.l2junity.gameserver.enums.ItemLocation;
+import org.l2junity.gameserver.enums.ItemSkillType;
+import org.l2junity.gameserver.enums.ShotType;
+import org.l2junity.gameserver.enums.UserInfoType;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
 import org.l2junity.gameserver.instancemanager.SiegeGuardManager;
-import org.l2junity.gameserver.model.*;
+import org.l2junity.gameserver.model.DropProtection;
+import org.l2junity.gameserver.model.Location;
+import org.l2junity.gameserver.model.VariationInstance;
+import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -60,23 +85,19 @@ import org.l2junity.gameserver.model.options.EnchantOptions;
 import org.l2junity.gameserver.model.options.Options;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.ItemVariables;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.model.world.ItemStorage;
+import org.l2junity.gameserver.model.world.Region;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.DropItem;
+import org.l2junity.gameserver.network.client.send.GetItem;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.SpawnItem;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 /**
  * This class manages items.
@@ -301,7 +322,7 @@ public final class ItemInstance extends WorldObject {
 	public final void pickupMe(Creature player) {
 		assert getWorldRegion() != null;
 
-		WorldRegion oldregion = getWorldRegion();
+		Region oldregion = getWorldRegion();
 
 		// Create a server->client GetItem packet to pick up the L2ItemInstance
 		player.broadcastPacket(new GetItem(this, player.getObjectId()));
@@ -319,7 +340,8 @@ public final class ItemInstance extends WorldObject {
 
 		// outside of synchronized to avoid deadlocks
 		// Remove the L2ItemInstance from the world
-		World.getInstance().removeVisibleObject(this, oldregion);
+		getWorld().removeVisibleObject(this, oldregion);
+		getWorld().removeObject(this);
 
 		if (player.isPlayer()) {
 			// Notify to scripts
@@ -1343,7 +1365,8 @@ public final class ItemInstance extends WorldObject {
 			_itеm.setDropperObjectId(_dropper != null ? _dropper.getObjectId() : 0); // Set the dropper Id for the knownlist packets in sendInfo
 
 			// Add the L2ItemInstance dropped in the world as a visible object
-			World.getInstance().addVisibleObject(_itеm, _itеm.getWorldRegion());
+			_itеm.getWorld().addVisibleObject(_itеm, _itеm.getWorldRegion());
+			
 			if (GeneralConfig.SAVE_DROPPED_ITEM) {
 				ItemsOnGroundManager.getInstance().save(_itеm);
 			}
@@ -1641,7 +1664,7 @@ public final class ItemInstance extends WorldObject {
 		if (GeneralConfig.SAVE_DROPPED_ITEM) {
 			ItemsOnGroundManager.getInstance().removeObject(this);
 		}
-
+		
 		return super.decayMe();
 	}
 
@@ -1729,7 +1752,7 @@ public final class ItemInstance extends WorldObject {
 
 	@Override
 	public Player getActingPlayer() {
-		return World.getInstance().getPlayer(getOwnerId());
+		return WorldManager.getInstance().getPlayer(getOwnerId());
 	}
 
 	public int getEquipReuseDelay() {
@@ -2072,5 +2095,10 @@ public final class ItemInstance extends WorldObject {
 				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_RESTORED_TO_ITS_PREVIOUS_APPEARANCE_AS_ITS_TEMPORARY_MODIFICATION_HAS_EXPIRED).addItemName(this));
 			}
 		}
+	}
+	
+	@Override
+	public void onSpawn() {
+		ItemStorage.getInstance().remove(this);
 	}
 }

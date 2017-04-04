@@ -18,11 +18,11 @@
  */
 package org.l2junity.gameserver.model.eventengine;
 
-import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 
 /**
  * @param <T>
@@ -43,7 +43,7 @@ public abstract class AbstractEventMember<T extends AbstractEvent<?>> {
 	}
 
 	public Player getPlayer() {
-		return World.getInstance().getPlayer(_objectId);
+		return WorldManager.getInstance().getPlayer(_objectId);
 	}
 
 	public void sendPacket(IClientOutgoingPacket... packets) {

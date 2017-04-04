@@ -21,9 +21,9 @@ package org.l2junity.gameserver.network.client.recv;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.ExChangePostState;
@@ -83,7 +83,7 @@ public final class RequestRejectPostAttachment implements IClientIncomingPacket 
 		client.sendPacket(SystemMessageId.MAIL_SUCCESSFULLY_RETURNED);
 		client.sendPacket(new ExChangePostState(true, _msgId, Message.REJECTED));
 
-		final Player sender = World.getInstance().getPlayer(msg.getSenderId());
+		final Player sender = WorldManager.getInstance().getPlayer(msg.getSenderId());
 		if (sender != null) {
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_RETURNED_THE_MAIL);
 			sm.addCharName(activeChar);

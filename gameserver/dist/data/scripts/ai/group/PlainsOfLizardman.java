@@ -18,15 +18,15 @@
  */
 package ai.group;
 
-import ai.AbstractNpcAI;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
+
+import ai.AbstractNpcAI;
 
 /**
  * Plains of Lizardmen AI.
@@ -96,7 +96,7 @@ public final class PlainsOfLizardman extends AbstractNpcAI {
 	public String onAdvEvent(String event, Npc npc, Player player) {
 		if (event.equals("fantasy_mushroom") && (npc != null) && (player != null)) {
 			npc.doCast(FANTASY_MUSHROOM_SKILL.getSkill());
-			World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 200, monster ->
+			npc.getWorld().forEachVisibleObjectInRadius(npc, Attackable.class, 200, monster ->
 			{
 				npc.setTarget(monster);
 				npc.doCast(STUN_EFFECT.getSkill());
@@ -128,7 +128,7 @@ public final class PlainsOfLizardman extends AbstractNpcAI {
 				if (npc.isScriptValue(0)) {
 					npc.setScriptValue(1);
 					npc.setIsInvul(true);
-					World.getInstance().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, monster ->
+					npc.getWorld().forEachVisibleObjectInRadius(npc, Attackable.class, 1000, monster ->
 					{
 						if ((monster.getId() == TANTA_MAGICIAN) || (monster.getId() == TANTA_SCOUT)) {
 							monster.setIsRunning(true);

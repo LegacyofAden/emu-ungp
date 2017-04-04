@@ -18,7 +18,14 @@
  */
 package instances.SeedOfDestruction;
 
-import instances.AbstractInstance;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.l2junity.commons.util.ArrayUtil;
 import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
@@ -28,13 +35,12 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.GraciaSeedsManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Territory;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -48,8 +54,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import java.nio.file.Path;
-import java.util.*;
+import instances.AbstractInstance;
 
 /**
  * Seed of Destruction instance zone.<br>
@@ -412,7 +417,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 				spawnState(world);
 				final Npc videoNpc = world.getNpc(TIAT_VIDEO_NPC);
 				if (videoNpc != null) {
-					playMovie(World.getInstance().getVisibleObjects(videoNpc, Player.class, 8000), Movie.SC_BOSS_TIAT_OPENING);
+					playMovie(videoNpc.getWorld().getVisibleObjects(videoNpc, Player.class, 8000), Movie.SC_BOSS_TIAT_OPENING);
 					videoNpc.deleteMe();
 				}
 			}
@@ -521,7 +526,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 					if (world.getStatus() >= 7) {
 						if (npc.getId() == TIAT) {
 							world.incStatus();
-							playMovie(World.getInstance().getVisibleObjects(npc, Player.class, 8000), Movie.SC_BOSS_TIAT_ENDING_SUCCES);
+							playMovie(npc.getWorld().getVisibleObjects(npc, Player.class, 8000), Movie.SC_BOSS_TIAT_ENDING_SUCCES);
 							world.removeNpcs();
 							world.finishInstance();
 							GraciaSeedsManager.getInstance().increaseSoDTiatKilled();

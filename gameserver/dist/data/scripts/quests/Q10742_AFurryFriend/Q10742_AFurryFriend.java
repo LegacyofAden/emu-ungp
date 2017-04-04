@@ -22,7 +22,6 @@ import org.l2junity.gameserver.ai.CtrlIntention;
 import org.l2junity.gameserver.enums.Race;
 import org.l2junity.gameserver.instancemanager.SuperpointManager;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -91,7 +90,7 @@ public final class Q10742_AFurryFriend extends Quest {
 						htmltext = "33995-02.html";
 					} else {
 						// Check if player has Ricky spawned
-						if (!World.getInstance().getVisibleObjects(player, Npc.class, 500).stream().anyMatch(n -> (n.getId() == RICKY) && (n.getSummoner() == player))) {
+						if (!player.getWorld().getVisibleObjects(player, Npc.class, 500).stream().anyMatch(n -> (n.getId() == RICKY) && (n.getSummoner() == player))) {
 							showOnScreenMsg(player, NpcStringId.TAKE_RICKY_TO_LEIRA_IN_UNDER_2_MINUTES, ExShowScreenMessage.MIDDLE_CENTER, 5000);
 							player.sendPacket(new ExSendUIEvent(player, false, false, 120, 0, NpcStringId.REMAINING_TIME));
 
@@ -128,7 +127,7 @@ public final class Q10742_AFurryFriend extends Quest {
 							startQuestTimer("CHECK_RICKY_DISTANCE", 2500, npc, player);
 						}
 					} else {
-						final Npc leira = World.getInstance().getVisibleObjects(npc, Npc.class, 125).stream().filter(n -> (n.getId() == LEIRA)).findAny().orElse(null);
+						final Npc leira = npc.getWorld().getVisibleObjects(npc, Npc.class, 125).stream().filter(n -> (n.getId() == LEIRA)).findAny().orElse(null);
 						if (leira != null) {
 							qs.setCond(2, true);
 							player.sendPacket(new ExSendUIEvent(player, false, false, 0, 0, NpcStringId.REMAINING_TIME));

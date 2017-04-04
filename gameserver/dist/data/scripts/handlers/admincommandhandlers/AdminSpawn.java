@@ -18,6 +18,12 @@
  */
 package handlers.admincommandhandlers;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.datatables.SpawnTable;
@@ -27,12 +33,12 @@ import org.l2junity.gameserver.instancemanager.DBSpawnManager;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
 import org.l2junity.gameserver.instancemanager.QuestManager;
 import org.l2junity.gameserver.model.L2Spawn;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.instancezone.Instance;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -40,12 +46,6 @@ import org.l2junity.gameserver.service.SpawnService;
 import org.l2junity.gameserver.util.Broadcast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class handles following admin commands: - show_spawns = shows menu - spawn_index lvl = shows menu for monsters with respective level - spawn_monster id = spawns monster id on target
@@ -166,12 +166,12 @@ public class AdminSpawn implements IAdminCommandHandler {
 		} else if (command.startsWith("admin_unspawnall")) {
 			Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.THE_NPC_SERVER_IS_NOT_OPERATING_AT_THIS_TIME));
 			DBSpawnManager.getInstance().cleanUp();
-			World.getInstance().deleteVisibleNpcSpawns();
+			WorldManager.getInstance().getMainWorld().deleteVisibleNpcSpawns();
 			AdminData.getInstance().broadcastMessageToGMs("NPC Unspawn completed!");
 		} else if (command.startsWith("admin_respawnall") || command.startsWith("admin_spawn_reload")) {
 			// make sure all spawns are deleted
 			DBSpawnManager.getInstance().cleanUp();
-			World.getInstance().deleteVisibleNpcSpawns();
+			WorldManager.getInstance().getMainWorld().deleteVisibleNpcSpawns();
 
 			NpcData.getInstance().reload();
 			SpawnService.getInstance().despawnAll();

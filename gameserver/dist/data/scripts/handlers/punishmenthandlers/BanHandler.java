@@ -20,10 +20,10 @@ package handlers.punishmenthandlers;
 
 import org.l2junity.gameserver.handler.IPunishmentHandler;
 import org.l2junity.gameserver.handler.PunishmentHandler;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.service.GameServerRMI;
@@ -39,7 +39,7 @@ public class BanHandler implements IPunishmentHandler {
 		switch (task.getAffect()) {
 			case CHARACTER: {
 				final int objectId = Integer.parseInt(String.valueOf(task.getKey()));
-				final Player player = World.getInstance().getPlayer(objectId);
+				final Player player = WorldManager.getInstance().getPlayer(objectId);
 				if (player != null) {
 					applyToPlayer(player);
 				}
@@ -60,7 +60,7 @@ public class BanHandler implements IPunishmentHandler {
 			}
 			case IP: {
 				final String ip = String.valueOf(task.getKey());
-				for (Player player : World.getInstance().getPlayers()) {
+				for (Player player : WorldManager.getInstance().getAllPlayers()) {
 					if (ip.equalsIgnoreCase(player.getIPAddress())) {
 						applyToPlayer(player);
 					}
@@ -69,7 +69,7 @@ public class BanHandler implements IPunishmentHandler {
 			}
 			case HWID: {
 				final String hwid = String.valueOf(task.getKey());
-				for (Player player : World.getInstance().getPlayers()) {
+				for (Player player : WorldManager.getInstance().getAllPlayers()) {
 					if (hwid.equalsIgnoreCase(player.getHWID())) {
 						applyToPlayer(player);
 					}

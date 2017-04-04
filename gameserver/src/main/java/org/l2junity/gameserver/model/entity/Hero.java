@@ -18,8 +18,22 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.FeatureConfig;
 import org.l2junity.core.startup.StartupComponent;
@@ -32,22 +46,22 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.StatsSet;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.send.CreatureSay;
+import org.l2junity.gameserver.network.client.send.InventoryUpdate;
+import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.UserInfo;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Date;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Hero entity.
@@ -522,7 +536,7 @@ public class Hero {
 		updateHeroes(true);
 
 		for (Integer objectId : _heroes.keySet()) {
-			final Player player = World.getInstance().getPlayer(objectId);
+			final Player player = WorldManager.getInstance().getPlayer(objectId);
 			if (player == null) {
 				continue;
 			}

@@ -28,7 +28,10 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.*;
+import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
+import org.l2junity.gameserver.model.actor.instance.L2FriendlyMobInstance;
+import org.l2junity.gameserver.model.actor.instance.L2GuardInstance;
+import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
@@ -187,9 +190,10 @@ public class GameWorld {
 	 * Remove the given pet instance.
 	 *
 	 * @param ownerId ID of the owner
+	 * @return result
 	 */
-	public void removePet(int ownerId) {
-		pets.remove(ownerId);
+	public boolean removePet(int ownerId) {
+		return pets.remove(ownerId) != null;
 	}
 
 	/**
@@ -341,7 +345,7 @@ public class GameWorld {
 	}
 
 	public void switchRegion(WorldObject object, Region newRegion) {
-		final Region oldRegion = /*object.getWorldRegion()*/null; //FIXME
+		final Region oldRegion = object.getWorldRegion();
 		if (oldRegion == null || oldRegion == newRegion) {
 			return;
 		}

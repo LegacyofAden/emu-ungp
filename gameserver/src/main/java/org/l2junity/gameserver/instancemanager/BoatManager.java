@@ -18,17 +18,17 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
+import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BoatManager {
 	private final Map<Integer, BoatInstance> _boats = new HashMap<>();
@@ -163,7 +163,10 @@ public class BoatManager {
 	}
 
 	private void broadcastPacketsToPlayers(VehiclePathPoint point1, VehiclePathPoint point2, IClientOutgoingPacket... packets) {
-		for (Player player : World.getInstance().getPlayers()) {
+		//FIXME n3k0: rework it to like this:
+		//WorldManager.getInstance().getMainWorld().forEachVisibleObjectInRadius(point1, Player.class, GeneralConfig.BOAT_BROADCAST_RADIUS, player -> player.sendPacket(packets));
+		
+		for (Player player : WorldManager.getInstance().getMainWorld().getPlayers()) {
 			double dx = player.getX() - point1.getX();
 			double dy = player.getY() - point1.getY();
 			if (Math.sqrt((dx * dx) + (dy * dy)) < GeneralConfig.BOAT_BROADCAST_RADIUS) {
