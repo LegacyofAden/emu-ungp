@@ -34,7 +34,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
@@ -557,7 +557,7 @@ public final class Stage1 extends AbstractInstance implements IGameXmlReader {
 	}
 
 	@Override
-	public String onTrapAction(L2TrapInstance trap, Creature trigger, TrapAction action) {
+	public String onTrapAction(TrapInstance trap, Creature trigger, TrapAction action) {
 		final Instance world = trap.getInstanceWorld();
 		if ((world != null) && (action == TrapAction.TRAP_TRIGGERED)) {
 			final int[] npcs = (trap.getId() == 18771) ? TRAP_18771_NPCS : TRAP_OTHER_NPCS;

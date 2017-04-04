@@ -34,10 +34,10 @@ import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class L2FortCommanderInstance extends L2DefenderInstance {
+public class FortCommanderInstance extends DefenderInstance {
 	private boolean _canTalk;
 
-	public L2FortCommanderInstance(NpcTemplate template) {
+	public FortCommanderInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FortCommanderInstance);
 		_canTalk = true;
@@ -64,7 +64,7 @@ public class L2FortCommanderInstance extends L2DefenderInstance {
 			return;
 		}
 
-		if (!(attacker instanceof L2FortCommanderInstance)) {
+		if (!(attacker instanceof FortCommanderInstance)) {
 			super.addDamageHate(attacker, damage, aggro);
 		}
 	}

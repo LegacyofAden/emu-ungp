@@ -37,8 +37,8 @@ import java.util.StringTokenizer;
 /**
  * @author NightMarez
  */
-public final class L2TeleporterInstance extends Npc {
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2TeleporterInstance.class);
+public final class TeleporterInstance extends Npc {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TeleporterInstance.class);
 
 	private static final CommonSkill[] FORBIDDEN_TRANSFORM =
 			{
@@ -47,7 +47,7 @@ public final class L2TeleporterInstance extends Npc {
 					CommonSkill.NATIVE_TRANSFORM
 			};
 
-	public L2TeleporterInstance(NpcTemplate template) {
+	public TeleporterInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2TeleporterInstance);
 	}

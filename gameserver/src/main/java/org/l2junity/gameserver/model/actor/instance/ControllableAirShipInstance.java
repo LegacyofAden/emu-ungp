@@ -31,7 +31,7 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class L2ControllableAirShipInstance extends L2AirShipInstance {
+public class ControllableAirShipInstance extends AirShipInstance {
 	private static final int HELM = 13556;
 	private static final int LOW_FUEL = 40;
 
@@ -45,7 +45,7 @@ public class L2ControllableAirShipInstance extends L2AirShipInstance {
 	private Future<?> _consumeFuelTask;
 	private Future<?> _checkTask;
 
-	public L2ControllableAirShipInstance(CharTemplate template, int ownerId) {
+	public ControllableAirShipInstance(CharTemplate template, int ownerId) {
 		super(template);
 		setInstanceType(InstanceType.L2ControllableAirShipInstance);
 		_ownerId = ownerId;

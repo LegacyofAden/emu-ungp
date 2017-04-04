@@ -22,7 +22,7 @@ import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BoatManager {
-	private final Map<Integer, L2BoatInstance> _boats = new HashMap<>();
+	private final Map<Integer, BoatInstance> _boats = new HashMap<>();
 	private final boolean[] _docksBusy = new boolean[3];
 
 	public static final int TALKING_ISLAND = 1;
@@ -48,7 +48,7 @@ public class BoatManager {
 		}
 	}
 
-	public L2BoatInstance getNewBoat(int boatId, int x, int y, int z, int heading) {
+	public BoatInstance getNewBoat(int boatId, int x, int y, int z, int heading) {
 		if (!GeneralConfig.ALLOW_BOAT) {
 			return null;
 		}
@@ -97,7 +97,7 @@ public class BoatManager {
 		npcDat.set("basePDef", 100);
 		npcDat.set("baseMDef", 100);
 		CharTemplate template = new CharTemplate(npcDat);
-		L2BoatInstance boat = new L2BoatInstance(template);
+		BoatInstance boat = new BoatInstance(template);
 		_boats.put(boat.getObjectId(), boat);
 		boat.setHeading(heading);
 		boat.setXYZInvisible(x, y, z);
@@ -109,7 +109,7 @@ public class BoatManager {
 	 * @param boatId
 	 * @return
 	 */
-	public L2BoatInstance getBoat(int boatId) {
+	public BoatInstance getBoat(int boatId) {
 		return _boats.get(boatId);
 	}
 

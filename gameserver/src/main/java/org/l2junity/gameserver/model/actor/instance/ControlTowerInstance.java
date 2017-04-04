@@ -32,12 +32,12 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Class for Control Tower instance.
  */
-public class L2ControlTowerInstance extends Tower {
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2ControlTowerInstance.class);
+public class ControlTowerInstance extends Tower {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControlTowerInstance.class);
 
 	private volatile Set<L2Spawn> _guards;
 
-	public L2ControlTowerInstance(NpcTemplate template) {
+	public ControlTowerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ControlTowerInstance);
 	}
@@ -56,7 +56,7 @@ public class L2ControlTowerInstance extends Tower {
 						spawn.stopRespawn();
 						// spawn.getLastSpawn().doDie(spawn.getLastSpawn());
 					} catch (Exception e) {
-						LOGGER.warn("Error at L2ControlTowerInstance", e);
+						LOGGER.warn("Error at ControlTowerInstance", e);
 					}
 				}
 				_guards.clear();

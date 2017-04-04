@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -28,7 +28,7 @@ import org.l2junity.network.PacketWriter;
 public class VehicleInfo implements IClientOutgoingPacket {
 	private final int _objId, _x, _y, _z, _heading;
 
-	public VehicleInfo(L2BoatInstance boat) {
+	public VehicleInfo(BoatInstance boat) {
 		_objId = boat.getObjectId();
 		_x = (int) boat.getX();
 		_y = (int) boat.getY();

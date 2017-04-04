@@ -33,12 +33,12 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.l2junity.gameserver.network.client.send.SystemMessage;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
-public class L2SiegeFlagInstance extends Npc {
+public class SiegeFlagInstance extends Npc {
 	private final Clan _clan;
 	private Siegable _siege;
 	private long _nextTalkTime;
 
-	public L2SiegeFlagInstance(Player player, NpcTemplate template, boolean advanced) {
+	public SiegeFlagInstance(Player player, NpcTemplate template, boolean advanced) {
 		super(template);
 		setInstanceType(InstanceType.L2SiegeFlagInstance);
 

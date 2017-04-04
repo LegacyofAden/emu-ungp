@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv.shuttle;
 
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
+import org.l2junity.gameserver.model.actor.instance.ShuttleInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
@@ -50,7 +50,7 @@ public class RequestShuttleGetOn implements IClientIncomingPacket {
 		}
 
 		// TODO: better way?
-		for (L2ShuttleInstance shuttle : World.getInstance().getVisibleObjects(activeChar, L2ShuttleInstance.class)) {
+		for (ShuttleInstance shuttle : World.getInstance().getVisibleObjects(activeChar, ShuttleInstance.class)) {
 			if (shuttle.isInRadius3d(activeChar, 1000)) {
 				shuttle.addPassenger(activeChar);
 				activeChar.getInVehiclePosition().setXYZ(_x, _y, _z);

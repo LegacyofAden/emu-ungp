@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 
 public class L2ArtefactInstanceAction implements IActionHandler {
 	/**
-	 * Manage actions when a player click on the L2ArtefactInstance.<BR>
+	 * Manage actions when a player click on the ArtefactInstance.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>

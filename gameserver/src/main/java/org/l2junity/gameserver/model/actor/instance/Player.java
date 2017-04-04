@@ -1594,7 +1594,7 @@ public final class Player extends Playable {
 		super.setReputation(reputation);
 
 		if ((getReputation() >= 0) && (reputation < 0)) {
-			World.getInstance().forEachVisibleObject(this, L2GuardInstance.class, object ->
+			World.getInstance().forEachVisibleObject(this, GuardInstance.class, object ->
 			{
 				if (object.getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE) {
 					object.getAI().setIntention(CtrlIntention.AI_INTENTION_ACTIVE);
@@ -4482,8 +4482,8 @@ public final class Player extends Playable {
 	/**
 	 * @return any summoned trap by this player or null.
 	 */
-	public L2TrapInstance getTrap() {
-		return getSummonedNpcs().stream().filter(Npc::isTrap).map(L2TrapInstance.class::cast).findAny().orElse(null);
+	public TrapInstance getTrap() {
+		return getSummonedNpcs().stream().filter(Npc::isTrap).map(TrapInstance.class::cast).findAny().orElse(null);
 	}
 
 	/**
@@ -6637,7 +6637,7 @@ public final class Player extends Playable {
 		}
 
 		// Friendly mobs doesn't attack players
-		if (attacker instanceof L2FriendlyMobInstance) {
+		if (attacker instanceof FriendlyMobInstance) {
 			return false;
 		}
 
@@ -6722,12 +6722,12 @@ public final class Player extends Playable {
 			if ((isInsideZone(ZoneId.PVP) && attackerPlayer.isInsideZone(ZoneId.PVP)) && (isInsideZone(ZoneId.SIEGE) && attackerPlayer.isInsideZone(ZoneId.SIEGE))) {
 				return true;
 			}
-		} else if (attacker instanceof L2DefenderInstance) {
+		} else if (attacker instanceof DefenderInstance) {
 			if (getClan() != null) {
 				Siege siege = SiegeManager.getInstance().getSiege(this);
 				return ((siege != null) && siege.checkIsAttacker(getClan()));
 			}
-		} else if (attacker instanceof L2GuardInstance) {
+		} else if (attacker instanceof GuardInstance) {
 			return (getReputation() < 0); // Guards attack only PK players.
 		}
 
@@ -8667,8 +8667,8 @@ public final class Player extends Playable {
 	/**
 	 * @return
 	 */
-	public L2BoatInstance getBoat() {
-		return (L2BoatInstance) _vehicle;
+	public BoatInstance getBoat() {
+		return (BoatInstance) _vehicle;
 	}
 
 	/**
@@ -8681,16 +8681,16 @@ public final class Player extends Playable {
 	/**
 	 * @return
 	 */
-	public L2AirShipInstance getAirShip() {
-		return (L2AirShipInstance) _vehicle;
+	public AirShipInstance getAirShip() {
+		return (AirShipInstance) _vehicle;
 	}
 
 	public boolean isInShuttle() {
-		return _vehicle instanceof L2ShuttleInstance;
+		return _vehicle instanceof ShuttleInstance;
 	}
 
-	public L2ShuttleInstance getShuttle() {
-		return (L2ShuttleInstance) _vehicle;
+	public ShuttleInstance getShuttle() {
+		return (ShuttleInstance) _vehicle;
 	}
 
 	public Vehicle getVehicle() {
@@ -9389,7 +9389,7 @@ public final class Player extends Playable {
 
 		if ((target.isHpBlocked() && !target.isNpc()) || (target.isPlayer() && target.getStat().has(BooleanStat.FACE_OFF) && (target.getActingPlayer().getAttackerObjId() != getObjectId()))) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.THE_ATTACK_HAS_BEEN_BLOCKED);
-		} else if (target.isDoor() || (target instanceof L2ControlTowerInstance)) {
+		} else if (target.isDoor() || (target instanceof ControlTowerInstance)) {
 			sm = SystemMessage.getSystemMessage(SystemMessageId.YOU_HIT_FOR_S1_DAMAGE);
 			sm.addInt(damage);
 		} else {

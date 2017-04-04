@@ -274,7 +274,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 	 * <ul>
 	 * <li>Update every 1s the _globalAggro counter to come close to 0</li>
 	 * <li>If the actor is Aggressive and can attack, add all autoAttackable L2Character in its Aggro Range to its _aggroList, chose a target and order to attack it</li>
-	 * <li>If the actor is a L2GuardInstance that can't attack, order to it to return to its home location</li>
+	 * <li>If the actor is a GuardInstance that can't attack, order to it to return to its home location</li>
 	 * <li>If the actor is a MonsterInstance that can't attack, order to it to random walk (1/100)</li>
 	 * </ul>
 	 */
@@ -293,8 +293,8 @@ public class AttackableAI extends CharacterAI implements Runnable {
 		// Add all autoAttackable L2Character in L2Attackable Aggro Range to its _aggroList with 0 damage and 1 hate
 		// A L2Attackable isn't aggressive during 10s after its spawn because _globalAggro is set to -10
 		if (_globalAggro >= 0) {
-			if (npc.isAggressive() || (npc instanceof L2GuardInstance)) {
-				final int range = npc instanceof L2GuardInstance ? 500 : npc.getAggroRange(); // TODO Make sure how guards behave towards players.
+			if (npc.isAggressive() || (npc instanceof GuardInstance)) {
+				final int range = npc instanceof GuardInstance ? 500 : npc.getAggroRange(); // TODO Make sure how guards behave towards players.
 				World.getInstance().forEachVisibleObjectInRadius(npc, Creature.class, range, t ->
 				{
 					// For each L2Character check if the target is autoattackable
@@ -361,9 +361,9 @@ public class AttackableAI extends CharacterAI implements Runnable {
 			return;
 		}
 
-		// Check if the actor is a L2GuardInstance
-		if ((npc instanceof L2GuardInstance) && !npc.isWalker()) {
-			// Order to the L2GuardInstance to return to its home location because there's no target to attack
+		// Check if the actor is a GuardInstance
+		if ((npc instanceof GuardInstance) && !npc.isWalker()) {
+			// Order to the GuardInstance to return to its home location because there's no target to attack
 			npc.returnHome();
 		}
 
@@ -969,7 +969,7 @@ public class AttackableAI extends CharacterAI implements Runnable {
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
 	 * <li>Add the target to the actor _aggroList or update hate if already present</li>
-	 * <li>Set the actor Intention to AI_INTENTION_ATTACK (if actor is L2GuardInstance check if it isn't too far from its home location)</li>
+	 * <li>Set the actor Intention to AI_INTENTION_ATTACK (if actor is GuardInstance check if it isn't too far from its home location)</li>
 	 * </ul>
 	 *
 	 * @param aggro The value of hate to add to the actor against the target

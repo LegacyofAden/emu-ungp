@@ -23,8 +23,8 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
-public final class L2FlyTerrainObjectInstance extends Npc {
-	public L2FlyTerrainObjectInstance(NpcTemplate template) {
+public final class FlyTerrainObjectInstance extends Npc {
+	public FlyTerrainObjectInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FlyTerrainObjectInstance);
 		setIsFlying(true);

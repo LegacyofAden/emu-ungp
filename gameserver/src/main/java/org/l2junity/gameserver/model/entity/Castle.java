@@ -31,8 +31,8 @@ import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.instancemanager.*;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Npc;
+import org.l2junity.gameserver.model.actor.instance.ArtefactInstance;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ArtefactInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.CastleSpawnHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
@@ -74,7 +74,7 @@ public final class Castle extends AbstractResidence {
 	private SiegeZone _zone = null;
 	private ResidenceTeleportZone _teleZone;
 	private Clan _formerOwner = null;
-	private final List<L2ArtefactInstance> _artefacts = new ArrayList<>(1);
+	private final List<ArtefactInstance> _artefacts = new ArrayList<>(1);
 	private final Map<Integer, CastleFunction> _function = new ConcurrentHashMap<>();
 	private int _ticketBuyCount = 0;
 
@@ -824,11 +824,11 @@ public final class Castle extends AbstractResidence {
 	 *
 	 * @param artefact
 	 */
-	public void registerArtefact(L2ArtefactInstance artefact) {
+	public void registerArtefact(ArtefactInstance artefact) {
 		_artefacts.add(artefact);
 	}
 
-	public List<L2ArtefactInstance> getArtefacts() {
+	public List<ArtefactInstance> getArtefacts() {
 		return _artefacts;
 	}
 

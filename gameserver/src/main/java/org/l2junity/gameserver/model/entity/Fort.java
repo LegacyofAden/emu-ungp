@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.World;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
@@ -61,7 +61,7 @@ public final class Fort extends AbstractResidence {
 	protected static final Logger _log = LoggerFactory.getLogger(Fort.class);
 
 	private final List<DoorInstance> _doors = new ArrayList<>();
-	private L2StaticObjectInstance _flagPole = null;
+	private StaticObjectInstance _flagPole = null;
 	private volatile FortSiege _siege = null;
 	private Calendar _siegeDate;
 	private Calendar _lastOwnedTime;
@@ -435,7 +435,7 @@ public final class Fort extends AbstractResidence {
 	 * @param val
 	 */
 	public void setVisibleFlag(boolean val) {
-		L2StaticObjectInstance flagPole = getFlagPole();
+		StaticObjectInstance flagPole = getFlagPole();
 		if (flagPole != null) {
 			flagPole.setMeshIndex(val ? 1 : 0);
 		}
@@ -601,7 +601,7 @@ public final class Fort extends AbstractResidence {
 	}
 
 	private void loadFlagPoles() {
-		for (L2StaticObjectInstance obj : StaticObjectData.getInstance().getStaticObjects()) {
+		for (StaticObjectInstance obj : StaticObjectData.getInstance().getStaticObjects()) {
 			if ((obj.getType() == 3) && obj.getName().startsWith(getName())) {
 				_flagPole = obj;
 				break;
@@ -739,7 +739,7 @@ public final class Fort extends AbstractResidence {
 		return _doors;
 	}
 
-	public final L2StaticObjectInstance getFlagPole() {
+	public final StaticObjectInstance getFlagPole() {
 		return _flagPole;
 	}
 

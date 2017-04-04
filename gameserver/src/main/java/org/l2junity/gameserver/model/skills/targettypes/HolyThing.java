@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.skills.targettypes;
 import org.l2junity.gameserver.handler.ITargetTypeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2ArtefactInstance;
+import org.l2junity.gameserver.model.actor.instance.ArtefactInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 
@@ -33,7 +33,7 @@ import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 public class HolyThing implements ITargetTypeHandler {
 	@Override
 	public WorldObject getTarget(Creature activeChar, WorldObject selectedTarget, Skill skill, boolean forceUse, boolean dontMove, boolean sendMessage) {
-		if (activeChar.getTarget() instanceof L2ArtefactInstance) {
+		if (activeChar.getTarget() instanceof ArtefactInstance) {
 			return activeChar.getTarget();
 		}
 

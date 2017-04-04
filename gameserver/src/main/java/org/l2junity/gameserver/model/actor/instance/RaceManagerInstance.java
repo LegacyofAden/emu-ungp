@@ -35,11 +35,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class L2RaceManagerInstance extends Npc {
+public class RaceManagerInstance extends Npc {
 	public static final int LANES = 8;
 	public static final int WINDOW_START = 0;
 
-	private static List<L2RaceManagerInstance> _managers;
+	private static List<RaceManagerInstance> _managers;
 	protected static int _raceNumber = 4;
 
 	// Time Constants
@@ -84,7 +84,7 @@ public class L2RaceManagerInstance extends Npc {
 					100000
 			};
 
-	public L2RaceManagerInstance(NpcTemplate template) {
+	public RaceManagerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2RaceManagerInstance);
 		if (_notInitialized) {
@@ -192,7 +192,7 @@ public class L2RaceManagerInstance extends Npc {
 	}
 
 	protected void broadcast(IClientOutgoingPacket pkt) {
-		for (L2RaceManagerInstance manager : _managers) {
+		for (RaceManagerInstance manager : _managers) {
 			if (!manager.isDead()) {
 				Broadcast.toKnownPlayers(manager, pkt);
 			}

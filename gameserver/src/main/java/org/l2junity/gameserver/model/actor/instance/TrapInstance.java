@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Zoey76
  */
-public final class L2TrapInstance extends Npc {
+public final class TrapInstance extends Npc {
 	private static final int TICK = 1000; // 1s
 	private boolean _isInArena = false;
 	private boolean _isTriggered;
@@ -64,7 +64,7 @@ public final class L2TrapInstance extends Npc {
 	// Tasks
 	private ScheduledFuture<?> _trapTask = null;
 
-	public L2TrapInstance(NpcTemplate template, int instanceId) {
+	public TrapInstance(NpcTemplate template, int instanceId) {
 		super(template);
 		setInstanceType(InstanceType.L2TrapInstance);
 		setInstanceById(instanceId);
@@ -80,7 +80,7 @@ public final class L2TrapInstance extends Npc {
 		}
 	}
 
-	public L2TrapInstance(NpcTemplate template, Player owner) {
+	public TrapInstance(NpcTemplate template, Player owner) {
 		this(template, owner.getInstanceId());
 		_owner = owner;
 	}
@@ -213,7 +213,7 @@ public final class L2TrapInstance extends Npc {
 	}
 
 	@Override
-	public L2TrapInstance asTrap() {
+	public TrapInstance asTrap() {
 		return this;
 	}
 

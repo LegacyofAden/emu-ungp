@@ -35,10 +35,10 @@ import java.util.List;
 /**
  * @author UnAfraid
  */
-public class L2ShuttleInstance extends Vehicle {
+public class ShuttleInstance extends Vehicle {
 	private L2ShuttleData _shuttleData;
 
-	public L2ShuttleInstance(CharTemplate template) {
+	public ShuttleInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ShuttleInstance);
 		setAI(new ShuttleAI(this));

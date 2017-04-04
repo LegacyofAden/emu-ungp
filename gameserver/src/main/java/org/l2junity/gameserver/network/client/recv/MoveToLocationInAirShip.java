@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -81,7 +81,7 @@ public class MoveToLocationInAirShip implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2AirShipInstance airShip = activeChar.getAirShip();
+		final AirShipInstance airShip = activeChar.getAirShip();
 		if (airShip.getObjectId() != _shipId) {
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 			return;

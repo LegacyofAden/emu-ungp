@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send.shuttle;
 
-import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
+import org.l2junity.gameserver.model.actor.instance.ShuttleInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.network.PacketWriter;
@@ -27,10 +27,10 @@ import org.l2junity.network.PacketWriter;
  * @author UnAfraid
  */
 public class ExShuttleMove implements IClientOutgoingPacket {
-	private final L2ShuttleInstance _shuttle;
+	private final ShuttleInstance _shuttle;
 	private final int _x, _y, _z;
 
-	public ExShuttleMove(L2ShuttleInstance shuttle, double x, double y, double z) {
+	public ExShuttleMove(ShuttleInstance shuttle, double x, double y, double z) {
 		_shuttle = shuttle;
 		_x = (int) x;
 		_y = (int) y;

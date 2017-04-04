@@ -27,8 +27,8 @@ import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
  * This class represents Friendly Mobs lying over the world.<br>
  * These friendly mobs should only attack players with karma > 0 and it is always aggro, since it just attacks players with karma.
  */
-public class L2FriendlyMobInstance extends Attackable {
-	public L2FriendlyMobInstance(NpcTemplate template) {
+public class FriendlyMobInstance extends Attackable {
+	public FriendlyMobInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FriendlyMobInstance);
 	}

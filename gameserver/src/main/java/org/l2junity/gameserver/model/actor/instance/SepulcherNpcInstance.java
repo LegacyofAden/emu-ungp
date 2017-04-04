@@ -47,8 +47,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author sandman
  */
-public class L2SepulcherNpcInstance extends Npc {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(L2SepulcherNpcInstance.class);
+public class SepulcherNpcInstance extends Npc {
+	protected static final Logger LOGGER = LoggerFactory.getLogger(SepulcherNpcInstance.class);
 
 	protected Future<?> _closeTask = null;
 	protected Future<?> _spawnNextMysteriousBoxTask = null;
@@ -57,7 +57,7 @@ public class L2SepulcherNpcInstance extends Npc {
 	private static final String HTML_FILE_PATH = "SepulcherNpc/";
 	private static final int HALLS_KEY = 7260;
 
-	public L2SepulcherNpcInstance(NpcTemplate template) {
+	public SepulcherNpcInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2SepulcherNpcInstance);
 		setShowSummonAnimation(true);

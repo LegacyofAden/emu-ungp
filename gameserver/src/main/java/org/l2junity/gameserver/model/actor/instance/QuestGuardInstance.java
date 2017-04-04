@@ -32,11 +32,11 @@ import org.l2junity.gameserver.model.skills.Skill;
  *
  * @author GKR
  */
-public final class L2QuestGuardInstance extends L2GuardInstance {
+public final class QuestGuardInstance extends GuardInstance {
 	private boolean _isAutoAttackable = true;
 	private boolean _isPassive = false;
 
-	public L2QuestGuardInstance(NpcTemplate template) {
+	public QuestGuardInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2QuestGuardInstance);
 	}

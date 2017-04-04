@@ -35,21 +35,21 @@ import org.slf4j.LoggerFactory;
 /**
  * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive MonsterInstance.
  */
-public class L2GuardInstance extends Attackable {
-	private static Logger _log = LoggerFactory.getLogger(L2GuardInstance.class);
+public class GuardInstance extends Attackable {
+	private static Logger _log = LoggerFactory.getLogger(GuardInstance.class);
 
 	/**
-	 * Constructor of L2GuardInstance (use L2Character and NpcInstance constructor).<br>
+	 * Constructor of GuardInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
-	 * <li>Call the L2Character constructor to set the _template of the L2GuardInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
-	 * <li>Set the name of the L2GuardInstance</li>
+	 * <li>Call the L2Character constructor to set the _template of the GuardInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
+	 * <li>Set the name of the GuardInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li>
 	 * </ul>
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2GuardInstance(NpcTemplate template) {
+	public GuardInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2GuardInstance);
 	}
@@ -68,7 +68,7 @@ public class L2GuardInstance extends Attackable {
 	}
 
 	/**
-	 * Set the home location of its L2GuardInstance.
+	 * Set the home location of its GuardInstance.
 	 */
 	@Override
 	public void onSpawn() {
@@ -83,7 +83,7 @@ public class L2GuardInstance extends Attackable {
 	}
 
 	/**
-	 * Return the pathfile of the selected HTML file in function of the L2GuardInstance Identifier and of the page number.<br>
+	 * Return the pathfile of the selected HTML file in function of the GuardInstance Identifier and of the page number.<br>
 	 * <B><U> Format of the pathfile </U> :</B>
 	 * <ul>
 	 * <li>if page number = 0 : <B>data/html/guard/12006.htm</B> (npcId-page number)</li>
@@ -105,25 +105,25 @@ public class L2GuardInstance extends Attackable {
 	}
 
 	/**
-	 * Manage actions when a player click on the L2GuardInstance.<br>
-	 * <B><U> Actions on first click on the L2GuardInstance (Select it)</U> :</B>
+	 * Manage actions when a player click on the GuardInstance.<br>
+	 * <B><U> Actions on first click on the GuardInstance (Select it)</U> :</B>
 	 * <ul>
-	 * <li>Set the L2GuardInstance as target of the L2PcInstance player (if necessary)</li>
+	 * <li>Set the GuardInstance as target of the L2PcInstance player (if necessary)</li>
 	 * <li>Send a Server->Client packet MyTargetSelected to the L2PcInstance player (display the select window)</li>
 	 * <li>Set the L2PcInstance Intention to AI_INTENTION_IDLE</li>
-	 * <li>Send a Server->Client packet ValidateLocation to correct the L2GuardInstance position and heading on the client</li>
+	 * <li>Send a Server->Client packet ValidateLocation to correct the GuardInstance position and heading on the client</li>
 	 * </ul>
-	 * <B><U> Actions on second click on the L2GuardInstance (Attack it/Interact with it)</U> :</B>
+	 * <B><U> Actions on second click on the GuardInstance (Attack it/Interact with it)</U> :</B>
 	 * <ul>
-	 * <li>If L2PcInstance is in the _aggroList of the L2GuardInstance, set the L2PcInstance Intention to AI_INTENTION_ATTACK</li>
-	 * <li>If L2PcInstance is NOT in the _aggroList of the L2GuardInstance, set the L2PcInstance Intention to AI_INTENTION_INTERACT (after a distance verification) and show message</li>
+	 * <li>If L2PcInstance is in the _aggroList of the GuardInstance, set the L2PcInstance Intention to AI_INTENTION_ATTACK</li>
+	 * <li>If L2PcInstance is NOT in the _aggroList of the GuardInstance, set the L2PcInstance Intention to AI_INTENTION_INTERACT (after a distance verification) and show message</li>
 	 * </ul>
 	 * <B><U> Example of use </U> :</B>
 	 * <ul>
 	 * <li>Client packet : Action, AttackRequest</li>
 	 * </ul>
 	 *
-	 * @param player The L2PcInstance that start an action on the L2GuardInstance
+	 * @param player The L2PcInstance that start an action on the GuardInstance
 	 */
 	@Override
 	public void onAction(Player player, boolean interact) {
@@ -131,12 +131,12 @@ public class L2GuardInstance extends Attackable {
 			return;
 		}
 
-		// Check if the L2PcInstance already target the L2GuardInstance
+		// Check if the L2PcInstance already target the GuardInstance
 		if (getObjectId() != player.getTargetId()) {
 			// Set the target of the L2PcInstance player
 			player.setTarget(this);
 		} else if (interact) {
-			// Check if the L2PcInstance is in the _aggroList of the L2GuardInstance
+			// Check if the L2PcInstance is in the _aggroList of the GuardInstance
 			if (containsTarget(player)) {
 				// Set the L2PcInstance Intention to AI_INTENTION_ATTACK
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, this);
@@ -148,7 +148,7 @@ public class L2GuardInstance extends Attackable {
 				} else {
 					player.setLastFolkNPC(this);
 
-					// Open a chat window on client with the text of the L2GuardInstance
+					// Open a chat window on client with the text of the GuardInstance
 					if (hasListener(EventType.ON_NPC_QUEST_START)) {
 						player.setLastQuestNpcObject(getObjectId());
 					}

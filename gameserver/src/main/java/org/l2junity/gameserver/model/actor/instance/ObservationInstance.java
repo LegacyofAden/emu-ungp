@@ -27,8 +27,8 @@ import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
  * @author NightMarez
  * @version $Revision: 1.3.2.2.2.5 $ $Date: 2005/03/27 15:29:32 $
  */
-public final class L2ObservationInstance extends Npc {
-	public L2ObservationInstance(NpcTemplate template) {
+public final class ObservationInstance extends Npc {
+	public ObservationInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ObservationInstance);
 	}
