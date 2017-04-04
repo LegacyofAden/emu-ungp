@@ -20,6 +20,8 @@ package org.l2junity.loginserver.network.client;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.loginserver.db.dto.Account;
 import org.l2junity.loginserver.manager.LoginManager;
 import org.l2junity.loginserver.network.client.crypt.KeyManager;
@@ -28,8 +30,6 @@ import org.l2junity.loginserver.network.client.send.Init;
 import org.l2junity.network.ChannelInboundHandler;
 import org.l2junity.network.IIncomingPacket;
 import org.l2junity.network.IOutgoingPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import java.net.InetAddress;
@@ -39,14 +39,13 @@ import java.util.Arrays;
 /**
  * @author NosBit
  */
+@Slf4j
 public class ClientHandler extends ChannelInboundHandler<ClientHandler> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClientHandler.class);
-
 	private InetAddress _address;
 	private int _connectionId;
 	private final SecretKey _blowfishKey;
 	private final ScrambledRSAKeyPair _scrambledRSAKeyPair;
-	private long _sessionId;
+	private SessionInfo sessionInfo;
 	private Channel _channel;
 	private byte[] _gameGuard;
 	private Account _account;
@@ -69,21 +68,21 @@ public class ClientHandler extends ChannelInboundHandler<ClientHandler> {
 		_connectionId = LoginManager.getInstance().getNextConnectionId();
 		sendPacket(new Init(_connectionId, _scrambledRSAKeyPair, _blowfishKey));
 
-		LOGGER.info("Client Connected: " + ctx.channel());
+		log.info("Client Connected: {}", ctx.channel());
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) {
-		LOGGER.info("Client Disconnected: " + ctx.channel());
+		log.info("Client Disconnected: {}", ctx.channel());
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, IIncomingPacket<ClientHandler> packet) {
-		LOGGER.info(packet.getClass().getSimpleName() + " packet from: " + ctx.channel());
+		log.debug("Incoming packet [{}] from [{}]", packet.getClass().getSimpleName(), ctx.channel());
 		try {
 			packet.run(this);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error while reading packet {} from client {}", ctx.channel(), packet.getClass().getSimpleName());
 		}
 	}
 
@@ -101,10 +100,6 @@ public class ClientHandler extends ChannelInboundHandler<ClientHandler> {
 		_channel.writeAndFlush(packet);
 		_channel.close();
 	}
-
-	/**
-	 * Connection id
-	 */
 
 	/**
 	 * @param id the connection id
@@ -128,26 +123,18 @@ public class ClientHandler extends ChannelInboundHandler<ClientHandler> {
 	}
 
 	/**
-	 * Session id
+	 * @param sessionInfo
 	 */
-
-	/**
-	 * @param id
-	 */
-	public void setLoginSessionId(long id) {
-		_sessionId = id;
+	public void setSessionInfo(SessionInfo sessionInfo) {
+		this.sessionInfo = sessionInfo;
 	}
 
 	/**
 	 * @return the session id
 	 */
-	public long getLoginSessionId() {
-		return _sessionId;
+	public SessionInfo getSessionInfo() {
+		return sessionInfo;
 	}
-
-	/**
-	 * Game Guard
-	 */
 
 	/**
 	 * @param data
@@ -186,5 +173,4 @@ public class ClientHandler extends ChannelInboundHandler<ClientHandler> {
 	public void setAccountLoginsId(long accountLoginsId) {
 		_accountLoginsId = accountLoginsId;
 	}
-
 }

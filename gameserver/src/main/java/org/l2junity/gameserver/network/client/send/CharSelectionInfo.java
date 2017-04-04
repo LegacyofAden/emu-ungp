@@ -18,6 +18,8 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.RatesConfig;
@@ -31,8 +33,6 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,12 +40,12 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
+@Slf4j
 public class CharSelectionInfo implements IClientOutgoingPacket {
-	private static Logger _log = LoggerFactory.getLogger(CharSelectionInfo.class);
-	private final String _loginName;
-	private final int _sessionId;
-	private int _activeId;
-	private final CharSelectInfoPackage[] _characterPackages;
+	private final String accountName;
+	private final int playKey;
+	private int activeId;
+	private final CharSelectInfoPackage[] characterPackages;
 
 	private static final int[] PAPERDOLL_ORDER_VISUAL_ID = new int[]
 			{
@@ -59,35 +59,29 @@ public class CharSelectionInfo implements IClientOutgoingPacket {
 					Inventory.PAPERDOLL_HAIR2,
 			};
 
-	/**
-	 * Constructor for CharSelectionInfo.
-	 *
-	 * @param loginName
-	 * @param sessionId
-	 */
-	public CharSelectionInfo(String loginName, int sessionId) {
-		_sessionId = sessionId;
-		_loginName = loginName;
-		_characterPackages = loadCharacterSelectInfo(_loginName);
-		_activeId = -1;
+	public CharSelectionInfo(SessionInfo sessionInfo) {
+		playKey = sessionInfo.getPlayKey();
+		accountName = sessionInfo.getAccountName();
+		characterPackages = loadCharacterSelectInfo(accountName);
+		activeId = -1;
 	}
 
-	public CharSelectionInfo(String loginName, int sessionId, int activeId) {
-		_sessionId = sessionId;
-		_loginName = loginName;
-		_characterPackages = loadCharacterSelectInfo(_loginName);
-		_activeId = activeId;
+	public CharSelectionInfo(SessionInfo sessionInfo, int activeId) {
+		playKey = sessionInfo.getPlayKey();
+		accountName = sessionInfo.getAccountName();
+		characterPackages = loadCharacterSelectInfo(accountName);
+		this.activeId = activeId;
 	}
 
 	public CharSelectInfoPackage[] getCharInfo() {
-		return _characterPackages;
+		return characterPackages;
 	}
 
 	@Override
 	public boolean write(PacketWriter packet) {
 		OutgoingPackets.CHARACTER_SELECTION_INFO.writeId(packet);
 
-		int size = _characterPackages.length;
+		int size = characterPackages.length;
 		packet.writeD(size); // How many char there is on this account
 
 		// Can prevent players from creating new characters (if 0); (if 1, the client will ask if chars may be created (0x13) Response: (0x0D) )
@@ -98,23 +92,23 @@ public class CharSelectionInfo implements IClientOutgoingPacket {
 		packet.writeC(0x00); // if 1 suggest premium account
 
 		long lastAccess = 0L;
-		if (_activeId == -1) {
+		if (activeId == -1) {
 			for (int i = 0; i < size; i++) {
-				if (lastAccess < _characterPackages[i].getLastAccess()) {
-					lastAccess = _characterPackages[i].getLastAccess();
-					_activeId = i;
+				if (lastAccess < characterPackages[i].getLastAccess()) {
+					lastAccess = characterPackages[i].getLastAccess();
+					activeId = i;
 				}
 			}
 		}
 
 		for (int i = 0; i < size; i++) {
-			CharSelectInfoPackage charInfoPackage = _characterPackages[i];
+			CharSelectInfoPackage charInfoPackage = characterPackages[i];
 
-			packet.writeS(charInfoPackage.getName()); // char name
-			packet.writeD(charInfoPackage.getObjectId()); // char id
-			packet.writeS(_loginName); // login
-			packet.writeD(_sessionId); // session id
-			packet.writeD(0x00); // ??
+			packet.writeS(charInfoPackage.getName());
+			packet.writeD(charInfoPackage.getObjectId());
+			packet.writeS(accountName);
+			packet.writeD(playKey);
+			packet.writeD(charInfoPackage.getClanId());
 			packet.writeD(0x00); // ??
 
 			packet.writeD(charInfoPackage.getSex()); // sex
@@ -179,7 +173,7 @@ public class CharSelectionInfo implements IClientOutgoingPacket {
 
 			packet.writeD(charInfoPackage.getDeleteTimer() > 0 ? (int) ((charInfoPackage.getDeleteTimer() - System.currentTimeMillis()) / 1000) : 0);
 			packet.writeD(charInfoPackage.getClassId());
-			packet.writeD(i == _activeId ? 1 : 0);
+			packet.writeD(i == activeId ? 1 : 0);
 
 			packet.writeC(charInfoPackage.getEnchantEffect() > 127 ? 127 : charInfoPackage.getEnchantEffect());
 			packet.writeD(charInfoPackage.getAugmentation() != null ? charInfoPackage.getAugmentation().getOption1Id() : 0);
