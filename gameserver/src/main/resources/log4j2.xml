@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" shutdownHook="disable">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%xEx%n"/>
+        </Console>
+        <RollingFile name="ConsoleFile" fileName="log/console.log"
+                     filePattern="log/$${date:yyyy-MM}/console/console-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d %-5level %class{36} %L %M - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AccountingFile" fileName="log/accounting.log"
+                     filePattern="log/$${date:yyyy-MM}/accounting/accounting-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AuditFile" fileName="log/audit.log"
+                     filePattern="log/$${date:yyyy-MM}/audit/audit-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="ChatFile" fileName="log/chat.log"
+                     filePattern="log/$${date:yyyy-MM}/chat/chat-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="EnchantItemFile" fileName="log/enchant-item.log"
+                     filePattern="log/$${date:yyyy-MM}/enchant-item/enchant-item-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="EnchantSkillFile" fileName="log/enchant-skill.log"
+                     filePattern="log/$${date:yyyy-MM}/enchant-skill/enchant-skill-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="GMAuditFile" fileName="log/gm-audit.log"
+                     filePattern="log/$${date:yyyy-MM}/gm-audit/gm-audit-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="ItemFile" fileName="log/item.log"
+                     filePattern="log/$${date:yyyy-MM}/item/item-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="OlympiadFile" fileName="log/olympiad.log"
+                     filePattern="log/$${date:yyyy-MM}/olympiad/olympiad-%date{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="accounting" level="all" additivity="false">
+            <AppenderRef ref="AccountingFile"/>
+        </Logger>
+        <Logger name="audit" level="all" additivity="false">
+            <AppenderRef ref="AuditFile"/>
+        </Logger>
+        <Logger name="chat" level="all" additivity="false">
+            <AppenderRef ref="ChatFile"/>
+        </Logger>
+        <Logger name="enchant.item" level="all" additivity="false">
+            <AppenderRef ref="EnchantItemFile"/>
+        </Logger>
+        <Logger name="enchant.skill" level="all" additivity="false">
+            <AppenderRef ref="EnchantSkillFile"/>
+        </Logger>
+        <Logger name="gmaudit" level="all" additivity="false">
+            <AppenderRef ref="GMAuditFile"/>
+        </Logger>
+        <Logger name="item" level="all" additivity="false">
+            <AppenderRef ref="ItemFile"/>
+        </Logger>
+        <Logger name="olympiad" level="all" additivity="false">
+            <AppenderRef ref="OlympiadFile"/>
+        </Logger>
+        <Logger name="com.mchange" level="warn"/>
+        <Logger name="io.netty" level="warn"/>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ConsoleFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

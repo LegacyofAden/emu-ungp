@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/route.xsd">
+	<route alias="2221_25" move_type="MoveSuperPoint_FollowRail">
+		<node id="0" fstring_index="-1" social_number="-1" delay="-1" x="81661" y="114385" z="-3320" />
+		<node id="1" fstring_index="-1" social_number="-1" delay="-1" x="81905" y="114135" z="-3232" />
+		<node id="2" fstring_index="-1" social_number="-1" delay="-1" x="82366" y="113725" z="-3096" />
+		<node id="3" fstring_index="-1" social_number="-1" delay="-1" x="82392" y="113108" z="-3048" />
+		<node id="4" fstring_index="-1" social_number="-1" delay="-1" x="83346" y="112987" z="-3048" />
+		<node id="5" fstring_index="-1" social_number="-1" delay="-1" x="84190" y="112573" z="-3048" />
+		<node id="6" fstring_index="-1" social_number="-1" delay="-1" x="84932" y="111924" z="-3096" />
+		<node id="7" fstring_index="-1" social_number="-1" delay="-1" x="86098" y="111684" z="-3112" />
+	</route>
+</list>

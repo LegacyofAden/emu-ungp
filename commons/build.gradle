@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
+
+defaultTasks('build')
+
+dependencies {
+	// Annotation processing
+	provided('org.projectlombok:lombok:+')
+	compile('org.atteo.classindex:classindex:+')
+
+	// Utils
+	compile('org.apache.commons:commons-lang3:+')
+	compile("org.apache.commons:commons-math3:+")
+	compile('commons-io:commons-io:+')
+
+	// Logging
+	compile('org.apache.logging.log4j:log4j-core:2.6.1')
+	compile('org.apache.logging.log4j:log4j-slf4j-impl:2.6.1')
+	compile('org.slf4j:slf4j-api:+')
+	compile('org.slf4j:slf4j-ext:+')
+
+	compile(group: 'org.bitlet', name: 'weupnp', version: '0.1.4')
+	compile(group: 'org.reflections', name: 'reflections', version: '0.9.10')
+	compile(group: 'com.google.guava', name: 'guava', version: '21.0')
+
+	compile(group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1')
+	compile(group: 'org.jdbi', name: 'jdbi', version: '2.78')
+
+	runtime(group: 'mysql', name: 'mysql-connector-java', version: '6.0.5')
+}
+
+
+configurations {
+	compile.exclude group: 'ch.qos.logback'
+	compile.exclude group: 'ch.qos.cal10n'
+}

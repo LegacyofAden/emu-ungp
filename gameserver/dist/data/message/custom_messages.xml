@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom_messages.xsd">
+	<message name="YOU_CANNOT_CHEAT_YOUR_WAY_OUT_OF_HERE_YOU_MUST_WAIT_UNTIL_YOUR_JAIL_TIME_IS_OVER">
+		<lang name="ru">Нельзя нарушать правила. Вы останетесь здесь до окончания вашего времени заключения.</lang>
+		<lang name="en">You cannot cheat your way out of here. You must wait until your jail time is over</lang>
+	</message>
+	<message name="PRICE_OF_$_HAS_BEEN_CHANGED_TO_$">
+		<lang name="ru">Цена %s% изменена на %s%.</lang>
+		<lang name="en">Price of %s% has been changed to %s%.</lang>
+	</message>
+	<message name="THE_NEXT_AUCTION_WILL_BEGIN_ON_THE_$">
+		<lang name="en">The next auction will begin on the %s%.</lang>
+		<lang name="ru">Следующий аукцион начнется в %s%.</lang>
+	</message>
+	<message name="YOU_CAN_NOT_OBSERVE_GAMES_WHILE_REGISTERED_ON_AN_EVENT">
+		<lang name="en">You cannot observe games while registered on an event.</lang>
+		<lang name="ru">Вы не можете наблюдать за играми пока зарегистрированы на ивент.</lang>
+	</message>
+	<message name="YOUR_LIST_OF_BUFFS_IS_EMPTY_PLEASE_ADD_SOME_BUFFS_FIRST">
+		<lang name="en">Your list of buffs is empty, please add some buffs first!</lang>
+		<lang name="ru">Список баффов пуст, пожалуйста добавьте сначала несколько баффов!</lang>
+	</message>
+	<message name="YOUR_TITLE_CANNOT_EXCEED_29_CHARACTERS_IN_LENGTH_PLEASE_TRY_AGAIN">
+		<lang name="en">Your title cannot exceed 29 characters in length. Please try again.</lang>
+		<lang name="ru">Ваш титул не может превышать 29 символов. Пожалуйста повторите попытку.</lang>
+	</message>
+	<message name="TOO_BIG_PRICE_MAXIMAL_PRICE_IS_$">
+		<lang name="en">Too big price! Maximal price is %s%</lang>
+		<lang name="ru">Слишком высокая цена! Максимально доступная цена %s%</lang>
+	</message>
+</list>
