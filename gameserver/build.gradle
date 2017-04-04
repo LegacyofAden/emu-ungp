@@ -73,7 +73,7 @@ compileJava {
 distZip {
 	from('dist/configs') {
 		into(baseName + '/bin/configs')
-		exclude('**.properties')
+		exclude('**/*.properties')
 	}
 	from('dist/data') {
 		into(baseName + '/bin/data')
@@ -81,4 +81,9 @@ distZip {
 	from('dist/sql') {
 		into(baseName + '/sql')
 	}
+}
+
+task createStartScripts(type: CreateStartScripts) {
+	unixStartScriptGenerator.template = resources.text.fromFile('../gradle/customUnixStartScript.txt');
+	windowsStartScriptGenerator.template = resources.text.fromFile('../gradle/customWindowsStartScript.txt');
 }

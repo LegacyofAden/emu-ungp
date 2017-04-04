@@ -41,3 +41,8 @@ distZip {
 		into(baseName + '/sql')
 	}
 }
+
+task createStartScripts(type: CreateStartScripts) {
+	unixStartScriptGenerator.template = resources.text.fromFile('../gradle/customUnixStartScript.txt');
+	windowsStartScriptGenerator.template = resources.text.fromFile('../gradle/customWindowsStartScript.txt');
+}
