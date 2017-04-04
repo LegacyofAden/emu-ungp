@@ -5,6 +5,7 @@ apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-eclipse'
 apply plugin: 'propdeps-idea'
 apply plugin: 'application'
+apply plugin: 'antlr'
 
 run.workingDir = new File("./dist")
 mainClassName = "org.l2junity.gameserver.GameServer"
@@ -31,6 +32,7 @@ sourceSets {
 
 dependencies {
 	provided('org.projectlombok:lombok:+')
+	antlr('org.antlr:antlr4:+')
 	compile project(':commons')
 	compile project(':geodriver')
 	compile project(':network')
@@ -49,6 +51,24 @@ dependencies {
 
 configurations {
 	compile.exclude group: 'ch.qos.logback'
+}
+
+generateGrammarSource {
+	arguments += ["-lib", "src/main/antlr/org/l2junity/gameserver/data/txt/gen"]
+	arguments += ["-package", "org.l2junity.gameserver.data.txt.gen"]
+}
+
+generateGrammarSource.doLast {
+	copy {
+		from("${buildDir}/generated-src/antlr/main")
+		exclude '**/*.tokens'
+		into('src/main/java/')
+	}
+	delete "${buildDir}/generated-src"
+}
+
+compileJava {
+	dependsOn generateGrammarSource
 }
 
 distZip {
