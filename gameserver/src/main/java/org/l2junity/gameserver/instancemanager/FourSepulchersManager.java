@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.SepulcherMonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.L2SepulcherNpcInstance;
+import org.l2junity.gameserver.model.actor.instance.SepulcherNpcInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.quest.Quest;
@@ -1264,7 +1264,7 @@ public final class FourSepulchersManager {
 					log.warn("managerSay(): manager is null");
 					continue;
 				}
-				if (!(temp.getLastSpawn() instanceof L2SepulcherNpcInstance)) {
+				if (!(temp.getLastSpawn() instanceof SepulcherNpcInstance)) {
 					log.warn("managerSay(): manager is not Sepulcher instance");
 					continue;
 				}
@@ -1274,7 +1274,7 @@ public final class FourSepulchersManager {
 					continue;
 				}
 
-				((L2SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg);
+				((SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg);
 			}
 		} else if (_inEntryTime) {
 			NpcStringId msg1 = NpcStringId.YOU_MAY_NOW_ENTER_THE_SEPULCHER;
@@ -1284,12 +1284,12 @@ public final class FourSepulchersManager {
 					log.warn("Something goes wrong in managerSay()...");
 					continue;
 				}
-				if (!(temp.getLastSpawn() instanceof L2SepulcherNpcInstance)) {
+				if (!(temp.getLastSpawn() instanceof SepulcherNpcInstance)) {
 					log.warn("Something goes wrong in managerSay()...");
 					continue;
 				}
-				((L2SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg1);
-				((L2SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg2);
+				((SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg1);
+				((SepulcherNpcInstance) temp.getLastSpawn()).sayInShout(msg2);
 			}
 		}
 	}

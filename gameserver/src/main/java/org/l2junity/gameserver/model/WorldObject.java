@@ -438,18 +438,18 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * Verify if object is instance of L2TrapInstance.
+	 * Verify if object is instance of TrapInstance.
 	 *
-	 * @return {@code true} if object is instance of L2TrapInstance, {@code false} otherwise
+	 * @return {@code true} if object is instance of TrapInstance, {@code false} otherwise
 	 */
 	public boolean isTrap() {
 		return false;
 	}
 
 	/**
-	 * @return {@link L2TrapInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link TrapInstance} instance if current object is such, {@code null} otherwise.
 	 */
-	public L2TrapInstance asTrap() {
+	public TrapInstance asTrap() {
 		return null;
 	}
 

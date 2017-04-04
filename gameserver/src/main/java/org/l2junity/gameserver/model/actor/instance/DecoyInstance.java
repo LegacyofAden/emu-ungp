@@ -31,10 +31,10 @@ import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
-public class L2DecoyInstance extends Npc {
+public class DecoyInstance extends Npc {
 	private final Player _owner;
 
-	public L2DecoyInstance(NpcTemplate template, Player owner, int totalLifeTime) {
+	public DecoyInstance(NpcTemplate template, Player owner, int totalLifeTime) {
 		super(template);
 		setInstanceType(InstanceType.L2DecoyInstance);
 		_owner = owner;

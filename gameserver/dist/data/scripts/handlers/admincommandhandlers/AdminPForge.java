@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.AdminForgePacket;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
@@ -324,7 +324,7 @@ public final class AdminPForge implements IAdminCommandHandler {
 						}
 
 						WorldObject target = null;
-						L2BoatInstance boat = null;
+						BoatInstance boat = null;
 						String value = st.nextToken();
 						switch (value) {
 							case "$oid":

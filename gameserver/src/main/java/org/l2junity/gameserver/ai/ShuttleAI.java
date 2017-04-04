@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.ai;
 
-import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
+import org.l2junity.gameserver.model.actor.instance.ShuttleInstance;
 import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleMove;
 
 /**
  * @author UnAfraid
  */
 public class ShuttleAI extends VehicleAI {
-	public ShuttleAI(L2ShuttleInstance shuttle) {
+	public ShuttleAI(ShuttleInstance shuttle) {
 		super(shuttle);
 	}
 
@@ -39,7 +39,7 @@ public class ShuttleAI extends VehicleAI {
 	}
 
 	@Override
-	public L2ShuttleInstance getActor() {
-		return (L2ShuttleInstance) _actor;
+	public ShuttleInstance getActor() {
+		return (ShuttleInstance) _actor;
 	}
 }

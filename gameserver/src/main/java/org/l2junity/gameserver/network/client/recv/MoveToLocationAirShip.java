@@ -23,7 +23,7 @@ import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.World;
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -59,7 +59,7 @@ public class MoveToLocationAirShip implements IClientIncomingPacket {
 			return;
 		}
 
-		final L2AirShipInstance ship = activeChar.getAirShip();
+		final AirShipInstance ship = activeChar.getAirShip();
 		if (!ship.isCaptain(activeChar)) {
 			return;
 		}

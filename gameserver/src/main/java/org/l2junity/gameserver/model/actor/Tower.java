@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.network.client.send.ActionFailed;
 
 /**
- * This class is a super-class for L2ControlTowerInstance and L2FlameTowerInstance.
+ * This class is a super-class for ControlTowerInstance and FlameTowerInstance.
  *
  * @author Zoey76
  */

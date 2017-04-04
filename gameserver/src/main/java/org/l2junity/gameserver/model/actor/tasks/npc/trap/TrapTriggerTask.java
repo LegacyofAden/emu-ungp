@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.tasks.npc.trap;
 
 import org.l2junity.commons.threading.ThreadPool;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,9 +29,9 @@ import java.util.concurrent.TimeUnit;
  * @author Zoey76
  */
 public class TrapTriggerTask implements Runnable {
-	private final L2TrapInstance _trap;
+	private final TrapInstance _trap;
 
-	public TrapTriggerTask(L2TrapInstance trap) {
+	public TrapTriggerTask(TrapInstance trap) {
 		_trap = trap;
 	}
 

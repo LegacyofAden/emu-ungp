@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
@@ -26,7 +26,7 @@ import org.l2junity.network.PacketWriter;
 public class ExAirShipStopMove implements IClientOutgoingPacket {
 	private final int _playerId, _airShipId, _x, _y, _z;
 
-	public ExAirShipStopMove(Player player, L2AirShipInstance ship, int x, int y, int z) {
+	public ExAirShipStopMove(Player player, AirShipInstance ship, int x, int y, int z) {
 		_playerId = player.getObjectId();
 		_airShipId = ship.getObjectId();
 		_x = x;

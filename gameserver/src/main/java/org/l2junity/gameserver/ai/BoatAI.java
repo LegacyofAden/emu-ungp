@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.ai;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.VehicleDeparture;
 import org.l2junity.gameserver.network.client.send.VehicleInfo;
@@ -29,7 +29,7 @@ import org.l2junity.gameserver.network.client.send.VehicleStarted;
  * @author DS
  */
 public class BoatAI extends VehicleAI {
-	public BoatAI(L2BoatInstance boat) {
+	public BoatAI(BoatInstance boat) {
 		super(boat);
 	}
 
@@ -67,7 +67,7 @@ public class BoatAI extends VehicleAI {
 	}
 
 	@Override
-	public L2BoatInstance getActor() {
-		return (L2BoatInstance) _actor;
+	public BoatInstance getActor() {
+		return (BoatInstance) _actor;
 	}
 }

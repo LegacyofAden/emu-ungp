@@ -30,8 +30,8 @@ import org.l2junity.gameserver.instancemanager.SiegeGuardManager;
 import org.l2junity.gameserver.instancemanager.SiegeManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2ControlTowerInstance;
-import org.l2junity.gameserver.model.actor.instance.L2FlameTowerInstance;
+import org.l2junity.gameserver.model.actor.instance.ControlTowerInstance;
+import org.l2junity.gameserver.model.actor.instance.FlameTowerInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.sieges.OnCastleSiegeFinish;
@@ -171,8 +171,8 @@ public class Siege implements Siegable {
 	private final List<SiegeClan> _defenderWaitingClans = new CopyOnWriteArrayList<>();
 
 	// Castle setting
-	private final List<L2ControlTowerInstance> _controlTowers = new ArrayList<>();
-	private final List<L2FlameTowerInstance> _flameTowers = new ArrayList<>();
+	private final List<ControlTowerInstance> _controlTowers = new ArrayList<>();
+	private final List<FlameTowerInstance> _flameTowers = new ArrayList<>();
 	private final Castle _castle;
 	private boolean _isInProgress = false;
 	private boolean _isNormalSide = true; // true = Atk is Atk, false = Atk is Def
@@ -1019,11 +1019,11 @@ public class Siege implements Siegable {
 	 * Remove all spawned towers.
 	 */
 	private void removeTowers() {
-		for (L2FlameTowerInstance ct : _flameTowers) {
+		for (FlameTowerInstance ct : _flameTowers) {
 			ct.deleteMe();
 		}
 
-		for (L2ControlTowerInstance ct : _controlTowers) {
+		for (ControlTowerInstance ct : _controlTowers) {
 			ct.deleteMe();
 		}
 
@@ -1184,7 +1184,7 @@ public class Siege implements Siegable {
 			for (TowerSpawn ts : SiegeManager.getInstance().getControlTowers(getCastle().getResidenceId())) {
 				final L2Spawn spawn = new L2Spawn(ts.getId());
 				spawn.setLocation(ts.getLocation());
-				_controlTowers.add((L2ControlTowerInstance) spawn.doSpawn());
+				_controlTowers.add((ControlTowerInstance) spawn.doSpawn());
 			}
 		} catch (Exception e) {
 			LOGGER.warn("Error while spawning control towers for castle: {}", _castle, e);
@@ -1200,7 +1200,7 @@ public class Siege implements Siegable {
 			for (TowerSpawn ts : SiegeManager.getInstance().getFlameTowers(getCastle().getResidenceId())) {
 				final L2Spawn spawn = new L2Spawn(ts.getId());
 				spawn.setLocation(ts.getLocation());
-				final L2FlameTowerInstance tower = (L2FlameTowerInstance) spawn.doSpawn();
+				final FlameTowerInstance tower = (FlameTowerInstance) spawn.doSpawn();
 				tower.setUpgradeLevel(ts.getUpgradeLevel());
 				tower.setZoneList(ts.getZoneList());
 				_flameTowers.add(tower);
@@ -1220,7 +1220,7 @@ public class Siege implements Siegable {
 		// When CT dies, so do all the guards that it controls
 		final Set<L2Spawn> spawned = SiegeGuardManager.getInstance().getSpawnedGuards(getCastle().getResidenceId());
 		if (!spawned.isEmpty()) {
-			L2ControlTowerInstance closestCt;
+			ControlTowerInstance closestCt;
 			double distance;
 			double distanceClosest = 0;
 			for (L2Spawn spawn : spawned) {
@@ -1231,7 +1231,7 @@ public class Siege implements Siegable {
 				closestCt = null;
 				distanceClosest = Integer.MAX_VALUE;
 
-				for (L2ControlTowerInstance ct : _controlTowers) {
+				for (ControlTowerInstance ct : _controlTowers) {
 					if (ct == null) {
 						continue;
 					}

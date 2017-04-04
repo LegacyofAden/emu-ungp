@@ -40,7 +40,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
@@ -1033,7 +1033,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides instant callback operation when {@link org.l2junity.gameserver.model.actor.instance.L2TrapInstance} acts.
+	 * Provides instant callback operation when {@link TrapInstance} acts.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -1044,7 +1044,7 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	}
 
 	/**
-	 * Provides instant callback operation when {@link org.l2junity.gameserver.model.actor.instance.L2TrapInstance} acts.
+	 * Provides instant callback operation when {@link TrapInstance} acts.
 	 *
 	 * @param callback
 	 * @param npcIds
@@ -2010,9 +2010,9 @@ public abstract class AbstractScript extends ManagedScript implements IEventTime
 	 * @param instanceId
 	 * @return
 	 */
-	public L2TrapInstance addTrap(int trapId, double x, double y, double z, int heading, Skill skill, int instanceId) {
+	public TrapInstance addTrap(int trapId, double x, double y, double z, int heading, Skill skill, int instanceId) {
 		final NpcTemplate npcTemplate = NpcData.getInstance().getTemplate(trapId);
-		L2TrapInstance trap = new L2TrapInstance(npcTemplate, instanceId);
+		TrapInstance trap = new TrapInstance(npcTemplate, instanceId);
 		trap.setCurrentHp(trap.getMaxHp());
 		trap.setCurrentMp(trap.getMaxMp());
 		trap.setIsInvul(true);

@@ -31,20 +31,20 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
  *
  * @version $Revision: 1.11.2.1.2.7 $ $Date: 2005/04/06 16:13:40 $
  */
-public final class L2ArtefactInstance extends Npc {
+public final class ArtefactInstance extends Npc {
 	/**
-	 * Constructor of L2ArtefactInstance (use L2Character and NpcInstance constructor).<BR>
+	 * Constructor of ArtefactInstance (use L2Character and NpcInstance constructor).<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Call the L2Character constructor to set the _template of the L2ArtefactInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
-	 * <li>Set the name of the L2ArtefactInstance</li>
+	 * <li>Call the L2Character constructor to set the _template of the ArtefactInstance (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
+	 * <li>Set the name of the ArtefactInstance</li>
 	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li><BR>
 	 * <BR>
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2ArtefactInstance(NpcTemplate template) {
+	public ArtefactInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2ArtefactInstance);
 	}

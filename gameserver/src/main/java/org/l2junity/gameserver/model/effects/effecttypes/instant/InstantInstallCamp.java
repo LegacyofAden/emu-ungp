@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2SiegeFlagInstance;
+import org.l2junity.gameserver.model.actor.instance.SiegeFlagInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -50,7 +50,7 @@ public final class InstantInstallCamp extends AbstractEffect {
 			return;
 		}
 
-		final L2SiegeFlagInstance flag = new L2SiegeFlagInstance(casterPlayer, NpcData.getInstance().getTemplate(HQ_NPC_ID), false);
+		final SiegeFlagInstance flag = new SiegeFlagInstance(casterPlayer, NpcData.getInstance().getTemplate(HQ_NPC_ID), false);
 		flag.setTitle(casterPlayer.getClan().getName());
 		flag.setCurrentHpMp(flag.getMaxHp(), flag.getMaxMp());
 		flag.setHeading(casterPlayer.getHeading());

@@ -34,9 +34,9 @@ import org.l2junity.gameserver.network.client.send.StaticObject;
  *
  * @author godson
  */
-public final class L2StaticObjectInstance extends Creature {
+public final class StaticObjectInstance extends Creature {
 	/**
-	 * The interaction distance of the L2StaticObjectInstance
+	 * The interaction distance of the StaticObjectInstance
 	 */
 	public static final int INTERACTION_DISTANCE = 150;
 
@@ -64,7 +64,7 @@ public final class L2StaticObjectInstance extends Creature {
 	 * @param template
 	 * @param staticId
 	 */
-	public L2StaticObjectInstance(CharTemplate template, int staticId) {
+	public StaticObjectInstance(CharTemplate template, int staticId) {
 		super(template);
 		setInstanceType(InstanceType.L2StaticObjectInstance);
 		_staticObjectId = staticId;

@@ -35,13 +35,13 @@ import org.l2junity.gameserver.network.client.send.ActionFailed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class L2DefenderInstance extends Attackable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(L2DefenderInstance.class);
+public class DefenderInstance extends Attackable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefenderInstance.class);
 
 	private Castle _castle = null; // the castle which the instance should defend
 	private Fort _fort = null; // the fortress which the instance should defend
 
-	public L2DefenderInstance(NpcTemplate template) {
+	public DefenderInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2DefenderInstance);
 	}
@@ -114,7 +114,7 @@ public class L2DefenderInstance extends Attackable {
 		_castle = CastleManager.getInstance().getCastle(getX(), getY(), getZ());
 
 		if ((_fort == null) && (_castle == null)) {
-			LOGGER.warn("L2DefenderInstance spawned outside of Fortress or Castle zone!" + this);
+			LOGGER.warn("DefenderInstance spawned outside of Fortress or Castle zone!" + this);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class L2DefenderInstance extends Attackable {
 			return;
 		}
 
-		if (!(attacker instanceof L2DefenderInstance)) {
+		if (!(attacker instanceof DefenderInstance)) {
 			if ((damage == 0) && (aggro <= 1) && (attacker.isPlayable())) {
 				Player player = attacker.getActingPlayer();
 				// Check if siege is in progress

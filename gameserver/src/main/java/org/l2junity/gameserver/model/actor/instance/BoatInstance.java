@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Maktakien, DS
  */
-public class L2BoatInstance extends Vehicle {
-	protected static final Logger _logBoat = LoggerFactory.getLogger(L2BoatInstance.class);
+public class BoatInstance extends Vehicle {
+	protected static final Logger _logBoat = LoggerFactory.getLogger(BoatInstance.class);
 
-	public L2BoatInstance(CharTemplate template) {
+	public BoatInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2BoatInstance);
 		setAI(new BoatAI(this));

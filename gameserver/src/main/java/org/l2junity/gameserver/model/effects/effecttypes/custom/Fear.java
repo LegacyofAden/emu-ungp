@@ -25,9 +25,9 @@ import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.L2FortCommanderInstance;
-import org.l2junity.gameserver.model.actor.instance.L2SiegeFlagInstance;
+import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
+import org.l2junity.gameserver.model.actor.instance.FortCommanderInstance;
+import org.l2junity.gameserver.model.actor.instance.SiegeFlagInstance;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
@@ -47,8 +47,8 @@ public final class Fear extends AbstractEffect {
 	@Override
 	public boolean checkPumpCondition(Creature caster, Creature target, Skill skill) {
 		return target.isPlayer() || target.isSummon() || (target.isAttackable() && //
-				!((target instanceof L2DefenderInstance) || (target instanceof L2FortCommanderInstance) || //
-						(target instanceof L2SiegeFlagInstance) || (target.getTemplate().getRace() == Race.SIEGE_WEAPON)));
+				!((target instanceof DefenderInstance) || (target instanceof FortCommanderInstance) || //
+						(target instanceof SiegeFlagInstance) || (target.getTemplate().getRace() == Race.SIEGE_WEAPON)));
 	}
 
 	@Override

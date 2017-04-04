@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -44,7 +44,7 @@ public class AdminTargetSay implements IAdminCommandHandler {
 		if (command.startsWith("admin_targetsay")) {
 			try {
 				final WorldObject obj = activeChar.getTarget();
-				if ((obj instanceof L2StaticObjectInstance) || !(obj instanceof Creature)) {
+				if ((obj instanceof StaticObjectInstance) || !(obj instanceof Creature)) {
 					activeChar.sendPacket(SystemMessageId.INVALID_TARGET);
 					return false;
 				}

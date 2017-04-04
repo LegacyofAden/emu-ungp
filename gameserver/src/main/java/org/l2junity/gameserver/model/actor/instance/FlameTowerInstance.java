@@ -32,11 +32,11 @@ import java.util.List;
  *
  * @author JIV
  */
-public class L2FlameTowerInstance extends Tower {
+public class FlameTowerInstance extends Tower {
 	private int _upgradeLevel = 0;
 	private List<Integer> _zoneList;
 
-	public L2FlameTowerInstance(NpcTemplate template) {
+	public FlameTowerInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2FlameTowerInstance);
 	}

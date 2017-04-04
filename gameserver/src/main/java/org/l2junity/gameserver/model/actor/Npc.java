@@ -681,7 +681,7 @@ public class Npc extends Creature {
 				if (showPkDenyChatWindow(player, "merchant")) {
 					return;
 				}
-			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (this instanceof L2TeleporterInstance)) {
+			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (this instanceof TeleporterInstance)) {
 				if (showPkDenyChatWindow(player, "teleporter")) {
 					return;
 				}

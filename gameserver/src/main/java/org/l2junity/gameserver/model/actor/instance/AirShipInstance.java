@@ -27,12 +27,12 @@ import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.network.client.send.*;
 
 /**
- * Flying airships. Very similar to Maktakien boats (see L2BoatInstance) but these do fly :P
+ * Flying airships. Very similar to Maktakien boats (see BoatInstance) but these do fly :P
  *
  * @author DrHouse, DS
  */
-public class L2AirShipInstance extends Vehicle {
-	public L2AirShipInstance(CharTemplate template) {
+public class AirShipInstance extends Vehicle {
+	public AirShipInstance(CharTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2AirShipInstance);
 		setAI(new AirShipAI(this));
