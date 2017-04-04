@@ -45,7 +45,7 @@ public class GuardInstance extends Attackable {
 	 *
 	 * @param template to apply to the NPC
 	 */
-	public L2GuardInstance(NpcTemplate template) {
+	public GuardInstance(NpcTemplate template) {
 		super(template);
 		setInstanceType(InstanceType.L2GuardInstance);
 	}
