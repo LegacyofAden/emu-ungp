@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="22900" level="93" type="L2Monster" name="Satyr Summoner" title="Brutal">
+	<npc id="22900" level="93" type="Monster" name="Satyr Summoner" title="Brutal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -100,7 +100,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22901" level="92" type="L2Monster" name="Satyr Summoner" title="Fully Enraged">
+	<npc id="22901" level="92" type="Monster" name="Satyr Summoner" title="Fully Enraged">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -200,7 +200,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22902" level="92" type="L2Monster" name="Satyr Summoner" title="Slightly Enraged">
+	<npc id="22902" level="92" type="Monster" name="Satyr Summoner" title="Slightly Enraged">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -298,7 +298,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22903" level="88" type="L2Monster" name="Satyr Witch" title="">
+	<npc id="22903" level="88" type="Monster" name="Satyr Witch" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -395,7 +395,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22904" level="90" type="L2Monster" name="Satyr Witch" title="Wicked">
+	<npc id="22904" level="90" type="Monster" name="Satyr Witch" title="Wicked">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -494,7 +494,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22905" level="89" type="L2Monster" name="Satyr Witch" title="Mature">
+	<npc id="22905" level="89" type="Monster" name="Satyr Witch" title="Mature">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -591,7 +591,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22906" level="89" type="L2Monster" name="Satyr Witch" title="Imperfect">
+	<npc id="22906" level="89" type="Monster" name="Satyr Witch" title="Imperfect">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -688,7 +688,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22907" level="91" type="L2Monster" name="Satyr Witch" title="Violent">
+	<npc id="22907" level="91" type="Monster" name="Satyr Witch" title="Violent">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -787,7 +787,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22908" level="93" type="L2Monster" name="Satyr Witch" title="Brutal">
+	<npc id="22908" level="93" type="Monster" name="Satyr Witch" title="Brutal">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -888,7 +888,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22909" level="92" type="L2Monster" name="Satyr Witch" title="Fully Enraged">
+	<npc id="22909" level="92" type="Monster" name="Satyr Witch" title="Fully Enraged">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -989,7 +989,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22910" level="92" type="L2Monster" name="Satyr Witch" title="Slightly Enraged">
+	<npc id="22910" level="92" type="Monster" name="Satyr Witch" title="Slightly Enraged">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -1088,7 +1088,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22911" level="95" type="L2Monster" name="Orbis' Victim" title="">
+	<npc id="22911" level="95" type="Monster" name="Orbis' Victim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1169,7 +1169,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22912" level="96" type="L2Monster" name="Orbis' Victim" title="">
+	<npc id="22912" level="96" type="Monster" name="Orbis' Victim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1252,7 +1252,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22913" level="97" type="L2Monster" name="Orbis' Victim" title="">
+	<npc id="22913" level="97" type="Monster" name="Orbis' Victim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1335,7 +1335,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22914" level="95" type="L2Monster" name="Orbis' Guard" title="">
+	<npc id="22914" level="95" type="Monster" name="Orbis' Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1414,7 +1414,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22915" level="96" type="L2Monster" name="Orbis' Guard" title="">
+	<npc id="22915" level="96" type="Monster" name="Orbis' Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1494,7 +1494,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22916" level="97" type="L2Monster" name="Orbis' Guard" title="">
+	<npc id="22916" level="97" type="Monster" name="Orbis' Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1574,7 +1574,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22917" level="95" type="L2Monster" name="Orbis' Thrower" title="">
+	<npc id="22917" level="95" type="Monster" name="Orbis' Thrower" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1658,7 +1658,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22918" level="96" type="L2Monster" name="Orbis' Thrower" title="">
+	<npc id="22918" level="96" type="Monster" name="Orbis' Thrower" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1742,7 +1742,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22919" level="97" type="L2Monster" name="Orbis' Thrower" title="">
+	<npc id="22919" level="97" type="Monster" name="Orbis' Thrower" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1828,7 +1828,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22920" level="96" type="L2Monster" name="Orbis' Thrower" title="Scout">
+	<npc id="22920" level="96" type="Monster" name="Orbis' Thrower" title="Scout">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1908,7 +1908,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22921" level="95" type="L2Monster" name="Orbis' Curator" title="">
+	<npc id="22921" level="95" type="Monster" name="Orbis' Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1982,7 +1982,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22922" level="96" type="L2Monster" name="Orbis' Curator" title="">
+	<npc id="22922" level="96" type="Monster" name="Orbis' Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2057,7 +2057,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22923" level="97" type="L2Monster" name="Orbis' Curator" title="">
+	<npc id="22923" level="97" type="Monster" name="Orbis' Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2132,7 +2132,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22924" level="96" type="L2Monster" name="Orbis' Ancient Hero" title="">
+	<npc id="22924" level="96" type="Monster" name="Orbis' Ancient Hero" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2207,7 +2207,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22925" level="97" type="L2Monster" name="Orbis' Ancient Hero" title="">
+	<npc id="22925" level="97" type="Monster" name="Orbis' Ancient Hero" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2284,7 +2284,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22926" level="96" type="L2Monster" name="Orbis' Chief Curator" title="">
+	<npc id="22926" level="96" type="Monster" name="Orbis' Chief Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2358,7 +2358,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22927" level="97" type="L2Monster" name="Orbis' Chief Curator" title="">
+	<npc id="22927" level="97" type="Monster" name="Orbis' Chief Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2435,7 +2435,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22928" level="97" type="L2Monster" name="Octavis' Gladiator" title="">
+	<npc id="22928" level="97" type="Monster" name="Octavis' Gladiator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2483,7 +2483,7 @@
 			<height normal="67" />
 		</collision>
 	</npc>
-	<npc id="22929" level="97" type="L2Monster" name="Beast of the Arena" title="">
+	<npc id="22929" level="97" type="Monster" name="Beast of the Arena" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2527,7 +2527,7 @@
 			<height normal="26" />
 		</collision>
 	</npc>
-	<npc id="22930" level="97" type="L2Monster" name="Octavis' Chief Curator" title="">
+	<npc id="22930" level="97" type="Monster" name="Octavis' Chief Curator" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2578,7 +2578,7 @@
 			<height normal="36.5" />
 		</collision>
 	</npc>
-	<npc id="22931" level="86" type="L2Monster" name="Krakia Bathus" title="">
+	<npc id="22931" level="86" type="Monster" name="Krakia Bathus" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -2665,7 +2665,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22932" level="86" type="L2Monster" name="Krakia Carcass" title="">
+	<npc id="22932" level="86" type="Monster" name="Krakia Carcass" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -2757,7 +2757,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22933" level="87" type="L2Monster" name="Krakia Lotus" title="">
+	<npc id="22933" level="87" type="Monster" name="Krakia Lotus" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -2844,7 +2844,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22934" level="86" type="L2Monster" name="Rakzan" title="">
+	<npc id="22934" level="86" type="Monster" name="Rakzan" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -2930,7 +2930,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22935" level="85" type="L2Monster" name="Weiss Khan" title="">
+	<npc id="22935" level="85" type="Monster" name="Weiss Khan" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -3018,7 +3018,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22936" level="85" type="L2Monster" name="Weiss Ele" title="">
+	<npc id="22936" level="85" type="Monster" name="Weiss Ele" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -3107,7 +3107,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22937" level="86" type="L2Monster" name="Bamonti" title="">
+	<npc id="22937" level="86" type="Monster" name="Bamonti" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -3195,7 +3195,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22938" level="85" type="L2Monster" name="Seknus" title="">
+	<npc id="22938" level="85" type="Monster" name="Seknus" title="">
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
 			<param name="MoveAroundSocial1" value="100" />
@@ -3284,7 +3284,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22939" level="86" type="L2Monster" name="Demonic Bathus" title="">
+	<npc id="22939" level="86" type="Monster" name="Demonic Bathus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3377,7 +3377,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22940" level="86" type="L2Monster" name="Demonic Carcass" title="">
+	<npc id="22940" level="86" type="Monster" name="Demonic Carcass" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3473,7 +3473,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22941" level="87" type="L2Monster" name="Demonic Lotus" title="">
+	<npc id="22941" level="87" type="Monster" name="Demonic Lotus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3564,7 +3564,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22942" level="86" type="L2Monster" name="Demonic Rakzan" title="">
+	<npc id="22942" level="86" type="Monster" name="Demonic Rakzan" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3659,7 +3659,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22943" level="85" type="L2Monster" name="Demonic Weiss Khan" title="">
+	<npc id="22943" level="85" type="Monster" name="Demonic Weiss Khan" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3751,7 +3751,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22944" level="85" type="L2Monster" name="Demonic Weiss Ele" title="">
+	<npc id="22944" level="85" type="Monster" name="Demonic Weiss Ele" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3843,7 +3843,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22945" level="86" type="L2Monster" name="Demonic Bamonti" title="">
+	<npc id="22945" level="86" type="Monster" name="Demonic Bamonti" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -3937,7 +3937,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22946" level="85" type="L2Monster" name="Demonic Seknus" title="">
+	<npc id="22946" level="85" type="Monster" name="Demonic Seknus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -4031,7 +4031,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22947" level="90" type="L2Monster" name="Garden Sentry" title="">
+	<npc id="22947" level="90" type="Monster" name="Garden Sentry" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="162" />
@@ -4101,7 +4101,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22948" level="90" type="L2Monster" name="Garden Scout" title="">
+	<npc id="22948" level="90" type="Monster" name="Garden Scout" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -4172,7 +4172,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22949" level="91" type="L2Monster" name="Garden Commander" title="">
+	<npc id="22949" level="91" type="Monster" name="Garden Commander" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="142" />
@@ -4243,7 +4243,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22950" level="92" type="L2Monster" name="Outdoor Gardener" title="">
+	<npc id="22950" level="92" type="Monster" name="Outdoor Gardener" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="128" />
@@ -4313,7 +4313,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22951" level="90" type="L2Monster" name="Garden Destroyer" title="">
+	<npc id="22951" level="90" type="Monster" name="Garden Destroyer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="148" />
@@ -4382,7 +4382,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22952" level="92" type="L2Monster" name="Garden Watchman" title="">
+	<npc id="22952" level="92" type="Monster" name="Garden Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -4451,7 +4451,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22953" level="92" type="L2Monster" name="Garden Scout" title="">
+	<npc id="22953" level="92" type="Monster" name="Garden Scout" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -4519,7 +4519,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22954" level="94" type="L2Monster" name="Sun Garden Manager" title="">
+	<npc id="22954" level="94" type="Monster" name="Sun Garden Manager" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="93" />
@@ -4596,7 +4596,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22955" level="94" type="L2Monster" name="Sun Gardener" title="">
+	<npc id="22955" level="94" type="Monster" name="Sun Gardener" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="128" />
@@ -4673,7 +4673,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22956" level="93" type="L2Monster" name="Garden Commander" title="">
+	<npc id="22956" level="93" type="Monster" name="Garden Commander" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="142" />
@@ -4746,7 +4746,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22957" level="93" type="L2Monster" name="Garden Warrior" title="">
+	<npc id="22957" level="93" type="Monster" name="Garden Warrior" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -4813,7 +4813,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22958" level="94" type="L2Monster" name="Moon Garden Manager" title="">
+	<npc id="22958" level="94" type="Monster" name="Moon Garden Manager" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="93" />
@@ -4889,7 +4889,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22959" level="92" type="L2Monster" name="Garden Protector" title="">
+	<npc id="22959" level="92" type="Monster" name="Garden Protector" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="128" />
@@ -4968,7 +4968,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22960" level="94" type="L2Monster" name="Moon Gardener" title="">
+	<npc id="22960" level="94" type="Monster" name="Moon Gardener" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="128" />
@@ -5047,7 +5047,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22961" level="92" type="L2Monster" name="Garden Sentry" title="">
+	<npc id="22961" level="92" type="Monster" name="Garden Sentry" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="162" />
@@ -5117,7 +5117,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22962" level="93" type="L2Monster" name="Garden Commander" title="">
+	<npc id="22962" level="93" type="Monster" name="Garden Commander" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="142" />
@@ -5194,7 +5194,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22963" level="93" type="L2Monster" name="Garden Warrior" title="">
+	<npc id="22963" level="93" type="Monster" name="Garden Warrior" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -5265,7 +5265,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22964" level="93" type="L2Monster" name="Apherus Lookout" title="Bewildered">
+	<npc id="22964" level="93" type="Monster" name="Apherus Lookout" title="Bewildered">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="93" />
@@ -5333,7 +5333,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22965" level="92" type="L2Monster" name="Novice Phantom" title="">
+	<npc id="22965" level="92" type="Monster" name="Novice Phantom" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5409,7 +5409,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22966" level="92" type="L2Monster" name="Novice Phantom Wizard" title="">
+	<npc id="22966" level="92" type="Monster" name="Novice Phantom Wizard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5484,7 +5484,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22967" level="92" type="L2Monster" name="Median Phantom" title="">
+	<npc id="22967" level="92" type="Monster" name="Median Phantom" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5560,7 +5560,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22968" level="94" type="L2Monster" name="Median Escort Swordsman" title="">
+	<npc id="22968" level="94" type="Monster" name="Median Escort Swordsman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5634,7 +5634,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22969" level="93" type="L2Monster" name="Wraith Guardian" title="">
+	<npc id="22969" level="93" type="Monster" name="Wraith Guardian" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5707,7 +5707,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22970" level="93" type="L2Monster" name="Wraith Warrior" title="">
+	<npc id="22970" level="93" type="Monster" name="Wraith Warrior" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5784,7 +5784,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22979" level="94" type="L2Monster" name="Novice Escort Swordsman" title="">
+	<npc id="22979" level="94" type="Monster" name="Novice Escort Swordsman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5852,7 +5852,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="22980" level="94" type="L2Monster" name="Novice Escort Wizard" title="">
+	<npc id="22980" level="94" type="Monster" name="Novice Escort Wizard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5918,7 +5918,7 @@
 			<height normal="26" />
 		</collision>
 	</npc>
-	<npc id="22981" level="95" type="L2Monster" name="Median Escort Swordsman" title="">
+	<npc id="22981" level="95" type="Monster" name="Median Escort Swordsman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -5986,7 +5986,7 @@
 			<height normal="32.5" />
 		</collision>
 	</npc>
-	<npc id="22983" level="93" type="L2Monster" name="Escort Warrior" title="">
+	<npc id="22983" level="93" type="Monster" name="Escort Warrior" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6026,7 +6026,7 @@
 			<height normal="55" />
 		</collision>
 	</npc>
-	<npc id="22984" level="20" type="L2Monster" name="Nemertess" title="Escort">
+	<npc id="22984" level="20" type="Monster" name="Nemertess" title="Escort">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6063,7 +6063,7 @@
 			<height normal="32" />
 		</collision>
 	</npc>
-	<npc id="22985" level="92" type="L2Monster" name="Spezion's Pawn" title="Prison Raider">
+	<npc id="22985" level="92" type="Monster" name="Spezion's Pawn" title="Prison Raider">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6105,7 +6105,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="22991" level="10" type="L2Monster" name="Crawler" title="Husk">
+	<npc id="22991" level="10" type="Monster" name="Crawler" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6180,7 +6180,7 @@
 			<height normal="18.5" />
 		</collision>
 	</npc>
-	<npc id="22992" level="8" type="L2Monster" name="Stalker" title="Husk">
+	<npc id="22992" level="8" type="Monster" name="Stalker" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6255,7 +6255,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="22993" level="16" type="L2Monster" name="Critter" title="Husk">
+	<npc id="22993" level="16" type="Monster" name="Critter" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6333,7 +6333,7 @@
 			<height normal="18" />
 		</collision>
 	</npc>
-	<npc id="22994" level="14" type="L2Monster" name="Avian" title="Husk">
+	<npc id="22994" level="14" type="Monster" name="Avian" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6409,7 +6409,7 @@
 			<height normal="16.5" />
 		</collision>
 	</npc>
-	<npc id="22995" level="18" type="L2Monster" name="Rider" title="Husk">
+	<npc id="22995" level="18" type="Monster" name="Rider" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6482,7 +6482,7 @@
 			<height normal="36.5" />
 		</collision>
 	</npc>
-	<npc id="22996" level="14" type="L2Monster" name="Krapher" title="Husk">
+	<npc id="22996" level="14" type="Monster" name="Krapher" title="Husk">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6557,7 +6557,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="22997" level="18" type="L2Monster" name="Handyman" title="Embryo">
+	<npc id="22997" level="18" type="Monster" name="Handyman" title="Embryo">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -6619,7 +6619,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="22998" level="18" type="L2Monster" name="Operative" title="Embryo">
+	<npc id="22998" level="18" type="Monster" name="Operative" title="Embryo">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="15100" level="89" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15100" level="89" type="Servitor" name="Wynn Spectral Lord" title="">
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="3" />
 			<skill name="DDMagic2" id="11344" level="3" />
@@ -43,7 +43,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15101" level="91" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15101" level="91" type="Servitor" name="Wynn Spectral Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="4" />
@@ -87,7 +87,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15102" level="93" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15102" level="93" type="Servitor" name="Wynn Spectral Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="5" />
@@ -131,7 +131,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15103" level="95" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15103" level="95" type="Servitor" name="Wynn Spectral Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="6" />
@@ -174,7 +174,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15104" level="97" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15104" level="97" type="Servitor" name="Wynn Spectral Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="7" />
@@ -218,7 +218,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15105" level="99" type="L2Servitor" name="Wynn Spectral Lord" title="">
+	<npc id="15105" level="99" type="Servitor" name="Wynn Spectral Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11343" level="8" />
@@ -262,7 +262,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="15106" level="85" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15106" level="85" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="1" />
@@ -306,7 +306,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15107" level="87" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15107" level="87" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="2" />
@@ -350,7 +350,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15108" level="89" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15108" level="89" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="3" />
@@ -394,7 +394,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15109" level="91" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15109" level="91" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="4" />
@@ -438,7 +438,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15110" level="93" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15110" level="93" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="5" />
@@ -482,7 +482,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15111" level="95" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15111" level="95" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="6" />
@@ -526,7 +526,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15112" level="97" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15112" level="97" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="7" />
@@ -568,7 +568,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15113" level="99" type="L2Servitor" name="Wynn Soulless" title="">
+	<npc id="15113" level="99" type="Servitor" name="Wynn Soulless" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11345" level="8" />
@@ -610,7 +610,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="15114" level="85" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15114" level="85" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="1" />
@@ -654,7 +654,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15115" level="87" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15115" level="87" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="2" />
@@ -698,7 +698,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15116" level="89" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15116" level="89" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="3" />
@@ -742,7 +742,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15117" level="91" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15117" level="91" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="4" />
@@ -786,7 +786,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15118" level="93" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15118" level="93" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="5" />
@@ -830,7 +830,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15119" level="95" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15119" level="95" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="6" />
@@ -874,7 +874,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15120" level="97" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15120" level="97" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="7" />
@@ -918,7 +918,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15121" level="99" type="L2Servitor" name="Wynn Merrow" title="">
+	<npc id="15121" level="99" type="Servitor" name="Wynn Merrow" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11332" level="8" />
@@ -962,7 +962,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="15122" level="85" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15122" level="85" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="1" />
@@ -1006,7 +1006,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15123" level="87" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15123" level="87" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="2" />
@@ -1050,7 +1050,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15124" level="89" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15124" level="89" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="3" />
@@ -1094,7 +1094,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15125" level="91" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15125" level="91" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="4" />
@@ -1138,7 +1138,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15126" level="93" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15126" level="93" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="5" />
@@ -1182,7 +1182,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15127" level="95" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15127" level="95" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="6" />
@@ -1225,7 +1225,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15128" level="97" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15128" level="97" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="7" />
@@ -1269,7 +1269,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15129" level="99" type="L2Servitor" name="Wynn Magnus" title="">
+	<npc id="15129" level="99" type="Servitor" name="Wynn Magnus" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11334" level="8" />
@@ -1313,7 +1313,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15130" level="85" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15130" level="85" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="1" />
@@ -1357,7 +1357,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15131" level="87" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15131" level="87" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="2" />
@@ -1401,7 +1401,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15132" level="89" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15132" level="89" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="3" />
@@ -1445,7 +1445,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15133" level="91" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15133" level="91" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="4" />
@@ -1489,7 +1489,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15134" level="93" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15134" level="93" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="5" />
@@ -1533,7 +1533,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15135" level="95" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15135" level="95" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="6" />
@@ -1577,7 +1577,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15136" level="97" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15136" level="97" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="7" />
@@ -1621,7 +1621,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15137" level="99" type="L2Servitor" name="Wynn Seraphim" title="">
+	<npc id="15137" level="99" type="Servitor" name="Wynn Seraphim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11336" level="8" />
@@ -1665,7 +1665,7 @@
 			<height normal="25.5" />
 		</collision>
 	</npc>
-	<npc id="15138" level="85" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15138" level="85" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="1" />
@@ -1696,7 +1696,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15139" level="90" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15139" level="90" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="2" />
@@ -1727,7 +1727,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15140" level="95" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15140" level="95" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="3" />
@@ -1758,7 +1758,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15141" level="99" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15141" level="99" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="4" />
@@ -1789,7 +1789,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15142" level="77" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15142" level="77" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="9" />
@@ -1823,7 +1823,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15143" level="80" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15143" level="80" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="10" />
@@ -1857,7 +1857,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15144" level="85" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15144" level="85" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="11" />
@@ -1891,7 +1891,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15145" level="90" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15145" level="90" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="12" />
@@ -1925,7 +1925,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15146" level="95" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15146" level="95" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="13" />
@@ -1959,7 +1959,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15147" level="99" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15147" level="99" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="14" />
@@ -1993,7 +1993,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15148" level="80" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15148" level="80" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2021,7 +2021,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15149" level="83" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15149" level="83" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2049,7 +2049,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15150" level="85" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15150" level="85" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2077,7 +2077,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15151" level="90" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15151" level="90" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2105,7 +2105,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15152" level="95" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15152" level="95" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2133,7 +2133,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15153" level="99" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15153" level="99" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>UNDEAD</race>
 		<sex>FEMALE</sex>
@@ -2161,7 +2161,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15154" level="100" type="L2Servitor" name="Mother Tree" title="">
+	<npc id="15154" level="100" type="Servitor" name="Mother Tree" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="s_tree_heal" id="19219" level="1" />
@@ -2191,7 +2191,7 @@
 			<height normal="78" />
 		</collision>
 	</npc>
-	<npc id="15155" level="100" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15155" level="100" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="1" />
@@ -2235,7 +2235,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15156" level="101" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15156" level="101" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="1" />
@@ -2279,7 +2279,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15157" level="102" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15157" level="102" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="2" />
@@ -2323,7 +2323,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15158" level="103" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15158" level="103" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="2" />
@@ -2367,7 +2367,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15159" level="104" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15159" level="104" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="3" />
@@ -2411,7 +2411,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15160" level="105" type="L2Servitor" name="Commando Cat" title="">
+	<npc id="15160" level="105" type="Servitor" name="Commando Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11375" level="3" />
@@ -2455,7 +2455,7 @@
 			<height normal="16.75" />
 		</collision>
 	</npc>
-	<npc id="15161" level="100" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15161" level="100" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="1" />
@@ -2500,7 +2500,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15162" level="101" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15162" level="101" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="1" />
@@ -2545,7 +2545,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15163" level="102" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15163" level="102" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="2" />
@@ -2590,7 +2590,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15164" level="103" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15164" level="103" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="2" />
@@ -2635,7 +2635,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15165" level="104" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15165" level="104" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="3" />
@@ -2680,7 +2680,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15166" level="105" type="L2Servitor" name="Witch Cat" title="">
+	<npc id="15166" level="105" type="Servitor" name="Witch Cat" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11377" level="3" />
@@ -2725,7 +2725,7 @@
 			<height normal="15.9" />
 		</collision>
 	</npc>
-	<npc id="15167" level="100" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15167" level="100" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="1" />
@@ -2769,7 +2769,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15168" level="101" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15168" level="101" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="1" />
@@ -2813,7 +2813,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15169" level="102" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15169" level="102" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="2" />
@@ -2857,7 +2857,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15170" level="103" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15170" level="103" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="2" />
@@ -2901,7 +2901,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15171" level="104" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15171" level="104" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="3" />
@@ -2945,7 +2945,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15172" level="105" type="L2Servitor" name="Unicorn Lancer" title="">
+	<npc id="15172" level="105" type="Servitor" name="Unicorn Lancer" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11379" level="3" />
@@ -2989,7 +2989,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15173" level="100" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15173" level="100" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="1" />
@@ -3034,7 +3034,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15174" level="101" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15174" level="101" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="1" />
@@ -3079,7 +3079,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15175" level="102" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15175" level="102" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="2" />
@@ -3124,7 +3124,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15176" level="103" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15176" level="103" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="2" />
@@ -3169,7 +3169,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15177" level="104" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15177" level="104" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="3" />
@@ -3214,7 +3214,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15178" level="105" type="L2Servitor" name="Unicorn Cherub" title="">
+	<npc id="15178" level="105" type="Servitor" name="Unicorn Cherub" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11381" level="3" />
@@ -3259,7 +3259,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="15179" level="100" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15179" level="100" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="1" />
@@ -3303,7 +3303,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15180" level="101" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15180" level="101" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="1" />
@@ -3347,7 +3347,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15181" level="102" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15181" level="102" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="2" />
@@ -3391,7 +3391,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15182" level="103" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15182" level="103" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="2" />
@@ -3435,7 +3435,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15183" level="104" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15183" level="104" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="3" />
@@ -3479,7 +3479,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15184" level="105" type="L2Servitor" name="Soul Specter" title="">
+	<npc id="15184" level="105" type="Servitor" name="Soul Specter" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11383" level="3" />
@@ -3523,7 +3523,7 @@
 			<height normal="28.6" />
 		</collision>
 	</npc>
-	<npc id="15185" level="100" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15185" level="100" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="1" />
@@ -3568,7 +3568,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15186" level="101" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15186" level="101" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="1" />
@@ -3613,7 +3613,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15187" level="102" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15187" level="102" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="2" />
@@ -3658,7 +3658,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15188" level="103" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15188" level="103" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="2" />
@@ -3703,7 +3703,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15189" level="104" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15189" level="104" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="3" />
@@ -3748,7 +3748,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15190" level="105" type="L2Servitor" name="Banshee Queen" title="">
+	<npc id="15190" level="105" type="Servitor" name="Banshee Queen" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="DDMagic1" id="11385" level="3" />
@@ -3793,7 +3793,7 @@
 			<height normal="23.5" />
 		</collision>
 	</npc>
-	<npc id="15191" level="101" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15191" level="101" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="5" />
@@ -3818,7 +3818,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15192" level="103" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15192" level="103" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="6" />
@@ -3843,7 +3843,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15193" level="105" type="L2Servitor" name="Blood Panther" title="">
+	<npc id="15193" level="105" type="Servitor" name="Blood Panther" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="10087" level="7" />
@@ -3868,7 +3868,7 @@
 			<height normal="14.5" />
 		</collision>
 	</npc>
-	<npc id="15194" level="101" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15194" level="101" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="15" />
@@ -3893,7 +3893,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15195" level="103" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15195" level="103" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="16" />
@@ -3918,7 +3918,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15196" level="105" type="L2Servitor" name="Cursed Man" title="">
+	<npc id="15196" level="105" type="Servitor" name="Cursed Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="PhysicalSpecial1" id="4709" level="17" />
@@ -3943,7 +3943,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="15197" level="101" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15197" level="101" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -3964,7 +3964,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15198" level="103" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15198" level="103" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -3985,7 +3985,7 @@
 			<height normal="25" grown="31" />
 		</collision>
 	</npc>
-	<npc id="15199" level="105" type="L2Servitor" name="Reanimated Man" title="">
+	<npc id="15199" level="105" type="Servitor" name="Reanimated Man" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="18001" level="60" type="L2Monster" name="Blood Queen">
+	<npc id="18001" level="60" type="Monster" name="Blood Queen">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -83,7 +83,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="18002" level="60" type="L2Monster" name="Blood Queen">
+	<npc id="18002" level="60" type="Monster" name="Blood Queen">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -164,7 +164,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="18003" level="1" type="L2Monster" name="Bearded Keltir">
+	<npc id="18003" level="1" type="Monster" name="Bearded Keltir">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -204,7 +204,7 @@
 			<height normal="10" />
 		</collision>
 	</npc>
-	<npc id="18004" level="49" type="L2Monster" name="Susceptor Prime">
+	<npc id="18004" level="49" type="Monster" name="Susceptor Prime">
 		<!-- Confirmed CT2.5 -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -242,7 +242,7 @@
 			<height normal="72" />
 		</collision>
 	</npc>
-	<npc id="18005" level="52" type="L2Monster" name="Mimic">
+	<npc id="18005" level="52" type="Monster" name="Mimic">
 		<!-- Confirmed CT2.5 -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -277,7 +277,7 @@
 			<height normal="8.5" />
 		</collision>
 	</npc>
-	<npc id="18006" level="68" type="L2Monster" name="Maluk Lord">
+	<npc id="18006" level="68" type="Monster" name="Maluk Lord">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -332,7 +332,7 @@
 			<height normal="45" grown="52" />
 		</collision>
 	</npc>
-	<npc id="18007" level="69" type="L2Monster" name="Limal Karinness">
+	<npc id="18007" level="69" type="Monster" name="Limal Karinness">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -384,7 +384,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="18008" level="70" type="L2Monster" name="Karik">
+	<npc id="18008" level="70" type="Monster" name="Karik">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="140" />
@@ -435,7 +435,7 @@
 			<height normal="90" grown="109" />
 		</collision>
 	</npc>
-	<npc id="18009" level="34" type="L2Monster" name="Offering of the Branded, Elder">
+	<npc id="18009" level="34" type="Monster" name="Offering of the Branded, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -491,7 +491,7 @@
 			<height normal="26.4" />
 		</collision>
 	</npc>
-	<npc id="18010" level="32" type="L2Monster" name="Offering of the Branded">
+	<npc id="18010" level="32" type="Monster" name="Offering of the Branded">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -536,7 +536,7 @@
 			<height normal="21" />
 		</collision>
 	</npc>
-	<npc id="18011" level="28" type="L2Monster" name="Offering of the Branded, Archer">
+	<npc id="18011" level="28" type="Monster" name="Offering of the Branded, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -579,7 +579,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="18012" level="29" type="L2Monster" name="Offering of the Branded, Warrior">
+	<npc id="18012" level="29" type="Monster" name="Offering of the Branded, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -627,7 +627,7 @@
 			<height normal="23" grown="27.6" />
 		</collision>
 	</npc>
-	<npc id="18013" level="29" type="L2Monster" name="Offering of the Branded, Follower">
+	<npc id="18013" level="29" type="Monster" name="Offering of the Branded, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -678,7 +678,7 @@
 			<height normal="22" />
 		</collision>
 	</npc>
-	<npc id="18014" level="37" type="L2Monster" name="Offering of the Branded, Berserker">
+	<npc id="18014" level="37" type="Monster" name="Offering of the Branded, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -727,7 +727,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="18015" level="34" type="L2Monster" name="Offering of the Branded, Zealot">
+	<npc id="18015" level="34" type="Monster" name="Offering of the Branded, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -776,7 +776,7 @@
 			<height normal="26.4" />
 		</collision>
 	</npc>
-	<npc id="18016" level="32" type="L2Monster" name="Offering of the Branded, Marksman">
+	<npc id="18016" level="32" type="Monster" name="Offering of the Branded, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -819,7 +819,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18017" level="34" type="L2Monster" name="Offering of the Branded, Disciple">
+	<npc id="18017" level="34" type="Monster" name="Offering of the Branded, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -864,7 +864,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18018" level="39" type="L2Monster" name="Offering of the Branded, Saint">
+	<npc id="18018" level="39" type="Monster" name="Offering of the Branded, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -912,7 +912,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18019" level="45" type="L2Monster" name="Apostate's Offering, Elder">
+	<npc id="18019" level="45" type="Monster" name="Apostate's Offering, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -963,7 +963,7 @@
 			<height normal="27.6" />
 		</collision>
 	</npc>
-	<npc id="18020" level="43" type="L2Monster" name="Apostate's Offering">
+	<npc id="18020" level="43" type="Monster" name="Apostate's Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1008,7 +1008,7 @@
 			<height normal="22" grown="26.4" />
 		</collision>
 	</npc>
-	<npc id="18021" level="39" type="L2Monster" name="Apostate's Offering, Archer">
+	<npc id="18021" level="39" type="Monster" name="Apostate's Offering, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1051,7 +1051,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18022" level="40" type="L2Monster" name="Apostate's Offering, Warrior">
+	<npc id="18022" level="40" type="Monster" name="Apostate's Offering, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1099,7 +1099,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18023" level="40" type="L2Monster" name="Apostate's Offering, Follower">
+	<npc id="18023" level="40" type="Monster" name="Apostate's Offering, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1150,7 +1150,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18024" level="48" type="L2Monster" name="Apostate's Offering, Berserker">
+	<npc id="18024" level="48" type="Monster" name="Apostate's Offering, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1198,7 +1198,7 @@
 			<height normal="32" />
 		</collision>
 	</npc>
-	<npc id="18025" level="45" type="L2Monster" name="Apostate's Offering, Zealot">
+	<npc id="18025" level="45" type="Monster" name="Apostate's Offering, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1248,7 +1248,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18026" level="43" type="L2Monster" name="Apostate's Offering, Marksman">
+	<npc id="18026" level="43" type="Monster" name="Apostate's Offering, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1291,7 +1291,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18027" level="45" type="L2Monster" name="Apostate's Offering, Disciple">
+	<npc id="18027" level="45" type="Monster" name="Apostate's Offering, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1336,7 +1336,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18028" level="50" type="L2Monster" name="Apostate's Offering, Saint">
+	<npc id="18028" level="50" type="Monster" name="Apostate's Offering, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -1384,7 +1384,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18029" level="56" type="L2Monster" name="Witch's Offering, Elder">
+	<npc id="18029" level="56" type="Monster" name="Witch's Offering, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1435,7 +1435,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="18030" level="54" type="L2Monster" name="Witch's Offering">
+	<npc id="18030" level="54" type="Monster" name="Witch's Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1480,7 +1480,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18031" level="50" type="L2Monster" name="Witch's Offering, Archer">
+	<npc id="18031" level="50" type="Monster" name="Witch's Offering, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1523,7 +1523,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18032" level="51" type="L2Monster" name="Witch's Offering, Warrior">
+	<npc id="18032" level="51" type="Monster" name="Witch's Offering, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1571,7 +1571,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18033" level="51" type="L2Monster" name="Witch's Offering, Follower">
+	<npc id="18033" level="51" type="Monster" name="Witch's Offering, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1622,7 +1622,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18034" level="59" type="L2Monster" name="Witch's Offering, Berserker">
+	<npc id="18034" level="59" type="Monster" name="Witch's Offering, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1671,7 +1671,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18035" level="56" type="L2Monster" name="Witch's Offering, Zealot">
+	<npc id="18035" level="56" type="Monster" name="Witch's Offering, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1721,7 +1721,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18036" level="54" type="L2Monster" name="Witch's Offering, Marksman">
+	<npc id="18036" level="54" type="Monster" name="Witch's Offering, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1764,7 +1764,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18037" level="56" type="L2Monster" name="Witch's Offering, Disciple">
+	<npc id="18037" level="56" type="Monster" name="Witch's Offering, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1809,7 +1809,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18038" level="61" type="L2Monster" name="Witch's Offering, Saint">
+	<npc id="18038" level="61" type="Monster" name="Witch's Offering, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -1857,7 +1857,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18039" level="67" type="L2Monster" name="Dark Omen Offering Elder">
+	<npc id="18039" level="67" type="Monster" name="Dark Omen Offering Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -1908,7 +1908,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="18040" level="65" type="L2Monster" name="Dark Omen Offering">
+	<npc id="18040" level="65" type="Monster" name="Dark Omen Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -1953,7 +1953,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18041" level="61" type="L2Monster" name="Dark Omen Offering Archer">
+	<npc id="18041" level="61" type="Monster" name="Dark Omen Offering Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -1996,7 +1996,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18042" level="62" type="L2Monster" name="Dark Omen Offering Warrior">
+	<npc id="18042" level="62" type="Monster" name="Dark Omen Offering Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2044,7 +2044,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18043" level="62" type="L2Monster" name="Dark Omen Offering Follower">
+	<npc id="18043" level="62" type="Monster" name="Dark Omen Offering Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2095,7 +2095,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18044" level="70" type="L2Monster" name="Dark Omen Offering Berserker">
+	<npc id="18044" level="70" type="Monster" name="Dark Omen Offering Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2144,7 +2144,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18045" level="67" type="L2Monster" name="Dark Omen Offering Zealot">
+	<npc id="18045" level="67" type="Monster" name="Dark Omen Offering Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2194,7 +2194,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18046" level="65" type="L2Monster" name="Dark Omen Offering Marksman">
+	<npc id="18046" level="65" type="Monster" name="Dark Omen Offering Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2237,7 +2237,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18047" level="67" type="L2Monster" name="Dark Omen Offering Disciple">
+	<npc id="18047" level="67" type="Monster" name="Dark Omen Offering Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2282,7 +2282,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18048" level="72" type="L2Monster" name="Dark Omen Offering Saint">
+	<npc id="18048" level="72" type="Monster" name="Dark Omen Offering Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -2330,7 +2330,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18049" level="78" type="L2Monster" name="Offering of Forbidden Path, Elder">
+	<npc id="18049" level="78" type="Monster" name="Offering of Forbidden Path, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2381,7 +2381,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18050" level="76" type="L2Monster" name="Offering of Forbidden Path">
+	<npc id="18050" level="76" type="Monster" name="Offering of Forbidden Path">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2426,7 +2426,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18051" level="78" type="L2Monster" name="Offering of Forbidden Path, Archer">
+	<npc id="18051" level="78" type="Monster" name="Offering of Forbidden Path, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2469,7 +2469,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="18052" level="78" type="L2Monster" name="Offering of Forbidden Path, Warrior">
+	<npc id="18052" level="78" type="Monster" name="Offering of Forbidden Path, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2517,7 +2517,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18053" level="78" type="L2Monster" name="Offering of Forbidden Path, Follower">
+	<npc id="18053" level="78" type="Monster" name="Offering of Forbidden Path, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2568,7 +2568,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="18054" level="78" type="L2Monster" name="Offering of Forbidden Path, Berserker">
+	<npc id="18054" level="78" type="Monster" name="Offering of Forbidden Path, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2617,7 +2617,7 @@
 			<height normal="35" grown="42.2" />
 		</collision>
 	</npc>
-	<npc id="18055" level="78" type="L2Monster" name="Offering of Forbidden Path, Zealot">
+	<npc id="18055" level="78" type="Monster" name="Offering of Forbidden Path, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2667,7 +2667,7 @@
 			<height normal="34.8" />
 		</collision>
 	</npc>
-	<npc id="18056" level="76" type="L2Monster" name="Offering of Forbidden Path, Marksman">
+	<npc id="18056" level="76" type="Monster" name="Offering of Forbidden Path, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2710,7 +2710,7 @@
 			<height normal="32.4" />
 		</collision>
 	</npc>
-	<npc id="18057" level="78" type="L2Monster" name="Offering of Forbidden Path, Disciple">
+	<npc id="18057" level="78" type="Monster" name="Offering of Forbidden Path, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2755,7 +2755,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="18058" level="78" type="L2Monster" name="Offering of Forbidden Path, Saint">
+	<npc id="18058" level="78" type="Monster" name="Offering of Forbidden Path, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />
@@ -2803,7 +2803,7 @@
 			<height normal="28.8" />
 		</collision>
 	</npc>
-	<npc id="18059" level="34" type="L2Monster" name="Offering of the Branded, Elder">
+	<npc id="18059" level="34" type="Monster" name="Offering of the Branded, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -2854,7 +2854,7 @@
 			<height normal="26.4" />
 		</collision>
 	</npc>
-	<npc id="18060" level="32" type="L2Monster" name="Offering of the Branded">
+	<npc id="18060" level="32" type="Monster" name="Offering of the Branded">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -2899,7 +2899,7 @@
 			<height normal="21" />
 		</collision>
 	</npc>
-	<npc id="18061" level="28" type="L2Monster" name="Offering of the Branded, Archer">
+	<npc id="18061" level="28" type="Monster" name="Offering of the Branded, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -2942,7 +2942,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="18062" level="29" type="L2Monster" name="Offering of the Branded, Warrior">
+	<npc id="18062" level="29" type="Monster" name="Offering of the Branded, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -2990,7 +2990,7 @@
 			<height normal="23" grown="27.6" />
 		</collision>
 	</npc>
-	<npc id="18063" level="29" type="L2Monster" name="Offering of the Branded, Follower">
+	<npc id="18063" level="29" type="Monster" name="Offering of the Branded, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3041,7 +3041,7 @@
 			<height normal="22" />
 		</collision>
 	</npc>
-	<npc id="18064" level="37" type="L2Monster" name="Offering of the Branded, Berserker">
+	<npc id="18064" level="37" type="Monster" name="Offering of the Branded, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3090,7 +3090,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="18065" level="34" type="L2Monster" name="Offering of the Branded, Zealot">
+	<npc id="18065" level="34" type="Monster" name="Offering of the Branded, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3140,7 +3140,7 @@
 			<height normal="26.4" />
 		</collision>
 	</npc>
-	<npc id="18066" level="32" type="L2Monster" name="Offering of the Branded, Marksman">
+	<npc id="18066" level="32" type="Monster" name="Offering of the Branded, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3183,7 +3183,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18067" level="34" type="L2Monster" name="Offering of the Branded, Disciple">
+	<npc id="18067" level="34" type="Monster" name="Offering of the Branded, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3228,7 +3228,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18068" level="39" type="L2Monster" name="Offering of the Branded, Saint">
+	<npc id="18068" level="39" type="Monster" name="Offering of the Branded, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="1" />
@@ -3276,7 +3276,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18069" level="45" type="L2Monster" name="Apostate's Offering, Elder">
+	<npc id="18069" level="45" type="Monster" name="Apostate's Offering, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3327,7 +3327,7 @@
 			<height normal="27.6" />
 		</collision>
 	</npc>
-	<npc id="18070" level="43" type="L2Monster" name="Apostate's Offering">
+	<npc id="18070" level="43" type="Monster" name="Apostate's Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3372,7 +3372,7 @@
 			<height normal="22" grown="26.4" />
 		</collision>
 	</npc>
-	<npc id="18071" level="39" type="L2Monster" name="Apostate's Offering, Archer">
+	<npc id="18071" level="39" type="Monster" name="Apostate's Offering, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3415,7 +3415,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18072" level="40" type="L2Monster" name="Apostate's Offering, Warrior">
+	<npc id="18072" level="40" type="Monster" name="Apostate's Offering, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3463,7 +3463,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18073" level="40" type="L2Monster" name="Apostate's Offering, Follower">
+	<npc id="18073" level="40" type="Monster" name="Apostate's Offering, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3514,7 +3514,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18074" level="48" type="L2Monster" name="Apostate's Offering, Berserker">
+	<npc id="18074" level="48" type="Monster" name="Apostate's Offering, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3563,7 +3563,7 @@
 			<height normal="32" />
 		</collision>
 	</npc>
-	<npc id="18075" level="45" type="L2Monster" name="Apostate's Offering, Zealot">
+	<npc id="18075" level="45" type="Monster" name="Apostate's Offering, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3613,7 +3613,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18076" level="43" type="L2Monster" name="Apostate's Offering, Marksman">
+	<npc id="18076" level="43" type="Monster" name="Apostate's Offering, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3656,7 +3656,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18077" level="45" type="L2Monster" name="Apostate's Offering, Disciple">
+	<npc id="18077" level="45" type="Monster" name="Apostate's Offering, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3701,7 +3701,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18078" level="50" type="L2Monster" name="Apostate's Offering, Saint">
+	<npc id="18078" level="50" type="Monster" name="Apostate's Offering, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="2" />
@@ -3749,7 +3749,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18079" level="56" type="L2Monster" name="Witch's Offering, Elder">
+	<npc id="18079" level="56" type="Monster" name="Witch's Offering, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -3800,7 +3800,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="18080" level="54" type="L2Monster" name="Witch's Offering,">
+	<npc id="18080" level="54" type="Monster" name="Witch's Offering,">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -3845,7 +3845,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18081" level="50" type="L2Monster" name="Witch's Offering, Archer">
+	<npc id="18081" level="50" type="Monster" name="Witch's Offering, Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -3888,7 +3888,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18082" level="51" type="L2Monster" name="Witch's Offering, Warrior">
+	<npc id="18082" level="51" type="Monster" name="Witch's Offering, Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -3936,7 +3936,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18083" level="51" type="L2Monster" name="Witch's Offering, Follower">
+	<npc id="18083" level="51" type="Monster" name="Witch's Offering, Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -3987,7 +3987,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18084" level="59" type="L2Monster" name="Witch's Offering, Berserker">
+	<npc id="18084" level="59" type="Monster" name="Witch's Offering, Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -4036,7 +4036,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18085" level="56" type="L2Monster" name="Witch's Offering, Zealot">
+	<npc id="18085" level="56" type="Monster" name="Witch's Offering, Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -4086,7 +4086,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18086" level="54" type="L2Monster" name="Witch's Offering, Marksman">
+	<npc id="18086" level="54" type="Monster" name="Witch's Offering, Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -4129,7 +4129,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18087" level="56" type="L2Monster" name="Witch's Offering, Disciple">
+	<npc id="18087" level="56" type="Monster" name="Witch's Offering, Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -4174,7 +4174,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18088" level="61" type="L2Monster" name="Witch's Offering, Saint">
+	<npc id="18088" level="61" type="Monster" name="Witch's Offering, Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="3" />
@@ -4222,7 +4222,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18089" level="67" type="L2Monster" name="Dark Omen Offering Elder">
+	<npc id="18089" level="67" type="Monster" name="Dark Omen Offering Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4273,7 +4273,7 @@
 			<height normal="24" />
 		</collision>
 	</npc>
-	<npc id="18090" level="65" type="L2Monster" name="Dark Omen Offering">
+	<npc id="18090" level="65" type="Monster" name="Dark Omen Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4318,7 +4318,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18091" level="61" type="L2Monster" name="Dark Omen Offering Archer">
+	<npc id="18091" level="61" type="Monster" name="Dark Omen Offering Archer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4361,7 +4361,7 @@
 			<height normal="21.5" />
 		</collision>
 	</npc>
-	<npc id="18092" level="62" type="L2Monster" name="Dark Omen Offering Warrior">
+	<npc id="18092" level="62" type="Monster" name="Dark Omen Offering Warrior">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4409,7 +4409,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="18093" level="62" type="L2Monster" name="Dark Omen Offering Follower">
+	<npc id="18093" level="62" type="Monster" name="Dark Omen Offering Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4460,7 +4460,7 @@
 			<height normal="16" />
 		</collision>
 	</npc>
-	<npc id="18094" level="70" type="L2Monster" name="Dark Omen Offering Berserker">
+	<npc id="18094" level="70" type="Monster" name="Dark Omen Offering Berserker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4509,7 +4509,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="18095" level="67" type="L2Monster" name="Dark Omen Offering Zealot">
+	<npc id="18095" level="67" type="Monster" name="Dark Omen Offering Zealot">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4559,7 +4559,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18096" level="65" type="L2Monster" name="Dark Omen Offering Marksman">
+	<npc id="18096" level="65" type="Monster" name="Dark Omen Offering Marksman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4602,7 +4602,7 @@
 			<height normal="25.3" />
 		</collision>
 	</npc>
-	<npc id="18097" level="67" type="L2Monster" name="Dark Omen Offering Disciple">
+	<npc id="18097" level="67" type="Monster" name="Dark Omen Offering Disciple">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4647,7 +4647,7 @@
 			<height normal="24" grown="28.8" />
 		</collision>
 	</npc>
-	<npc id="18098" level="72" type="L2Monster" name="Dark Omen Offering Saint">
+	<npc id="18098" level="72" type="Monster" name="Dark Omen Offering Saint">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="4" />
@@ -4695,7 +4695,7 @@
 			<height normal="28.8" grown="34.9" />
 		</collision>
 	</npc>
-	<npc id="18099" level="78" type="L2Monster" name="Offering of Forbidden Path, Elder">
+	<npc id="18099" level="78" type="Monster" name="Offering of Forbidden Path, Elder">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="RoomIndex" value="5" />

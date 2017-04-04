@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="22100" level="58" type="L2Monster" name="Freya's Gardener">
+	<npc id="22100" level="58" type="Monster" name="Freya's Gardener">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="40" />
@@ -83,7 +83,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="22101" level="58" type="L2Monster" name="Freya's Servant">
+	<npc id="22101" level="58" type="Monster" name="Freya's Servant">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -164,7 +164,7 @@
 			<height normal="50" />
 		</collision>
 	</npc>
-	<npc id="22102" level="58" type="L2Monster" name="Freya's Servant">
+	<npc id="22102" level="58" type="Monster" name="Freya's Servant">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -240,7 +240,7 @@
 			<height normal="50" />
 		</collision>
 	</npc>
-	<npc id="22103" level="57" type="L2Monster" name="Freya's White Bear">
+	<npc id="22103" level="57" type="Monster" name="Freya's White Bear">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="100" />
@@ -320,7 +320,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="22104" level="58" type="L2Monster" name="Freya's Dog">
+	<npc id="22104" level="58" type="Monster" name="Freya's Dog">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="78" />
@@ -402,7 +402,7 @@
 			<height normal="25" />
 		</collision>
 	</npc>
-	<npc id="22105" level="72" type="L2Monster" name="Spiked Stakato">
+	<npc id="22105" level="72" type="Monster" name="Spiked Stakato">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -455,7 +455,7 @@
 			<height normal="43.2" />
 		</collision>
 	</npc>
-	<npc id="22106" level="73" type="L2Monster" name="Spiked Stakato Worker">
+	<npc id="22106" level="73" type="Monster" name="Spiked Stakato Worker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="70" />
@@ -509,7 +509,7 @@
 			<height normal="48.3" />
 		</collision>
 	</npc>
-	<npc id="22107" level="74" type="L2Monster" name="Spiked Stakato Guard">
+	<npc id="22107" level="74" type="Monster" name="Spiked Stakato Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -563,7 +563,7 @@
 			<height normal="22.8" />
 		</collision>
 	</npc>
-	<npc id="22108" level="74" type="L2Monster" name="Female Spiked Stakato">
+	<npc id="22108" level="74" type="Monster" name="Female Spiked Stakato">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -626,7 +626,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="22109" level="74" type="L2Monster" name="Male Spiked Stakato">
+	<npc id="22109" level="74" type="Monster" name="Male Spiked Stakato">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="57" />
@@ -687,7 +687,7 @@
 			<height normal="31" />
 		</collision>
 	</npc>
-	<npc id="22110" level="74" type="L2Monster" name="Male Spiked Stakato">
+	<npc id="22110" level="74" type="Monster" name="Male Spiked Stakato">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -748,7 +748,7 @@
 			<height normal="28.4" />
 		</collision>
 	</npc>
-	<npc id="22111" level="75" type="L2Monster" name="Spiked Stakato Sorcerer">
+	<npc id="22111" level="75" type="Monster" name="Spiked Stakato Sorcerer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -804,7 +804,7 @@
 			<height normal="43.6" />
 		</collision>
 	</npc>
-	<npc id="22112" level="74" type="L2Monster" name="Cannibalistic Stakato Follower">
+	<npc id="22112" level="74" type="Monster" name="Cannibalistic Stakato Follower">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -863,7 +863,7 @@
 			<height normal="29.8" />
 		</collision>
 	</npc>
-	<npc id="22113" level="75" type="L2Monster" name="Cannibalistic Stakato Leader">
+	<npc id="22113" level="75" type="Monster" name="Cannibalistic Stakato Leader">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -925,7 +925,7 @@
 			<height normal="48.8" grown="59.4" />
 		</collision>
 	</npc>
-	<npc id="22114" level="75" type="L2Monster" name="Cannibalistic Stakato Leader">
+	<npc id="22114" level="75" type="Monster" name="Cannibalistic Stakato Leader">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -985,7 +985,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="22115" level="76" type="L2Monster" name="Spiked Stakato Soldier">
+	<npc id="22115" level="76" type="Monster" name="Spiked Stakato Soldier">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -1037,7 +1037,7 @@
 			<height normal="43.2" />
 		</collision>
 	</npc>
-	<npc id="22116" level="77" type="L2Monster" name="Spiked Stakato Drone">
+	<npc id="22116" level="77" type="Monster" name="Spiked Stakato Drone">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="62" />
@@ -1089,7 +1089,7 @@
 			<height normal="47.3" />
 		</collision>
 	</npc>
-	<npc id="22117" level="78" type="L2Monster" name="Spiked Stakato Captain">
+	<npc id="22117" level="78" type="Monster" name="Spiked Stakato Captain">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="20" />
@@ -1141,7 +1141,7 @@
 			<height normal="29.1" grown="26.4" />
 		</collision>
 	</npc>
-	<npc id="22118" level="78" type="L2Monster" name="Spiked Stakato Nurse">
+	<npc id="22118" level="78" type="Monster" name="Spiked Stakato Nurse">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="20" />
@@ -1200,7 +1200,7 @@
 			<height normal="43.8" />
 		</collision>
 	</npc>
-	<npc id="22119" level="78" type="L2Monster" name="Spiked Stakato Nurse">
+	<npc id="22119" level="78" type="Monster" name="Spiked Stakato Nurse">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1258,7 +1258,7 @@
 			<height normal="36.4" />
 		</collision>
 	</npc>
-	<npc id="22120" level="78" type="L2Monster" name="Spiked Stakato Baby">
+	<npc id="22120" level="78" type="Monster" name="Spiked Stakato Baby">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -1317,7 +1317,7 @@
 			<height normal="29" />
 		</collision>
 	</npc>
-	<npc id="22121" level="78" type="L2Monster" name="Spiked Stakato Shaman">
+	<npc id="22121" level="78" type="Monster" name="Spiked Stakato Shaman">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -1373,7 +1373,7 @@
 			<height normal="43.6" />
 		</collision>
 	</npc>
-	<npc id="22122" level="78" type="L2Monster" name="Monastic Pilgrim">
+	<npc id="22122" level="78" type="Monster" name="Monastic Pilgrim">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="50" />
@@ -1427,7 +1427,7 @@
 			<height normal="27.8" />
 		</collision>
 	</npc>
-	<npc id="22123" level="78" type="L2Monster" name="Monastic Crusader">
+	<npc id="22123" level="78" type="Monster" name="Monastic Crusader">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="90" />
@@ -1479,7 +1479,7 @@
 			<height normal="37.5" />
 		</collision>
 	</npc>
-	<npc id="22124" level="78" type="L2Monster" name="Solina Brother">
+	<npc id="22124" level="78" type="Monster" name="Solina Brother">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1537,7 +1537,7 @@
 			<height normal="23.4" />
 		</collision>
 	</npc>
-	<npc id="22125" level="78" type="L2Monster" name="Solina Lay Brother">
+	<npc id="22125" level="78" type="Monster" name="Solina Lay Brother">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1593,7 +1593,7 @@
 			<height normal="23.4" />
 		</collision>
 	</npc>
-	<npc id="22126" level="78" type="L2Monster" name="Silent Seeker">
+	<npc id="22126" level="78" type="Monster" name="Silent Seeker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1651,7 +1651,7 @@
 			<height normal="25.4" />
 		</collision>
 	</npc>
-	<npc id="22127" level="78" type="L2Monster" name="Silent Brother">
+	<npc id="22127" level="78" type="Monster" name="Silent Brother">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1707,7 +1707,7 @@
 			<height normal="25.4" />
 		</collision>
 	</npc>
-	<npc id="22128" level="78" type="L2Monster" name="Monastic Guardian">
+	<npc id="22128" level="78" type="Monster" name="Monastic Guardian">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1776,7 +1776,7 @@
 			<height normal="15.6" />
 		</collision>
 	</npc>
-	<npc id="22129" level="78" type="L2Monster" name="Warrior Monk">
+	<npc id="22129" level="78" type="Monster" name="Warrior Monk">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -1833,7 +1833,7 @@
 			<height normal="28.4" />
 		</collision>
 	</npc>
-	<npc id="22130" level="78" type="L2Monster" name="Divine Advocate">
+	<npc id="22130" level="78" type="Monster" name="Divine Advocate">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="130" />
@@ -1885,7 +1885,7 @@
 			<height normal="30" grown="36.5" />
 		</collision>
 	</npc>
-	<npc id="22131" level="78" type="L2Monster" name="Pilgrim of Light">
+	<npc id="22131" level="78" type="Monster" name="Pilgrim of Light">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="85" />
@@ -1966,7 +1966,7 @@
 			<height normal="38.5" grown="46.5" />
 		</collision>
 	</npc>
-	<npc id="22132" level="78" type="L2Monster" name="Judge of Light">
+	<npc id="22132" level="78" type="Monster" name="Judge of Light">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2037,7 +2037,7 @@
 			<height normal="47" />
 		</collision>
 	</npc>
-	<npc id="22133" level="78" type="L2Monster" name="Guardian of the Grail">
+	<npc id="22133" level="78" type="Monster" name="Guardian of the Grail">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2114,7 +2114,7 @@
 			<height normal="22" />
 		</collision>
 	</npc>
-	<npc id="22134" level="78" type="L2Monster" name="Guardian of the Holy Land">
+	<npc id="22134" level="78" type="Monster" name="Guardian of the Holy Land">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2193,7 +2193,7 @@
 			<height normal="34.5" />
 		</collision>
 	</npc>
-	<npc id="22135" level="78" type="L2Monster" name="Beholder of Light">
+	<npc id="22135" level="78" type="Monster" name="Beholder of Light">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2245,7 +2245,7 @@
 			<height normal="47" />
 		</collision>
 	</npc>
-	<npc id="22136" level="99" type="L2Monster" name="Doorman Zombie">
+	<npc id="22136" level="99" type="Monster" name="Doorman Zombie">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="pass1" value="36228" />
@@ -2309,7 +2309,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22137" level="99" type="L2Monster" name="Penance Guard">
+	<npc id="22137" level="99" type="Monster" name="Penance Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2375,7 +2375,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22138" level="99" type="L2Monster" name="Chapel Guard">
+	<npc id="22138" level="99" type="Monster" name="Chapel Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2441,7 +2441,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22139" level="98" type="L2Monster" name="Old Aristocrat's Soldier">
+	<npc id="22139" level="98" type="Monster" name="Old Aristocrat's Soldier">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2526,7 +2526,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22140" level="98" type="L2Monster" name="Zombie Worker">
+	<npc id="22140" level="98" type="Monster" name="Zombie Worker">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2610,7 +2610,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22141" level="98" type="L2Monster" name="Forgotten Victim">
+	<npc id="22141" level="98" type="Monster" name="Forgotten Victim">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2699,7 +2699,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22142" level="98" type="L2Monster" name="Triol's Layperson">
+	<npc id="22142" level="98" type="Monster" name="Triol's Layperson">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2800,7 +2800,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22143" level="98" type="L2Monster" name="Triol's Believer">
+	<npc id="22143" level="98" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2900,7 +2900,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22144" level="98" type="L2Monster" name="Resurrected Temple Knight">
+	<npc id="22144" level="98" type="Monster" name="Resurrected Temple Knight">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -2988,7 +2988,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22145" level="98" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22145" level="98" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3076,7 +3076,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22146" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22146" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3176,7 +3176,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22147" level="99" type="L2Monster" name="Ritual Offering">
+	<npc id="22147" level="99" type="Monster" name="Ritual Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3261,7 +3261,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22148" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22148" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3351,7 +3351,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22149" level="99" type="L2Monster" name="Ritual Offering">
+	<npc id="22149" level="99" type="Monster" name="Ritual Offering">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3439,7 +3439,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22150" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22150" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3531,7 +3531,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22151" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22151" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3632,7 +3632,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22152" level="99" type="L2Monster" name="Temple Guard">
+	<npc id="22152" level="99" type="Monster" name="Temple Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3720,7 +3720,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22153" level="99" type="L2Monster" name="Temple Guard Captain">
+	<npc id="22153" level="99" type="Monster" name="Temple Guard Captain">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3810,7 +3810,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22154" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22154" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3896,7 +3896,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="22155" level="99" type="L2Monster" name="Triol's High Priest">
+	<npc id="22155" level="99" type="Monster" name="Triol's High Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -3992,7 +3992,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22156" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22156" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4080,7 +4080,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22157" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22157" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4168,7 +4168,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22158" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22158" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4261,7 +4261,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22159" level="99" type="L2Monster" name="Triol's High Priest">
+	<npc id="22159" level="99" type="Monster" name="Triol's High Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4356,7 +4356,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22160" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22160" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4444,7 +4444,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22161" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22161" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4536,7 +4536,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22162" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22162" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4629,7 +4629,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22163" level="99" type="L2Monster" name="Triol's High Priest">
+	<npc id="22163" level="99" type="Monster" name="Triol's High Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4729,7 +4729,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22164" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22164" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4819,7 +4819,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22165" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22165" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -4911,7 +4911,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22166" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22166" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5002,7 +5002,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22167" level="99" type="L2Monster" name="Triol's High Priest">
+	<npc id="22167" level="99" type="Monster" name="Triol's High Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5097,7 +5097,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22168" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22168" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5189,7 +5189,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22169" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22169" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5281,7 +5281,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22170" level="99" type="L2Monster" name="Triol's Believer">
+	<npc id="22170" level="99" type="Monster" name="Triol's Believer">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5370,7 +5370,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22171" level="99" type="L2Monster" name="Triol's High Priest">
+	<npc id="22171" level="99" type="Monster" name="Triol's High Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5470,7 +5470,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22172" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22172" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5562,7 +5562,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22173" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22173" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5654,7 +5654,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22174" level="99" type="L2Monster" name="Triol's Priest">
+	<npc id="22174" level="99" type="Monster" name="Triol's Priest">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5746,7 +5746,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22175" level="99" type="L2Monster" name="Andreas' Captain of the Royal Guard">
+	<npc id="22175" level="99" type="Monster" name="Andreas' Captain of the Royal Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5851,7 +5851,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22176" level="99" type="L2Monster" name="Andreas' Royal Guards">
+	<npc id="22176" level="99" type="Monster" name="Andreas' Royal Guards">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -5940,7 +5940,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22188" level="99" type="L2Monster" name="Andreas' Captain of the Royal Guard">
+	<npc id="22188" level="99" type="Monster" name="Andreas' Captain of the Royal Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6031,7 +6031,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22189" level="99" type="L2Monster" name="Andreas' Royal Guards">
+	<npc id="22189" level="99" type="Monster" name="Andreas' Royal Guards">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6120,7 +6120,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22190" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22190" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6211,7 +6211,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22191" level="99" type="L2Monster" name="Andreas' Captain of the Royal Guard">
+	<npc id="22191" level="99" type="Monster" name="Andreas' Captain of the Royal Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6314,7 +6314,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22192" level="99" type="L2Monster" name="Andreas' Royal Guards">
+	<npc id="22192" level="99" type="Monster" name="Andreas' Royal Guards">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6400,7 +6400,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22193" level="99" type="L2Monster" name="Andreas' Royal Guards">
+	<npc id="22193" level="99" type="Monster" name="Andreas' Royal Guards">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6484,7 +6484,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22194" level="99" type="L2Monster" name="Penance Guard">
+	<npc id="22194" level="99" type="Monster" name="Penance Guard">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -6550,7 +6550,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22195" level="99" type="L2Monster" name="Ritual Sacrifice">
+	<npc id="22195" level="99" type="Monster" name="Ritual Sacrifice">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="MoveAroundSocial" value="80" />
@@ -6635,7 +6635,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="22196" level="80" type="L2Monster" name="Velociraptor">
+	<npc id="22196" level="80" type="Monster" name="Velociraptor">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="ag_type" value="1" />
@@ -6725,7 +6725,7 @@
 			<height normal="47.2" />
 		</collision>
 	</npc>
-	<npc id="22197" level="80" type="L2Monster" name="Velociraptor">
+	<npc id="22197" level="80" type="Monster" name="Velociraptor">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="IsSayPrivate" value="0" />
@@ -6807,7 +6807,7 @@
 			<height normal="47.2" />
 		</collision>
 	</npc>
-	<npc id="22198" level="80" type="L2Monster" name="Velociraptor">
+	<npc id="22198" level="80" type="Monster" name="Velociraptor">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="mobile_type" value="1" />
@@ -6898,7 +6898,7 @@
 			<height normal="47.2" />
 		</collision>
 	</npc>
-	<npc id="22199" level="80" type="L2Monster" name="Pterosaur">
+	<npc id="22199" level="80" type="Monster" name="Pterosaur">
 		<!-- Confirmed CT2.5 -->
 		<parameters>
 			<param name="ag_type" value="1" />
