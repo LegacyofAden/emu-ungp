@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/spawns.xsd">
+	<spawn name="LandOfChaos">
+		<group>
+			<npc id="19460" x="-12880" y="-115200" z="-3696" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-14112" y="-110048" z="-3400" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-15056" y="-111056" z="-3416" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-15744" y="-110288" z="-3376" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-14512" y="-115488" z="-3632" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-19952" y="-111040" z="-3456" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-21168" y="-112384" z="-3432" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-21328" y="-111040" z="-3432" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-24720" y="-115072" z="-3320" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-23632" y="-116240" z="-3312" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-23216" y="-114848" z="-3296" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-22592" y="-119552" z="-3112" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-24048" y="-120320" z="-3240" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-24768" y="-124288" z="-2760" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-26576" y="-124688" z="-2728" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-22128" y="-123632" z="-3008" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19460" x="-20384" y="-123968" z="-3024" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-14736" y="-113648" z="-3696" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-14800" y="-113904" z="-3664" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-14944" y="-113744" z="-3680" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-15328" y="-113216" z="-3896" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16064" y="-111984" z="-3416" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16272" y="-116304" z="-4056" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16608" y="-116448" z="-4056" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16464" y="-115808" z="-4048" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16657" y="-111600" z="-3280" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-17104" y="-111568" z="-3288" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-16528" y="-111696" z="-3288" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20416" y="-112736" z="-3400" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20336" y="-112528" z="-3408" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22496" y="-114432" z="-3280" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22320" y="-113200" z="-3440" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21024" y="-114096" z="-4024" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20912" y="-114480" z="-4032" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20800" y="-114272" z="-4024" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20560" y="-112624" z="-3392" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23008" y="-113712" z="-3296" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23008" y="-113296" z="-3360" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23856" y="-111232" z="-3472" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23328" y="-110848" z="-3464" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22768" y="-110816" z="-3448" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23872" y="-111872" z="-3448" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23488" y="-109408" z="-3496" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23920" y="-109392" z="-3536" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23920" y="-108944" z="-3520" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23920" y="-110432" z="-3504" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23344" y="-110480" z="-3488" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22336" y="-115408" z="-3400" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22336" y="-114960" z="-3400" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-22512" y="-114800" z="-3352" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23328" y="-118752" z="-3232" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23360" y="-117408" z="-3344" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23248" y="-118544" z="-3288" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23568" y="-117968" z="-3344" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21776" y="-117664" z="-4048" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21536" y="-117776" z="-4040" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21728" y="-117408" z="-4032" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23120" y="-118800" z="-3176" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24864" y="-122576" z="-2800" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-25520" y="-122832" z="-2776" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24576" y="-122192" z="-2872" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21680" y="-122128" z="-3240" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21904" y="-122096" z="-3272" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21808" y="-122432" z="-3152" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-21488" y="-122464" z="-3128" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-25632" y="-123056" z="-2752" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24928" y="-122976" z="-2728" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23344" y="-124304" z="-2904" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23536" y="-124544" z="-2840" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23696" y="-124320" z="-2824" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23711" y="-122992" z="-2704" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24032" y="-123392" z="-2712" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-23264" y="-123040" z="-2736" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19712" y="-123488" z="-3000" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19280" y="-122784" z="-2888" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19472" y="-122768" z="-2880" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19472" y="-122144" z="-2936" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20336" y="-120128" z="-4048" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20352" y="-119888" z="-4056" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-20096" y="-120256" z="-4048" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-18848" y="-119168" z="-4080" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19216" y="-119104" z="-4048" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-19089" y="-119344" z="-4056" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24144" y="-107664" z="-3552" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24352" y="-107824" z="-3560" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19461" x="-24448" y="-107408" z="-3568" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-13216" y="-115152" z="-3608" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-14448" y="-110512" z="-3384" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-21152" y="-111296" z="-3400" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-24368" y="-115456" z="-3248" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-23248" y="-119808" z="-3176" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-25680" y="-124304" z="-2680" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19462" x="-22000" y="-124352" z="-2960" heading="0" respawnTime="60sec" /> <!-- Horn -->
+			<npc id="19463" x="-13554" y="-116135" z="-3704" heading="62232" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-12618" y="-115727" z="-3688" heading="27294" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-14326" y="-109274" z="-3392" heading="12215" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-17275" y="-115122" z="-4104" heading="13270" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-21529" y="-112773" z="-3496" heading="60101" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-21259" y="-112157" z="-3424" heading="21139" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-23500" y="-116059" z="-3296" heading="20366" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-20659" y="-115209" z="-4056" heading="28544" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-23707" y="-116899" z="-3224" heading="5058" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-21888" y="-121528" z="-3376" heading="4838" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-26351" y="-124548" z="-2696" heading="4127" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-22150" y="-123595" z="-3000" heading="5984" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19463" x="-26963" y="-123964" z="-2720" heading="32584" respawnTime="60sec" /> <!-- Bloody Horn -->
+			<npc id="19475" x="-14000" y="-115824" z="-3672" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-13328" y="-114496" z="-3656" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-14736" y="-110912" z="-3392" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-14512" y="-109680" z="-3392" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-15648" y="-110000" z="-3400" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-14448" y="-114896" z="-3640" heading="5838" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-19936" y="-111616" z="-3440" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-21296" y="-111600" z="-3392" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-20736" y="-110896" z="-3432" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-20576" y="-112384" z="-3416" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-23280" y="-115920" z="-3312" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-23600" y="-114704" z="-3320" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-24336" y="-115872" z="-3280" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-23360" y="-119456" z="-3160" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-22400" y="-120256" z="-3184" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-25392" y="-124016" z="-2688" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-21472" y="-123232" z="-3000" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-20608" y="-124240" z="-3016" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-22160" y="-123760" z="-3000" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-26240" y="-125328" z="-2736" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="19475" x="-25072" y="-125296" z="-2712" heading="0" respawnTime="60sec" /> <!-- Legah -->
+			<npc id="23330" x="-13881" y="-114921" z="-3656" heading="50747" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-13385" y="-115433" z="-3608" heading="22830" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-14067" y="-115625" z="-3616" heading="36845" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-14067" y="-114793" z="-3624" heading="51103" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-14747" y="-110226" z="-3416" heading="32516" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-15337" y="-110108" z="-3400" heading="38726" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-14688" y="-109754" z="-3384" heading="47373" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-15101" y="-109695" z="-3352" heading="73" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-20304" y="-111950" z="-3392" heading="26889" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-20304" y="-111572" z="-3400" heading="36078" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-21045" y="-111320" z="-3384" heading="14656" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-20646" y="-111194" z="-3384" heading="44495" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-23816" y="-115186" z="-3304" heading="62137" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-24194" y="-114942" z="-3304" heading="27466" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-23627" y="-114942" z="-3256" heading="41733" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-23942" y="-115857" z="-3288" heading="22802" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-22849" y="-120684" z="-3176" heading="49263" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-22727" y="-120243" z="-3176" heading="62686" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-22666" y="-120180" z="-3176" heading="19744" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-22666" y="-120054" z="-3160" heading="36768" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-25620" y="-124640" z="-2720" heading="37949" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-26084" y="-124701" z="-2680" heading="30048" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-21027" y="-124139" z="-2968" heading="56255" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-21735" y="-123844" z="-2976" heading="57283" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-21086" y="-124434" z="-2936" heading="44808" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-21558" y="-124257" z="-2984" heading="62507" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-25272" y="-125006" z="-2696" heading="24301" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23330" x="-25968" y="-124945" z="-2688" heading="60996" respawnTime="60sec" /> <!-- Rubble -->
+			<npc id="23333" x="-13323" y="-114985" z="-3616" heading="6947" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-14067" y="-114921" z="-3632" heading="17714" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-13819" y="-114793" z="-3632" heading="48518" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-15278" y="-110344" z="-3408" heading="41584" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-14865" y="-110580" z="-3400" heading="1876" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-14452" y="-110108" z="-3352" heading="32317" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-20589" y="-111761" z="-3440" heading="18137" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-20646" y="-111068" z="-3400" heading="46844" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-20646" y="-112013" z="-3392" heading="16077" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-23375" y="-115369" z="-3264" heading="57354" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-23753" y="-114881" z="-3256" heading="2295" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-23690" y="-115918" z="-3264" heading="3115" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-23032" y="-120432" z="-3216" heading="36667" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-22788" y="-120432" z="-3200" heading="19555" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-23398" y="-120432" z="-3192" heading="16771" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-25330" y="-124640" z="-2720" heading="56222" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-21676" y="-123785" z="-2976" heading="54618" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-21145" y="-124552" z="-2944" heading="61314" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-21735" y="-124021" z="-2976" heading="15366" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-26026" y="-125250" z="-2712" heading="54158" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23333" x="-25098" y="-125006" z="-2680" heading="24636" respawnTime="60sec" /> <!-- Putrefied Zombie -->
+			<npc id="23334" x="-13323" y="-115049" z="-3616" heading="51311" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13881" y="-114921" z="-3656" heading="12396" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13385" y="-114729" z="-3616" heading="53338" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13261" y="-114985" z="-3616" heading="42211" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14005" y="-115305" z="-3648" heading="48451" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13757" y="-115369" z="-3656" heading="19170" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13695" y="-115369" z="-3648" heading="45666" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13881" y="-114793" z="-3632" heading="25984" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13943" y="-115625" z="-3608" heading="41172" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13571" y="-114985" z="-3672" heading="18360" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13385" y="-115305" z="-3616" heading="63206" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13757" y="-115177" z="-3672" heading="60581" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13757" y="-114729" z="-3632" heading="63931" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13509" y="-115049" z="-3648" heading="10708" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14067" y="-115305" z="-3648" heading="30118" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13881" y="-115561" z="-3632" heading="1694" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13881" y="-115625" z="-3608" heading="10416" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13261" y="-115305" z="-3608" heading="64349" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13757" y="-115561" z="-3624" heading="32658" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13261" y="-115049" z="-3616" heading="6879" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13199" y="-115241" z="-3608" heading="58366" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13385" y="-115433" z="-3608" heading="63859" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13819" y="-115625" z="-3608" heading="38719" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13385" y="-115113" z="-3616" heading="22187" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13819" y="-115369" z="-3656" heading="18441" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13633" y="-115177" z="-3672" heading="53011" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13757" y="-114601" z="-3608" heading="54220" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-13943" y="-114537" z="-3616" heading="38869" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15160" y="-110757" z="-3368" heading="27976" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15160" y="-110639" z="-3384" heading="30105" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14629" y="-110639" z="-3360" heading="32196" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14983" y="-110757" z="-3368" heading="47171" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14747" y="-110639" z="-3368" heading="57427" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15160" y="-110698" z="-3360" heading="1218" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15219" y="-110521" z="-3392" heading="1744" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15278" y="-109931" z="-3368" heading="60228" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14570" y="-109990" z="-3360" heading="20908" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14511" y="-110580" z="-3368" heading="27882" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14924" y="-110521" z="-3400" heading="53903" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15278" y="-109754" z="-3360" heading="16936" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15337" y="-110108" z="-3400" heading="58958" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15396" y="-110167" z="-3400" heading="40750" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14865" y="-109990" z="-3400" heading="47285" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14570" y="-110285" z="-3392" heading="41890" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15042" y="-109872" z="-3384" heading="43060" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14983" y="-109754" z="-3360" heading="33192" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15160" y="-110285" z="-3416" heading="14325" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14570" y="-110403" z="-3384" heading="10487" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-15455" y="-110344" z="-3368" heading="19194" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14865" y="-110403" z="-3424" heading="24288" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14747" y="-110580" z="-3392" heading="2606" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14865" y="-110462" z="-3424" heading="23651" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14983" y="-110108" z="-3424" heading="2765" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14688" y="-110462" z="-3384" heading="62951" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14983" y="-109636" z="-3376" heading="58001" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-14688" y="-109754" z="-3384" heading="43576" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20475" y="-112139" z="-3296" heading="36648" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20133" y="-111824" z="-3384" heading="9602" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20475" y="-112013" z="-3408" heading="8637" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20475" y="-112013" z="-3408" heading="34572" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20133" y="-111320" z="-3416" heading="53342" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20190" y="-111887" z="-3392" heading="51581" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20475" y="-111005" z="-3416" heading="41107" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20418" y="-111320" z="-3408" heading="53118" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20133" y="-111635" z="-3392" heading="7651" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20133" y="-111320" z="-3416" heading="40904" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20304" y="-111131" z="-3400" heading="38882" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20703" y="-111446" z="-3432" heading="8590" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21102" y="-111509" z="-3400" heading="36188" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21102" y="-111950" z="-3384" heading="41683" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21159" y="-111509" z="-3384" heading="18870" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21159" y="-111824" z="-3384" heading="51491" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21045" y="-111383" z="-3400" heading="63061" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21045" y="-111635" z="-3416" heading="25714" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20589" y="-111131" z="-3384" heading="23040" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20760" y="-111194" z="-3384" heading="61108" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20874" y="-112076" z="-3384" heading="37534" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21102" y="-111446" z="-3392" heading="12650" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20988" y="-112076" z="-3384" heading="16551" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20589" y="-111383" z="-3424" heading="12871" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20874" y="-111257" z="-3408" heading="34734" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20760" y="-111383" z="-3432" heading="61440" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21159" y="-111887" z="-3392" heading="37569" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20817" y="-111194" z="-3384" heading="49851" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23816" y="-115491" z="-3320" heading="5708" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23627" y="-115308" z="-3304" heading="62025" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23501" y="-115735" z="-3280" heading="43034" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24257" y="-115064" z="-3272" heading="40229" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24194" y="-115369" z="-3296" heading="35069" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24068" y="-115613" z="-3288" heading="45074" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24005" y="-114820" z="-3296" heading="31563" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23816" y="-115491" z="-3320" heading="34524" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23564" y="-115369" z="-3312" heading="18160" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24131" y="-115125" z="-3272" heading="54381" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24194" y="-114942" z="-3304" heading="54759" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23690" y="-114881" z="-3256" heading="24716" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23879" y="-115613" z="-3312" heading="44339" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23501" y="-115796" z="-3264" heading="40027" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23816" y="-115064" z="-3304" heading="627" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23312" y="-115186" z="-3272" heading="31526" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24131" y="-115003" z="-3272" heading="1619" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24131" y="-115369" z="-3296" heading="8903" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23879" y="-115003" z="-3280" heading="12815" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24257" y="-115186" z="-3272" heading="51207" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23816" y="-115003" z="-3296" heading="15755" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23375" y="-115491" z="-3272" heading="57827" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23564" y="-115735" z="-3288" heading="26781" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23564" y="-115796" z="-3264" heading="31305" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23312" y="-115552" z="-3272" heading="22887" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23312" y="-115613" z="-3264" heading="59477" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23375" y="-115735" z="-3272" heading="40165" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-24005" y="-115613" z="-3312" heading="52525" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23459" y="-120243" z="-3160" heading="28602" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23276" y="-119865" z="-3160" heading="2351" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23337" y="-120117" z="-3200" heading="42168" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22788" y="-120243" z="-3200" heading="5550" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23215" y="-120621" z="-3192" heading="39079" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23398" y="-120432" z="-3192" heading="51467" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23276" y="-120558" z="-3208" heading="56238" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22605" y="-120684" z="-3168" heading="53582" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23276" y="-120054" z="-3200" heading="28885" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23032" y="-120495" z="-3208" heading="36753" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23093" y="-120369" z="-3224" heading="51011" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23520" y="-119991" z="-3160" heading="28116" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23459" y="-120306" z="-3160" heading="48464" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22910" y="-120747" z="-3160" heading="31226" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22910" y="-120684" z="-3176" heading="51966" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22727" y="-120810" z="-3168" heading="7746" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22971" y="-120558" z="-3208" heading="24237" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22910" y="-120180" z="-3192" heading="55347" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22849" y="-120369" z="-3200" heading="56076" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23398" y="-120621" z="-3168" heading="50263" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22727" y="-120180" z="-3192" heading="2783" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23520" y="-120621" z="-3160" heading="14760" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22910" y="-120432" z="-3200" heading="44105" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23093" y="-120495" z="-3216" heading="10578" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23215" y="-119991" z="-3200" heading="43913" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22483" y="-120243" z="-3160" heading="22874" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-22849" y="-120873" z="-3168" heading="28637" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-23032" y="-120873" z="-3152" heading="4035" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25446" y="-124518" z="-2712" heading="42072" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25852" y="-124823" z="-2720" heading="53559" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25910" y="-124518" z="-2704" heading="7164" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25910" y="-124518" z="-2704" heading="6739" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25330" y="-124640" z="-2720" heading="19675" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25330" y="-124640" z="-2720" heading="18778" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25562" y="-124335" z="-2680" heading="64215" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25678" y="-124640" z="-2720" heading="27350" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25504" y="-124640" z="-2720" heading="36046" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25736" y="-124701" z="-2728" heading="29650" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25678" y="-124640" z="-2720" heading="27774" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25504" y="-124396" z="-2688" heading="22960" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25968" y="-124823" z="-2720" heading="28934" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25504" y="-124823" z="-2736" heading="49827" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25620" y="-124579" z="-2720" heading="34099" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25562" y="-124396" z="-2704" heading="35068" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21381" y="-124493" z="-2944" heading="48786" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21440" y="-124434" z="-2944" heading="47894" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21735" y="-123962" z="-2976" heading="34148" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21322" y="-124493" z="-2960" heading="35670" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21086" y="-124316" z="-2968" heading="11832" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21381" y="-123726" z="-2976" heading="16397" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21735" y="-124375" z="-2952" heading="15391" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21440" y="-124316" z="-2976" heading="29288" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21558" y="-124198" z="-2984" heading="45405" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21322" y="-124198" z="-3000" heading="29602" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20850" y="-124021" z="-2952" heading="40144" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21204" y="-123608" z="-2944" heading="52940" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20909" y="-124493" z="-2960" heading="55690" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20850" y="-124257" z="-2960" heading="14005" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21558" y="-124198" z="-2984" heading="56652" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21086" y="-124375" z="-2968" heading="51940" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20968" y="-124198" z="-2944" heading="38489" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21794" y="-124080" z="-2968" heading="16195" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21558" y="-124316" z="-2968" heading="12708" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20968" y="-124021" z="-2968" heading="40987" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21263" y="-124434" z="-2976" heading="51113" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21145" y="-124257" z="-2984" heading="41414" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21735" y="-124375" z="-2952" heading="39230" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21086" y="-124257" z="-2976" heading="14005" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20909" y="-123962" z="-2944" heading="39715" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21794" y="-123785" z="-2944" heading="31015" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-21440" y="-123726" z="-2976" heading="13372" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-20968" y="-124434" z="-2944" heading="2698" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-26026" y="-125128" z="-2680" heading="48799" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25910" y="-125128" z="-2680" heading="64758" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-26142" y="-125006" z="-2680" heading="57995" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25156" y="-125189" z="-2696" heading="42655" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25794" y="-125067" z="-2696" heading="27678" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25968" y="-125128" z="-2680" heading="26566" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25968" y="-125189" z="-2680" heading="52371" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25330" y="-125189" z="-2680" heading="55498" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25446" y="-124945" z="-2720" heading="56824" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25968" y="-125128" z="-2680" heading="49637" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25330" y="-125372" z="-2680" heading="34137" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23334" x="-25562" y="-125250" z="-2688" heading="45777" respawnTime="60sec" /> <!-- Shelop -->
+			<npc id="23335" x="-13819" y="-115241" z="-3672" heading="7148" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-13199" y="-115241" z="-3608" heading="17655" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-13447" y="-114857" z="-3632" heading="18643" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-15042" y="-109636" z="-3368" heading="58487" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-14747" y="-109813" z="-3368" heading="2610" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-15219" y="-110580" z="-3368" heading="22241" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-20988" y="-111383" z="-3416" heading="37929" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-20703" y="-111572" z="-3448" heading="53852" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-21045" y="-111950" z="-3384" heading="16152" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-23438" y="-115430" z="-3288" heading="25947" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-24194" y="-115247" z="-3296" heading="5773" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-23627" y="-115308" z="-3304" heading="56325" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-23581" y="-120306" z="-3160" heading="63766" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-22788" y="-120180" z="-3192" heading="55904" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-23276" y="-120747" z="-3176" heading="22594" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-25852" y="-124823" z="-2720" heading="47449" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-20909" y="-124434" z="-2960" heading="49356" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-21381" y="-124021" z="-3000" heading="3799" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-21676" y="-123844" z="-2984" heading="36527" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-25446" y="-125433" z="-2672" heading="10828" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23335" x="-25620" y="-125372" z="-2680" heading="43586" respawnTime="60sec" /> <!-- Poras -->
+			<npc id="23336" x="-13757" y="-115177" z="-3672" heading="47565" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-13695" y="-115625" z="-3608" heading="10185" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-15514" y="-110108" z="-3360" heading="5944" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-15042" y="-109990" z="-3408" heading="31870" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-20190" y="-111761" z="-3384" heading="50611" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-20988" y="-111572" z="-3424" heading="41352" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-23249" y="-115430" z="-3280" heading="12791" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-24194" y="-115064" z="-3272" heading="46571" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-22666" y="-120306" z="-3176" heading="46972" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-23459" y="-120054" z="-3160" heading="23262" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-25736" y="-124701" z="-2728" heading="18998" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-25388" y="-124579" z="-2704" heading="20142" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-21558" y="-124375" z="-2968" heading="58878" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23336" x="-20909" y="-124375" z="-2944" heading="34448" respawnTime="60sec" /> <!-- Death Worm -->
+			<npc id="23337" x="-13261" y="-115113" z="-3608" heading="26213" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-14129" y="-114921" z="-3616" heading="53178" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-13695" y="-114537" z="-3632" heading="48538" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-15042" y="-109754" z="-3352" heading="59870" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-15278" y="-109990" z="-3400" heading="46259" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-14924" y="-110521" z="-3400" heading="26484" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-20304" y="-111383" z="-3392" heading="29277" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-20361" y="-111572" z="-3424" heading="48283" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-20646" y="-111131" z="-3384" heading="40147" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-23879" y="-115857" z="-3264" heading="36531" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-23564" y="-115857" z="-3264" heading="14823" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-23753" y="-114881" z="-3256" heading="3274" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-23154" y="-120243" z="-3216" heading="50024" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-23459" y="-120306" z="-3160" heading="50207" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-22788" y="-120180" z="-3192" heading="41569" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-25736" y="-124701" z="-2728" heading="62309" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-20968" y="-124080" z="-2952" heading="21626" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-21381" y="-123785" z="-3000" heading="62270" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-21558" y="-124316" z="-2968" heading="14440" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-25272" y="-125250" z="-2680" heading="24830" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="23337" x="-25968" y="-125128" z="-2680" heading="35348" respawnTime="60sec" /> <!-- Large Rubble -->
+			<npc id="25927" x="-18371" y="-114358" z="-4072" heading="16383" respawnTime="60sec" /> <!-- Krogel -->
+			<npc id="33837" x="-26375" y="-106062" z="-2632" heading="65028" respawnTime="60sec" /> <!-- Refugee Corpse -->
+			<npc id="33838" x="-25428" y="-105719" z="-2608" heading="17423" respawnTime="60sec" /> <!-- Quincy -->
+			<npc id="33842" x="-25321" y="-105816" z="-2600" heading="23421" respawnTime="60sec" /> <!-- Parajan -->
+			<npc id="33843" x="-25517" y="-105892" z="-2600" heading="19380" respawnTime="60sec" /> <!-- Falk -->
+		</group>
+	</spawn>
+</list>

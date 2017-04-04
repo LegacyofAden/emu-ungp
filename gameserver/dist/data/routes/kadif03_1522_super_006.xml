@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/route.xsd">
+	<route alias="kadif03_1522_super_006" move_type="MoveSuperPoint_FollowRail">
+		<node id="0" fstring_index="-1" social_number="-1" delay="-1" x="-151310" y="145209" z="-11976" />
+		<node id="1" fstring_index="-1" social_number="-1" delay="-1" x="-151325" y="145435" z="-11976" />
+		<node id="2" fstring_index="-1" social_number="-1" delay="-1" x="-151318" y="145786" z="-11976" />
+		<node id="3" fstring_index="-1" social_number="-1" delay="-1" x="-151318" y="146069" z="-11976" />
+		<node id="4" fstring_index="-1" social_number="-1" delay="-1" x="-151318" y="146441" z="-11976" />
+		<node id="5" fstring_index="-1" social_number="-1" delay="-1" x="-151319" y="146717" z="-11976" />
+		<node id="6" fstring_index="-1" social_number="-1" delay="-1" x="-151330" y="147104" z="-11976" />
+	</route>
+</list>

@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'propdeps-idea'
+apply plugin: 'application'
+
+run.workingDir = new File("./dist")
+mainClassName = "org.l2junity.loginserver.LoginServer"
+
+applicationDefaultJvmArgs = [
+		"-server",
+		"-Xms128M",
+		"-Xmx512M"
+]
+
+defaultTasks 'assemble'
+distTar.enabled = false
+bootRepackage.enabled = false
+
+dependencies {
+	provided('org.projectlombok:lombok:+')
+	compile project(':commons')
+	compile project(':network')
+
+	compile('org.mindrot:jbcrypt:+')
+	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')
+}
+
+configurations {
+	compile.exclude group: 'ch.qos.logback'
+}
+
+distZip {
+	from('dist') {
+		into(baseName + '/bin/')
+	}
+}

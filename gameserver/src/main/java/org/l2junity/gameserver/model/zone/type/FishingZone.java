@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) 2004-2015 L2J Unity
+ * 
+ * This file is part of L2J Unity.
+ * 
+ * L2J Unity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * L2J Unity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.l2junity.gameserver.model.zone.type;
+
+import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.model.Fishing;
+import org.l2junity.gameserver.model.PcCondOverride;
+import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.zone.ZoneId;
+import org.l2junity.gameserver.model.zone.ZoneType;
+import org.l2junity.gameserver.network.client.send.fishing.ExAutoFishAvailable;
+
+import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * A fishing zone
+ *
+ * @author durgus
+ */
+public class FishingZone extends ZoneType {
+	public FishingZone(int id) {
+		super(id);
+	}
+
+	@Override
+	protected void onEnter(Creature character) {
+		if (character.isPlayer()) {
+			if ((GeneralConfig.ALLOWFISHING || character.canOverrideCond(PcCondOverride.ZONE_CONDITIONS)) && !character.isInsideZone(ZoneId.FISHING)) {
+				WeakReference<Player> weakPlayer = new WeakReference<>(character.getActingPlayer());
+				ThreadPool.getInstance().executeGeneral(new Runnable() {
+					@Override
+					public void run() {
+						Player player = weakPlayer.get();
+						if (player != null) {
+							Fishing fishing = player.getFishing();
+							if (player.isInsideZone(ZoneId.FISHING)) {
+								if (fishing.canFish() && !fishing.isFishing()) {
+									if (fishing.isAtValidLocation()) {
+										player.sendPacket(ExAutoFishAvailable.YES);
+									} else {
+										player.sendPacket(ExAutoFishAvailable.NO);
+									}
+								}
+								ThreadPool.getInstance().scheduleGeneral(this, 7000, TimeUnit.MILLISECONDS);
+							} else {
+								player.sendPacket(ExAutoFishAvailable.NO);
+							}
+						}
+					}
+				});
+			}
+			character.setInsideZone(ZoneId.FISHING, true);
+		}
+	}
+
+	@Override
+	protected void onExit(Creature character) {
+		if (character.isPlayer()) {
+			character.setInsideZone(ZoneId.FISHING, false);
+			character.sendPacket(ExAutoFishAvailable.NO);
+		}
+	}
+
+	/*
+	 * getWaterZ() this added function returns the Z value for the water surface. In effect this simply returns the upper Z value of the zone. This required some modification of L2ZoneForm, and zone form extensions.
+	 */
+	public int getWaterZ() {
+		return getZone().getHighZ();
+	}
+}
