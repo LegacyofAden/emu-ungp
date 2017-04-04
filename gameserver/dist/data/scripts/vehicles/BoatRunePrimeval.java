@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -74,7 +74,7 @@ public class BoatRunePrimeval implements Runnable {
 
 	private static final VehiclePathPoint PRIMEVAL_DOCK = RUNE_TO_PRIMEVAL[RUNE_TO_PRIMEVAL.length - 1];
 
-	private final L2BoatInstance _boat;
+	private final BoatInstance _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 
@@ -89,7 +89,7 @@ public class BoatRunePrimeval implements Runnable {
 	private final PlaySound RUNE_SOUND;
 	private final PlaySound PRIMEVAL_SOUND;
 
-	public BoatRunePrimeval(L2BoatInstance boat) {
+	public BoatRunePrimeval(BoatInstance boat) {
 		_boat = boat;
 
 		ARRIVED_AT_RUNE = new CreatureSay(0, ChatType.BOAT, 801, SystemMessageId.WELCOME_TO_RUNE_HARBOR);
@@ -156,7 +156,7 @@ public class BoatRunePrimeval implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(5, 34381, -37680, -3610, 40785);
+		final BoatInstance boat = BoatManager.getInstance().getNewBoat(5, 34381, -37680, -3610, 40785);
 		if (boat != null) {
 			boat.registerEngine(new BoatRunePrimeval(boat));
 			boat.runEngine(180000);

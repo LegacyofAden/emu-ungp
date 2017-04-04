@@ -501,7 +501,7 @@
 			<height normal="17" />
 		</collision>
 	</npc>
-	<npc id="19216" level="85" type="L2Monster" name="Altar of Evil Spirit Offering Box" title="">
+	<npc id="19216" level="85" type="Monster" name="Altar of Evil Spirit Offering Box" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Skill01_Probablity" value="0" />
@@ -713,7 +713,7 @@
 			<height normal="1450" />
 		</collision>
 	</npc>
-	<npc id="19218" level="1" type="L2Npc" name="" title="">
+	<npc id="19218" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -738,7 +738,7 @@
 			<height normal="7" />
 		</collision>
 	</npc>
-	<npc id="19219" level="1" type="L2Npc" name="" title="">
+	<npc id="19219" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -763,7 +763,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="19220" level="87" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19220" level="87" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -807,7 +807,7 @@
 			<height normal="14" />
 		</collision>
 	</npc>
-	<npc id="19221" level="87" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19221" level="87" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="200" />
@@ -853,7 +853,7 @@
 			<height normal="40.48" />
 		</collision>
 	</npc>
-	<npc id="19222" level="87" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19222" level="87" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="70" />
@@ -902,7 +902,7 @@
 			<height normal="34" />
 		</collision>
 	</npc>
-	<npc id="19223" level="92" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19223" level="92" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -947,7 +947,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="19224" level="92" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19224" level="92" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -992,7 +992,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="19225" level="92" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19225" level="92" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1042,7 +1042,7 @@
 			<height normal="38" />
 		</collision>
 	</npc>
-	<npc id="19226" level="97" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19226" level="97" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="100" />
@@ -1088,7 +1088,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="19227" level="97" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19227" level="97" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -1134,7 +1134,7 @@
 			<height normal="34.5" />
 		</collision>
 	</npc>
-	<npc id="19228" level="97" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19228" level="97" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="130" />
@@ -1183,7 +1183,7 @@
 			<height normal="46.5" />
 		</collision>
 	</npc>
-	<npc id="19229" level="87" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19229" level="87" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -1230,7 +1230,7 @@
 			<height normal="14" />
 		</collision>
 	</npc>
-	<npc id="19230" level="87" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19230" level="87" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="200" />
@@ -1277,7 +1277,7 @@
 			<height normal="40.48" />
 		</collision>
 	</npc>
-	<npc id="19231" level="87" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19231" level="87" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="70" />
@@ -1330,7 +1330,7 @@
 			<height normal="34" />
 		</collision>
 	</npc>
-	<npc id="19232" level="92" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19232" level="92" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -1378,7 +1378,7 @@
 			<height normal="33" />
 		</collision>
 	</npc>
-	<npc id="19233" level="92" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19233" level="92" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="60" />
@@ -1426,7 +1426,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="19234" level="92" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19234" level="92" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1478,7 +1478,7 @@
 			<height normal="38" />
 		</collision>
 	</npc>
-	<npc id="19235" level="97" type="L2Monster" name="Kartia Guard" title="">
+	<npc id="19235" level="97" type="Monster" name="Kartia Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="100" />
@@ -1527,7 +1527,7 @@
 			<height normal="42" />
 		</collision>
 	</npc>
-	<npc id="19236" level="97" type="L2Monster" name="Kartia Watchman" title="">
+	<npc id="19236" level="97" type="Monster" name="Kartia Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="120" />
@@ -1576,7 +1576,7 @@
 			<height normal="34.5" />
 		</collision>
 	</npc>
-	<npc id="19237" level="97" type="L2Monster" name="Kartia Dimensional Watchman" title="">
+	<npc id="19237" level="97" type="Monster" name="Kartia Dimensional Watchman" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="130" />
@@ -1631,7 +1631,7 @@
 			<height normal="46.5" />
 		</collision>
 	</npc>
-	<npc id="19238" level="40" type="L2Npc" name="Daemon Angma" title="Helpful">
+	<npc id="19238" level="40" type="Npc" name="Daemon Angma" title="Helpful">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1664,7 +1664,7 @@
 			<height normal="12.5" />
 		</collision>
 	</npc>
-	<npc id="19239" level="40" type="L2Npc" name="Daemon Angma" title="Aggressive">
+	<npc id="19239" level="40" type="Npc" name="Daemon Angma" title="Aggressive">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1697,7 +1697,7 @@
 			<height normal="12.5" />
 		</collision>
 	</npc>
-	<npc id="19240" level="40" type="L2Npc" name="Daemon Angma" title="Distracted">
+	<npc id="19240" level="40" type="Npc" name="Daemon Angma" title="Distracted">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1730,7 +1730,7 @@
 			<height normal="12.5" />
 		</collision>
 	</npc>
-	<npc id="19241" level="40" type="L2Npc" name="Daemon Angma" title="Mastermind">
+	<npc id="19241" level="40" type="Npc" name="Daemon Angma" title="Mastermind">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1765,7 +1765,7 @@
 			<height normal="19" />
 		</collision>
 	</npc>
-	<npc id="19242" level="40" type="L2Npc" name="Sound Clam" title="">
+	<npc id="19242" level="40" type="Npc" name="Sound Clam" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1798,7 +1798,7 @@
 			<height normal="6" />
 		</collision>
 	</npc>
-	<npc id="19243" level="40" type="L2Npc" name="Campaign Presentation 1" title="">
+	<npc id="19243" level="40" type="Npc" name="Campaign Presentation 1" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1831,7 +1831,7 @@
 			<height normal="40" />
 		</collision>
 	</npc>
-	<npc id="19244" level="99" type="L2Npc" name="Red Tama Plant" title="">
+	<npc id="19244" level="99" type="Npc" name="Red Tama Plant" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>ETC</sex>
@@ -1861,7 +1861,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="19245" level="99" type="L2Npc" name="Blue Tama Plant" title="">
+	<npc id="19245" level="99" type="Npc" name="Blue Tama Plant" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>ETC</sex>
@@ -1891,7 +1891,7 @@
 			<height normal="23" />
 		</collision>
 	</npc>
-	<npc id="19246" level="40" type="L2Npc" name="Tanima" title="">
+	<npc id="19246" level="40" type="Npc" name="Tanima" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<skill name="Skill04_ID" id="14834" level="1" />
@@ -1923,7 +1923,7 @@
 			<height normal="9" />
 		</collision>
 	</npc>
-	<npc id="19247" level="85" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19247" level="85" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1957,7 +1957,7 @@
 			<height normal="50" />
 		</collision>
 	</npc>
-	<npc id="19248" level="90" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19248" level="90" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -1992,7 +1992,7 @@
 			<height normal="50" />
 		</collision>
 	</npc>
-	<npc id="19249" level="95" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19249" level="95" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2027,7 +2027,7 @@
 			<height normal="50" />
 		</collision>
 	</npc>
-	<npc id="19250" level="85" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19250" level="85" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2060,7 +2060,7 @@
 			<height normal="75" />
 		</collision>
 	</npc>
-	<npc id="19251" level="90" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19251" level="90" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2094,7 +2094,7 @@
 			<height normal="75" />
 		</collision>
 	</npc>
-	<npc id="19252" level="95" type="L2Npc" name="Kartia's Altar" title="">
+	<npc id="19252" level="95" type="Npc" name="Kartia's Altar" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2128,7 +2128,7 @@
 			<height normal="75" />
 		</collision>
 	</npc>
-	<npc id="19253" level="88" type="L2Monster" name="Zellaka" title="Lord of Kartia">
+	<npc id="19253" level="88" type="Monster" name="Zellaka" title="Lord of Kartia">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="134" />
@@ -2189,7 +2189,7 @@
 			<height normal="54" />
 		</collision>
 	</npc>
-	<npc id="19254" level="93" type="L2Monster" name="Pelline" title="Lord of Kartia">
+	<npc id="19254" level="93" type="Monster" name="Pelline" title="Lord of Kartia">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="119" />
@@ -2251,7 +2251,7 @@
 			<height normal="46" />
 		</collision>
 	</npc>
-	<npc id="19255" level="98" type="L2Monster" name="Kalios" title="Lord of Kartia">
+	<npc id="19255" level="98" type="Monster" name="Kalios" title="Lord of Kartia">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="130" />
@@ -2313,7 +2313,7 @@
 			<height normal="65.5" />
 		</collision>
 	</npc>
-	<npc id="19256" level="99" type="L2Npc" name="Tree of Life" title="">
+	<npc id="19256" level="99" type="Npc" name="Tree of Life" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="0" />
@@ -2347,7 +2347,7 @@
 			<height normal="50.5" />
 		</collision>
 	</npc>
-	<npc id="19257" level="1" type="L2Npc" name="Small Draco Egg" title="">
+	<npc id="19257" level="1" type="Npc" name="Small Draco Egg" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>ELEMENTAL</race>
 		<sex>MALE</sex>
@@ -2374,7 +2374,7 @@
 			<height normal="20" />
 		</collision>
 	</npc>
-	<npc id="19258" level="1" type="L2Npc" name="Large Draco Egg" title="">
+	<npc id="19258" level="1" type="Npc" name="Large Draco Egg" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>ELEMENTAL</race>
 		<sex>MALE</sex>
@@ -2401,7 +2401,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="19259" level="99" type="L2Monster" name="Smelting Furnace" title="">
+	<npc id="19259" level="99" type="Monster" name="Smelting Furnace" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="i_zone_quest_point" value="1" />
@@ -2432,7 +2432,7 @@
 			<height normal="90.5" />
 		</collision>
 	</npc>
-	<npc id="19260" level="99" type="L2Monster" name="Weapon Stand" title="">
+	<npc id="19260" level="99" type="Monster" name="Weapon Stand" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>ETC</sex>
@@ -2460,7 +2460,7 @@
 			<height normal="150" />
 		</collision>
 	</npc>
-	<npc id="19261" level="99" type="L2Monster" name="Armor Stand" title="">
+	<npc id="19261" level="99" type="Monster" name="Armor Stand" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>ETC</sex>
@@ -2488,7 +2488,7 @@
 			<height normal="150" />
 		</collision>
 	</npc>
-	<npc id="19262" level="99" type="L2Monster" name="Kunda" title="">
+	<npc id="19262" level="99" type="Monster" name="Kunda" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2539,7 +2539,7 @@
 			<height normal="46" />
 		</collision>
 	</npc>
-	<npc id="19263" level="99" type="L2Monster" name="Kunda" title="">
+	<npc id="19263" level="99" type="Monster" name="Kunda" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2589,7 +2589,7 @@
 			<height normal="46" />
 		</collision>
 	</npc>
-	<npc id="19264" level="99" type="L2Monster" name="Kunda" title="">
+	<npc id="19264" level="99" type="Monster" name="Kunda" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2639,7 +2639,7 @@
 			<height normal="46" />
 		</collision>
 	</npc>
-	<npc id="19265" level="99" type="L2Monster" name="Kunda Lord" title="">
+	<npc id="19265" level="99" type="Monster" name="Kunda Lord" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2683,7 +2683,7 @@
 			<height normal="72" />
 		</collision>
 	</npc>
-	<npc id="19266" level="99" type="L2Monster" name="Zahak" title="">
+	<npc id="19266" level="99" type="Monster" name="Zahak" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2727,7 +2727,7 @@
 			<height normal="63" />
 		</collision>
 	</npc>
-	<npc id="19267" level="90" type="L2Npc" name="Mysterious Box" title="">
+	<npc id="19267" level="90" type="Npc" name="Mysterious Box" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -2759,7 +2759,7 @@
 			<height normal="8.5" />
 		</collision>
 	</npc>
-	<npc id="19268" level="90" type="L2Monster" name="Mysterious Guard" title="">
+	<npc id="19268" level="90" type="Monster" name="Mysterious Guard" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="74" />
@@ -2798,7 +2798,7 @@
 			<height normal="31" grown="36" />
 		</collision>
 	</npc>
-	<npc id="19269" level="90" type="L2Monster" name="Clan Flag" title="">
+	<npc id="19269" level="90" type="Monster" name="Clan Flag" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>ETC</sex>
@@ -2830,7 +2830,7 @@
 			<height normal="120" />
 		</collision>
 	</npc>
-	<npc id="19270" level="99" type="L2Monster" name="Lesser Zahak" title="">
+	<npc id="19270" level="99" type="Monster" name="Lesser Zahak" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="150" />
@@ -2883,7 +2883,7 @@
 			<id>5</id>
 		</extend_drop>
 	</npc>
-	<npc id="19271" level="70" type="L2Npc" name="Verdof's Treasure Chest" title="">
+	<npc id="19271" level="70" type="Npc" name="Verdof's Treasure Chest" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="MoveAroundSocial" value="110" />
@@ -2914,7 +2914,7 @@
 			<height normal="12" />
 		</collision>
 	</npc>
-	<npc id="19272" level="80" type="L2Monster" name="Bratty Angma" title="">
+	<npc id="19272" level="80" type="Monster" name="Bratty Angma" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DEMONIC</race>
 		<sex>MALE</sex>
@@ -2940,7 +2940,7 @@
 			<height normal="45" />
 		</collision>
 	</npc>
-	<npc id="19273" level="87" type="L2Monster" name="Bratty Angma" title="">
+	<npc id="19273" level="87" type="Monster" name="Bratty Angma" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DEMONIC</race>
 		<sex>MALE</sex>
@@ -2967,7 +2967,7 @@
 			<height normal="45" />
 		</collision>
 	</npc>
-	<npc id="19274" level="92" type="L2Monster" name="Bratty Angma" title="">
+	<npc id="19274" level="92" type="Monster" name="Bratty Angma" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DEMONIC</race>
 		<sex>MALE</sex>
@@ -2994,7 +2994,7 @@
 			<height normal="45" />
 		</collision>
 	</npc>
-	<npc id="19275" level="97" type="L2Monster" name="Bratty Angma" title="">
+	<npc id="19275" level="97" type="Monster" name="Bratty Angma" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DEMONIC</race>
 		<sex>MALE</sex>
@@ -3021,7 +3021,7 @@
 			<height normal="45" />
 		</collision>
 	</npc>
-	<npc id="19276" level="99" type="L2Npc" name="Bundle (Presentation)" title="">
+	<npc id="19276" level="99" type="Npc" name="Bundle (Presentation)" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3052,7 +3052,7 @@
 			<height normal="77" />
 		</collision>
 	</npc>
-	<npc id="19277" level="99" type="L2Npc" name="Tauti's Axe (Presentation)" title="">
+	<npc id="19277" level="99" type="Npc" name="Tauti's Axe (Presentation)" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3083,7 +3083,7 @@
 			<height normal="45" />
 		</collision>
 	</npc>
-	<npc id="19278" level="99" type="L2Npc" name="Tauti (Presentation)" title="">
+	<npc id="19278" level="99" type="Npc" name="Tauti (Presentation)" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3114,7 +3114,7 @@
 			<height normal="90" />
 		</collision>
 	</npc>
-	<npc id="19279" level="99" type="L2Monster" name="Cooling Device" title="">
+	<npc id="19279" level="99" type="Monster" name="Cooling Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="i_zone_quest_point" value="2" />
@@ -3145,7 +3145,7 @@
 			<height normal="90.5" />
 		</collision>
 	</npc>
-	<npc id="19280" level="99" type="L2Monster" name="Weapon Molding Device" title="">
+	<npc id="19280" level="99" type="Monster" name="Weapon Molding Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="i_zone_quest_point" value="3" />
@@ -3176,7 +3176,7 @@
 			<height normal="90.5" />
 		</collision>
 	</npc>
-	<npc id="19281" level="99" type="L2Monster" name="Armor Molding Device" title="">
+	<npc id="19281" level="99" type="Monster" name="Armor Molding Device" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="i_zone_quest_point" value="3" />
@@ -3207,7 +3207,7 @@
 			<height normal="90.5" />
 		</collision>
 	</npc>
-	<npc id="19282" level="99" type="L2Npc" name="Exclusive to Noblesse Quests" title="">
+	<npc id="19282" level="99" type="Npc" name="Exclusive to Noblesse Quests" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3233,7 +3233,7 @@
 			<height normal="77" />
 		</collision>
 	</npc>
-	<npc id="19283" level="99" type="L2Npc" name="Tauti Spotlight" title="">
+	<npc id="19283" level="99" type="Npc" name="Tauti Spotlight" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3259,7 +3259,7 @@
 			<height normal="22.5" />
 		</collision>
 	</npc>
-	<npc id="19284" level="61" type="L2Npc" name="Explosive Orc Barrel" title="">
+	<npc id="19284" level="61" type="Npc" name="Explosive Orc Barrel" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3286,7 +3286,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="19285" level="1" type="L2Npc" name="Verdof's Treasure Chest - Decoration Only" title="">
+	<npc id="19285" level="1" type="Npc" name="Verdof's Treasure Chest - Decoration Only" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>FEMALE</sex>
@@ -3312,7 +3312,7 @@
 			<height normal="12" />
 		</collision>
 	</npc>
-	<npc id="19286" level="1" type="L2Npc" name="Possessed Pilgrim" title="">
+	<npc id="19286" level="1" type="Npc" name="Possessed Pilgrim" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>DIVINE</race>
 		<sex>MALE</sex>
@@ -3338,7 +3338,7 @@
 			<height normal="25.4" />
 		</collision>
 	</npc>
-	<npc id="19287" level="99" type="L2Monster" name="Zahak" title="">
+	<npc id="19287" level="99" type="Monster" name="Zahak" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMANOID</race>
 		<sex>MALE</sex>
@@ -3373,7 +3373,7 @@
 			<height normal="63" />
 		</collision>
 	</npc>
-	<npc id="19288" level="1" type="L2Npc" name="" title="">
+	<npc id="19288" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3400,7 +3400,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="19289" level="1" type="L2Npc" name="" title="">
+	<npc id="19289" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3427,7 +3427,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="19290" level="1" type="L2Npc" name="" title="">
+	<npc id="19290" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3454,7 +3454,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="19291" level="1" type="L2Npc" name="" title="">
+	<npc id="19291" level="1" type="Npc" name="" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3481,7 +3481,7 @@
 			<height normal="0.1" />
 		</collision>
 	</npc>
-	<npc id="19292" level="90" type="L2Npc" name="Herb Chest" title="">
+	<npc id="19292" level="90" type="Npc" name="Herb Chest" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3539,7 +3539,7 @@
 			<height normal="47.5" />
 		</collision>
 	</npc>
-	<npc id="19294" level="93" type="L2Monster" name="Cocoon Destroyer" title="Violent">
+	<npc id="19294" level="93" type="Monster" name="Cocoon Destroyer" title="Violent">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />
@@ -3597,7 +3597,7 @@
 			<id>1</id>
 		</extend_drop>
 	</npc>
-	<npc id="19295" level="90" type="L2Npc" name="Wisp" title="">
+	<npc id="19295" level="90" type="Npc" name="Wisp" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>CONSTRUCT</race>
 		<sex>MALE</sex>
@@ -3627,7 +3627,7 @@
 			<height normal="30" />
 		</collision>
 	</npc>
-	<npc id="19296" level="93" type="L2Npc" name="Golem Generator" title="Virus-Infected">
+	<npc id="19296" level="93" type="Npc" name="Golem Generator" title="Virus-Infected">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Attack_BoostValue" value="140" />
@@ -3663,7 +3663,7 @@
 			<height normal="47.5" />
 		</collision>
 	</npc>
-	<npc id="19297" level="93" type="L2Monster" name="Alarm" title="">
+	<npc id="19297" level="93" type="Monster" name="Alarm" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Attack_BoostValue" value="140" />
@@ -3704,7 +3704,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="19298" level="93" type="L2Monster" name="Boz" title="Spicula Clone Generator">
+	<npc id="19298" level="93" type="Monster" name="Boz" title="Spicula Clone Generator">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="Attack_BoostValue" value="140" />
@@ -3746,7 +3746,7 @@
 			<height normal="70" />
 		</collision>
 	</npc>
-	<npc id="19299" level="95" type="L2Monster" name="Spicula Elite Captain" title="">
+	<npc id="19299" level="95" type="Monster" name="Spicula Elite Captain" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<parameters>
 			<param name="IsAggressive" value="1" />

@@ -173,7 +173,7 @@ import org.slf4j.LoggerFactory;
  * <li>L2DoorInstance</li>
  * <li>L2Playable</li>
  * <li>L2Npc</li>
- * <li>L2StaticObjectInstance</li>
+ * <li>StaticObjectInstance</li>
  * <li>L2Trap</li>
  * <li>L2Vehicle</li>
  * </ul>
@@ -3462,7 +3462,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * <ul>
 	 * <li>If L2Character or target is in a town area, send a system message TARGET_IN_PEACEZONE a Server->Client packet ActionFailed</li>
 	 * <li>If target is confused, send a Server->Client packet ActionFailed</li>
-	 * <li>If L2Character is a L2ArtefactInstance, send a Server->Client packet ActionFailed</li>
+	 * <li>If L2Character is a ArtefactInstance, send a Server->Client packet ActionFailed</li>
 	 * <li>Send a Server->Client packet MyTargetSelected to start attack and Notify AI with AI_INTENTION_ATTACK</li>
 	 * </ul>
 	 *

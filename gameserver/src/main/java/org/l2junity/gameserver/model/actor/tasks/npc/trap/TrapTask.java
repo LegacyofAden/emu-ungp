@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.tasks.npc.trap;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.network.client.send.SocialAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 public class TrapTask implements Runnable {
 	private static final Logger _log = LoggerFactory.getLogger(TrapTask.class);
 	private static final int TICK = 1000; // 1s
-	private final L2TrapInstance _trap;
+	private final TrapInstance _trap;
 
-	public TrapTask(L2TrapInstance trap) {
+	public TrapTask(TrapInstance trap) {
 		_trap = trap;
 	}
 

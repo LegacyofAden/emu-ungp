@@ -33,7 +33,16 @@ configurations {
 }
 
 distZip {
-	from('dist') {
-		into(baseName + '/bin/')
+	from('dist/configs') {
+		into(baseName + '/bin/configs')
+		exclude('**.properties')
 	}
+	from('dist/sql') {
+		into(baseName + '/sql')
+	}
+}
+
+task createStartScripts(type: CreateStartScripts) {
+	unixStartScriptGenerator.template = resources.text.fromFile('../gradle/customUnixStartScript.txt');
+	windowsStartScriptGenerator.template = resources.text.fromFile('../gradle/customWindowsStartScript.txt');
 }

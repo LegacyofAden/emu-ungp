@@ -24,7 +24,7 @@ import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2StaticObjectInstance;
+import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 
@@ -55,7 +55,7 @@ public class StaticObjectScope implements IAffectScopeHandler {
 				return;
 			}
 
-			if (!(c instanceof DoorInstance) && !(c instanceof L2StaticObjectInstance)) {
+			if (!(c instanceof DoorInstance) && !(c instanceof StaticObjectInstance)) {
 				return;
 			}
 

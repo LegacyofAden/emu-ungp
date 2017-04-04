@@ -37,11 +37,11 @@ import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.Vehicle;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.model.actor.instance.TreasureInstance;
 import org.l2junity.gameserver.model.actor.poly.ObjectPoly;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -464,18 +464,18 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	}
 
 	/**
-	 * Verify if object is instance of L2TrapInstance.
+	 * Verify if object is instance of TrapInstance.
 	 *
-	 * @return {@code true} if object is instance of L2TrapInstance, {@code false} otherwise
+	 * @return {@code true} if object is instance of TrapInstance, {@code false} otherwise
 	 */
 	public boolean isTrap() {
 		return false;
 	}
 
 	/**
-	 * @return {@link L2TrapInstance} instance if current object is such, {@code null} otherwise.
+	 * @return {@link TrapInstance} instance if current object is such, {@code null} otherwise.
 	 */
-	public L2TrapInstance asTrap() {
+	public TrapInstance asTrap() {
 		return null;
 	}
 

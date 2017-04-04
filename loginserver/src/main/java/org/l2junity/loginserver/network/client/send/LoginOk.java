@@ -18,6 +18,7 @@
  */
 package org.l2junity.loginserver.network.client.send;
 
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.network.IOutgoingPacket;
 import org.l2junity.network.PacketWriter;
 
@@ -25,16 +26,16 @@ import org.l2junity.network.PacketWriter;
  * @author NosBit
  */
 public class LoginOk implements IOutgoingPacket {
-	private final long _loginSessionId;
+	private final SessionInfo sessionInfo;
 
-	public LoginOk(long loginSessionId) {
-		_loginSessionId = loginSessionId;
+	public LoginOk(SessionInfo sessionInfo) {
+		this.sessionInfo = sessionInfo;
 	}
 
 	@Override
 	public boolean write(PacketWriter packet) {
 		packet.writeC(0x03);
-		packet.writeQ(_loginSessionId);
+		packet.writeQ(sessionInfo.getLoginKey());
 		packet.writeD(0);
 		packet.writeD(0);
 		packet.writeD(0);

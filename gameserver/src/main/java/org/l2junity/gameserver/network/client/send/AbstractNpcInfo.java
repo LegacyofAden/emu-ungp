@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send;
 
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
@@ -56,9 +56,9 @@ public abstract class AbstractNpcInfo implements IClientOutgoingPacket {
 	}
 
 	public static class TrapInfo extends AbstractNpcInfo {
-		private final L2TrapInstance _trap;
+		private final TrapInstance _trap;
 
-		public TrapInfo(L2TrapInstance cha, Creature attacker) {
+		public TrapInfo(TrapInstance cha, Creature attacker) {
 			super(cha);
 
 			_trap = cha;

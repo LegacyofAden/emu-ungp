@@ -20,7 +20,7 @@ package org.l2junity.gameserver.network.client.recv;
 
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -55,7 +55,7 @@ public final class RequestGetOnVehicle implements IClientIncomingPacket {
 			return;
 		}
 
-		L2BoatInstance boat;
+		BoatInstance boat;
 		if (activeChar.isInBoat()) {
 			boat = activeChar.getBoat();
 			if (boat.getObjectId() != _boatId) {

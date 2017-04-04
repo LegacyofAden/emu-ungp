@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/npcs.xsd">
-	<npc id="29300" level="99" type="L2Monster" name="Varkaron" title="Dimensional Invader">
+	<npc id="29300" level="99" type="Monster" name="Varkaron" title="Dimensional Invader">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -106,7 +106,7 @@
 			<height normal="100" />
 		</collision>
 	</npc>
-	<npc id="29301" level="99" type="L2Monster" name="Minion Monisac" title="">
+	<npc id="29301" level="99" type="Monster" name="Minion Monisac" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -127,7 +127,7 @@
 			<height normal="27" />
 		</collision>
 	</npc>
-	<npc id="29302" level="99" type="L2Monster" name="Minion Monishe" title="">
+	<npc id="29302" level="99" type="Monster" name="Minion Monishe" title="">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -148,7 +148,7 @@
 			<height normal="27.5" />
 		</collision>
 	</npc>
-	<npc id="29303" level="105" type="L2Npc" name="Helios" title="Emperor of the Beginning">
+	<npc id="29303" level="105" type="Npc" name="Helios" title="Emperor of the Beginning">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -267,7 +267,7 @@
 			<height normal="124.0" />
 		</collision>
 	</npc>
-	<npc id="29304" level="105" type="L2Npc" name="Helios" title="Emperor of the Beginning">
+	<npc id="29304" level="105" type="Npc" name="Helios" title="Emperor of the Beginning">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -386,7 +386,7 @@
 			<height normal="152.0" />
 		</collision>
 	</npc>
-	<npc id="29305" level="105" type="L2RaidBoss" name="Helios" title="Emperor of the Beginning">
+	<npc id="29305" level="105" type="RaidBoss" name="Helios" title="Emperor of the Beginning">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -505,7 +505,7 @@
 			<height normal="180.0" />
 		</collision>
 	</npc>
-	<npc id="29306" level="105" type="L2Npc" name="Leopold" title="Superion Siege Cannon">
+	<npc id="29306" level="105" type="Npc" name="Leopold" title="Superion Siege Cannon">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -522,7 +522,7 @@
 			<height normal="249.0" />
 		</collision>
 	</npc>
-	<npc id="29307" level="105" type="L2Npc" name="Helios' Red Lightning" title="Enuma Elish">
+	<npc id="29307" level="105" type="Npc" name="Helios' Red Lightning" title="Enuma Elish">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -539,7 +539,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="29308" level="105" type="L2Npc" name="Helios' Blue Lightning" title="Enuma Elish">
+	<npc id="29308" level="105" type="Npc" name="Helios' Blue Lightning" title="Enuma Elish">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -556,7 +556,7 @@
 			<height normal="33.5" />
 		</collision>
 	</npc>
-	<npc id="29309" level="105" type="L2Npc" name="Leopold Origin" title="Ultimate Kamael">
+	<npc id="29309" level="105" type="Npc" name="Leopold Origin" title="Ultimate Kamael">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -573,7 +573,7 @@
 			<height normal="35.5" />
 		</collision>
 	</npc>
-	<npc id="29310" level="105" type="L2Npc" name="Enuma Elish Origin" title="Ultimate Kamael">
+	<npc id="29310" level="105" type="Npc" name="Enuma Elish Origin" title="Ultimate Kamael">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -590,7 +590,7 @@
 			<height normal="35.5" />
 		</collision>
 	</npc>
-	<npc id="29311" level="105" type="L2Npc" name="Royal Templar Colonel" title="Emperor's Escort">
+	<npc id="29311" level="105" type="Npc" name="Royal Templar Colonel" title="Emperor's Escort">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -607,7 +607,7 @@
 			<height normal="45.5" />
 		</collision>
 	</npc>
-	<npc id="29312" level="105" type="L2Npc" name="Royal Sharpshooter" title="Emperor's Escort">
+	<npc id="29312" level="105" type="Npc" name="Royal Sharpshooter" title="Emperor's Escort">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -649,7 +649,7 @@
 			<height normal="45.5" />
 		</collision>
 	</npc>
-	<npc id="29313" level="105" type="L2Npc" name="Royal Archmage" title="Emperor's Escort">
+	<npc id="29313" level="105" type="Npc" name="Royal Archmage" title="Emperor's Escort">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -692,7 +692,7 @@
 			<height normal="45.5" />
 		</collision>
 	</npc>
-	<npc id="29314" level="105" type="L2Npc" name="Royal Gatekeeper" title="Emperor's Escort">
+	<npc id="29314" level="105" type="Npc" name="Royal Gatekeeper" title="Emperor's Escort">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -716,7 +716,7 @@
 			<height normal="45.5" />
 		</collision>
 	</npc>
-	<npc id="29315" level="105" type="L2Npc" name="Mimillion" title="Red Lightning Watchman">
+	<npc id="29315" level="105" type="Npc" name="Mimillion" title="Red Lightning Watchman">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>
@@ -733,7 +733,7 @@
 			<height normal="50.5" />
 		</collision>
 	</npc>
-	<npc id="29316" level="105" type="L2Npc" name="Mimillus" title="Blue Lightning Watchman">
+	<npc id="29316" level="105" type="Npc" name="Mimillus" title="Blue Lightning Watchman">
 		<!-- AUTO GENERATED NPC TODO: FIX IT -->
 		<race>HUMAN</race>
 		<sex>FEMALE</sex>

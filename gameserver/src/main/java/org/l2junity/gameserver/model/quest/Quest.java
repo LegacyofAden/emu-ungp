@@ -20,6 +20,7 @@ package org.l2junity.gameserver.model.quest;
 
 import org.l2junity.gameserver.model.Language;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.data.HtmRepository;
@@ -33,7 +34,6 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.events.AbstractScript;
@@ -392,7 +392,7 @@ public class Quest extends AbstractScript implements IIdentifiable {
 	 * @param trigger the character which makes effect on the trap
 	 * @param action  0: trap casting its skill. 1: trigger detects the trap. 2: trigger removes the trap
 	 */
-	public final void notifyTrapAction(L2TrapInstance trap, Creature trigger, TrapAction action) {
+	public final void notifyTrapAction(TrapInstance trap, Creature trigger, TrapAction action) {
 		String res = null;
 		try {
 			res = onTrapAction(trap, trigger, action);
@@ -992,7 +992,7 @@ public class Quest extends AbstractScript implements IIdentifiable {
 	 * @param action  this parameter contains a reference to the action that was triggered.
 	 * @return
 	 */
-	public String onTrapAction(L2TrapInstance trap, Creature trigger, TrapAction action) {
+	public String onTrapAction(TrapInstance trap, Creature trigger, TrapAction action) {
 		return null;
 	}
 

@@ -189,7 +189,7 @@ public final class CursedWeaponsManager implements IGameXmlReader {
 	}
 
 	public synchronized void checkDrop(Attackable attackable, Player player) {
-		if ((attackable instanceof L2DefenderInstance) || (attackable instanceof L2GuardInstance) || (attackable instanceof GrandBossInstance) || (attackable instanceof FeedableBeastInstance) || (attackable instanceof L2FortCommanderInstance)) {
+		if ((attackable instanceof DefenderInstance) || (attackable instanceof GuardInstance) || (attackable instanceof GrandBossInstance) || (attackable instanceof FeedableBeastInstance) || (attackable instanceof FortCommanderInstance)) {
 			return;
 		}
 

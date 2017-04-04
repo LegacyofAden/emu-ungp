@@ -18,16 +18,16 @@
  */
 package org.l2junity.gameserver.network.client.send;
 
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.network.PacketWriter;
 
 public class ExAirShipInfo implements IClientOutgoingPacket {
 	// store some parameters, because they can be changed during broadcast
-	private final L2AirShipInstance _ship;
+	private final AirShipInstance _ship;
 	private final int _x, _y, _z, _heading, _moveSpeed, _rotationSpeed, _captain, _helm;
 
-	public ExAirShipInfo(L2AirShipInstance ship) {
+	public ExAirShipInfo(AirShipInstance ship) {
 		_ship = ship;
 		_x = (int) ship.getX();
 		_y = (int) ship.getY();

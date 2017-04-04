@@ -70,7 +70,7 @@ public class MonsterInstance extends Attackable {
 	@Override
 	public boolean isAutoAttackable(Creature attacker) {
 		// Check if the MonsterInstance target is aggressive
-		if (NpcConfig.GUARD_ATTACK_AGGRO_MOB && isAggressive() && (attacker instanceof L2GuardInstance)) {
+		if (NpcConfig.GUARD_ATTACK_AGGRO_MOB && isAggressive() && (attacker instanceof GuardInstance)) {
 			return true;
 		}
 
@@ -79,7 +79,7 @@ public class MonsterInstance extends Attackable {
 		}
 
 		// Anything considers monsters friendly except Players, Attackables (Guards, Friendly NPC), Traps and EffectPoints.
-		if (!attacker.isPlayable() && !attacker.isAttackable() && !(attacker instanceof L2TrapInstance) && !(attacker instanceof L2EffectPointInstance)) {
+		if (!attacker.isPlayable() && !attacker.isAttackable() && !(attacker instanceof TrapInstance) && !(attacker instanceof EffectPointInstance)) {
 			return false;
 		}
 

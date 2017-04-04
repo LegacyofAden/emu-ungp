@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.effects.effecttypes.instant;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.effects.L2EffectType;
@@ -52,7 +52,7 @@ public final class InstantRefuelAirship extends AbstractEffect {
 			return;
 		}
 
-		final L2AirShipInstance ship = casterPlayer.getAirShip();
+		final AirShipInstance ship = casterPlayer.getAirShip();
 		ship.setFuel(ship.getFuel() + _value);
 		ship.updateAbnormalVisualEffects();
 	}

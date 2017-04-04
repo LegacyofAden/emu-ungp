@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -76,7 +76,7 @@ public class BoatInnadrilTour implements Runnable {
 
 	private static final VehiclePathPoint DOCK = TOUR[TOUR.length - 1];
 
-	private final L2BoatInstance _boat;
+	private final BoatInstance _boat;
 	private int _cycle = 0;
 
 	private final CreatureSay ARRIVED_AT_INNADRIL;
@@ -93,7 +93,7 @@ public class BoatInnadrilTour implements Runnable {
 
 	private final PlaySound INNADRIL_SOUND;
 
-	public BoatInnadrilTour(L2BoatInstance boat) {
+	public BoatInnadrilTour(BoatInstance boat) {
 		_boat = boat;
 
 		ARRIVED_AT_INNADRIL = new CreatureSay(0, ChatType.BOAT, 801, SystemMessageId.THE_INNADRIL_PLEASURE_BOAT_HAS_ARRIVED_IT_WILL_ANCHOR_FOR_TEN_MINUTES);
@@ -167,7 +167,7 @@ public class BoatInnadrilTour implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(4, 111264, 226240, -3610, 32768);
+		final BoatInstance boat = BoatManager.getInstance().getNewBoat(4, 111264, 226240, -3610, 32768);
 		if (boat != null) {
 			boat.registerEngine(new BoatInnadrilTour(boat));
 			boat.runEngine(180000);

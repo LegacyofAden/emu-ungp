@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model.actor.tasks.npc.trap;
 
-import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
+import org.l2junity.gameserver.model.actor.instance.TrapInstance;
 
 /**
  * Trap unsummon task.
@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.actor.instance.L2TrapInstance;
  * @author Zoey76
  */
 public class TrapUnsummonTask implements Runnable {
-	private final L2TrapInstance _trap;
+	private final TrapInstance _trap;
 
-	public TrapUnsummonTask(L2TrapInstance trap) {
+	public TrapUnsummonTask(TrapInstance trap) {
 		_trap = trap;
 	}
 

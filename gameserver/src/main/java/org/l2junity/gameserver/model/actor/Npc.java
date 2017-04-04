@@ -57,9 +57,9 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.FishermanInstance;
-import org.l2junity.gameserver.model.actor.instance.L2TeleporterInstance;
 import org.l2junity.gameserver.model.actor.instance.MerchantInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.TeleporterInstance;
 import org.l2junity.gameserver.model.actor.instance.WarehouseInstance;
 import org.l2junity.gameserver.model.actor.status.NpcStatus;
 import org.l2junity.gameserver.model.actor.tasks.npc.RandomAnimationTask;
@@ -683,7 +683,7 @@ public class Npc extends Creature {
 				if (showPkDenyChatWindow(player, "merchant")) {
 					return;
 				}
-			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (this instanceof L2TeleporterInstance)) {
+			} else if (!PlayerConfig.ALT_GAME_KARMA_PLAYER_CAN_USE_GK && (this instanceof TeleporterInstance)) {
 				if (showPkDenyChatWindow(player, "teleporter")) {
 					return;
 				}

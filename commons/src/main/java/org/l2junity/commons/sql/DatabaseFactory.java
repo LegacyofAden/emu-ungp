@@ -22,6 +22,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.database.AbstractConnectionFactory;
+import org.l2junity.commons.database.ConnectionFactoryBuilder;
 import org.l2junity.core.configs.DatabaseConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.skife.jdbi.v2.DBI;
@@ -39,11 +41,23 @@ import java.util.concurrent.TimeUnit;
 public final class DatabaseFactory {
 	@Getter(lazy = true)
 	private final static DatabaseFactory instance = new DatabaseFactory();
+//	private final AbstractConnectionFactory connectionFactory;
 
 	private HikariDataSource source;
 	private final DBI dbi;
 
 	protected DatabaseFactory() {
+		/*
+		connectionFactory = ConnectionFactoryBuilder.builder()
+				.setPoolType(DatabaseConfig.DATABASE_POOL_TYPE)
+				.setMaxConnections(DatabaseConfig.DATABASE_MAX_CONNECTIONS)
+				.setDatabaseDriver(DatabaseConfig.DRIVER)
+				.setDatabaseUrl(DatabaseConfig.DATABASE_URL)
+				.setDatabaseLogin(DatabaseConfig.DATABASE_LOGIN)
+				.setDatabasePassword(DatabaseConfig.DATABASE_PASSWORD)
+				.build();
+		*/
+
 		try {
 			HikariConfig config = new HikariConfig();
 

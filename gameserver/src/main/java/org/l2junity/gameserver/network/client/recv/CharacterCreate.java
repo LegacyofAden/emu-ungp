@@ -229,7 +229,7 @@ public final class CharacterCreate implements IClientIncomingPacket {
 		}
 		Disconnection.of(client, newChar).storeMe().deleteMe();
 
-		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
+		final CharSelectionInfo cl = new CharSelectionInfo(client.getSessionInfo());
 		client.setCharSelection(cl.getCharInfo());
 	}
 }

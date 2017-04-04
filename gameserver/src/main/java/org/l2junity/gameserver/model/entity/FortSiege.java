@@ -30,7 +30,7 @@ import org.l2junity.gameserver.instancemanager.FortSiegeManager;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.L2FortCommanderInstance;
+import org.l2junity.gameserver.model.actor.instance.FortCommanderInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.sieges.OnFortSiegeFinish;
@@ -515,7 +515,7 @@ public class FortSiege implements Siegable {
 	 *
 	 * @param instance
 	 */
-	public void killedCommander(L2FortCommanderInstance instance) {
+	public void killedCommander(FortCommanderInstance instance) {
 		if ((getFort() != null) && (!_commanders.isEmpty())) {
 			L2Spawn spawn = instance.getSpawn();
 			if (spawn != null) {

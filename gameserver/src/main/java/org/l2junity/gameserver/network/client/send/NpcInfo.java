@@ -25,7 +25,7 @@ import org.l2junity.gameserver.enums.NpcInfoType;
 import org.l2junity.gameserver.enums.Team;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2GuardInstance;
+import org.l2junity.gameserver.model.actor.instance.GuardInstance;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
@@ -256,7 +256,7 @@ public class NpcInfo extends AbstractMaskPacket<NpcInfoType> {
 		packet.writeC(_initSize);
 
 		if (containsMask(NpcInfoType.ATTACKABLE)) {
-			packet.writeC(_npc.isAttackable() && !(_npc instanceof L2GuardInstance) ? 0x01 : 0x00);
+			packet.writeC(_npc.isAttackable() && !(_npc instanceof GuardInstance) ? 0x01 : 0x00);
 		}
 		if (containsMask(NpcInfoType.UNKNOWN1)) {
 			packet.writeD(0x00); // unknown

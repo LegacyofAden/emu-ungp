@@ -12,7 +12,7 @@ loginserver/bin
 geodriver/bin
 mmocore/bin
 network/bin
-.idea	
+.idea
 .gradle
 commons/build
 gameserver/build

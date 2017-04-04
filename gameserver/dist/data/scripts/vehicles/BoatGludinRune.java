@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.VehiclePathPoint;
-import org.l2junity.gameserver.model.actor.instance.L2BoatInstance;
+import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.network.client.send.CreatureSay;
 import org.l2junity.gameserver.network.client.send.PlaySound;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
@@ -106,7 +106,7 @@ public class BoatGludinRune implements Runnable {
 					new VehiclePathPoint(-95686, 150514, -3610, 150, 800)
 			};
 
-	private final L2BoatInstance _boat;
+	private final BoatInstance _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 
@@ -137,7 +137,7 @@ public class BoatGludinRune implements Runnable {
 	private final PlaySound GLUDIN_SOUND;
 	private final PlaySound RUNE_SOUND;
 
-	public BoatGludinRune(L2BoatInstance boat) {
+	public BoatGludinRune(BoatInstance boat) {
 		_boat = boat;
 
 		ARRIVED_AT_GLUDIN = new CreatureSay(0, ChatType.BOAT, 801, SystemMessageId.THE_FERRY_HAS_ARRIVED_AT_GLUDIN_HARBOR);
@@ -298,7 +298,7 @@ public class BoatGludinRune implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
+		final BoatInstance boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
 		if (boat != null) {
 			boat.registerEngine(new BoatGludinRune(boat));
 			boat.runEngine(180000);

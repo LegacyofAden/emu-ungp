@@ -29,8 +29,8 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.L2AirShipInstance;
-import org.l2junity.gameserver.model.actor.instance.L2ControllableAirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
+import org.l2junity.gameserver.model.actor.instance.ControllableAirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.zone.ZoneType;
@@ -88,7 +88,7 @@ public abstract class AirShipController extends AbstractNpcAI {
 	protected Movie _movie = null;
 
 	protected boolean _isBusy = false;
-	protected L2ControllableAirShipInstance _dockedShip = null;
+	protected ControllableAirShipInstance _dockedShip = null;
 	private final Runnable _decayTask = new DecayTask();
 
 	private final Runnable _departTask = new DepartTask();
@@ -135,7 +135,7 @@ public abstract class AirShipController extends AbstractNpcAI {
 			}
 
 			_isBusy = true;
-			final L2AirShipInstance ship = AirShipManager.getInstance().getNewAirShip(_shipSpawnX, _shipSpawnY, _shipSpawnZ, _shipHeading, ownerId);
+			final AirShipInstance ship = AirShipManager.getInstance().getNewAirShip(_shipSpawnX, _shipSpawnY, _shipSpawnZ, _shipHeading, ownerId);
 			if (ship != null) {
 				if (_arrivalPath != null) {
 					ship.executePath(_arrivalPath);
@@ -220,9 +220,9 @@ public abstract class AirShipController extends AbstractNpcAI {
 
 	@Override
 	public String onEnterZone(Creature character, ZoneType zone) {
-		if (character instanceof L2ControllableAirShipInstance) {
+		if (character instanceof ControllableAirShipInstance) {
 			if (_dockedShip == null) {
-				_dockedShip = (L2ControllableAirShipInstance) character;
+				_dockedShip = (ControllableAirShipInstance) character;
 				_dockedShip.setInDock(_dockZone);
 				_dockedShip.setOustLoc(_oustLoc);
 
@@ -243,7 +243,7 @@ public abstract class AirShipController extends AbstractNpcAI {
 
 	@Override
 	public String onExitZone(Creature character, ZoneType zone) {
-		if (character instanceof L2ControllableAirShipInstance) {
+		if (character instanceof ControllableAirShipInstance) {
 			if (character.equals(_dockedShip)) {
 				if (_departSchedule != null) {
 					_departSchedule.cancel(false);

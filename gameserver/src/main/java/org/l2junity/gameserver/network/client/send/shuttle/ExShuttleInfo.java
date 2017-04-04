@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.network.client.send.shuttle;
 
 import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.actor.instance.L2ShuttleInstance;
+import org.l2junity.gameserver.model.actor.instance.ShuttleInstance;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleStop;
 import org.l2junity.gameserver.network.client.OutgoingPackets;
 import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
@@ -31,10 +31,10 @@ import java.util.List;
  * @author UnAfraid
  */
 public class ExShuttleInfo implements IClientOutgoingPacket {
-	private final L2ShuttleInstance _shuttle;
+	private final ShuttleInstance _shuttle;
 	private final List<L2ShuttleStop> _stops;
 
-	public ExShuttleInfo(L2ShuttleInstance shuttle) {
+	public ExShuttleInfo(ShuttleInstance shuttle) {
 		_shuttle = shuttle;
 		_stops = shuttle.getStops();
 	}
