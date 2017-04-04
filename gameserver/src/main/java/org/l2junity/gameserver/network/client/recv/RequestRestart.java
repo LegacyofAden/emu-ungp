@@ -68,7 +68,7 @@ public final class RequestRestart implements IClientIncomingPacket {
 		client.sendPacket(RestartResponse.TRUE);
 
 		// send char list
-		final CharSelectionInfo cl = new CharSelectionInfo(client.getAccountName(), client.getSessionId().playOkID1);
+		final CharSelectionInfo cl = new CharSelectionInfo(client.getSessionInfo());
 		client.sendPacket(cl);
 		client.setCharSelection(cl.getCharInfo());
 	}

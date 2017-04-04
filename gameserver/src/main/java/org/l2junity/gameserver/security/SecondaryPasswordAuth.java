@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.security;
 
-import org.l2junity.gameserver.LoginServerThread;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.network.client.Disconnection;
