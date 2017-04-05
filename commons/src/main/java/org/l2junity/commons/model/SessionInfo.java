@@ -1,6 +1,6 @@
 package org.l2junity.commons.model;
 
-import lombok.Data;
+import lombok.*;
 import org.l2junity.commons.util.Rnd;
 
 import java.io.Serializable;
@@ -10,7 +10,12 @@ import java.io.Serializable;
  * @since 04.04.2017
  */
 @Data
+@EqualsAndHashCode(exclude = {"sessionExpire"})
 public class SessionInfo implements Serializable {
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private static final long serialVersionUID = 1L;
+
 	private String accountName;
 	private long loginKey;
 	private int playKey;
@@ -37,11 +42,5 @@ public class SessionInfo implements Serializable {
 		this.accountName = accountName;
 		this.loginKey = loginKey;
 		this.playKey = playKey;
-	}
-
-	public boolean equals(SessionInfo sessionInfo) {
-		return sessionInfo.getLoginKey() == loginKey
-				&& sessionInfo.getPlayKey() == playKey
-				&& sessionInfo.getAccountName().equals(accountName);
 	}
 }
