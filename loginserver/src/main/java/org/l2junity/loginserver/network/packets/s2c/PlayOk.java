@@ -16,30 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.l2junity.loginserver;
+package org.l2junity.loginserver.network.packets.s2c;
 
-
-import lombok.Getter;
-import org.l2junity.core.startup.StartupLevel;
-import org.l2junity.core.startup.StartupManager;
-import org.l2junity.loginserver.service.LoginServerRMI;
+import org.l2junity.loginserver.network.packets.LoginServerPacket;
 
 /**
  * @author ANZO
  */
-public class LoginServer {
-	@Getter
-	private static LoginServer instance;
+public class PlayOk extends LoginServerPacket {
+	private final long sessionId;
 
-	@Getter
-	private LoginServerRMI rmi;
-
-	private LoginServer() throws Exception {
-		StartupManager.getInstance().startup(StartupLevel.class);
-		rmi = new LoginServerRMI();
+	public PlayOk(long sessionId) {
+		this.sessionId = sessionId;
 	}
 
-	public static void main(String[] args) throws Exception {
-		instance = new LoginServer();
+	@Override
+	protected void writeImpl(PacketBody body) {
+		body.writeC(0x07);
+		body.writeQ(sessionId);
 	}
 }

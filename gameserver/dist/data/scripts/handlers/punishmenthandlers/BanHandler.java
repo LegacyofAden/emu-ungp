@@ -18,6 +18,7 @@
  */
 package handlers.punishmenthandlers;
 
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.handler.IPunishmentHandler;
 import org.l2junity.gameserver.handler.PunishmentHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
@@ -26,7 +27,6 @@ import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.client.Disconnection;
 import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.service.GameServerRMI;
 
 /**
  * This class handles ban punishment.
@@ -47,7 +47,7 @@ public class BanHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
+				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {

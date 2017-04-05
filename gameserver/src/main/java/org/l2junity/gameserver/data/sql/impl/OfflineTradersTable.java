@@ -18,6 +18,20 @@
  */
 package org.l2junity.gameserver.data.sql.impl;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.core.configs.L2JModsConfig;
+import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.GameServer;
+import org.l2junity.gameserver.enums.PrivateStoreType;
+import org.l2junity.gameserver.model.TradeItem;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.holders.SellBuffHolder;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.l2junity.gameserver.network.client.Disconnection;
+import org.l2junity.gameserver.network.client.L2GameClient;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,21 +40,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.core.configs.L2JModsConfig;
-import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.enums.PrivateStoreType;
-import org.l2junity.gameserver.model.TradeItem;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.holders.SellBuffHolder;
-import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.service.GameServerRMI;
-
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @StartupComponent("Service")
@@ -203,7 +202,7 @@ public class OfflineTradersTable {
 
 					player.spawnMe(player.getX(), player.getY(), player.getZ());
 
-					GameServerRMI.getInstance().addAccountInGame(player.getAccountName(), client);
+					GameServer.getInstance().getRmi().addAccountInGame(player.getAccountName(), client);
 
 					try (PreparedStatement stm_items = con.prepareStatement(LOAD_OFFLINE_ITEMS)) {
 						stm_items.setInt(1, player.getObjectId());

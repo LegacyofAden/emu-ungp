@@ -30,11 +30,4 @@ public class LoginServerConfig {
 			"Default: false"
 	})
 	public static boolean AUTO_CREATE_ACCOUNTS;
-
-	@ConfigProperty(name = "ShowLicense", value = "true")
-	@ConfigComments(comment = {
-			"Showing License agreement.",
-			"Default: true"
-	})
-	public static boolean SHOW_LICENCE;
 }

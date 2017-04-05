@@ -20,14 +20,14 @@ public enum CustomMessage {
     YOUR_LIST_OF_BUFFS_IS_EMPTY_PLEASE_ADD_SOME_BUFFS_FIRST,
     YOUR_TITLE_CANNOT_EXCEED_29_CHARACTERS_IN_LENGTH_PLEASE_TRY_AGAIN,
     TOO_BIG_PRICE_MAXIMAL_PRICE_IS_$,
-    $_SKIPPING_WAITING_TIME,
-    $_YOU_CANT_SKIP_WAITING_TIME_RIGHT_NOW,
-    $_ANTHARAS_HAS_BEEN_RESPAWNED,
-    $_YOU_CANT_RESPAWN_ANTHARAS_WHILE_ANTHARAS_IS_ALIVE,
-    $_ALL_MINIONS_HAS_BEEN_DELETED,
-    $_YOU_CANT_DESPAWN_MINIONS_RIGHT_NOW,
-    $_FIGHT_HAS_BEEN_ABORTED,
-    $_YOU_CANT_ABORT_FIGHT_RIGHT_NOW,
+	$_SKIPPING_WAITING_TIME,
+	$_YOU_CANT_SKIP_WAITING_TIME_RIGHT_NOW,
+	$_ANTHARAS_HAS_BEEN_RESPAWNED,
+	$_YOU_CANT_RESPAWN_ANTHARAS_WHILE_ANTHARAS_IS_ALIVE,
+	$_ALL_MINIONS_HAS_BEEN_DELETED,
+	$_YOU_CANT_DESPAWN_MINIONS_RIGHT_NOW,
+	$_FIGHT_HAS_BEEN_ABORTED,
+	$_YOU_CANT_ABORT_FIGHT_RIGHT_NOW,
 
     ;
 
@@ -66,7 +66,7 @@ public enum CustomMessage {
         send(player);
     }
 
-    public static boolean contains(String value) {
-        return Stream.of(values()).anyMatch(e -> e.name().equals(value));
-    }
+	public static boolean contains(String value) {
+		return Stream.of(values()).anyMatch(e -> e.name().equals(value));
+	}
 }
