@@ -31,6 +31,7 @@ import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.functions.FuncTemplate;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -146,8 +147,8 @@ public final class DocumentItem implements IGameXmlReader {
 				Condition condition = parseCondition(n.getFirstChild());
 				Node msg = n.getAttributes().getNamedItem("msg");
 				Node msgId = n.getAttributes().getNamedItem("msgId");
-				if ((condition != null) && (msg != null)) {
-					condition.setMessage(msg.getNodeValue());
+				if ((condition != null) && (msg != null) && CustomMessage.contains(msg.getNodeValue())) {
+					condition.setMessage(CustomMessage.valueOf(msg.getNodeValue()));
 				} else if ((condition != null) && (msgId != null)) {
 					condition.setMessageId(Integer.decode(msgId.getNodeValue()));
 					Node addName = n.getAttributes().getNamedItem("addName");
