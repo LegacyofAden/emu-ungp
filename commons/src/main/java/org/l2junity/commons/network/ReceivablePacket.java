@@ -48,6 +48,12 @@ public abstract class ReceivablePacket<TClient extends Client> implements Runnab
 		getBuffer().get(dst);
 	}
 
+	protected byte[] readB(int len) {
+		byte[] result = new byte[len];
+		getBuffer().get(result);
+		return result;
+	}
+
 	protected void readB(byte[] dst, int offset, int len) {
 		getBuffer().get(dst, offset, len);
 	}
