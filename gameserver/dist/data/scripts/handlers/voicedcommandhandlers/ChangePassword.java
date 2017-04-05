@@ -18,23 +18,21 @@
  */
 package handlers.voicedcommandhandlers;
 
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IVoicedCommandHandler;
 import org.l2junity.gameserver.handler.VoicedCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.service.GameServerRMI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.StringTokenizer;
 
 /**
  * @author Nik
  */
+@Slf4j
 public class ChangePassword implements IVoicedCommandHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ChangePassword.class);
-
 	private static final String[] _voicedCommands =
 			{
 					"changepassword"
@@ -70,7 +68,7 @@ public class ChangePassword implements IVoicedCommandHandler {
 						return false;
 					}
 
-					GameServerRMI.getInstance().changePassword(activeChar, curpass, newpass);
+					GameServer.getInstance().getRmi().changePassword(activeChar, curpass, newpass);
 					activeChar.sendMessage("Password changed.");
 				} else {
 					activeChar.sendMessage("Invalid password data! You have to fill all boxes.");
@@ -78,7 +76,7 @@ public class ChangePassword implements IVoicedCommandHandler {
 				}
 			} catch (Exception e) {
 				activeChar.sendMessage("A problem occured while changing password!");
-				LOGGER.warn("", e);
+				log.warn("", e);
 			}
 		} else {
 			// showHTML(activeChar);

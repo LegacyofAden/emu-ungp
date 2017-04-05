@@ -18,16 +18,16 @@
  */
 package handlers.admincommandhandlers;
 
-import java.util.StringTokenizer;
-
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.ServerStatus;
 import org.l2junity.core.configs.GeneralConfig;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.service.GameServerRMI;
+
+import java.util.StringTokenizer;
 
 /**
  * This class handles the admin commands that acts on the login
@@ -48,13 +48,13 @@ public class AdminLogin implements IAdminCommandHandler {
 	@Override
 	public boolean useAdminCommand(String command, Player activeChar) {
 		if (command.equals("admin_server_gm_only")) {
-			GameServerRMI.getInstance().setServerStatus(ServerStatus.GM_ONLY);
+			GameServer.getInstance().getRmi().setServerStatus(ServerStatus.GM_ONLY);
 			GeneralConfig.SERVER_GMONLY = true;
 
 			activeChar.sendMessage("Server is now GM only");
 			showMainPage(activeChar);
 		} else if (command.equals("admin_server_all")) {
-			GameServerRMI.getInstance().setServerStatus(ServerStatus.AUTO);
+			GameServer.getInstance().getRmi().setServerStatus(ServerStatus.AUTO);
 			GeneralConfig.SERVER_GMONLY = false;
 			activeChar.sendMessage("Server is not GM only anymore");
 			showMainPage(activeChar);
@@ -64,7 +64,7 @@ public class AdminLogin implements IAdminCommandHandler {
 				st.nextToken();
 				String number = st.nextToken();
 				try {
-					GameServerRMI.getInstance().setMaxOnline(Integer.parseInt(number));
+					GameServer.getInstance().getRmi().setMaxOnline(Integer.parseInt(number));
 					activeChar.sendMessage("maxPlayer set to " + number);
 					showMainPage(activeChar);
 				} catch (NumberFormatException e) {
@@ -91,7 +91,7 @@ public class AdminLogin implements IAdminCommandHandler {
 				}
 				if (GeneralConfig.SERVER_LIST_TYPE != newType) {
 					GeneralConfig.SERVER_LIST_TYPE = newType;
-					GameServerRMI.getInstance().setServerType(newType);
+					GameServer.getInstance().getRmi().setServerType(newType);
 					activeChar.sendMessage("Server Type changed to " + getServerTypeName(newType));
 					showMainPage(activeChar);
 				} else {
@@ -111,7 +111,7 @@ public class AdminLogin implements IAdminCommandHandler {
 					age = Integer.parseInt(mode);
 					if (GeneralConfig.SERVER_LIST_AGE != age) {
 						GeneralConfig.SERVER_LIST_AGE = age;
-						GameServerRMI.getInstance().setServerAgeLimit(AgeLimit.valueOf(age));
+						GameServer.getInstance().getRmi().setServerAgeLimit(AgeLimit.valueOf(age));
 						activeChar.sendMessage("Server Age changed to " + age);
 						showMainPage(activeChar);
 					} else {
@@ -136,10 +136,10 @@ public class AdminLogin implements IAdminCommandHandler {
 	private void showMainPage(Player activeChar) {
 		final NpcHtmlMessage html = new NpcHtmlMessage(0, 1);
 		html.setFile(activeChar.getLang(), "admin/login.htm");
-		html.replace("%status%", GameServerRMI.getInstance().getServerStatus().toString());
+		html.replace("%status%", GameServer.getInstance().getRmi().getServerStatus().toString());
 		html.replace("%clock%", getServerTypeName(GeneralConfig.SERVER_LIST_TYPE));
 		html.replace("%brackets%", String.valueOf(GeneralConfig.SERVER_LIST_BRACKET));
-		html.replace("%max_players%", String.valueOf(GameServerRMI.getInstance().getMaxOnline()));
+		html.replace("%max_players%", String.valueOf(GameServer.getInstance().getRmi().getMaxOnline()));
 		activeChar.sendPacket(html);
 	}
 

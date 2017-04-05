@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS `accounts` (
-  `id` BIGINT AUTO_INCREMENT,
-  `name` VARCHAR(64) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `last_server_id` TINYINT UNSIGNED,
-  `access_level` TINYINT NOT NULL DEFAULT 1,
-  `last_ip` VARCHAR(32),
+  `id`               BIGINT AUTO_INCREMENT,
+  `name`             VARCHAR(64)  NOT NULL,
+  `password`         VARCHAR(128) NOT NULL,
+  `last_server_id`   TINYINT UNSIGNED,
+  `access_level`     TINYINT      NOT NULL DEFAULT 1,
+  `last_ip`          VARCHAR(32),
   `last_time_access` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE INDEX(`name`),
   PRIMARY KEY(`id`)
 );
