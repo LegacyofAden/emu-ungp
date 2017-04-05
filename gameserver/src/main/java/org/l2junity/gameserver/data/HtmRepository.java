@@ -130,7 +130,7 @@ public class HtmRepository {
 				Path root = zipFileSystem.getPath("/");
 				Files.walk(root).filter(item -> FilenameUtils.getExtension(item.toString()).equals("htm")).forEach(path -> {
 					try (InputStream is = Files.newInputStream(path)) {
-						addHtm(language, path, IOUtils.toString(is, UTF_8));
+						addHtm(language, path.getFileName(), IOUtils.toString(is, UTF_8));
 					} catch (Exception e) {
 						log.error("Error while loading html=[{}] from archive=[{}]", path, filePath);
 					}
@@ -152,6 +152,8 @@ public class HtmRepository {
 		if (ScriptsConfig.HTML_COMPRESSION_ENABLE) {
 			htm = htmlCompressor.compress(htm);
 		}
-		caches.get(language).putIfAbsent(htmPath.toString().replaceFirst("/*$", ""), htm);
+		caches.get(language).putIfAbsent(htmPath.toString()
+				.replaceFirst("/*$", "")
+				.replace("\\", "/"), htm);
 	}
 }

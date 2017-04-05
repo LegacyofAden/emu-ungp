@@ -32,7 +32,7 @@ public class LoginServer {
 	private static LoginServer instance;
 
 	@Getter
-	private LoginServerRMI rmi;
+	private static LoginServerRMI rmi;
 
 	private LoginServer() throws Exception {
 		StartupManager.getInstance().startup(StartupLevel.class);

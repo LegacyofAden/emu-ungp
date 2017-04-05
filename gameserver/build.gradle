@@ -33,9 +33,9 @@ sourceSets {
 dependencies {
 	provided('org.projectlombok:lombok:+')
 	antlr('org.antlr:antlr4:+')
-	compile project(':commons')
-	compile project(':geodriver')
-	compile project(':network')
+	provided project(':commons')
+	provided project(':geodriver')
+	provided project(':network')
 
 	compile('com.googlecode.htmlcompressor:htmlcompressor:1.5.2')
 	compile('com.google.javascript:closure-compiler:v20151216')
