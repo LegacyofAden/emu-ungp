@@ -591,7 +591,7 @@ public class Npc extends Creature {
 
 		String html = HtmRepository.getInstance().getCustomHtm("default/" + pom + ".htm");
 		if (html != null) {
-			return html;
+			return "default/" + pom + ".htm";
 		}
 
 		// If the file is not found, the standard message "I have nothing to say to you" is returned
