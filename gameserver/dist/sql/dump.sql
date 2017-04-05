@@ -4100,7 +4100,7 @@ CREATE TABLE IF NOT EXISTS `character_factions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;CREATE TABLE IF NOT EXISTS `character_variables` (
   `charId` int(10) UNSIGNED NOT NULL,
   `var` varchar(255) NOT NULL,
-  `val` text NOT NULL
+  `val` varbinary(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;CREATE TABLE IF NOT EXISTS `pledge_applicant` (
   `charId` int(10) NOT NULL,
   `clanId` int(10) NOT NULL,

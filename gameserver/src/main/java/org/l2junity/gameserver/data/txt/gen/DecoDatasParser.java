@@ -54,7 +54,7 @@ public class DecoDatasParser extends Parser {
 		DYESTUFF=162, COBWEB=163, RUNE_XP=164, RUNE_SP=165, RUNE_REMOVE_PENALTY=166, 
 		NAME=167, WS=168, LINE_COMMENT=169, STAR_COMMENT=170;
 	public static final int
-		RULE_file = 0, RULE_decoData = 1, RULE_id = 2, RULE_name = 3, RULE_type = 4,
+			RULE_file = 0, RULE_decoData = 1, RULE_id = 2, RULE_name = 3, RULE_type = 4,
 			RULE_level = 5, RULE_depth_ = 6, RULE_funcValue = 7, RULE_cost = 8, RULE_deco_type = 9,
 		RULE_cost_object = 10, RULE_identifier_object = 11, RULE_bool_object = 12, 
 		RULE_byte_object = 13, RULE_int_object = 14, RULE_long_object = 15, RULE_double_object = 16, 
@@ -63,7 +63,7 @@ public class DecoDatasParser extends Parser {
 		RULE_int_list = 23, RULE_double_list = 24, RULE_base_attribute_attack = 25, 
 		RULE_attack_attribute = 26, RULE_attribute = 27, RULE_category_list = 28;
 	public static final String[] ruleNames = {
-		"file", "decoData", "id", "name", "type", "level", "depth_", "funcValue",
+			"file", "decoData", "id", "name", "type", "level", "depth_", "funcValue",
 			"cost", "deco_type", "cost_object", "identifier_object", "bool_object",
 		"byte_object", "int_object", "long_object", "double_object", "string_object", 
 		"name_object", "category_object", "vector3D_object", "empty_list", "identifier_list", 
@@ -74,8 +74,8 @@ public class DecoDatasParser extends Parser {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'deco_begin'", "'deco_end'", "'id'", "'='", "'name'", "'type'", 
 		"'level'", "'depth'", "'func'", "'('", "')'", "'cost'", "'0'", "'1'", 
-		"'2'", "'3'", "'4'", "'5'", "'6'", "'7'", "'8'", "'9'", "'10'", "'11'", 
-		"'12'", "'{'", "':'", "'}'", "'slot_lhand'", "'['", "']'", "'base_attribute_attack'",
+		"'2'", "'3'", "'4'", "'5'", "'6'", "'7'", "'8'", "'9'", "'10'", "'11'",
+			"'12'", "'{'", "':'", "'}'", "'slot_lhand'", "'['", "']'", "'base_attribute_attack'",
 			"'none'", "'hp_regen'", "'mp_regen'", "'cp_regen'", "'exp_restore'", "'teleport'",
 		"'broadcast'", "'curtain'", "'hanging'", "'outerplatform'", "'platform'", 
 		"'item_create'", "'buff'", null, null, null, null, "'fire'", "'water'", 
@@ -396,7 +396,6 @@ public class DecoDatasParser extends Parser {
 	public static class TypeContext extends ParserRuleContext {
 		public DecoFunctionType value;
 		public Deco_typeContext dt;
-
 		public Deco_typeContext deco_type() {
 			return getRuleContext(Deco_typeContext.class, 0);
 		}
@@ -663,7 +662,6 @@ public class DecoDatasParser extends Parser {
 
 	public static class Deco_typeContext extends ParserRuleContext {
 		public DecoFunctionType value;
-
 		public Deco_typeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}

@@ -82,8 +82,8 @@ public class DecoDatasLexer extends Lexer {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'deco_begin'", "'deco_end'", "'id'", "'='", "'name'", "'type'", 
 		"'level'", "'depth'", "'func'", "'('", "')'", "'cost'", "'0'", "'1'", 
-		"'2'", "'3'", "'4'", "'5'", "'6'", "'7'", "'8'", "'9'", "'10'", "'11'", 
-		"'12'", "'{'", "':'", "'}'", "'slot_lhand'", "'['", "']'", "'base_attribute_attack'",
+		"'2'", "'3'", "'4'", "'5'", "'6'", "'7'", "'8'", "'9'", "'10'", "'11'",
+			"'12'", "'{'", "':'", "'}'", "'slot_lhand'", "'['", "']'", "'base_attribute_attack'",
 			"'none'", "'hp_regen'", "'mp_regen'", "'cp_regen'", "'exp_restore'", "'teleport'",
 		"'broadcast'", "'curtain'", "'hanging'", "'outerplatform'", "'platform'", 
 		"'item_create'", "'buff'", null, null, null, null, "'fire'", "'water'", 
