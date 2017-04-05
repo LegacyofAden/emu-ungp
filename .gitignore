@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+commons/build/
+loginserver/build/
+gameserver/build/
+geodriver/build/
+network/build/
+loginserver/dist/log/
+gameserver/dist/log/
+*.properties
