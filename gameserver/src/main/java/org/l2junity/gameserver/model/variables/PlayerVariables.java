@@ -94,7 +94,7 @@ public class PlayerVariables extends AbstractVariables {
 			try (ResultSet rset = st.executeQuery()) {
 				while (rset.next()) {
 					Object deSerializedObject;
-					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("value")))) {
+					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("val")))) {
 						deSerializedObject = objectIn.readObject();
 					} catch (IOException | ClassNotFoundException e) {
 						LOGGER.warn("Couldn't restore variable {} for: {}", rset.getString("var"), getPlayer(), e);

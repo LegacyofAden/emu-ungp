@@ -4,7 +4,7 @@ apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-idea'
 apply plugin: 'propdeps-eclipse'
 
-defaultTasks('build')
+defaultTasks('compile')
 
 dependencies {
 	// Annotation processing
