@@ -87,6 +87,10 @@ public final class FloodProtectorAction {
 	 * @return true if action is allowed, otherwise false
 	 */
 	public boolean tryPerformAction(final String command) {
+		if (_config == null) {
+			return true;
+		}
+
 		final int curTick = GameTimeManager.getInstance().getGameTicks();
 
 		if ((_client.getActiveChar() != null) && _client.getActiveChar().canOverrideCond(PcCondOverride.FLOOD_CONDITIONS)) {

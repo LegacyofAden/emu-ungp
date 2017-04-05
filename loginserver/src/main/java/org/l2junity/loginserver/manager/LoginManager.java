@@ -36,6 +36,7 @@ import org.l2junity.loginserver.network.packets.s2c.PlayOk;
 import org.mindrot.jbcrypt.BCrypt;
 import org.skife.jdbi.v2.exceptions.DBIException;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 /**
@@ -78,10 +79,8 @@ public class LoginManager {
 				}
 			}
 
-			account.setLastIp(client.getHostAddress());
-			account.setLastTimeAccess(Instant.now());
-			accountsDAO.updateLastIp(account);
-			//accountsDAO.updateLastTimeAccess(account);
+			accountsDAO.updateLastIp(account, client.getHostAddress());
+			accountsDAO.updateLastTimeAccess(account, new Timestamp(Instant.now().toEpochMilli()));
 
 			client.setAccount(account);
 

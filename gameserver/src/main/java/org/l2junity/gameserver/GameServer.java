@@ -17,7 +17,7 @@ public final class GameServer {
 	private static GameServer instance;
 
 	@Getter
-	private GameServerRMI rmi;
+	private static GameServerRMI rmi;
 
 	private GameServer() throws Exception {
 		StartupManager.getInstance().startup(StartupLevel.class);
