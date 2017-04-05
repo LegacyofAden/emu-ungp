@@ -152,7 +152,9 @@ public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerR
 	public void kickPlayerByAccount(String account) {
 		for(GameServerInfo gameServerInfo : getGameServers()) {
 			try {
-				gameServerInfo.getConnection().kickPlayerByAccount(account);
+				if (gameServerInfo.getConnection() != null) {
+					gameServerInfo.getConnection().kickPlayerByAccount(account);
+				}
 			}
 			catch (RemoteException e) {
 				log.error("Error while calling kickPlayerByAccount on serverId={}", gameServerInfo.getId(), e);
