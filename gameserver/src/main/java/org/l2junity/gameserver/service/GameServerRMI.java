@@ -14,7 +14,6 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.NetworkConfig;
-import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.client.ConnectionState;
 import org.l2junity.gameserver.network.client.L2GameClient;
@@ -46,18 +45,16 @@ import java.util.concurrent.TimeUnit;
  * @since 03.04.2017
  */
 @Slf4j
-@StartupComponent("Network")
 public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI {
-	protected static final Logger ACCOUNTING_LOGGER = LoggerFactory.getLogger("accounting");
+	private static final Logger ACCOUNTING_LOGGER = LoggerFactory.getLogger("accounting");
 
 	private ILoginServerRMI connection;
 	private GameServerInfo gameServerInfo;
 	private transient ScheduledFuture<?> reconnectTask;
 
-	private final Map<String, SessionInfo> loginSessions = new ConcurrentHashMap<>();
 	private final Map<String, L2GameClient> accountsInGameServer = new ConcurrentHashMap<>();
 
-	GameServerRMI() throws RemoteException {
+	public GameServerRMI() throws RemoteException {
 		gameServerInfo = new GameServerInfo(GameserverConfig.SERVER_ID, NetworkConfig.HOST, NetworkConfig.PORT);
 		gameServerInfo.setMaxOnline(GameserverConfig.MAXIMUM_ONLINE_USERS);
 		gameServerInfo.setStatus(ServerStatus.AUTO);
@@ -113,11 +110,6 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		}
 
 		return new AccountInfo(account, chars, charToDel);
-	}
-
-	@Override
-	public void addLoginSession(SessionInfo sessionInfo) throws RemoteException {
-		loginSessions.put(sessionInfo.getAccountName(), sessionInfo);
 	}
 
 	@Override
@@ -266,20 +258,5 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 				}
 			}
 		}
-	}
-
-	public static GameServerRMI getInstance() {
-		return SingletonHolder.instance.get();
-	}
-
-	private static class SingletonHolder {
-		protected static final ThreadLocal<GameServerRMI> instance = ThreadLocal.withInitial(() -> {
-			try {
-				return new GameServerRMI();
-			} catch (RemoteException e) {
-				log.error("Error while initializing GameServerRMI server", e);
-			}
-			return null;
-		});
 	}
 }

@@ -18,9 +18,8 @@
  */
 package handlers.punishmenthandlers;
 
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.IPunishmentHandler;
 import org.l2junity.gameserver.handler.PunishmentHandler;
@@ -38,7 +37,8 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.JailZone;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.service.GameServerRMI;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class handles jail punishment.
@@ -73,7 +73,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
+				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {
@@ -116,7 +116,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServerRMI.getInstance().getClient(account);
+				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {

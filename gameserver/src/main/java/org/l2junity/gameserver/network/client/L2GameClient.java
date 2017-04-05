@@ -18,16 +18,12 @@
  */
 package org.l2junity.gameserver.network.client;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.concurrent.locks.ReentrantLock;
-
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
-import org.l2junity.commons.model.SessionInfo;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
@@ -40,14 +36,9 @@ import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.LeaveWorld;
-import org.l2junity.gameserver.network.client.send.ServerClose;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.client.send.*;
 import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
-import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.util.FloodProtectors;
 import org.l2junity.network.ChannelInboundHandler;
 import org.l2junity.network.ICrypt;
@@ -55,8 +46,12 @@ import org.l2junity.network.IIncomingPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents a client connected on Game Server.
@@ -117,7 +112,7 @@ public final class L2GameClient extends ChannelInboundHandler<L2GameClient> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) {
 		LOG_ACCOUNTING.debug("Client Disconnected: {}", ctx.channel());
-		GameServerRMI.getInstance().removeAccountInGame(getAccountName());
+		GameServer.getInstance().getRmi().removeAccountInGame(getAccountName());
 		IdFactory.getInstance().releaseId(getObjectId());
 
 		Disconnection.of(this).onDisconnection();

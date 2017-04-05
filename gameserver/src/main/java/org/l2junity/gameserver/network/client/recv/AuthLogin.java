@@ -20,9 +20,9 @@ package org.l2junity.gameserver.network.client.recv;
 
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.SessionInfo;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.LoginFail;
-import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.network.PacketReader;
 
 @Slf4j
@@ -50,7 +50,7 @@ public final class AuthLogin implements IClientIncomingPacket {
 
 		if (client.getAccountName() == null) {
 			SessionInfo sessionInfo = new SessionInfo(accountName, loginKey, playKey);
-			if (!GameServerRMI.getInstance().tryAddGameClient(client, sessionInfo)) {
+			if (!GameServer.getInstance().getRmi().tryAddGameClient(client, sessionInfo)) {
 				log.warn("Session key isn't correct. Closing connection for account {}", accountName);
 				client.close(new LoginFail(LoginFail.SYSTEM_ERROR_LOGIN_LATER));
 			}
