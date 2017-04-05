@@ -24,6 +24,7 @@ import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.io.Closeable;
+import java.sql.Timestamp;
 
 /**
  * @author NosBit
@@ -41,10 +42,10 @@ public interface AccountsDAO extends Closeable {
 	int updatePassword(@BindBean Account account);
 
 	@SqlUpdate("UPDATE `accounts` SET `last_ip` = :lastIp WHERE `id` = :id")
-	int updateLastIp(@BindBean Account account);
+	int updateLastIp(@BindBean Account account, @Bind("lastIp") String lastIp);
 
 	@SqlUpdate("UPDATE `accounts` SET `last_time_access` = :lastTimeAccess WHERE `id` = :id")
-	int updateLastTimeAccess(@BindBean Account account);
+	int updateLastTimeAccess(@BindBean Account account, @Bind("lastTimeAccess") Timestamp lastTimeAccess);
 
 	@SqlUpdate("UPDATE `accounts` SET `last_server_id` = :lastServerId WHERE `id` = :id")
 	int updateLastServerId(@Bind("id") long id, @Bind("lastServerId") short lastServerId);

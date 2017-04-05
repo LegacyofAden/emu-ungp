@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class LoginServerRMI extends UnicastRemoteObject implements ILoginServerRMI, IXmlReader {
-	private final Map<Short, GameServerInfo> gameservers = new HashMap<>();
+	private static final Map<Short, GameServerInfo> gameservers = new HashMap<>();
 
 	public LoginServerRMI() throws RemoteException {
 		try {

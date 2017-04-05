@@ -18,6 +18,9 @@
  */
 package org.l2junity.commons.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.enums.AgeLimit;
 import org.l2junity.commons.model.enums.ServerStatus;
@@ -35,6 +38,10 @@ import java.util.Set;
  */
 @Slf4j
 public class GameServerInfo implements Serializable {
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private static final long serialVersionUID = 1L;
+
 	private final short id;
 	private String name;
 	private boolean showing;
@@ -69,7 +76,7 @@ public class GameServerInfo implements Serializable {
 
 	public void update(IGameServerRMI connection, GameServerInfo gameserver) {
 		this.connection = connection;
-
+		this.status = gameserver.getStatus();
 		this.ageLimit = gameserver.getAgeLimit();
 		this.serverTypes = gameserver.getServerTypes();
 		this.address = gameserver.getAddress();

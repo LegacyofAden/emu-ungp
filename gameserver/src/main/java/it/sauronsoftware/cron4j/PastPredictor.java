@@ -27,7 +27,7 @@ import java.util.TimeZone;
  * @author Carlo Pelliccia
  */
 public class PastPredictor {
-	
+
 	/**
 	 * The scheduling pattern on which the predictor works.
 	 */

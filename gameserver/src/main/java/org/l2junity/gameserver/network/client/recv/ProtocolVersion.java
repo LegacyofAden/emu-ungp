@@ -18,16 +18,14 @@
  */
 package org.l2junity.gameserver.network.client.recv;
 
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.network.client.L2GameClient;
 import org.l2junity.gameserver.network.client.send.KeyPacket;
 import org.l2junity.network.PacketReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+@Slf4j(topic = "accounting")
 public final class ProtocolVersion implements IClientIncomingPacket {
-	private static final Logger _logAccounting = LoggerFactory.getLogger("accounting");
-
 	private int _version;
 
 	@Override
@@ -43,7 +41,7 @@ public final class ProtocolVersion implements IClientIncomingPacket {
 			// this is just a ping attempt from the new C2 client
 			client.closeNow();
 		} else if (!GameserverConfig.PROTOCOL_LIST.contains(_version)) {
-			_logAccounting.warn("Wrong protocol version {}, {}", _version, client);
+			log.warn("Wrong protocol version {}, {}", _version, client);
 			client.setProtocolOk(false);
 			client.close(new KeyPacket(client.enableCrypt(), 0));
 		} else {
