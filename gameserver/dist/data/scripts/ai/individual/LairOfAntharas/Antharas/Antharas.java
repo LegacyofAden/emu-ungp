@@ -18,10 +18,7 @@
  */
 package ai.individual.LairOfAntharas.Antharas;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import ai.AbstractNpcAI;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.core.configs.GrandBossConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -40,15 +37,14 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.SpecialCamera;
+import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 import org.l2junity.gameserver.network.client.send.string.NpcStringId;
 import org.l2junity.gameserver.util.Broadcast;
 
-import ai.AbstractNpcAI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Antharas AI.
@@ -417,9 +413,9 @@ public final class Antharas extends AbstractNpcAI {
 				if (getStatus() == WAITING) {
 					cancelQuestTimer("SPAWN_ANTHARAS", null, null);
 					notifyEvent("SPAWN_ANTHARAS", null, null);
-					player.sendMessage(getClass().getSimpleName() + ": Skipping waiting time ...");
+					player.sendMessage(CustomMessage.$_SKIPPING_WAITING_TIME, getClass().getSimpleName());
 				} else {
-					player.sendMessage(getClass().getSimpleName() + ": You cant skip waiting time right now!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_SKIP_WAITING_TIME_RIGHT_NOW, getClass().getSimpleName());
 				}
 				break;
 			}
@@ -428,9 +424,9 @@ public final class Antharas extends AbstractNpcAI {
 					setRespawn(0);
 					cancelQuestTimer("CLEAR_STATUS", null, null);
 					notifyEvent("CLEAR_STATUS", null, null);
-					player.sendMessage(getClass().getSimpleName() + ": Antharas has been respawned.");
+					player.sendMessage(CustomMessage.$_ANTHARAS_HAS_BEEN_RESPAWNED, getClass().getSimpleName());
 				} else {
-					player.sendMessage(getClass().getSimpleName() + ": You cant respawn antharas while antharas is alive!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_RESPAWN_ANTHARAS_WHILE_ANTHARAS_IS_ALIVE, getClass().getSimpleName());
 				}
 				break;
 			}
@@ -470,9 +466,9 @@ public final class Antharas extends AbstractNpcAI {
 							}
 						}
 					}
-					player.sendMessage(getClass().getSimpleName() + ": Fight has been aborted!");
+					player.sendMessage(CustomMessage.$_FIGHT_HAS_BEEN_ABORTED, getClass().getSimpleName());
 				} else {
-					player.sendMessage(getClass().getSimpleName() + ": You cant abort fight right now!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_ABORT_FIGHT_RIGHT_NOW, getClass().getSimpleName());
 				}
 				break;
 			}

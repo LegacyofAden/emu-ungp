@@ -28,4 +28,125 @@
 		<lang name="en">Too big price! Maximal price is %s%</lang>
 		<lang name="ru">Слишком высокая цена! Максимально доступная цена %s%</lang>
 	</message>
+	<message name="$_SKIPPING_WAITING_TIME">
+		<lang name="en">%s%: Skipping waiting time ...</lang>
+		<lang name="ru">%s%: Пропуск времени ожидания ...</lang>
+	</message>
+	<message name="$_YOU_CANT_SKIP_WAITING_TIME_RIGHT_NOW">
+		<lang name="en">%s%: You cant skip waiting time right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_ANTHARAS_HAS_BEEN_RESPAWNED">
+		<lang name="en">%s%: Antharas has been respawned.</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_YOU_CANT_RESPAWN_ANTHARAS_WHILE_ANTHARAS_IS_ALIVE">
+		<lang name="en">%s%: You cant respawn antharas while antharas is alive!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_ALL_MINIONS_HAS_BEEN_DELETED">
+		<lang name="en">%s%: All minions has been deleted!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_YOU_CANT_DESPAWN_MINIONS_RIGHT_NOW">
+		<lang name="en">%s%: You cant despawn minions right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_FIGHT_HAS_BEEN_ABORTED">
+		<lang name="en">%s%: Fight has been aborted!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_YOU_CANT_ABORT_FIGHT_RIGHT_NOW">
+		<lang name="en">%s%: You cant abort fight right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="">
+		<lang name="en"></lang>
+		<lang name="ru"></lang>
+	</message>
+
 </list>

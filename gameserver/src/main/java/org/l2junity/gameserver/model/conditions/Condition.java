@@ -21,6 +21,7 @@ package org.l2junity.gameserver.model.conditions;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
+import org.l2junity.gameserver.network.client.send.string.CustomMessage;
 
 /**
  * The Class Condition.
@@ -28,7 +29,7 @@ import org.l2junity.gameserver.model.skills.Skill;
  * @author mkizub
  */
 public abstract class Condition {
-	private String _msg;
+	private CustomMessage _msg;
 	private int _msgId;
 	private boolean _addName = false;
 
@@ -37,7 +38,7 @@ public abstract class Condition {
 	 *
 	 * @param msg the new message
 	 */
-	public final void setMessage(String msg) {
+	public final void setMessage(CustomMessage msg) {
 		_msg = msg;
 	}
 
@@ -46,7 +47,7 @@ public abstract class Condition {
 	 *
 	 * @return the message
 	 */
-	public final String getMessage() {
+	public final CustomMessage getMessage() {
 		return _msg;
 	}
 
