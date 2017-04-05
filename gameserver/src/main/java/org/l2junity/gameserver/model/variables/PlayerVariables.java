@@ -18,6 +18,13 @@
  */
 package org.l2junity.gameserver.model.variables;
 
+import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.holders.ItemHolder;
+import org.l2junity.gameserver.model.world.WorldManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,19 +33,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
-import org.l2junity.commons.sql.DatabaseFactory;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.holders.ItemHolder;
-import org.l2junity.gameserver.model.world.WorldManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
@@ -49,7 +45,7 @@ public class PlayerVariables extends AbstractVariables {
 	// SQL Queries.
 	private static final String SELECT_QUERY = "SELECT * FROM character_variables WHERE charId = ?";
 	private static final String DELETE_QUERY = "DELETE FROM character_variables WHERE charId = ?";
-	private static final String INSERT_QUERY = "INSERT INTO character_variables (charId, var, value) VALUES (?, ?, ?)";
+	private static final String INSERT_QUERY = "INSERT INTO character_variables (charId, var, val) VALUES (?, ?, ?)";
 
 	// Public variable names
 	public static final String HAIR_ACCESSORY_VARIABLE_NAME = "HAIR_ACCESSORY_ENABLED";
