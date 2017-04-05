@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/route.xsd">
+	<route alias="boss_wagon_1" move_type="MoveSuperPoint_FollowRail">
+		<node id="0" fstring_index="-1" social_number="-1" delay="-1" x="-179551" y="207088" z="-15488" />
+		<node id="1" fstring_index="-1" social_number="-1" delay="-1" x="-179550" y="207375" z="-15496" />
+		<node id="2" fstring_index="-1" social_number="-1" delay="-1" x="-180162" y="207441" z="-15496" />
+		<node id="3" fstring_index="-1" social_number="-1" delay="-1" x="-180717" y="207687" z="-15496" />
+		<node id="4" fstring_index="-1" social_number="-1" delay="-1" x="-181138" y="208053" z="-15496" />
+		<node id="5" fstring_index="-1" social_number="-1" delay="-1" x="-181565" y="208512" z="-15496" />
+		<node id="6" fstring_index="-1" social_number="-1" delay="-1" x="-181726" y="209028" z="-15496" />
+		<node id="7" fstring_index="-1" social_number="-1" delay="-1" x="-181794" y="209631" z="-15496" />
+		<node id="8" fstring_index="-1" social_number="-1" delay="-1" x="-181714" y="210148" z="-15496" />
+		<node id="9" fstring_index="-1" social_number="-1" delay="-1" x="-181520" y="210667" z="-15496" />
+		<node id="10" fstring_index="-1" social_number="-1" delay="-1" x="-181140" y="211155" z="-15496" />
+		<node id="11" fstring_index="-1" social_number="-1" delay="-1" x="-180684" y="211526" z="-15496" />
+		<node id="12" fstring_index="-1" social_number="-1" delay="-1" x="-180233" y="211774" z="-15496" />
+		<node id="13" fstring_index="-1" social_number="-1" delay="-1" x="-179550" y="211888" z="-15496" />
+		<node id="14" fstring_index="-1" social_number="-1" delay="-1" x="-179547" y="211251" z="-15472" />
+	</route>
+</list>

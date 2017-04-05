@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/route.xsd">
+	<route alias="DB_SP_TURN_1" move_type="MoveSuperPoint_FollowRail">
+		<node id="0" fstring_index="-1" social_number="-1" delay="-1" x="175150" y="112260" z="-7704" />
+		<node id="1" fstring_index="-1" social_number="-1" delay="-1" x="175904" y="112005" z="-7704" />
+		<node id="2" fstring_index="-1" social_number="-1" delay="-1" x="176877" y="111963" z="-7704" />
+		<node id="3" fstring_index="-1" social_number="-1" delay="-1" x="177853" y="111989" z="-7704" />
+		<node id="4" fstring_index="-1" social_number="-1" delay="-1" x="178871" y="111978" z="-7704" />
+		<node id="5" fstring_index="-1" social_number="-1" delay="-1" x="179756" y="112184" z="-7704" />
+		<node id="6" fstring_index="-1" social_number="-1" delay="-1" x="180358" y="113383" z="-7704" />
+		<node id="7" fstring_index="-1" social_number="-1" delay="-1" x="179600" y="112560" z="-7704" />
+		<node id="8" fstring_index="-1" social_number="-1" delay="-1" x="178843" y="112436" z="-7704" />
+		<node id="9" fstring_index="-1" social_number="-1" delay="-1" x="177858" y="112473" z="-7704" />
+		<node id="10" fstring_index="-1" social_number="-1" delay="-1" x="176868" y="112422" z="-7704" />
+		<node id="11" fstring_index="-1" social_number="-1" delay="-1" x="175934" y="112474" z="-7704" />
+		<node id="12" fstring_index="-1" social_number="-1" delay="-1" x="174962" y="112768" z="-7704" />
+	</route>
+</list>
