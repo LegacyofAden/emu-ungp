@@ -32,6 +32,7 @@ sourceSets {
 
 dependencies {
 	provided('org.projectlombok:lombok:+')
+	provided files("${System.properties['java.home']}/../lib/tools.jar")
 	antlr('org.antlr:antlr4:+')
 	provided project(':commons')
 	provided project(':geodriver')
