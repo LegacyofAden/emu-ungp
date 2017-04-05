@@ -10,7 +10,7 @@ import org.l2junity.commons.config.annotation.ConfigProperty;
  */
 @ConfigFile(name = "configs/scriptengine.properties")
 public class ScriptEngineConfig {
-	@ConfigProperty(name = "PreferedCompiler", value = "com.sun.tools.javac.api.JavacTool,org.eclipse.jdt.internal.compiler.tool.EclipseCompiler")
+	@ConfigProperty(name = "PreferedCompiler", value = "com.sun.tools.javac.api.JavacTool")
 	@ConfigComments(comment = {
 			"The prefered java compiler api to use.",
 			"The value is a fully qualified name of a class which implements the javax.toold.JavaCompiler and has a zero argument constructor.",
