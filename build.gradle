@@ -1,9 +1,5 @@
 System.setProperty("file.encoding", "UTF-8")
 
-import com.aragost.javahg.Changeset
-import com.aragost.javahg.Repository
-import com.aragost.javahg.commands.ParentsCommand
-
 apply plugin: 'java'
 apply plugin: 'distribution'
 
@@ -19,6 +15,7 @@ buildscript {
 		classpath("com.aragost.javahg:javahg:+")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
         classpath("org.springframework.build.gradle:propdeps-plugin:+")
+		classpath("org.ajoberstar:gradle-git:+")
     }
 }
 
@@ -39,6 +36,7 @@ distributions {
 subprojects {
     apply plugin: 'idea'
 	apply plugin: 'eclipse'
+	apply plugin: 'org.ajoberstar.grgit'
 
     sourceCompatibility = '1.8'
 
@@ -69,13 +67,14 @@ subprojects {
 
     tasks.withType(Jar) {
         manifest {
-            attributes('Implementation-Title': project.name,
-                    'Implementation-Version': getHgRevision(),
-                    'Built-Date': new java.util.Date().toString(),
-                    'Built-By': System.getProperty('user.name'),
-                    'Built-JDK': System.getProperty('java.version'),
-                    'Source-Compatibility': project.sourceCompatibility,
-                    'Target-Compatibility': project.targetCompatibility
+            attributes(
+					'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+					'Built-By': System.getProperty('user.name'),
+					'Implementation-Time': new Date().format('yyyy-MM-dd_hh:mm'),
+					'Implementation-Version': grgit.log(includes:['HEAD']).size(),
+					'Git-Branch': grgit.branch.getCurrent().getName(),
+					'Git-Hash-Full': grgit.head().id,
+					'Git-Hash-Short': grgit.head().getAbbreviatedId()
             )
         }
     }
@@ -83,15 +82,4 @@ subprojects {
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '3.3'
-}
-
-String getHgRevision() {
-	def repo = Repository.open(projectDir)
-	def parentsCommand = new ParentsCommand(repo)
-	List<Changeset> changesets = parentsCommand.execute()
-	if (changesets == null || changesets.size() != 1) {
-		def message = "Exactly one was parent expected. " + changesets
-		throw new Exception(message)
-	}
-	return changesets[0].node
 }
