@@ -154,7 +154,7 @@ public class GameClient extends Client<GameClient> {
 	}
 
 	public void closeForce() {
-		state.set(GameClientState.CLOSING);
+		state.set(GameClientState.DISCONNECTED);
 		getConnection().sendAndClose(null);
 	}
 
@@ -162,7 +162,7 @@ public class GameClient extends Client<GameClient> {
 		if (!isConnected()) {
 			return;
 		}
-		state.set(GameClientState.CLOSING);
+		state.set(GameClientState.DISCONNECTED);
 		getConnection().sendAndClose(new GameServerPacket[]{packet});
 	}
 

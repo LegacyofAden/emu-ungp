@@ -125,7 +125,7 @@ public class UserInfo extends AbstractMaskPacket<UserInfoType> {
 
 		if (containsMask(UserInfoType.BASIC_INFO)) {
 			body.writeH(16 + (_activeChar.getAppearance().getVisibleName().length() * 2));
-			body.writeString(_activeChar.getName());
+			body.writeString(_activeChar.getAppearance().getVisibleName());
 			body.writeC(_activeChar.isGM() ? 0x01 : 0x00);
 			body.writeC(_activeChar.getRace().ordinal());
 			body.writeC(_activeChar.getAppearance().getSex() ? 0x01 : 0x00);

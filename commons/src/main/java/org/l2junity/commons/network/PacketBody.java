@@ -63,15 +63,10 @@ public class PacketBody<TClient extends Client> {
 	 * @param value the string
 	 */
 	public void writeString(String value) {
-		if (value != null) {
-			short length = (short)value.length();
-			_buffer.put((byte) length);
-			_buffer.put((byte) (length >>> 8));
-			for (int i = 0; i < length; i++) {
-				_buffer.putChar(Character.reverseBytes(value.charAt(i)));
-			}
-		} else {
-			_buffer.putShort((short)0);
+		final int len = value.length();
+		writeH(len);
+		for (int i = 0; i < len; ++i) {
+			_buffer.putChar(value.charAt(i));
 		}
 	}
 

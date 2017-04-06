@@ -7,7 +7,6 @@ package org.l2junity.gameserver.network;
 public enum GameClientState {
 	CONNECTED,
 	DISCONNECTED,
-	CLOSING,
 	AUTHENTICATED,
 	IN_GAME
 }
