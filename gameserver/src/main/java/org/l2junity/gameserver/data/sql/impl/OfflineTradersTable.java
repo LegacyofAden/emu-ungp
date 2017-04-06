@@ -188,7 +188,6 @@ public class OfflineTradersTable {
 
 				try {
 					GameClient client = new GameClient(null);
-					client.setDetached(true);
 					player = Player.load(rs.getInt("charId"));
 					client.setActiveChar(player);
 					player.setOnlineStatus(true, false);

@@ -9,6 +9,7 @@ import org.l2junity.commons.network.Client;
 import org.l2junity.commons.network.Connection;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.PlayerConfig;
+import org.l2junity.gameserver.GameServer;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
@@ -28,6 +29,7 @@ import org.l2junity.gameserver.network.packets.s2c.ServerClose;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
+import org.l2junity.gameserver.service.GameServerRMI;
 import org.l2junity.gameserver.util.FloodProtectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,12 @@ public class GameClient extends Client<GameClient> {
 
 	public GameClient(Connection<GameClient> connection) {
 		super(connection);
-		connection.setCipher(new GameCrypt(this));
+		if (connection != null) {
+			connection.setCipher(new GameCrypt(this));
+		}
+		else {
+			isDetached = true;
+		}
 	}
 
 	public boolean compareAndSetState(GameClientState compare, GameClientState set) {
@@ -100,6 +107,14 @@ public class GameClient extends Client<GameClient> {
 
 	@Override
 	protected void onOpen() {
+		logAccounting.debug("Client Connected: {}", this);
+	}
+
+	@Override
+	protected void onClose() {
+		logAccounting.debug("Client Disconnected: {}", this);
+		GameServer.getInstance().getRmi().removeAccountInGame(accountName);
+		Disconnection.of(this).onDisconnection();
 	}
 
 	public byte[] enableCrypt() {

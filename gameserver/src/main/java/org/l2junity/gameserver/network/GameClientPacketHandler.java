@@ -29,23 +29,28 @@ public class GameClientPacketHandler implements IPacketHandler<GameClient> {
 		}
 
 		GameClientPacketType packetType = GameClientPacketType.PACKET_ARRAY[opcode];
-
-		if (!packetType.getConnectionStates().contains(client.getState())) {
-			log.warn("{}: Connection at invalid state: {} Required States: {}", packetType, client.getState(), packetType.getConnectionStates());
-			return null;
-		}
-
-		if (packetType == GameClientPacketType.EX_PACKET) {
-			int exOpcode = buffer.getShort() & 0xFFFF;
-
-			if ((opcode < 0) || (opcode >= GameClientPacketTypeEx.PACKET_ARRAY.length)) {
-				log.warn("Client {} sended unknown expacket with opcode {}:{}", client, Integer.toHexString(opcode), Integer.toHexString(exOpcode));
+		if (packetType != null) {
+			if (!packetType.getConnectionStates().contains(client.getState())) {
+				log.warn("{}: Connection at invalid state: {} Required States: {}", packetType, client.getState(), packetType.getConnectionStates());
 				return null;
 			}
-			GameClientPacketTypeEx packetExType = GameClientPacketTypeEx.PACKET_ARRAY[exOpcode];
-			return packetExType.newIncomingPacket();
-		} else {
-			return packetType.newIncomingPacket();
+
+			if (packetType == GameClientPacketType.EX_PACKET) {
+				int exOpcode = buffer.getShort() & 0xFFFF;
+
+				if ((opcode < 0) || (opcode >= GameClientPacketTypeEx.PACKET_ARRAY.length)) {
+					log.warn("Client {} sended unknown expacket with opcode {}:{}", client, Integer.toHexString(opcode), Integer.toHexString(exOpcode));
+					return null;
+				}
+				GameClientPacketTypeEx packetExType = GameClientPacketTypeEx.PACKET_ARRAY[exOpcode];
+				if (packetExType != null) {
+					return packetExType.newIncomingPacket();
+				}
+				return null;
+			} else {
+				return packetType.newIncomingPacket();
+			}
 		}
+		return null;
 	}
 }
