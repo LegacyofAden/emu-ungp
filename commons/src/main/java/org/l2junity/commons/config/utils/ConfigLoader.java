@@ -100,11 +100,10 @@ public final class ConfigLoader {
 		for (Field field : clazz.getDeclaredFields()) {
 			ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
 			if (annotation != null) {
-				final String propertyValue = properties.getProperty(annotation.name());
+				final String propertyValue = properties.getProperty(configName(field));
 				if (propertyValue == null) {
-					out.appendln("");
-					out.appendln(generateFieldConfig(field));
-					log.info("Updated '{}' config with new field '{}'", fileName, annotation.name());
+					out.appendln("").appendln(generateFieldConfig(field));
+					log.info("Updated '{}' config with new field '{}'", fileName, configName(field));
 				}
 			}
 		}
@@ -148,6 +147,7 @@ public final class ConfigLoader {
 	private String generateFieldConfig(Field field) {
 		ConfigComments configComments = field.getAnnotation(ConfigComments.class);
 		ConfigProperty configProperty = field.getAnnotation(ConfigProperty.class);
+		String cfgName = configName(field);
 
 		if (configProperty != null) {
 			StrBuilder out = new StrBuilder();
@@ -161,13 +161,13 @@ public final class ConfigLoader {
 				}
 			}
 
-			if (VAR_NAMES_CACHE.contains(configProperty.name())) {
-				log.warn("Config property name [{}] already defined!", configProperty.name());
+			if (VAR_NAMES_CACHE.contains(cfgName)) {
+				log.warn("Config property name [{}] already defined!", cfgName);
 			} else {
-				VAR_NAMES_CACHE.add(configProperty.name());
+				VAR_NAMES_CACHE.add(cfgName);
 			}
 
-			out.appendln(configProperty.name() + " = " + configProperty.value());
+			out.appendln(cfgName + " = " + configProperty.value());
 			return out.toString();
 		}
 		return null;
@@ -222,7 +222,7 @@ public final class ConfigLoader {
 
 	@SuppressWarnings("unchecked")
 	private void setConfigValue(Object object, Field field, Properties properties, ConfigProperty annotation) {
-		final String propertyValue = properties.getProperty(annotation.name(), annotation.value());
+		final String propertyValue = properties.getProperty(configName(field), annotation.value());
 		if (StringUtils.isEmpty(propertyValue)) {
 			return;
 		}
@@ -268,5 +268,10 @@ public final class ConfigLoader {
 		} catch (IllegalAccessException e) {
 			log.error("Invalid modifiers for field {}", field);
 		}
+	}
+
+	private String configName(Field field) {
+		ConfigProperty anno = field.getAnnotation(ConfigProperty.class);
+		return anno == null || anno.name().isEmpty() ? field.getName() : anno.name();
 	}
 }
