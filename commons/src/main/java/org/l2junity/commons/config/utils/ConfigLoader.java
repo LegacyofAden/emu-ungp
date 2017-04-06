@@ -220,6 +220,7 @@ public final class ConfigLoader {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setConfigValue(Object object, Field field, Properties properties, ConfigProperty annotation) {
 		final String propertyValue = properties.getProperty(annotation.name(), annotation.value());
 		if (StringUtils.isEmpty(propertyValue)) {
@@ -262,7 +263,7 @@ public final class ConfigLoader {
 					((Map<Object, Object>) field.get(object)).put(keyObj, valueObj);
 				}
 			} else {
-				ConfigTypeCaster.cast(null, field, propertyValue);
+				ConfigTypeCaster.cast(object, field, propertyValue);
 			}
 		} catch (IllegalAccessException e) {
 			log.error("Invalid modifiers for field {}", field);

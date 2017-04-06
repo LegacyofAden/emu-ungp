@@ -20,6 +20,7 @@ package org.l2junity.gameserver.model.actor;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.EmptyQueue;
 import org.l2junity.commons.util.Rnd;
@@ -86,6 +87,7 @@ import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
+import org.l2junity.gameserver.retail.EventId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
@@ -105,30 +107,8 @@ import java.util.stream.Collectors;
 
 import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
 
-/**
- * Mother class of all character objects of the world (PC, NPC...)<br>
- * L2Character:<br>
- * <ul>
- * <li>L2DoorInstance</li>
- * <li>L2Playable</li>
- * <li>L2Npc</li>
- * <li>StaticObjectInstance</li>
- * <li>L2Trap</li>
- * <li>L2Vehicle</li>
- * </ul>
- * <br>
- * <b>Concept of CharTemplate:</b><br>
- * Each L2Character owns generic and static properties (ex : all Keltir have the same number of HP...).<br>
- * All of those properties are stored in a different template for each type of L2Character.<br>
- * Each template is loaded once in the server cache memory (reduce memory use).<br>
- * When a new instance of L2Character is spawned, server just create a link between the instance and the template.<br>
- * This link is stored in {@link #_template}
- *
- * @version $Revision: 1.53.2.45.2.34 $ $Date: 2005/04/11 10:06:08 $
- */
+@Slf4j
 public abstract class Creature extends WorldObject implements ISkillsHolder, IDeletable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Creature.class);
-
 	private volatile Set<WeakReference<Creature>> _attackByList;
 
 	private boolean _isDead = false;
@@ -1432,7 +1412,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		if (skill != null) {
 			doInstantCast(target, skill);
 		} else {
-			LOGGER.warn("{} is trying to cast non-existing skill {}.", this, holder);
+			log.warn("{} is trying to cast non-existing skill {}.", this, holder);
 		}
 	}
 
@@ -1862,6 +1842,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 */
 	public boolean isAlikeDead() {
 		return _isDead;
+	}
+
+	@EventId(72)
+	public final boolean isAlive() {
+		return !_isDead;
 	}
 
 	/**
@@ -3009,7 +2994,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 
 				if ((curX < WorldData.MAP_MIN_X) || (curX > WorldData.MAP_MAX_X) || (curY < WorldData.MAP_MIN_Y) || (curY > WorldData.MAP_MAX_Y)) {
 					// Temporary fix for character outside world region errors
-					LOGGER.warn("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
+					log.warn("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
 					getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
 					if (isPlayer()) {
 						Disconnection.of(getActingPlayer()).defaultSequence(false);
@@ -3789,6 +3774,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @return
 	 */
+	@EventId(10972)
 	public abstract int getLevel();
 
 	public int getAccuracy() {
@@ -3839,6 +3825,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getStat().getMAtkSpd();
 	}
 
+	@EventId(11048)
 	public int getMaxMp() {
 		return getStat().getMaxMp();
 	}
@@ -3847,6 +3834,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getStat().getMaxRecoverableMp();
 	}
 
+	@EventId(11040)
 	public int getMaxHp() {
 		return getStat().getMaxHp();
 	}
@@ -4096,6 +4084,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		getStatus().setCurrentCp(newCp, broadcast);
 	}
 
+	@EventId(360)
 	public final double getCurrentHp() {
 		return getStatus().getCurrentHp();
 	}
@@ -4116,6 +4105,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		getStatus().setCurrentHpMp(newHp, newMp);
 	}
 
+	@EventId(368)
 	public final double getCurrentMp() {
 		return getStatus().getCurrentMp();
 	}
@@ -4296,11 +4286,17 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return false;
 	}
 
+	@EventId(596)
+	public int getPkKills() {
+		return 0;
+	}
+
 	/**
 	 * Dummy method overriden in {@link Player}
 	 *
 	 * @return the clan id of current character.
 	 */
+	@EventId(10596)
 	public int getClanId() {
 		return 0;
 	}
@@ -4312,6 +4308,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 */
 	public Clan getClan() {
 		return null;
+	}
+
+	@EventId(10604)
+	public boolean isClanLeader() {
+		return false;
 	}
 
 	/**
@@ -4602,6 +4603,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getTemplate().getRace();
 	}
 
+	@EventId(144)
+	public int getRaceId() {
+		return getRace().ordinal();
+	}
+
 	@Override
 	public final void setXYZ(double x, double y, double z) {
 		final ZoneRegion oldZoneRegion = ZoneManager.getInstance().getRegion(this);
@@ -4750,11 +4756,22 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return _basicPropertyResists.computeIfAbsent(basicProperty, k -> new BasicPropertyResist());
 	}
 
+	@EventId(604)
 	public int getReputation() {
 		return _reputation;
 	}
 
 	public void setReputation(int reputation) {
 		_reputation = reputation;
+	}
+
+	@EventId(136)
+	public boolean isDualClassActive() {
+		return false;
+	}
+
+	@EventId(200)
+	public long getSp() {
+		return 0;
 	}
 }

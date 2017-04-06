@@ -47,6 +47,7 @@ import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
+import org.l2junity.gameserver.retail.EventId;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -256,6 +257,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		}
 	}
 
+	@EventId(384)
 	@Override
 	public String getName() {
 		return _name;
@@ -265,6 +267,25 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		_name = value;
 	}
 
+	@EventId(8)
+	@Override
+	public double getX() {
+		return _x;
+	}
+
+	@EventId(16)
+	@Override
+	public double getY() {
+		return _y;
+	}
+
+	@EventId(24)
+	@Override
+	public double getZ() {
+		return _z;
+	}
+
+	@EventId(36)
 	@Override
 	public final int getObjectId() {
 		return _objectId;
@@ -388,6 +409,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 *
 	 * @return {@code true} if object is instance of L2PcInstance, {@code false} otherwise
 	 */
+	@EventId(68)
 	public boolean isPlayer() {
 		return false;
 	}
@@ -647,36 +669,6 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 	public final void setLocationInvisible(ILocational loc) {
 		setXYZInvisible(loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	/**
-	 * Gets the X coordinate.
-	 *
-	 * @return the X coordinate
-	 */
-	@Override
-	public double getX() {
-		return _x;
-	}
-
-	/**
-	 * Gets the Y coordinate.
-	 *
-	 * @return the Y coordinate
-	 */
-	@Override
-	public double getY() {
-		return _y;
-	}
-
-	/**
-	 * Gets the Z coordinate.
-	 *
-	 * @return the Z coordinate
-	 */
-	@Override
-	public double getZ() {
-		return _z;
 	}
 
 	/**

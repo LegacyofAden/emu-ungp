@@ -8,21 +8,27 @@ import org.l2junity.gameserver.retail.EventId;
  */
 public class Creature {
     @EventId(8)
+    // Used
     public int x;
 
     @EventId(16)
+    // Used
     public int y;
 
     @EventId(24)
+    // Used
     public int z;
 
     @EventId(36)
+    // Used
     public int id;
 
     @EventId(68)
+    // Used
     public boolean is_pc;
 
     @EventId(72)
+    // Used
     public boolean alive;
 
     @EventId(76)
@@ -59,24 +65,30 @@ public class Creature {
     public int subjob3_class;
 
     @EventId(136)
+    // Used
     public int dual_class;
 
     @EventId(144)
+    // Used
     public int race;
 
     @EventId(148)
     public int occupation;
 
     @EventId(200)
+    // Used
     public int sp;
 
     @EventId(360)
+    // Used
     public double hp;
 
     @EventId(384)
+    // Used
     public String name;
 
     @EventId(368)
+    // Used
     public double mp;
 
     @EventId(444)
@@ -89,18 +101,22 @@ public class Creature {
     public int target_id;
 
     @EventId(596)
+    // Used
     public int pk_count;
 
     @EventId(604)
+    // Used
     public int karma;
 
     @EventId(10584)
     public int quest_last_reward_time;
 
     @EventId(10596)
+    // Used
     public int pledge_id;
 
     @EventId(10604)
+    // Used
     public int is_pledge_master;
 
     @EventId(10664)
@@ -114,12 +130,15 @@ public class Creature {
     public int dbid;
 
     @EventId(10972)
+    // Used
     public int level;
 
     @EventId(11040)
+    // Used
     public double max_hp;
 
     @EventId(11048)
+    // Used
     public double max_mp;
 
     @EventId(11088)

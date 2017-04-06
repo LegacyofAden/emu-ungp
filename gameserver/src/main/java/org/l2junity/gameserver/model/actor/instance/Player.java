@@ -1481,6 +1481,7 @@ public final class Player extends Playable {
 	/**
 	 * @return the PK counter of the L2PcInstance.
 	 */
+	@Override
 	public int getPkKills() {
 		return _pkKills;
 	}
@@ -2127,6 +2128,7 @@ public final class Player extends Playable {
 	/**
 	 * @return the SP amount of the L2PcInstance.
 	 */
+	@Override
 	public long getSp() {
 		return getStat().getSp();
 	}
@@ -4815,6 +4817,7 @@ public final class Player extends Playable {
 	/**
 	 * @return True if the L2PcInstance is the leader of its clan.
 	 */
+	@Override
 	public boolean isClanLeader() {
 		if (getClan() == null) {
 			return false;
@@ -7914,6 +7917,7 @@ public final class Player extends Playable {
 		}
 	}
 
+	@Override
 	public boolean isDualClassActive() {
 		return isSubClassActive() && getSubClasses().get(_classIndex).isDualClass();
 	}
