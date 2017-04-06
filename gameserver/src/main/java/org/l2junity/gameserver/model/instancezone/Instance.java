@@ -18,23 +18,8 @@
  */
 package org.l2junity.gameserver.model.instancezone;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.ArrayUtil;
@@ -54,12 +39,7 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.DoorTemplate;
 import org.l2junity.gameserver.model.events.EventDispatcher;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceCreated;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceDestroy;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceEnter;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceFinish;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceLeave;
-import org.l2junity.gameserver.model.events.impl.instance.OnInstanceStatusChange;
+import org.l2junity.gameserver.model.events.impl.instance.*;
 import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.interfaces.INamable;
@@ -68,13 +48,19 @@ import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.model.world.GameWorld;
 import org.l2junity.gameserver.model.world.WorldManager;
-
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Instance world.
@@ -85,24 +71,25 @@ import lombok.extern.slf4j.Slf4j;
 public final class Instance implements IIdentifiable, INamable {
 
 	private final Map<Integer, DoorInstance> doors = new ConcurrentHashMap<>();
-	
+
 	// Basic instance parameters
 	private final InstanceTemplate _template;
 	private final long _startTime;
 	private long _endTime;
-	
+
 	// Advanced instance parameters
 	private final Set<Integer> _allowed = ConcurrentHashMap.newKeySet(); // ObjectId of players which can enter to instance
 	private final StatsSet _parameters = new StatsSet();
-	
+
 	// Timers
 	private final Map<Integer, ScheduledFuture<?>> _ejectDeadTasks = new ConcurrentHashMap<>();
 	private ScheduledFuture<?> _cleanUpTask = null;
 	private ScheduledFuture<?> _emptyDestroyTask = null;
 	private final List<SpawnTemplate> _spawns;
 
-	@Getter private final GameWorld world;
-	
+	@Getter
+	private final GameWorld world;
+
 	/**
 	 * Create instance world.
 	 *
@@ -112,7 +99,7 @@ public final class Instance implements IIdentifiable, INamable {
 	 */
 	public Instance(GameWorld world, InstanceTemplate template, Player player) {
 		this.world = world;
-		
+
 		// Set basic instance info
 		_template = template;
 		_startTime = System.currentTimeMillis();
@@ -567,7 +554,7 @@ public final class Instance implements IIdentifiable, INamable {
 	public Npc getNpc(int id) {
 		return getNpcStream().filter(npc -> npc.getId() == id).findFirst().orElse(null);
 	}
-	
+
 	private Stream<Npc> getNpcStream() {
 		return getWorld().getVisibleObjects().stream()
 				.filter(WorldObject::isNpc)
@@ -801,7 +788,7 @@ public final class Instance implements IIdentifiable, INamable {
 		if (_template.getReenterType().equals(InstanceReenterType.ON_FINISH)) {
 			setReenterTime();
 		}
-		
+
 		// Change instance duration
 		setDuration(delay);
 		_allowed.forEach(objId ->
@@ -916,7 +903,7 @@ public final class Instance implements IIdentifiable, INamable {
 			}
 		}
 	}
-	
+
 	private void onAddPlayer(Player player) {
 		if (_emptyDestroyTask != null && !_emptyDestroyTask.isDone()) {
 			_emptyDestroyTask.cancel(false);
@@ -933,13 +920,13 @@ public final class Instance implements IIdentifiable, INamable {
 			}
 		}
 	}
-	
+
 	public void onAddNpc(Npc npc) {
-		
+
 	}
 
 	public void onRemoveNpc(Npc npc) {
-		
+
 	}
 
 	// ----------------------------------------------

@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.AttributeType;
 import org.l2junity.gameserver.enums.MailType;
 import org.l2junity.gameserver.instancemanager.MailManager;

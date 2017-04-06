@@ -20,10 +20,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.enums.ShortcutType;
 import org.l2junity.gameserver.model.Shortcut;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ShortCutRegister;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestShortCutReg extends GameClientPacket {
 	private ShortcutType _type;

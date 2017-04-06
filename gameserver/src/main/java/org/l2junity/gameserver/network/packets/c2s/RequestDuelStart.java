@@ -20,12 +20,11 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExDuelAskStart;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Format:(ch) Sd
@@ -48,7 +47,7 @@ public final class RequestDuelStart extends GameClientPacket {
 		if (activeChar == null) {
 			return;
 		}
-		
+
 		Player targetChar = activeChar.getWorld().getPlayer(_player);
 		if (targetChar == null) {
 			activeChar.sendPacket(SystemMessageId.THERE_IS_NO_OPPONENT_TO_RECEIVE_YOUR_CHALLENGE_FOR_A_DUEL);

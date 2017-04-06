@@ -21,10 +21,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.entity.Castle;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.SiegeDefenderList;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestSiegeDefenderList extends GameClientPacket {
 	private int _castleId;

@@ -96,8 +96,8 @@ import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.ability.ExAcquireAPSkillList;
@@ -189,7 +189,8 @@ public final class Player extends Playable {
 
 	public static final int REQUEST_TIMEOUT = 15;
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private GameClient client;
 
 	private final String _accountName;
@@ -3541,7 +3542,7 @@ public final class Player extends Playable {
 
 	//@formatter:off
 	/*
-    public void queryGameGuard()
+	public void queryGameGuard()
 	{
 		if (getClient() != null)
 		{
@@ -7266,12 +7267,12 @@ public final class Player extends Playable {
 	}
 
 	@Override
-	public void sendMessage(CustomMessage msg, String ... args) {
+	public void sendMessage(CustomMessage msg, String... args) {
 		msg.send(this, args);
 	}
 
 	@Override
-	public void sendMessage(CustomMessage msg, Object ... args) {
+	public void sendMessage(CustomMessage msg, Object... args) {
 		msg.send(this, args);
 	}
 

@@ -20,8 +20,6 @@ package org.l2junity.gameserver.network.packets.s2c.string;
 
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

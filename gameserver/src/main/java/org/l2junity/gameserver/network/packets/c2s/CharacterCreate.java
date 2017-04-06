@@ -18,18 +18,11 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.data.xml.impl.CategoryData;
-import org.l2junity.gameserver.data.xml.impl.InitialEquipmentData;
-import org.l2junity.gameserver.data.xml.impl.InitialShortcutData;
-import org.l2junity.gameserver.data.xml.impl.PlayerTemplateData;
-import org.l2junity.gameserver.data.xml.impl.SkillData;
-import org.l2junity.gameserver.data.xml.impl.SkillTreesData;
+import org.l2junity.gameserver.data.xml.impl.*;
 import org.l2junity.gameserver.enums.CategoryType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.SkillLearn;
@@ -53,6 +46,8 @@ import org.l2junity.gameserver.network.packets.s2c.CharSelectionInfo;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @Slf4j
 @SuppressWarnings("unused")

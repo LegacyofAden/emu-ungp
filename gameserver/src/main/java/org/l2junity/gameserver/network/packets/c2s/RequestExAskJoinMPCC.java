@@ -22,12 +22,11 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExAskJoinMPCC;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Format: (ch) S<br>

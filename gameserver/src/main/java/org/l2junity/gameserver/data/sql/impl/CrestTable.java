@@ -22,9 +22,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.model.Crest.CrestType;
-import org.l2junity.gameserver.model.Clan;
 
 import java.sql.*;
 import java.util.HashSet;

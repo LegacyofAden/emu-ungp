@@ -21,7 +21,6 @@ package org.l2junity.gameserver.model;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.gameserver.network.packets.c2s.IClientIncomingPacket;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 

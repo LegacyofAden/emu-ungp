@@ -195,7 +195,8 @@ public enum GameClientPacketTypeEx {
 	REQUEST_SHUTTLE_GET_OFF(0x7D, RequestShuttleGetOff::new, GameClientState.IN_GAME),
 	MOVE_TO_LOCATION_IN_SHUTTLE(0x7E, MoveToLocationInShuttle::new, GameClientState.IN_GAME),
 	CANNOT_MORE_ANYMORE_IN_SHUTTLE(0x7F, CannotMoveAnymoreInShuttle::new, GameClientState.IN_GAME),
-	REQUEST_AGIT_ACTION(0x80, null, GameClientState.IN_GAME), // TODO: Implement / HANDLE SWITCH
+	REQUEST_AGIT_ACTION(0x80, null, GameClientState.IN_GAME),
+	// TODO: Implement / HANDLE SWITCH
 	REQUEST_EX_ADD_CONTACT_TO_CONTACT_LIST(0x81, RequestExAddContactToContactList::new, GameClientState.IN_GAME),
 	REQUEST_EX_DELETE_CONTACT_FROM_CONTACT_LIST(0x82, RequestExDeleteContactFromContactList::new, GameClientState.IN_GAME),
 	REQUEST_EX_SHOW_CONTACT_LIST(0x83, RequestExShowContactList::new, GameClientState.IN_GAME),
@@ -214,7 +215,8 @@ public enum GameClientPacketTypeEx {
 	REQUEST_SCENE_EX_ESCAPE_SCENE(0x90, RequestExEscapeScene::new, GameClientState.IN_GAME),
 	REQUEST_FLY_MOVE(0x91, RequestFlyMove::new, GameClientState.IN_GAME),
 	REQUEST_SURRENDER_PLEDGE_WAR_EX(0x92, null, GameClientState.IN_GAME),
-	REQUEST_DYNAMIC_QUEST_ACTION(0x93, null, GameClientState.IN_GAME), // TODO: Implement / HANDLE SWITCH
+	REQUEST_DYNAMIC_QUEST_ACTION(0x93, null, GameClientState.IN_GAME),
+	// TODO: Implement / HANDLE SWITCH
 	REQUEST_FRIEND_DETAIL_INFO(0x94, RequestFriendDetailInfo::new, GameClientState.IN_GAME),
 	REQUEST_UPDATE_FRIEND_MEMO(0x95, null, GameClientState.IN_GAME),
 	REQUEST_UPDATE_BLOCK_MEMO(0x96, null, GameClientState.IN_GAME),
@@ -376,7 +378,7 @@ public enum GameClientPacketTypeEx {
 		_incomingPacketFactory = incomingPacketFactory != null ? incomingPacketFactory : () -> null;
 		_connectionStates = new HashSet<>(Arrays.asList(connectionStates));
 	}
-	
+
 	public int getPacketId() {
 		return _packetId;
 	}

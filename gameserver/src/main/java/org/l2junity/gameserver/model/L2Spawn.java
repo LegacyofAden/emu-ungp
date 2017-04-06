@@ -18,12 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.lang.reflect.Constructor;
-import java.util.Deque;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
@@ -37,6 +31,12 @@ import org.l2junity.gameserver.model.interfaces.INamable;
 import org.l2junity.gameserver.model.spawns.NpcSpawnTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.util.Deque;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class manages the spawn and respawn of a group of NpcInstance that are in the same are and have the same type.<br>

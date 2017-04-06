@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.GameServerPacketType;
-import org.l2junity.network.PacketWriter;
 
 import java.util.ArrayList;
 import java.util.Iterator;

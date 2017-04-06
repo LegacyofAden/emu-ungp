@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.effects.effecttypes.custom;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -31,6 +29,8 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.stats.Formulas;
+
+import java.util.List;
 
 /**
  * Confuse effect implementation.

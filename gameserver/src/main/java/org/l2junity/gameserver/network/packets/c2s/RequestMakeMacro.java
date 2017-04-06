@@ -23,12 +23,8 @@ import org.l2junity.gameserver.enums.MacroType;
 import org.l2junity.gameserver.model.Macro;
 import org.l2junity.gameserver.model.MacroCmd;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

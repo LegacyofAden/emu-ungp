@@ -18,26 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-
-import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.EmptyQueue;
 import org.l2junity.commons.util.Rnd;
@@ -54,17 +34,7 @@ import org.l2junity.gameserver.data.xml.impl.DoorData;
 import org.l2junity.gameserver.data.xml.impl.LevelBonusData;
 import org.l2junity.gameserver.data.xml.impl.TransformData;
 import org.l2junity.gameserver.engines.IdFactory;
-import org.l2junity.gameserver.enums.AttributeType;
-import org.l2junity.gameserver.enums.BasicProperty;
-import org.l2junity.gameserver.enums.CategoryType;
-import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.enums.ItemSkillType;
-import org.l2junity.gameserver.enums.Position;
-import org.l2junity.gameserver.enums.Race;
-import org.l2junity.gameserver.enums.ShotType;
-import org.l2junity.gameserver.enums.StatusUpdateType;
-import org.l2junity.gameserver.enums.Team;
-import org.l2junity.gameserver.enums.UserInfoType;
+import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
 import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
@@ -72,16 +42,7 @@ import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.instancemanager.MapRegionManager;
 import org.l2junity.gameserver.instancemanager.TimersManager;
 import org.l2junity.gameserver.instancemanager.ZoneManager;
-import org.l2junity.gameserver.model.AccessLevel;
-import org.l2junity.gameserver.model.CharEffectList;
-import org.l2junity.gameserver.model.Clan;
-import org.l2junity.gameserver.model.CreatureContainer;
-import org.l2junity.gameserver.model.Location;
-import org.l2junity.gameserver.model.Party;
-import org.l2junity.gameserver.model.PcCondOverride;
-import org.l2junity.gameserver.model.TeleportWhereType;
-import org.l2junity.gameserver.model.TimeStamp;
-import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
 import org.l2junity.gameserver.model.actor.status.CharStatus;
@@ -94,15 +55,7 @@ import org.l2junity.gameserver.model.debugger.Debugger;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.EventType;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttack;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttackAvoid;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureAttacked;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageDealt;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDamageReceived;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureKilled;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleport;
-import org.l2junity.gameserver.model.events.impl.character.OnCreatureTeleported;
+import org.l2junity.gameserver.model.events.impl.character.*;
 import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
 import org.l2junity.gameserver.model.events.returns.DamageReturn;
 import org.l2junity.gameserver.model.events.returns.LocationReturn;
@@ -120,44 +73,15 @@ import org.l2junity.gameserver.model.items.type.EtcItemType;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.options.OptionsSkillHolder;
 import org.l2junity.gameserver.model.options.OptionsSkillType;
-import org.l2junity.gameserver.model.skills.AbnormalType;
-import org.l2junity.gameserver.model.skills.CommonSkill;
-import org.l2junity.gameserver.model.skills.EffectScope;
-import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.model.skills.SkillCaster;
-import org.l2junity.gameserver.model.skills.SkillCastingType;
-import org.l2junity.gameserver.model.skills.SkillChannelized;
-import org.l2junity.gameserver.model.skills.SkillChannelizer;
-import org.l2junity.gameserver.model.skills.SkillConditionScope;
-import org.l2junity.gameserver.model.stats.BaseStats;
-import org.l2junity.gameserver.model.stats.BasicPropertyResist;
-import org.l2junity.gameserver.model.stats.BooleanStat;
-import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.model.stats.Formulas;
-import org.l2junity.gameserver.model.stats.MoveType;
+import org.l2junity.gameserver.model.skills.*;
+import org.l2junity.gameserver.model.stats.*;
 import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
 import org.l2junity.gameserver.network.Disconnection;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
-import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
-import org.l2junity.gameserver.network.packets.s2c.Attack;
-import org.l2junity.gameserver.network.packets.s2c.ChangeMoveType;
-import org.l2junity.gameserver.network.packets.s2c.ChangeWaitType;
-import org.l2junity.gameserver.network.packets.s2c.ExShowTrace;
-import org.l2junity.gameserver.network.packets.s2c.ExTeleportToLocationActivate;
-import org.l2junity.gameserver.network.packets.s2c.MoveToLocation;
-import org.l2junity.gameserver.network.packets.s2c.NpcInfo;
-import org.l2junity.gameserver.network.packets.s2c.Revive;
-import org.l2junity.gameserver.network.packets.s2c.ServerObjectInfo;
-import org.l2junity.gameserver.network.packets.s2c.SetupGauge;
-import org.l2junity.gameserver.network.packets.s2c.SocialAction;
-import org.l2junity.gameserver.network.packets.s2c.StatusUpdate;
-import org.l2junity.gameserver.network.packets.s2c.StopMove;
-import org.l2junity.gameserver.network.packets.s2c.StopRotation;
-import org.l2junity.gameserver.network.packets.s2c.TeleportToLocation;
-import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
@@ -165,6 +89,19 @@ import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
 
 /**
  * Mother class of all character objects of the world (PC, NPC...)<br>
@@ -762,11 +699,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		// default implementation
 	}
 
-	public void sendMessage(CustomMessage msg, String ... args) {
+	public void sendMessage(CustomMessage msg, String... args) {
 
 	}
 
-	public void sendMessage(CustomMessage msg, Object ... args) {
+	public void sendMessage(CustomMessage msg, Object... args) {
 
 	}
 

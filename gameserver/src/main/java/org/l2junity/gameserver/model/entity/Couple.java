@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.entity;
 
-import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.commons.sql.DatabaseFactory;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

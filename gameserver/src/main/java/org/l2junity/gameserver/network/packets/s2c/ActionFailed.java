@@ -20,8 +20,8 @@ package org.l2junity.gameserver.network.packets.s2c;
 
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.skills.SkillCastingType;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 import java.util.EnumMap;
 import java.util.Map;

@@ -18,10 +18,6 @@
  */
 package org.l2junity.gameserver.model.cubic;
 
-import java.util.Comparator;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.PlayerConfig;
@@ -33,6 +29,10 @@ import org.l2junity.gameserver.model.actor.templates.L2CubicTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.packets.s2c.ExUserInfoCubic;
 import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
+
+import java.util.Comparator;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author UnAfraid

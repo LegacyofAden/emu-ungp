@@ -229,7 +229,7 @@ public enum GameClientPacketType {
 		_incomingPacketFactory = incomingPacketFactory != null ? incomingPacketFactory : () -> null;
 		_connectionStates = new HashSet<>(Arrays.asList(connectionStates));
 	}
-	
+
 	public int getPacketId() {
 		return _packetId;
 	}

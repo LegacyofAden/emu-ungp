@@ -31,9 +31,10 @@ import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.*;
 import org.l2junity.gameserver.model.actor.instance.FishermanInstance;
 import org.l2junity.gameserver.model.actor.instance.NpcInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.VillageMasterInstance;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
 import org.l2junity.gameserver.model.base.SubClass;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -45,12 +46,10 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
 
 import java.util.List;
 

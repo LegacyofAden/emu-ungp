@@ -20,8 +20,8 @@ package org.l2junity.gameserver.network.packets.s2c;
 
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 public final class PartySmallWindowDelete extends GameServerPacket {
 	private final Player _member;

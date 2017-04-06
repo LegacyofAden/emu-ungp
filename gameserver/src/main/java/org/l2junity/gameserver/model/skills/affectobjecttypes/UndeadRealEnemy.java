@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.model.skills.affectobjecttypes;
 
-import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 
 /**
  * Undead enemy npc affect object implementation.

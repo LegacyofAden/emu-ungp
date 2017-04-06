@@ -22,7 +22,6 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
-
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 

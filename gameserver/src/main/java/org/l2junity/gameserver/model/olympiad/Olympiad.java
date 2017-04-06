@@ -667,7 +667,7 @@ public class Olympiad {
 		}
 		//@formatter:off
 		/*
-        Properties OlympiadProperties = new Properties();
+		Properties OlympiadProperties = new Properties();
 		try (FileOutputStream fos = new FileOutputStream(new File("./" + OLYMPIAD_DATA_FILE)))
 		{
 			OlympiadProperties.setProperty("CurrentCycle", String.valueOf(_currentCycle));

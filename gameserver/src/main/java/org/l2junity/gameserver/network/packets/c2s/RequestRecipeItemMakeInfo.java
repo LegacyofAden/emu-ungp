@@ -21,11 +21,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 import org.l2junity.gameserver.data.xml.impl.RecipeData;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.RecipeHolder;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.RecipeItemMakeInfo;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestRecipeItemMakeInfo extends GameClientPacket {
 	private int _id;

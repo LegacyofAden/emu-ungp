@@ -18,17 +18,6 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.L2JModsConfig;
@@ -55,6 +44,15 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.*;
 
 /**
  * This class manages AI of L2Attackable.

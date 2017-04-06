@@ -18,22 +18,8 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.lang.reflect.Constructor;
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.core.configs.RatesConfig;
@@ -58,8 +44,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Constructor;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.time.DayOfWeek;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Instance manager.
@@ -79,7 +73,7 @@ public final class InstanceManager implements IGameXmlReader {
 	private final Map<Integer, String> _instanceNames = new HashMap<>();
 	// Instance templates holder
 	private final Map<Integer, InstanceTemplate> _instanceTemplates = new HashMap<>();
-	
+
 	private final Map<Integer, Instance> _instanceWorlds = new ConcurrentHashMap<>();
 	// Player reenter times
 	private final Map<Integer, Map<Integer, Long>> _playerInstanceTimes = new ConcurrentHashMap<>();
@@ -340,10 +334,10 @@ public final class InstanceManager implements IGameXmlReader {
 	 * @return newly created instance if success, otherwise {@code null}
 	 */
 	public Instance createInstance(InstanceTemplate template, Player player) {
-		if(template == null) {
+		if (template == null) {
 			return null;
 		}
-		
+
 		return new Instance(WorldManager.getInstance().createWorld(), template, player);
 	}
 
@@ -359,7 +353,7 @@ public final class InstanceManager implements IGameXmlReader {
 			LOGGER.warn("Missing template for instance with id {}!", id);
 			return null;
 		}
-		
+
 		return new Instance(WorldManager.getInstance().createWorld(), _instanceTemplates.get(id), player);
 	}
 

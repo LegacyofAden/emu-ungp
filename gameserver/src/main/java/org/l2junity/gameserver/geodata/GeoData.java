@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.geodata;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.lang.management.ShutdownManager;
 import org.l2junity.commons.lang.management.TerminationStatus;
 import org.l2junity.core.configs.GeoDataConfig;
@@ -39,8 +37,9 @@ import org.l2junity.gameserver.util.LinePointIterator3D;
 import org.l2junity.geodriver.Cell;
 import org.l2junity.geodriver.GeoDriver;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author -Nemesiss-, HorridoJoho

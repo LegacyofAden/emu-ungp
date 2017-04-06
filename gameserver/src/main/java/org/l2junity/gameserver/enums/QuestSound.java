@@ -55,7 +55,8 @@ public enum QuestSound {
 	// Quest 21
 	ITEMSOUND_ARMOR_CLOTH(new PlaySound("ItemSound.item_drop_equip_armor_cloth")),
 	AMDSOUND_ED_CHIMES(new PlaySound("AmdSound.ed_chimes_05")),
-	HORROR_01(new PlaySound("horror_01")), // played when spawned monster sees player
+	HORROR_01(new PlaySound("horror_01")),
+	// played when spawned monster sees player
 	// Quest 22
 	AMBSOUND_HORROR_01(new PlaySound("AmbSound.dd_horror_01")),
 	AMBSOUND_HORROR_03(new PlaySound("AmbSound.d_horror_03")),

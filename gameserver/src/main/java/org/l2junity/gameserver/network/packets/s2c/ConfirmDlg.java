@@ -21,7 +21,7 @@ package org.l2junity.gameserver.network.packets.s2c;
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketWriter;
+
 
 /**
  * ConfirmDlg server packet implementation.

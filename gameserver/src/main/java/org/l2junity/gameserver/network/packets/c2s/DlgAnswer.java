@@ -26,10 +26,9 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDlgAns
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.holders.DoorRequestHolder;
 import org.l2junity.gameserver.model.holders.SummonRequestHolder;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author Dezmond_snz

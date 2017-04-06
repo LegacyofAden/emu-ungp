@@ -18,7 +18,6 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.GeneralConfig;
@@ -29,14 +28,12 @@ import org.l2junity.gameserver.model.actor.request.CrystallizationRequest;
 import org.l2junity.gameserver.model.holders.ItemChanceHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.CrystalType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
 
 import java.util.List;
 

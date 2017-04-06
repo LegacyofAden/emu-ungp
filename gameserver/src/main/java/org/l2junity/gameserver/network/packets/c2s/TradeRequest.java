@@ -27,13 +27,12 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerTrade;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.SendTradeRequest;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * This packet manages the trade request.

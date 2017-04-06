@@ -38,7 +38,8 @@ public class FortUpdater implements Runnable {
 	private final UpdaterType _updaterType;
 
 	public enum UpdaterType {
-		MAX_OWN_TIME, // gives fort back to NPC clan
+		MAX_OWN_TIME,
+		// gives fort back to NPC clan
 		PERIODIC_UPDATE // raise blood oath/supply level
 	}
 

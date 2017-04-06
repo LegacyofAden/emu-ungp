@@ -25,10 +25,7 @@ import org.l2junity.gameserver.model.world.WorldManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -93,14 +90,19 @@ public class PlayerVariables extends AbstractVariables {
 			st.setInt(1, _objectId);
 			try (ResultSet rset = st.executeQuery()) {
 				while (rset.next()) {
-					Object deSerializedObject;
-					try (final ValidObjectInputStream objectIn = new ValidObjectInputStream(new ByteArrayInputStream(rset.getBytes("val")))) {
-						deSerializedObject = objectIn.readObject();
-					} catch (IOException | ClassNotFoundException e) {
-						LOGGER.warn("Couldn't restore variable {} for: {}", rset.getString("var"), getPlayer(), e);
-						deSerializedObject = null;
+
+					byte[] valBytes = rset.getBytes("val");
+					if (valBytes != null) {
+						Object deSerializedObject;
+						// TODO: ValidObjectInputStream
+						try (ObjectInputStream objectIn = new ObjectInputStream(new ByteArrayInputStream(valBytes))) {
+							deSerializedObject = objectIn.readObject();
+						} catch (Exception e) {
+							LOGGER.warn("Couldn't restore variable {} for: {}", rset.getString("var"), getPlayer(), e);
+							deSerializedObject = null;
+						}
+						set(rset.getString("var"), deSerializedObject);
 					}
-					set(rset.getString("var"), deSerializedObject);
 				}
 			}
 		} catch (SQLException e) {

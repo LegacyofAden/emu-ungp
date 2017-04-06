@@ -19,9 +19,8 @@
 package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Format: (ch)S S: numerical password

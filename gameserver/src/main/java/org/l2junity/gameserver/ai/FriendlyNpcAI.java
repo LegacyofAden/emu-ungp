@@ -18,16 +18,14 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_REST;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.*;
 
 /**
  * @author Sdw

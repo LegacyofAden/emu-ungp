@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
+
+import java.util.function.Consumer;
 
 /**
  * Ring Range affect scope implementation. Gathers objects in ring/donut shaped area with start and end range.

@@ -18,16 +18,6 @@
  */
 package org.l2junity.gameserver.model.itemcontainer;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.PlayerConfig;
@@ -42,6 +32,16 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.ItemStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Advi
@@ -608,7 +608,7 @@ public abstract class ItemContainer {
 	 * @return
 	 */
 	protected boolean removeItem(ItemInstance item) {
-		if(_items.remove(item.getObjectId()) != null) {
+		if (_items.remove(item.getObjectId()) != null) {
 			ItemStorage.getInstance().remove(item);
 			return true;
 		}
@@ -657,7 +657,7 @@ public abstract class ItemContainer {
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					final ItemInstance item = new ItemInstance(rs);
-					
+
 					final Player owner = getOwner() != null ? getOwner().getActingPlayer() : null;
 					// If stackable item is found in inventory just add to current quantity
 					if (item.isStackable() && (getItemByItemId(item.getId()) != null)) {

@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.Disconnection;
-
 import org.l2junity.gameserver.network.GameClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

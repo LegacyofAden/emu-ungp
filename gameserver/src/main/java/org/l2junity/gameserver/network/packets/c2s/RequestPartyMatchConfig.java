@@ -24,11 +24,10 @@ import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.CommandChannelMatchingRoom;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ListPartyWaiting;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestPartyMatchConfig extends GameClientPacket {
 	private int _page, _location;

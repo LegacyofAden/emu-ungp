@@ -34,9 +34,7 @@ import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.residences.AbstractResidence;
 import org.l2junity.gameserver.model.residences.ResidenceFunctionType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
 
 import java.util.concurrent.TimeUnit;
 

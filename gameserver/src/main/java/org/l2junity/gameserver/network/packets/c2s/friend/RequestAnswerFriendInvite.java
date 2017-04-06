@@ -21,12 +21,10 @@ package org.l2junity.gameserver.network.packets.c2s.friend;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.friend.FriendAddRequestResult;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

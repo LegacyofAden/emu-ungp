@@ -23,12 +23,11 @@ import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.events.Containers;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDelete;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.CharDeleteFail;
 import org.l2junity.gameserver.network.packets.s2c.CharDeleteSuccess;
 import org.l2junity.gameserver.network.packets.s2c.CharSelectionInfo;
-import org.l2junity.network.PacketReader;
+
 
 public final class CharacterDelete extends GameClientPacket {
 	// cd

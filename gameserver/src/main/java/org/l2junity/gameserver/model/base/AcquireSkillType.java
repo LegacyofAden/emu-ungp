@@ -35,9 +35,12 @@ public enum AcquireSkillType {
 	DUMMY2(8),
 	DUMMY3(9),
 	FISHING(10),
-	REVELATION(11), // Need proper ID
-	REVELATION_DUALCLASS(12), // Need proper ID
-	DUALCLASS(13), // Need proper ID
+	REVELATION(11),
+	// Need proper ID
+	REVELATION_DUALCLASS(12),
+	// Need proper ID
+	DUALCLASS(13),
+	// Need proper ID
 	ALCHEMY(140);
 
 	private final int _id;

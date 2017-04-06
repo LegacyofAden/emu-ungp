@@ -30,14 +30,12 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.CommonSkill;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
 import org.l2junity.gameserver.network.packets.s2c.alchemy.ExTryMixCube;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
-import org.l2junity.network.PacketReader;
 
 import java.util.LinkedList;
 import java.util.List;

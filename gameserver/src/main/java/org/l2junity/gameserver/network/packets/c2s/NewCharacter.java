@@ -20,10 +20,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.data.xml.impl.PlayerTemplateData;
 import org.l2junity.gameserver.model.base.ClassId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.NewCharacterSuccess;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author Zoey76

@@ -22,11 +22,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Lets drink to code!

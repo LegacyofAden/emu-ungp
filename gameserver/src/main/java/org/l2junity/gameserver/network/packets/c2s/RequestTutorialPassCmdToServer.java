@@ -24,9 +24,8 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerBypass;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 public class RequestTutorialPassCmdToServer extends GameClientPacket {
 	private String _bypass = null;

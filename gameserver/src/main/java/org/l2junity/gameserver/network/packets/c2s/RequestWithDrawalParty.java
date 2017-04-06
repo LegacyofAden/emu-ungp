@@ -22,9 +22,8 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.Party.MessageType;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestWithDrawalParty extends GameClientPacket {
 	@Override

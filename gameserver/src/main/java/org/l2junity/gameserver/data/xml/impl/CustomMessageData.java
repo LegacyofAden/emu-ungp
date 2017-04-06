@@ -17,29 +17,29 @@ import java.nio.file.Path;
 @Slf4j
 @StartupComponent(value = "Data")
 public class CustomMessageData implements IGameXmlReader {
-    @Getter(lazy = true)
-    private static final CustomMessageData instance = new CustomMessageData();
+	@Getter(lazy = true)
+	private static final CustomMessageData instance = new CustomMessageData();
 
-    CustomMessageData() {
-        reload();
-    }
+	CustomMessageData() {
+		reload();
+	}
 
-    private void reload() {
-        parseDatapackFile("data/message/custom_messages.xml");
-    }
+	private void reload() {
+		parseDatapackFile("data/message/custom_messages.xml");
+	}
 
-    @Override
-    public void parseDocument(Document doc, Path path) {
-        forEach(doc, "list", listNode -> forEach(listNode, "message", msgNode -> {
-            try {
-                CustomMessage message = CustomMessage.valueOf(parseString(msgNode.getAttributes(), "name"));
-                forEach(msgNode, "lang", lang -> {
-                    message.addMessage(Language.valueOfShort(parseString(lang.getAttributes(), "name")),
-                            lang.getTextContent());
-                });
-            } catch (IllegalArgumentException e) {
-                log.warn("Incorrect custom message: " + parseString(msgNode.getAttributes(), "name") + e.getMessage());
-            }
-        }));
-    }
+	@Override
+	public void parseDocument(Document doc, Path path) {
+		forEach(doc, "list", listNode -> forEach(listNode, "message", msgNode -> {
+			try {
+				CustomMessage message = CustomMessage.valueOf(parseString(msgNode.getAttributes(), "name"));
+				forEach(msgNode, "lang", lang -> {
+					message.addMessage(Language.valueOfShort(parseString(lang.getAttributes(), "name")),
+							lang.getTextContent());
+				});
+			} catch (IllegalArgumentException e) {
+				log.warn("Incorrect custom message: " + parseString(msgNode.getAttributes(), "name") + e.getMessage());
+			}
+		}));
+	}
 }

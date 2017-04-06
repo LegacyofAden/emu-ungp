@@ -130,10 +130,12 @@ public enum EffectType {
 	i_reset_quest(InstantResetQuest::new),
 	i_resurrection(InstantResurrection::new),
 	i_restoration(InstantRestoration::new),
-	i_restoration_by_category(InstantRestorationByCategory::new), // Not confirmed
+	i_restoration_by_category(InstantRestorationByCategory::new),
+	// Not confirmed
 	i_restoration_random(InstantRestorationRandom::new),
 	i_restore_vital_point_noncount(InstantRestoreVitalPointNonCount::new),
-	i_set_hair_accessory_slot(InstantSetHairAccessorySlot::new), // Not confirmed
+	i_set_hair_accessory_slot(InstantSetHairAccessorySlot::new),
+	// Not confirmed
 	i_set_skill(InstantSetSkill::new),
 	i_skill_turning(InstantSkillTurning::new),
 	i_soul_blow(InstantSoulBlow::new),
@@ -168,12 +170,16 @@ public enum EffectType {
 	p_2h_sword_bonus(PumpTwoHandedSwordBonus::new),
 	p_ability_change(PumpAbilityChange::new),
 	p_abnormal_shield(PumpAbnormalShield::new),
-	p_absorb_damage(PumpAbsorbDamage::new), // Not confirmed
+	p_absorb_damage(PumpAbsorbDamage::new),
+	// Not confirmed
 	p_area_damage(PumpAreaDamage::new),
 	p_attack_attribute(PumpAttackAttribute::new),
-	p_attack_attribute_add(PumpAttackAttributeAdd::new), // Not confirmed
-	p_attack_behind(PumpAttackBehind::new), // Not confirmed
-	p_attack_damage_position(PumpAttackDamagePosition::new), // Not confirmed
+	p_attack_attribute_add(PumpAttackAttributeAdd::new),
+	// Not confirmed
+	p_attack_behind(PumpAttackBehind::new),
+	// Not confirmed
+	p_attack_damage_position(PumpAttackDamagePosition::new),
+	// Not confirmed
 	p_attack_range(PumpAttackRange::new),
 	p_attack_speed(PumpAttackSpeed::new),
 	p_attack_speed_by_hp2(PumpAttackSpeedByHp2::new),
@@ -208,7 +214,8 @@ public enum EffectType {
 	p_condition_block_act_item(PumpConditionBlockActItem::new),
 	p_condition_block_act_skill(PumpConditionBlockActSkill::new),
 	p_cp_regen(PumpCpRegen::new),
-	p_crafting_critical(PumpCraftingCritical::new), // Not confirmed
+	p_crafting_critical(PumpCraftingCritical::new),
+	// Not confirmed
 	p_create_common_item(PumpCreateCommonItem::new),
 	p_create_item(PumpCreateItem::new),
 	p_critical_damage(PumpCriticalDamage::new),
@@ -230,21 +237,25 @@ public enum EffectType {
 	p_defence_trait(PumpDefenceTrait::new),
 	p_disappear_target(PumpDisappearTarget::new),
 	p_disarm(PumpDisarm::new),
-	p_disarmor(PumpDisarmor::new), // Not confirmed
+	p_disarmor(PumpDisarmor::new),
+	// Not confirmed
 	p_droprate_modify(PumpDroprateModify::new),
 	p_enlarge_abnormal_slot(PumpEnlargeAbnormalSlot::new),
 	p_enlarge_storage(PumpEnlargeStorage::new),
 	p_exp_modify(PumpExpModify::new),
 	p_expand_deco_slot(PumpExpandDecoSlot::new),
-	p_expand_jewel_slot(PumpExpandJewelSlot::new), // Not confirmed
-	p_face_off(PumpFaceoff::new), // Not confirmed
+	p_expand_jewel_slot(PumpExpandJewelSlot::new),
+	// Not confirmed
+	p_face_off(PumpFaceoff::new),
+	// Not confirmed
 	p_fatal_blow_rate(PumpFatalBlowRate::new),
 	p_focus_energy(PumpFocusEnergy::new),
 	p_get_damage_limit(PumpGetDamageLimit::new),
 	p_get_item_by_exp(PumpGetItemByExp::new),
 	p_hate_attack(PumpHateAttack::new),
 	p_heal_effect(PumpHealEffect::new),
-	p_heal_special_critical(PumpHealSpecialCritical::new), // Not confirmed
+	p_heal_special_critical(PumpHealSpecialCritical::new),
+	// Not confirmed
 	p_hide(PumpHide::new),
 	p_hit(PumpHit::new),
 	p_hit_at_night(PumpHitAtNight::new),
@@ -262,7 +273,8 @@ public enum EffectType {
 	p_magic_critical_dmg(PumpMagicCriticalDmg::new),
 	p_magic_critical_rate(PumpMagicCriticalRate::new),
 	p_magic_defence_critical_dmg(PumpMagicDefenceCriticalDmg::new),
-	p_magic_defence_critical_rate(PumpMagicDefenceCriticalRate::new), // Not confirmed
+	p_magic_defence_critical_rate(PumpMagicDefenceCriticalRate::new),
+	// Not confirmed
 	p_magic_hit(PumpMagicHit::new),
 	p_magic_mp_cost(PumpMagicMpCost::new),
 	p_magic_speed(PumpMagicSpeed::new),
@@ -291,11 +303,14 @@ public enum EffectType {
 	p_physical_shield_defence_angle_all(PumpPhysicalShieldDefenceAngleAll::new),
 	p_pk_protect(PumpPkProtect::new),
 	p_pve_magical_skill_dmg_bonus(PumpPveMagicalSkillDmgBonus::new),
-	p_pve_magical_skill_defence_bonus(PumpPveMagicalSkillDefenceBonus::new), // Not confirmed
+	p_pve_magical_skill_defence_bonus(PumpPveMagicalSkillDefenceBonus::new),
+	// Not confirmed
 	p_pve_physical_attack_dmg_bonus(PumpPvePhysicalAttackDmgBonus::new),
-	p_pve_physical_attack_defence_bonus(PumpPvePhysicalAttackDefenceBonus::new), // Not confirmed
+	p_pve_physical_attack_defence_bonus(PumpPvePhysicalAttackDefenceBonus::new),
+	// Not confirmed
 	p_pve_physical_skill_dmg_bonus(PumpPvePhysicalSkillDmgBonus::new),
-	p_pve_physical_skill_defence_bonus(PumpPvePhysicalSkillDefenceBonus::new), // Not confirmed
+	p_pve_physical_skill_defence_bonus(PumpPvePhysicalSkillDefenceBonus::new),
+	// Not confirmed
 	p_pvp_magical_skill_dmg_bonus(PumpPvpMagicalSkillDmgBonus::new),
 	p_pvp_magical_skill_defence_bonus(PumpPvpMagicalSkillDefenceBonus::new),
 	p_pvp_physical_attack_dmg_bonus(PumpPvpPhysicalAttackDmgBonus::new),
@@ -314,8 +329,10 @@ public enum EffectType {
 	p_set_cloak_slot(PumpSetCloakSlot::new),
 	p_shield_defence_rate(PumpShieldDefenceRate::new),
 	p_skill_critical(PumpSkillCritical::new),
-	p_skill_critical_damage(PumpSkillCriticalDamage::new), // Not confirmed
-	p_skill_critical_rate(PumpSkillCriticalRate::new), // Not confirmed
+	p_skill_critical_damage(PumpSkillCriticalDamage::new),
+	// Not confirmed
+	p_skill_critical_rate(PumpSkillCriticalRate::new),
+	// Not confirmed
 	p_skill_critical_probability(PumpSkillCriticalProbability::new),
 	p_skill_power(PumpSkillPower::new),
 	p_soul_eating(PumpSoulEating::new),
@@ -323,7 +340,8 @@ public enum EffectType {
 	p_spell_power(PumpSpellPower::new),
 	p_speed(PumpSpeed::new),
 	p_speed_out_of_fight(PumpSpeedOutOfFight::new),
-	p_spheric_barrier(PumpSphericBarrier::new), // Not confirmed
+	p_spheric_barrier(PumpSphericBarrier::new),
+	// Not confirmed
 	p_stat_up(PumpStatUp::new),
 	p_stat_up_at_night(PumpStatUpAtNight::new),
 	p_statbonus_skillcritical(PumpStatBonusSkillCritical::new),
@@ -337,7 +355,8 @@ public enum EffectType {
 	p_transform_hangover(PumpTransformHangover::new),
 	p_trigger_skill_by_attack(PumpTriggerSkillByAttack::new),
 	p_trigger_skill_by_avoid(PumpTriggerSkillByAvoid::new),
-	p_trigger_skill_by_death(PumpTriggerSkillByDeath::new), // Not confirmed
+	p_trigger_skill_by_death(PumpTriggerSkillByDeath::new),
+	// Not confirmed
 	p_trigger_skill_by_dmg(PumpTriggerSkillByDmg::new),
 	p_trigger_skill_by_kill(PumpTriggerSkillByKill::new),
 	p_trigger_skill_by_magic_type(PumpTriggerSkillByMagicType::new),
@@ -347,17 +366,20 @@ public enum EffectType {
 	p_violet_boy(PumpVioletBoy::new),
 	p_weight_limit(PumpWeightLimit::new),
 	p_weight_penalty(PumpWeightPenalty::new),
-	p_world_chat_point(PumpWorldChatPoints::new), // Not confirmed
+	p_world_chat_point(PumpWorldChatPoints::new),
+	// Not confirmed
 	p_wrong_casting(PumpWrongCasting::new),
 
 	t_cp(TickCp::new),
 	t_get_energy(TickGetEnergy::new),
 	t_hp(TickHp::new),
 	t_hp_fatal(TickHpFatal::new),
-	t_hp_magic(TickHpMagic::new), // Not confirmed
+	t_hp_magic(TickHpMagic::new),
+	// Not confirmed
 	t_hp_to_owner(TickHpToOwner::new),
 	t_mp(TickMp::new),
-	t_synergy(TickSynergySkill::new), // Custom
+	t_synergy(TickSynergySkill::new),
+	// Custom
 
 	// Rework
 	Confuse(org.l2junity.gameserver.model.effects.effecttypes.custom.Confuse::new),

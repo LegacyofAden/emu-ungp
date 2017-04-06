@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.TrapAction;
@@ -42,10 +37,14 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.AbstractNpcInfo.TrapInfo;
-
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Trap instance.

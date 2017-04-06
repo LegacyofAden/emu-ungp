@@ -24,11 +24,10 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.options.Variation;
 import org.l2junity.gameserver.model.options.VariationFee;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.s2c.ExVariationResult;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Format:(ch) dddd

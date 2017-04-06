@@ -550,7 +550,7 @@ public class StatsSet implements IParserAdvUtils {
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(enumClass);
 		final Object val = _set.get(key);
-		if (val == null || val instanceof String && StringUtils.isEmpty((String)val)) {
+		if (val == null || val instanceof String && StringUtils.isEmpty((String) val)) {
 			return defaultValue;
 		}
 		if (enumClass.isInstance(val)) {

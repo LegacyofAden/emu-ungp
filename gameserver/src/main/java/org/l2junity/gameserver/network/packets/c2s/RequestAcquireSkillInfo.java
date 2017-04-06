@@ -32,11 +32,10 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerRequestAcquireSkillInfo;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.AcquireSkillInfo;
 import org.l2junity.gameserver.network.packets.s2c.ExAcquireSkillInfo;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Request Acquire Skill Info client packet implementation.

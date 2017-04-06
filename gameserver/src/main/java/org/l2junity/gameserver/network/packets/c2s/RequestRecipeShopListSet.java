@@ -28,7 +28,6 @@ import org.l2junity.gameserver.model.holders.RecipeHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.RecipeShopMsg;
@@ -36,7 +35,6 @@ import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
 
 import java.util.HashMap;
 import java.util.Map;

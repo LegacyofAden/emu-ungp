@@ -1,30 +1,10 @@
 package org.l2junity.gameserver.model.skills;
 
-import java.util.function.Consumer;
-
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.skills.affectscopetypes.BalakasScope;
-import org.l2junity.gameserver.model.skills.affectscopetypes.DeadParty;
-import org.l2junity.gameserver.model.skills.affectscopetypes.DeadPartyPledge;
-import org.l2junity.gameserver.model.skills.affectscopetypes.DeadPledge;
-import org.l2junity.gameserver.model.skills.affectscopetypes.DeadUnion;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Fan;
-import org.l2junity.gameserver.model.skills.affectscopetypes.FanPB;
-import org.l2junity.gameserver.model.skills.affectscopetypes.None;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Party;
-import org.l2junity.gameserver.model.skills.affectscopetypes.PartyPledge;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Pledge;
-import org.l2junity.gameserver.model.skills.affectscopetypes.PointBlank;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Range;
-import org.l2junity.gameserver.model.skills.affectscopetypes.RangeSortByHp;
-import org.l2junity.gameserver.model.skills.affectscopetypes.RingRange;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Single;
-import org.l2junity.gameserver.model.skills.affectscopetypes.Square;
-import org.l2junity.gameserver.model.skills.affectscopetypes.SquarePB;
-import org.l2junity.gameserver.model.skills.affectscopetypes.StaticObjectScope;
-import org.l2junity.gameserver.model.skills.affectscopetypes.SummonExceptMaster;
-import org.l2junity.gameserver.model.skills.affectscopetypes.WyvernScope;
+import org.l2junity.gameserver.model.skills.affectscopetypes.*;
+
+import java.util.function.Consumer;
 
 /**
  * @author ANZO

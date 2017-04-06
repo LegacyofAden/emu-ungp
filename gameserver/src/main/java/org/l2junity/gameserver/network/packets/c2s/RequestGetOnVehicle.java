@@ -23,11 +23,10 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.GetOnVehicle;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestGetOnVehicle extends GameClientPacket {
 	private int _boatId;

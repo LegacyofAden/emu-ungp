@@ -18,10 +18,10 @@
  */
 package org.l2junity.gameserver.model.skills.affectobjecttypes;
 
-import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.skills.IAffectObjectHandler;
 
 /**
  * @author Nik

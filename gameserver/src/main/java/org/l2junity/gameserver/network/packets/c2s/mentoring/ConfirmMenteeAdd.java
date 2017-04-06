@@ -18,21 +18,20 @@
  */
 package org.l2junity.gameserver.network.packets.c2s.mentoring;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMenteeAdd;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.mentoring.ExMentorList;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 
 /**
  * @author Gnacik, UnAfraid

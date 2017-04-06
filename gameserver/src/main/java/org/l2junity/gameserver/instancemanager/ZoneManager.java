@@ -18,18 +18,8 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.lang.reflect.Constructor;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.IXmlReader;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
@@ -39,11 +29,7 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.model.zone.AbstractZoneSettings;
-import org.l2junity.gameserver.model.zone.L2ZoneForm;
-import org.l2junity.gameserver.model.zone.L2ZoneRespawn;
-import org.l2junity.gameserver.model.zone.ZoneRegion;
-import org.l2junity.gameserver.model.zone.ZoneType;
+import org.l2junity.gameserver.model.zone.*;
 import org.l2junity.gameserver.model.zone.form.ZoneCuboid;
 import org.l2junity.gameserver.model.zone.form.ZoneCylinder;
 import org.l2junity.gameserver.model.zone.form.ZoneNPoly;
@@ -55,8 +41,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Constructor;
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * This class manages the zones
@@ -369,10 +356,10 @@ public final class ZoneManager implements IGameXmlReader {
 		load();
 
 		// Re-validate all characters in zones
-		WorldManager.getInstance().getWorlds().forEach(world -> 
-			world.getVisibleObjects().stream()
-				.filter(o -> o instanceof Creature)
-				.forEach(o -> ((Creature) o).revalidateZone(true))
+		WorldManager.getInstance().getWorlds().forEach(world ->
+				world.getVisibleObjects().stream()
+						.filter(o -> o instanceof Creature)
+						.forEach(o -> ((Creature) o).revalidateZone(true))
 		);
 
 		SETTINGS.clear();

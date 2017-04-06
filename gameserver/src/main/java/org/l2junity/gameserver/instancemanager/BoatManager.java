@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.VehiclePathPoint;
@@ -29,6 +26,9 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class BoatManager {
@@ -166,7 +166,7 @@ public class BoatManager {
 	private void broadcastPacketsToPlayers(VehiclePathPoint point1, VehiclePathPoint point2, GameServerPacket... packets) {
 		//FIXME n3k0: rework it to like this:
 		//WorldManager.getInstance().getMainWorld().forEachVisibleObjectInRadius(point1, Player.class, GeneralConfig.BOAT_BROADCAST_RADIUS, player -> player.sendPacket(packets));
-		
+
 		for (Player player : WorldManager.getInstance().getMainWorld().getPlayers()) {
 			double dx = player.getX() - point1.getX();
 			double dy = player.getY() - point1.getY();

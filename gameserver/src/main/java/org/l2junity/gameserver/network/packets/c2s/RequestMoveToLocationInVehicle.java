@@ -24,13 +24,12 @@ import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.type.WeaponType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.MoveToLocationInVehicle;
 import org.l2junity.gameserver.network.packets.s2c.StopMoveInVehicle;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestMoveToLocationInVehicle extends GameClientPacket {
 	private int _boatId;

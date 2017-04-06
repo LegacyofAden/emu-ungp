@@ -40,7 +40,8 @@ public enum DoubleStat {
 	MAX_MP("maxMp", new MaxMpFinalizer()),
 	MAX_MP_ADD("maxMpAdd"),
 	MAX_CP("maxCp", new MaxCpFinalizer()),
-	MAX_RECOVERABLE_HP("maxRecoverableHp"), // The maximum HP that is able to be recovered trough heals
+	MAX_RECOVERABLE_HP("maxRecoverableHp"),
+	// The maximum HP that is able to be recovered trough heals
 	MAX_RECOVERABLE_MP("maxRecoverableMp"),
 	MAX_RECOVERABLE_CP("maxRecoverableCp"),
 	REGENERATE_HP_RATE("regHp", new RegenHPFinalizer()),
@@ -57,11 +58,14 @@ public enum DoubleStat {
 	MAGIC_ATTACK("mAtk", new MAttackFinalizer()),
 	MAGIC_ATTACK_ADD("mAtkAdd"),
 	PHYSICAL_ATTACK_SPEED("pAtkSpd", new PAttackSpeedFinalizer()),
-	MAGIC_ATTACK_SPEED("mAtkSpd", new MAttackSpeedFinalizer()), // Magic Skill Casting Time Rate
-	ATK_REUSE("atkReuse"), // Bows Hits Reuse Rate
+	MAGIC_ATTACK_SPEED("mAtkSpd", new MAttackSpeedFinalizer()),
+	// Magic Skill Casting Time Rate
+	ATK_REUSE("atkReuse"),
+	// Bows Hits Reuse Rate
 	SHIELD_DEFENCE("sDef", new ShieldDefenceFinalizer()),
 	CRITICAL_DAMAGE("cAtk"),
-	CRITICAL_DAMAGE_ADD("cAtkAdd"), // this is another type for special critical damage mods - vicious stance, critical power and critical damage SA
+	CRITICAL_DAMAGE_ADD("cAtkAdd"),
+	// this is another type for special critical damage mods - vicious stance, critical power and critical damage SA
 	HATE_ATTACK("attackHate"),
 
 	// PVP BONUS
@@ -92,7 +96,8 @@ public enum DoubleStat {
 
 	// ATTACK & DEFENCE RATES
 	MAGIC_CRITICAL_DAMAGE("mCritPower"),
-	PHYSICAL_SKILL_POWER("physicalSkillPower"), // Adding skill power (not multipliers) results in points added directly to final value unmodified by defence, traits, elements, criticals etc.
+	PHYSICAL_SKILL_POWER("physicalSkillPower"),
+	// Adding skill power (not multipliers) results in points added directly to final value unmodified by defence, traits, elements, criticals etc.
 	// Even when damage is 0 due to general trait immune multiplier, added skill power is active and clearly visible (damage not being 0 but at the value of added skill power).
 	MAGICAL_SKILL_POWER("magicalSkillPower"),
 	CRITICAL_DAMAGE_SKILL("cAtkSkill"),
@@ -110,7 +115,8 @@ public enum DoubleStat {
 	DEFENCE_CRITICAL_DAMAGE("defCritDamage"),
 	DEFENCE_MAGIC_CRITICAL_DAMAGE("defMCritDamage"),
 	DEFENCE_MAGIC_CRITICAL_DAMAGE_ADD("defMCritDamageAdd"),
-	DEFENCE_CRITICAL_DAMAGE_ADD("defCritDamageAdd"), // Resistance to critical damage in value (Example: +100 will be 100 more critical damage, NOT 100% more).
+	DEFENCE_CRITICAL_DAMAGE_ADD("defCritDamageAdd"),
+	// Resistance to critical damage in value (Example: +100 will be 100 more critical damage, NOT 100% more).
 	DEFENCE_CRITICAL_DAMAGE_SKILL("defCAtkSkill"),
 	DEFENCE_CRITICAL_DAMAGE_SKILL_ADD("defCAtkSkillAdd"),
 	INSTANT_KILL_RESIST("instantKillResist"),
@@ -157,7 +163,8 @@ public enum DoubleStat {
 
 	// VULNERABILITIES
 	DAMAGE_ZONE_VULN("damageZoneVuln"),
-	RESIST_DISPEL_BUFF("cancelVuln"), // Resistance for cancel type skills
+	RESIST_DISPEL_BUFF("cancelVuln"),
+	// Resistance for cancel type skills
 	RESIST_ABNORMAL_DEBUFF("debuffVuln"),
 
 	// RESISTANCES
@@ -184,8 +191,10 @@ public enum DoubleStat {
 	// PROFICIENCY
 	REFLECT_DAMAGE_PERCENT("reflectDam"),
 	REFLECT_DAMAGE_PERCENT_DEFENSE("reflectDamDef"),
-	REFLECT_SKILL_MAGIC("reflectSkillMagic"), // Need rework
-	REFLECT_SKILL_PHYSIC("reflectSkillPhysic"), // Need rework
+	REFLECT_SKILL_MAGIC("reflectSkillMagic"),
+	// Need rework
+	REFLECT_SKILL_PHYSIC("reflectSkillPhysic"),
+	// Need rework
 	VENGEANCE_SKILL_MAGIC_DAMAGE("vengeanceMdam"),
 	VENGEANCE_SKILL_PHYSICAL_DAMAGE("vengeancePdam"),
 	ABSORB_DAMAGE_PERCENT("absorbDam"),

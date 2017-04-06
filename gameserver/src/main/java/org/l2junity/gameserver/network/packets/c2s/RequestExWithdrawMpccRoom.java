@@ -21,9 +21,8 @@ package org.l2junity.gameserver.network.packets.c2s;
 import org.l2junity.gameserver.enums.MatchingRoomType;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.matching.MatchingRoom;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author Sdw

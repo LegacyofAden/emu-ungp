@@ -21,9 +21,8 @@ package org.l2junity.gameserver.network.packets.c2s;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 public final class CannotMoveAnymore extends GameClientPacket {
 	private int _x;

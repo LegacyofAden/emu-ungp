@@ -23,10 +23,9 @@ import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.SiegeDefenderList;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestConfirmSiegeWaitingList extends GameClientPacket {
 	private int _approved;

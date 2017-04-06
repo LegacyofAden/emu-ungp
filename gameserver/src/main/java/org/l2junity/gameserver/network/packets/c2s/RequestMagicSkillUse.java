@@ -24,11 +24,10 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerUseSkill;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 @Slf4j
 public final class RequestMagicSkillUse extends GameClientPacket {

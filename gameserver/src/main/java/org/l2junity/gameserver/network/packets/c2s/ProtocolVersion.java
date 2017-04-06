@@ -20,10 +20,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.configs.GameserverConfig;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.KeyPacket;
-import org.l2junity.network.PacketReader;
+
 
 @Slf4j(topic = "accounting")
 public final class ProtocolVersion extends GameClientPacket {

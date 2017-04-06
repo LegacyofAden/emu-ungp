@@ -21,7 +21,6 @@ package org.l2junity.gameserver.network.packets.s2c;
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.ItemInfo;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.network.PacketWriter;
 
 import java.util.Collection;
 import java.util.List;

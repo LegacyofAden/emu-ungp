@@ -23,10 +23,9 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.beautyshop.BeautyData;
 import org.l2junity.gameserver.model.beautyshop.BeautyItem;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExResponseBeautyRegistReset;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author Sdw

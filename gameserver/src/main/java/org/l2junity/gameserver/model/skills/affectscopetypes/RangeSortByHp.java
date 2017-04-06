@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
-import java.awt.Color;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.model.Location;
@@ -32,6 +27,11 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
+
+import java.awt.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Range sorted by lowest to highest hp percent affect scope implementation.

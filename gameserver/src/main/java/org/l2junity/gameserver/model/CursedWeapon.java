@@ -18,12 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
@@ -39,16 +33,17 @@ import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.packets.s2c.Earthquake;
-import org.l2junity.gameserver.network.packets.s2c.ExRedSky;
-import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
-import org.l2junity.gameserver.network.packets.s2c.SocialAction;
-import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
-import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class CursedWeapon implements INamable {
 	private static final Logger _log = LoggerFactory.getLogger(CursedWeapon.class);

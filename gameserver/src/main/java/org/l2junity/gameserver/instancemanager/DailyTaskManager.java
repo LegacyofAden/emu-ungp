@@ -18,11 +18,6 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.Collections;
-import java.util.List;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.TrainingCampConfig;
 import org.l2junity.gameserver.data.sql.impl.ClanTable;
@@ -48,6 +43,11 @@ import org.l2junity.gameserver.network.packets.s2c.ExVoteSystemInfo;
 import org.l2junity.gameserver.network.packets.s2c.ExWorldChatCnt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author UnAfraid

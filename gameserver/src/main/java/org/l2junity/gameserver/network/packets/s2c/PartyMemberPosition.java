@@ -22,8 +22,8 @@ import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 import java.util.HashMap;
 import java.util.Map;

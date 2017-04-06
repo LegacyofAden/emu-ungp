@@ -22,10 +22,9 @@ import org.l2junity.gameserver.instancemanager.ItemAuctionManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemauction.ItemAuction;
 import org.l2junity.gameserver.model.itemauction.ItemAuctionInstance;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExItemAuctionInfoPacket;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author Forsaiken

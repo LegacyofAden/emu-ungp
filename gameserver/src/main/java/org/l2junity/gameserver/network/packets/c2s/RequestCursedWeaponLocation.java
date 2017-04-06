@@ -22,11 +22,9 @@ import org.l2junity.gameserver.instancemanager.CursedWeaponsManager;
 import org.l2junity.gameserver.model.CursedWeapon;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExCursedWeaponLocation;
 import org.l2junity.gameserver.network.packets.s2c.ExCursedWeaponLocation.CursedWeaponInfo;
-import org.l2junity.network.PacketReader;
 
 import java.util.LinkedList;
 import java.util.List;

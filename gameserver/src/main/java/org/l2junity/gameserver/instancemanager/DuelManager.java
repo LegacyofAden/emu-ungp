@@ -24,7 +24,6 @@ import org.l2junity.gameserver.model.entity.Duel;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;

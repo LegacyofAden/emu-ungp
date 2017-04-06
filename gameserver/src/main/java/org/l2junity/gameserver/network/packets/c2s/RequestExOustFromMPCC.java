@@ -20,11 +20,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * D0 0F 00 5A 00 77 00 65 00 72 00 67 00 00 00
@@ -43,7 +42,7 @@ public final class RequestExOustFromMPCC extends GameClientPacket {
 	public void runImpl() {
 		Player activeChar = getClient().getActiveChar();
 		Player target = WorldManager.getInstance().getPlayer(_name);
-		
+
 		if ((target != null) && target.isInParty() && activeChar.isInParty() && activeChar.getParty().isInCommandChannel() && target.getParty().isInCommandChannel() && activeChar.getParty().getCommandChannel().getLeader().equals(activeChar) && activeChar.getParty().getCommandChannel().equals(target.getParty().getCommandChannel())) {
 			if (activeChar.equals(target)) {
 				return;

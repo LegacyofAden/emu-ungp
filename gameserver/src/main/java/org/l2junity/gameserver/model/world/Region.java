@@ -1,11 +1,7 @@
 package org.l2junity.gameserver.model.world;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -16,27 +12,34 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.Vehicle;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 /**
- * 
  * @author PointerRage
- *
  */
 @Slf4j
 public class Region {
-	@Getter private final Map<Integer, WorldObject> objects = new ConcurrentHashMap<>(0);
-	
-	@Getter private final int worldId;
-	@Getter private final int x;
-	@Getter private final int y;
-	@Getter private final int z;
-	
-	@Getter private boolean isActive;
-	
+	@Getter
+	private final Map<Integer, WorldObject> objects = new ConcurrentHashMap<>(0);
+
+	@Getter
+	private final int worldId;
+	@Getter
+	private final int x;
+	@Getter
+	private final int y;
+	@Getter
+	private final int z;
+
+	@Getter
+	private boolean isActive;
+
 	private ScheduledFuture<?> neighborsTask;
-	
+
 	protected Region(int worldId, int x, int y, int z) {
 		this.worldId = worldId;
 		this.x = x;
@@ -44,7 +47,7 @@ public class Region {
 		this.z = z;
 		isActive = GeneralConfig.GRIDS_ALWAYS_ON;
 	}
-	
+
 	public void addVisibleObject(WorldObject object) {
 		objects.put(object.getObjectId(), object);
 
@@ -64,13 +67,13 @@ public class Region {
 			}
 		}
 	}
-	
+
 	public boolean forEachSurroundingRegion(Predicate<Region> p) {
 		final GameWorld world = WorldManager.getInstance().getWorld(worldId);
-		if(world == null) {
+		if (world == null) {
 			return false;
 		}
-		
+
 		final Region[][][] regions = world.getRegions();
 		for (int x = this.x - 1; x <= this.x + 1; x++) {
 			for (int y = this.y - 1; y <= this.y + 1; y++) {
@@ -78,12 +81,12 @@ public class Region {
 					if (!WorldData.isValidRegion(x, y, z)) {
 						continue;
 					}
-					
+
 					final Region region = regions[x][y][z];
-					if(region == null) {
+					if (region == null) {
 						continue;
 					}
-					
+
 					if (!p.test(region)) {
 						return false;
 					}
@@ -92,18 +95,18 @@ public class Region {
 		}
 		return true;
 	}
-	
+
 	public boolean isSurroundingRegion(Region region) {
-		return region != null && x >= region.getX() - 1 && x <= region.getX() + 1 
-				&& y >= region.getY() - 1 && y <= region.getY() + 1 
+		return region != null && x >= region.getX() - 1 && x <= region.getX() + 1
+				&& y >= region.getY() - 1 && y <= region.getY() + 1
 				&& z >= region.getZ() - 1 && z <= region.getZ() + 1
 				&& worldId == region.getWorldId();
 	}
-	
+
 	public boolean isNeighborsEmpty() {
 		return forEachSurroundingRegion(w -> !(w.isActive() && w.getObjects().values().stream().anyMatch(WorldObject::isPlayable)));
 	}
-	
+
 	public void setActive(boolean active) {
 		if (isActive == active) {
 			return;
@@ -114,7 +117,7 @@ public class Region {
 
 		log.debug("{} Grid {}", active ? "Starting" : "Stopping", this);
 	}
-	
+
 	public void deleteVisibleNpcSpawns() {
 		log.debug("Deleting all visible NPC's in Region: {}", this);
 		for (WorldObject obj : objects.values()) {
@@ -131,7 +134,7 @@ public class Region {
 		}
 		log.info("All visible NPC's deleted in Region: {}", this);
 	}
-	
+
 	public class NeighborsTask implements Runnable {
 		private final boolean isActivating;
 
@@ -207,7 +210,7 @@ public class Region {
 			neighborsTask = ThreadPool.getInstance().scheduleGeneral(new NeighborsTask(false), GeneralConfig.GRID_NEIGHBOR_TURNOFF_TIME, TimeUnit.SECONDS);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";

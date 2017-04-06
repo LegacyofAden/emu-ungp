@@ -27,13 +27,11 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.alchemy.AlchemyCraftData;
 import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.alchemy.ExAlchemyConversion;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
-import org.l2junity.network.PacketReader;
 
 import java.util.HashSet;
 import java.util.Set;

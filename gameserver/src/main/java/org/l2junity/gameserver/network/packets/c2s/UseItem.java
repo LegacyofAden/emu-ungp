@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.PlayerConfig;
@@ -45,13 +42,15 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.ActionType;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.world.ItemStorage;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.ExUseSharedGroupItem;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 
 @Slf4j
 public final class UseItem extends GameClientPacket {

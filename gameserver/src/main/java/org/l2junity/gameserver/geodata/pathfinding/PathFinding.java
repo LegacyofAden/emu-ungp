@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding;
 
-import java.util.List;
-
 import org.l2junity.core.configs.GeoDataConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.geodata.pathfinding.cellnodes.CellPathFinding;
@@ -28,6 +26,8 @@ import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoNode;
 import org.l2junity.gameserver.geodata.pathfinding.geonodes.GeoPathFinding;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.world.WorldData;
+
+import java.util.List;
 
 /**
  * @author -Nemesiss-
@@ -64,7 +64,7 @@ public abstract class PathFinding {
 
 	// @formatter:off
 	/*
-    public List<AbstractNodeLoc> search(AbstractNode start, AbstractNode end, int instanceId)
+	public List<AbstractNodeLoc> search(AbstractNode start, AbstractNode end, int instanceId)
 	{
 		// The simplest grid-based pathfinding.
 		// Drawback is not having higher cost for diagonal movement (means funny routes)

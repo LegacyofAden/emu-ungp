@@ -22,10 +22,9 @@ import org.l2junity.gameserver.data.xml.impl.VariationData;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.options.VariationFee;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.s2c.ExPutIntensiveResultForVariationMake;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Fromat(ch) dd

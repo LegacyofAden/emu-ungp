@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.core.configs.GeneralConfig;
@@ -32,13 +29,15 @@ import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.ItemStorage;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 
 @Slf4j
 public final class RequestDestroyItem extends GameClientPacket {
@@ -89,7 +88,7 @@ public final class RequestDestroyItem extends GameClientPacket {
 			// gm can destroy other player items
 			if (activeChar.isGM()) {
 				final ItemInstance obj = ItemStorage.getInstance().get(_objectId);
-				if(obj != null) {
+				if (obj != null) {
 					if (_count > obj.getCount()) {
 						count = obj.getCount();
 					}

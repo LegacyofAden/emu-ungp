@@ -34,7 +34,6 @@ import org.l2junity.gameserver.model.multibox.MultiboxSettings;
 import org.l2junity.gameserver.model.multibox.MultiboxSourceType;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.network.GameClient;
-
 import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.Collections;

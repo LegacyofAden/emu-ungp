@@ -18,8 +18,8 @@
  */
 package org.l2junity.gameserver.geodata.pathfinding.cellnodes;
 
-import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.core.configs.GeoDataConfig;
+import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNode;
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;

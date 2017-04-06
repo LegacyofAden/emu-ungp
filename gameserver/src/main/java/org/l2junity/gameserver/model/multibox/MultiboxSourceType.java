@@ -19,7 +19,6 @@
 package org.l2junity.gameserver.model.multibox;
 
 import org.l2junity.gameserver.network.GameClient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

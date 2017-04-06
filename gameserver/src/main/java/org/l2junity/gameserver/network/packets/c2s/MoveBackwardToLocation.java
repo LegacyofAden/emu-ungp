@@ -28,7 +28,6 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerMoveRequest;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.FlyToLocation.FlyType;
@@ -36,7 +35,6 @@ import org.l2junity.gameserver.network.packets.s2c.sayune.ExFlyMove;
 import org.l2junity.gameserver.network.packets.s2c.sayune.ExFlyMoveBroadcast;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
-import org.l2junity.network.PacketReader;
 
 import java.util.Arrays;
 

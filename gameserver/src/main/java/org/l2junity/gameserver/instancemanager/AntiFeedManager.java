@@ -23,7 +23,6 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.GameClient;
 
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

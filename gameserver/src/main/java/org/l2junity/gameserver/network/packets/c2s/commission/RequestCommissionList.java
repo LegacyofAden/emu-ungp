@@ -24,10 +24,8 @@ import org.l2junity.gameserver.model.commission.CommissionItemType;
 import org.l2junity.gameserver.model.commission.CommissionTreeType;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.type.CrystalType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.commission.ExCloseCommission;
-import org.l2junity.network.PacketReader;
 
 import java.util.function.Predicate;
 

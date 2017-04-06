@@ -21,11 +21,9 @@ package org.l2junity.gameserver.network.packets.c2s.onedayreward;
 import org.l2junity.gameserver.data.xml.impl.OneDayRewardData;
 import org.l2junity.gameserver.model.OneDayRewardDataHolder;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExConnectedTimeAndGettableReward;
 import org.l2junity.gameserver.network.packets.s2c.onedayreward.ExOneDayReceiveRewardList;
-import org.l2junity.network.PacketReader;
 
 import java.util.Collection;
 

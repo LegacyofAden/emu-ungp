@@ -18,12 +18,6 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.MobGroup;
 import org.l2junity.gameserver.model.MobGroupTable;
@@ -36,6 +30,12 @@ import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
+import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
 
 /**
  * AI for controllable mobs

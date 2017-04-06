@@ -18,14 +18,13 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.io.Serializable;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.l2junity.commons.math.Point3D;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.interfaces.IPositionable;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.io.Serializable;
 
 /**
  * Location data transfer object.<br>
@@ -36,7 +35,9 @@ import lombok.Setter;
 public class Location extends Point3D implements IPositionable, Serializable {
 	private static final long serialVersionUID = 9053071440080626121L;
 
-	@Getter @Setter private int heading;
+	@Getter
+	@Setter
+	private int heading;
 
 	public Location(double x, double y, double z) {
 		this(x, y, z, 0);

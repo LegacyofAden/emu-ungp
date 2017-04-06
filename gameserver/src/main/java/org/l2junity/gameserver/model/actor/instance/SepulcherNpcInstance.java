@@ -18,9 +18,6 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -41,6 +38,9 @@ import org.l2junity.gameserver.network.packets.s2c.SocialAction;
 import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author sandman

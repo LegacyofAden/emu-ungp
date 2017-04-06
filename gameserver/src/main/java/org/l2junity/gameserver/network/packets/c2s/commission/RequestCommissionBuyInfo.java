@@ -21,12 +21,11 @@ package org.l2junity.gameserver.network.packets.c2s.commission;
 import org.l2junity.gameserver.instancemanager.CommissionManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.commission.CommissionItem;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.commission.ExCloseCommission;
 import org.l2junity.gameserver.network.packets.s2c.commission.ExResponseCommissionBuyInfo;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author NosBit

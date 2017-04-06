@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.effects.effecttypes.instant;
 
-import java.util.List;
-
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
@@ -29,6 +27,8 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
+
+import java.util.List;
 
 /**
  * Randomize Hate effect implementation.

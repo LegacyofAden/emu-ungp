@@ -21,8 +21,8 @@ package org.l2junity.gameserver.network.packets.s2c;
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.enums.StatusUpdateType;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

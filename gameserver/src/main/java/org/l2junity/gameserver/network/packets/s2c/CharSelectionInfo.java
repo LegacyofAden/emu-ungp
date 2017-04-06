@@ -32,7 +32,6 @@ import org.l2junity.gameserver.model.VariationInstance;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.network.GameClient;
-
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.GameServerPacketType;
 

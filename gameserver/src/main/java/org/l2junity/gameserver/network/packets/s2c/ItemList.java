@@ -25,7 +25,6 @@ import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class ItemList extends AbstractItemPacket {
 	private final Player _activeChar;

@@ -22,11 +22,10 @@ import org.l2junity.core.configs.GeoDataConfig;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.GetOnVehicle;
 import org.l2junity.gameserver.network.packets.s2c.ValidateLocation;
-import org.l2junity.network.PacketReader;
+
 
 public class ValidatePosition extends GameClientPacket {
 	private int _x;

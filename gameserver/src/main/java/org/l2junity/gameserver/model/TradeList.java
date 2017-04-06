@@ -18,12 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.core.configs.AdminConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
@@ -41,6 +35,12 @@ import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Advi

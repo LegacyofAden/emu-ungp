@@ -35,9 +35,9 @@ import org.l2junity.gameserver.instancemanager.tasks.FourSepulchersChangeWarmUpT
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.DoorInstance;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.instance.SepulcherMonsterInstance;
 import org.l2junity.gameserver.model.actor.instance.SepulcherNpcInstance;
-import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;

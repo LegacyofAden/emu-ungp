@@ -1,9 +1,6 @@
 package org.l2junity.gameserver.network.crypt;
 
 import org.l2junity.commons.network.ICipher;
-import org.l2junity.gameserver.model.events.EventDispatcher;
-import org.l2junity.gameserver.model.events.impl.server.OnPacketReceived;
-import org.l2junity.gameserver.model.events.impl.server.OnPacketSent;
 import org.l2junity.gameserver.network.GameClient;
 
 import java.nio.ByteBuffer;
@@ -28,69 +25,57 @@ public class GameCrypt implements ICipher {
 	}
 
 	@Override
-	public boolean encrypt(ByteBuffer buf, int position, int size) {
+	public boolean encrypt(ByteBuffer buffer, int position, int size) {
 		if (!isEnabled) {
 			isEnabled = true;
-			onPacketSent(buf);
 			return true;
 		}
 
-		onPacketSent(buf);
-
-		int a = 0;
-		while (buf.hasRemaining()) {
-			final int b = buf.get() & 0xFF;
-			a = b ^ outKey[(buf.position() - 1) & 15] ^ a;
-			buf.put(buf.position() - 1, (byte)a);
+		int temp = 0;
+		for (int i = 0; i < size; i++) {
+			int temp2 = buffer.get(position + i) & 0xFF;
+			temp = temp2 ^ outKey[i & 15] ^ temp;
+			buffer.put(position + i, (byte) temp);
 		}
 
-		shiftKey(outKey, buf.position());
+		int old = outKey[8] & 0xff;
+		old |= outKey[9] << 8 & 0xff00;
+		old |= outKey[10] << 0x10 & 0xff0000;
+		old |= outKey[11] << 0x18 & 0xff000000;
+
+		old += size;
+
+		outKey[8] = (byte) (old & 0xff);
+		outKey[9] = (byte) (old >> 0x08 & 0xff);
+		outKey[10] = (byte) (old >> 0x10 & 0xff);
+		outKey[11] = (byte) (old >> 0x18 & 0xff);
 		return true;
 	}
 
 	@Override
-	public boolean decrypt(ByteBuffer buf, int position, int size) {
+	public boolean decrypt(ByteBuffer buffer, int position, int size) {
 		if (!isEnabled) {
-			onPacketReceive(buf);
 			return true;
 		}
 
-		int a = 0;
-		while (buf.hasRemaining()) {
-			final int b = buf.get() & 0xFF;
-			buf.put(buf.position() - 1, (byte)(b ^ inKey[(buf.position() - 1) & 15] ^ a));
-			a = b;
+		int temp = 0;
+		for (int i = 0; i < size; i++) {
+			int temp2 = buffer.get(position + i) & 0xFF;
+			buffer.put(position + i, (byte) (temp2 ^ inKey[i & 15] ^ temp));
+			temp = temp2;
 		}
 
-		shiftKey(inKey, buf.position());
-
-		onPacketReceive(buf);
-		return true;
-	}
-
-	private void onPacketSent(ByteBuffer buf) {
-		byte[] data = new byte[buf.position()];
-		buf.get(data, 0, buf.position());
-		EventDispatcher.getInstance().notifyEvent(new OnPacketSent(client, data));
-	}
-
-	private void onPacketReceive(ByteBuffer buf) {
-		byte[] data = new byte[buf.position()];
-		buf.get(data, 0, buf.position());
-		EventDispatcher.getInstance().notifyEvent(new OnPacketReceived(client, data));
-	}
-
-	private void shiftKey(byte[] key, int size) {
-		int old = key[8] & 0xff;
-		old |= (key[9] << 8) & 0xff00;
-		old |= (key[10] << 0x10) & 0xff0000;
-		old |= (key[11] << 0x18) & 0xff000000;
+		int old = inKey[8] & 0xff;
+		old |= inKey[9] << 8 & 0xff00;
+		old |= inKey[10] << 0x10 & 0xff0000;
+		old |= inKey[11] << 0x18 & 0xff000000;
 
 		old += size;
 
-		key[8] = (byte) (old & 0xff);
-		key[9] = (byte) ((old >> 0x08) & 0xff);
-		key[10] = (byte) ((old >> 0x10) & 0xff);
-		key[11] = (byte) ((old >> 0x18) & 0xff);
+		inKey[8] = (byte) (old & 0xff);
+		inKey[9] = (byte) (old >> 0x08 & 0xff);
+		inKey[10] = (byte) (old >> 0x10 & 0xff);
+		inKey[11] = (byte) (old >> 0x18 & 0xff);
+		return true;
 	}
 }

@@ -26,7 +26,6 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.ExPrivateStoreSetWholeMsg;
@@ -35,7 +34,7 @@ import org.l2junity.gameserver.network.packets.s2c.PrivateStoreMsgSell;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
 
 public class SetPrivateStoreListSell extends GameClientPacket {
 	private static final int BATCH_LENGTH = 20; // length of the one item

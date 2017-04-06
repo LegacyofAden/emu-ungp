@@ -23,11 +23,10 @@ import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.ClanInvitationRequest;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestAnswerJoinPledge extends GameClientPacket {
 	private int _answer;

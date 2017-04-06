@@ -7,8 +7,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.l2junity.core.configs.ScriptsConfig;
-import org.l2junity.core.startup.StartupComponent;
-import org.l2junity.gameserver.data.txt.gen.*;
+import org.l2junity.gameserver.data.txt.gen.DecoDatasBaseListener;
+import org.l2junity.gameserver.data.txt.gen.DecoDatasLexer;
+import org.l2junity.gameserver.data.txt.gen.DecoDatasParser;
 import org.l2junity.gameserver.data.txt.model.decodata.DecoDataTemplate;
 
 import java.io.InputStream;
@@ -44,8 +45,7 @@ public class DecoData extends DecoDatasBaseListener {
 				walker.walk(this, tree);
 			} catch (Exception e) {
 				log.error("Error while loading decodata.txt", e);
-			}
-			finally {
+			} finally {
 				log.info("Loaded {} DecoDataTemplate's", templates.size());
 			}
 		}

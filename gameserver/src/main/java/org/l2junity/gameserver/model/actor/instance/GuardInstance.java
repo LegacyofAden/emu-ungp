@@ -33,7 +33,7 @@ import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
  * This class manages all Guards in the world. It inherits all methods from L2Attackable and adds some more such as tracking PK and aggressive MonsterInstance.
  */
 public class GuardInstance extends Attackable {
-	
+
 	/**
 	 * Constructor of GuardInstance (use L2Character and NpcInstance constructor).<br>
 	 * <B><U> Actions</U> :</B>

@@ -20,9 +20,11 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.model.ClanMember;
 import org.l2junity.gameserver.model.ClanPrivilege;
-import org.l2junity.gameserver.model.actor.instance.Player;;
+import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
+
+;
 
 public class RequestGiveNickName extends GameClientPacket {
 	private String _target;

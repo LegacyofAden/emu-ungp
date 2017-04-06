@@ -1,6 +1,7 @@
 package org.l2junity.gameserver.model.drops.conditions;
 
 import org.l2junity.gameserver.model.StatsSet;
+
 import java.util.function.Function;
 
 /**

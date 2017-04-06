@@ -20,8 +20,8 @@ package org.l2junity.gameserver.network.packets.s2c;
 
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 public final class Revive extends GameServerPacket {
 	private final int _objectId;

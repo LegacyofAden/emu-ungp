@@ -22,8 +22,8 @@ import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 public final class PartySmallWindowAll extends GameServerPacket {
 	private final Party _party;

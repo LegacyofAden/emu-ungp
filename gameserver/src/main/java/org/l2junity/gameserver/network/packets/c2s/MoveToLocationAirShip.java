@@ -25,10 +25,9 @@ import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldData;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public class MoveToLocationAirShip extends GameClientPacket {
 	public static final int MIN_Z = -895;

@@ -21,12 +21,12 @@ import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.crypt.BlowFishKeygen;
+import org.l2junity.gameserver.network.crypt.GameCrypt;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.LeaveWorld;
 import org.l2junity.gameserver.network.packets.s2c.ServerClose;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.gameserver.network.crypt.GameCrypt;
-import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.security.SecondaryPasswordAuth;
 import org.l2junity.gameserver.util.FloodProtectors;
 import org.slf4j.Logger;
@@ -46,16 +46,20 @@ public class GameClient extends Client<GameClient> {
 
 	private final AtomicReference<GameClientState> state = new AtomicReference<>(GameClientState.CONNECTED);
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private SessionInfo sessionInfo;
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private boolean protocolOk;
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private boolean isAuthedGG;
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private int[][] trace;
 
 	@Getter
@@ -73,10 +77,12 @@ public class GameClient extends Client<GameClient> {
 	@Getter
 	private final FloodProtectors floodProtectors = new FloodProtectors(this);
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private Player activeChar;
 
-	@Getter @Setter
+	@Getter
+	@Setter
 	private boolean isDetached;
 
 	public GameClient(Connection<GameClient> connection) {

@@ -24,10 +24,8 @@ import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.L2Seed;
 import org.l2junity.gameserver.model.SeedProduction;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
-import org.l2junity.network.PacketReader;
 
 import java.util.ArrayList;
 import java.util.List;

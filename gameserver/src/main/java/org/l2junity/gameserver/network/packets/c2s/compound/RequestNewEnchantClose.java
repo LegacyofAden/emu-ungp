@@ -20,9 +20,8 @@ package org.l2junity.gameserver.network.packets.c2s.compound;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.CompoundRequest;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author UnAfraid

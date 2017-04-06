@@ -18,21 +18,6 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
@@ -67,24 +52,23 @@ import org.l2junity.gameserver.model.variables.ClanVariables;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
-import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
-import org.l2junity.gameserver.network.packets.s2c.ExSubPledgeSkillAdd;
-import org.l2junity.gameserver.network.packets.s2c.PledgeReceiveSubPledgeCreated;
-import org.l2junity.gameserver.network.packets.s2c.PledgeShowInfoUpdate;
-import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListAll;
-import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListDeleteAll;
-import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListUpdate;
-import org.l2junity.gameserver.network.packets.s2c.PledgeSkillList;
+import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.PledgeSkillList.SubPledgeSkill;
-import org.l2junity.gameserver.network.packets.s2c.PledgeSkillListAdd;
-import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
-import org.l2junity.gameserver.network.packets.s2c.UserInfo;
 import org.l2junity.gameserver.network.packets.s2c.pledgebonus.ExPledgeBonusMarkReset;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.EnumIntBitmask;
 import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Clan implements IIdentifiable, INamable {

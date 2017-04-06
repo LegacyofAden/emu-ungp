@@ -23,13 +23,12 @@ import org.l2junity.gameserver.data.xml.impl.SkillData;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.ValidateLocation;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Fromat:(ch) dddddc

@@ -20,10 +20,8 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.instancemanager.ClanEntryManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExPledgeWaitingListApplied;
-import org.l2junity.network.PacketReader;
 
 import java.util.OptionalInt;
 

@@ -20,11 +20,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.gameserver.data.sql.impl.CharNameTable;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExIsCharNameCreatable;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author UnAfraid

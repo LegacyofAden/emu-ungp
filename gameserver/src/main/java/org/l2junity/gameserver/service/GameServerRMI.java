@@ -77,14 +77,11 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 					log.warn("Connection to login server failed. Reason: {}", registerResult.toString());
 					break;
 			}
-		}
-		catch (ConnectException e) {
+		} catch (ConnectException e) {
 			log.warn("Loginserver isn't available. Make sure it's up and running.");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Connection to login server failed", e);
-		}
-		finally {
+		} finally {
 			reconnectTask = null;
 		}
 	}
@@ -156,8 +153,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	public void changePassword(Player player, String oldPass, String newPass) {
 		try {
 			connection.changePassword(player.getAccountName(), oldPass, newPass);
-		}
-		catch (RemoteException e) {
+		} catch (RemoteException e) {
 			log.error("Error while changePassword", e);
 			onConnectionLost();
 		}
@@ -166,8 +162,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	public void changeAccessLevel(String accountName, int accessLevel) {
 		try {
 			connection.changeAccessLevel(accountName, accessLevel);
-		}
-		catch (RemoteException e) {
+		} catch (RemoteException e) {
 			log.error("Error while changeAccessLevel", e);
 			onConnectionLost();
 		}
@@ -186,8 +181,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	private void sendUpdate() {
 		try {
 			connection.updateGameServer(this, gameServerInfo);
-		}
-		catch (RemoteException e) {
+		} catch (RemoteException e) {
 			log.error("Error while updating game server status", e);
 			onConnectionLost();
 		}
@@ -252,8 +246,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		public void run() {
 			try {
 				connection.testConnection();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				if (reconnectTask == null) {
 					onConnectionLost();
 				}

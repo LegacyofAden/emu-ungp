@@ -22,16 +22,9 @@ import org.l2junity.gameserver.data.sql.impl.ClanTable;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.gameserver.network.packets.s2c.GMHennaInfo;
-import org.l2junity.gameserver.network.packets.s2c.GMViewCharacterInfo;
-import org.l2junity.gameserver.network.packets.s2c.GMViewItemList;
-import org.l2junity.gameserver.network.packets.s2c.GMViewPledgeInfo;
-import org.l2junity.gameserver.network.packets.s2c.GMViewSkillInfo;
-import org.l2junity.gameserver.network.packets.s2c.GMViewWarehouseWithdrawList;
-import org.l2junity.gameserver.network.packets.s2c.GmViewQuestInfo;
-import org.l2junity.network.PacketReader;
+import org.l2junity.gameserver.network.packets.s2c.*;
+
 
 public final class RequestGMCommand extends GameClientPacket {
 	private String _targetName;

@@ -18,14 +18,14 @@
  */
 package org.l2junity.gameserver.model.skills.conditiontypes;
 
-import java.util.List;
-
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.skills.ISkillCondition;
 import org.l2junity.gameserver.model.skills.Skill;
+
+import java.util.List;
 
 /**
  * @author UnAfraid

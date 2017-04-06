@@ -52,7 +52,8 @@ public enum AbnormalVisualEffect {
 	SHAKE(26),
 	ULTIMATE_DEFENCE(28),
 	VP_UP(29),
-	VP_KEEP(29), // TODO: Unknown ClientID
+	VP_KEEP(29),
+	// TODO: Unknown ClientID
 	REAL_TARGET(30),
 	DEATH_MARK(31),
 	TURN_FLEE(32),
@@ -60,9 +61,12 @@ public enum AbnormalVisualEffect {
 	AIR_BATTLE_SLOW(34),
 	AIR_BATTLE_ROOT(35),
 	CHANGE_WP(36),
-	CHANGE_HAIR_G(37), // Gold Afro
-	CHANGE_HAIR_P(38), // Pink Afro
-	CHANGE_HAIR_B(39), // Black Afro
+	CHANGE_HAIR_G(37),
+	// Gold Afro
+	CHANGE_HAIR_P(38),
+	// Pink Afro
+	CHANGE_HAIR_B(39),
+	// Black Afro
 	UNKNOWN_40(40),
 	STIGMA_OF_SILEN(41),
 	SPEED_DOWN(42),

@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import java.util.StringTokenizer;
-
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.ai.CtrlIntention;
@@ -44,6 +42,8 @@ import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 import org.l2junity.gameserver.util.Util;
+
+import java.util.StringTokenizer;
 
 /**
  * RequestBypassToServer client packet implementation.

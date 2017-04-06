@@ -19,10 +19,10 @@
 package org.l2junity.gameserver.model.holders;
 
 import org.l2junity.commons.util.Rnd;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Npc;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.List;

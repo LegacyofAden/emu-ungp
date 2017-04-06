@@ -18,9 +18,9 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
-import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
+import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 
 import java.util.function.Consumer;

@@ -1,24 +1,8 @@
 package org.l2junity.gameserver.model.world;
 
-import static org.l2junity.gameserver.model.world.WorldData.OFFSET_X;
-import static org.l2junity.gameserver.model.world.WorldData.OFFSET_Y;
-import static org.l2junity.gameserver.model.world.WorldData.OFFSET_Z;
-import static org.l2junity.gameserver.model.world.WorldData.REGIONS_X;
-import static org.l2junity.gameserver.model.world.WorldData.REGIONS_Y;
-import static org.l2junity.gameserver.model.world.WorldData.REGIONS_Z;
-import static org.l2junity.gameserver.model.world.WorldData.REGION_MIN_DIMENSION;
-import static org.l2junity.gameserver.model.world.WorldData.SHIFT_BY;
-import static org.l2junity.gameserver.model.world.WorldData.SHIFT_BY_Z;
-import static org.l2junity.gameserver.model.world.WorldData.isValidRegion;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.CommonUtil;
 import org.l2junity.gameserver.ai.CharacterAI;
 import org.l2junity.gameserver.ai.CtrlEvent;
@@ -28,11 +12,7 @@ import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
-import org.l2junity.gameserver.model.actor.instance.FriendlyMobInstance;
-import org.l2junity.gameserver.model.actor.instance.GuardInstance;
-import org.l2junity.gameserver.model.actor.instance.PetInstance;
-import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.instance.*;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.events.EventDispatcher;
@@ -43,28 +23,35 @@ import org.l2junity.gameserver.network.Disconnection;
 import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
 import org.l2junity.gameserver.util.Util;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static org.l2junity.gameserver.model.world.WorldData.*;
 
 /**
- * 
  * @author PointerRage
- *
  */
 @Slf4j
 public class GameWorld {
 	private final Map<Integer, WorldObject> objects = new ConcurrentHashMap<>();
 	private final Map<Integer, Player> players = new ConcurrentHashMap<>();
 	private final Map<Integer, PetInstance> pets = new ConcurrentHashMap<>();
-	
-	@Getter(AccessLevel.PROTECTED) private final Region[][][] regions = new Region[REGIONS_X + 1][REGIONS_Y + 1][REGIONS_Z + 1];
-	
-	@Getter private final int id;
+
+	@Getter(AccessLevel.PROTECTED)
+	private final Region[][][] regions = new Region[REGIONS_X + 1][REGIONS_Y + 1][REGIONS_Z + 1];
+
+	@Getter
+	private final int id;
+
 	protected GameWorld(int id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * Adds an object to the world.<br>
 	 * <B><U>Example of use</U>:</B>
@@ -95,7 +82,7 @@ public class GameWorld {
 			}
 		}
 	}
-	
+
 	/**
 	 * Removes an object from the world.<br>
 	 * <B><U>Example of use</U>:</B>
@@ -118,7 +105,7 @@ public class GameWorld {
 			players.remove(object.getObjectId());
 		}
 	}
-	
+
 	/**
 	 * <B><U> Example of use</U>:</B>
 	 * <ul>
@@ -478,10 +465,10 @@ public class GameWorld {
 		for (int x = Math.max(centerWorldRegion.getX() - depth, 0); x <= Math.min(centerWorldRegion.getX() + depth, REGIONS_X); x++) {
 			for (int y = Math.max(centerWorldRegion.getY() - depth, 0); y <= Math.min(centerWorldRegion.getY() + depth, REGIONS_Y); y++) {
 				for (int z = Math.max(centerWorldRegion.getZ() - depth, 0); z <= Math.min(centerWorldRegion.getZ() + depth, REGIONS_Z); z++) {
-					if(regions[x][y][z] == null) {
+					if (regions[x][y][z] == null) {
 						continue;
 					}
-					
+
 					for (WorldObject visibleObject : regions[x][y][z].getObjects().values()) {
 						if ((visibleObject == null) || (visibleObject == object) || !clazz.isInstance(visibleObject)) {
 							continue;
@@ -516,10 +503,10 @@ public class GameWorld {
 		for (int x = Math.max(centerWorldRegion.getX() - depth, 0); x <= Math.min(centerWorldRegion.getX() + depth, REGIONS_X); x++) {
 			for (int y = Math.max(centerWorldRegion.getY() - depth, 0); y <= Math.min(centerWorldRegion.getY() + depth, REGIONS_Y); y++) {
 				for (int z = Math.max(centerWorldRegion.getZ() - depth, 0); z <= Math.min(centerWorldRegion.getZ() + depth, REGIONS_Z); z++) {
-					if(regions[x][y][z] == null) {
+					if (regions[x][y][z] == null) {
 						continue;
 					}
-					
+
 					final int x1 = (x - OFFSET_X) << SHIFT_BY;
 					final int y1 = (y - OFFSET_Y) << SHIFT_BY;
 					final int z1 = (z - OFFSET_Z) << SHIFT_BY_Z;
@@ -596,13 +583,13 @@ public class GameWorld {
 		final int rx = ((int) x >> SHIFT_BY) + OFFSET_X;
 		final int ry = ((int) y >> SHIFT_BY) + OFFSET_Y;
 		final int rz = ((int) z >> SHIFT_BY_Z) + OFFSET_Z;
-		
-//		try {
-			return getRegionByTile(rx, ry, rz);
-//		} catch (ArrayIndexOutOfBoundsException e) {
-//			log.warn("Incorrect world region X: {} Y: {} Z: {} for coordinates x: {} y: {} z: {}", (((int) x >> SHIFT_BY) + OFFSET_X), (((int) y >> SHIFT_BY) + OFFSET_Y), (((int) z >> SHIFT_BY_Z) + OFFSET_Z), x, y, z);
-//			return null;
-//		}
+
+		//		try {
+		return getRegionByTile(rx, ry, rz);
+		//		} catch (ArrayIndexOutOfBoundsException e) {
+		//			log.warn("Incorrect world region X: {} Y: {} Z: {} for coordinates x: {} y: {} z: {}", (((int) x >> SHIFT_BY) + OFFSET_X), (((int) y >> SHIFT_BY) + OFFSET_Y), (((int) z >> SHIFT_BY_Z) + OFFSET_Z), x, y, z);
+		//			return null;
+		//		}
 	}
 
 	/**
@@ -613,18 +600,18 @@ public class GameWorld {
 	public Region[][][] getWorldRegions() {
 		return regions;
 	}
-	
+
 	public Region getRegionByTile(int x, int y, int z) {
-		if(!isValidRegion(x, y, z)) {
-    		return null;
-    	}
-		
-		if(regions[x][y][z] == null) {
-        	synchronized (regions) {
-        		createRegionBlock(x, y, z);
+		if (!isValidRegion(x, y, z)) {
+			return null;
+		}
+
+		if (regions[x][y][z] == null) {
+			synchronized (regions) {
+				createRegionBlock(x, y, z);
 			}
-        }
-		
+		}
+
 		return regions[x][y][z];
 	}
 
@@ -637,7 +624,7 @@ public class GameWorld {
 			for (int y = 0; y <= REGIONS_Y; y++) {
 				for (int z = 0; z <= REGIONS_Z; z++) {
 					final Region region = regions[x][y][z];
-					if(region == null) {
+					if (region == null) {
 						continue;
 					}
 					region.deleteVisibleNpcSpawns();
@@ -646,25 +633,25 @@ public class GameWorld {
 		}
 		log.info("All visible NPC's deleted.");
 	}
-	
+
 	protected void initAllRegions() {
 		synchronized (regions) {
-	        for (int i = 0; i <= REGIONS_X; i++) {
-	            for (int j = 0; j <= REGIONS_Y; j++) {
-	            	for(int k = 0; k <= REGIONS_Z; k++) {
-		            	if(!isValidRegion(i, j, k)) {
-		            		continue;
-		            	}
-		            	
-		                if(regions[i][j][k] == null) {
-		                	createRegionBlock(i, j, k);
-		                }
-	            	}
-	            }
-	        }
+			for (int i = 0; i <= REGIONS_X; i++) {
+				for (int j = 0; j <= REGIONS_Y; j++) {
+					for (int k = 0; k <= REGIONS_Z; k++) {
+						if (!isValidRegion(i, j, k)) {
+							continue;
+						}
+
+						if (regions[i][j][k] == null) {
+							createRegionBlock(i, j, k);
+						}
+					}
+				}
+			}
 		}
-    }
-    
+	}
+
 	private void createRegionBlock(int x, int y, int z) {
 		for (int a = -1; a <= 1; a++) {
 			for (int b = -1; b <= 1; b++) {
@@ -676,21 +663,21 @@ public class GameWorld {
 			}
 		}
 	}
-	
-	 protected void dispose() {
-	    	for(Player player : players.values()) {
-	    		player.teleToLocation(TeleportWhereType.TOWN, null);
-	    	}
-	    	players.clear();
-	    	
-	    	for(WorldObject object : objects.values()) {
-	    		if(object instanceof IDeletable) {
-	    			final IDeletable deletable = (IDeletable) object;
-	    			deletable.deleteMe();
-	    		} else {
-	    			object.decayMe();
-	    		}
-	    	}
-	    	objects.clear();
-	    }
+
+	protected void dispose() {
+		for (Player player : players.values()) {
+			player.teleToLocation(TeleportWhereType.TOWN, null);
+		}
+		players.clear();
+
+		for (WorldObject object : objects.values()) {
+			if (object instanceof IDeletable) {
+				final IDeletable deletable = (IDeletable) object;
+				deletable.deleteMe();
+			} else {
+				object.decayMe();
+			}
+		}
+		objects.clear();
+	}
 }

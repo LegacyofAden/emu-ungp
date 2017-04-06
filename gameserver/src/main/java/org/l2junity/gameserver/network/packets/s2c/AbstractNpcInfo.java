@@ -21,8 +21,8 @@ package org.l2junity.gameserver.network.packets.s2c;
 import org.l2junity.commons.network.PacketBody;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.TrapInstance;
-import org.l2junity.gameserver.network.packets.GameServerPacketType;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
 
 public abstract class AbstractNpcInfo extends GameServerPacket {
 	protected int _x, _y, _z, _heading;

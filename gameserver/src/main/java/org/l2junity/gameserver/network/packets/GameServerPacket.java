@@ -89,7 +89,7 @@ public abstract class GameServerPacket extends SendablePacket<GameClient> {
 
 	/**
 	 * @param masks Masks to check
-	 * @param type mask type
+	 * @param type  mask type
 	 * @return {@code true} if the mask contains the current update component type
 	 */
 	static boolean containsMask(int masks, IUpdateTypeComponent type) {

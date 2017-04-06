@@ -21,10 +21,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.model.SessionInfo;
 import org.l2junity.gameserver.GameServer;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.LoginFail;
-import org.l2junity.network.PacketReader;
+
 
 @Slf4j
 public final class AuthLogin extends GameClientPacket {

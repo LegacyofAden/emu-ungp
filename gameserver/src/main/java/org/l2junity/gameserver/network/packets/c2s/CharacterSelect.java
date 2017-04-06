@@ -33,8 +33,8 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSelect
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
-import org.l2junity.gameserver.network.GameClientState;
 import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.GameClientState;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.CharSelected;
 import org.l2junity.gameserver.network.packets.s2c.ServerClose;
@@ -75,7 +75,7 @@ public class CharacterSelect extends GameClientPacket {
 
 		// We should always be able to acquire the lock
 		// But if we can't lock then nothing should be done (i.e. repeated packet)
-		try(CloseableReentrantLock temp = getClient().getActiveCharLock().open()) {
+		try (CloseableReentrantLock temp = getClient().getActiveCharLock().open()) {
 			// should always be null but if not then this is repeated packet and nothing should be done here
 			if (getClient().getActiveChar() == null) {
 				final CharSelectInfoPackage info = getClient().getCharSelection(_charSlot);

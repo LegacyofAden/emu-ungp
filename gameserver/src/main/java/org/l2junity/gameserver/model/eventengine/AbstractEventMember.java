@@ -18,11 +18,11 @@
  */
 package org.l2junity.gameserver.model.eventengine;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**

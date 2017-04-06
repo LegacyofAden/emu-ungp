@@ -31,7 +31,8 @@ public enum WeaponType implements ItemType {
 	BLUNT(TraitType.BLUNT),
 	DAGGER(TraitType.DAGGER),
 	POLE(TraitType.POLE),
-	FIST(TraitType.FIST), // 0 items with that type
+	FIST(TraitType.FIST),
+	// 0 items with that type
 	BOW(TraitType.BOW),
 	ETC(TraitType.ETC),
 	DUAL(TraitType.DUAL),
@@ -40,9 +41,11 @@ public enum WeaponType implements ItemType {
 	RAPIER(TraitType.RAPIER),
 	CROSSBOW(TraitType.CROSSBOW),
 	ANCIENTSWORD(TraitType.ANCIENTSWORD),
-	FLAG(TraitType.NONE), // 0 items with that type
+	FLAG(TraitType.NONE),
+	// 0 items with that type
 	DUALDAGGER(TraitType.DUALDAGGER),
-	OWNTHING(TraitType.NONE), // 0 items with that type
+	OWNTHING(TraitType.NONE),
+	// 0 items with that type
 	TWOHANDCROSSBOW(TraitType.TWOHANDCROSSBOW),
 	DUALBLUNT(TraitType.DUALBLUNT);
 

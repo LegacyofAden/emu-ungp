@@ -44,8 +44,7 @@ public class GameClientPacketHandler implements IPacketHandler<GameClient> {
 			}
 			GameClientPacketTypeEx packetExType = GameClientPacketTypeEx.PACKET_ARRAY[exOpcode];
 			return packetExType.newIncomingPacket();
-		}
-		else {
+		} else {
 			return packetType.newIncomingPacket();
 		}
 	}

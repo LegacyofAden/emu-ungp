@@ -20,20 +20,19 @@ package org.l2junity.gameserver.scripting;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.core.configs.ScriptEngineConfig;
-import org.l2junity.gameserver.scripting.java.JavaScriptingEngine;
 import org.l2junity.commons.util.ArrayUtil;
-import org.l2junity.commons.util.BasePathProvider;
+import org.l2junity.core.configs.ScriptEngineConfig;
 import org.l2junity.core.startup.StartupComponent;
+import org.l2junity.gameserver.scripting.java.JavaScriptingEngine;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Caches script engines and provides functionality for executing and managing scripts.
@@ -51,7 +50,7 @@ public final class ScriptEngineManager {
 
 	protected ScriptEngineManager() {
 		JavaScriptingEngine javaEngine = new JavaScriptingEngine();
-		for(String compiler : ScriptEngineConfig.PREFERED_COMPILER) {
+		for (String compiler : ScriptEngineConfig.PREFERED_COMPILER) {
 			javaEngine.setProperty("preferedCompiler", compiler);
 		}
 		javaEngine.setProperty("classloader", ScriptEngineConfig.CLASS_LOADER);

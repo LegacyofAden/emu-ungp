@@ -24,12 +24,11 @@ import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.PetItemList;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 @Slf4j
 public final class RequestPetUseItem extends GameClientPacket {

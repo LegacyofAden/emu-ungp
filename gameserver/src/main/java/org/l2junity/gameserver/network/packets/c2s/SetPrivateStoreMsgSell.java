@@ -20,11 +20,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.PrivateStoreMsgSell;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
 
 public class SetPrivateStoreMsgSell extends GameClientPacket {
 	private static final int MAX_MSG_LENGTH = 29;

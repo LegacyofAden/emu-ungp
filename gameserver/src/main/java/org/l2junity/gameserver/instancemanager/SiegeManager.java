@@ -35,7 +35,10 @@ import org.l2junity.gameserver.model.skills.CommonSkill;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @StartupComponent("Service")

@@ -20,9 +20,8 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
+
 
 public final class SendBypassBuildCmd extends GameClientPacket {
 	public static final int GM_MESSAGE = 9;

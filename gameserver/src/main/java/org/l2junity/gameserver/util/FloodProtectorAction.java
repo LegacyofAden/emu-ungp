@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.GameClient;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;

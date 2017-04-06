@@ -32,7 +32,6 @@ import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.Disconnection;
 import org.l2junity.gameserver.network.GameClient;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

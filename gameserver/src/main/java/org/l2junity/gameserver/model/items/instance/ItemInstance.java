@@ -18,23 +18,6 @@
  */
 package org.l2junity.gameserver.model.items.instance;
 
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.GeneralConfig;
@@ -45,12 +28,7 @@ import org.l2junity.gameserver.data.xml.impl.EnsoulData;
 import org.l2junity.gameserver.data.xml.impl.OptionData;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.engines.IdFactory;
-import org.l2junity.gameserver.enums.AttributeType;
-import org.l2junity.gameserver.enums.InstanceType;
-import org.l2junity.gameserver.enums.ItemLocation;
-import org.l2junity.gameserver.enums.ItemSkillType;
-import org.l2junity.gameserver.enums.ShotType;
-import org.l2junity.gameserver.enums.UserInfoType;
+import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.CastleManager;
 import org.l2junity.gameserver.instancemanager.ItemsOnGroundManager;
@@ -88,16 +66,23 @@ import org.l2junity.gameserver.model.variables.ItemVariables;
 import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.packets.s2c.DropItem;
-import org.l2junity.gameserver.network.packets.s2c.GetItem;
-import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
-import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
-import org.l2junity.gameserver.network.packets.s2c.SpawnItem;
-import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.GMAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
 
 /**
  * This class manages items.
@@ -1366,7 +1351,7 @@ public final class ItemInstance extends WorldObject {
 
 			// Add the L2ItemInstance dropped in the world as a visible object
 			_itеm.getWorld().addVisibleObject(_itеm, _itеm.getWorldRegion());
-			
+
 			if (GeneralConfig.SAVE_DROPPED_ITEM) {
 				ItemsOnGroundManager.getInstance().save(_itеm);
 			}
@@ -1664,7 +1649,7 @@ public final class ItemInstance extends WorldObject {
 		if (GeneralConfig.SAVE_DROPPED_ITEM) {
 			ItemsOnGroundManager.getInstance().removeObject(this);
 		}
-		
+
 		return super.decayMe();
 	}
 
@@ -2096,7 +2081,7 @@ public final class ItemInstance extends WorldObject {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onSpawn() {
 		ItemStorage.getInstance().remove(this);

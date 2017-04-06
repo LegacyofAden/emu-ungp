@@ -26,11 +26,10 @@ import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 public final class RequestPetGetItem extends GameClientPacket {
 	private int _objectId;
@@ -43,10 +42,10 @@ public final class RequestPetGetItem extends GameClientPacket {
 	@Override
 	public void runImpl() {
 		final Player player = getClient().getActiveChar();
-		if(player == null) {
+		if (player == null) {
 			return;
 		}
-		
+
 		ItemInstance item = (ItemInstance) player.getWorld().findObject(_objectId);
 		if ((item == null) || !player.hasPet()) {
 			getClient().sendPacket(ActionFailed.STATIC_PACKET);

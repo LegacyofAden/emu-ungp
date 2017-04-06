@@ -21,10 +21,9 @@ package org.l2junity.gameserver.network.packets.c2s;
 import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerRestore;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.CharSelectionInfo;
-import org.l2junity.network.PacketReader;
+
 
 public final class CharacterRestore extends GameClientPacket {
 	// cd

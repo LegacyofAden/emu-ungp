@@ -20,7 +20,6 @@ package org.l2junity.gameserver.model.multibox;
 
 import org.l2junity.gameserver.network.GameClient;
 
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;

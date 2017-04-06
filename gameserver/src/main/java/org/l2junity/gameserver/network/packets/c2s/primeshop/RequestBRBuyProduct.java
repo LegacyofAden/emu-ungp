@@ -25,13 +25,11 @@ import org.l2junity.gameserver.model.actor.request.PrimeShopRequest;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.primeshop.ExBRBuyProduct;
 import org.l2junity.gameserver.network.packets.s2c.primeshop.ExBRBuyProduct.ExBrProductReplyType;
 import org.l2junity.gameserver.network.packets.s2c.primeshop.ExBRGamePoint;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
 
 import java.util.Calendar;
 

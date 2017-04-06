@@ -1,9 +1,7 @@
 package org.l2junity.gameserver.model.world;
 
 /**
- * 
  * @author PointerRage
- *
  */
 public final class WorldData {
 	/**
@@ -53,9 +51,9 @@ public final class WorldData {
 	public static final int REGIONS_Z = (MAP_MAX_Z >> SHIFT_BY_Z) + OFFSET_Z;
 
 	public static final int REGION_MIN_DIMENSION = Math.min(TILE_SIZE / (TILE_SIZE >> SHIFT_BY_Z), TILE_SIZE / (TILE_SIZE >> SHIFT_BY));
-	
-	
+
+
 	public static boolean isValidRegion(int x, int y, int z) {
-        return 0 <= x && x <= REGIONS_X && 0 <= y && y <= REGIONS_Y && 0 <= z && z <= REGIONS_Z;
-    }
+		return 0 <= x && x <= REGIONS_X && 0 <= y && y <= REGIONS_Y && 0 <= z && z <= REGIONS_Z;
+	}
 }

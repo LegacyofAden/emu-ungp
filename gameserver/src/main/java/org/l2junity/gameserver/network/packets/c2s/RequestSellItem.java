@@ -35,7 +35,6 @@ import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.ExBuySellList;
 import org.l2junity.gameserver.network.packets.s2c.ExUserInfoInvenWeight;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
 
 import java.util.ArrayList;
 import java.util.List;

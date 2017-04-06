@@ -27,10 +27,9 @@ import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.restriction.CanPlayerJoinSiege;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author KenM

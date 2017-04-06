@@ -19,15 +19,14 @@
 package org.l2junity.gameserver.network.packets.c2s;
 
 import org.l2junity.gameserver.data.sql.impl.CrestTable;
+import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.Crest;
 import org.l2junity.gameserver.model.Crest.CrestType;
-import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * Client packet for setting/deleting clan crest.

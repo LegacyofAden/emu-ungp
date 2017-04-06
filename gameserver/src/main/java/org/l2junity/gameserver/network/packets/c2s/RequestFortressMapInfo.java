@@ -21,11 +21,10 @@ package org.l2junity.gameserver.network.packets.c2s;
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.gameserver.instancemanager.FortManager;
 import org.l2junity.gameserver.model.entity.Fort;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.ExShowFortressMapInfo;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author KenM

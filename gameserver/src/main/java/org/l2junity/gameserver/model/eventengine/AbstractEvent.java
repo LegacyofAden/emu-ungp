@@ -22,7 +22,6 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.AbstractScript;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 
-
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

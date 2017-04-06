@@ -28,14 +28,13 @@ import org.l2junity.gameserver.model.items.combination.CombinationItem;
 import org.l2junity.gameserver.model.items.combination.CombinationItemReward;
 import org.l2junity.gameserver.model.items.combination.CombinationItemType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.compound.ExEnchantFail;
 import org.l2junity.gameserver.network.packets.s2c.compound.ExEnchantOneFail;
 import org.l2junity.gameserver.network.packets.s2c.compound.ExEnchantSucess;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author UnAfraid

@@ -18,10 +18,8 @@
  */
 package org.l2junity.gameserver.model;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.l2junity.gameserver.engines.IdFactory;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.enums.ShotType;
@@ -30,32 +28,15 @@ import org.l2junity.gameserver.handler.ActionShiftHandler;
 import org.l2junity.gameserver.handler.IActionHandler;
 import org.l2junity.gameserver.handler.IActionShiftHandler;
 import org.l2junity.gameserver.instancemanager.InstanceManager;
-import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.model.actor.Vehicle;
-import org.l2junity.gameserver.model.actor.instance.DoorInstance;
-import org.l2junity.gameserver.model.actor.instance.MonsterInstance;
-import org.l2junity.gameserver.model.actor.instance.PetInstance;
-import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.model.actor.instance.ServitorInstance;
-import org.l2junity.gameserver.model.actor.instance.TrapInstance;
-import org.l2junity.gameserver.model.actor.instance.TreasureInstance;
+import org.l2junity.gameserver.model.actor.*;
+import org.l2junity.gameserver.model.actor.instance.*;
 import org.l2junity.gameserver.model.actor.poly.ObjectPoly;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.ListenersContainer;
 import org.l2junity.gameserver.model.events.impl.restriction.IsWorldObjectVisibleFor;
 import org.l2junity.gameserver.model.events.returns.BooleanReturn;
 import org.l2junity.gameserver.model.instancezone.Instance;
-import org.l2junity.gameserver.model.interfaces.IDecayable;
-import org.l2junity.gameserver.model.interfaces.IIdentifiable;
-import org.l2junity.gameserver.model.interfaces.ILocational;
-import org.l2junity.gameserver.model.interfaces.INamable;
-import org.l2junity.gameserver.model.interfaces.IPositionable;
-import org.l2junity.gameserver.model.interfaces.ISpawnable;
-import org.l2junity.gameserver.model.interfaces.IUniqueId;
+import org.l2junity.gameserver.model.interfaces.*;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.GameWorld;
 import org.l2junity.gameserver.model.world.Region;
@@ -65,11 +46,11 @@ import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
-
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Base class for all interactive objects.
@@ -86,7 +67,9 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	/**
 	 * World Region
 	 */
-	@Getter @Setter private Region worldRegion;
+	@Getter
+	@Setter
+	private Region worldRegion;
 	/**
 	 * Instance type
 	 */
@@ -790,7 +773,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	public void setHeading(int newHeading) {
 		_heading.set(newHeading);
 	}
-	
+
 	public final GameWorld getWorld() {
 		return WorldManager.getInstance().getWorld(getInstanceId());
 	}
@@ -827,16 +810,16 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		if (_instance != null) {
 			_instance.onInstanceChange(this, false);
 		}
-		
+
 		final GameWorld newWorld = WorldManager.getInstance().getWorld(newInstance == null ? WorldManager.MAIN_WORLD_ID : newInstance.getId());
 		final Region newRegion = newWorld.getRegion(getLocation());
-		
+
 		final GameWorld oldWorld = WorldManager.getInstance().getWorld(_instance == null ? WorldManager.MAIN_WORLD_ID : _instance.getId());
 		final Region oldRegion = oldWorld.getRegion(getLocation());
-		
+
 		oldRegion.removeVisibleObject(this);
 		newRegion.addVisibleObject(this);
-		
+
 		oldWorld.switchRegion(this, newRegion);
 		oldWorld.removeObject(this);
 		newWorld.addObject(this);

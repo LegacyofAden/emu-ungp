@@ -30,14 +30,13 @@ import org.l2junity.gameserver.model.items.appearance.AppearanceStone;
 import org.l2junity.gameserver.model.items.appearance.AppearanceType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.variables.ItemVariables;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExAdenaInvenCount;
 import org.l2junity.gameserver.network.packets.s2c.ExUserInfoEquipSlot;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.appearance.ExShapeShiftingResult;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.network.PacketReader;
+
 
 /**
  * @author UnAfraid

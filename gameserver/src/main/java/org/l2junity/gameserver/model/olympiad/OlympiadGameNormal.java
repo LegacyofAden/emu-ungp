@@ -18,14 +18,6 @@
  */
 package org.l2junity.gameserver.model.olympiad;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.core.configs.OlympiadConfig;
@@ -39,9 +31,16 @@ import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExOlympiadMatchResult;
 import org.l2junity.gameserver.network.packets.s2c.ExOlympiadUserInfo;
-
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author GodKratos, Pere, DS

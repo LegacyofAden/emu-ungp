@@ -18,13 +18,6 @@
  */
 package org.l2junity.gameserver.instancemanager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.data.xml.impl.CastleData;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
@@ -39,6 +32,13 @@ import org.l2junity.gameserver.model.interfaces.IPositionable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Siege Guard Manager.

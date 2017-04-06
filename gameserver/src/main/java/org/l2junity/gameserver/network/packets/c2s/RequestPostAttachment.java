@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.network.packets.c2s;
 
-import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
-
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.gameserver.datatables.ItemTable;
 import org.l2junity.gameserver.enums.ItemLocation;
@@ -31,14 +29,15 @@ import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExChangePostState;
 import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
-import org.l2junity.network.PacketReader;
+
+import static org.l2junity.gameserver.model.itemcontainer.Inventory.ADENA_ID;
+
 
 /**
  * @author Migi, DS

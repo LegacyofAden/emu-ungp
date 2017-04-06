@@ -19,9 +19,7 @@
 package org.l2junity.gameserver.network.packets.c2s;
 
 import lombok.extern.slf4j.Slf4j;
-import org.l2junity.gameserver.network.GameClient;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
-import org.l2junity.network.PacketReader;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

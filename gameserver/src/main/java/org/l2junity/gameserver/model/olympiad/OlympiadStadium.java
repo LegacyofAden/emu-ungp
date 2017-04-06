@@ -31,7 +31,6 @@ import org.l2junity.gameserver.model.zone.type.OlympiadStadiumZone;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.ExOlympiadMatchEnd;
 import org.l2junity.gameserver.network.packets.s2c.ExOlympiadUserInfo;
-
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;

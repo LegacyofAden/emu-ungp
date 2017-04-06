@@ -20,8 +20,8 @@ package org.l2junity.gameserver.network.packets.c2s;
 
 import lombok.extern.slf4j.Slf4j;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.GameClientState;
 import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.GameClientState;
 import org.l2junity.gameserver.network.packets.GameClientPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.CharSelectionInfo;

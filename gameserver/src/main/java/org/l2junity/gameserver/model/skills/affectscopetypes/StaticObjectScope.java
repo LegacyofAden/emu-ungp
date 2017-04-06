@@ -18,8 +18,6 @@
  */
 package org.l2junity.gameserver.model.skills.affectscopetypes;
 
-import java.util.function.Consumer;
-
 import org.l2junity.commons.lang.mutable.MutableInt;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
@@ -27,6 +25,8 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
+
+import java.util.function.Consumer;
 
 /**
  * Static Object affect scope implementation. Used to detect hidden doors.

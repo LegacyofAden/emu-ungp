@@ -18,29 +18,23 @@
  */
 package org.l2junity.gameserver.ai;
 
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ATTACK;
-import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
-
-import java.util.Collection;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.WorldObject;
-import org.l2junity.gameserver.model.actor.Attackable;
-import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.model.actor.Playable;
-import org.l2junity.gameserver.model.actor.Summon;
+import org.l2junity.gameserver.model.actor.*;
 import org.l2junity.gameserver.model.actor.instance.DefenderInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.util.Util;
+
+import java.util.Collection;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import static org.l2junity.gameserver.ai.CtrlIntention.*;
 
 /**
  * This class manages AI of L2Attackable.
