@@ -60,8 +60,76 @@
 		<lang name="en">%s%: You cant abort fight right now!</lang>
 		<lang name="ru"></lang>
 	</message>
-	<message name="">
-		<lang name="en"></lang>
+	<message name="$_YOU_CANT_ABORT_FIGHT_RIGHT_NOW">
+		<lang name="en">%s%: You cant abort fight right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_YOU_CANT_RESPAWN_BAIUM_WHILE_BAIUM_IS_ALIVE">
+		<lang name="en">%s%: You cant respawn Baium while Baium is alive!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_ABORTING_FIGHT">
+		<lang name="en">%s%: Aborting fight!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_ALL_ARCHANGELS_HAS_BEEN_DELETED">
+		<lang name="en">%s%: All archangels has been deleted!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_YOU_CANT_DESPAWN_ARCHANGELS_RIGHT_NOW">
+		<lang name="en">%s%: You cant despawn archangels right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_ISNT_IN_THE_WORLD">
+		<lang name="en">%s% isn't in the World.</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="YOU_CANNOT_SWITCH_YOUR_CLASS_RIGHT_NOW">
+		<lang name="en">You cannot switch your class right now!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="YOU_HAVE_LEARNED_$_NEW_SKILLS">
+		<lang name="en">You have learned %s% new skills.</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="CANNOT_SIT_WHILE_CASTING">
+		<lang name="en">Cannot sit while casting</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="YOU_CANNOT_MOUNT_A_STEED_WHILE_HOLDING_A_FLAG">
+		<lang name="en">You cannot mount a steed while holding a flag.</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="SKILL_$_HAS_BEEN_REMOVED">
+		<lang name="en">Skill %s% has been removed!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="TOO_SMALL_PRICE_MINIMAL_PRICE_IS_$">
+		<lang name="en">Too small price! Minimal price is %s%</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="YOU_ALREADY_REACHED_MAX_COUNT_OF_BUFFS_MAX_BUFFS_IS_$">
+		<lang name="en">You already reached max count of buffs! Max buffs is: %s%</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_HAS_BEEN_ADDED">
+		<lang name="en">%s% has been added!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="$_HAS_NO_ENOUGH_MANA_FOR_$">
+		<lang name="en">%s% has no enough mana for %s%!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="NOT_ENOUGH_$">
+		<lang name="en">Not enough %s%!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="NOT_ENOUGH_ITEMS">
+		<lang name="en">Not enough items!</lang>
+		<lang name="ru"></lang>
+	</message>
+	<message name="TELEPORT_SPAWN_PROTECTION_ENDED">
+		<lang name="en">Teleport spawn protection ended.</lang>
 		<lang name="ru"></lang>
 	</message>
 	<message name="">

@@ -440,11 +440,11 @@ public final class Antharas extends AbstractNpcAI {
 					}
 					if (player != null) // Player dont will be null just when is this event called from GM command
 					{
-						player.sendMessage(getClass().getSimpleName() + ": All minions has been deleted!");
+						player.sendMessage(CustomMessage.$_ALL_MINIONS_HAS_BEEN_DELETED, getClass().getSimpleName());
 					}
 				} else if (player != null) // Player dont will be null just when is this event called from GM command
 				{
-					player.sendMessage(getClass().getSimpleName() + ": You cant despawn minions right now!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_DESPAWN_MINIONS_RIGHT_NOW, getClass().getSimpleName());
 				}
 				break;
 			}

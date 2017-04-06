@@ -32,6 +32,7 @@ import org.l2junity.gameserver.network.packets.s2c.AcquireSkillList;
 import org.l2junity.gameserver.network.packets.s2c.ExSubjobInfo;
 import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 import org.l2junity.gameserver.network.packets.s2c.ability.ExAcquireAPSkillList;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.concurrent.TimeUnit;
@@ -60,7 +61,7 @@ public class InstantChangeClass extends AbstractEffect {
 			final int activeClass = targetPlayer.getClassId().getId();
 
 			if (!targetPlayer.setActiveClass(_index)) {
-				targetPlayer.sendMessage("You cannot switch your class right now!");
+				targetPlayer.sendMessage(CustomMessage.YOU_CANNOT_SWITCH_YOUR_CLASS_RIGHT_NOW);
 				return;
 			}
 

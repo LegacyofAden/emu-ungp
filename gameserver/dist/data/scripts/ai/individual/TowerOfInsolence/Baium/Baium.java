@@ -43,6 +43,7 @@ import org.l2junity.gameserver.network.packets.s2c.Earthquake;
 import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
 import org.l2junity.gameserver.network.packets.s2c.PlaySound;
 import org.l2junity.gameserver.network.packets.s2c.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import ai.AbstractNpcAI;
@@ -347,7 +348,7 @@ public final class Baium extends AbstractNpcAI {
 					cancelQuestTimer("CLEAR_STATUS", null, null);
 					notifyEvent("CLEAR_STATUS", null, null);
 				} else {
-					player.sendMessage(getClass().getSimpleName() + ": You cant respawn Baium while Baium is alive!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_RESPAWN_BAIUM_WHILE_BAIUM_IS_ALIVE, getClass().getSimpleName());
 				}
 				break;
 			}
@@ -356,9 +357,9 @@ public final class Baium extends AbstractNpcAI {
 					_baium = null;
 					notifyEvent("CLEAR_ZONE", null, null);
 					notifyEvent("CLEAR_STATUS", null, null);
-					player.sendMessage(getClass().getSimpleName() + ": Aborting fight!");
+					player.sendMessage(CustomMessage.$_ABORTING_FIGHT, getClass().getSimpleName());
 				} else {
-					player.sendMessage(getClass().getSimpleName() + ": You cant abort attack right now!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_ABORT_FIGHT_RIGHT_NOW, getClass().getSimpleName());
 				}
 				cancelQuestTimers("CHECK_ATTACK");
 				cancelQuestTimers("SELECT_TARGET");
@@ -372,10 +373,10 @@ public final class Baium extends AbstractNpcAI {
 						}
 					}
 					if (player != null) {
-						player.sendMessage(getClass().getSimpleName() + ": All archangels has been deleted!");
+						player.sendMessage(CustomMessage.$_ALL_ARCHANGELS_HAS_BEEN_DELETED, getClass().getSimpleName());
 					}
 				} else if (player != null) {
-					player.sendMessage(getClass().getSimpleName() + ": You cant despawn archangels right now!");
+					player.sendMessage(CustomMessage.$_YOU_CANT_DESPAWN_ARCHANGELS_RIGHT_NOW, getClass().getSimpleName());
 				}
 				break;
 			}

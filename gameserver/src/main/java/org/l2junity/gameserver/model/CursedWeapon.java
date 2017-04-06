@@ -34,6 +34,7 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.slf4j.Logger;
@@ -593,7 +594,7 @@ public class CursedWeapon implements INamable {
 			// Go to item on the ground
 			player.teleToLocation(_item.getLocation(), true);
 		} else {
-			player.sendMessage(_name + " isn't in the World.");
+			player.sendMessage(CustomMessage.$_ISNT_IN_THE_WORLD, _name);
 		}
 	}
 

@@ -2074,7 +2074,7 @@ public final class Player extends Playable {
 		}
 		storeSkills(skillsForStore, -1);
 		if (PlayerConfig.AUTO_LEARN_SKILLS && (skillCounter > 0)) {
-			sendMessage("You have learned " + skillCounter + " new skills.");
+			sendMessage(CustomMessage.YOU_HAVE_LEARNED_$_NEW_SKILLS, skillCounter);
 		}
 		return skillCounter;
 	}
@@ -2257,7 +2257,7 @@ public final class Player extends Playable {
 
 	public void sitDown(boolean checkCast) {
 		if (checkCast && isCastingNow()) {
-			sendMessage("Cannot sit while casting");
+			sendMessage(CustomMessage.CANNOT_SIT_WHILE_CASTING);
 			return;
 		}
 
@@ -5019,7 +5019,7 @@ public final class Player extends Playable {
 			} else if (getInventory().getItemByItemId(9819) != null) {
 				sendPacket(ActionFailed.STATIC_PACKET);
 				// FIXME: Wrong Message
-				sendMessage("You cannot mount a steed while holding a flag.");
+				sendMessage(CustomMessage.YOU_CANNOT_MOUNT_A_STEED_WHILE_HOLDING_A_FLAG);
 				return false;
 			} else if (pet.isHungry()) {
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -8384,7 +8384,7 @@ public final class Player extends Playable {
 			}
 		}
 		if (isTeleportProtected()) {
-			sendMessage("Teleport spawn protection ended.");
+			sendMessage(CustomMessage.TELEPORT_SPAWN_PROTECTION_ENDED);
 		}
 		setProtection(false);
 		setTeleportProtection(false);

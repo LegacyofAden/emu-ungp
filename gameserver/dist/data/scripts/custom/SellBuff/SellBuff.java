@@ -182,9 +182,11 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						return false;
 					}
 
-					final SellBuffHolder holder = activeChar.getSellingBuffs().stream().filter(h -> (h.getSkillId() == skillToChange.getId())).findFirst().orElse(null);
+					final SellBuffHolder holder = activeChar.getSellingBuffs().stream()
+							.filter(h -> (h.getSkillId() == skillToChange.getId())).findFirst().orElse(null);
 					if ((holder != null)) {
-						activeChar.sendMessage("Price of " + activeChar.getKnownSkill(holder.getSkillId()).getName() + " has been changed to " + price + "!");
+						activeChar.sendMessage(CustomMessage.PRICE_OF_$_HAS_BEEN_CHANGED_TO_$,
+								activeChar.getKnownSkill(holder.getSkillId()).getName(), price);
 						holder.setPrice(price);
 						SellBuffsManager.getInstance().sendBuffEditMenu(activeChar);
 					}
@@ -212,7 +214,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 
 					final SellBuffHolder holder = activeChar.getSellingBuffs().stream().filter(h -> (h.getSkillId() == skillToRemove.getId())).findFirst().orElse(null);
 					if ((holder != null) && activeChar.getSellingBuffs().remove(holder)) {
-						activeChar.sendMessage("Skill " + activeChar.getKnownSkill(holder.getSkillId()).getName() + " has been removed!");
+						activeChar.sendMessage(CustomMessage.SKILL_$_HAS_BEEN_REMOVED, activeChar.getKnownSkill(holder.getSkillId()).getName());
 						SellBuffsManager.getInstance().sendBuffEditMenu(activeChar);
 					}
 				}
@@ -233,7 +235,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						try {
 							price = Integer.parseInt(st.nextToken());
 						} catch (NumberFormatException e) {
-							activeChar.sendMessage("Too big price! Maximal price is " + SellBuffConfig.SELLBUFF_MIN_PRICE);
+							activeChar.sendMessage(CustomMessage.TOO_BIG_PRICE_MAXIMAL_PRICE_IS_$, SellBuffConfig.SELLBUFF_MIN_PRICE);
 							SellBuffsManager.getInstance().sendBuffEditMenu(activeChar);
 						}
 					}
@@ -246,17 +248,18 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 					if (skillToAdd == null) {
 						return false;
 					} else if (price < SellBuffConfig.SELLBUFF_MIN_PRICE) {
-						activeChar.sendMessage("Too small price! Minimal price is " + SellBuffConfig.SELLBUFF_MIN_PRICE);
+						activeChar.sendMessage(CustomMessage.TOO_SMALL_PRICE_MINIMAL_PRICE_IS_$, SellBuffConfig.SELLBUFF_MIN_PRICE);
 						return false;
 					} else if (price > SellBuffConfig.SELLBUFF_MAX_PRICE) {
-						activeChar.sendMessage("Too big price! Maximal price is " + SellBuffConfig.SELLBUFF_MAX_PRICE);
+						activeChar.sendMessage(CustomMessage.TOO_BIG_PRICE_MAXIMAL_PRICE_IS_$, SellBuffConfig.SELLBUFF_MAX_PRICE);
 						return false;
 					} else if (activeChar.getSellingBuffs().size() >= SellBuffConfig.SELLBUFF_MAX_BUFFS) {
-						activeChar.sendMessage("You already reached max count of buffs! Max buffs is: " + SellBuffConfig.SELLBUFF_MAX_BUFFS);
+						activeChar.sendMessage(CustomMessage.YOU_ALREADY_REACHED_MAX_COUNT_OF_BUFFS_MAX_BUFFS_IS_$,
+								SellBuffConfig.SELLBUFF_MAX_BUFFS);
 						return false;
 					} else if (!SellBuffsManager.getInstance().isInSellList(activeChar, skillToAdd)) {
 						activeChar.getSellingBuffs().add(new SellBuffHolder(skillToAdd.getId(), price));
-						activeChar.sendMessage(skillToAdd.getName() + " has been added!");
+						activeChar.sendMessage(CustomMessage.$_HAS_BEEN_ADDED, skillToAdd.getName());
 						SellBuffsManager.getInstance().sendBuffChoiceMenu(activeChar, 0);
 					}
 				}
@@ -321,7 +324,7 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 					}
 
 					if (seller.getCurrentMp() < (skillToBuy.getMpConsume() * SellBuffConfig.SELLBUFF_MP_MULTIPLER)) {
-						activeChar.sendMessage(seller.getName() + " has no enough mana for " + skillToBuy.getName() + "!");
+						activeChar.sendMessage(CustomMessage.$_HAS_NO_ENOUGH_MANA_FOR_$, seller.getName(), skillToBuy.getName());
 						SellBuffsManager.getInstance().sendBuffMenu(activeChar, seller, index);
 						return false;
 					}
@@ -336,9 +339,9 @@ public class SellBuff implements IVoicedCommandHandler, IBypassHandler {
 						} else {
 							final ItemTemplate item = ItemTable.getInstance().getTemplate(SellBuffConfig.SELLBUFF_PAYMENT_ID);
 							if (item != null) {
-								activeChar.sendMessage("Not enough " + item.getName() + "!");
+								activeChar.sendMessage(CustomMessage.NOT_ENOUGH_$, item.getName());
 							} else {
-								activeChar.sendMessage("Not enough items!");
+								activeChar.sendMessage(CustomMessage.NOT_ENOUGH_ITEMS);
 							}
 						}
 					}
