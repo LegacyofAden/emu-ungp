@@ -185,32 +185,42 @@ public final class ConfigLoader {
 			log.error("Error while calling loadConfig", ex);
 		}
 
-		for (Field field : clazz.getFields()) {
-			ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
-			if (annotation == null) {
-				continue;
-			}
-			if (!Modifier.isStatic(field.getModifiers())
-					|| Modifier.isFinal(field.getModifiers())) {
-				log.warn("Invalid modifiers for {}", field);
-				return;
+		try {
+			Object configObject = clazz.newInstance();
+
+			for (Field field : clazz.getFields()) {
+				ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
+				if (annotation == null) {
+					continue;
+				}
+				if (!Modifier.isStatic(field.getModifiers())
+						|| Modifier.isFinal(field.getModifiers())) {
+					log.warn("Invalid modifiers for {}", field);
+					return;
+				}
+
+				setConfigValue(configObject, field, properties, annotation);
 			}
 
-			setConfigValue(clazz, field, properties, annotation);
-		}
-
-		for (Method method : clazz.getMethods()) {
-			if (method.isAnnotationPresent(ConfigAfterLoad.class)) {
-				try {
-					method.invoke(null);
-				} catch (Exception e) {
-					log.error("Error while calling ConfigAfterLoad method", e);
+			for (Method method : clazz.getDeclaredMethods()) {
+				if (method.isAnnotationPresent(ConfigAfterLoad.class)) {
+					boolean isMethodAccessible = method.isAccessible();
+					method.setAccessible(true);
+					try {
+						method.invoke(configObject);
+					} catch (Exception e) {
+						log.error("Error while calling ConfigAfterLoad method", e);
+					} finally {
+						method.setAccessible(isMethodAccessible);
+					}
 				}
 			}
+		} catch (Exception e) {
+			log.error("Error while initializing config object", e);
 		}
 	}
 
-	private void setConfigValue(Class<?> clazz, Field field, Properties properties, ConfigProperty annotation) {
+	private void setConfigValue(Object object, Field field, Properties properties, ConfigProperty annotation) {
 		final String propertyValue = properties.getProperty(annotation.name(), annotation.value());
 		if (StringUtils.isEmpty(propertyValue)) {
 			return;
@@ -233,7 +243,6 @@ public final class ConfigLoader {
 			} else if (field.getType().isAssignableFrom(List.class)) {
 				Class genericType = (Class) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
 				String[] values = propertyValue.split(annotation.splitter());
-				Object object = clazz.newInstance();
 				((List<Object>) field.get(object)).clear();
 				for (String value : values) {
 					if (!value.trim().isEmpty()) {
@@ -241,7 +250,6 @@ public final class ConfigLoader {
 					}
 				}
 			} else if (field.getType().isAssignableFrom(Map.class)) {
-				Object object = clazz.newInstance();
 				((Map<Object, Object>) field.get(object)).clear();
 
 				Class keyType = (Class) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
@@ -258,8 +266,6 @@ public final class ConfigLoader {
 			}
 		} catch (IllegalAccessException e) {
 			log.error("Invalid modifiers for field {}", field);
-		} catch (InstantiationException e) {
-			log.error("Failed to initialize field", e);
 		}
 	}
 }
