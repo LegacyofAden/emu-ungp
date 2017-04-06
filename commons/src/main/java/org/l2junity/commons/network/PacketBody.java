@@ -64,8 +64,10 @@ public class PacketBody<TClient extends Client> {
 	 */
 	public void writeString(String value) {
 		if (value != null) {
-			_buffer.putShort(Short.reverseBytes((short)value.length()));
-			for (int i = 0; i < value.length(); i++) {
+			short length = (short)value.length();
+			_buffer.put((byte) length);
+			_buffer.put((byte) (length >>> 8));
+			for (int i = 0; i < length; i++) {
 				_buffer.putChar(Character.reverseBytes(value.charAt(i)));
 			}
 		} else {

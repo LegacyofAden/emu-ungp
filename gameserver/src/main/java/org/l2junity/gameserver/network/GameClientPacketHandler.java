@@ -44,7 +44,6 @@ public class GameClientPacketHandler implements IPacketHandler<GameClient> {
 			if (packetType == GameClientPacketType.EX_PACKET
 					&& buffer.remaining() >= 2) {
 				exOpcode = buffer.getShort() & 0xFFFF;
-				log.info("Client sended packet: {}:{}", Integer.toHexString(opcode), Integer.toHexString(exOpcode));
 				if ((exOpcode < 0) || (exOpcode >= GameClientPacketTypeEx.PACKET_ARRAY.length)) {
 					log.warn("Client {} sended unknown expacket with opcode {}:{}", client, Integer.toHexString(opcode), Integer.toHexString(exOpcode));
 					return null;
@@ -54,11 +53,11 @@ public class GameClientPacketHandler implements IPacketHandler<GameClient> {
 					packet = packetExType.newIncomingPacket();
 				}
 			} else {
-				log.info("Client sended packet: {}", Integer.toHexString(opcode));
 				packet = packetType.newIncomingPacket();
 			}
 
 			if (packet != null) {
+				// log.info("Reading packet: {}", packet.getClass().getSimpleName());
 				EventDispatcher.getInstance().notifyEvent(new OnPacketReceived(client, packet));
 			}
 			else {

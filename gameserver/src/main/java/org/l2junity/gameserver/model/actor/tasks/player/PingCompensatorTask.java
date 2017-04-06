@@ -31,12 +31,13 @@ public class PingCompensatorTask implements Runnable {
 
 	@Override
 	public void run() {
-		if(!player.isPlayer() || player.isOfflineShop() || !player.getClient().isConnected()) {
+		if(player.getClient() == null || player.isOfflineShop() || !player.getClient().isConnected()) {
 			self.cancel(false);
 			return;
 		}
 		player.sendPacket(new RequestNetPing(player));
 	}
+
 
 	public static long compensation(Player player, long original) {
 		if(!player.getClient().isConnected())

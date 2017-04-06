@@ -144,7 +144,7 @@ public class GameClient extends Client<GameClient> {
 		if (isDetached || (packet == null)) {
 			return;
 		}
-		log.info("Server sended packet: {}", packet.getClass().getSimpleName());
+		//log.info("Sending packet: {}", packet.getClass().getSimpleName());
 		getConnection().sendPackets(new GameServerPacket[]{packet});
 		EventDispatcher.getInstance().notifyEvent(new OnPacketSent(this, packet));
 	}
