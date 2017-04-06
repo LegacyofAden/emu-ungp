@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.Fort;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -22,7 +22,7 @@ import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * Mp Consume Per Level effect implementation.

@@ -50,21 +50,21 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ExAskModifyPartyLooting;
-import org.l2junity.gameserver.network.client.send.ExCloseMPCC;
-import org.l2junity.gameserver.network.client.send.ExOpenMPCC;
-import org.l2junity.gameserver.network.client.send.ExPartyPetWindowAdd;
-import org.l2junity.gameserver.network.client.send.ExPartyPetWindowDelete;
-import org.l2junity.gameserver.network.client.send.ExSetPartyLooting;
-import org.l2junity.gameserver.network.client.send.ExTacticalSign;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.PartyMemberPosition;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowAdd;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowAll;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowDelete;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowDeleteAll;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.ExAskModifyPartyLooting;
+import org.l2junity.gameserver.network.packets.s2c.ExCloseMPCC;
+import org.l2junity.gameserver.network.packets.s2c.ExOpenMPCC;
+import org.l2junity.gameserver.network.packets.s2c.ExPartyPetWindowAdd;
+import org.l2junity.gameserver.network.packets.s2c.ExPartyPetWindowDelete;
+import org.l2junity.gameserver.network.packets.s2c.ExSetPartyLooting;
+import org.l2junity.gameserver.network.packets.s2c.ExTacticalSign;
+import org.l2junity.gameserver.network.packets.s2c.PartyMemberPosition;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowAdd;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowAll;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowDelete;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowDeleteAll;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,7 +260,7 @@ public class Party extends AbstractPlayerGroup {
 	 * @param player
 	 * @param msg
 	 */
-	public void broadcastToPartyMembers(Player player, IClientOutgoingPacket msg) {
+	public void broadcastToPartyMembers(Player player, GameServerPacket msg) {
 		for (Player member : getMembers()) {
 			if ((member != null) && (member.getObjectId() != player.getObjectId())) {
 				member.sendPacket(msg);

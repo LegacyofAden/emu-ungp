@@ -32,9 +32,9 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.*;
-import org.l2junity.gameserver.network.client.send.ExOlympiadMatchList;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExOlympiadMatchList;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -30,10 +30,10 @@ import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.entity.Fort.FortFunction;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.WareHouseDepositList;
-import org.l2junity.gameserver.network.client.send.WareHouseWithdrawalList;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.WareHouseDepositList;
+import org.l2junity.gameserver.network.packets.s2c.WareHouseWithdrawalList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -26,8 +26,8 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.skills.SkillCastingType;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import static org.l2junity.gameserver.ai.CtrlIntention.AI_INTENTION_ACTIVE;
 

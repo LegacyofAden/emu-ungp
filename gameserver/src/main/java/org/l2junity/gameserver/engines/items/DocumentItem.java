@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.holders.ItemSkillHolder;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.functions.FuncTemplate;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;

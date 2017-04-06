@@ -23,9 +23,9 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.SetupGauge;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
+import org.l2junity.gameserver.network.packets.s2c.SetupGauge;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 
 /**

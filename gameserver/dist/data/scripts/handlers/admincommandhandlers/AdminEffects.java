@@ -36,18 +36,18 @@ import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.skills.AbnormalVisualEffect;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExRedSky;
-import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.SunRise;
-import org.l2junity.gameserver.network.client.send.SunSet;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.Earthquake;
+import org.l2junity.gameserver.network.packets.s2c.ExRedSky;
+import org.l2junity.gameserver.network.packets.s2c.ExUserInfoAbnormalVisualEffect;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.OnEventTrigger;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.SunRise;
+import org.l2junity.gameserver.network.packets.s2c.SunSet;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
 
@@ -533,7 +533,7 @@ public class AdminEffects implements IAdminCommandHandler {
 	 * @param activeChar
 	 */
 	private void adminAtmosphere(String type, String state, int duration, Player activeChar) {
-		IClientOutgoingPacket packet = null;
+		GameServerPacket packet = null;
 
 		if (type.equals("sky")) {
 			if (state.equals("night")) {

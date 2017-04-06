@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.instance.DoppelgangerInstance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
-import org.l2junity.gameserver.network.client.send.MoveToLocation;
+import org.l2junity.gameserver.network.packets.s2c.MoveToLocation;
 
 import static org.l2junity.gameserver.ai.CtrlIntention.*;
 

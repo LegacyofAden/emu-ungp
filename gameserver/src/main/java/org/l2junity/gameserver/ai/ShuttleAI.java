@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.ai;
 
 import org.l2junity.gameserver.model.actor.instance.ShuttleInstance;
-import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleMove;
+import org.l2junity.gameserver.network.packets.s2c.shuttle.ExShuttleMove;
 
 /**
  * @author UnAfraid

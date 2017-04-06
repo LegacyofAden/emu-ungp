@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 /**
  * @author Sahar, Nik64

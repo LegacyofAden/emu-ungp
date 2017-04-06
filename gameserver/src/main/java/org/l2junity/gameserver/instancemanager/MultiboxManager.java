@@ -33,8 +33,9 @@ import org.l2junity.gameserver.model.multibox.MultiboxHolder;
 import org.l2junity.gameserver.model.multibox.MultiboxSettings;
 import org.l2junity.gameserver.model.multibox.MultiboxSourceType;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.GameClient;
+
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.Collections;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class MultiboxManager {
 	 * @param client
 	 * @return {@code true} if player does not excess maximum amount of dual boxes, {@code false} otherwise.
 	 */
-	public boolean canRegisterClient(Class clazz, L2GameClient client) {
+	public boolean canRegisterClient(Class clazz, GameClient client) {
 		if (_holders.containsKey(clazz)) {
 			return _holders.get(clazz).canAddClient(client);
 		}
@@ -106,7 +107,7 @@ public class MultiboxManager {
 	 * @param client
 	 * @return
 	 */
-	public boolean registerClient(Class clazz, L2GameClient client) {
+	public boolean registerClient(Class clazz, GameClient client) {
 		if (_holders.containsKey(clazz)) {
 			return _holders.get(clazz).addClient(client);
 		}
@@ -118,7 +119,7 @@ public class MultiboxManager {
 	 * @param clazz
 	 * @param client
 	 */
-	public void unregisterClient(Class clazz, L2GameClient client) {
+	public void unregisterClient(Class clazz, GameClient client) {
 		if (_holders.containsKey(clazz)) {
 			_holders.get(clazz).removeClient(client);
 		} else {
@@ -131,7 +132,7 @@ public class MultiboxManager {
 	 * @param client
 	 * @return
 	 */
-	public int getCurrentConnections(Class clazz, L2GameClient client) {
+	public int getCurrentConnections(Class clazz, GameClient client) {
 		if (_holders.containsKey(clazz)) {
 			return _holders.get(clazz).getCurrentConnections(client);
 		}
@@ -153,7 +154,7 @@ public class MultiboxManager {
 
 	private void onPlayerLogout(OnPlayerLogout event) {
 		final Player player = event.getActiveChar();
-		final L2GameClient client = event.getClient();
+		final GameClient client = event.getClient();
 		if ((player == null) || (client == null)) {
 			log.warn("Player or client is null, {}, {}", player, client);
 			return;
@@ -172,7 +173,7 @@ public class MultiboxManager {
 	 * @param client
 	 * @return Set of multiboxes of current client.
 	 */
-	public Set<L2GameClient> getMultiboxesOf(Class clazz, L2GameClient client) {
+	public Set<GameClient> getMultiboxesOf(Class clazz, GameClient client) {
 		if (!_holders.containsKey(clazz)) {
 			return Collections.emptySet();
 		}
@@ -191,7 +192,7 @@ public class MultiboxManager {
 	 * @param clazz
 	 * @param client
 	 */
-	public void sendDefaultRestrictionMessage(Class clazz, L2GameClient client) {
+	public void sendDefaultRestrictionMessage(Class clazz, GameClient client) {
 		final MultiboxHolder holder = _holders.get(clazz);
 		if (holder == null) {
 			log.warn("Attempt to send default restriction message on non-existent manager ({}):", clazz.getSimpleName(), new UnsupportedOperationException());
@@ -205,14 +206,14 @@ public class MultiboxManager {
 		}
 
 		final StringBuilder sb = new StringBuilder();
-		final Set<L2GameClient> clients = getMultiboxesOf(clazz, client);
+		final Set<GameClient> clients = getMultiboxesOf(clazz, client);
 		if (!clients.isEmpty()) {
 			sb.append("<table width=\"100%\">");
-			for (L2GameClient multiboxClient : getMultiboxesOf(clazz, client)) {
+			for (GameClient multiboxClient : getMultiboxesOf(clazz, client)) {
 				if (multiboxClient.getActiveChar() != null) {
-					sb.append("<tr><td>Character: <font color=\"LEVEL\">" + multiboxClient.getActiveChar().getName() + "</font></td></tr>");
+					sb.append("<tr><td>Character: <font color=\"LEVEL\">").append(multiboxClient.getActiveChar().getName()).append("</font></td></tr>");
 				} else {
-					sb.append("<tr><td>Account: <font color=\"LEVEL\">" + multiboxClient.getAccountName() + "</font></td></tr>");
+					sb.append("<tr><td>Account: <font color=\"LEVEL\">").append(multiboxClient.getAccountName()).append("</font></td></tr>");
 				}
 			}
 			sb.append("</table>");

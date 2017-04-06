@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.events.annotations.Id;
 import org.l2junity.gameserver.model.events.annotations.RegisterEvent;
 import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import ai.AbstractNpcAI;
 

@@ -25,7 +25,7 @@ import org.l2junity.core.configs.DateTimeConfig;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.OnDayNightChange;
-import org.l2junity.gameserver.network.client.send.ClientSetTime;
+import org.l2junity.gameserver.network.packets.s2c.ClientSetTime;
 import org.l2junity.gameserver.util.Broadcast;
 
 import java.time.LocalTime;

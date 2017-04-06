@@ -34,10 +34,10 @@ import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.ScriptZone;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.Earthquake;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.OnEventTrigger;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import quests.Q10301_ShadowOfTerrorBlackishRedFog.Q10301_ShadowOfTerrorBlackishRedFog;
 
 import java.util.Set;

@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 
 /**
  * Tactical Signs setting player action handler.

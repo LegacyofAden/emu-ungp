@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.PetItemList;
+import org.l2junity.gameserver.network.packets.s2c.PetItemList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

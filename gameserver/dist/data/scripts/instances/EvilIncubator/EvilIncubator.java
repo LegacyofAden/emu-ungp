@@ -35,9 +35,9 @@ import org.l2junity.gameserver.model.events.impl.character.OnCreatureDeath;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.Earthquake;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import instances.AbstractInstance;
 import quests.Q10341_DayOfDestinyHumansFate.Q10341_DayOfDestinyHumansFate;

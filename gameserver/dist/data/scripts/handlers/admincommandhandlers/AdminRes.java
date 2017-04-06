@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.ControllableMobInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

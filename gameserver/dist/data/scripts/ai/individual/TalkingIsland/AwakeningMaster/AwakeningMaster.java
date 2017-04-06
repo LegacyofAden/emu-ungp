@@ -37,11 +37,11 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerChange
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.quest.QuestState;
-import org.l2junity.gameserver.network.client.send.ExChangeToAwakenedClass;
-import org.l2junity.gameserver.network.client.send.ExShowUsm;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.UserInfo;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExChangeToAwakenedClass;
+import org.l2junity.gameserver.network.packets.s2c.ExShowUsm;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import quests.Q10338_SeizeYourDestiny.Q10338_SeizeYourDestiny;
 import quests.Q10472_WindsOfFateEncroachingShadows.Q10472_WindsOfFateEncroachingShadows;
 

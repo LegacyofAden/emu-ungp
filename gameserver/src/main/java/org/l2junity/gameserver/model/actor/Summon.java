@@ -55,23 +55,24 @@ import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
-import org.l2junity.gameserver.network.client.send.AbstractMaskPacket;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.ExPartyPetWindowAdd;
-import org.l2junity.gameserver.network.client.send.ExPartyPetWindowDelete;
-import org.l2junity.gameserver.network.client.send.ExPartyPetWindowUpdate;
-import org.l2junity.gameserver.network.client.send.ExPetInfo;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.InventoryUpdate;
-import org.l2junity.gameserver.network.client.send.MyPetSummonInfo;
-import org.l2junity.gameserver.network.client.send.PetDelete;
-import org.l2junity.gameserver.network.client.send.PetItemList;
-import org.l2junity.gameserver.network.client.send.PetStatusUpdate;
-import org.l2junity.gameserver.network.client.send.RelationChanged;
-import org.l2junity.gameserver.network.client.send.SummonInfo;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.TeleportToLocation;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.AbstractMaskPacket;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ExPartyPetWindowAdd;
+import org.l2junity.gameserver.network.packets.s2c.ExPartyPetWindowDelete;
+import org.l2junity.gameserver.network.packets.s2c.ExPartyPetWindowUpdate;
+import org.l2junity.gameserver.network.packets.s2c.ExPetInfo;
+
+import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
+import org.l2junity.gameserver.network.packets.s2c.MyPetSummonInfo;
+import org.l2junity.gameserver.network.packets.s2c.PetDelete;
+import org.l2junity.gameserver.network.packets.s2c.PetItemList;
+import org.l2junity.gameserver.network.packets.s2c.PetStatusUpdate;
+import org.l2junity.gameserver.network.packets.s2c.RelationChanged;
+import org.l2junity.gameserver.network.packets.s2c.SummonInfo;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.TeleportToLocation;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 public abstract class Summon extends Playable {
@@ -889,7 +890,7 @@ public abstract class Summon extends Playable {
 	}
 
 	@Override
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 		if (getOwner() != null) {
 			getOwner().sendPacket(packets);
 		}

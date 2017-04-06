@@ -30,11 +30,11 @@ import org.l2junity.gameserver.model.actor.instance.PetInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.InventoryUpdate;
-import org.l2junity.gameserver.network.client.send.MagicSkillLaunched;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillLaunched;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

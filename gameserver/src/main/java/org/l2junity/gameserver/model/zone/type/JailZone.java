@@ -26,8 +26,8 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.tasks.player.TeleportTask;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.concurrent.TimeUnit;
 

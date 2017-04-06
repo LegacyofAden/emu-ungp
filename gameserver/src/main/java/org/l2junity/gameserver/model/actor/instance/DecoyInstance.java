@@ -25,9 +25,10 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.CharInfo;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.CharInfo;
+
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 public class DecoyInstance extends Npc {
@@ -117,7 +118,7 @@ public class DecoyInstance extends Npc {
 	}
 
 	@Override
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 		if (getActingPlayer() != null) {
 			getActingPlayer().sendPacket(packets);
 		}

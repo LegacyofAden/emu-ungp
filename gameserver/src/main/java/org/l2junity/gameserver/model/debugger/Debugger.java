@@ -23,7 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+
 
 /**
  * @author UnAfraid
@@ -69,10 +70,10 @@ public class Debugger {
 		}
 	}
 
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 		final Player player = getPlayer();
 		if (player != null) {
-			for (IClientOutgoingPacket packet : packets) {
+			for (GameServerPacket packet : packets) {
 				player.sendPacket(packet);
 			}
 		}

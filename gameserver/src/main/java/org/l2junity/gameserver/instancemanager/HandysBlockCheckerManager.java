@@ -27,11 +27,11 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemcontainer.PcInventory;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.ExCubeGameAddPlayer;
-import org.l2junity.gameserver.network.client.send.ExCubeGameChangeTeam;
-import org.l2junity.gameserver.network.client.send.ExCubeGameRemovePlayer;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameAddPlayer;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameChangeTeam;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameRemovePlayer;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;

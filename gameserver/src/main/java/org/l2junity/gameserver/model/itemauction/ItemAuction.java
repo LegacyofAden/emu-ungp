@@ -32,9 +32,10 @@ import org.l2junity.gameserver.model.ItemInfo;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -335,11 +336,11 @@ public final class ItemAuction {
 		}
 	}
 
-	public final void broadcastToAllBidders(final IClientOutgoingPacket packet) {
+	public final void broadcastToAllBidders(final GameServerPacket packet) {
 		ThreadPool.getInstance().executeGeneral(() -> broadcastToAllBiddersInternal(packet));
 	}
 
-	public final void broadcastToAllBiddersInternal(final IClientOutgoingPacket packet) {
+	public final void broadcastToAllBiddersInternal(final GameServerPacket packet) {
 		for (int i = _auctionBids.size(); i-- > 0; ) {
 			final ItemAuctionBid bid = _auctionBids.get(i);
 			if (bid != null) {

@@ -18,30 +18,22 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 
 /**
  * @author UnAfraid
  */
+@Data
+@AllArgsConstructor
 public class OnPlayerLogout implements IBaseEvent {
-	private final Player _activeChar;
-	private final L2GameClient _client;
-
-	public OnPlayerLogout(Player activeChar, L2GameClient client) {
-		_activeChar = activeChar;
-		_client = client;
-	}
-
-	public Player getActiveChar() {
-		return _activeChar;
-	}
-
-	public L2GameClient getClient() {
-		return _client;
-	}
+	private final Player activeChar;
+	private final GameClient client;
 
 	@Override
 	public EventType getType() {

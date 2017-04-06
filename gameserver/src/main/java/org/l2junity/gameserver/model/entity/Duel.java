@@ -33,8 +33,9 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.OlympiadStadiumZone;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -511,7 +512,7 @@ public class Duel {
 	 *
 	 * @param packet
 	 */
-	public void broadcastToTeam1(IClientOutgoingPacket packet) {
+	public void broadcastToTeam1(GameServerPacket packet) {
 		if (_playerA == null) {
 			return;
 		}
@@ -530,7 +531,7 @@ public class Duel {
 	 *
 	 * @param packet
 	 */
-	public void broadcastToTeam2(IClientOutgoingPacket packet) {
+	public void broadcastToTeam2(GameServerPacket packet) {
 		if (_playerB == null) {
 			return;
 		}

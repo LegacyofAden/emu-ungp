@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.skills.SkillCaster;
-import org.l2junity.gameserver.network.client.send.NpcSay;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.NpcSay;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 import quests.Q00196_SevenSignsSealOfTheEmperor.Q00196_SevenSignsSealOfTheEmperor;
 

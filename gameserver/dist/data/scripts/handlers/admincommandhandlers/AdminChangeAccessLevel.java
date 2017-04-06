@@ -30,8 +30,8 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.AccessLevel;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * Change access level command handler.

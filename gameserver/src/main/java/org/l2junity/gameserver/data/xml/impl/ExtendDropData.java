@@ -27,13 +27,12 @@ import org.l2junity.gameserver.model.drops.conditions.IExDropCondition;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.holders.ExtendDropDataHolder;
 import org.l2junity.gameserver.model.holders.ExtendDropItemHolder;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * @author Sdw

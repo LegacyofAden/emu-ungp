@@ -21,6 +21,7 @@ package org.l2junity.loginserver.network.packets.s2c;
 import org.l2junity.commons.model.AccountInfo;
 import org.l2junity.commons.model.GameServerInfo;
 import org.l2junity.commons.model.enums.ServerStatus;
+import org.l2junity.commons.network.PacketBody;
 import org.l2junity.loginserver.LoginServer;
 import org.l2junity.loginserver.network.LoginClient;
 import org.l2junity.loginserver.network.packets.LoginServerPacket;

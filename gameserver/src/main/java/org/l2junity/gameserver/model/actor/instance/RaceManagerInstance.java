@@ -27,8 +27,9 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
 import java.util.List;
@@ -191,7 +192,7 @@ public class RaceManagerInstance extends Npc {
 		}
 	}
 
-	protected void broadcast(IClientOutgoingPacket pkt) {
+	protected void broadcast(GameServerPacket pkt) {
 		for (RaceManagerInstance manager : _managers) {
 			if (!manager.isDead()) {
 				Broadcast.toKnownPlayers(manager, pkt);

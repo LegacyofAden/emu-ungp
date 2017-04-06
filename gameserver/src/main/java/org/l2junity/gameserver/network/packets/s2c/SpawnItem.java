@@ -1,0 +1,67 @@
+/*
+ * Copyright (C) 2004-2015 L2J Unity
+ * 
+ * This file is part of L2J Unity.
+ * 
+ * L2J Unity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * L2J Unity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.l2junity.gameserver.network.packets.s2c;
+
+import org.l2junity.commons.network.PacketBody;
+import org.l2junity.gameserver.model.WorldObject;
+import org.l2junity.gameserver.model.items.instance.ItemInstance;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacketType;
+
+public final class SpawnItem extends GameServerPacket {
+	private final int _objectId;
+	private int _itemId;
+	private final int _x, _y, _z;
+	private int _stackable;
+	private long _count;
+
+	public SpawnItem(WorldObject obj) {
+		_objectId = obj.getObjectId();
+		_x = (int) obj.getX();
+		_y = (int) obj.getY();
+		_z = (int) obj.getZ();
+
+		if (obj.isItem()) {
+			ItemInstance item = (ItemInstance) obj;
+			_itemId = item.getDisplayId();
+			_stackable = item.isStackable() ? 0x01 : 0x00;
+			_count = item.getCount();
+		} else {
+			_itemId = obj.getPoly().getPolyId();
+			_stackable = 0;
+			_count = 1;
+		}
+	}
+
+	@Override
+	protected void writeImpl(PacketBody body) {
+		GameServerPacketType.SPAWN_ITEM.writeId(body);
+
+		body.writeD(_objectId);
+		body.writeD(_itemId);
+
+		body.writeD(_x);
+		body.writeD(_y);
+		body.writeD(_z);
+		// only show item count if it is a stackable item
+		body.writeD(_stackable);
+		body.writeQ(_count);
+		body.writeD(0x00); // c2
+	}
+}

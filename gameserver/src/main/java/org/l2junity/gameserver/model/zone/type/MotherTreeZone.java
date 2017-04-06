@@ -22,7 +22,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
 
 /**
  * A mother-trees zone Basic type zone for Hp, MP regen

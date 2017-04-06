@@ -23,7 +23,7 @@ import org.l2junity.gameserver.handler.ITargetTypeHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * Any friendly selected target or enemy if force use. Works on dead targets or doors as well.

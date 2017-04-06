@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.UserInfo;
 
 /**
  * Vitality Point Up effect implementation.

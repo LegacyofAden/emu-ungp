@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.instance.AirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.ControllableAirShipInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
-import org.l2junity.gameserver.network.client.send.ExAirShipTeleportList;
+import org.l2junity.gameserver.network.packets.s2c.ExAirShipTeleportList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

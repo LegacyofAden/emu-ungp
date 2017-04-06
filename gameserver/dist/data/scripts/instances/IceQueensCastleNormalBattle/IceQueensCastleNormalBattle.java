@@ -43,12 +43,12 @@ import org.l2junity.gameserver.model.quest.State;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.variables.NpcVariables;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.ExChangeClientEffectInfo;
-import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ExChangeClientEffectInfo;
+import org.l2junity.gameserver.network.packets.s2c.ExSendUIEvent;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.OnEventTrigger;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 import instances.AbstractInstance;

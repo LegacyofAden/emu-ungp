@@ -34,8 +34,8 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveNodeArri
 import org.l2junity.gameserver.model.superpoint.Superpoint;
 import org.l2junity.gameserver.model.superpoint.SuperpointInfo;
 import org.l2junity.gameserver.model.superpoint.SuperpointNode;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.w3c.dom.Document;
 
 import java.awt.*;

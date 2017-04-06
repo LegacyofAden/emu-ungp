@@ -23,11 +23,12 @@ import org.l2junity.gameserver.enums.PetitionState;
 import org.l2junity.gameserver.enums.PetitionType;
 import org.l2junity.gameserver.instancemanager.PetitionManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.PetitionVotePacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+
+import org.l2junity.gameserver.network.packets.s2c.PetitionVotePacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -121,7 +122,7 @@ public final class Petition {
 		return _type.toString().replace("_", " ");
 	}
 
-	public void sendPetitionerPacket(IClientOutgoingPacket responsePacket) {
+	public void sendPetitionerPacket(GameServerPacket responsePacket) {
 		if ((getPetitioner() == null) || !getPetitioner().isOnline()) {
 			// Allows petitioners to see the results of their petition when
 			// they log back into the game.
@@ -133,7 +134,7 @@ public final class Petition {
 		getPetitioner().sendPacket(responsePacket);
 	}
 
-	public void sendResponderPacket(IClientOutgoingPacket responsePacket) {
+	public void sendResponderPacket(GameServerPacket responsePacket) {
 		if ((getResponder() == null) || !getResponder().isOnline()) {
 			endPetitionConsultation(PetitionState.RESPONDER_MISSING);
 			return;

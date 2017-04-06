@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.ChatHandler;
 import org.l2junity.gameserver.handler.IChatHandler;
 import org.l2junity.gameserver.instancemanager.PetitionManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * Petition chat handler.

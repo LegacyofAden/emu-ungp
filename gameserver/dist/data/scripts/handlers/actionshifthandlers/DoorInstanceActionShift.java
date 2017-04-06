@@ -29,8 +29,8 @@ import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.entity.Fort;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.StaticObject;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.StaticObject;
 import org.l2junity.gameserver.util.HtmlUtil;
 
 /**

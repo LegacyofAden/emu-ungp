@@ -39,8 +39,8 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcCreatureSee;
 import org.l2junity.gameserver.model.interfaces.IDeletable;
 import org.l2junity.gameserver.model.interfaces.ILocational;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.send.DeleteObject;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
 import org.l2junity.gameserver.util.Util;
 
 import lombok.AccessLevel;

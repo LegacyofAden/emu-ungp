@@ -20,6 +20,8 @@ package org.l2junity.loginserver.network.crypt;
 
 import org.l2junity.commons.network.ICipher;
 import org.l2junity.commons.util.Rnd;
+import org.l2junity.loginserver.LoginServer;
+import org.l2junity.loginserver.network.LoginClient;
 
 import javax.crypto.SecretKey;
 import java.nio.ByteBuffer;
@@ -55,11 +57,17 @@ public class LoginCrypt implements ICipher {
 		STATIC_BLOWFISH_ENGINE.init(STATIC_BLOWFISH_KEY);
 	}
 
-	private final BlowfishEngine _blowfishEngine = new BlowfishEngine();
+	private final LoginClient client;
+
+	private final BlowfishEngine blowfishEngine = new BlowfishEngine();
 	private boolean isStaticCrypt = true;
 
-	public LoginCrypt(SecretKey blowfishKey) {
-		_blowfishEngine.init(blowfishKey.getEncoded());
+	public LoginCrypt(LoginClient client) {
+		this.client = client;
+	}
+
+	public void setKey(byte[] key) {
+		blowfishEngine.init(key);
 	}
 
 	@Override
@@ -111,7 +119,7 @@ public class LoginCrypt implements ICipher {
 			final byte[] block = new byte[8];
 			while (buf.remaining() >= 8) {
 				buf.get(block);
-				_blowfishEngine.encryptBlock(block, 0);
+				blowfishEngine.encryptBlock(block, 0);
 				buf.position(buf.position() - block.length);
 				buf.put(block);
 			}
@@ -130,7 +138,7 @@ public class LoginCrypt implements ICipher {
 		final byte[] block = new byte[8];
 		while (buf.remaining() >= 8) {
 			buf.get(block);
-			_blowfishEngine.decryptBlock(block, 0);
+			blowfishEngine.decryptBlock(block, 0);
 			buf.position(buf.position() - block.length);
 			buf.put(block);
 		}

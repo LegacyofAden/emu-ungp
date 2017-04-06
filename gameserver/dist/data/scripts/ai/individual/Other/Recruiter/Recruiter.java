@@ -37,10 +37,10 @@ import org.l2junity.gameserver.model.holders.TrainingHolder;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
-import org.l2junity.gameserver.network.client.send.training.ExTrainingZone_Admission;
-import org.l2junity.gameserver.network.client.send.training.ExTrainingZone_Leaving;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.training.ExTrainingZone_Admission;
+import org.l2junity.gameserver.network.packets.s2c.training.ExTrainingZone_Leaving;
 
 import java.util.concurrent.TimeUnit;
 

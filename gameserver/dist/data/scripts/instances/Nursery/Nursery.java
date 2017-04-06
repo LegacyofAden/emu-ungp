@@ -32,10 +32,10 @@ import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.ScriptZone;
-import org.l2junity.gameserver.network.client.send.Earthquake;
-import org.l2junity.gameserver.network.client.send.ExSendUIEvent;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.Earthquake;
+import org.l2junity.gameserver.network.packets.s2c.ExSendUIEvent;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 /**
  * Nursery instance zone.

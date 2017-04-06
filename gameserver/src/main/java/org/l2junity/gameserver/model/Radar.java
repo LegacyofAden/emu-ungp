@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.RadarControl;
+import org.l2junity.gameserver.network.packets.s2c.RadarControl;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

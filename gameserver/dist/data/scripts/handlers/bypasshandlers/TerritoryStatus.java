@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 public class TerritoryStatus implements IBypassHandler {
 	private static final String[] COMMANDS =

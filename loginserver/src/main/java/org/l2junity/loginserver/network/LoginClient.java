@@ -24,8 +24,6 @@ public class LoginClient extends Client<LoginClient> {
 	private final AtomicReference<LoginClientState> state = new AtomicReference<>(LoginClientState.CONNECTED);
 
 	@Getter
-	private final SecretKey blowfishKey;
-	@Getter
 	private final ScrambledRSAKeyPair scrambledRSAKeyPair;
 
 	@Getter
@@ -40,9 +38,8 @@ public class LoginClient extends Client<LoginClient> {
 
 	public LoginClient(Connection<LoginClient> connection) {
 		super(connection);
-		blowfishKey = KeyManager.getInstance().generateBlowfishKey();
 		scrambledRSAKeyPair = KeyManager.getInstance().getRandomScrambledRSAKeyPair();
-		getConnection().setCipher(new LoginCrypt(blowfishKey));
+		getConnection().setCipher(new LoginCrypt(this));
 	}
 
 	public boolean compareAndSetState(LoginClientState compare, LoginClientState set) {
@@ -55,7 +52,9 @@ public class LoginClient extends Client<LoginClient> {
 
 	@Override
 	protected void onOpen() {
-		sendPacket(new Init(this));
+		byte[] key = KeyManager.getInstance().generateBlowfishKey().getEncoded();
+		getConnection().getCipher().setKey(key);
+		sendPacket(new Init(this, key));
 	}
 
 	public boolean checkGameGuardData(byte[] data) {

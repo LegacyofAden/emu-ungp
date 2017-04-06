@@ -20,8 +20,8 @@ package org.l2junity.gameserver.model.actor.tasks.player;
 
 import org.l2junity.gameserver.data.xml.impl.AdminData;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.LeaveWorld;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.packets.s2c.LeaveWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class GameGuardCheckTask implements Runnable {
 	@Override
 	public void run() {
 		if ((_player != null)) {
-			L2GameClient client = _player.getClient();
+			GameClient client = _player.getClient();
 			if ((client != null) && !client.isAuthedGG() && _player.isOnline()) {
 				AdminData.getInstance().broadcastMessageToGMs("Client " + client + " failed to reply GameGuard query and is being kicked!");
 				_log.info("Client " + client + " failed to reply GameGuard query and is being kicked!");

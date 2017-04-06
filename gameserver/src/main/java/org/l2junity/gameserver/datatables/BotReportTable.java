@@ -30,8 +30,8 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -384,7 +384,7 @@ public final class BotReportTable {
 	 * @return int (hashed ip)
 	 */
 	private static int hashIp(Player player) {
-		String con = player.getClient().getConnectionAddress().getHostAddress();
+		String con = player.getClient().getIP();
 		String[] rawByte = con.split("\\.");
 		int[] rawIp = new int[4];
 		for (int i = 0; i < 4; i++) {

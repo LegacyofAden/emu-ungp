@@ -32,10 +32,10 @@ import org.l2junity.gameserver.model.effects.L2EffectType;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.NpcInfo;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.StopMove;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.NpcInfo;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.StopMove;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentAffect;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
-import org.l2junity.gameserver.network.client.Disconnection;
+import org.l2junity.gameserver.network.Disconnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

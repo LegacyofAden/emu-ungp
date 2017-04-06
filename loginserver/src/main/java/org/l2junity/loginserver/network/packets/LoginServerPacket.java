@@ -1,6 +1,7 @@
 package org.l2junity.loginserver.network.packets;
 
 import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.network.PacketBody;
 import org.l2junity.commons.network.SendablePacket;
 import org.l2junity.loginserver.network.LoginClient;
 
@@ -17,7 +18,7 @@ public abstract class LoginServerPacket extends SendablePacket<LoginClient> {
 	@Override
 	protected boolean write(LoginClient client, ByteBuffer buffer) {
 		try {
-			PacketBody body = new PacketBody(client, buffer);
+			PacketBody body = new PacketBody<>(client, buffer);
 			writeImpl(body);
 		} catch (Exception e) {
 			log.error("Sending {} to {} failed", getClass().getSimpleName(), client, e);

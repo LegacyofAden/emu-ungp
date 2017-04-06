@@ -18,6 +18,8 @@
  */
 package org.l2junity.gameserver.model.actor.instance;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.CommonUtil;
@@ -94,14 +96,15 @@ import org.l2junity.gameserver.model.world.ItemStorage;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
-import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionInfo;
-import org.l2junity.gameserver.network.client.send.friend.L2FriendStatus;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.ability.ExAcquireAPSkillList;
+import org.l2junity.gameserver.network.packets.s2c.commission.ExResponseCommissionInfo;
+import org.l2junity.gameserver.network.packets.s2c.friend.L2FriendStatus;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.EnumIntBitmask;
@@ -186,7 +189,8 @@ public final class Player extends Playable {
 
 	public static final int REQUEST_TIMEOUT = 15;
 
-	private L2GameClient _client;
+	@Getter @Setter
+	private GameClient client;
 
 	private final String _accountName;
 	private long _deleteTimer;
@@ -3226,25 +3230,14 @@ public final class Player extends Playable {
 		return super.isAlikeDead() || isFakeDeath();
 	}
 
-	/**
-	 * @return the client owner of this char.
-	 */
-	public L2GameClient getClient() {
-		return _client;
-	}
-
-	public void setClient(L2GameClient client) {
-		_client = client;
-	}
-
 	public String getIPAddress() {
 		return getIPAddress(null);
 	}
 
 	public String getIPAddress(String defaultIfNotAvailable) {
 		String ip = defaultIfNotAvailable;
-		if (_client != null) {
-			ip = _client.getIP();
+		if (client != null) {
+			ip = client.getIP();
 		}
 		return ip;
 	}
@@ -3253,7 +3246,7 @@ public final class Player extends Playable {
 		if ((getIPAddress(null) == null) || (target.getIPAddress(null) == null)) {
 			return false;
 		}
-		return _client.getIP().equalsIgnoreCase(target.getClient().getIP());
+		return client.getIP().equalsIgnoreCase(target.getClient().getIP());
 	}
 
 	public String getHWID() {
@@ -3262,8 +3255,8 @@ public final class Player extends Playable {
 
 	public String getHWID(String defaultIfNotAvailable) {
 		String hwid = defaultIfNotAvailable;
-		if ((_client != null) && (_client.getHWID() != null)) {
-			hwid = _client.getHWID();
+		if ((client != null) && (client.getHWID() != null)) {
+			hwid = client.getHWID();
 		}
 		return hwid;
 	}
@@ -3272,7 +3265,7 @@ public final class Player extends Playable {
 		if ((getHWID(null) == null) || (target.getHWID(null) == null)) {
 			return false;
 		}
-		return _client.getHWID().equalsIgnoreCase(target.getClient().getHWID());
+		return client.getHWID().equalsIgnoreCase(target.getClient().getHWID());
 	}
 
 	public ILocational getCurrentSkillWorldPosition() {
@@ -3456,12 +3449,12 @@ public final class Player extends Playable {
 	}
 
 	@Override
-	public final void broadcastPacket(IClientOutgoingPacket mov) {
-		if (mov instanceof CharInfo) {
+	public final void broadcastPacket(GameServerPacket packet) {
+		if (packet instanceof CharInfo) {
 			throw new IllegalArgumentException("CharInfo is being sent via broadcastPacket. Do NOT do that! Use broadcastCharInfo() instead.");
 		}
 
-		sendPacket(mov);
+		sendPacket(packet);
 
 		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
@@ -3469,12 +3462,12 @@ public final class Player extends Playable {
 				return;
 			}
 
-			player.sendPacket(mov);
+			player.sendPacket(packet);
 		});
 	}
 
 	@Override
-	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
+	public void broadcastPacket(GameServerPacket mov, int radiusInKnownlist) {
 		if (mov instanceof CharInfo) {
 			throw new IllegalArgumentException("CharInfo is being sent via broadcastPacket. Do NOT do that! Use broadcastCharInfo() instead.");
 		}
@@ -3566,10 +3559,10 @@ public final class Player extends Playable {
 	 * Send a Server->Client packet StatusUpdate to the L2PcInstance.
 	 */
 	@Override
-	public void sendPacket(IClientOutgoingPacket... packets) {
-		if (_client != null) {
-			for (IClientOutgoingPacket packet : packets) {
-				_client.sendPacket(packet);
+	public void sendPacket(GameServerPacket... packets) {
+		if (client != null) {
+			for (GameServerPacket packet : packets) {
+				client.sendPacket(packet);
 
 				if (isDebug() && !(packet instanceof SystemMessage)) {
 					final StringBuilder sb = new StringBuilder();

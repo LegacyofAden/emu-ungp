@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.zone.AbstractZoneSettings;
 import org.l2junity.gameserver.model.zone.TaskZoneSettings;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
+import org.l2junity.gameserver.network.packets.s2c.EtcStatusUpdate;
 
 import java.util.Map;
 import java.util.Map.Entry;

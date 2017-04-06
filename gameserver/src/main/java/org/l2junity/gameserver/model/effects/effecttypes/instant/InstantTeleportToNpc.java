@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.FlyToLocation;
-import org.l2junity.gameserver.network.client.send.FlyToLocation.FlyType;
-import org.l2junity.gameserver.network.client.send.ValidateLocation;
+import org.l2junity.gameserver.network.packets.s2c.FlyToLocation;
+import org.l2junity.gameserver.network.packets.s2c.FlyToLocation.FlyType;
+import org.l2junity.gameserver.network.packets.s2c.ValidateLocation;
 
 /**
  * Teleport player to summoned npc effect implementation.

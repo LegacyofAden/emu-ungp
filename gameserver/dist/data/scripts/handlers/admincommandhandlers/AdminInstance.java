@@ -39,8 +39,8 @@ import org.l2junity.gameserver.model.html.pagehandlers.NextPrevPageHandler;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 import org.l2junity.gameserver.util.BypassParser;
 
 /**

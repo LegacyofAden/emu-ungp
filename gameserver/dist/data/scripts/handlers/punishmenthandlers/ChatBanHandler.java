@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.punishment.PunishmentTask;
 import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.packets.s2c.EtcStatusUpdate;
 
 /**
  * This class handles chat ban punishment.
@@ -47,7 +47,7 @@ public class ChatBanHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
+				final GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {
@@ -90,7 +90,7 @@ public class ChatBanHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
+				final GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {

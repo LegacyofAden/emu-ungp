@@ -25,10 +25,10 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.entity.BlockCheckerEngine;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.ExCubeGameChangePoints;
-import org.l2junity.gameserver.network.client.send.ExCubeGameExtendedChangePoints;
-import org.l2junity.gameserver.network.client.send.NpcInfo;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameChangePoints;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameExtendedChangePoints;
+import org.l2junity.gameserver.network.packets.s2c.NpcInfo;
 
 /**
  * @author BiggBoss

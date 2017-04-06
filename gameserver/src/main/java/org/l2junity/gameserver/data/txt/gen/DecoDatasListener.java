@@ -1,6 +1,15 @@
 // Generated from org\l2junity\gameserver\data\txt\gen\DecoDatas.g4 by ANTLR 4.7
 package org.l2junity.gameserver.data.txt.gen;
 
+import org.l2junity.gameserver.data.txt.model.decodata.DecoCostData;
+import org.l2junity.gameserver.data.txt.model.decodata.DecoFunctionType;
+
+
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
+import org.l2junity.gameserver.data.txt.model.constants.AttributeType;
+import org.l2junity.gameserver.data.txt.model.item.AttributeAttack;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

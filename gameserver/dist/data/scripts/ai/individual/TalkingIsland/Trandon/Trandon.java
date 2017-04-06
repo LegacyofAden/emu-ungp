@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSubCha
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.l2junity.gameserver.network.client.recv.RequestAcquireSkill;
+import org.l2junity.gameserver.network.packets.c2s.RequestAcquireSkill;
 
 import java.util.Set;
 

@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.spawns.NpcSpawnTemplate;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.Set;
 

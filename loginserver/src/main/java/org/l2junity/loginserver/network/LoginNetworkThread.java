@@ -24,6 +24,6 @@ public class LoginNetworkThread extends NetworkThread<LoginClient> {
 
 	@Override
 	public IPacketHandler<LoginClient> getPacketHandler() {
-		return LoginPacketHandler.getInstance();
+		return LoginClientPacketHandler.getInstance();
 	}
 }

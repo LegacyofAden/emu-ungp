@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.itemauction.ItemAuction;
 import org.l2junity.gameserver.model.itemauction.ItemAuctionInstance;
-import org.l2junity.gameserver.network.client.send.ExItemAuctionInfoPacket;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExItemAuctionInfoPacket;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

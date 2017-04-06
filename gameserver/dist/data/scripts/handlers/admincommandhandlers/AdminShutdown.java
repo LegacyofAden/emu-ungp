@@ -27,7 +27,7 @@ import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.instancemanager.GameTimeManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 /**
  * This class handles following admin commands: - server_shutdown [sec] = shows menu or shuts down server in sec seconds

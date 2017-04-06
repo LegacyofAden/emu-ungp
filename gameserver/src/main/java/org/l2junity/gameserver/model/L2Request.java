@@ -20,9 +20,10 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.recv.IClientIncomingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameClientPacket;
+import org.l2junity.gameserver.network.packets.c2s.IClientIncomingPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,7 @@ public class L2Request {
 	protected Player _partner;
 	protected boolean _isRequestor;
 	protected boolean _isAnswerer;
-	protected IClientIncomingPacket _requestPacket;
+	protected GameClientPacket _requestPacket;
 
 	public L2Request(Player player) {
 		_player = player;
@@ -72,7 +73,7 @@ public class L2Request {
 	 *
 	 * @param packet
 	 */
-	private synchronized void setRequestPacket(IClientIncomingPacket packet) {
+	private synchronized void setRequestPacket(GameClientPacket packet) {
 		_requestPacket = packet;
 	}
 
@@ -81,7 +82,7 @@ public class L2Request {
 	 *
 	 * @return
 	 */
-	public IClientIncomingPacket getRequestPacket() {
+	public GameClientPacket getRequestPacket() {
 		return _requestPacket;
 	}
 
@@ -92,7 +93,7 @@ public class L2Request {
 	 * @param packet
 	 * @return
 	 */
-	public synchronized boolean setRequest(Player partner, IClientIncomingPacket packet) {
+	public synchronized boolean setRequest(Player partner, GameClientPacket packet) {
 		if (partner == null) {
 			_player.sendPacket(SystemMessageId.YOU_HAVE_INVITED_THE_WRONG_TARGET);
 			return false;

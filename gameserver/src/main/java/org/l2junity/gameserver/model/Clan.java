@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.core.configs.FeatureConfig;
@@ -65,29 +66,28 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.ClanVariables;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.ExSubPledgeSkillAdd;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.PledgeReceiveSubPledgeCreated;
-import org.l2junity.gameserver.network.client.send.PledgeShowInfoUpdate;
-import org.l2junity.gameserver.network.client.send.PledgeShowMemberListAll;
-import org.l2junity.gameserver.network.client.send.PledgeShowMemberListDeleteAll;
-import org.l2junity.gameserver.network.client.send.PledgeShowMemberListUpdate;
-import org.l2junity.gameserver.network.client.send.PledgeSkillList;
-import org.l2junity.gameserver.network.client.send.PledgeSkillList.SubPledgeSkill;
-import org.l2junity.gameserver.network.client.send.PledgeSkillListAdd;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.UserInfo;
-import org.l2junity.gameserver.network.client.send.pledgebonus.ExPledgeBonusMarkReset;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.ExSubPledgeSkillAdd;
+import org.l2junity.gameserver.network.packets.s2c.PledgeReceiveSubPledgeCreated;
+import org.l2junity.gameserver.network.packets.s2c.PledgeShowInfoUpdate;
+import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListAll;
+import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListDeleteAll;
+import org.l2junity.gameserver.network.packets.s2c.PledgeShowMemberListUpdate;
+import org.l2junity.gameserver.network.packets.s2c.PledgeSkillList;
+import org.l2junity.gameserver.network.packets.s2c.PledgeSkillList.SubPledgeSkill;
+import org.l2junity.gameserver.network.packets.s2c.PledgeSkillListAdd;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.pledgebonus.ExPledgeBonusMarkReset;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.EnumIntBitmask;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class Clan implements IIdentifiable, INamable {
-	private static final Logger _log = LoggerFactory.getLogger(Clan.class);
-
 	// SQL queries
 	private static final String INSERT_CLAN_DATA = "INSERT INTO clan_data (clan_id,clan_name,clan_level,hasCastle,blood_alliance_count,blood_oath_count,ally_id,ally_name,leader_id,crest_id,crest_large_id,ally_crest_id,new_leader_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String SELECT_CLAN_DATA = "SELECT * FROM clan_data where clan_id=?";
@@ -285,7 +285,7 @@ public class Clan implements IIdentifiable, INamable {
 				ps.setInt(2, getLeaderId());
 				ps.execute();
 			} catch (Exception e) {
-				_log.warn("Couldn't update clan privs for old clan leader", e);
+				log.warn("Couldn't update clan privs for old clan leader", e);
 			}
 		}
 
@@ -316,14 +316,14 @@ public class Clan implements IIdentifiable, INamable {
 				ps.setInt(2, getLeaderId());
 				ps.execute();
 			} catch (Exception e) {
-				_log.warn("Couldn't update clan privs for new clan leader", e);
+				log.warn("Couldn't update clan privs for new clan leader", e);
 			}
 		}
 
 		broadcastClanStatus();
 		broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_LEADER_PRIVILEGES_HAVE_BEEN_TRANSFERRED_TO_C1).addString(member.getName()));
 
-		_log.info("Leader of Clan: " + getName() + " changed to: " + member.getName() + " ex leader: " + exMember.getName());
+		log.info("Leader of Clan: " + getName() + " changed to: " + member.getName() + " ex leader: " + exMember.getName());
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class Clan implements IIdentifiable, INamable {
 	 */
 	public String getLeaderName() {
 		if (_leader == null) {
-			_log.warn("Clan " + getName() + " without clan leader!");
+			log.warn("Clan " + getName() + " without clan leader!");
 			return "";
 		}
 		return _leader.getName();
@@ -424,7 +424,7 @@ public class Clan implements IIdentifiable, INamable {
 	public void removeClanMember(int objectId, long clanJoinExpiryTime) {
 		final ClanMember exMember = _members.remove(objectId);
 		if (exMember == null) {
-			_log.warn("Member Object ID: " + objectId + " not found in clan while trying to remove");
+			log.warn("Member Object ID: " + objectId + " not found in clan while trying to remove");
 			return;
 		}
 		final int leadssubpledge = getLeaderSubPledge(objectId);
@@ -791,7 +791,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.execute();
 		} catch (Exception e) {
-			_log.warn("Exception on updateBloodAllianceCountInDB(): " + e.getMessage(), e);
+			log.warn("Exception on updateBloodAllianceCountInDB(): " + e.getMessage(), e);
 		}
 	}
 
@@ -828,7 +828,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.execute();
 		} catch (Exception e) {
-			_log.warn("Exception on updateBloodAllianceCountInDB(): " + e.getMessage(), e);
+			log.warn("Exception on updateBloodAllianceCountInDB(): " + e.getMessage(), e);
 		}
 	}
 
@@ -840,7 +840,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.execute();
 		} catch (Exception e) {
-			_log.warn("Exception on updateClanScoreInDb(): " + e.getMessage(), e);
+			log.warn("Exception on updateClanScoreInDb(): " + e.getMessage(), e);
 		}
 
 		// Update variables at database
@@ -878,7 +878,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(10, getId());
 			ps.execute();
 		} catch (Exception e) {
-			_log.error("Error saving clan: " + e.getMessage(), e);
+			log.error("Error saving clan: " + e.getMessage(), e);
 		}
 	}
 
@@ -915,10 +915,10 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(13, getNewLeaderId());
 			ps.execute();
 			if (GeneralConfig.DEBUG) {
-				_log.debug("New clan saved in db: " + getId());
+				log.debug("New clan saved in db: " + getId());
 			}
 		} catch (Exception e) {
-			_log.error("Error saving new clan: " + e.getMessage(), e);
+			log.error("Error saving new clan: " + e.getMessage(), e);
 		}
 	}
 
@@ -938,7 +938,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps1.setInt(4, member.getObjectId());
 			ps1.execute();
 			if (GeneralConfig.DEBUG) {
-				_log.debug("clan member removed in db: " + getId());
+				log.debug("clan member removed in db: " + getId());
 			}
 			// Remove apprentice.
 			ps2.setInt(1, member.getObjectId());
@@ -947,7 +947,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps3.setInt(1, member.getObjectId());
 			ps3.execute();
 		} catch (Exception e) {
-			_log.error("Error removing clan member: " + e.getMessage(), e);
+			log.error("Error removing clan member: " + e.getMessage(), e);
 		}
 	}
 
@@ -1005,7 +1005,7 @@ public class Clan implements IIdentifiable, INamable {
 			}
 
 			if (GeneralConfig.DEBUG && (getName() != null)) {
-				_log.info("Restored clan data for \"" + getName() + "\" from database.");
+				log.info("Restored clan data for \"" + getName() + "\" from database.");
 			}
 
 			restoreSubPledges();
@@ -1013,7 +1013,7 @@ public class Clan implements IIdentifiable, INamable {
 			restoreSkills();
 			restoreNotice();
 		} catch (Exception e) {
-			_log.error("Error restoring clan data: " + e.getMessage(), e);
+			log.error("Error restoring clan data: " + e.getMessage(), e);
 		}
 	}
 
@@ -1028,7 +1028,7 @@ public class Clan implements IIdentifiable, INamable {
 				}
 			}
 		} catch (Exception e) {
-			_log.error("Error restoring clan notice: " + e.getMessage(), e);
+			log.error("Error restoring clan notice: " + e.getMessage(), e);
 		}
 	}
 
@@ -1058,7 +1058,7 @@ public class Clan implements IIdentifiable, INamable {
 			}
 			ps.execute();
 		} catch (Exception e) {
-			_log.warn("Error could not store clan notice: " + e.getMessage(), e);
+			log.warn("Error could not store clan notice: " + e.getMessage(), e);
 		}
 
 		_notice = notice;
@@ -1108,13 +1108,13 @@ public class Clan implements IIdentifiable, INamable {
 						if (subunit != null) {
 							subunit.addNewSkill(skill);
 						} else {
-							_log.info("Missing subpledge " + subType + " for clan " + this + ", skill skipped.");
+							log.info("Missing subpledge " + subType + " for clan " + this + ", skill skipped.");
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			_log.error("Error restoring clan skills: " + e.getMessage(), e);
+			log.error("Error restoring clan skills: " + e.getMessage(), e);
 		}
 	}
 
@@ -1177,7 +1177,7 @@ public class Clan implements IIdentifiable, INamable {
 				if (subunit != null) {
 					oldSkill = subunit.addNewSkill(newSkill);
 				} else {
-					_log.warn("Subpledge " + subType + " does not exist for clan " + this);
+					log.warn("Subpledge " + subType + " does not exist for clan " + this);
 					return oldSkill;
 				}
 			}
@@ -1201,7 +1201,7 @@ public class Clan implements IIdentifiable, INamable {
 					}
 				}
 			} catch (Exception e) {
-				_log.warn("Error could not store clan skills: " + e.getMessage(), e);
+				log.warn("Error could not store clan skills: " + e.getMessage(), e);
 			}
 
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.THE_CLAN_SKILL_S1_HAS_BEEN_ADDED);
@@ -1241,7 +1241,7 @@ public class Clan implements IIdentifiable, INamable {
 						}
 					}
 				} catch (NullPointerException e) {
-					_log.warn(e.getMessage(), e);
+					log.warn(e.getMessage(), e);
 				}
 			}
 		}
@@ -1336,13 +1336,13 @@ public class Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void broadcastToOnlineAllyMembers(IClientOutgoingPacket packet) {
+	public void broadcastToOnlineAllyMembers(GameServerPacket packet) {
 		for (Clan clan : ClanTable.getInstance().getClanAllies(getAllyId())) {
 			clan.broadcastToOnlineMembers(packet);
 		}
 	}
 
-	public void broadcastToOnlineMembers(IClientOutgoingPacket packet) {
+	public void broadcastToOnlineMembers(GameServerPacket packet) {
 		for (ClanMember member : _members.values()) {
 			if ((member != null) && member.isOnline()) {
 				member.getPlayerInstance().sendPacket(packet);
@@ -1358,7 +1358,7 @@ public class Clan implements IIdentifiable, INamable {
 		}
 	}
 
-	public void broadcastToOtherOnlineMembers(IClientOutgoingPacket packet, Player player) {
+	public void broadcastToOtherOnlineMembers(GameServerPacket packet, Player player) {
 		for (ClanMember member : _members.values()) {
 			if ((member != null) && member.isOnline() && (member.getPlayerInstance() != player)) {
 				member.getPlayerInstance().sendPacket(packet);
@@ -1504,7 +1504,7 @@ public class Clan implements IIdentifiable, INamable {
 				}
 			}
 		} catch (Exception e) {
-			_log.warn("Could not restore clan sub-units: " + e.getMessage(), e);
+			log.warn("Could not restore clan sub-units: " + e.getMessage(), e);
 		}
 	}
 
@@ -1600,10 +1600,10 @@ public class Clan implements IIdentifiable, INamable {
 			}
 
 			if (GeneralConfig.DEBUG) {
-				_log.debug("New sub_clan saved in db: " + getId() + "; " + pledgeType);
+				log.debug("New sub_clan saved in db: " + getId() + "; " + pledgeType);
 			}
 		} catch (Exception e) {
-			_log.error("Error saving sub clan data: " + e.getMessage(), e);
+			log.error("Error saving sub clan data: " + e.getMessage(), e);
 		}
 
 		broadcastToOnlineMembers(new PledgeShowInfoUpdate(_leader.getClan()));
@@ -1647,10 +1647,10 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(4, pledgeType);
 			ps.execute();
 			if (GeneralConfig.DEBUG) {
-				_log.debug("Subpledge updated in db: " + getId());
+				log.debug("Subpledge updated in db: " + getId());
 			}
 		} catch (Exception e) {
-			_log.error("Error updating subpledge: " + e.getMessage(), e);
+			log.error("Error updating subpledge: " + e.getMessage(), e);
 		}
 	}
 
@@ -1675,7 +1675,7 @@ public class Clan implements IIdentifiable, INamable {
 				}
 			}
 		} catch (Exception e) {
-			_log.error("Error restoring clan privs by rank: " + e.getMessage(), e);
+			log.error("Error restoring clan privs by rank: " + e.getMessage(), e);
 		}
 	}
 
@@ -1708,7 +1708,7 @@ public class Clan implements IIdentifiable, INamable {
 				ps.setInt(5, privs);
 				ps.execute();
 			} catch (Exception e) {
-				_log.warn("Could not store clan privs for rank: " + e.getMessage(), e);
+				log.warn("Could not store clan privs for rank: " + e.getMessage(), e);
 			}
 
 			for (ClanMember cm : getMembers()) {
@@ -1734,7 +1734,7 @@ public class Clan implements IIdentifiable, INamable {
 				ps.setInt(4, privs);
 				ps.execute();
 			} catch (Exception e) {
-				_log.warn("Could not create new rank and store clan privs for rank: " + e.getMessage(), e);
+				log.warn("Could not create new rank and store clan privs for rank: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -1827,7 +1827,7 @@ public class Clan implements IIdentifiable, INamable {
 				ps.setInt(2, getId());
 				ps.execute();
 			} catch (Exception e) {
-				_log.warn("Could not store auction for clan: " + e.getMessage(), e);
+				log.warn("Could not store auction for clan: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -2001,7 +2001,7 @@ public class Clan implements IIdentifiable, INamable {
 		}
 
 		if (GeneralConfig.DEBUG) {
-			_log.debug(player.getObjectId() + "(" + player.getName() + ") requested ally creation from ");
+			log.debug(player.getObjectId() + "(" + player.getName() + ") requested ally creation from ");
 		}
 
 		if (!player.isClanLeader()) {
@@ -2279,7 +2279,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.execute();
 		} catch (Exception e) {
-			_log.warn("could not increase clan level:" + e.getMessage(), e);
+			log.warn("could not increase clan level:" + e.getMessage(), e);
 		}
 
 		setLevel(level);
@@ -2317,7 +2317,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			_log.warn("Could not update crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
+			log.warn("Could not update crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
 		}
 
 		for (Player member : getOnlineMembers(0)) {
@@ -2348,7 +2348,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, allyId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			_log.warn("Could not update ally crest for ally/clan id " + allyId + " : " + e.getMessage(), e);
+			log.warn("Could not update ally crest for ally/clan id " + allyId + " : " + e.getMessage(), e);
 		}
 
 		if (onlyThisClan) {
@@ -2384,7 +2384,7 @@ public class Clan implements IIdentifiable, INamable {
 			ps.setInt(2, getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			_log.warn("Could not update large crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
+			log.warn("Could not update large crest for clan " + getName() + " [" + getId() + "] : " + e.getMessage(), e);
 		}
 
 		for (Player member : getOnlineMembers(0)) {

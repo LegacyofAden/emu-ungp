@@ -36,7 +36,7 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.AbstractZoneSettings;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * A siege zone

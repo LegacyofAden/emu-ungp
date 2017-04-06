@@ -24,9 +24,9 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.IRestorable;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.items.type.EtcItemType;
-import org.l2junity.gameserver.network.client.send.ExAutoSoulShot;
-import org.l2junity.gameserver.network.client.send.ShortCutInit;
-import org.l2junity.gameserver.network.client.send.ShortCutRegister;
+import org.l2junity.gameserver.network.packets.s2c.ExAutoSoulShot;
+import org.l2junity.gameserver.network.packets.s2c.ShortCutInit;
+import org.l2junity.gameserver.network.packets.s2c.ShortCutRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

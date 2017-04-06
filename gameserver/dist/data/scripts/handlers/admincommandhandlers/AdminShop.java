@@ -24,9 +24,9 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.BuyList;
-import org.l2junity.gameserver.network.client.send.ExBuySellList;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.BuyList;
+import org.l2junity.gameserver.network.packets.s2c.ExBuySellList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

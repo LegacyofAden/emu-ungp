@@ -34,9 +34,9 @@ import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.network.client.send.ExBasicActionList;
-import org.l2junity.gameserver.network.client.send.ExUserInfoEquipSlot;
-import org.l2junity.gameserver.network.client.send.SkillCoolTime;
+import org.l2junity.gameserver.network.packets.s2c.ExBasicActionList;
+import org.l2junity.gameserver.network.packets.s2c.ExUserInfoEquipSlot;
+import org.l2junity.gameserver.network.packets.s2c.SkillCoolTime;
 
 import java.util.ArrayList;
 import java.util.List;

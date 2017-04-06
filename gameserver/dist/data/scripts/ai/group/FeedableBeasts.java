@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.TamedBeastInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import quests.Q00020_BringUpWithLove.Q00020_BringUpWithLove;
 
 import java.util.HashMap;

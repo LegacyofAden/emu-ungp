@@ -39,7 +39,7 @@ import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.TeleportZone;
-import org.l2junity.gameserver.network.client.send.SpecialCamera;
+import org.l2junity.gameserver.network.packets.s2c.SpecialCamera;
 
 import instances.AbstractInstance;
 import quests.Q00144_PailakaInjuredDragon.Q00144_PailakaInjuredDragon;

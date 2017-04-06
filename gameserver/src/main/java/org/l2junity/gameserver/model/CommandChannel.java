@@ -21,11 +21,11 @@ package org.l2junity.gameserver.model;
 import org.l2junity.core.configs.PlayerConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ExCloseMPCC;
-import org.l2junity.gameserver.network.client.send.ExMPCCPartyInfoUpdate;
-import org.l2junity.gameserver.network.client.send.ExOpenMPCC;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExCloseMPCC;
+import org.l2junity.gameserver.network.packets.s2c.ExMPCCPartyInfoUpdate;
+import org.l2junity.gameserver.network.packets.s2c.ExOpenMPCC;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.LinkedList;
 import java.util.List;

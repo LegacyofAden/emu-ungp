@@ -18,33 +18,25 @@
  */
 package org.l2junity.gameserver.model.events.impl.server;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 
 /**
  * @author UnAfraid
  */
+@Data
+@AllArgsConstructor
 public class OnPacketReceived implements IBaseEvent {
-	private final L2GameClient _client;
-	private final byte[] _data;
-
-	public OnPacketReceived(L2GameClient client, byte[] data) {
-		_client = client;
-		_data = data;
-	}
+	private final GameClient client;
+	private final byte[] data;
 
 	public Player getActiveChar() {
-		return _client.getActiveChar();
-	}
-
-	public L2GameClient getClient() {
-		return _client;
-	}
-
-	public byte[] getData() {
-		return _data;
+		return client.getActiveChar();
 	}
 
 	@Override

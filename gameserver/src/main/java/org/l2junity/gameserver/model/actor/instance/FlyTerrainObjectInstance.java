@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.actor.instance;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 
 public final class FlyTerrainObjectInstance extends Npc {
 	public FlyTerrainObjectInstance(NpcTemplate template) {

@@ -38,8 +38,8 @@ import org.l2junity.gameserver.model.residences.ResidenceFunction;
 import org.l2junity.gameserver.model.residences.ResidenceFunctionTemplate;
 import org.l2junity.gameserver.model.residences.ResidenceFunctionType;
 import org.l2junity.gameserver.model.teleporter.TeleportHolder;
-import org.l2junity.gameserver.network.client.send.AgitDecoInfo;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.AgitDecoInfo;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import ai.AbstractNpcAI;
 

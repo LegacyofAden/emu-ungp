@@ -42,10 +42,10 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.instancezone.InstanceTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.appearance.ExCuriousHouseMemberUpdate;
-import org.l2junity.gameserver.network.client.send.ceremonyofchaos.*;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.appearance.ExCuriousHouseMemberUpdate;
+import org.l2junity.gameserver.network.packets.s2c.ceremonyofchaos.*;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

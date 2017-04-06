@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpChanged;
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.items.Weapon;
-import org.l2junity.gameserver.network.client.send.ExNewSkillToLearnByLevelUp;
+import org.l2junity.gameserver.network.packets.s2c.ExNewSkillToLearnByLevelUp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

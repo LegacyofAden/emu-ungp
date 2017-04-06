@@ -31,8 +31,8 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcTeleportRequ
 import org.l2junity.gameserver.model.events.returns.TerminateReturn;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.ItemTemplate;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

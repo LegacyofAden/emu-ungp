@@ -22,7 +22,6 @@ bootRepackage.enabled = false
 dependencies {
 	provided('org.projectlombok:lombok:+')
 	provided project(':commons')
-	provided project(':network')
 
 	compile('org.mindrot:jbcrypt:+')
 	compile(group: 'com.sun.mail', name: 'javax.mail', version: '1.5.6')

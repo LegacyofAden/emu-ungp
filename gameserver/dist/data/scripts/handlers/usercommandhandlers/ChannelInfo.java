@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IUserCommandHandler;
 import org.l2junity.gameserver.handler.UserCommandHandler;
 import org.l2junity.gameserver.model.CommandChannel;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ExMultiPartyCommandChannelInfo;
+import org.l2junity.gameserver.network.packets.s2c.ExMultiPartyCommandChannelInfo;
 
 /**
  * Channel Info user command.

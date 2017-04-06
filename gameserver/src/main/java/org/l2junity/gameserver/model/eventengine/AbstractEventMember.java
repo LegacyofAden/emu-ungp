@@ -22,7 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+
 
 /**
  * @param <T>
@@ -46,10 +47,10 @@ public abstract class AbstractEventMember<T extends AbstractEvent<?>> {
 		return WorldManager.getInstance().getPlayer(_objectId);
 	}
 
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 		final Player player = getPlayer();
 		if (player != null) {
-			for (IClientOutgoingPacket packet : packets) {
+			for (GameServerPacket packet : packets) {
 				player.sendPacket(packet);
 			}
 		}

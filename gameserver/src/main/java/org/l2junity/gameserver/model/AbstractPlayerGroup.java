@@ -20,10 +20,11 @@ package org.l2junity.gameserver.model;
 
 import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public abstract class AbstractPlayerGroup {
 	 *
 	 * @param packet the packet to broadcast
 	 */
-	public void broadcastPacket(final IClientOutgoingPacket packet) {
+	public void broadcastPacket(final GameServerPacket packet) {
 		forEachMember(m ->
 		{
 			if (m != null) {

@@ -22,7 +22,8 @@ import org.l2junity.commons.util.Rnd;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Duel;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -154,7 +155,7 @@ public final class DuelManager {
 	 * @param player
 	 * @param packet
 	 */
-	public void broadcastToOppositTeam(Player player, IClientOutgoingPacket packet) {
+	public void broadcastToOppositTeam(Player player, GameServerPacket packet) {
 		if ((player == null) || !player.isInDuel()) {
 			return;
 		}

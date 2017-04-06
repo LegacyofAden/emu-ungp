@@ -49,15 +49,15 @@ import org.l2junity.gameserver.model.html.PageBuilder;
 import org.l2junity.gameserver.model.html.PageResult;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
-import org.l2junity.gameserver.network.client.send.GMViewItemList;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowAll;
-import org.l2junity.gameserver.network.client.send.PartySmallWindowDeleteAll;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.UserInfo;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.packets.s2c.ExVoteSystemInfo;
+import org.l2junity.gameserver.network.packets.s2c.GMViewItemList;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowAll;
+import org.l2junity.gameserver.network.packets.s2c.PartySmallWindowDeleteAll;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -486,7 +486,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 				return false;
 			}
 
-			final L2GameClient client = pl.getClient();
+			final GameClient client = pl.getClient();
 			if (client == null) {
 				activeChar.sendMessage("Client is null.");
 				return false;
@@ -795,13 +795,13 @@ public class AdminEditChar implements IAdminCommandHandler {
 			return;
 		}
 
-		final L2GameClient client = player.getClient();
+		final GameClient client = player.getClient();
 		if (client == null) {
 			activeChar.sendMessage("Client is null.");
 		} else if (client.isDetached()) {
 			activeChar.sendMessage("Client is detached.");
 		} else {
-			ip = client.getConnectionAddress().getHostAddress();
+			ip = client.getIP();
 		}
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
@@ -957,7 +957,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		int CharactersFound = 0;
-		L2GameClient client;
+		GameClient client;
 		String name, ip = "0.0.0.0";
 		final StringBuilder replyMSG = new StringBuilder(1000);
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
@@ -980,7 +980,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 					continue;
 				}
 
-				ip = client.getConnectionAddress().getHostAddress();
+				ip = client.getIP();
 				if (!ip.equals(IpAdress)) {
 					continue;
 				}
@@ -1052,7 +1052,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 	private void findDualbox(Player activeChar, int multibox) {
 		Map<String, List<Player>> ipMap = new HashMap<>();
 		String ip = "0.0.0.0";
-		L2GameClient client;
+		GameClient client;
 		final Map<String, Integer> dualboxIPs = new HashMap<>();
 
 		final List<Player> players = WorldManager.getInstance().getAllPlayers();
@@ -1063,10 +1063,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				continue;
 			}
 
-			ip = client.getConnectionAddress().getHostAddress();
-			if (ipMap.get(ip) == null) {
-				ipMap.put(ip, new ArrayList<Player>());
-			}
+			ip = client.getIP();
+			ipMap.computeIfAbsent(ip, k -> new ArrayList<>());
 			ipMap.get(ip).add(player);
 
 			if (ipMap.get(ip).size() >= multibox) {
@@ -1080,7 +1078,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		List<String> keys = new ArrayList<>(dualboxIPs.keySet());
-		keys.sort(Comparator.comparing(s -> dualboxIPs.get(s)).reversed());
+		keys.sort(Comparator.comparing(dualboxIPs::get).reversed());
 
 		final StringBuilder results = new StringBuilder();
 		for (String dualboxIP : keys) {
@@ -1097,7 +1095,7 @@ public class AdminEditChar implements IAdminCommandHandler {
 
 	private void findDualboxStrict(Player activeChar, int multibox) {
 		Map<IpPack, List<Player>> ipMap = new HashMap<>();
-		L2GameClient client;
+		GameClient client;
 		final Map<IpPack, Integer> dualboxIPs = new HashMap<>();
 
 		final List<Player> players = WorldManager.getInstance().getAllPlayers();
@@ -1108,10 +1106,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 				continue;
 			}
 
-			IpPack pack = new IpPack(client.getConnectionAddress().getHostAddress(), client.getTrace());
-			if (ipMap.get(pack) == null) {
-				ipMap.put(pack, new ArrayList<Player>());
-			}
+			IpPack pack = new IpPack(client.getIP(), client.getTrace());
+			ipMap.computeIfAbsent(pack, k -> new ArrayList<>());
 			ipMap.get(pack).add(player);
 
 			if (ipMap.get(pack).size() >= multibox) {
@@ -1125,11 +1121,11 @@ public class AdminEditChar implements IAdminCommandHandler {
 		}
 
 		List<IpPack> keys = new ArrayList<>(dualboxIPs.keySet());
-		keys.sort(Comparator.comparing(s -> dualboxIPs.get(s)).reversed());
+		keys.sort(Comparator.comparing(dualboxIPs::get).reversed());
 
 		final StringBuilder results = new StringBuilder();
 		for (IpPack dualboxIP : keys) {
-			results.append("<a action=\"bypass -h admin_find_ip " + dualboxIP.ip + "\">" + dualboxIP.ip + " (" + dualboxIPs.get(dualboxIP) + ")</a><br1>");
+			results.append("<a action=\"bypass -h admin_find_ip ").append(dualboxIP.ip).append("\">").append(dualboxIP.ip).append(" (").append(dualboxIPs.get(dualboxIP)).append(")</a><br1>");
 		}
 
 		final NpcHtmlMessage adminReply = new NpcHtmlMessage(0, 1);
@@ -1239,8 +1235,8 @@ public class AdminEditChar implements IAdminCommandHandler {
 			} else {
 				text.append("<tr><td><table width=270 border=0 cellpadding=2><tr><td width=30 align=right>");
 			}
-			text.append(member.getLevel() + "</td><td width=130><a action=\"bypass -h admin_character_info " + member.getName() + "\">" + member.getName() + "</a>");
-			text.append("</td><td width=110 align=right>" + member.getClassId().toString() + "</td></tr></table></td></tr>");
+			text.append(member.getLevel()).append("</td><td width=130><a action=\"bypass -h admin_character_info ").append(member.getName()).append("\">").append(member.getName()).append("</a>");
+			text.append("</td><td width=110 align=right>").append(member.getClassId().toString()).append("</td></tr></table></td></tr>");
 			color = !color;
 		}
 		html.replace("%player%", target.getName());

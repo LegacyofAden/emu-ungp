@@ -39,9 +39,9 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.Weapon;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.InventoryUpdate;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.InventoryUpdate;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
 import org.slf4j.Logger;
@@ -240,7 +240,7 @@ public abstract class Vehicle extends Creature {
 		return _passengers;
 	}
 
-	public void broadcastToPassengers(IClientOutgoingPacket sm) {
+	public void broadcastToPassengers(GameServerPacket sm) {
 		for (Player player : _passengers) {
 			if (player != null) {
 				player.sendPacket(sm);

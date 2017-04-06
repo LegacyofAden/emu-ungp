@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.QuestSound;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.QuestState;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import quests.Q00184_ArtOfPersuasion.Q00184_ArtOfPersuasion;
 import quests.Q00185_NikolasCooperation.Q00185_NikolasCooperation;
 

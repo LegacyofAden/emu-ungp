@@ -35,8 +35,8 @@ import org.l2junity.gameserver.model.html.pagehandlers.NextPrevPageHandler;
 import org.l2junity.gameserver.model.html.styles.ButtonsStyle;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.BypassParser;
 
 import java.time.Instant;

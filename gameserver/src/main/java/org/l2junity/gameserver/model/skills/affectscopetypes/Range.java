@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.TargetType;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
 
 /**
  * Range affect scope implementation. Gathers objects in area of target origin (including origin itself).

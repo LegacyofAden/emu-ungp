@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.instance.RaidBossInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.zone.type.NoRestartZone;
-import org.l2junity.gameserver.network.client.send.SpecialCamera;
+import org.l2junity.gameserver.network.packets.s2c.SpecialCamera;
 
 /**
  * Sailren AI.

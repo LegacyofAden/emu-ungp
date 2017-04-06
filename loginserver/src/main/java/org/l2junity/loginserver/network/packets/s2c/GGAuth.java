@@ -1,5 +1,6 @@
 package org.l2junity.loginserver.network.packets.s2c;
 
+import org.l2junity.commons.network.PacketBody;
 import org.l2junity.loginserver.network.packets.LoginServerPacket;
 
 /**

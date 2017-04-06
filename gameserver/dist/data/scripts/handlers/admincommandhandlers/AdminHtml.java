@@ -22,7 +22,7 @@ import org.l2junity.gameserver.data.HtmRepository;
 import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.StringTokenizer;
 

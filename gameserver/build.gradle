@@ -33,10 +33,10 @@ sourceSets {
 dependencies {
 	provided('org.projectlombok:lombok:+')
 	provided files("${System.properties['java.home']}/../lib/tools.jar")
+
 	antlr('org.antlr:antlr4:+')
-	provided project(':commons')
-	provided project(':geodriver')
-	provided project(':network')
+	compile project(':commons')
+	compile project(':geodriver')
 
 	compile('com.googlecode.htmlcompressor:htmlcompressor:1.5.2')
 	compile('com.google.javascript:closure-compiler:v20151216')

@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * This class handles following admin commands: - targetsay <message> = makes talk a L2Character

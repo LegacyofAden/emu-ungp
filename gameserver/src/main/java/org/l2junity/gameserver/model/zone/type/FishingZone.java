@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.fishing.ExAutoFishAvailable;
+import org.l2junity.gameserver.network.packets.s2c.fishing.ExAutoFishAvailable;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;

@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.conditions;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 
 /**
  * The Class Condition.

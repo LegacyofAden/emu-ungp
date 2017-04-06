@@ -33,8 +33,9 @@ import org.l2junity.gameserver.model.holders.ItemHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -391,7 +392,7 @@ public abstract class AbstractOlympiadGame {
 
 	public abstract void broadcastOlympiadInfo(OlympiadStadium _stadium);
 
-	protected abstract void broadcastPacket(IClientOutgoingPacket packet);
+	protected abstract void broadcastPacket(GameServerPacket packet);
 
 	protected abstract boolean needBuffers();
 

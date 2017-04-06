@@ -29,8 +29,9 @@ import org.l2junity.gameserver.model.TradeItem;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SellBuffHolder;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.GameClient;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -187,7 +188,7 @@ public class OfflineTradersTable {
 				Player player = null;
 
 				try {
-					L2GameClient client = new L2GameClient();
+					GameClient client = new GameClient(null);
 					client.setDetached(true);
 					player = Player.load(rs.getInt("charId"));
 					client.setActiveChar(player);

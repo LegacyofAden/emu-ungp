@@ -26,9 +26,9 @@ import org.l2junity.gameserver.model.AccessLevel;
 import org.l2junity.gameserver.model.AdminCommandAccessRight;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -295,7 +295,7 @@ public final class AdminData implements IGameXmlReader {
 	 *
 	 * @param packet the packet
 	 */
-	public void broadcastToGMs(IClientOutgoingPacket packet) {
+	public void broadcastToGMs(GameServerPacket packet) {
 		for (Player gm : getAllGms(true)) {
 			gm.sendPacket(packet);
 		}

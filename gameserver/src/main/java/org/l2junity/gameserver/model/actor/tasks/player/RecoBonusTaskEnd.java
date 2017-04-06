@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.tasks.player;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
+import org.l2junity.gameserver.network.packets.s2c.ExVoteSystemInfo;
 
 /**
  * Task dedicated to end player's recommendation bonus.

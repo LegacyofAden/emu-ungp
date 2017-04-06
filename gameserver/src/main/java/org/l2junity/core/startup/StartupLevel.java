@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.commons.util.ServerInfoUtils;
 import org.l2junity.commons.versioning.Version;
 import org.l2junity.gameserver.ShutdownHooks;
+import org.l2junity.gameserver.network.packets.GameNetworkThread;
 
 import java.awt.*;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 
 /**
@@ -37,6 +39,12 @@ public enum StartupLevel implements IStartupLevel {
 
 			for (String line : ServerInfoUtils.getMemUsage()) {
 				log.info(line);
+			}
+
+			try {
+				GameNetworkThread.getInstance().startup();
+			} catch (IOException e) {
+				log.error("Error while starting network thread", e);
 			}
 
 			log.info("Server loaded in {} millisecond(s).", ServerInfoUtils.formatNumber(ManagementFactory.getRuntimeMXBean().getUptime()));

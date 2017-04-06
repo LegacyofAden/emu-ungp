@@ -43,9 +43,9 @@ import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.stats.functions.FuncAdd;
 import org.l2junity.gameserver.model.stats.functions.FuncSet;
 import org.l2junity.gameserver.model.stats.functions.FuncTemplate;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

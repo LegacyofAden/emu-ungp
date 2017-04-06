@@ -15,12 +15,12 @@ import org.l2junity.core.configs.GameserverConfig;
 import org.l2junity.core.configs.GeneralConfig;
 import org.l2junity.core.configs.NetworkConfig;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.ConnectionState;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.CharSelectionInfo;
-import org.l2junity.gameserver.network.client.send.LoginFail;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.GameClientState;
+import org.l2junity.gameserver.network.packets.s2c.CharSelectionInfo;
+import org.l2junity.gameserver.network.packets.s2c.LoginFail;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +46,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI {
-	private static final Logger ACCOUNTING_LOGGER = LoggerFactory.getLogger("accounting");
+	private static final Logger logAccounting = LoggerFactory.getLogger("accounting");
 
 	private ILoginServerRMI connection;
 	private GameServerInfo gameServerInfo;
 	private transient ScheduledFuture<?> reconnectTask;
 
-	private final Map<String, L2GameClient> accountsInGameServer = new ConcurrentHashMap<>();
+	private final Map<String, GameClient> accountsInGameServer = new ConcurrentHashMap<>();
 
 	public GameServerRMI() throws RemoteException {
 		gameServerInfo = new GameServerInfo(GameserverConfig.SERVER_ID, NetworkConfig.HOST, NetworkConfig.PORT);
@@ -120,31 +120,32 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 	@Override
 	public void kickPlayerByAccount(String account) throws RemoteException {
 		if (accountsInGameServer.containsKey(account)) {
-			L2GameClient client = accountsInGameServer.get(account);
+			GameClient client = accountsInGameServer.get(account);
 			client.close(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_LOGGED_IN_TO_TWO_PLACES_IF_YOU_SUSPECT_ACCOUNT_THEFT_WE_RECOMMEND_CHANGING_YOUR_PASSWORD_SCANNING_YOUR_COMPUTER_FOR_VIRUSES_AND_USING_AN_ANTI_VIRUS_SOFTWARE));
-			ACCOUNTING_LOGGER.info("Kicked by login, {}", client);
+			logAccounting.info("Kicked by login, {}", client);
 			removeAccountInGame(account);
 		}
 	}
 
-	public boolean tryAddGameClient(L2GameClient client, SessionInfo sessionInfo) {
+	public boolean tryAddGameClient(GameClient client, SessionInfo sessionInfo) {
 		if (checkSession(sessionInfo)) {
 			client.setAccountName(sessionInfo.getAccountName());
 			if (addAccountInGame(sessionInfo.getAccountName(), client)) {
-				client.setConnectionState(ConnectionState.AUTHENTICATED);
-				client.setSessionId(sessionInfo);
-				client.sendPacket(LoginFail.LOGIN_SUCCESS);
+				if (client.compareAndSetState(GameClientState.CONNECTED, GameClientState.AUTHENTICATED)) {
+					client.setSessionInfo(sessionInfo);
+					client.sendPacket(LoginFail.LOGIN_SUCCESS);
 
-				final CharSelectionInfo cl = new CharSelectionInfo(sessionInfo);
-				client.sendPacket(cl);
-				client.setCharSelection(cl.getCharInfo());
+					final CharSelectionInfo charSelectionInfo = new CharSelectionInfo(sessionInfo);
+					client.sendPacket(charSelectionInfo);
+					client.setCharSelectionInfo(charSelectionInfo.getCharInfo());
+				}
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean addAccountInGame(String account, L2GameClient client) {
+	public boolean addAccountInGame(String account, GameClient client) {
 		return accountsInGameServer.putIfAbsent(account, client) == null;
 	}
 
@@ -197,7 +198,7 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 		return false;
 	}
 
-	public L2GameClient getClient(String account) {
+	public GameClient getClient(String account) {
 		return accountsInGameServer.get(account);
 	}
 

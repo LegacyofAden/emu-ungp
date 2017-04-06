@@ -24,11 +24,11 @@ import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.PrivateStoreManageListBuy;
-import org.l2junity.gameserver.network.client.send.PrivateStoreManageListSell;
-import org.l2junity.gameserver.network.client.send.RecipeShopManageList;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.PrivateStoreManageListBuy;
+import org.l2junity.gameserver.network.packets.s2c.PrivateStoreManageListSell;
+import org.l2junity.gameserver.network.packets.s2c.RecipeShopManageList;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -24,7 +24,7 @@ import org.l2junity.core.configs.NpcConfig;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.L2Spawn;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
-import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
 
 import java.util.concurrent.TimeUnit;
 

@@ -29,4 +29,6 @@ public interface ICipher {
 	 * @return true, if decrypted successfully.
 	 */
 	boolean decrypt(ByteBuffer buffer, int position, int size);
+
+	void setKey(byte[] key);
 }

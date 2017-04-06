@@ -24,10 +24,10 @@ import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.ArenaParticipantsHolder;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ExCubeGameChangeTimeToStart;
-import org.l2junity.gameserver.network.client.send.ExCubeGameRequestReady;
-import org.l2junity.gameserver.network.client.send.ExCubeGameTeamList;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameChangeTimeToStart;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameRequestReady;
+import org.l2junity.gameserver.network.packets.s2c.ExCubeGameTeamList;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

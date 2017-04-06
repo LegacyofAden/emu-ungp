@@ -22,7 +22,7 @@ import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.SayuneRequest;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.sayune.ExNotifyFlyMoveStart;
+import org.l2junity.gameserver.network.packets.s2c.sayune.ExNotifyFlyMoveStart;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;

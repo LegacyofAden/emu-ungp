@@ -36,11 +36,12 @@ import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.olympiad.OnOlympiadMatchResult;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ExOlympiadMatchResult;
-import org.l2junity.gameserver.network.client.send.ExOlympiadUserInfo;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.ExOlympiadMatchResult;
+import org.l2junity.gameserver.network.packets.s2c.ExOlympiadUserInfo;
+
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * @author GodKratos, Pere, DS
@@ -130,7 +131,7 @@ public abstract class OlympiadGameNormal extends AbstractOlympiadGame {
 	}
 
 	@Override
-	protected final void broadcastPacket(IClientOutgoingPacket packet) {
+	protected final void broadcastPacket(GameServerPacket packet) {
 		if (_playerOne.updatePlayer()) {
 			_playerOne.getPlayer().sendPacket(packet);
 		}

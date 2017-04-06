@@ -36,11 +36,11 @@ import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.stats.BooleanStat;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.ability.ExAcquireAPSkillList;
-import org.l2junity.gameserver.network.client.send.friend.L2FriendStatus;
-import org.l2junity.gameserver.network.client.send.onedayreward.ExOneDayReceiveRewardList;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.ability.ExAcquireAPSkillList;
+import org.l2junity.gameserver.network.packets.s2c.friend.L2FriendStatus;
+import org.l2junity.gameserver.network.packets.s2c.onedayreward.ExOneDayReceiveRewardList;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Util;
 
 import java.util.concurrent.atomic.AtomicInteger;

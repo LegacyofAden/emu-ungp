@@ -24,7 +24,7 @@ import org.l2junity.gameserver.model.Party;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 
 public class EffectPointInstance extends Npc {
 	private final Player _owner;

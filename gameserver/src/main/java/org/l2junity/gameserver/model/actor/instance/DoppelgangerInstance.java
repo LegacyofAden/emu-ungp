@@ -30,9 +30,10 @@ import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.skills.BuffInfo;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,7 +168,7 @@ public class DoppelgangerInstance extends Npc {
 	}
 
 	@Override
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 		if (getSummoner() != null) {
 			getSummoner().sendPacket(packets);
 		}

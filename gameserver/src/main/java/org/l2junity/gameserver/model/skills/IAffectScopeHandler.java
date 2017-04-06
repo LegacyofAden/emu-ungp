@@ -20,8 +20,7 @@ package org.l2junity.gameserver.model.skills;
 
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
-import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
 
 import java.awt.*;
 import java.util.function.Consumer;

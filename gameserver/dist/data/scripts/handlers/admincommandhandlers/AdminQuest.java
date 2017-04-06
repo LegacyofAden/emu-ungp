@@ -38,7 +38,7 @@ import org.l2junity.gameserver.model.events.ListenerRegisterType;
 import org.l2junity.gameserver.model.events.listeners.AbstractEventListener;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestTimer;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 import org.l2junity.gameserver.scripting.GameScriptsLoader;
 import org.l2junity.gameserver.scripting.ScriptEngineManager;
 import org.l2junity.gameserver.util.Util;

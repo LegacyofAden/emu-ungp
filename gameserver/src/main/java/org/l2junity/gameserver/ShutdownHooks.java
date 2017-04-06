@@ -30,11 +30,10 @@ import org.l2junity.gameserver.instancemanager.*;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.EventLoopGroupManager;
-import org.l2junity.gameserver.network.client.ClientNetworkManager;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.GameNetworkThread;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.util.Broadcast;
 
 /**
@@ -130,8 +129,7 @@ public final class ShutdownHooks {
 
 			// saveData sends messages to exit players, so shutdown selector after it
 			try {
-				ClientNetworkManager.getInstance().stop();
-				EventLoopGroupManager.getInstance().shutdown();
+				GameNetworkThread.getInstance().shutdown();
 				log.info("Game Server: Selector thread has been shut down(" + tc.getEstimatedTimeAndRestartCounter() + "ms).");
 			} catch (Throwable t) {
 				// ignore

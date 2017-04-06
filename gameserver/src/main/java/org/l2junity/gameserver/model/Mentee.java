@@ -25,7 +25,8 @@ import java.sql.ResultSet;
 import org.l2junity.commons.sql.DatabaseFactory;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+
+import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +108,7 @@ public class Mentee {
 		return isOnline() ? getPlayerInstance().isOnlineInt() : 0;
 	}
 
-	public void sendPacket(IClientOutgoingPacket packet) {
+	public void sendPacket(GameServerPacket packet) {
 		if (isOnline()) {
 			getPlayerInstance().sendPacket(packet);
 		}

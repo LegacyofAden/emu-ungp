@@ -139,27 +139,27 @@ import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneRegion;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.Attack;
-import org.l2junity.gameserver.network.client.send.ChangeMoveType;
-import org.l2junity.gameserver.network.client.send.ChangeWaitType;
-import org.l2junity.gameserver.network.client.send.ExShowTrace;
-import org.l2junity.gameserver.network.client.send.ExTeleportToLocationActivate;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.MoveToLocation;
-import org.l2junity.gameserver.network.client.send.NpcInfo;
-import org.l2junity.gameserver.network.client.send.Revive;
-import org.l2junity.gameserver.network.client.send.ServerObjectInfo;
-import org.l2junity.gameserver.network.client.send.SetupGauge;
-import org.l2junity.gameserver.network.client.send.SocialAction;
-import org.l2junity.gameserver.network.client.send.StatusUpdate;
-import org.l2junity.gameserver.network.client.send.StopMove;
-import org.l2junity.gameserver.network.client.send.StopRotation;
-import org.l2junity.gameserver.network.client.send.TeleportToLocation;
-import org.l2junity.gameserver.network.client.send.UserInfo;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.Attack;
+import org.l2junity.gameserver.network.packets.s2c.ChangeMoveType;
+import org.l2junity.gameserver.network.packets.s2c.ChangeWaitType;
+import org.l2junity.gameserver.network.packets.s2c.ExShowTrace;
+import org.l2junity.gameserver.network.packets.s2c.ExTeleportToLocationActivate;
+import org.l2junity.gameserver.network.packets.s2c.MoveToLocation;
+import org.l2junity.gameserver.network.packets.s2c.NpcInfo;
+import org.l2junity.gameserver.network.packets.s2c.Revive;
+import org.l2junity.gameserver.network.packets.s2c.ServerObjectInfo;
+import org.l2junity.gameserver.network.packets.s2c.SetupGauge;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.StatusUpdate;
+import org.l2junity.gameserver.network.packets.s2c.StopMove;
+import org.l2junity.gameserver.network.packets.s2c.StopRotation;
+import org.l2junity.gameserver.network.packets.s2c.TeleportToLocation;
+import org.l2junity.gameserver.network.packets.s2c.UserInfo;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
@@ -428,7 +428,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * @param packet
 	 * @param types
 	 */
-	public void sendDebugPacket(IClientOutgoingPacket packet, DebugType... types) {
+	public void sendDebugPacket(GameServerPacket packet, DebugType... types) {
 		for (Debugger debugger : getDebuggers()) {
 			if ((types == null) || (types.length == 0) || debugger.hasDebugType(types)) {
 				debugger.sendPacket(packet);
@@ -663,13 +663,13 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * L2PcInstance in the detection area of the L2Character are identified in <B>_knownPlayers</B>.<br>
 	 * In order to inform other players of state modification on the L2Character, server just need to go through _knownPlayers to send Server->Client Packet
 	 *
-	 * @param mov
+	 * @param packet
 	 */
-	public void broadcastPacket(IClientOutgoingPacket mov) {
+	public void broadcastPacket(GameServerPacket packet) {
 		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (isVisibleFor(player)) {
-				player.sendPacket(mov);
+				player.sendPacket(packet);
 			}
 		});
 	}
@@ -680,14 +680,14 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * L2PcInstance in the detection area of the L2Character are identified in <B>_knownPlayers</B>.<br>
 	 * In order to inform other players of state modification on the L2Character, server just need to go through _knownPlayers to send Server->Client Packet
 	 *
-	 * @param mov
+	 * @param packet
 	 * @param radiusInKnownlist
 	 */
-	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
+	public void broadcastPacket(GameServerPacket packet, int radiusInKnownlist) {
 		getWorld().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (isVisibleFor(player)) {
-				player.sendPacket(mov);
+				player.sendPacket(packet);
 			}
 		});
 	}

@@ -18,7 +18,8 @@
  */
 package org.l2junity.gameserver.model.multibox;
 
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 
 import java.util.Iterator;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MultiboxHolder {
 	private final MultiboxSettings _settings;
-	private final Map<Integer, Set<L2GameClient>> _clients = new ConcurrentHashMap<>();
+	private final Map<Integer, Set<GameClient>> _clients = new ConcurrentHashMap<>();
 
 	public MultiboxHolder(MultiboxSettings settings) {
 		_settings = settings;
@@ -47,7 +48,7 @@ public class MultiboxHolder {
 	 * @param client
 	 * @return
 	 */
-	public boolean canAddClient(L2GameClient client) {
+	public boolean canAddClient(GameClient client) {
 		if (client == null) {
 			return false;
 		} else if (!getSettings().isEnabled()) {
@@ -71,7 +72,7 @@ public class MultiboxHolder {
 	 * @param client
 	 * @return
 	 */
-	public boolean addClient(L2GameClient client) {
+	public boolean addClient(GameClient client) {
 		if (client == null) {
 			return false;
 		} else if (!getSettings().isEnabled()) {
@@ -93,7 +94,7 @@ public class MultiboxHolder {
 	/**
 	 * @param client
 	 */
-	public void removeClient(L2GameClient client) {
+	public void removeClient(GameClient client) {
 		if ((client == null) || !getSettings().isEnabled()) {
 			return;
 		}
@@ -103,7 +104,7 @@ public class MultiboxHolder {
 			return;
 		}
 
-		final Set<L2GameClient> dualboxClients = _clients.get(hash);
+		final Set<GameClient> dualboxClients = _clients.get(hash);
 		if ((dualboxClients != null) && dualboxClients.contains(client)) {
 			dualboxClients.remove(client);
 			if (dualboxClients.isEmpty()) {
@@ -116,7 +117,7 @@ public class MultiboxHolder {
 	 * @param client
 	 * @return
 	 */
-	public int getCurrentConnections(L2GameClient client) {
+	public int getCurrentConnections(GameClient client) {
 		if ((client != null) && getSettings().isEnabled()) {
 			int key = getSettings().getProtectionType().generateHash(client);
 			if (_clients.containsKey(key)) {
@@ -136,7 +137,7 @@ public class MultiboxHolder {
 	/**
 	 * @return map containing all multibox clients.
 	 */
-	public Map<Integer, Set<L2GameClient>> getAllClients() {
+	public Map<Integer, Set<GameClient>> getAllClients() {
 		return _clients;
 	}
 
@@ -148,16 +149,10 @@ public class MultiboxHolder {
 			return;
 		}
 
-		final Iterator<Set<L2GameClient>> it = _clients.values().iterator();
+		final Iterator<Set<GameClient>> it = _clients.values().iterator();
 		while (it.hasNext()) {
-			final Set<L2GameClient> clients = it.next();
-			final Iterator<L2GameClient> clientIt = clients.iterator();
-			while (clientIt.hasNext()) {
-				final L2GameClient client = clientIt.next();
-				if ((client == null) || (client.getActiveChar() == null)) {
-					clientIt.remove();
-				}
-			}
+			final Set<GameClient> clients = it.next();
+			clients.removeIf(client -> (client == null) || (client.getActiveChar() == null));
 			if (clients.isEmpty()) {
 				it.remove();
 			}

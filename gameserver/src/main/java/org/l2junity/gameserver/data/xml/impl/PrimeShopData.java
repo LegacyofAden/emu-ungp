@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.primeshop.PrimeShopGroup;
 import org.l2junity.gameserver.model.primeshop.PrimeShopItem;
-import org.l2junity.gameserver.network.client.send.primeshop.ExBRProductInfo;
+import org.l2junity.gameserver.network.packets.s2c.primeshop.ExBRProductInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

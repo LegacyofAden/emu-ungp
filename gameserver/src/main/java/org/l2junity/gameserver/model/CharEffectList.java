@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameTask;
 import org.l2junity.gameserver.model.skills.*;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.packets.s2c.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

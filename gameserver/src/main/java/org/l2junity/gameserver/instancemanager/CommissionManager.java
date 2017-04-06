@@ -31,9 +31,9 @@ import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.itemcontainer.Mail;
 import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.commission.*;
-import org.l2junity.gameserver.network.client.send.commission.ExResponseCommissionList.CommissionListReplyType;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.commission.*;
+import org.l2junity.gameserver.network.packets.s2c.commission.ExResponseCommissionList.CommissionListReplyType;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

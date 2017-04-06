@@ -36,9 +36,9 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressT
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.ExShowUsm;
-import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowQuestionMark;
+import org.l2junity.gameserver.network.packets.s2c.ExShowUsm;
+import org.l2junity.gameserver.network.packets.s2c.TutorialShowHtml;
+import org.l2junity.gameserver.network.packets.s2c.TutorialShowQuestionMark;
 import org.l2junity.gameserver.util.Util;
 
 /**

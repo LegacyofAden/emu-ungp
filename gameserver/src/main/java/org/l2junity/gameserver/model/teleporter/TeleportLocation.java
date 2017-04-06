@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.teleporter;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.StatsSet;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import java.util.ArrayList;
 import java.util.Collections;

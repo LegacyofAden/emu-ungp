@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.Formulas;
-import org.l2junity.gameserver.network.client.send.StartRotation;
-import org.l2junity.gameserver.network.client.send.StopRotation;
+import org.l2junity.gameserver.network.packets.s2c.StartRotation;
+import org.l2junity.gameserver.network.packets.s2c.StopRotation;
 
 /**
  * Bluff effect implementation.

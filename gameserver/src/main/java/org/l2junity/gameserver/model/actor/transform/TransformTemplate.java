@@ -25,7 +25,7 @@ import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.itemcontainer.Inventory;
 import org.l2junity.gameserver.model.items.type.WeaponType;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.network.client.send.ExBasicActionList;
+import org.l2junity.gameserver.network.packets.s2c.ExBasicActionList;
 
 import java.util.*;
 

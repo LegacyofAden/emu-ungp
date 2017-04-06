@@ -30,7 +30,7 @@ import org.l2junity.gameserver.model.Shortcut;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.base.ClassId;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ShortCutRegister;
+import org.l2junity.gameserver.network.packets.s2c.ShortCutRegister;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

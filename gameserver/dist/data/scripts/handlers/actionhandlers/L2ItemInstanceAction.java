@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Castle;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 public class L2ItemInstanceAction implements IActionHandler {
 	@Override

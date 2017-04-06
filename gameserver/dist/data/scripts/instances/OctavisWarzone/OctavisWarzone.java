@@ -35,7 +35,7 @@ import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 import org.l2junity.gameserver.model.zone.ZoneType;
 import org.l2junity.gameserver.model.zone.type.ScriptZone;
-import org.l2junity.gameserver.network.client.send.ExShowUsm;
+import org.l2junity.gameserver.network.packets.s2c.ExShowUsm;
 import org.l2junity.gameserver.util.Util;
 
 import instances.AbstractInstance;

@@ -24,7 +24,7 @@ import org.l2junity.gameserver.data.xml.impl.ResidenceFunctionsData;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.AgitDecoInfo;
+import org.l2junity.gameserver.network.packets.s2c.AgitDecoInfo;
 
 import java.time.Instant;
 import java.util.concurrent.ScheduledFuture;

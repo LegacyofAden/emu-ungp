@@ -23,11 +23,11 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Hero;
 import org.l2junity.gameserver.model.olympiad.Olympiad;
-import org.l2junity.gameserver.network.client.send.ExHeroList;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExHeroList;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.List;
 

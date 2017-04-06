@@ -40,10 +40,11 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.olympiad.OlympiadGameManager;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.AbstractNpcInfo.TrapInfo;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.AbstractNpcInfo.TrapInfo;
+
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 /**
@@ -85,7 +86,7 @@ public final class TrapInstance extends Npc {
 	}
 
 	@Override
-	public void broadcastPacket(IClientOutgoingPacket mov) {
+	public void broadcastPacket(GameServerPacket mov) {
 		getWorld().forEachVisibleObject(this, Player.class, player ->
 		{
 			if (_isTriggered || canBeSeen(player)) {
@@ -95,7 +96,7 @@ public final class TrapInstance extends Npc {
 	}
 
 	@Override
-	public void broadcastPacket(IClientOutgoingPacket mov, int radiusInKnownlist) {
+	public void broadcastPacket(GameServerPacket mov, int radiusInKnownlist) {
 		getWorld().forEachVisibleObjectInRadius(this, Player.class, radiusInKnownlist, player ->
 		{
 			if (_isTriggered || canBeSeen(player)) {

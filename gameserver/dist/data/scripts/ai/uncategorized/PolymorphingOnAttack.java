@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.actor.Attackable;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 import java.util.Arrays;
 import java.util.HashMap;

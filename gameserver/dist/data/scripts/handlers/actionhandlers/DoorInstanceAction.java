@@ -29,7 +29,7 @@ import org.l2junity.gameserver.model.actor.instance.DoorInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.ClanHall;
 import org.l2junity.gameserver.model.holders.DoorRequestHolder;
-import org.l2junity.gameserver.network.client.send.ConfirmDlg;
+import org.l2junity.gameserver.network.packets.s2c.ConfirmDlg;
 
 public class DoorInstanceAction implements IActionHandler {
 	@Override

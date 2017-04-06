@@ -26,10 +26,10 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.WarehouseInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.WareHouseDepositList;
-import org.l2junity.gameserver.network.client.send.WareHouseWithdrawalList;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.WareHouseDepositList;
+import org.l2junity.gameserver.network.packets.s2c.WareHouseWithdrawalList;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 public class ClanWarehouse implements IBypassHandler {
 	private static final String[] COMMANDS =

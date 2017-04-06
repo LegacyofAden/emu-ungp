@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.enums;
 
-import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -20,8 +20,8 @@ package org.l2junity.gameserver.util;
 
 import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.ExUserInfoAbnormalVisualEffect;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.ExUserInfoAbnormalVisualEffect;
 
 /**
  * @author lord_rex

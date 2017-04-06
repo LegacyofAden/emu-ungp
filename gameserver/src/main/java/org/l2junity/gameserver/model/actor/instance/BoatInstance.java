@@ -23,9 +23,9 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Vehicle;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
-import org.l2junity.gameserver.network.client.send.VehicleDeparture;
-import org.l2junity.gameserver.network.client.send.VehicleInfo;
-import org.l2junity.gameserver.network.client.send.VehicleStarted;
+import org.l2junity.gameserver.network.packets.s2c.VehicleDeparture;
+import org.l2junity.gameserver.network.packets.s2c.VehicleInfo;
+import org.l2junity.gameserver.network.packets.s2c.VehicleStarted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

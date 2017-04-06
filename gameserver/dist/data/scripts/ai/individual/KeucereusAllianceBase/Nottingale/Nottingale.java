@@ -23,7 +23,7 @@ import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.RadarControl;
+import org.l2junity.gameserver.network.packets.s2c.RadarControl;
 import quests.Q10273_GoodDayToFly.Q10273_GoodDayToFly;
 
 import java.util.HashMap;

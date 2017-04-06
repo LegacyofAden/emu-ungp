@@ -35,9 +35,9 @@ import org.l2junity.gameserver.model.events.impl.character.npc.OnNpcMoveFinished
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.AutoAttackStop;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.AutoAttackStop;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

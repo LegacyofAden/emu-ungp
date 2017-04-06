@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.BypassHandler;
 import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ensoul.ExShowEnsoulWindow;
+import org.l2junity.gameserver.network.packets.s2c.ensoul.ExShowEnsoulWindow;
 
 /**
  * @author St3eT

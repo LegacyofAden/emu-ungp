@@ -23,8 +23,9 @@ import org.l2junity.gameserver.model.actor.Summon;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.Disconnection;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.Disconnection;
+
+import org.l2junity.gameserver.network.GameClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,7 @@ public final class OfflineTradeUtil {
 		}
 
 		// Check whether client is null or player is already in offline mode.
-		final L2GameClient client = player.getClient();
+		final GameClient client = player.getClient();
 		if ((client == null) || client.isDetached()) {
 			return false;
 		}
@@ -91,7 +92,7 @@ public final class OfflineTradeUtil {
 			return false;
 		}
 
-		final L2GameClient client = player.getClient();
+		final GameClient client = player.getClient();
 		client.setDetached(true);
 
 		player.leaveParty();

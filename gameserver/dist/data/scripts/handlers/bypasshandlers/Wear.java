@@ -25,8 +25,8 @@ import org.l2junity.gameserver.handler.IBypassHandler;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.buylist.ProductList;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.ShopPreviewList;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.ShopPreviewList;
 
 import java.util.StringTokenizer;
 

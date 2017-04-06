@@ -28,8 +28,8 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.debugger.DebugType;
 import org.l2junity.gameserver.model.holders.MinionHolder;
 import org.l2junity.gameserver.model.quest.Quest;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
-import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
 import org.l2junity.gameserver.util.Broadcast;
 import org.l2junity.gameserver.util.Util;
 

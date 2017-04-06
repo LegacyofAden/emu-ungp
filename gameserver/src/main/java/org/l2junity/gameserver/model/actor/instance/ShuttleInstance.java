@@ -25,9 +25,9 @@ import org.l2junity.gameserver.model.actor.Vehicle;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleData;
 import org.l2junity.gameserver.model.shuttle.L2ShuttleStop;
-import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleGetOff;
-import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleGetOn;
-import org.l2junity.gameserver.network.client.send.shuttle.ExShuttleInfo;
+import org.l2junity.gameserver.network.packets.s2c.shuttle.ExShuttleGetOff;
+import org.l2junity.gameserver.network.packets.s2c.shuttle.ExShuttleGetOn;
+import org.l2junity.gameserver.network.packets.s2c.shuttle.ExShuttleInfo;
 
 import java.util.Iterator;
 import java.util.List;

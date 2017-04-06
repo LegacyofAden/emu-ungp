@@ -24,7 +24,7 @@ import org.l2junity.gameserver.instancemanager.AirShipManager;
 import org.l2junity.gameserver.model.Location;
 import org.l2junity.gameserver.model.actor.Vehicle;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
-import org.l2junity.gameserver.network.client.send.*;
+import org.l2junity.gameserver.network.packets.s2c.*;
 
 /**
  * Flying airships. Very similar to Maktakien boats (see BoatInstance) but these do fly :P

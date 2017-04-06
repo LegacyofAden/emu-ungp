@@ -18,42 +18,23 @@
  */
 package org.l2junity.gameserver.model.events.impl.character.player;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
 
 /**
  * @author UnAfraid
  */
+@Data
+@AllArgsConstructor
 public class OnPlayerCreate implements IBaseEvent {
-	private final Player _activeChar;
-	private final int _objectId;
-	private final String _name;
-	private final L2GameClient _client;
-
-	public OnPlayerCreate(Player activeChar, int objectId, String name, L2GameClient client) {
-		_activeChar = activeChar;
-		_objectId = objectId;
-		_name = name;
-		_client = client;
-	}
-
-	public Player getActiveChar() {
-		return _activeChar;
-	}
-
-	public int getObjectId() {
-		return _objectId;
-	}
-
-	public String getName() {
-		return _name;
-	}
-
-	public L2GameClient getClient() {
-		return _client;
-	}
+	private final Player activeChar;
+	private final int objectId;
+	private final String name;
+	private final GameClient client;
 
 	@Override
 	public EventType getType() {

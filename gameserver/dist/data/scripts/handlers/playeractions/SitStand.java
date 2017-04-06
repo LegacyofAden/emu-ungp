@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.StaticObjectInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ChairSit;
+import org.l2junity.gameserver.network.packets.s2c.ChairSit;
 
 /**
  * Sit/Stand player action handler.

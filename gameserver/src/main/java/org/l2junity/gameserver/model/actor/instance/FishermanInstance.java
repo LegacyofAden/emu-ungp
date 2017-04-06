@@ -23,9 +23,9 @@ import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.SkillLearn;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.base.AcquireSkillType;
-import org.l2junity.gameserver.network.client.send.ExAcquirableSkillListByClass;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExAcquirableSkillListByClass;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.List;
 

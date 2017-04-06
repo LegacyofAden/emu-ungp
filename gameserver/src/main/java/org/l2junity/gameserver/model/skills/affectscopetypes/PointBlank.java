@@ -31,7 +31,7 @@ import org.l2junity.gameserver.model.skills.AffectObjectType;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.TargetType;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
 
 /**
  * Point Blank affect scope implementation. Gathers targets in specific radius except initial target.

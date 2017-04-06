@@ -28,9 +28,9 @@ import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventDispatcher;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSocialAction;
-import org.l2junity.gameserver.network.client.send.ExAskCoupleAction;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExAskCoupleAction;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 
 /**
@@ -79,7 +79,7 @@ public final class SocialAction implements IPlayerActionHandler {
 		}
 
 		if (activeChar.canMakeSocialAction()) {
-			activeChar.broadcastPacket(new org.l2junity.gameserver.network.client.send.SocialAction(activeChar.getObjectId(), id));
+			activeChar.broadcastPacket(new org.l2junity.gameserver.network.packets.s2c.SocialAction(activeChar.getObjectId(), id));
 
 			// Notify to scripts
 			EventDispatcher.getInstance().notifyEventAsync(new OnPlayerSocialAction(activeChar, id), activeChar);

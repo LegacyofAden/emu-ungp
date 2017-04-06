@@ -39,7 +39,7 @@ import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.BooleanStat;
-import org.l2junity.gameserver.network.client.send.EtcStatusUpdate;
+import org.l2junity.gameserver.network.packets.s2c.EtcStatusUpdate;
 
 /**
  * This class represents all Playable characters in the world.<br>

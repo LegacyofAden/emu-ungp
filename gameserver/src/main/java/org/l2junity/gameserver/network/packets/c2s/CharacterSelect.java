@@ -1,0 +1,127 @@
+/*
+ * Copyright (C) 2004-2015 L2J Unity
+ * 
+ * This file is part of L2J Unity.
+ * 
+ * L2J Unity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * L2J Unity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.l2junity.gameserver.network.packets.c2s;
+
+import lombok.extern.slf4j.Slf4j;
+import org.l2junity.commons.concurrent.CloseableReentrantLock;
+import org.l2junity.gameserver.GameServer;
+import org.l2junity.gameserver.data.sql.impl.CharNameTable;
+import org.l2junity.gameserver.data.xml.impl.SecondaryAuthData;
+import org.l2junity.gameserver.instancemanager.MultiboxManager;
+import org.l2junity.gameserver.instancemanager.PunishmentManager;
+import org.l2junity.gameserver.model.CharSelectInfoPackage;
+import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.events.Containers;
+import org.l2junity.gameserver.model.events.EventDispatcher;
+import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerSelect;
+import org.l2junity.gameserver.model.events.returns.TerminateReturn;
+import org.l2junity.gameserver.model.punishment.PunishmentAffect;
+import org.l2junity.gameserver.model.punishment.PunishmentType;
+import org.l2junity.gameserver.network.GameClientState;
+import org.l2junity.gameserver.network.Disconnection;
+import org.l2junity.gameserver.network.packets.GameClientPacket;
+import org.l2junity.gameserver.network.packets.s2c.CharSelected;
+import org.l2junity.gameserver.network.packets.s2c.ServerClose;
+
+@Slf4j(topic = "accounting")
+public class CharacterSelect extends GameClientPacket {
+	// cd
+	private int _charSlot;
+
+	@SuppressWarnings("unused")
+	private int _unk1; // new in C4
+	@SuppressWarnings("unused")
+	private int _unk2; // new in C4
+	@SuppressWarnings("unused")
+	private int _unk3; // new in C4
+	@SuppressWarnings("unused")
+	private int _unk4; // new in C4
+
+	@Override
+	public void readImpl() {
+		_charSlot = readD();
+		_unk1 = readH();
+		_unk2 = readD();
+		_unk3 = readD();
+		_unk4 = readD();
+	}
+
+	@Override
+	public void runImpl() {
+		if (!getClient().getFloodProtectors().getCharacterSelect().tryPerformAction("CharacterSelect")) {
+			return;
+		}
+
+		if (SecondaryAuthData.getInstance().isEnabled() && !getClient().getSecondaryAuth().isAuthed()) {
+			getClient().getSecondaryAuth().openDialog();
+			return;
+		}
+
+		// We should always be able to acquire the lock
+		// But if we can't lock then nothing should be done (i.e. repeated packet)
+		try(CloseableReentrantLock temp = getClient().getActiveCharLock().open()) {
+			// should always be null but if not then this is repeated packet and nothing should be done here
+			if (getClient().getActiveChar() == null) {
+				final CharSelectInfoPackage info = getClient().getCharSelection(_charSlot);
+				if (info == null) {
+					return;
+				}
+
+				// Banned?
+				if (PunishmentManager.getInstance().hasPunishment(info.getObjectId(), PunishmentAffect.CHARACTER, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(getClient().getAccountName(), PunishmentAffect.ACCOUNT, PunishmentType.BAN) || PunishmentManager.getInstance().hasPunishment(getClient().getIP(), PunishmentAffect.IP, PunishmentType.BAN)) {
+					getClient().close(ServerClose.STATIC_PACKET);
+					return;
+				}
+
+				// Selected character is banned (compatibility with previous versions).
+				if (info.getAccessLevel() < 0) {
+					getClient().close(ServerClose.STATIC_PACKET);
+					return;
+				}
+
+				if (!MultiboxManager.getInstance().registerClient(GameServer.class, getClient())) {
+					MultiboxManager.getInstance().sendDefaultRestrictionMessage(GameServer.class, getClient());
+					return;
+				}
+
+				if (getClient().compareAndSetState(GameClientState.AUTHENTICATED, GameClientState.IN_GAME)) {
+					// load up character from disk
+					final Player cha = getClient().load(_charSlot);
+					if (cha == null) {
+						return; // handled in GameClient
+					}
+
+					CharNameTable.getInstance().addName(cha);
+
+					cha.setClient(getClient());
+					getClient().setActiveChar(cha);
+					cha.setOnlineStatus(true, true);
+
+					final TerminateReturn terminate = EventDispatcher.getInstance().notifyEvent(new OnPlayerSelect(cha, cha.getObjectId(), cha.getName(), getClient()), Containers.Players(), TerminateReturn.class);
+					if ((terminate != null) && terminate.terminate()) {
+						Disconnection.of(cha).defaultSequence(false);
+						return;
+					}
+					getClient().sendPacket(new CharSelected(cha));
+					log.info("Logged in, {}", getClient());
+				}
+			}
+		}
+	}
+}

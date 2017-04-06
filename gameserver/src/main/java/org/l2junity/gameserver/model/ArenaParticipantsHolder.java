@@ -21,9 +21,10 @@ package org.l2junity.gameserver.model;
 import org.l2junity.gameserver.instancemanager.HandysBlockCheckerManager;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.BlockCheckerEngine;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,7 @@ public final class ArenaParticipantsHolder {
 		return _bluePlayers.size();
 	}
 
-	public void broadCastPacketToTeam(IClientOutgoingPacket packet) {
+	public void broadCastPacketToTeam(GameServerPacket packet) {
 		for (Player p : _redPlayers) {
 			p.sendPacket(packet);
 		}

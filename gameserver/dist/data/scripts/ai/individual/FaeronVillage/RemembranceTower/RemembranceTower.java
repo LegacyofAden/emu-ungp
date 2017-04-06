@@ -21,7 +21,7 @@ package ai.individual.FaeronVillage.RemembranceTower;
 import ai.AbstractNpcAI;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
+import org.l2junity.gameserver.network.packets.s2c.OnEventTrigger;
 
 /**
  * Remembrance Tower AI.

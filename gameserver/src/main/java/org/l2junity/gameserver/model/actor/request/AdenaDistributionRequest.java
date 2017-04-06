@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.model.actor.request;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.adenadistribution.ExDivideAdenaCancel;
+import org.l2junity.gameserver.network.packets.s2c.adenadistribution.ExDivideAdenaCancel;
 
 import java.util.List;
 

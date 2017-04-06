@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerFishing;
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 import org.l2junity.gameserver.model.onedayreward.AbstractOneDayRewardHandler;
-import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingEndReason;
+import org.l2junity.gameserver.network.packets.s2c.fishing.ExFishingEnd.FishingEndReason;
 
 /**
  * @author UnAfraid

@@ -26,7 +26,7 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
-import org.l2junity.gameserver.network.client.send.OnEventTrigger;
+import org.l2junity.gameserver.network.packets.s2c.OnEventTrigger;
 
 import ai.AbstractNpcAI;
 import instances.CrystalCaverns.CrystalCavernsCoralGarden;

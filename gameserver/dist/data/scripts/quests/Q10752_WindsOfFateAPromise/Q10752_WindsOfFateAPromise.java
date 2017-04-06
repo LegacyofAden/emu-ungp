@@ -37,8 +37,8 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerPressT
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import quests.Q10751_WindsOfFateEncounters.Q10751_WindsOfFateEncounters;
 

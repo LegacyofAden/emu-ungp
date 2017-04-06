@@ -68,9 +68,10 @@ import org.l2junity.gameserver.model.spawns.SpawnTemplate;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.model.world.GameWorld;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -105,7 +106,7 @@ public final class Instance implements IIdentifiable, INamable {
 	/**
 	 * Create instance world.
 	 *
-	 * @param id       ID of instance world
+	 * @param world    instance world
 	 * @param template template of instance world
 	 * @param player   player who create instance world.
 	 */
@@ -685,9 +686,9 @@ public final class Instance implements IIdentifiable, INamable {
 	 *
 	 * @param packets packets to be send
 	 */
-	public void broadcastPacket(IClientOutgoingPacket... packets) {
+	public void broadcastPacket(GameServerPacket... packets) {
 		for (Player player : getWorld().getPlayers()) {
-			for (IClientOutgoingPacket packet : packets) {
+			for (GameServerPacket packet : packets) {
 				player.sendPacket(packet);
 			}
 		}

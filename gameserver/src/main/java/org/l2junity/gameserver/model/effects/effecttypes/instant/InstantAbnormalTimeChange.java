@@ -25,8 +25,8 @@ import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.AbnormalType;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.AbnormalStatusUpdate;
-import org.l2junity.gameserver.network.client.send.ExAbnormalStatusUpdateFromTarget;
+import org.l2junity.gameserver.network.packets.s2c.AbnormalStatusUpdate;
+import org.l2junity.gameserver.network.packets.s2c.ExAbnormalStatusUpdateFromTarget;
 
 import java.util.Collections;
 import java.util.HashSet;

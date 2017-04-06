@@ -1,5 +1,6 @@
 package org.l2junity.loginserver.network.packets.s2c;
 
+import org.l2junity.commons.network.PacketBody;
 import org.l2junity.loginserver.network.LoginClient;
 import org.l2junity.loginserver.network.packets.LoginServerPacket;
 
@@ -12,10 +13,10 @@ public class Init extends LoginServerPacket {
 	private final byte[] publicKey;
 	private final byte[] blowfishKey;
 
-	public Init(LoginClient client) {
+	public Init(LoginClient client, byte[] blowfishKey) {
 		this.connectionId = client.getConnectionId();
 		this.publicKey = client.getScrambledRSAKeyPair().getScrambledModulus();
-		this.blowfishKey = client.getBlowfishKey().getEncoded();
+		this.blowfishKey = blowfishKey;
 	}
 
 	@Override

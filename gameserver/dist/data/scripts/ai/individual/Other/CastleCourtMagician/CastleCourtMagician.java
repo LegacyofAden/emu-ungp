@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.ClanPrivilege;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
-import org.l2junity.gameserver.network.client.recv.RequestAcquireSkill;
+import org.l2junity.gameserver.network.packets.c2s.RequestAcquireSkill;
 
 /**
  * Castle Court Magician AI.

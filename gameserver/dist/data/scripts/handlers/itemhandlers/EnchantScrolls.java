@@ -24,8 +24,8 @@ import org.l2junity.gameserver.model.actor.Playable;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.request.EnchantItemRequest;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ChooseInventoryItem;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ChooseInventoryItem;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 public class EnchantScrolls implements IItemHandler {
 	@Override

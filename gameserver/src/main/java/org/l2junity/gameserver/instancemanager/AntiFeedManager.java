@@ -21,7 +21,8 @@ package org.l2junity.gameserver.instancemanager;
 import org.l2junity.core.configs.L2JModsConfig;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,8 +62,8 @@ public final class AntiFeedManager {
 			return false;
 		}
 
-		final L2GameClient targetClient = targetPlayer.getClient();
-		final L2GameClient attackerClient = attackerPlayer.getClient();
+		final GameClient targetClient = targetPlayer.getClient();
+		final GameClient attackerClient = attackerPlayer.getClient();
 		if ((targetClient == null) || (attackerClient == null)) {
 			return false;
 		}

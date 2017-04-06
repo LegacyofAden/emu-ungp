@@ -46,9 +46,9 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerLogin;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.*;
-import org.l2junity.gameserver.network.client.send.awakening.ExCallToChangeClass;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.*;
+import org.l2junity.gameserver.network.packets.s2c.awakening.ExCallToChangeClass;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.l2junity.gameserver.taskmanager.DecayTaskManager;
 
 import java.util.List;

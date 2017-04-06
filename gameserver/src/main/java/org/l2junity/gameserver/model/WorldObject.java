@@ -62,10 +62,11 @@ import org.l2junity.gameserver.model.world.Region;
 import org.l2junity.gameserver.model.world.WorldData;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.DeleteObject;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
+
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -293,7 +294,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 
 	public abstract void sendInfo(Player activeChar);
 
-	public void sendPacket(IClientOutgoingPacket... packets) {
+	public void sendPacket(GameServerPacket... packets) {
 	}
 
 	public void sendPacket(SystemMessageId id) {

@@ -24,9 +24,9 @@ import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
-import org.l2junity.gameserver.network.client.send.NpcSay;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcSay;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 /**
  * Proclaimer AI.

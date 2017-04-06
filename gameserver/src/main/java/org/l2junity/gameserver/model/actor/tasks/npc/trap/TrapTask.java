@@ -20,7 +20,7 @@ package org.l2junity.gameserver.model.actor.tasks.npc.trap;
 
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.TrapInstance;
-import org.l2junity.gameserver.network.client.send.SocialAction;
+import org.l2junity.gameserver.network.packets.s2c.SocialAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

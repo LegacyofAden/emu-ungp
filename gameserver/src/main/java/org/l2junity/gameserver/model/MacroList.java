@@ -24,7 +24,7 @@ import org.l2junity.gameserver.enums.MacroUpdateType;
 import org.l2junity.gameserver.enums.ShortcutType;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.IRestorable;
-import org.l2junity.gameserver.network.client.send.SendMacroList;
+import org.l2junity.gameserver.network.packets.s2c.SendMacroList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

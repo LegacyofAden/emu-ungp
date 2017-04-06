@@ -23,8 +23,8 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.NpcInfo;
-import org.l2junity.gameserver.network.client.send.ServerObjectInfo;
+import org.l2junity.gameserver.network.packets.s2c.NpcInfo;
+import org.l2junity.gameserver.network.packets.s2c.ServerObjectInfo;
 
 public class WaterZone extends ZoneType {
 	public WaterZone(int id) {

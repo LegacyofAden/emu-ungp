@@ -24,9 +24,9 @@ import org.l2junity.gameserver.enums.TaxType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
 import org.l2junity.gameserver.model.buylist.ProductList;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.BuyList;
-import org.l2junity.gameserver.network.client.send.ExBuySellList;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.BuyList;
+import org.l2junity.gameserver.network.packets.s2c.ExBuySellList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

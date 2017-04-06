@@ -22,15 +22,10 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.ExShowScreenMessage;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.ExShowScreenMessage;
 
-/**
- * This class ...
- *
- * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
- */
 public final class Broadcast {
 
 	/**
@@ -43,7 +38,7 @@ public final class Broadcast {
 	 * @param character
 	 * @param mov
 	 */
-	public static void toPlayersTargettingMyself(Creature character, IClientOutgoingPacket mov) {
+	public static void toPlayersTargettingMyself(Creature character, GameServerPacket mov) {
 		character.getWorld().forEachVisibleObject(character, Player.class, player ->
 		{
 			if (player.getTarget() == character) {
@@ -63,7 +58,7 @@ public final class Broadcast {
 	 * @param character
 	 * @param mov
 	 */
-	public static void toKnownPlayers(Creature character, IClientOutgoingPacket mov) {
+	public static void toKnownPlayers(Creature character, GameServerPacket mov) {
 		character.getWorld().forEachVisibleObject(character, Player.class, player -> player.sendPacket(mov));
 	}
 
@@ -75,15 +70,15 @@ public final class Broadcast {
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packet to this L2Character (to do this use method toSelfAndKnownPlayers)</B></FONT><BR>
 	 *
 	 * @param character
-	 * @param mov
+	 * @param packet
 	 * @param radius
 	 */
-	public static void toKnownPlayersInRadius(Creature character, IClientOutgoingPacket mov, int radius) {
+	public static void toKnownPlayersInRadius(Creature character, GameServerPacket packet, int radius) {
 		if (radius < 0) {
 			radius = 1500;
 		}
 
-		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
+		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, packet::sendTo);
 	}
 
 	/**
@@ -93,27 +88,27 @@ public final class Broadcast {
 	 * In order to inform other players of state modification on the L2Character, server just need to go through _knownPlayers to send Server->Client Packet<BR>
 	 *
 	 * @param character
-	 * @param mov
+	 * @param packet
 	 */
-	public static void toSelfAndKnownPlayers(Creature character, IClientOutgoingPacket mov) {
+	public static void toSelfAndKnownPlayers(Creature character, GameServerPacket packet) {
 		if (character instanceof Player) {
-			character.sendPacket(mov);
+			character.sendPacket(packet);
 		}
 
-		toKnownPlayers(character, mov);
+		toKnownPlayers(character, packet);
 	}
 
 	// To improve performance we are comparing values of radius^2 instead of calculating sqrt all the time
-	public static void toSelfAndKnownPlayersInRadius(Creature character, IClientOutgoingPacket mov, int radius) {
+	public static void toSelfAndKnownPlayersInRadius(Creature character, GameServerPacket packet, int radius) {
 		if (radius < 0) {
 			radius = 600;
 		}
 
 		if (character instanceof Player) {
-			character.sendPacket(mov);
+			character.sendPacket(packet);
 		}
 
-		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, mov::sendTo);
+		character.getWorld().forEachVisibleObjectInRadius(character, Player.class, radius, packet::sendTo);
 	}
 
 	/**
@@ -124,7 +119,7 @@ public final class Broadcast {
 	 *
 	 * @param packet
 	 */
-	public static void toAllOnlinePlayers(IClientOutgoingPacket packet) {
+	public static void toAllOnlinePlayers(GameServerPacket packet) {
 		for (Player player : WorldManager.getInstance().getAllPlayers()) {
 			if (player.isOnline()) {
 				player.sendPacket(packet);

@@ -31,8 +31,8 @@ import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
-import org.l2junity.gameserver.network.client.send.TutorialShowQuestionMark;
+import org.l2junity.gameserver.network.packets.s2c.TutorialShowHtml;
+import org.l2junity.gameserver.network.packets.s2c.TutorialShowQuestionMark;
 
 /**
  * Pailaka - Song of Ice and Fire (128)

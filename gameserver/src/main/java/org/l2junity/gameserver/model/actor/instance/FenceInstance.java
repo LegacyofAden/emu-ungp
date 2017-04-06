@@ -20,8 +20,8 @@ import org.l2junity.gameserver.enums.FenceState;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.interfaces.IDeletable;
-import org.l2junity.gameserver.network.client.send.DeleteObject;
-import org.l2junity.gameserver.network.client.send.ExColosseumFenceInfo;
+import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
+import org.l2junity.gameserver.network.packets.s2c.ExColosseumFenceInfo;
 
 /**
  * @author HoridoJoho / FBIagent

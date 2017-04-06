@@ -30,8 +30,8 @@ import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.world.GameWorld;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ExAdenaInvenCount;
-import org.l2junity.gameserver.network.client.send.GMViewItemList;
+import org.l2junity.gameserver.network.packets.s2c.ExAdenaInvenCount;
+import org.l2junity.gameserver.network.packets.s2c.GMViewItemList;
 
 /**
  * This class handles following admin commands: - itemcreate = show menu - create_item <id> [num] = creates num items with respective id, if num is not specified, assumes 1.

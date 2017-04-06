@@ -19,7 +19,7 @@
 package org.l2junity.gameserver.communitybbs.Manager;
 
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ShowBoard;
+import org.l2junity.gameserver.network.packets.s2c.ShowBoard;
 
 import java.util.ArrayList;
 import java.util.List;

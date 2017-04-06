@@ -18,23 +18,25 @@
  */
 package org.l2junity.gameserver.model.multibox;
 
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author UnAfraid
  */
+
 public enum MultiboxSourceType {
 	IP {
 		@Override
-		public int generateHash(L2GameClient client) {
+		public int generateHash(GameClient client) {
 			return generateHash(client.getIP());
 		}
 	},
 	HWID {
 		@Override
-		public int generateHash(L2GameClient client) {
+		public int generateHash(GameClient client) {
 			return generateHash(client.getHWID());
 		}
 	};
@@ -45,7 +47,7 @@ public enum MultiboxSourceType {
 		return value == null ? 0 : value.hashCode();
 	}
 
-	public abstract int generateHash(L2GameClient client);
+	public abstract int generateHash(GameClient client);
 
 	/**
 	 * @param name

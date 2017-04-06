@@ -18,7 +18,7 @@
  */
 package org.l2junity.gameserver.model;
 
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 
 /**
  * @author Rayan RPG, JIV

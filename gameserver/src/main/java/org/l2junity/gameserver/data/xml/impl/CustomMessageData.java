@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.l2junity.core.startup.StartupComponent;
 import org.l2junity.gameserver.data.xml.IGameXmlReader;
 import org.l2junity.gameserver.model.Language;
-import org.l2junity.gameserver.network.client.send.string.CustomMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.w3c.dom.Document;
 
 import java.nio.file.Path;

@@ -29,8 +29,8 @@ import org.l2junity.gameserver.model.events.impl.character.player.OnPlayableExpC
 import org.l2junity.gameserver.model.events.listeners.ConsumerEventListener;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.stats.DoubleStat;
-import org.l2junity.gameserver.network.client.send.ExSpawnEmitter;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExSpawnEmitter;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * Soul Eating effect implementation.

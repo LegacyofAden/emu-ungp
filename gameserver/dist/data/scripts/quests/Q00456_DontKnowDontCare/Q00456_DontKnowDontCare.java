@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.items.ItemTemplate;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
 import org.l2junity.gameserver.model.quest.State;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
 import org.l2junity.gameserver.util.Util;
 
 import java.util.HashMap;

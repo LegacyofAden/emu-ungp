@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.holders.SkillHolder;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.l2junity.gameserver.network.client.send.ExShowQuestInfo;
+import org.l2junity.gameserver.network.packets.s2c.ExShowQuestInfo;
 
 import java.util.HashMap;
 import java.util.Map;

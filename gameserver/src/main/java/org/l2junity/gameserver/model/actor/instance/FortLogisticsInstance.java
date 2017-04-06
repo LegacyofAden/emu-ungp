@@ -21,8 +21,8 @@ package org.l2junity.gameserver.model.actor.instance;
 import org.l2junity.gameserver.data.xml.impl.NpcData;
 import org.l2junity.gameserver.enums.InstanceType;
 import org.l2junity.gameserver.model.actor.templates.NpcTemplate;
-import org.l2junity.gameserver.network.client.send.ActionFailed;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.StringTokenizer;
 

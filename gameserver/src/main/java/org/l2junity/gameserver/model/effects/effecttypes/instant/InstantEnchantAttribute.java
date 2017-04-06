@@ -27,7 +27,7 @@ import org.l2junity.gameserver.model.actor.request.EnchantItemAttributeRequest;
 import org.l2junity.gameserver.model.effects.AbstractEffect;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.ExChooseInventoryAttributeItem;
+import org.l2junity.gameserver.network.packets.s2c.ExChooseInventoryAttributeItem;
 
 /**
  * @author Sdw

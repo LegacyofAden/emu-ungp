@@ -33,7 +33,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.interfaces.ILocational;
 import org.l2junity.gameserver.model.skills.IAffectScopeHandler;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.ExServerPrimitive;
+import org.l2junity.gameserver.network.packets.s2c.ExServerPrimitive;
 
 /**
  * Dead command channel/party affect scope implementation.

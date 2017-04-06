@@ -40,8 +40,8 @@ import org.l2junity.gameserver.instancemanager.tasks.MessageDeletionTask;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.entity.Message;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ExNoticePostArrived;
-import org.l2junity.gameserver.network.client.send.ExUnReadMailCount;
+import org.l2junity.gameserver.network.packets.s2c.ExNoticePostArrived;
+import org.l2junity.gameserver.network.packets.s2c.ExUnReadMailCount;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

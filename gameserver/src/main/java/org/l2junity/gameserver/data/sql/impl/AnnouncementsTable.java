@@ -28,7 +28,7 @@ import org.l2junity.gameserver.model.announce.Announcement;
 import org.l2junity.gameserver.model.announce.AnnouncementType;
 import org.l2junity.gameserver.model.announce.AutoAnnouncement;
 import org.l2junity.gameserver.model.announce.IAnnouncement;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -35,8 +35,8 @@ import org.l2junity.gameserver.model.events.annotations.RegisterType;
 import org.l2junity.gameserver.model.events.impl.character.player.OnPlayerDlgAnswer;
 import org.l2junity.gameserver.model.holders.SiegeGuardHolder;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ConfirmDlg;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ConfirmDlg;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

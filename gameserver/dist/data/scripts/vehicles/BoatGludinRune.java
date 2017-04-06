@@ -23,9 +23,9 @@ import org.l2junity.gameserver.enums.ChatType;
 import org.l2junity.gameserver.instancemanager.BoatManager;
 import org.l2junity.gameserver.model.VehiclePathPoint;
 import org.l2junity.gameserver.model.actor.instance.BoatInstance;
-import org.l2junity.gameserver.network.client.send.CreatureSay;
-import org.l2junity.gameserver.network.client.send.PlaySound;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.CreatureSay;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

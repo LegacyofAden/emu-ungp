@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.WorldObject;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.Disconnection;
+import org.l2junity.gameserver.network.Disconnection;
 
 /**
  * This class handles following admin commands: - character_disconnect = disconnects target player

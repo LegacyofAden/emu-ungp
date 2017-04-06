@@ -23,7 +23,7 @@ import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.quest.Quest;
 import org.l2junity.gameserver.model.quest.QuestState;
-import org.l2junity.gameserver.network.client.send.TutorialShowHtml;
+import org.l2junity.gameserver.network.packets.s2c.TutorialShowHtml;
 import quests.Q10732_AForeignLand.Q10732_AForeignLand;
 
 /**

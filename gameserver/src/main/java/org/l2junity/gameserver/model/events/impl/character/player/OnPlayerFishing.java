@@ -21,7 +21,7 @@ package org.l2junity.gameserver.model.events.impl.character.player;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
-import org.l2junity.gameserver.network.client.send.fishing.ExFishingEnd.FishingEndReason;
+import org.l2junity.gameserver.network.packets.s2c.fishing.ExFishingEnd.FishingEndReason;
 
 /**
  * @author UnAfraid

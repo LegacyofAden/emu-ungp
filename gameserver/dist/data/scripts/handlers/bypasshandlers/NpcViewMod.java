@@ -41,7 +41,7 @@ import org.l2junity.gameserver.model.drops.GeneralDropItem;
 import org.l2junity.gameserver.model.drops.GroupedGeneralDropItem;
 import org.l2junity.gameserver.model.drops.IDropItem;
 import org.l2junity.gameserver.model.items.ItemTemplate;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 import org.l2junity.gameserver.util.HtmlUtil;
 import org.l2junity.gameserver.util.Util;
 

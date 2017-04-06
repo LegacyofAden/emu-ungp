@@ -35,10 +35,11 @@ import org.l2junity.gameserver.model.punishment.PunishmentType;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.model.zone.ZoneId;
 import org.l2junity.gameserver.model.zone.type.JailZone;
-import org.l2junity.gameserver.network.client.L2GameClient;
-import org.l2junity.gameserver.network.client.send.NpcHtmlMessage;
+import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.packets.s2c.NpcHtmlMessage;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * This class handles jail punishment.
@@ -48,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 public class JailHandler implements IPunishmentHandler {
 	public JailHandler() {
 		// Register global listener
-		Containers.Global().addListener(new ConsumerEventListener(Containers.Global(), EventType.ON_PLAYER_LOGIN, (OnPlayerLogin event) -> onPlayerLogin(event), this));
+		Containers.Global().addListener(new ConsumerEventListener(Containers.Global(), EventType.ON_PLAYER_LOGIN, (Consumer<OnPlayerLogin>) this::onPlayerLogin, this));
 	}
 
 	public void onPlayerLogin(OnPlayerLogin event) {
@@ -73,7 +74,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
+				final GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {
@@ -116,7 +117,7 @@ public class JailHandler implements IPunishmentHandler {
 			}
 			case ACCOUNT: {
 				final String account = String.valueOf(task.getKey());
-				final L2GameClient client = GameServer.getInstance().getRmi().getClient(account);
+				final GameClient client = GameServer.getInstance().getRmi().getClient(account);
 				if (client != null) {
 					final Player player = client.getActiveChar();
 					if (player != null) {

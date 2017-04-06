@@ -19,7 +19,8 @@
 package org.l2junity.gameserver.util;
 
 import org.l2junity.core.configs.FloodProtectorConfig;
-import org.l2junity.gameserver.network.client.L2GameClient;
+import org.l2junity.gameserver.network.GameClient;
+
 
 /**
  * Collection of flood protectors for single player.
@@ -97,7 +98,7 @@ public final class FloodProtectors {
 	 *
 	 * @param client game client for which the collection of flood protectors is being created.
 	 */
-	public FloodProtectors(final L2GameClient client) {
+	public FloodProtectors(final GameClient client) {
 		super();
 		_useItem = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_USE_ITEM);
 		_rollDice = new FloodProtectorAction(client, FloodProtectorConfig.FLOOD_PROTECTOR_ROLL_DICE);

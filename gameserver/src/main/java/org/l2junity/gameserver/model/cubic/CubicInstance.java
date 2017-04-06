@@ -31,8 +31,8 @@ import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.L2CubicTemplate;
 import org.l2junity.gameserver.model.skills.Skill;
-import org.l2junity.gameserver.network.client.send.ExUserInfoCubic;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
+import org.l2junity.gameserver.network.packets.s2c.ExUserInfoCubic;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
 
 /**
  * @author UnAfraid

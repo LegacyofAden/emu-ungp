@@ -21,7 +21,7 @@ package org.l2junity.gameserver.taskmanager;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Summon;
-import org.l2junity.gameserver.network.client.send.AutoAttackStop;
+import org.l2junity.gameserver.network.packets.s2c.AutoAttackStop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -28,7 +28,8 @@ import org.l2junity.gameserver.model.actor.instance.BoatInstance;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.templates.CharTemplate;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.IClientOutgoingPacket;
+import org.l2junity.gameserver.network.packets.GameServerPacket;
+
 
 public class BoatManager {
 	private final Map<Integer, BoatInstance> _boats = new HashMap<>();
@@ -147,7 +148,7 @@ public class BoatManager {
 	 * @param point2
 	 * @param packet
 	 */
-	public void broadcastPacket(VehiclePathPoint point1, VehiclePathPoint point2, IClientOutgoingPacket packet) {
+	public void broadcastPacket(VehiclePathPoint point1, VehiclePathPoint point2, GameServerPacket packet) {
 		broadcastPacketsToPlayers(point1, point2, packet);
 	}
 
@@ -158,11 +159,11 @@ public class BoatManager {
 	 * @param point2
 	 * @param packets
 	 */
-	public void broadcastPackets(VehiclePathPoint point1, VehiclePathPoint point2, IClientOutgoingPacket... packets) {
+	public void broadcastPackets(VehiclePathPoint point1, VehiclePathPoint point2, GameServerPacket... packets) {
 		broadcastPacketsToPlayers(point1, point2, packets);
 	}
 
-	private void broadcastPacketsToPlayers(VehiclePathPoint point1, VehiclePathPoint point2, IClientOutgoingPacket... packets) {
+	private void broadcastPacketsToPlayers(VehiclePathPoint point1, VehiclePathPoint point2, GameServerPacket... packets) {
 		//FIXME n3k0: rework it to like this:
 		//WorldManager.getInstance().getMainWorld().forEachVisibleObjectInRadius(point1, Player.class, GeneralConfig.BOAT_BROADCAST_RADIUS, player -> player.sendPacket(packets));
 		
@@ -170,14 +171,14 @@ public class BoatManager {
 			double dx = player.getX() - point1.getX();
 			double dy = player.getY() - point1.getY();
 			if (Math.sqrt((dx * dx) + (dy * dy)) < GeneralConfig.BOAT_BROADCAST_RADIUS) {
-				for (IClientOutgoingPacket p : packets) {
+				for (GameServerPacket p : packets) {
 					player.sendPacket(p);
 				}
 			} else {
 				dx = player.getX() - point2.getX();
 				dy = player.getY() - point2.getY();
 				if (Math.sqrt((dx * dx) + (dy * dy)) < GeneralConfig.BOAT_BROADCAST_RADIUS) {
-					for (IClientOutgoingPacket p : packets) {
+					for (GameServerPacket p : packets) {
 						player.sendPacket(p);
 					}
 				}

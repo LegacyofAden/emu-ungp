@@ -24,7 +24,7 @@ import org.l2junity.gameserver.handler.AdminCommandHandler;
 import org.l2junity.gameserver.handler.IAdminCommandHandler;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.Disconnection;
+import org.l2junity.gameserver.network.Disconnection;
 
 public class AdminKick implements IAdminCommandHandler {
 	private static final String[] ADMIN_COMMANDS =

@@ -32,7 +32,7 @@ import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.entity.Castle;
 import org.l2junity.gameserver.model.interfaces.IStorable;
 import org.l2junity.gameserver.model.itemcontainer.ItemContainer;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

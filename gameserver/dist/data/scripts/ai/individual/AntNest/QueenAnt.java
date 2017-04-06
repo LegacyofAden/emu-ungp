@@ -38,8 +38,8 @@ import org.l2junity.gameserver.model.skills.CommonSkill;
 import org.l2junity.gameserver.model.skills.Skill;
 import org.l2junity.gameserver.model.skills.SkillCaster;
 import org.l2junity.gameserver.model.zone.ZoneType;
-import org.l2junity.gameserver.network.client.send.MagicSkillUse;
-import org.l2junity.gameserver.network.client.send.PlaySound;
+import org.l2junity.gameserver.network.packets.s2c.MagicSkillUse;
+import org.l2junity.gameserver.network.packets.s2c.PlaySound;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

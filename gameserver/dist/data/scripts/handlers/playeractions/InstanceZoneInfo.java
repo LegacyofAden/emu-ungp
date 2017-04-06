@@ -22,7 +22,7 @@ import org.l2junity.gameserver.handler.IPlayerActionHandler;
 import org.l2junity.gameserver.handler.PlayerActionHandler;
 import org.l2junity.gameserver.model.ActionDataHolder;
 import org.l2junity.gameserver.model.actor.instance.Player;
-import org.l2junity.gameserver.network.client.send.ExInzoneWaiting;
+import org.l2junity.gameserver.network.packets.s2c.ExInzoneWaiting;
 
 /**
  * Instance Zone Info player action handler.

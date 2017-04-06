@@ -44,8 +44,8 @@ import org.l2junity.gameserver.model.olympiad.Olympiad;
 import org.l2junity.gameserver.model.variables.AccountVariables;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
 import org.l2junity.gameserver.model.world.WorldManager;
-import org.l2junity.gameserver.network.client.send.ExVoteSystemInfo;
-import org.l2junity.gameserver.network.client.send.ExWorldChatCnt;
+import org.l2junity.gameserver.network.packets.s2c.ExVoteSystemInfo;
+import org.l2junity.gameserver.network.packets.s2c.ExWorldChatCnt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

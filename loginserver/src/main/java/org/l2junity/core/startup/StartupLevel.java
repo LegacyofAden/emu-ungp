@@ -42,7 +42,7 @@ public enum StartupLevel implements IStartupLevel {
 			try {
 				LoginNetworkThread.getInstance().startup();
 			} catch (IOException e) {
-				log.error("Error while startion network thread", e);
+				log.error("Error while starting network thread", e);
 			}
 
 			log.info("Server loaded in {} millisecond(s).", ServerInfoUtils.formatNumber(ManagementFactory.getRuntimeMXBean().getUptime()));

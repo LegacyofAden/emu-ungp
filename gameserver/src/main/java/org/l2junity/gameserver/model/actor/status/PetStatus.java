@@ -21,8 +21,8 @@ package org.l2junity.gameserver.model.actor.status;
 import org.l2junity.gameserver.ai.CtrlEvent;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.instance.PetInstance;
-import org.l2junity.gameserver.network.client.send.SystemMessage;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.SystemMessage;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 public class PetStatus extends SummonStatus {
 	private int _currentFed = 0; // Current Fed of the PetInstance

@@ -24,8 +24,8 @@ import org.l2junity.gameserver.handler.ItemHandler;
 import org.l2junity.gameserver.model.actor.Npc;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
-import org.l2junity.gameserver.network.client.send.ExGetPremiumItemList;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExGetPremiumItemList;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 import java.util.HashMap;
 

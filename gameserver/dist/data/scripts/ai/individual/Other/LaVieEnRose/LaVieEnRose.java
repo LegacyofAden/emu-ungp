@@ -25,11 +25,11 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.ceremonyofchaos.CeremonyOfChaosEvent;
 import org.l2junity.gameserver.model.olympiad.OlympiadManager;
 import org.l2junity.gameserver.model.variables.PlayerVariables;
-import org.l2junity.gameserver.network.client.send.ExResponseBeautyList;
-import org.l2junity.gameserver.network.client.send.ExResponseResetList;
-import org.l2junity.gameserver.network.client.send.ExShowBeautyMenu;
-import org.l2junity.gameserver.network.client.send.string.NpcStringId;
-import org.l2junity.gameserver.network.client.send.string.SystemMessageId;
+import org.l2junity.gameserver.network.packets.s2c.ExResponseBeautyList;
+import org.l2junity.gameserver.network.packets.s2c.ExResponseResetList;
+import org.l2junity.gameserver.network.packets.s2c.ExShowBeautyMenu;
+import org.l2junity.gameserver.network.packets.s2c.string.NpcStringId;
+import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
 
 /**
  * La Vie En Rose AI.
