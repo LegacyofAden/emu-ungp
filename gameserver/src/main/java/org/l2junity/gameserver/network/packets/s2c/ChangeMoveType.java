@@ -19,6 +19,7 @@
 package org.l2junity.gameserver.network.packets.s2c;
 
 import org.l2junity.commons.network.PacketBody;
+import org.l2junity.gameserver.enums.EEnvType;
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.GameServerPacketType;
@@ -27,20 +28,22 @@ public class ChangeMoveType extends GameServerPacket {
 	public static final int WALK = 0;
 	public static final int RUN = 1;
 
-	private final int _charObjId;
-	private final boolean _running;
+	private final int objectId;
+	private final boolean isRunning;
+	private final EEnvType environment;
 
 	public ChangeMoveType(Creature character) {
-		_charObjId = character.getObjectId();
-		_running = character.isRunning();
+		objectId = character.getObjectId();
+		isRunning = character.isRunning();
+		environment = character.getEnvironment();
 	}
 
 	@Override
 	protected void writeImpl(PacketBody body) {
 		GameServerPacketType.CHANGE_MOVE_TYPE.writeId(body);
 
-		body.writeD(_charObjId);
-		body.writeD(_running ? RUN : WALK);
-		body.writeD(0); // c2
+		body.writeD(objectId);
+		body.writeD(isRunning ? RUN : WALK);
+		body.writeD(environment.getType()); // c2
 	}
 }

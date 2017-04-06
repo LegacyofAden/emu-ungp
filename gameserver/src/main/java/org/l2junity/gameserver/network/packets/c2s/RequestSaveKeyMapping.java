@@ -70,13 +70,12 @@ public class RequestSaveKeyMapping extends GameClientPacket {
 		}
 		readD();
 		readD();
-
 	}
 
 	@Override
 	public void runImpl() {
 		final Player player = getClient().getActiveChar();
-		if (!PlayerConfig.STORE_UI_SETTINGS || (player == null) || (getClient().getState() != GameClientState.IN_GAME)) {
+		if (!PlayerConfig.STORE_UI_SETTINGS || (player == null)) {
 			return;
 		}
 		player.getUISettings().storeAll(_catMap, _keyMap);

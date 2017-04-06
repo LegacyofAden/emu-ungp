@@ -24,6 +24,7 @@ import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.events.EventType;
 import org.l2junity.gameserver.model.events.impl.IBaseEvent;
 import org.l2junity.gameserver.network.GameClient;
+import org.l2junity.gameserver.network.packets.GameClientPacket;
 
 
 /**
@@ -33,7 +34,7 @@ import org.l2junity.gameserver.network.GameClient;
 @AllArgsConstructor
 public class OnPacketReceived implements IBaseEvent {
 	private final GameClient client;
-	private final byte[] data;
+	private final GameClientPacket packet;
 
 	public Player getActiveChar() {
 		return client.getActiveChar();

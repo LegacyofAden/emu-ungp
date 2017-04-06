@@ -38,6 +38,7 @@ import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.PcCondOverride;
 import org.l2junity.gameserver.model.TeleportWhereType;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.actor.tasks.player.PingCompensatorTask;
 import org.l2junity.gameserver.model.entity.*;
 import org.l2junity.gameserver.model.instancezone.Instance;
 import org.l2junity.gameserver.model.items.instance.ItemInstance;
@@ -356,6 +357,8 @@ public class EnterWorld extends GameClientPacket {
 		}
 
 		activeChar.onPlayerEnter();
+
+		PingCompensatorTask.attach(activeChar);
 
 		getClient().sendPacket(new SkillCoolTime(activeChar));
 		getClient().sendPacket(new ExVoteSystemInfo(activeChar));

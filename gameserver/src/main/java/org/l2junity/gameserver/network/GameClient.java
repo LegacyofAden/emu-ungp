@@ -20,6 +20,8 @@ import org.l2junity.gameserver.instancemanager.MentorManager;
 import org.l2junity.gameserver.model.CharSelectInfoPackage;
 import org.l2junity.gameserver.model.Clan;
 import org.l2junity.gameserver.model.actor.instance.Player;
+import org.l2junity.gameserver.model.events.EventDispatcher;
+import org.l2junity.gameserver.model.events.impl.server.OnPacketSent;
 import org.l2junity.gameserver.model.world.WorldManager;
 import org.l2junity.gameserver.network.crypt.BlowFishKeygen;
 import org.l2junity.gameserver.network.crypt.GameCrypt;
@@ -36,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -63,6 +66,12 @@ public class GameClient extends Client<GameClient> {
 	@Getter
 	@Setter
 	private int[][] trace;
+
+	@Getter
+	private long ping;
+
+	@Setter
+	private long lastPingSendTime;
 
 	@Getter
 	private String accountName;
@@ -135,8 +144,9 @@ public class GameClient extends Client<GameClient> {
 		if (isDetached || (packet == null)) {
 			return;
 		}
+		log.info("Server sended packet: {}", packet.getClass().getSimpleName());
 		getConnection().sendPackets(new GameServerPacket[]{packet});
-		packet.run(getActiveChar());
+		EventDispatcher.getInstance().notifyEvent(new OnPacketSent(this, packet));
 	}
 
 	public void sendPacket(SystemMessageId smId) {
@@ -176,6 +186,11 @@ public class GameClient extends Client<GameClient> {
 			return null;
 		}
 		return charSelectionInfo[charslot];
+	}
+
+	public void setPing(long ping)
+	{
+		this.ping = (ping - lastPingSendTime) / 2;
 	}
 
 	/**

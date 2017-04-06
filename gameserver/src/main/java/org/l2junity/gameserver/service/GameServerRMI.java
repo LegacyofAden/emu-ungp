@@ -135,15 +135,19 @@ public class GameServerRMI extends UnicastRemoteObject implements IGameServerRMI
 					final CharSelectionInfo charSelectionInfo = new CharSelectionInfo(sessionInfo);
 					client.sendPacket(charSelectionInfo);
 					client.setCharSelectionInfo(charSelectionInfo.getCharInfo());
+					return true;
 				}
-				return true;
 			}
 		}
 		return false;
 	}
 
 	public boolean addAccountInGame(String account, GameClient client) {
-		return accountsInGameServer.putIfAbsent(account, client) == null;
+		if (!accountsInGameServer.containsKey(account)) {
+			accountsInGameServer.put(account, client);
+			return true;
+		}
+		return false;
 	}
 
 	public void removeAccountInGame(String account) {

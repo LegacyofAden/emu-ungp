@@ -6964,11 +6964,14 @@ public final class Player extends Playable {
 		switch (type) {
 			case NONE: // None
 			{
+				setEnvironment(EEnvType.ET_GROUND);
 				setIsFlying(false);
 				break;
 			}
 			case STRIDER: // Strider
 			{
+				if (npcId >= 12526 && npcId <= 12528)
+					setEnvironment(EEnvType.ET_HOVER);
 				if (isNoble()) {
 					addSkill(CommonSkill.STRIDER_SIEGE_ASSAULT.getSkill(), false);
 				}
@@ -6976,6 +6979,7 @@ public final class Player extends Playable {
 			}
 			case WYVERN: // Wyvern
 			{
+				setEnvironment(EEnvType.ET_AIR);
 				setIsFlying(true);
 				break;
 			}

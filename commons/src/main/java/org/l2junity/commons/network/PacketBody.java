@@ -79,7 +79,7 @@ public class PacketBody<TClient extends Client> {
 	 * @param value the float
 	 */
 	public void writeE(float value) {
-		writeD(Integer.reverseBytes(Float.floatToIntBits(value)));
+		_buffer.putFloat(value);
 	}
 
 	public void writeOptionalD(int value) {

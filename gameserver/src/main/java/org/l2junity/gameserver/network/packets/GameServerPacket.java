@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
  */
 @Slf4j
 public abstract class GameServerPacket extends SendablePacket<GameClient> {
-	protected static int[] PAPERDOLL_ORDER = new int[]
+	private static int[] PAPERDOLL_ORDER = new int[]
 			{
 					Inventory.PAPERDOLL_UNDER,
 					Inventory.PAPERDOLL_REAR,
@@ -55,14 +55,14 @@ public abstract class GameServerPacket extends SendablePacket<GameClient> {
 
 			};
 
-	protected static int[] PAPERDOLL_ORDER_AUGMENT = new int[]
+	private static int[] PAPERDOLL_ORDER_AUGMENT = new int[]
 			{
 					Inventory.PAPERDOLL_RHAND,
 					Inventory.PAPERDOLL_LHAND,
 					Inventory.PAPERDOLL_RHAND
 			};
 
-	protected static int[] PAPERDOLL_ORDER_VISUAL_ID = new int[]
+	private static int[] PAPERDOLL_ORDER_VISUAL_ID = new int[]
 			{
 					Inventory.PAPERDOLL_RHAND,
 					Inventory.PAPERDOLL_LHAND,
@@ -87,15 +87,6 @@ public abstract class GameServerPacket extends SendablePacket<GameClient> {
 		return PAPERDOLL_ORDER_VISUAL_ID;
 	}
 
-	/**
-	 * @param masks Masks to check
-	 * @param type  mask type
-	 * @return {@code true} if the mask contains the current update component type
-	 */
-	static boolean containsMask(int masks, IUpdateTypeComponent type) {
-		return (masks & type.getMask()) == type.getMask();
-	}
-
 	protected abstract void writeImpl(PacketBody body);
 
 	@Override
@@ -103,6 +94,7 @@ public abstract class GameServerPacket extends SendablePacket<GameClient> {
 		try {
 			PacketBody body = new PacketBody<>(client, buffer);
 			writeImpl(body);
+			run(client.getActiveChar());
 		} catch (Exception e) {
 			log.error("Sending {} to {} failed", getClass().getSimpleName(), client, e);
 			return false;

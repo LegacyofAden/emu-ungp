@@ -318,7 +318,7 @@ public enum GameClientPacketTypeEx {
 	REQUEST_ALCHEMY_TRY_MIX_CUBE(0x101, RequestAlchemyTryMixCube::new, GameClientState.IN_GAME),
 	REQUEST_ALCHEMY_CONVERSION(0x102, RequestAlchemyConversion::new, GameClientState.IN_GAME),
 	SEND_EXECUTED_UI_EVENTS_COUNT(0x103, null, GameClientState.IN_GAME),
-	EX_SEND_CLIENT_INI(0x104, null, GameClientState.AUTHENTICATED),
+	EX_SEND_CLIENT_INI(0x104, ExSendClientINI::new, GameClientState.AUTHENTICATED),
 	REQUEST_EX_AUTO_FISH(0x105, ExRequestAutoFish::new, GameClientState.IN_GAME),
 	REQUEST_VIP_ATTENDANCE_ITEM_LIST(0x106, null, GameClientState.IN_GAME),
 	REQUEST_VIP_ATTENDANCE_CHECK(0x107, null, GameClientState.IN_GAME),

@@ -18,6 +18,8 @@
  */
 package org.l2junity.gameserver.model.actor;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.l2junity.commons.threading.ThreadPool;
 import org.l2junity.commons.util.EmptyQueue;
 import org.l2junity.commons.util.Rnd;
@@ -209,6 +211,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 * Movement data of this L2Character
 	 */
 	protected MoveData _move;
+
+	// TODO: Rework isFlying to ET_AIR
+	@Getter
+	@Setter
+	private EEnvType environment = EEnvType.ET_GROUND;
 
 	/**
 	 * This creature's target.

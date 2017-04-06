@@ -109,7 +109,7 @@ public class CharSelectionInfo extends GameServerPacket {
 			body.writeD(charInfoPackage.getObjectId());
 			body.writeS(accountName);
 			body.writeD(playKey);
-			body.writeD(charInfoPackage.getClanId());
+			body.writeD(0x00);
 			body.writeD(0x00); // ??
 
 			body.writeD(charInfoPackage.getSex()); // sex
