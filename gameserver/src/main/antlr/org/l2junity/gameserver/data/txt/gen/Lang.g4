@@ -12,7 +12,7 @@ identifier_object
     @after {$ctx.value = $text;} :
     // workaround about name conflicts (itemdata.txt)
     DAGGER | BOW | CROSSBOW | RAPIER | GLOVES | STEEL | LEATHER | ORIHARUKON | 'slot_lhand'
-    | NAME | NONE | ORC
+    | NAME | NONE | ORC | BOSS | 'con'
     ;
 
 bool_object
@@ -161,6 +161,8 @@ MERCHANT: 'merchant';
 ELF: 'elf';
 KAMAEL: 'kamael';
 ORC: 'orc';
+SIEGE_WEAPON: 'siege_weapon';
+FRIEND: 'friend';
 
 // NPC Types
 MERCENARY: 'mercenary';
@@ -181,6 +183,14 @@ FIELDBOSS : 'fieldboss';
 BLACKSMITH : 'blacksmith';
 GUILD_MASTER : 'guild_master';
 GUILD_COACH : 'guild_coach';
+PC_TRAP : 'pc_trap';
+XMASTREE : 'xmastree';
+DOPPELGANGER: 'doppelganger';
+OWNTHING: 'ownthing';
+SIEGE_ATTACKER : 'siege_attacker';
+MRKEEPER : 'mrkeeper';
+COLLECTION : 'collection';
+PACKAGE_KEEPER : 'package_keeper';
 
 // Weapon types
 SWORD : 'sword';
@@ -196,7 +206,6 @@ RAPIER : 'rapier';
 ANCIENTSWORD : 'ancientsword';
 CROSSBOW : 'crossbow';
 FLAG : 'flag';
-OWNTHING : 'ownthing';
 DUALDAGGER : 'dualdagger';
 ETC : 'etc';
 

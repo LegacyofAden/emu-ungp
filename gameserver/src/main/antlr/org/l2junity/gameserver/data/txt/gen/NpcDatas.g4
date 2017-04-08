@@ -3,7 +3,7 @@ grammar NpcDatas;
 import Lang;
 
 @header {
-import org.l2junity.gameserver.data.txt.model.constants.NpcType;
+import org.l2junity.gameserver.data.txt.model.constants.*;
 }
 
 file : npc+;
@@ -107,13 +107,24 @@ npc_type
     | FIELDBOSS {$ctx.value = NpcType.FIELDBOSS;}
     | WORLD_TRAP {$ctx.value = NpcType.WORLD_TRAP;}
     | MERCHANT {$ctx.value = NpcType.MERCHANT;}
+    | HOLYTHING {$ctx.value = NpcType.HOLYTHING;}
     | WAREHOUSE_KEEPER {$ctx.value = NpcType.WAREHOUSE_KEEPER;}
     | BLACKSMITH {$ctx.value = NpcType.BLACKSMITH;}
     | TELEPORTER {$ctx.value = NpcType.TELEPORTER;}
     | GUILD_MASTER {$ctx.value = NpcType.GUILD_MASTER;}
     | GUILD_COACH {$ctx.value = NpcType.GUILD_COACH;}
     | GUARD {$ctx.value = NpcType.GUARD;}
-    | MONRACE {$ctx.value = NpcType.MONRACE;};
+    | MONRACE {$ctx.value = NpcType.MONRACE;}
+    | PC_TRAP {$ctx.value = NpcType.PC_TRAP;}
+    | XMASTREE {$ctx.value = NpcType.XMASTREE;}
+    | PET {$ctx.value = NpcType.PET;}
+    | SUMMON {$ctx.value = NpcType.SUMMON;}
+    | DOPPELGANGER {$ctx.value = NpcType.DOPPELGANGER;}
+    | OWNTHING {$ctx.value = NpcType.OWNTHING;}
+    | SIEGE_ATTACKER {$ctx.value = NpcType.SIEGE_ATTACKER;}
+    | MRKEEPER {$ctx.value = NpcType.MRKEEPER;}
+    | COLLECTION {$ctx.value = NpcType.COLLECTION;}
+    | PACKAGE_KEEPER {$ctx.value = NpcType.PACKAGE_KEEPER;};
 
 npc_id
     returns[int value]: io=int_object {$ctx.value = $io.value;};
@@ -127,51 +138,57 @@ level : 'level' '=' io=int_object;
 
 exp : 'exp' '=' lo=long_object;
 
-ex_crt_effect : 'ex_crt_effect' '=' int_object;
+ex_crt_effect : 'ex_crt_effect' '=' (bo=bool_object | '{' bo=bool_object '}');
 
 unique : 'unique' '=' bo=bool_object;
 
 s_npc_prop_hp_rate: 's_npc_prop_hp_rate' '=' d=double_object;
 
-race:
+race returns[RaceType value]:
     'race' '=' (
-    FAIRY
-    | ANIMAL
-    | HUMANOID
-    | PLANT
-    | UNDEAD
-    | CONSTRUCT
-    | BEAST
-    | BUG
-    | ELEMENTAL
-    | DEMONIC
-    | DRAGON
-    | GIANT
-    | DIVINE
-    | ETC
-    | SUMMON
-    | PET
-    | HOLYTHING
-    | DWARF
-    | MERCHANT
-    | ELF
-    | KAMAEL
-    | ORC
-    | MERCENARY
-    | CASTLE_GUARD
-    | HUMAN
-    | BOSS
-    | ZZOLDAGU
-    | WORLD_TRAP
-    | MONRACE
-    | GUARD
-    | TELEPORTER
-    | WAREHOUSE_KEEPER
-    | SUMMON
-    | DARKELF
+    FAIRY {$ctx.value = RaceType.FAIRY;}
+    | ANIMAL {$ctx.value = RaceType.ANIMAL;}
+    | HUMANOID {$ctx.value = RaceType.HUMANOID;}
+    | PLANT {$ctx.value = RaceType.PLANT;}
+    | UNDEAD {$ctx.value = RaceType.UNDEAD;}
+    | CONSTRUCT {$ctx.value = RaceType.CONSTRUCT;}
+    | BEAST {$ctx.value = RaceType.BEAST;}
+    | BUG {$ctx.value = RaceType.BUG;}
+    | ELEMENTAL {$ctx.value = RaceType.ELEMENTAL;}
+    | DEMONIC {$ctx.value = RaceType.DEMONIC;}
+    | DRAGON {$ctx.value = RaceType.DRAGON;}
+    | GIANT {$ctx.value = RaceType.GIANT;}
+    | DIVINE {$ctx.value = RaceType.DIVINE;}
+    | ETC {$ctx.value = RaceType.ETC;}
+    | SUMMON {$ctx.value = RaceType.SUMMON;}
+    | PET {$ctx.value = RaceType.PET;}
+    | HOLYTHING {$ctx.value = RaceType.HOLYTHING;}
+    | DWARF {$ctx.value = RaceType.DWARF;}
+    | MERCHANT {$ctx.value = RaceType.MERCHANT;}
+    | ELF {$ctx.value = RaceType.ELF;}
+    | KAMAEL {$ctx.value = RaceType.KAMAEL;}
+    | ORC {$ctx.value = RaceType.ORC;}
+    | MERCENARY {$ctx.value = RaceType.MERCENARY;}
+    | CASTLE_GUARD {$ctx.value = RaceType.CASTLE_GUARD;}
+    | HUMAN {$ctx.value = RaceType.HUMAN;}
+    | BOSS {$ctx.value = RaceType.BOSS;}
+    | ZZOLDAGU {$ctx.value = RaceType.ZZOLDAGU;}
+    | WORLD_TRAP {$ctx.value = RaceType.WORLD_TRAP;}
+    | MONRACE {$ctx.value = RaceType.MONRACE;}
+    | GUARD {$ctx.value = RaceType.GUARD;}
+    | TELEPORTER {$ctx.value = RaceType.TELEPORTER;}
+    | WAREHOUSE_KEEPER {$ctx.value = RaceType.WAREHOUSE_KEEPER;}
+    | DARKELF {$ctx.value = RaceType.DARKELF;}
+    | SIEGE_WEAPON {$ctx.value = RaceType.SIEGE_WEAPON;}
+    | FRIEND {$ctx.value = RaceType.FRIEND;}
     );
 
-sex : 'sex' '=' (MALE | FEMALE | ETC);
+sex returns[Sex value]:
+ 	'sex' '=' (
+ 	MALE {$ctx.value = Sex.MALE;}
+ 	| FEMALE {$ctx.value = Sex.FEMALE;}
+  	| ETC {$ctx.value = Sex.ETC;}
+  	);
 
 skill_list: 'skill_list' '=' category_list;
 
@@ -187,8 +204,8 @@ collision_height: 'collision_height' '=' double_list;
 hit_time_factor: 'hit_time_factor' '=' double_object;
 hit_time_factor_skill: 'hit_time_factor_skill' '=' int_object;
 
-ground_high: 'ground_high' '=' int_list;
-ground_low: 'ground_low' '=' int_list;
+ground_high: 'ground_high' '=' double_list;
+ground_low: 'ground_low' '=' double_list;
 
 str: 'str' '=' int_object;
 int_: 'int' '=' int_object;
@@ -202,8 +219,17 @@ org_hp_regen: 'org_hp_regen' '=' double_object;
 org_mp: 'org_mp' '=' double_object;
 org_mp_regen: 'org_mp_regen' '=' double_object;
 
-base_attack_type: 'base_attack_type' '=' attack_type;
-attack_type: SWORD | BLUNT | BOW | DAGGER | FIST | POLE | DUAL | DUALFIST;
+base_attack_type returns[WeaponType value]:
+	'base_attack_type' '=' (
+	SWORD {$ctx.value = WeaponType.SWORD;}
+	| BLUNT {$ctx.value = WeaponType.BLUNT;}
+	| BOW {$ctx.value = WeaponType.BOW;}
+	| DAGGER {$ctx.value = WeaponType.DAGGER;}
+	| FIST {$ctx.value = WeaponType.FIST;}
+	| POLE {$ctx.value = WeaponType.POLE;}
+	| DUAL {$ctx.value = WeaponType.DUAL;}
+	| DUALFIST {$ctx.value = WeaponType.DUALFIST;}
+	);
 
 base_attack_range: 'base_attack_range' '=' io=int_object;
 
@@ -211,11 +237,11 @@ base_damage_range: 'base_damage_range' '=' il=int_list;
 base_rand_dam: 'base_rand_dam' '=' io=int_object;
 
 base_physical_attack: 'base_physical_attack' '=' d=double_object;
-base_critical: 'base_critical' '=' io=int_object;
+base_critical: 'base_critical' '=' d=double_object;
 
 physical_hit_modify: 'physical_hit_modify' '=' d=double_object;
 
-base_attack_speed: 'base_attack_speed' '=' io=int_object;
+base_attack_speed: 'base_attack_speed' '=' doBas=double_object;
 
 base_reuse_delay: 'base_reuse_delay' '=' io=int_object;
 
@@ -225,7 +251,7 @@ base_defend: 'base_defend' '=' d=double_object;
 base_magic_defend: 'base_magic_defend' '=' d=double_object;
 
 base_attribute_defend
-    returns[List<Integer> value]: 'base_attribute_defend' '=' il=int_list {$ctx.value = $il.value;};
+    returns[List<Double> value]: 'base_attribute_defend' '=' il=double_list {$ctx.value = $il.value;};
 
 physical_avoid_modify: 'physical_avoid_modify' '=' io=int_object;
 shield_defense_rate: 'shield_defense_rate' '=' io=int_object;
@@ -245,7 +271,7 @@ corpse_time: 'corpse_time' '=' io=int_object;
 no_sleep_mode: 'no_sleep_mode' '=' bo=bool_object;
 
 agro_range: 'agro_range' '=' io=int_object;
-passable_door: 'passable_door' '=' bo=bool_object;
+passable_door: 'passable_door' '=' io=int_object;
 
 can_move: 'can_move' '=' bo=bool_object;
 flying: 'flying' '=' bo=bool_object;
@@ -255,9 +281,9 @@ show_name_tag: 'show_name_tag' '=' bo=bool_object;
 abnormal_resist: 'abnormal_resist' '=' int_list;
 is_death_penalty: 'is_death_penalty' '=' bo=bool_object;
 
-npc_ai: 'npc_ai' '=' '{' no=name_object (';' ai_param)* '}';
-ai_param: '{' name_object '=' param_value '}';
-param_value: int_object | category_object | npc_privates | fstring_object | double_object | identifier_object;
+npc_ai: 'npc_ai' '=' '{' no=name_object ((';' | ';' ai_param)*) '}';
+ai_param: '{' no1=name_object '=' param_value '}';
+param_value: int_object | double_object | category_object | npc_privates | fstring_object | identifier_object;
 
 npc_privates: '[' identifier_object (';' identifier_object)* ']';
 fstring_object: '[' io=int_object ']';
@@ -287,7 +313,18 @@ ex_item_drop_list: 'ex_item_drop_list' '=' make_group_list;
 
 vitality_item_drop_list: 'vitality_item_drop_list' '=' make_group_list;
 
-mp_reward: 'mp_reward' '=' string_object;
+mp_reward: 'mp_reward' '=' '{' rewardValue=double_object ';' mp_reward_type ';'
+							   rewardAffectValue=double_object ';' mp_reward_affect_type '}';
+
+mp_reward_type returns[MpRewardType value]: (
+	'per' {$ctx.value = MpRewardType.PER;}
+	| 'diff' {$ctx.value = MpRewardType.DIFF;}
+	);
+
+mp_reward_affect_type returns[MpRewardAffectType value]: (
+	'solo' {$ctx.value = MpRewardAffectType.SOLO;}
+	| 'party' {$ctx.value = MpRewardAffectType.PARTY;}
+	);
 
 fake_class_id: 'fake_class_id' '=' io=int_object;
 
