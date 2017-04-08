@@ -1,249 +1,254 @@
 package org.l2junity.gameserver.retail.model.actor;
 
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 
 /***
  * @author ANZO, Camellion
  * @since 20.03.2017
  */
 public class Creature {
-    @EventId(8)
+    @AiEventId(8)
     // Used
     public int x;
 
-    @EventId(16)
+    @AiEventId(16)
     // Used
     public int y;
 
-    @EventId(24)
+    @AiEventId(24)
     // Used
     public int z;
 
-    @EventId(36)
+    @AiEventId(36)
     // Used
     public int id;
 
-    @EventId(68)
+    @AiEventId(68)
     // Used
     public boolean is_pc;
 
-    @EventId(72)
+    @AiEventId(72)
     // Used
     public boolean alive;
 
-    @EventId(76)
+    @AiEventId(76)
     public int age;
 
-    @EventId(88)
+    @AiEventId(88)
     public int subjob_id;
 
-    @EventId(96)
+    @AiEventId(96)
     public int subjob1_level;
 
-    @EventId(100)
+    @AiEventId(100)
     public int subjob2_level;
 
-    @EventId(104)
+    @AiEventId(104)
     public int subjob3_level;
 
-    @EventId(108)
+    @AiEventId(108)
     public int nobless_type;
 
-    @EventId(112)
+    @AiEventId(112)
     public int hero_type;
 
-    @EventId(120)
+    @AiEventId(120)
     public int subjob0_class;
 
-    @EventId(124)
+    @AiEventId(124)
     public int subjob1_class;
 
-    @EventId(128)
+    @AiEventId(128)
     public int subjob2_class;
 
-    @EventId(132)
+    @AiEventId(132)
     public int subjob3_class;
 
-    @EventId(136)
+    @AiEventId(136)
     // Used
     public int dual_class;
 
-    @EventId(144)
+    @AiEventId(144)
     // Used
     public int race;
 
-    @EventId(148)
+    @AiEventId(148)
     public int occupation;
 
-    @EventId(200)
+    @AiEventId(200)
     // Used
     public int sp;
 
-    @EventId(360)
+    @AiEventId(360)
     // Used
     public double hp;
 
-    @EventId(384)
+    @AiEventId(384)
     // Used
     public String name;
 
-    @EventId(368)
+    @AiEventId(368)
     // Used
     public double mp;
 
-    @EventId(444)
+    @AiEventId(444)
     public int stop_mode;
 
-    @EventId(580)
+    @AiEventId(580)
     public int target_index;
 
-    @EventId(584)
+    @AiEventId(584)
+    // Used
     public int target_id;
 
-    @EventId(596)
+    @AiEventId(596)
     // Used
     public int pk_count;
 
-    @EventId(604)
+    @AiEventId(604)
     // Used
     public int karma;
 
-    @EventId(10584)
+    @AiEventId(10584)
     public int quest_last_reward_time;
 
-    @EventId(10596)
+    @AiEventId(10596)
     // Used
     public int pledge_id;
 
-    @EventId(10604)
+    @AiEventId(10604)
     // Used
     public int is_pledge_master;
 
-    @EventId(10664)
+    @AiEventId(10664)
     public int residence_id;
 
     @Deprecated
-    @EventId(6528)
+    @AiEventId(6528)
     public int death_penalty_level;
 
-    @EventId(10824)
+    @AiEventId(10824)
     public int dbid;
 
-    @EventId(10972)
+    @AiEventId(10972)
     // Used
     public int level;
 
-    @EventId(11040)
+    @AiEventId(11040)
     // Used
     public double max_hp;
 
-    @EventId(11048)
+    @AiEventId(11048)
     // Used
     public double max_mp;
 
-    @EventId(11088)
+    @AiEventId(11088)
     public double hp_regen;
 
-    @EventId(11120)
+    @AiEventId(11120)
     public int equiped_weapon_class_id;
 
-    @EventId(11124)
+    @AiEventId(11124)
     public int attack_type;
 
-    @EventId(11360)
+    @AiEventId(11360)
+    // Used
     public int builder_level;
 
-    @EventId(11376)
+    @AiEventId(11376)
     public int last_blow_weapon_class_id;
 
-    @EventId(11464)
+    @AiEventId(11464)
+    // Used
     public boolean in_peacezone;
 
-    @EventId(11468)
+    @AiEventId(11468)
     public boolean in_battlefield;
 
-    @EventId(11552)
+    @AiEventId(11552)
     public String ai;
 
-    @EventId(11796)
+    @AiEventId(11796)
     public int summon_type;
 
-    @EventId(11804)
+    @AiEventId(11804)
     public int summoner_id;
 
-    @EventId(11808)
+    @AiEventId(11808)
     public int boss_id;
 
-    @EventId(11812)
+    @AiEventId(11812)
     public int npc_class_id;
 
-    @EventId(11816)
+    @AiEventId(11816)
     public int weight_point;
 
-    @EventId(11820)
+    @AiEventId(11820)
     public int respawn_time;
 
-    @EventId(11864)
+    @AiEventId(11864)
     public int p_state;
 
-    @EventId(11880)
+    @AiEventId(11880)
     public Creature master;
 
-    @EventId(11888)
+    @AiEventId(11888)
     public int action;
 
-    @EventId(11936)
+    @AiEventId(11936)
     public int flag;
 
-    @EventId(11940)
+    @AiEventId(11940)
     public int yongma_type;
 
     // на страйдере, виверне, ездовом питомце, итд
-    @EventId(11948)
+    @AiEventId(11948)
     public int strider_level;
 
-    @EventId(11960)
+    @AiEventId(11960)
     public int pet_dbid;
 
-    @EventId(11968)
+    @AiEventId(11968)
     public int max_magic_level;
 
-    @EventId(11976)
+    @AiEventId(11976)
+    // Used
     public int transformID;
 
-    @EventId(11980)
+    @AiEventId(11980)
+    // Used (maybe scrambled with instant_zone_type_id)
     public int instant_zone_id;
 
-    @EventId(11984)
+    @AiEventId(11984)
     public int instant_zone_type_id;
 
-    @EventId(11988)
+    @AiEventId(11988)
     public int instant_zone_type_id_in_use;
 
-    @EventId(12112)
+    @AiEventId(12112)
     public int straight_attacker;
 
-    @EventId(12113)
+    @AiEventId(12113)
     public int turn_to_followee;
 
-    @EventId(12116)
+    @AiEventId(12116)
     public int summon_ai;
 
-    @EventId(13284)
+    @AiEventId(13284)
     public int db_value;
 
-    @EventId(13288)
+    @AiEventId(13288)
     public int param1;
 
-    @EventId(13292)
+    @AiEventId(13292)
     public int param2;
 
-    @EventId(13296)
+    @AiEventId(13296)
     public int param3;
 
-    @EventId(13323)
+    @AiEventId(13323)
     public int absolute_defence;
 
-    @EventId(13324)
+    @AiEventId(13324)
     public int no_attack_damage;
 }

@@ -5223,6 +5223,11 @@ public final class Player extends Playable {
 		return _accessLevel;
 	}
 
+	@Override
+	public int getBuilderLevel() {
+		return _accessLevel.getLevel();
+	}
+
 	/**
 	 * Update Stats of the L2PcInstance client side by sending Server->Client packet UserInfo/StatusUpdate to this L2PcInstance and CharInfo/StatusUpdate to all L2PcInstance in its _KnownPlayers (broadcast).
 	 *

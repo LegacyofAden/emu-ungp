@@ -1,6 +1,6 @@
 package org.l2junity.gameserver.retail.model;
 
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 
 import java.util.HashMap;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @since 20.03.2017
  */
 public class RoomInfoList extends HashMap<Integer, RoomInfo> {
-    @EventId(385941504)
+    @AiEventId(385941504)
     public RoomInfo GetRoomInfo(int room) {
         return get(room);
     }

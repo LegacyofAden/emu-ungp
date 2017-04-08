@@ -2,7 +2,7 @@ package org.l2junity.gameserver.retail.ai;
 
 import org.l2junity.gameserver.model.actor.Creature;
 import org.l2junity.gameserver.model.actor.Npc;
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 import org.l2junity.gameserver.retail.model.GlobalObject;
 import org.l2junity.gameserver.retail.model.RecordInfo;
 import org.l2junity.gameserver.retail.model.SpawnDefine;
@@ -17,195 +17,195 @@ public class MakerEventHandler {
         this.myself = myself;
     }*/
 
-    @EventId(736)
+    @AiEventId(736)
     protected NpcMaker myself = null;
 
-    @EventId(712)
+    @AiEventId(712)
     protected GlobalObject gg = null;
 
-    @EventId(288)
+    @AiEventId(288)
     protected int i0;
-    @EventId(296)
+    @AiEventId(296)
     protected int i1;
-    @EventId(304)
+    @AiEventId(304)
     protected int i2;
-    @EventId(312)
+    @AiEventId(312)
     protected int i3;
-    @EventId(320)
+    @AiEventId(320)
     protected int i4;
-    @EventId(328)
+    @AiEventId(328)
     protected int i5;
-    @EventId(336)
+    @AiEventId(336)
     protected int i6;
-    @EventId(344)
+    @AiEventId(344)
     protected int i7;
-    @EventId(352)
+    @AiEventId(352)
     protected int i8;
-    @EventId(360)
+    @AiEventId(360)
     protected int i9;
-    @EventId(368)
+    @AiEventId(368)
     protected int i10;
-    @EventId(376)
+    @AiEventId(376)
     protected int i11;
-    @EventId(384)
+    @AiEventId(384)
     protected int i12;
-    @EventId(424)
+    @AiEventId(424)
     protected Creature c0;
-    @EventId(432)
+    @AiEventId(432)
     protected Creature c1;
-    @EventId(440)
+    @AiEventId(440)
     protected Creature c2;
-    @EventId(448)
+    @AiEventId(448)
     protected Creature c3;
-    @EventId(456)
+    @AiEventId(456)
     protected Creature c4;
 
-    @EventId(584)
+    @AiEventId(584)
     protected String s0;
-    @EventId(592)
+    @AiEventId(592)
     protected String s1;
 
-    @EventId(632)
+    @AiEventId(632)
     protected NpcMaker maker0;
-    @EventId(640)
+    @AiEventId(640)
     protected NpcMaker maker1;
-    @EventId(648)
+    @AiEventId(648)
     protected NpcMaker maker2;
-    @EventId(656)
+    @AiEventId(656)
     protected NpcMaker maker3;
 
-    @EventId(744)
+    @AiEventId(744)
     protected SpawnDefine def0;
 
-    @EventId(0)
+    @AiEventId(0)
     protected void ON_START() {
     }
 
-    @EventId(1)
-    protected void ON_NPC_DELETED(@EventId(name = "reply", value = 280) int reply,
-                                  @EventId(name = "deleted_def", value = 752) SpawnDefine deleted_def,
-                                  @EventId(name = "deleted_npc", value = 776) Npc deleted_npc,
-                                  @EventId(name = "died", value = 804) int died,
-                                  @EventId(name = "c0", value = 424) Creature c0,
-                                  @EventId(name = "s0", value = 584) String s0) {
+    @AiEventId(1)
+    protected void ON_NPC_DELETED(@AiEventId(name = "reply", value = 280) int reply,
+                                  @AiEventId(name = "deleted_def", value = 752) SpawnDefine deleted_def,
+                                  @AiEventId(name = "deleted_npc", value = 776) Npc deleted_npc,
+                                  @AiEventId(name = "died", value = 804) int died,
+                                  @AiEventId(name = "c0", value = 424) Creature c0,
+                                  @AiEventId(name = "s0", value = 584) String s0) {
     }
 
-    @EventId(2)
-    protected void ON_ALL_NPC_DELETED(@EventId(name = "def0", value = 744) SpawnDefine def0,
-                                      @EventId(name = "deleted_def", value = 752) SpawnDefine deleted_def) {
+    @AiEventId(2)
+    protected void ON_ALL_NPC_DELETED(@AiEventId(name = "def0", value = 744) SpawnDefine def0,
+                                      @AiEventId(name = "deleted_def", value = 752) SpawnDefine deleted_def) {
     }
 
-    @EventId(3)
-    protected void ON_SCRIPT_EVENT(@EventId(name = "script_event_arg1", value = 248) int script_event_arg1,
-                                   @EventId(name = "script_event_arg2", value = 252) int script_event_arg2,
-                                   @EventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
+    @AiEventId(3)
+    protected void ON_SCRIPT_EVENT(@AiEventId(name = "script_event_arg1", value = 248) int script_event_arg1,
+                                   @AiEventId(name = "script_event_arg2", value = 252) int script_event_arg2,
+                                   @AiEventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
     }
 
-    @EventId(4)
-    protected void ON_DB_NPC_INFO(@EventId(name = "loaded_def", value = 760) SpawnDefine loaded_def,
-                                  @EventId(name = "record0", value = 792) RecordInfo record0) {
+    @AiEventId(4)
+    protected void ON_DB_NPC_INFO(@AiEventId(name = "loaded_def", value = 760) SpawnDefine loaded_def,
+                                  @AiEventId(name = "record0", value = 792) RecordInfo record0) {
     }
 
-    @EventId(5)
-    protected void ON_TIMER(@EventId(name = "timer_id", value = 244) int timer_id,
-                            @EventId(name = "script_event_arg1", value = 248) int script_event_arg1,
-                            @EventId(name = "script_event_arg2", value = 252) int script_event_arg2,
-                            @EventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
+    @AiEventId(5)
+    protected void ON_TIMER(@AiEventId(name = "timer_id", value = 244) int timer_id,
+                            @AiEventId(name = "script_event_arg1", value = 248) int script_event_arg1,
+                            @AiEventId(name = "script_event_arg2", value = 252) int script_event_arg2,
+                            @AiEventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
     }
 
-    @EventId(6)
-    protected void ON_NPC_CREATED(@EventId(name = "created_def", value = 768) SpawnDefine created_def,
-                                  @EventId(name = "created_npc", value = 784) Npc created_npc,
-                                  @EventId(name = "record0", value = 792) RecordInfo record0) {
+    @AiEventId(6)
+    protected void ON_NPC_CREATED(@AiEventId(name = "created_def", value = 768) SpawnDefine created_def,
+                                  @AiEventId(name = "created_npc", value = 784) Npc created_npc,
+                                  @AiEventId(name = "record0", value = 792) RecordInfo record0) {
     }
 
-    @EventId(7)
-    protected void ON_NPCPOS_EVENT(@EventId(name = "enabled", value = 800) int enabled) {
+    @AiEventId(7)
+    protected void ON_NPCPOS_EVENT(@AiEventId(name = "enabled", value = 800) int enabled) {
     }
 
-    @EventId(8)
-    protected void ON_DOOR_EVENT(@EventId(name = "enabled", value = 800) int enabled) {
+    @AiEventId(8)
+    protected void ON_DOOR_EVENT(@AiEventId(name = "enabled", value = 800) int enabled) {
     }
 
-    @EventId(9)
+    @AiEventId(9)
     protected void ON_START_SIEGE_EVENT() {
     }
 
-    @EventId(10)
+    @AiEventId(10)
     protected void ON_END_SIEGE_EVENT() {
     }
 
-    @EventId(11)
+    @AiEventId(11)
     protected void ON_PROCLAIM_SIEGE_EVENT() {
     }
 
-    @EventId(12)
+    @AiEventId(12)
     protected void ON_DESTRUCT_CTRL_TOWER_EVENT() {
     }
 
-    @EventId(13)
+    @AiEventId(13)
     protected void ON_CANCEL_SIEGE_EVENT() {
     }
 
-    @EventId(14)
+    @AiEventId(14)
     protected void ON_START_TEAMBATTLEAGIT_FINAL_EVENT() {
     }
 
-    @EventId(15)
-    protected void ON_FIELD_CYCLE_CHANGED_EVENT(@EventId(name = "event_id", value = 236) int event_id,
-                                                @EventId(name = "state", value = 148) int state) {
+    @AiEventId(15)
+    protected void ON_FIELD_CYCLE_CHANGED_EVENT(@AiEventId(name = "event_id", value = 236) int event_id,
+                                                @AiEventId(name = "state", value = 148) int state) {
     }
 
-    @EventId(16)
-    protected void ON_FORTRESS_EVENT(@EventId(name = "residence_id", value = 224) int residence_id,
-                                     @EventId(name = "event_id", value = 236) int event_id,
-                                     @EventId(name = "reply", value = 280) int reply) {
+    @AiEventId(16)
+    protected void ON_FORTRESS_EVENT(@AiEventId(name = "residence_id", value = 224) int residence_id,
+                                     @AiEventId(name = "event_id", value = 236) int event_id,
+                                     @AiEventId(name = "reply", value = 280) int reply) {
     }
 
-    @EventId(17)
-    protected void ON_INSTANT_ZONE_EVENT(@EventId(name = "reply", value = 280) int reply,
-                                         @EventId(name = "event_id", value = 236) int event_id,
-                                         @EventId(name = "action_id", value = 264) int action_id,
-                                         @EventId(name = "script_event_arg1", value = 248) int script_event_arg1,
-                                         @EventId(name = "script_event_arg2", value = 252) int script_event_arg2,
-                                         @EventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
+    @AiEventId(17)
+    protected void ON_INSTANT_ZONE_EVENT(@AiEventId(name = "reply", value = 280) int reply,
+                                         @AiEventId(name = "event_id", value = 236) int event_id,
+                                         @AiEventId(name = "action_id", value = 264) int action_id,
+                                         @AiEventId(name = "script_event_arg1", value = 248) int script_event_arg1,
+                                         @AiEventId(name = "script_event_arg2", value = 252) int script_event_arg2,
+                                         @AiEventId(name = "script_event_arg3", value = 256) int script_event_arg3) {
     }
 
-    @EventId(18)
-    protected void ON_OLYMPIAD_FIELD_STEP_CHANGED_EVENT(@EventId(name = "inzone_id", value = 228) int inzone_id,
-                                                        @EventId(name = "event_id", value = 236) int event_id,
-                                                        @EventId(name = "state", value = 148) int state) {
+    @AiEventId(18)
+    protected void ON_OLYMPIAD_FIELD_STEP_CHANGED_EVENT(@AiEventId(name = "inzone_id", value = 228) int inzone_id,
+                                                        @AiEventId(name = "event_id", value = 236) int event_id,
+                                                        @AiEventId(name = "state", value = 148) int state) {
     }
 
-    @EventId(21)
+    @AiEventId(21)
     protected void ON_DECLARE_DOMINION_EVENT() {
     }
 
-    @EventId(22)
+    @AiEventId(22)
     protected void ON_START_CHANGE_TIME_EVENT() {
     }
 
-    @EventId(23)
+    @AiEventId(23)
     protected void ON_END_CHANGE_TIME_EVENT() {
     }
 
-    @EventId(24)
-    protected void ON_DEBUG_MAKER_EVENT(@EventId(name = "reply", value = 280) int reply,
-                                        @EventId(name = "creature", value = 112) Creature creature) {
+    @AiEventId(24)
+    protected void ON_DEBUG_MAKER_EVENT(@AiEventId(name = "reply", value = 280) int reply,
+                                        @AiEventId(name = "creature", value = 112) Creature creature) {
     }
 
-    @EventId(25)
-    protected void ON_DYNAMIC_QUEST_EVENT(@EventId(name = "reply", value = 280) int reply,
-                                          @EventId(name = "success", value = 200) int success) {
+    @AiEventId(25)
+    protected void ON_DYNAMIC_QUEST_EVENT(@AiEventId(name = "reply", value = 280) int reply,
+                                          @AiEventId(name = "success", value = 200) int success) {
     }
 
-    @EventId(26)
-    protected void ON_DYNAMIC_QUEST_INFO(@EventId(name = "quest_id", value = 156) int quest_id,
-                                         @EventId(name = "event_id", value = 236) int event_id) {
+    @AiEventId(26)
+    protected void ON_DYNAMIC_QUEST_INFO(@AiEventId(name = "quest_id", value = 156) int quest_id,
+                                         @AiEventId(name = "event_id", value = 236) int event_id) {
     }
 
-    @EventId(29)
-    protected void ON_EVENT_CAMPAIGN_EVENT(@EventId(name = "reply", value = 280) int reply,
-                                           @EventId(name = "success", value = 200) int success) {
+    @AiEventId(29)
+    protected void ON_EVENT_CAMPAIGN_EVENT(@AiEventId(name = "reply", value = 280) int reply,
+                                           @AiEventId(name = "success", value = 200) int success) {
     }
 }

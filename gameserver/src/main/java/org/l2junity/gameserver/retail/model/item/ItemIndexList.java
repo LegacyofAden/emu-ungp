@@ -1,6 +1,6 @@
 package org.l2junity.gameserver.retail.model.item;
 
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 
 import java.util.HashMap;
 
@@ -9,12 +9,12 @@ import java.util.HashMap;
  * @since 20.03.2017
  */
 public class ItemIndexList extends HashMap<Integer, Integer> {
-    @EventId(520093696)
+    @AiEventId(520093696)
     public int GetSize() {
         return size();
     }
 
-    @EventId(520159233)
+    @AiEventId(520159233)
     public int GetItemIndex(int item_id) {
         for (Entry<Integer, Integer> entry : entrySet()) {
             if (entry.getValue() == item_id) {

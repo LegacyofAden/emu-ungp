@@ -1,15 +1,15 @@
 package org.l2junity.gameserver.retail.model.formation;
 
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 
 /***
  * @author ANZO, Camellion
  * @since 20.03.2017
  */
 public class Party {
-    @EventId(36)
+    @AiEventId(36)
     public int id;
 
-    @EventId(76)
+    @AiEventId(76)
     public int member_count;
 }

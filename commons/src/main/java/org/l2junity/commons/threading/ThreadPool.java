@@ -139,6 +139,10 @@ public final class ThreadPool {
 		}
 	}
 
+	public boolean hasGeneralTasks() {
+		return !((ScheduledThreadPoolExecutor)generalScheduledThreadPool).getQueue().isEmpty();
+	}
+
 	public String getStats() {
 		final ScheduledThreadPoolExecutor effectsScheduledThreadPool = (ScheduledThreadPoolExecutor) this.effectsScheduledThreadPool;
 		final ScheduledThreadPoolExecutor generalScheduledThreadPool = (ScheduledThreadPoolExecutor) this.generalScheduledThreadPool;

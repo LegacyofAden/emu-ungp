@@ -47,7 +47,7 @@ import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.ActionFailed;
 import org.l2junity.gameserver.network.packets.s2c.DeleteObject;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -257,7 +257,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		}
 	}
 
-	@EventId(384)
+	@AiEventId(384)
 	@Override
 	public String getName() {
 		return _name;
@@ -267,25 +267,25 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 		_name = value;
 	}
 
-	@EventId(8)
+	@AiEventId(8)
 	@Override
 	public double getX() {
 		return _x;
 	}
 
-	@EventId(16)
+	@AiEventId(16)
 	@Override
 	public double getY() {
 		return _y;
 	}
 
-	@EventId(24)
+	@AiEventId(24)
 	@Override
 	public double getZ() {
 		return _z;
 	}
 
-	@EventId(36)
+	@AiEventId(36)
 	@Override
 	public final int getObjectId() {
 		return _objectId;
@@ -409,7 +409,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 *
 	 * @return {@code true} if object is instance of L2PcInstance, {@code false} otherwise
 	 */
-	@EventId(68)
+	@AiEventId(68)
 	public boolean isPlayer() {
 		return false;
 	}
@@ -686,6 +686,7 @@ public abstract class WorldObject extends ListenersContainer implements IIdentif
 	 *
 	 * @return the instance ID
 	 */
+	@AiEventId(11980)
 	public int getInstanceId() {
 		final Instance instance = _instance;
 		return (instance != null) ? instance.getId() : WorldManager.MAIN_WORLD_ID;

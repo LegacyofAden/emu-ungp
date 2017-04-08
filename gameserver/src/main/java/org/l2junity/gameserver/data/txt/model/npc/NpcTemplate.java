@@ -4,6 +4,8 @@ import lombok.Data;
 import org.l2junity.gameserver.data.txt.gen.NpcDatasParser;
 import org.l2junity.gameserver.data.txt.model.constants.*;
 import org.l2junity.gameserver.data.txt.model.item.AttributeAttack;
+import org.l2junity.gameserver.model.events.ListenersContainer;
+import org.l2junity.gameserver.model.interfaces.IIdentifiable;
 import org.l2junity.gameserver.model.stats.DoubleStat;
 
 import java.util.Collections;
@@ -19,7 +21,7 @@ import java.util.Map;
  * @since 04.04.17
  */
 @Data
-public final class NpcTemplate {
+public final class NpcTemplate extends ListenersContainer implements IIdentifiable {
 	private final int npcId;
 	private final NpcType npcType;
 	private final String name;
@@ -90,6 +92,10 @@ public final class NpcTemplate {
 
 	protected final Map<DoubleStat, Double> baseValues = new EnumMap<>(DoubleStat.class);
 
+	/***
+	 * Constructor using for create NpcTemplate from npcdata.txt
+	 * @param ctx parser context
+	 */
 	public NpcTemplate(NpcDatasParser.NpcContext ctx) {
 		npcId = ctx.npc_id().value;
 		npcType = ctx.npc_type().value;
@@ -246,5 +252,10 @@ public final class NpcTemplate {
 		exDrop = ctx.ex_drop().int_list().value;
 		enableMoveAfterTalk = ctx.enable_move_after_talk().bool_object().value;
 		broadcastCond = ctx.broadcast_cond().int_list().value;
+	}
+
+	@Override
+	public int getId() {
+		return npcId;
 	}
 }

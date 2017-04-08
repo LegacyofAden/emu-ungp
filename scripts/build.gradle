@@ -1,7 +1,34 @@
 apply plugin: 'java'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
 
-defaultTasks('build')
+run.workingDir = new File("./dist")
+mainClassName = "org.l2junity.tools.parsers.ai.AiParser"
+
+applicationDefaultJvmArgs = [
+		"-Xms2G",
+		"-Xmx8G"
+]
+
+defaultTasks 'assemble'
+distTar.enabled = false
+bootRepackage.enabled = false
 
 dependencies {
+	provided('org.projectlombok:lombok:+')
 	compile project(':commons')
+	compile project(':gameserver')
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src/main/java'
+			exclude '**/gameserver/ai/**'
+		}
+	}
 }

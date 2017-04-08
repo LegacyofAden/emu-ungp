@@ -1,6 +1,6 @@
 package org.l2junity.gameserver.retail.model;
 
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 import org.l2junity.gameserver.retail.model.actor.Creature;
 
 /***
@@ -8,9 +8,9 @@ import org.l2junity.gameserver.retail.model.actor.Creature;
  * @since 20.03.2017
  */
 public class HateInfo {
-    @EventId(8)
+    @AiEventId(8)
     public Creature creature;
 
-    @EventId(16)
+    @AiEventId(16)
     public int hate;
 }

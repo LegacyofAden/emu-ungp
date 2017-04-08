@@ -41,10 +41,7 @@ import org.l2junity.gameserver.enums.*;
 import org.l2junity.gameserver.geodata.GeoData;
 import org.l2junity.gameserver.geodata.pathfinding.AbstractNodeLoc;
 import org.l2junity.gameserver.geodata.pathfinding.PathFinding;
-import org.l2junity.gameserver.instancemanager.GameTimeManager;
-import org.l2junity.gameserver.instancemanager.MapRegionManager;
-import org.l2junity.gameserver.instancemanager.TimersManager;
-import org.l2junity.gameserver.instancemanager.ZoneManager;
+import org.l2junity.gameserver.instancemanager.*;
 import org.l2junity.gameserver.model.*;
 import org.l2junity.gameserver.model.actor.instance.Player;
 import org.l2junity.gameserver.model.actor.stat.CharStat;
@@ -87,12 +84,10 @@ import org.l2junity.gameserver.network.packets.GameServerPacket;
 import org.l2junity.gameserver.network.packets.s2c.*;
 import org.l2junity.gameserver.network.packets.s2c.string.CustomMessage;
 import org.l2junity.gameserver.network.packets.s2c.string.SystemMessageId;
-import org.l2junity.gameserver.retail.EventId;
+import org.l2junity.gameserver.retail.AiEventId;
 import org.l2junity.gameserver.taskmanager.AttackStanceTaskManager;
 import org.l2junity.gameserver.taskmanager.MovementController;
 import org.l2junity.gameserver.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -481,6 +476,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @return Transformation Id
 	 */
+	@AiEventId(11976)
 	public int getTransformationId() {
 		return _transform.map(Transform::getId).orElse(0);
 	}
@@ -1844,7 +1840,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return _isDead;
 	}
 
-	@EventId(72)
+	@AiEventId(72)
 	public final boolean isAlive() {
 		return !_isDead;
 	}
@@ -2827,6 +2823,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	/**
 	 * @return the identifier of the L2Object targeted or -1.
 	 */
+	@AiEventId(584)
 	public final int getTargetId() {
 		if (_target != null) {
 			return _target.getObjectId();
@@ -3442,6 +3439,11 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		player.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, this);
 	}
 
+	@AiEventId(11464)
+	public boolean isInsidePeaceZone() {
+		return isInsideZone(ZoneId.PEACE);
+	}
+
 	/**
 	 * @param attacker
 	 * @return True if inside peace zone.
@@ -3774,7 +3776,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @return
 	 */
-	@EventId(10972)
+	@AiEventId(10972)
 	public abstract int getLevel();
 
 	public int getAccuracy() {
@@ -3825,7 +3827,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getStat().getMAtkSpd();
 	}
 
-	@EventId(11048)
+	@AiEventId(11048)
 	public int getMaxMp() {
 		return getStat().getMaxMp();
 	}
@@ -3834,7 +3836,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getStat().getMaxRecoverableMp();
 	}
 
-	@EventId(11040)
+	@AiEventId(11040)
 	public int getMaxHp() {
 		return getStat().getMaxHp();
 	}
@@ -4084,7 +4086,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		getStatus().setCurrentCp(newCp, broadcast);
 	}
 
-	@EventId(360)
+	@AiEventId(360)
 	public final double getCurrentHp() {
 		return getStatus().getCurrentHp();
 	}
@@ -4105,7 +4107,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		getStatus().setCurrentHpMp(newHp, newMp);
 	}
 
-	@EventId(368)
+	@AiEventId(368)
 	public final double getCurrentMp() {
 		return getStatus().getCurrentMp();
 	}
@@ -4286,7 +4288,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return false;
 	}
 
-	@EventId(596)
+	@AiEventId(596)
 	public int getPkKills() {
 		return 0;
 	}
@@ -4296,7 +4298,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 	 *
 	 * @return the clan id of current character.
 	 */
-	@EventId(10596)
+	@AiEventId(10596)
 	public int getClanId() {
 		return 0;
 	}
@@ -4310,7 +4312,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return null;
 	}
 
-	@EventId(10604)
+	@AiEventId(10604)
 	public boolean isClanLeader() {
 		return false;
 	}
@@ -4603,7 +4605,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return getTemplate().getRace();
 	}
 
-	@EventId(144)
+	@AiEventId(144)
 	public int getRaceId() {
 		return getRace().ordinal();
 	}
@@ -4756,7 +4758,7 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		return _basicPropertyResists.computeIfAbsent(basicProperty, k -> new BasicPropertyResist());
 	}
 
-	@EventId(604)
+	@AiEventId(604)
 	public int getReputation() {
 		return _reputation;
 	}
@@ -4765,13 +4767,18 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 		_reputation = reputation;
 	}
 
-	@EventId(136)
+	@AiEventId(136)
 	public boolean isDualClassActive() {
 		return false;
 	}
 
-	@EventId(200)
+	@AiEventId(200)
 	public long getSp() {
+		return 0;
+	}
+
+	@AiEventId(11360)
+	public int getBuilderLevel() {
 		return 0;
 	}
 }
